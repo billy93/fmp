@@ -19,7 +19,8 @@
         vm.rememberMe = true;
         vm.requestResetPassword = requestResetPassword;
         vm.username = null;
-
+        vm.errorMessage = null;
+        
         $timeout(function (){angular.element('#username').focus();});
 
         function cancel () {
@@ -55,7 +56,8 @@
                     Auth.resetPreviousState();
                     $state.go(previousState.name, previousState.params);
                 }
-            }).catch(function () {
+            }).catch(function (err) {
+            	vm.errorMessage = err.data.detail;
                 vm.authenticationError = true;
             });
         }

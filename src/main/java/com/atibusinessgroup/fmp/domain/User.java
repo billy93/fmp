@@ -1,23 +1,27 @@
 package com.atibusinessgroup.fmp.domain;
 
-import com.atibusinessgroup.fmp.config.Constants;
+import java.io.Serializable;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Set;
-import java.time.Instant;
+import com.atibusinessgroup.fmp.config.Constants;
+import com.atibusinessgroup.fmp.service.dto.PasswordHistory;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * A user.
@@ -27,7 +31,6 @@ import java.time.Instant;
 public class User extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
 
     @Id
     private String id;
@@ -78,7 +81,25 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Field("reset_date")
     private Instant resetDate = null;
+    
+    @Field("jhi_locked")
+    private Boolean locked;
 
+    @Field("last_lockout_date_time")
+    private Instant lastLockoutDateTime;
+
+    @Field("suspended")
+    private Boolean suspended;
+
+    @Field("last_login_date_time")
+    private Instant lastLoginDateTime;
+
+    @Field("failed_login_counter")
+    private Integer failedLoginCounter;
+
+    @Field("password_history")
+    private List<PasswordHistory> passwordHistory = new ArrayList<>();
+    
     @JsonIgnore
     private Set<Authority> authorities = new HashSet<>();
 
@@ -186,8 +207,16 @@ public class User extends AbstractAuditingEntity implements Serializable {
     public void setAuthorities(Set<Authority> authorities) {
         this.authorities = authorities;
     }
+    
+    public List<PasswordHistory> getPasswordHistory() {
+		return passwordHistory;
+	}
 
-    @Override
+	public void setPasswordHistory(List<PasswordHistory> passwordHistory) {
+		this.passwordHistory = passwordHistory;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -204,18 +233,54 @@ public class User extends AbstractAuditingEntity implements Serializable {
     public int hashCode() {
         return Objects.hashCode(getId());
     }
+    
+    public Boolean getLocked() {
+		return locked;
+	}
 
-    @Override
-    public String toString() {
-        return "User{" +
-            "login='" + login + '\'' +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
-            ", activated='" + activated + '\'' +
-            ", langKey='" + langKey + '\'' +
-            ", activationKey='" + activationKey + '\'' +
-            "}";
-    }
+	public void setLocked(Boolean locked) {
+		this.locked = locked;
+	}
+
+	public Instant getLastLockoutDateTime() {
+		return lastLockoutDateTime;
+	}
+
+	public void setLastLockoutDateTime(Instant lastLockoutDateTime) {
+		this.lastLockoutDateTime = lastLockoutDateTime;
+	}
+
+	public Boolean getSuspended() {
+		return suspended;
+	}
+
+	public void setSuspended(Boolean suspended) {
+		this.suspended = suspended;
+	}
+
+	public Instant getLastLoginDateTime() {
+		return lastLoginDateTime;
+	}
+
+	public void setLastLoginDateTime(Instant lastLoginDateTime) {
+		this.lastLoginDateTime = lastLoginDateTime;
+	}
+
+	public Integer getFailedLoginCounter() {
+		return failedLoginCounter;
+	}
+
+	public void setFailedLoginCounter(Integer failedLoginCounter) {
+		this.failedLoginCounter = failedLoginCounter;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", login=" + login + ", password=" + password + ", firstName=" + firstName
+				+ ", lastName=" + lastName + ", email=" + email + ", activated=" + activated + ", langKey=" + langKey
+				+ ", imageUrl=" + imageUrl + ", activationKey=" + activationKey + ", resetKey=" + resetKey
+				+ ", resetDate=" + resetDate + ", locked=" + locked + ", lastLockoutDateTime=" + lastLockoutDateTime
+				+ ", suspended=" + suspended + ", lastLoginDateTime=" + lastLoginDateTime + ", failedLoginCounter="
+				+ failedLoginCounter + ", passwordHistory=" + passwordHistory + ", authorities=" + authorities + "]";
+	}
 }

@@ -1,26 +1,45 @@
 package com.atibusinessgroup.fmp.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 
-import com.atibusinessgroup.fmp.domain.User;
-import com.atibusinessgroup.fmp.repository.UserRepository;
-import com.atibusinessgroup.fmp.security.SecurityUtils;
-import com.atibusinessgroup.fmp.service.MailService;
-import com.atibusinessgroup.fmp.service.UserService;
-import com.atibusinessgroup.fmp.service.dto.UserDTO;
-import com.atibusinessgroup.fmp.web.rest.errors.*;
-import com.atibusinessgroup.fmp.web.rest.vm.KeyAndPasswordVM;
-import com.atibusinessgroup.fmp.web.rest.vm.ManagedUserVM;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.util.*;
+import com.atibusinessgroup.fmp.domain.SystemParameter;
+import com.atibusinessgroup.fmp.domain.User;
+import com.atibusinessgroup.fmp.repository.UserRepository;
+import com.atibusinessgroup.fmp.security.SecurityUtils;
+import com.atibusinessgroup.fmp.service.MailService;
+import com.atibusinessgroup.fmp.service.SystemParameterService;
+import com.atibusinessgroup.fmp.service.UserService;
+import com.atibusinessgroup.fmp.service.dto.PasswordHistory;
+import com.atibusinessgroup.fmp.service.dto.UserDTO;
+import com.atibusinessgroup.fmp.web.rest.errors.EmailAlreadyUsedException;
+import com.atibusinessgroup.fmp.web.rest.errors.EmailNotFoundException;
+import com.atibusinessgroup.fmp.web.rest.errors.InternalServerErrorException;
+import com.atibusinessgroup.fmp.web.rest.errors.InvalidPasswordException;
+import com.atibusinessgroup.fmp.web.rest.errors.LoginAlreadyUsedException;
+import com.atibusinessgroup.fmp.web.rest.vm.KeyAndPasswordVM;
+import com.atibusinessgroup.fmp.web.rest.vm.ManagedUserVM;
+import com.codahale.metrics.annotation.Timed;
 
 /**
  * REST controller for managing the current user's account.
@@ -36,12 +55,18 @@ public class AccountResource {
     private final UserService userService;
 
     private final MailService mailService;
+    
+    private final PasswordEncoder passwordEncoder;
+    
+    private final SystemParameterService systemParameterService;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
+    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService, PasswordEncoder passwordEncoder, SystemParameterService systemParameterService) {
 
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
+        this.passwordEncoder = passwordEncoder;
+        this.systemParameterService = systemParameterService;
     }
 
     /**
@@ -56,8 +81,9 @@ public class AccountResource {
     @Timed
     @ResponseStatus(HttpStatus.CREATED)
     public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
-        if (!checkPasswordLength(managedUserVM.getPassword())) {
-            throw new InvalidPasswordException();
+    	int minLengthPassword = systemParameterService.getParameterNameValue(SystemParameter.PASSWORD_MIN_LENGTH) , maxLengthPassword= systemParameterService.getParameterNameValue(SystemParameter.PASSWORD_MAX_LENGTH);
+        if (!checkPasswordLength(managedUserVM.getPassword(),minLengthPassword , maxLengthPassword )) {
+            throw new InvalidPasswordException("Password length must be at least "+ minLengthPassword +" characters and cannot be longer than "+ maxLengthPassword+" characters");
         }
         userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase()).ifPresent(u -> {throw new LoginAlreadyUsedException();});
         userRepository.findOneByEmailIgnoreCase(managedUserVM.getEmail()).ifPresent(u -> {throw new EmailAlreadyUsedException();});
@@ -139,9 +165,30 @@ public class AccountResource {
     @PostMapping(path = "/account/change-password")
     @Timed
     public void changePassword(@RequestBody String password) {
-        if (!checkPasswordLength(password)) {
-            throw new InvalidPasswordException();
+    	int minLengthPassword = systemParameterService.getParameterNameValue(SystemParameter.PASSWORD_MIN_LENGTH) , maxLengthPassword= systemParameterService.getParameterNameValue(SystemParameter.PASSWORD_MAX_LENGTH);
+        
+    	if (!checkPasswordLength(password, minLengthPassword, maxLengthPassword)) {
+            throw new InvalidPasswordException("Password length must be at least "+minLengthPassword+" characters and cannot be longer than "+maxLengthPassword+" characters");
         }
+        
+        if (!validPasswordFormat(password)) {
+        	throw new InvalidPasswordException("Password must be a combination of uppercase, lowercase and digit\", Status.BAD_REQUEST, \"Password must be a combination of uppercase, lowercase and digit");
+        }
+        
+        int minPasswordAgeInDays = systemParameterService.getParameterNameValue(SystemParameter.MIN_PASSWORD_AGE_IN_DAYS), 
+        		limitPasswordHistories = systemParameterService.getParameterNameValue(SystemParameter.LIMIT_PASSWORD_HISTORIES);
+        
+        String response = authorizedToChangePassword(password, false, SecurityUtils.getCurrentUserLogin(), 
+        		minPasswordAgeInDays, limitPasswordHistories);
+        
+        if (response.contentEquals("Old Password")) {
+        	throw new InvalidPasswordException("Your password cannot be the same as last " + limitPasswordHistories + " used passwords");
+        } else if (response.contentEquals("Recently Changed")) {
+        	throw new InvalidPasswordException("You can only change your password every " + minPasswordAgeInDays + " days");
+        } else if (response.contentEquals("No User Found")) {
+        	throw new InvalidPasswordException("No User Found");
+        }
+        
         userService.changePassword(password);
    }
 
@@ -170,8 +217,10 @@ public class AccountResource {
     @PostMapping(path = "/account/reset-password/finish")
     @Timed
     public void finishPasswordReset(@RequestBody KeyAndPasswordVM keyAndPassword) {
-        if (!checkPasswordLength(keyAndPassword.getNewPassword())) {
-            throw new InvalidPasswordException();
+    	int minLengthPassword = systemParameterService.getParameterNameValue(SystemParameter.PASSWORD_MIN_LENGTH) , maxLengthPassword= systemParameterService.getParameterNameValue(SystemParameter.PASSWORD_MAX_LENGTH);
+        
+    	if (!checkPasswordLength(keyAndPassword.getNewPassword(), minLengthPassword,maxLengthPassword)) {
+            throw new InvalidPasswordException("Password length must be at least "+minLengthPassword+" characters and cannot be longer than "+maxLengthPassword+" characters");
         }
         Optional<User> user =
             userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
@@ -181,9 +230,83 @@ public class AccountResource {
         }
     }
 
-    private static boolean checkPasswordLength(String password) {
+    private static boolean checkPasswordLength(String password, int minLength, int maxLength) {
         return !StringUtils.isEmpty(password) &&
-            password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH &&
-            password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;
+            password.length() >= minLength &&
+            password.length() <= maxLength;
+    }
+    
+    private boolean validPasswordFormat(String password) {
+    	boolean hasUppercase = false, hasDigit = false, hasLowercase = false;
+    	
+    	for (int i = 0; i < password.length(); i++) {
+    		char character = password.charAt(i);
+    		
+    		if (Character.isUpperCase(character)) {
+    			hasUppercase = true;
+    		} else if (Character.isDigit(character)) {
+    			hasDigit = true;
+    		} else if (Character.isLowerCase(character)) {
+    			hasLowercase = true;
+    		}
+    	}
+    	
+    	return (hasUppercase && hasDigit && hasLowercase);
+    }
+    
+    private String authorizedToChangePassword(String password, boolean ignoreDaysConstraint, 
+    		Optional<String> loginOptional, int minPasswordAgeInDays, int limitPasswordHistories) {
+    	 String result = "Authorized";
+    	 
+    	 Optional<User> userOptional = userRepository.findOneByLogin(loginOptional.get());
+    	 
+    	 if (userOptional.isPresent()) {
+    		 User user = userOptional.get();
+    		 
+    		 List<PasswordHistory> history = user.getPasswordHistory();
+    		 log.debug("BEFORE SORT");
+    	    	for (PasswordHistory ph:history) {
+    	    		log.debug(ph.toString());
+    	    	}
+    	    	
+    	    	Collections.sort(history, new Comparator<PasswordHistory>() {
+    	    	    @Override
+    	    	    public int compare(PasswordHistory o1, PasswordHistory o2) {
+    	    	        return o2.getModifiedDateTime().compareTo(o1.getModifiedDateTime());
+    	    	    }
+    	    	});
+    	    	
+    	    	log.debug("AFTER SORT");
+    	    	for (PasswordHistory ph:history) {
+    	    		log.debug(ph.toString());
+    	    	}
+    	    	
+    	 		
+             if (history.size() > 0) {
+             	Instant lastModifiedPasswordDateTime = history.get(0).getModifiedDateTime();
+             	Duration duration = Duration.between(lastModifiedPasswordDateTime, Instant.now());
+     			long days = duration.toDays();	
+             	
+     			log.debug("DAYS " + days);
+     			log.debug((!ignoreDaysConstraint && (days < minPasswordAgeInDays)) + "");
+     			
+     			if(!ignoreDaysConstraint && days < minPasswordAgeInDays) {
+        			return "Recently Changed";
+        		}
+     			
+     			if (history.size() <= limitPasswordHistories)
+     				limitPasswordHistories = history.size();
+     	        	
+     	        for (int i = 0; i < limitPasswordHistories; i++) {
+     	        	if (passwordEncoder.matches(password, history.get(i).getPasswordHash())) {
+     	        		return "Old Password";
+     	        	}
+     	        }
+             }
+    	 } else {
+    		 result = "No User Found";
+    	 }
+    	 
+    	 return result;
     }
 }

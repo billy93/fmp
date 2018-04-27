@@ -5,20 +5,33 @@
         .module('fmpApp')
         .controller('PasswordController', PasswordController);
 
-    PasswordController.$inject = ['Auth', 'Principal'];
+    PasswordController.$inject = ['Auth', 'Principal', 'SystemParameter'];
 
-    function PasswordController (Auth, Principal) {
+    function PasswordController (Auth, Principal, SystemParameter) {
         var vm = this;
 
         vm.changePassword = changePassword;
         vm.doNotMatch = null;
         vm.error = null;
         vm.success = null;
-
+        vm.minLength = 8;
+        vm.maxLength = 30;
+        vm.errorMessage = null;
+        
         Principal.identity().then(function(account) {
             vm.account = account;
         });
 
+        SystemParameter.getPasswordParameter(function(data) {
+        	data.forEach(function(d) {
+        		if (d.name == 'PASSWORD_MIN_LENGTH') {
+        			vm.minLength = d.value;
+        		} else if (d.name == 'PASSWORD_MAX_LENGTH') {
+        			vm.maxLength = d.value;
+        		}
+        	});
+        }, function(error){});
+        
         function changePassword () {
             if (vm.password !== vm.confirmPassword) {
                 vm.error = null;
@@ -29,9 +42,10 @@
                 Auth.changePassword(vm.password).then(function () {
                     vm.error = null;
                     vm.success = 'OK';
-                }).catch(function () {
+                }).catch(function (err) {
                     vm.success = null;
                     vm.error = 'ERROR';
+                    vm.errorMessage = err.data.title;
                 });
             }
         }

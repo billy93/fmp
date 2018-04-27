@@ -8,6 +8,7 @@ import com.atibusinessgroup.fmp.repository.UserRepository;
 import com.atibusinessgroup.fmp.security.AuthoritiesConstants;
 import com.atibusinessgroup.fmp.security.SecurityUtils;
 import com.atibusinessgroup.fmp.service.util.RandomUtil;
+import com.atibusinessgroup.fmp.service.dto.PasswordHistory;
 import com.atibusinessgroup.fmp.service.dto.UserDTO;
 
 import org.slf4j.Logger;
@@ -199,6 +200,10 @@ public class UserService {
             .ifPresent(user -> {
                 String encryptedPassword = passwordEncoder.encode(password);
                 user.setPassword(encryptedPassword);
+                PasswordHistory ph = new PasswordHistory();
+                ph.setModifiedDateTime(Instant.now());
+                ph.setPasswordHash(encryptedPassword);
+                user.getPasswordHistory().add(ph);
                 userRepository.save(user);
                 log.debug("Changed password for User: {}", user);
             });
