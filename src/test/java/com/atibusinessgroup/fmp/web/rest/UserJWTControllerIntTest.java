@@ -1,11 +1,13 @@
 package com.atibusinessgroup.fmp.web.rest;
 
-import com.atibusinessgroup.fmp.FmpApp;
-import com.atibusinessgroup.fmp.domain.User;
-import com.atibusinessgroup.fmp.repository.UserRepository;
-import com.atibusinessgroup.fmp.security.jwt.TokenProvider;
-import com.atibusinessgroup.fmp.web.rest.vm.LoginVM;
-import com.atibusinessgroup.fmp.web.rest.errors.ExceptionTranslator;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,15 +19,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.hamcrest.Matchers.nullValue;
-import static org.hamcrest.Matchers.isEmptyString;
-import static org.hamcrest.Matchers.not;
+import com.atibusinessgroup.fmp.FmpApp;
+import com.atibusinessgroup.fmp.domain.User;
+import com.atibusinessgroup.fmp.repository.UserRepository;
+import com.atibusinessgroup.fmp.security.jwt.TokenProvider;
+import com.atibusinessgroup.fmp.web.rest.errors.ExceptionTranslator;
+import com.atibusinessgroup.fmp.web.rest.vm.LoginVM;
 
-/**
+/*
  * Test class for the UserJWTController REST controller.
  *
  * @see UserJWTController
@@ -53,7 +54,7 @@ public class UserJWTControllerIntTest {
 
     @Before
     public void setup() {
-        UserJWTController userJWTController = new UserJWTController(tokenProvider, authenticationManager);
+        UserJWTController userJWTController = new UserJWTController(tokenProvider, authenticationManager, null, null);
         this.mockMvc = MockMvcBuilders.standaloneSetup(userJWTController)
             .setControllerAdvice(exceptionTranslator)
             .build();
