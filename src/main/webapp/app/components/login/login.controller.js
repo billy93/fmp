@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('LoginController', LoginController);
 
-    LoginController.$inject = ['$rootScope', '$state', '$timeout', 'Auth', '$uibModalInstance'];
+    LoginController.$inject = ['$rootScope', '$state', '$timeout', 'Auth', '$uibModalInstance', '$localStorage', '$sessionStorage'];
 
-    function LoginController ($rootScope, $state, $timeout, Auth, $uibModalInstance) {
+    function LoginController ($rootScope, $state, $timeout, Auth, $uibModalInstance, $localStorage, $sessionStorage) {
         var vm = this;
 
         vm.authenticationError = false;
@@ -48,7 +48,7 @@
                 }
 
                 $rootScope.$broadcast('authenticationSuccess');
-
+                
                 // previousState was set in the authExpiredInterceptor before being redirected to login modal.
                 // since login is successful, go to stored previousState and clear previousState
                 if (Auth.getPreviousState()) {

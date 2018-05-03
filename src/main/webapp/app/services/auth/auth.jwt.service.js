@@ -24,7 +24,6 @@
         }
 
         function login (credentials) {
-
             var data = {
                 username: credentials.username,
                 password: credentials.password,
@@ -34,9 +33,12 @@
 
             function authenticateSuccess (data, status, headers) {
                 var bearerToken = headers('Authorization');
+                var changePasswordNeeded = headers('ChangePasswordNeeded');
+                
                 if (angular.isDefined(bearerToken) && bearerToken.slice(0, 7) === 'Bearer ') {
                     var jwt = bearerToken.slice(7, bearerToken.length);
-                    service.storeAuthenticationToken(jwt, credentials.rememberMe);
+                    service.storeAuthenticationToken(jwt, credentials.rememberMe, changePasswordNeeded);
+                    
                     return jwt;
                 }
             }
@@ -55,18 +57,21 @@
             return deferred.promise;
         }
 
-        function storeAuthenticationToken(jwt, rememberMe) {
+        function storeAuthenticationToken(jwt, rememberMe, changePasswordNeeded) {
             if(rememberMe){
                 $localStorage.authenticationToken = jwt;
+                $localStorage.changePasswordNeeded = changePasswordNeeded;
             } else {
                 $sessionStorage.authenticationToken = jwt;
+                $sessionStorage.changePasswordNeeded = changePasswordNeeded;
             }
         }
-
+        
         function logout () {
-
             delete $localStorage.authenticationToken;
             delete $sessionStorage.authenticationToken;
+            delete $localStorage.changePasswordNeeded;
+            delete $sessionStorage.changePasswordNeeded;
         }
     }
 })();

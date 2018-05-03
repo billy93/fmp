@@ -5,9 +5,9 @@
         .module('fmpApp')
         .factory('Auth', Auth);
 
-    Auth.$inject = ['$rootScope', '$state', '$sessionStorage', '$q', 'Principal', 'AuthServerProvider', 'Account', 'LoginService', 'Register', 'Activate', 'Password', 'PasswordResetInit', 'PasswordResetFinish', 'JhiTrackerService'];
+    Auth.$inject = ['$rootScope', '$state', '$localStorage', '$sessionStorage', '$q', 'Principal', 'AuthServerProvider', 'Account', 'LoginService', 'Register', 'Activate', 'Password', 'PasswordResetInit', 'PasswordResetFinish', 'JhiTrackerService'];
 
-    function Auth ($rootScope, $state, $sessionStorage, $q, Principal, AuthServerProvider, Account, LoginService, Register, Activate, Password, PasswordResetInit, PasswordResetFinish, JhiTrackerService) {
+    function Auth ($rootScope, $state, $localStorage, $sessionStorage, $q, Principal, AuthServerProvider, Account, LoginService, Register, Activate, Password, PasswordResetInit, PasswordResetFinish, JhiTrackerService) {
         var service = {
             activateAccount: activateAccount,
             authorize: authorize,
@@ -51,13 +51,13 @@
                     $state.go('home');
                 }
 
-                // recover and clear previousState after external login redirect (e.g. oauth2)
+            	// recover and clear previousState after external login redirect (e.g. oauth2)
                 if (isAuthenticated && !$rootScope.fromState.name && getPreviousState()) {
                     var previousState = getPreviousState();
                     resetPreviousState();
                     $state.go(previousState.name, previousState.params);
                 }
-
+                
                 if ($rootScope.toState.data.authorities && $rootScope.toState.data.authorities.length > 0 && !Principal.hasAnyAuthority($rootScope.toState.data.authorities)) {
                     if (isAuthenticated) {
                         // user is signed in but not authorized for desired state

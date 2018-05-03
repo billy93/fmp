@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('PasswordController', PasswordController);
 
-    PasswordController.$inject = ['Auth', 'Principal', 'SystemParameter'];
+    PasswordController.$inject = ['Auth', 'Principal', 'SystemParameter', '$stateParams'];
 
-    function PasswordController (Auth, Principal, SystemParameter) {
+    function PasswordController (Auth, Principal, SystemParameter, $stateParams) {
         var vm = this;
 
         vm.changePassword = changePassword;
@@ -17,6 +17,8 @@
         vm.minLength = 8;
         vm.maxLength = 30;
         vm.errorMessage = null;
+        
+        vm.isExpired = $stateParams.isExpired;
         
         Principal.identity().then(function(account) {
             vm.account = account;
@@ -45,6 +47,7 @@
                 }).catch(function (err) {
                     vm.success = null;
                     vm.error = 'ERROR';
+                    console.log(err);
                     vm.errorMessage = err.data.title;
                 });
             }
