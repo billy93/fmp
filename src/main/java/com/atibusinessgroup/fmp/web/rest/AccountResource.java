@@ -172,7 +172,7 @@ public class AccountResource {
         }
         
         if (!validPasswordFormat(password)) {
-        	throw new InvalidPasswordException("Password must be a combination of uppercase, lowercase and digit\", Status.BAD_REQUEST, \"Password must be a combination of uppercase, lowercase and digit");
+        	throw new InvalidPasswordException("Password must be a combination of uppercase, lowercase and digit");
         }
         
         int minPasswordAgeInDays = systemParameterService.getParameterNameValue(SystemParameter.MIN_PASSWORD_AGE_IN_DAYS), 

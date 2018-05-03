@@ -22,6 +22,24 @@
                     controllerAs: 'vm'
                 }
             }
+        })
+        $stateProvider.state('password-expired', {
+            parent: 'account',
+            url: '/password-expired',
+            data: {
+                authorities: ['ROLE_USER'],
+                pageTitle: 'Password'
+            },
+            params: {
+            	isExpired: true
+            },
+            views: {
+                'content@': {
+                    templateUrl: 'app/account/password/password.html',
+                    controller: 'PasswordController',
+                    controllerAs: 'vm'
+                }
+            }
         });
     }
 })();

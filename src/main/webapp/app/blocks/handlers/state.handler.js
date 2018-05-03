@@ -5,10 +5,10 @@
         .module('fmpApp')
         .factory('stateHandler', stateHandler);
 
-    stateHandler.$inject = ['$rootScope', '$state', '$sessionStorage',  '$window',
+    stateHandler.$inject = ['$rootScope', '$state', '$sessionStorage', '$localStorage', '$window',
         'Auth', 'Principal', 'VERSION'];
 
-    function stateHandler($rootScope, $state, $sessionStorage,  $window,
+    function stateHandler($rootScope, $state, $sessionStorage, $localStorage, $window,
         Auth, Principal, VERSION) {
         return {
             initialize: initialize
@@ -27,16 +27,19 @@
                     event.preventDefault();
                     $window.open(toState.url, '_self');
                 }
-
-                if (Principal.isIdentityResolved()) {
+                
+            	if (Principal.isIdentityResolved()) {
                     Auth.authorize();
                 }
-
             });
 
             var stateChangeSuccess = $rootScope.$on('$stateChangeSuccess',  function(event, toState, toParams, fromState, fromParams) {
                 var titleKey = 'fmp' ;
 
+                if ($sessionStorage.changePasswordNeeded == '1' || $localStorage.changePasswordNeeded == '1') {
+                	$state.go('password-expired');
+                } 
+                
                 // Set the page title key to the one configured in state or use default one
                 if (toState.data.pageTitle) {
                     titleKey = toState.data.pageTitle;
