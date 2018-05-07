@@ -64,6 +64,15 @@ public class DomainUserDetailsService implements UserDetailsService {
 					user.setSuspended(true);
 					modified = true;
 				}
+			} else {
+				Instant createdDateTime = user.getCreatedDate();
+				Duration duration = Duration.between(createdDateTime, Instant.now());
+				long days = duration.toDays();
+				
+				if(days > systemParameterService.getParameterNameValue(SystemParameter.MAX_UNUSED_DAYS_TO_SUSPEND_NEW_USER)) {
+					user.setSuspended(true);
+					modified = true;
+				}
 			}
 
 			if (lockoutDateTime != null) {

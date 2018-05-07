@@ -12,7 +12,7 @@
             </div>
 
             <div class="alert alert-danger" ng-show="vm.error">
-                <p>Your password couldn't be reset. Remember a password request is only valid for 24 hours.</p>
+                <p>{{vm.errorMessage}}.</p>
             </div>
 
             <div class="alert alert-success" ng-show="vm.success">
@@ -28,7 +28,7 @@
                     <div class="form-group">
                         <label class="control-label" for="password">New password</label>
                         <input type="password" class="form-control" id="password" name="password" placeholder="New password"
-                               ng-model="vm.resetAccount.password" ng-minlength=4 ng-maxlength=50 required>
+                               ng-model="vm.resetAccount.password" ng-minlength={{vm.minLength}} ng-maxlength={{vm.maxLength}} required>
                         <div ng-show="form.password.$dirty && form.password.$invalid">
                             <p class="help-block"
                                ng-show="form.password.$error.required">
@@ -36,11 +36,11 @@
                             </p>
                             <p class="help-block"
                                ng-show="form.password.$error.minlength">
-                                Your password is required to be at least 4 characters.
+                                Your password is required to be at least {{vm.minLength}} characters.
                             </p>
                             <p class="help-block"
                                ng-show="form.password.$error.maxlength">
-                                Your password cannot be longer than 50 characters.
+                                Your password cannot be longer than {{vm.maxLength}} characters.
                             </p>
                         </div>
                         <password-strength-bar password-to-check="vm.resetAccount.password"></password-strength-bar>
@@ -49,7 +49,7 @@
                     <div class="form-group">
                         <label class="control-label" for="confirmPassword">New password confirmation</label>
                         <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm the new password"
-                               ng-model="vm.confirmPassword" ng-minlength=4 ng-maxlength=50 required>
+                               ng-model="vm.confirmPassword" ng-minlength={{vm.minLength}} ng-maxlength={{vm.maxLength}} required>
                         <div ng-show="form.confirmPassword.$dirty && form.confirmPassword.$invalid">
                             <p class="help-block"
                                ng-show="form.confirmPassword.$error.required">
@@ -57,11 +57,11 @@
                             </p>
                             <p class="help-block"
                                ng-show="form.confirmPassword.$error.minlength">
-                                Your password confirmation is required to be at least 4 characters.
+                                Your password confirmation is required to be at least {{vm.minLength}} characters.
                             </p>
                             <p class="help-block"
                                ng-show="form.confirmPassword.$error.maxlength">
-                                Your password confirmation cannot be longer than 50 characters.
+                                Your password confirmation cannot be longer than {{vm.maxLength}} characters.
                             </p>
                         </div>
                     </div>
