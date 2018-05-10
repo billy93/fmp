@@ -26,4 +26,37 @@ public class PasswordHistory {
 	public String toString() {
 		return "PasswordHistory [passwordHash=" + passwordHash + ", modifiedDateTime=" + modifiedDateTime + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((modifiedDateTime == null) ? 0 : modifiedDateTime.hashCode());
+		result = prime * result + ((passwordHash == null) ? 0 : passwordHash.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PasswordHistory other = (PasswordHistory) obj;
+		if (modifiedDateTime == null) {
+			if (other.modifiedDateTime != null)
+				return false;
+		} else if (!modifiedDateTime.equals(other.modifiedDateTime))
+			return false;
+		if (passwordHash == null) {
+			if (other.passwordHash != null)
+				return false;
+		} else if (!passwordHash.equals(other.passwordHash))
+			return false;
+		return true;
+	}
+	
+	
 }

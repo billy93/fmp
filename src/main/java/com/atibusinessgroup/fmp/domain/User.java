@@ -100,6 +100,12 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Field("password_history")
     private List<PasswordHistory> passwordHistory = new ArrayList<>();
     
+    @Field("effective_date_time")
+    private Instant effectiveDateTime;
+    
+    @Field("discontinue_date_time")
+    private Instant discontinueDateTime;
+    
     @JsonIgnore
     private Set<Authority> authorities = new HashSet<>();
 
@@ -273,6 +279,22 @@ public class User extends AbstractAuditingEntity implements Serializable {
 	public void setFailedLoginCounter(Integer failedLoginCounter) {
 		this.failedLoginCounter = failedLoginCounter;
 	}
+		
+	public Instant getEffectiveDateTime() {
+		return effectiveDateTime;
+	}
+
+	public void setEffectiveDateTime(Instant effectiveDateTime) {
+		this.effectiveDateTime = effectiveDateTime;
+	}
+
+	public Instant getDiscontinueDateTime() {
+		return discontinueDateTime;
+	}
+
+	public void setDiscontinueDateTime(Instant discontinueDateTime) {
+		this.discontinueDateTime = discontinueDateTime;
+	}
 
 	@Override
 	public String toString() {
@@ -281,6 +303,10 @@ public class User extends AbstractAuditingEntity implements Serializable {
 				+ ", imageUrl=" + imageUrl + ", activationKey=" + activationKey + ", resetKey=" + resetKey
 				+ ", resetDate=" + resetDate + ", locked=" + locked + ", lastLockoutDateTime=" + lastLockoutDateTime
 				+ ", suspended=" + suspended + ", lastLoginDateTime=" + lastLoginDateTime + ", failedLoginCounter="
-				+ failedLoginCounter + ", passwordHistory=" + passwordHistory + ", authorities=" + authorities + "]";
+				+ failedLoginCounter + ", passwordHistory=" + passwordHistory + ", effectiveLockoutDateTime="
+				+ effectiveDateTime + ", discontinueDateTime=" + discontinueDateTime + ", authorities="
+				+ authorities + "]";
 	}
+
+	
 }

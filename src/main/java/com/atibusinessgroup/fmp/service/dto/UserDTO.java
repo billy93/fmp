@@ -7,6 +7,7 @@ import com.atibusinessgroup.fmp.domain.User;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.*;
 import java.time.Instant;
@@ -18,182 +19,298 @@ import java.util.stream.Collectors;
  */
 public class UserDTO {
 
-    private String id;
+	private String id;
 
-    @NotBlank
-    @Pattern(regexp = Constants.LOGIN_REGEX)
-    @Size(min = 1, max = 50)
-    private String login;
+	@NotBlank
+	@Pattern(regexp = Constants.LOGIN_REGEX)
+	@Size(min = 1, max = 50)
+	private String login;
 
-    @Size(max = 50)
-    private String firstName;
+	@Size(max = 50)
+	private String firstName;
 
-    @Size(max = 50)
-    private String lastName;
+	@Size(max = 50)
+	private String lastName;
 
-    @Email
-    @Size(min = 5, max = 100)
-    private String email;
+	@Email
+	@Size(min = 5, max = 100)
+	private String email;
 
-    @Size(max = 256)
-    private String imageUrl;
+	@Size(max = 256)
+	private String imageUrl;
 
-    private boolean activated = false;
+	private boolean activated = false;
 
-    @Size(min = 2, max = 6)
-    private String langKey;
+	@Size(min = 2, max = 6)
+	private String langKey;
 
-    private String createdBy;
+	private String createdBy;
 
-    private Instant createdDate;
+	private Instant createdDate;
 
-    private String lastModifiedBy;
+	private String lastModifiedBy;
 
-    private Instant lastModifiedDate;
+	private Instant lastModifiedDate;
 
-    private Set<String> authorities;
+	private Set<String> authorities;
 
-    public UserDTO() {
-        // Empty constructor needed for Jackson.
-    }
+	private String password;
 
-    public UserDTO(User user) {
-        this.id = user.getId();
-        this.login = user.getLogin();
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
-        this.email = user.getEmail();
-        this.activated = user.getActivated();
-        this.imageUrl = user.getImageUrl();
-        this.langKey = user.getLangKey();
-        this.createdBy = user.getCreatedBy();
-        this.createdDate = user.getCreatedDate();
-        this.lastModifiedBy = user.getLastModifiedBy();
-        this.lastModifiedDate = user.getLastModifiedDate();
-        this.authorities = user.getAuthorities().stream()
-            .map(Authority::getName)
-            .collect(Collectors.toSet());
-    }
+	private Set<String> passwordHistory;
 
-    public String getId() {
-        return id;
-    }
+	private String resetKey;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	private Instant resetDate;
 
-    public String getLogin() {
-        return login;
-    }
+	private Instant effectiveDateTime;
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
+	private Instant discontinueDateTime;
+	
+	private Boolean locked;
+	
+	private Instant lastLockoutDateTime;
+	
+	private Boolean suspended;
+	
+	private Instant lastLoginDateTime;
 
-    public String getFirstName() {
-        return firstName;
-    }
+	private Integer failedLoginCounter;
+	
+	
+	public UserDTO() {
+		// Empty constructor needed for Jackson.
+	}
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+	public UserDTO(User user) {
+		this.id = user.getId();
+		this.login = user.getLogin();
+		this.firstName = user.getFirstName();
+		this.lastName = user.getLastName();
+		this.email = user.getEmail();
+		this.activated = user.getActivated();
+		this.imageUrl = user.getImageUrl();
+		this.langKey = user.getLangKey();
+		this.createdBy = user.getCreatedBy();
+		this.createdDate = user.getCreatedDate();
+		this.lastModifiedBy = user.getLastModifiedBy();
+		this.lastModifiedDate = user.getLastModifiedDate();
+		this.authorities = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet());
+		this.password = user.getPassword();
+		this.resetKey = user.getResetKey();
+		this.resetDate = user.getResetDate();
+		this.effectiveDateTime = user.getEffectiveDateTime();
+		this.discontinueDateTime = user.getDiscontinueDateTime();
+		this.passwordHistory = user.getPasswordHistory().stream().map(PasswordHistory::getPasswordHash)
+				.collect(Collectors.toSet());
+		this.locked = user.getLocked();
+		this.lastLockoutDateTime = user.getLastLockoutDateTime();
+		this.suspended = user.getSuspended();
+		this.lastLoginDateTime = user.getLastLoginDateTime();
+		this.failedLoginCounter = user.getFailedLoginCounter();
+	}
 
-    public String getLastName() {
-        return lastName;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public String getLogin() {
+		return login;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public void setLogin(String login) {
+		this.login = login;
+	}
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
+	public String getFirstName() {
+		return firstName;
+	}
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
-    public boolean isActivated() {
-        return activated;
-    }
+	public String getLastName() {
+		return lastName;
+	}
 
-    public void setActivated(boolean activated) {
-        this.activated = activated;
-    }
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
-    public String getLangKey() {
-        return langKey;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setLangKey(String langKey) {
-        this.langKey = langKey;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public String getCreatedBy() {
-        return createdBy;
-    }
+	public String getImageUrl() {
+		return imageUrl;
+	}
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
 
-    public Instant getCreatedDate() {
-        return createdDate;
-    }
+	public boolean isActivated() {
+		return activated;
+	}
 
-    public void setCreatedDate(Instant createdDate) {
-        this.createdDate = createdDate;
-    }
+	public void setActivated(boolean activated) {
+		this.activated = activated;
+	}
 
-    public String getLastModifiedBy() {
-        return lastModifiedBy;
-    }
+	public String getLangKey() {
+		return langKey;
+	}
 
-    public void setLastModifiedBy(String lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
+	public void setLangKey(String langKey) {
+		this.langKey = langKey;
+	}
 
-    public Instant getLastModifiedDate() {
-        return lastModifiedDate;
-    }
+	public String getCreatedBy() {
+		return createdBy;
+	}
 
-    public void setLastModifiedDate(Instant lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
 
-    public Set<String> getAuthorities() {
-        return authorities;
-    }
+	public Instant getCreatedDate() {
+		return createdDate;
+	}
 
-    public void setAuthorities(Set<String> authorities) {
-        this.authorities = authorities;
-    }
+	public void setCreatedDate(Instant createdDate) {
+		this.createdDate = createdDate;
+	}
 
-    @Override
-    public String toString() {
-        return "UserDTO{" +
-            "login='" + login + '\'' +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
-            ", activated=" + activated +
-            ", langKey='" + langKey + '\'' +
-            ", createdBy=" + createdBy +
-            ", createdDate=" + createdDate +
-            ", lastModifiedBy='" + lastModifiedBy + '\'' +
-            ", lastModifiedDate=" + lastModifiedDate +
-            ", authorities=" + authorities +
-            "}";
-    }
+	public String getLastModifiedBy() {
+		return lastModifiedBy;
+	}
+
+	public void setLastModifiedBy(String lastModifiedBy) {
+		this.lastModifiedBy = lastModifiedBy;
+	}
+
+	public Instant getLastModifiedDate() {
+		return lastModifiedDate;
+	}
+
+	public void setLastModifiedDate(Instant lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
+	}
+
+	public Set<String> getAuthorities() {
+		return authorities;
+	}
+
+	public void setAuthorities(Set<String> authorities) {
+		this.authorities = authorities;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Set<String> getPasswordHistory() {
+		return passwordHistory;
+	}
+
+	public void setPasswordHistory(Set<String> passwordHistory) {
+		this.passwordHistory = passwordHistory;
+	}
+
+	public String getResetKey() {
+		return resetKey;
+	}
+
+	public void setResetKey(String resetKey) {
+		this.resetKey = resetKey;
+	}
+
+	public Instant getResetDate() {
+		return resetDate;
+	}
+
+	public void setResetDate(Instant resetDate) {
+		this.resetDate = resetDate;
+	}
+
+	public Instant getEffectiveDateTime() {
+		return effectiveDateTime;
+	}
+
+	public void setEffectiveDateTime(Instant effectiveDateTime) {
+		this.effectiveDateTime = effectiveDateTime;
+	}
+
+	public Instant getDiscontinueDateTime() {
+		return discontinueDateTime;
+	}
+
+	public void setDiscontinueDateTime(Instant discontinueDateTime) {
+		this.discontinueDateTime = discontinueDateTime;
+	}
+
+	public Boolean getLocked() {
+		return locked;
+	}
+
+	public void setLocked(Boolean locked) {
+		this.locked = locked;
+	}
+
+	public Instant getLastLockoutDateTime() {
+		return lastLockoutDateTime;
+	}
+
+	public void setLastLockoutDateTime(Instant lastLockoutDateTime) {
+		this.lastLockoutDateTime = lastLockoutDateTime;
+	}
+
+	public Boolean getSuspended() {
+		return suspended;
+	}
+
+	public void setSuspended(Boolean suspended) {
+		this.suspended = suspended;
+	}
+
+	public Instant getLastLoginDateTime() {
+		return lastLoginDateTime;
+	}
+
+	public void setLastLoginDateTime(Instant lastLoginDateTime) {
+		this.lastLoginDateTime = lastLoginDateTime;
+	}
+
+	public Integer getFailedLoginCounter() {
+		return failedLoginCounter;
+	}
+
+	public void setFailedLoginCounter(Integer failedLoginCounter) {
+		this.failedLoginCounter = failedLoginCounter;
+	}
+
+	@Override
+	public String toString() {
+		return "UserDTO [id=" + id + ", login=" + login + ", firstName=" + firstName + ", lastName=" + lastName
+				+ ", email=" + email + ", imageUrl=" + imageUrl + ", activated=" + activated + ", langKey=" + langKey
+				+ ", createdBy=" + createdBy + ", createdDate=" + createdDate + ", lastModifiedBy=" + lastModifiedBy
+				+ ", lastModifiedDate=" + lastModifiedDate + ", authorities=" + authorities + ", password=" + password
+				+ ", passwordHistory=" + passwordHistory + ", resetKey=" + resetKey + ", resetDate=" + resetDate
+				+ ", effectiveDateTime=" + effectiveDateTime + ", discontinueDateTime=" + discontinueDateTime
+				+ ", locked=" + locked + ", lastLockoutDateTime=" + lastLockoutDateTime + ", suspended=" + suspended
+				+ ", lastLoginDateTime=" + lastLoginDateTime + ", failedLoginCounter=" + failedLoginCounter + "]";
+	}
+
 }
