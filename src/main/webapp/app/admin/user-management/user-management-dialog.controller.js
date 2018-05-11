@@ -15,8 +15,7 @@
         vm.languages = null;
         vm.save = save;
         vm.user = entity;
-
-
+        vm.user.password="";
 
         function clear () {
             $uibModalInstance.dismiss('cancel');

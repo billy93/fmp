@@ -2,7 +2,9 @@ package com.atibusinessgroup.fmp.service;
 
 import com.atibusinessgroup.fmp.domain.Authority;
 import com.atibusinessgroup.fmp.domain.User;
+import com.atibusinessgroup.fmp.domain.UserHistory;
 import com.atibusinessgroup.fmp.repository.AuthorityRepository;
+import com.atibusinessgroup.fmp.repository.UserHistoryRepository;
 import com.atibusinessgroup.fmp.config.Constants;
 import com.atibusinessgroup.fmp.repository.UserRepository;
 import com.atibusinessgroup.fmp.security.AuthoritiesConstants;
@@ -33,15 +35,18 @@ public class UserService {
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
+    
+    private final UserHistoryRepository userHistoryRepository;
 
     private final PasswordEncoder passwordEncoder;
 
     private final AuthorityRepository authorityRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, UserHistoryRepository userHistoryRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
+        this.userHistoryRepository = userHistoryRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -130,11 +135,32 @@ public class UserService {
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
         user.setActivated(true);
+        user.setEffectiveDateTime(Instant.now());
+        user.setDiscontinueDateTime(null);
         userRepository.save(user);
         log.debug("Created Information for User: {}", user);
         return user;
     }
 
+    public UserHistory saveHistoryUser(User userDTO) {
+    	UserHistory user = new UserHistory();
+    	user.setIdHistory(userDTO.getId());
+    	user.setLogin(userDTO.getLogin());
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setEmail(userDTO.getEmail());
+        user.setImageUrl(userDTO.getImageUrl());
+        user.setAuthorities(userDTO.getAuthorities());
+        user.setPassword(userDTO.getPassword());
+        user.setPasswordHistory(userDTO.getPasswordHistory());
+        user.setResetKey(userDTO.getResetKey());
+        user.setResetDate(userDTO.getResetDate());
+        user.setActivated(false);
+        user.setEffectiveDateTime(userDTO.getEffectiveDateTime());
+        user.setDiscontinueDateTime(Instant.now().minus(1,ChronoUnit.DAYS));
+        userHistoryRepository.save(user);
+    	return user;
+    }
     /**
      * Update basic information (first name, last name, email, language) for the current user.
      *
@@ -153,6 +179,7 @@ public class UserService {
                 user.setEmail(email);
                 user.setLangKey(langKey);
                 user.setImageUrl(imageUrl);
+                user.setEffectiveDateTime(Instant.now());
                 userRepository.save(user);
                 log.debug("Changed Information for User: {}", user);
             });
@@ -175,6 +202,24 @@ public class UserService {
                 user.setImageUrl(userDTO.getImageUrl());
                 user.setActivated(userDTO.isActivated());
                 user.setLangKey(userDTO.getLangKey());
+                user.setEffectiveDateTime(Instant.now());
+                user.setSuspended(userDTO.getSuspended());
+                if(!userDTO.getSuspended()) {
+                	user.setLastLoginDateTime(Instant.now());
+                }
+                user.setLocked(userDTO.getLocked());
+                if(!userDTO.getLocked()) {
+                	user.setFailedLoginCounter(0);
+                }
+                if(userDTO.getPassword()!=null || !userDTO.getPassword().isEmpty()) {
+                	String encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
+                    user.setPassword(encryptedPassword);
+                    PasswordHistory ph = new PasswordHistory();
+                    ph.setModifiedDateTime(Instant.now());
+                    ph.setPasswordHash(encryptedPassword);
+                    user.getPasswordHistory().add(ph);
+                    user.setEffectiveDateTime(Instant.now());
+                }
                 Set<Authority> managedAuthorities = user.getAuthorities();
                 managedAuthorities.clear();
                 userDTO.getAuthorities().stream()
@@ -185,6 +230,34 @@ public class UserService {
                 return user;
             })
             .map(UserDTO::new);
+    }
+    
+    /**
+     * Update all information for a specific user, and return the modified user.
+     *
+     * @param userDTO user to update
+     * @return updated user
+     */
+    public Optional<User> getUserFromDTO(UserDTO userDTO) {
+        return Optional.of(userRepository
+            .findOne(userDTO.getId()))
+            .map(user -> {
+                user.setLogin(userDTO.getLogin());
+                user.setFirstName(userDTO.getFirstName());
+                user.setLastName(userDTO.getLastName());
+                user.setEmail(userDTO.getEmail());
+                user.setImageUrl(userDTO.getImageUrl());
+                Set<Authority> managedAuthorities = user.getAuthorities();
+                managedAuthorities.clear();
+                userDTO.getAuthorities().stream()
+                    .map(authorityRepository::findOne)
+                    .forEach(managedAuthorities::add);
+                user.setResetKey(userDTO.getResetKey());
+                user.setResetDate(userDTO.getResetDate());
+                user.setEffectiveDateTime(userDTO.getEffectiveDateTime());
+                user.setDiscontinueDateTime(userDTO.getDiscontinueDateTime());
+                return user;
+            });
     }
 
     public void deleteUser(String login) {
@@ -204,6 +277,7 @@ public class UserService {
                 ph.setModifiedDateTime(Instant.now());
                 ph.setPasswordHash(encryptedPassword);
                 user.getPasswordHistory().add(ph);
+                user.setEffectiveDateTime(Instant.now());
                 userRepository.save(user);
                 log.debug("Changed password for User: {}", user);
             });

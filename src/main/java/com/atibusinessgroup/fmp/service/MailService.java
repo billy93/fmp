@@ -16,7 +16,11 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import javax.mail.internet.MimeMessage;
+
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Service for sending emails.
@@ -86,6 +90,18 @@ public class MailService {
     }
 
     @Async
+    public void sendEmailFromTemplateWithCustomVariable(User user, String templateName, String titleKey, Map<String, String> customVariable) {
+        Locale locale = Locale.forLanguageTag(user.getLangKey());
+        Context context = new Context(locale);
+        context.setVariable("map", customVariable);
+        context.setVariable(USER, user);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        String content = templateEngine.process(templateName, context);
+        String subject = messageSource.getMessage(titleKey, null, locale);
+        sendEmail(user.getEmail(), subject, content, false, true);
+    }
+    
+    @Async
     public void sendActivationEmail(User user) {
         log.debug("Sending activation email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "activationEmail", "email.activation.title");
@@ -101,5 +117,12 @@ public class MailService {
     public void sendPasswordResetMail(User user) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "passwordResetEmail", "email.reset.title");
+    }
+    @Async
+    public void sendChangedFieldMail(User user, List<String> changedField) {
+        log.debug("Sending password reset email to '{}'", user.getEmail());
+        Map<String, String> customField = new HashMap<>();
+        customField.put("field", changedField.toString());
+        sendEmailFromTemplateWithCustomVariable(user, "userChangedField", "email.change.title", customField);
     }
 }
