@@ -1,14 +1,14 @@
 package com.atibusinessgroup.fmp.service;
 
-import com.atibusinessgroup.fmp.domain.SystemParameter;
-import com.atibusinessgroup.fmp.repository.SystemParameterRepository;
-import com.atibusinessgroup.fmp.web.rest.errors.SystemParameterException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import com.atibusinessgroup.fmp.domain.SystemParameter;
+import com.atibusinessgroup.fmp.repository.SystemParameterRepository;
+import com.atibusinessgroup.fmp.web.rest.errors.SystemParameterException;
 
 
 /**

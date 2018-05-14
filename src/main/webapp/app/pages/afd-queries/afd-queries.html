@@ -1,0 +1,84 @@
+<div>
+    <h2>AFD Query</h2>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+                <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+                    <th jh-sort-by="id"><span>ID</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="source"><span>Source</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="sc"><span>S/C</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="tariffCode"><span>Tar Cd</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="carrier"><span>Cxr</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="origin"><span>Orig</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="originCountry"><span>Orig Cn</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="destination"><span>Dest</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="destinationCountry"><span>Dest Cn</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="fareClass"><span>Fare Cls</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="bookingClass"><span>Bkg Cls</span> <span class="glyphicon glyphicon-sort"></span></th> 
+                    <th jh-sort-by="cabin"><span>Cabin</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="owrt"><span>OW/RT</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="footnote"><span>Ftnt</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="routingNo"><span>Rtg No</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="ruleNo"><span>Rule No</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="mpm"><span>MPM</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="currency"><span>Curr</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="baseAmount"><span>Base Amt</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="error"><span>Error</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="tfcCalcDate"><span>TFC Calc Date</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="tfcFocusDate"><span>TFC Focus Date</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="yqyr"><span>YQYR</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="taxes"><span>Taxes</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="tfc"><span>TFC</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="aif"><span>AIF</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="itinerary"><span>Itinerary</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="overrideIndicator"><span>Override Ind</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="effectiveDate"><span>Eff Date</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="discontinueDate"><span>Disc Date</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="gfsRef"><span>GFS Ref</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="global"><span>Global</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="ruleFocusDate"><span>Rule Focus Date</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="sellable"><span>Sellable</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="travelStart"><span>Travel Start</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="travelEnd"><span>Travel End</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="travelComplete"><span>Travel Complete</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="saleStart"><span>Sale Start</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="saleEnd"><span>Sale End</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="resStart"><span>Res Start</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="resEnd"><span>Res End</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="minStay"><span>Min Stay</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="maxStay"><span>Max Stay</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="advancePurchase"><span>Adv Pur</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="advancePurchase"><span>Adv Pur</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="dowIn"><span>DOW In</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="dowOut"><span>DOW Out</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="season"><span>Season</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="firstSeasonDate"><span>F Season Date</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="lastSeasonDate"><span>L Season Date</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="travelDateRanges"><span>Travel Date Ranges</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="fareType"><span>Fare Type</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="paxType"><span>Pax Type</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="wpId"><span>WP Id</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="groupFare"><span>Group Fare</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="refAmount"><span>Ref Amt</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="refYqyr"><span>Ref YQYR</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="refTaxes"><span>Ref Taxes</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="refTfc"><span>Ref TFC</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="refAif"><span>Ref AIF</span> <span class="glyphicon glyphicon-sort"></span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="afdQuery in vm.afdQueries track by afdQuery.id">
+                    <td><a ui-sref="system-parameter-detail({id:afdQuery.id})">{{afdQuery.id}}</a></td>
+                    <td>{{afdQuery.name}}</td>
+                    <td>{{afdQuery.value}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="text-center">
+        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
+    </div>
+</div>
