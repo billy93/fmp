@@ -109,7 +109,19 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @JsonIgnore
     private Set<Authority> authorities = new HashSet<>();
 
-    public String getId() {
+    @Field("review_levels")
+    private List<String> reviewLevels;
+    
+    
+    public List<String> getReviewLevels() {
+		return reviewLevels;
+	}
+
+	public void setReviewLevels(List<String> reviewLevels) {
+		this.reviewLevels = reviewLevels;
+	}
+
+	public String getId() {
         return id;
     }
 
