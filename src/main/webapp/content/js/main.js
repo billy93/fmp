@@ -30,7 +30,7 @@ $(function(){
 		}		
 	});
 
-	$('.menu-list').on('click',function(){		
+	$('.menu-list').on('click',function(){	
 		if ($(this).hasClass('open')){
 			$('.menu-list').not(this).removeClass('sub');
 			$('.menu-list').not(this).find('.sub-menu').slideUp(200);

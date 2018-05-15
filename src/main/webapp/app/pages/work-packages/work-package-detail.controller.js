@@ -36,7 +36,7 @@
         vm.account = null;
         vm.workPackage = entity;
         vm.fareType = ["Yearly", "Promotion", "Ad-hoc", "Corporate", "SPA & Code-share", "Miles"];
-        
+   
         //FARES TAB
         vm.selectedTab = 0;       
         vm.selectTab = function(index){
@@ -473,7 +473,6 @@
         Account.get().$promise
         .then(function(account){
         	vm.account = account;
-        	console.log(account.data.reviewLevels);
         })
         .catch(function(err){
         	console.log(err);
