@@ -37,8 +37,8 @@ spring:
     mail:
         host: localhost
         port: 25
-        username:
-        password:
+        username: laurensius.sakti@atibusinessgroup.com 
+        password: ati2018
     messages:
         cache-seconds: 1
     thymeleaf:

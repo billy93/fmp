@@ -45,6 +45,11 @@
                     titleKey = toState.data.pageTitle;
                 }
                 $window.document.title = titleKey;
+                
+                $('body').append("<script src='content/js/modernizr-custom.js'></script>" +
+                			       "<script src='content/js/plugins.js'></script>" +
+                			       "<script src='content/js/revealer.js'></script>" +
+                			       "<script src='content/js/main.js'></script>");
             });
 
             $rootScope.$on('$destroy', function () {
