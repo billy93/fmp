@@ -1,4 +1,4 @@
-<div>
+<!-- <div>
     <h2>Work Order Queue</h2>
     <label class="centered mb2">My Business Area: <b>JKT</b></label>
     <div class="tab-content wq">
@@ -166,3 +166,1321 @@
         <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
     </div>
 </div>
+ -->
+ 
+ 
+ 
+ 
+ <!-- <div ng-cloak>
+    <div class="row">
+        <div class="col-md-4">
+            <span class="hipster img-responsive img-rounded"></span>
+        </div>
+        <div class="col-md-8">
+            <h1>Welcome, Java Hipster!</h1>
+            <p class="lead">This is your homepage</p>
+
+            <div ng-switch="vm.isAuthenticated()">
+                <div class="alert alert-success" ng-switch-when="true">
+                    You are logged in as user "{{vm.account.login}}".
+                </div>
+
+                <div class="alert alert-warning" ng-switch-when="false">
+                    If you want to <a class="alert-link" href="" ng-click="vm.login()">sign in</a>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").
+                </div>
+
+                <div class="alert alert-warning" ng-switch-when="false">
+                    You don't have an account yet? <a class="alert-link" ui-sref="register">Register a new account</a>
+                </div>
+            </div>
+
+            <p>
+                If you have any question on JHipster:
+            </p>
+
+            <ul>
+                <li><a href="http://www.jhipster.tech/" target="_blank" rel="noopener">JHipster homepage</a></li>
+                <li><a href="http://stackoverflow.com/tags/jhipster/info" target="_blank" rel="noopener">JHipster on Stack Overflow</a></li>
+                <li><a href="https://github.com/jhipster/generator-jhipster/issues?state=open" target="_blank" rel="noopener">JHipster bug tracker</a></li>
+                <li><a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener">JHipster public chat room</a></li>
+                <li><a href="https://twitter.com/java_hipster" target="_blank" rel="noopener">follow @java_hipster on Twitter</a></li>
+            </ul>
+
+            <p>
+             <span>If you like JHipster, don't forget to give us a star on </span>&nbsp;<a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener">GitHub</a>!
+            </p>
+        </div>
+    </div>
+</div> -->
+
+
+<div class="page-wrapper">
+			<!-- page content main current -->
+			<div class="page-content page--current">
+				<div class="content-header">
+					<div class="clearfix">
+						<a href="#" class="sidebar-toggle pull-left showLeftPush" data-toggle="push-menu" role="button">
+					        <span class="sr-only">Toggle navigation</span>
+					        <span class="icon-bar"></span>
+					        <span class="icon-bar"></span>
+					        <span class="icon-bar"></span>
+				      	</a>
+					</div>	
+				</div>
+				<div class="content-title">
+					<h2>Work Order Queue</h2>
+					<p>My Business Area: <span>JKT</span></p>
+				</div>
+
+				<!-- table panel -->
+				<div class="panel">
+					<div class="panel-body">
+						<!-- filter -->
+						<div class="filter-hero">
+							<div class="filter-label semibold show">Hide Filter</div>							
+							<div class="filter-area">
+								<div class="clearfix">
+									<div class="pull-left w50">
+										<div class="form-group">
+											<div class="custom-label semibold">Review Level</div>
+											<div class="checkbox-wrapper">
+												<label>
+													<input type="checkbox" name="">
+													LSO1
+												</label>
+												<label>
+													<input type="checkbox" name="">
+													LSO2
+												</label>
+												<label>
+													<input type="checkbox" name="">
+													HO1
+												</label>
+												<label>
+													<input type="checkbox" name="">
+													HO2
+												</label>
+												<label>
+													<input type="checkbox" name="">
+													Distribution
+												</label>
+												<label>
+													<input type="checkbox" name="">
+													Market Distribution
+												</label>
+												<label>
+													<input type="checkbox" name="">
+													Route Management
+												</label>
+											</div>
+										</div>
+										<div class="form-group mb0">
+											<div class="custom-label semibold">Distribution Type</div>
+											<div class="checkbox-wrapper">
+												<label>
+													<input type="checkbox" name="">
+													ATPCO
+												</label>
+												<label>
+													<input type="checkbox" name="">
+													Market
+												</label>
+											</div>
+										</div>
+									</div>
+									<div class="pull-left w50">
+										<div class="form-group">
+											<div class="custom-label semibold">WO Status</div>
+											<div class="clearfix">
+												<div class="pull-left multi-option-checkbox">
+													<div class="checkbox-wrapper">
+														<label>
+															<input type="checkbox" name="">
+															New
+														</label>
+														<label>
+															<input type="checkbox" name="">
+															Pending
+														</label>
+														<label>
+															<input type="checkbox" name="">
+															Reviewing
+														</label>
+														<label>
+															<input type="checkbox" name="">
+															Ready to Release
+														</label>
+														<label>
+															<input type="checkbox" name="">
+															Completed
+														</label>
+														<label>
+															<input type="checkbox" name="">
+															Mkt Distribution
+														</label>
+													</div>
+												</div>
+												<div class="pull-left multi-option-checkbox">
+													<div class="checkbox-wrapper">
+														<label>
+															<input type="checkbox" name="">
+															Withdraw
+														</label>
+														<label>
+															<input type="checkbox" name="">
+															Referred
+														</label>
+														<label>
+															<input type="checkbox" name="">
+															Discontinued
+														</label>
+													</div>
+												</div>
+												<div class="pull-left multi-option-checkbox">
+													<div class="checkbox-wrapper">
+														<label>
+															<input type="checkbox" name="">
+															On Hold
+														</label>
+														<label>
+															<input type="checkbox" name="">
+															Busy or Locked
+														</label>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>							
+						</div>
+						<!-- end of filter -->
+
+						<!-- table -->
+						<div class="table-wrapper">
+							<div class="datatable-wrapper form-inline">
+								<div class="clearfix">
+									<div class="pull-left w50 data-on">
+										<div class="datatable-length">
+											<label>
+												<select class="form-control">
+													<option>10</option>
+													<option>20</option>
+													<option>30</option>
+												</select>
+												 records per page
+											</label>
+										</div>
+									</div>
+									<div class="pull-right w50">
+										<div class="clearfix">
+											<div class="pull-right datatable-button">
+												<div class="button-group dropdown">
+													<button class="btn btn-default small">New <i class="fa fa-caret-down"></i></button>
+													<ul class="dropdown-menu" role="menu">
+													    <li>
+													    	<a href="#" class="pagenav__button pagenav__button--right" data-id="1">Regular Work Order</a>
+													    </li>
+													    <li>
+													    	<a href="#">Discount Work Order</a>
+													    </li>
+													</ul>
+												</div>													
+												<button class="btn btn-default small">Refresh</button>
+											</div>
+										</div>																						
+									</div>
+								</div>
+								<div class="table-responsive">
+									<table class="table table-stripped table-bordered datatable">
+										<thead>
+											<tr role="row">
+												<th class="sorting_asc" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" aria-sort="ascending">No</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">WO Type</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Distribution Type</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Status</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">WO ID</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">WO Name</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Review Level</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Priority</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Target Sub</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Filling Date</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Distribution Date</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Disc/Expiry Date</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Filling Status</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Filling Error</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">QA Status</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Queued Date</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Locked By</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Locked Since</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr role="row" class="datatable-row" 
+												ng-repeat="workPackage in vm.workPackages track by workPackage.id" ng-click="vm.rowSelected(workPackage)" ng-class="{selected: workPackage === vm.selectedRow}">
+												<td class="text-right">
+							                        <div class="btn-group entities flex-btn-group-container">
+							                            <button type="submit" title="Edit"
+							                                    ui-sref="work-package-detail({id:workPackage.id})"
+							                                    class="btn btn-primary btn-sm">
+							                                <span class="glyphicon glyphicon-pencil"></span>
+							                            </button>
+							                        </div>
+							                    </td>
+							                    <td><a ui-sref="work-package-detail({id:workPackage.id})">{{$index+1}}</a></td>
+							                    <td>{{workPackage.type}}</td>
+							                    <td>{{workPackage.targetDistribution}}</td>
+							                    <td>{{workPackage.status}}</td>
+							                    <td>{{workPackage.wpid}}</td>
+							                    <td>{{workPackage.name}}</td>
+							                    <td>{{workPackage.reviewLevel}}</td>
+							                    <td data-translate="{{'fmpApp.Priority.' + workPackage.priority}}">{{workPackage.priority}}</td>
+							                    <td>{{workPackage.targetSub}}</td>
+							                    <td>{{workPackage.fillingDate | date:'medium'}}</td>
+							                    <td>{{workPackage.distributionDate | date:'medium'}}</td>
+							                    <td>{{workPackage.discExpiryDate | date:'medium'}}</td>
+							                    <td data-translate="{{'fmpApp.Status.' + workPackage.fillingStatus}}">{{workPackage.fillingStatus}}</td>
+							                    <td>{{workPackage.fillingError}}</td>
+							                    <td>{{workPackage.lockedBy}}</td>
+							                    <td>{{workPackage.lockedSince | date:'medium'}}</td>
+											</tr>										
+										</tbody>	
+									</table>
+								</div>
+								<div class="clearfix data-on">
+									<div class="pull-left dataTables_info">
+										Showing 1 to 10 of 57 entries
+									</div>
+									<div class="pull-right dataTables_paginate">
+										<ul class="pagination">
+										    <li class="previous disabled"><a href="#">Previous</a></li>
+										    <li class="active"><a href="#">1</a></li>
+										    <li><a href="#">2</a></li>
+										    <li><a href="#">3</a></li>
+									      	<li><a href="#">4</a></li>
+									      	<li><a href="#">5</a></li>
+									      	<li class="next"><a href="#">Next</a></li>
+										</ul>
+									</div>
+								</div>								
+							</div>
+						</div>
+						<!-- end of table -->
+					</div>
+				</div>
+
+			</div>
+
+			<!-- page content detail 1 -->
+			<div class="page-content">
+				<div class="content-header">
+					<div class="clearfix">
+						<a href="#" class="sidebar-toggle pull-left showLeftPush" data-toggle="push-menu" role="button">
+					        <span class="sr-only">Toggle navigation</span>
+					        <span class="icon-bar"></span>
+					        <span class="icon-bar"></span>
+					        <span class="icon-bar"></span>
+				      	</a>
+					</div>	
+				</div>
+
+				<div class="content-title">
+					<h2>Create Work Package</h2>
+				</div>
+
+				<div class="panel panel-detail">
+					<div class="panel-body">
+						<button class="btn btn-default small btn-back back js-back" data-id="0"><i class="fa fa-arrow-left"></i> Back</button>
+
+						<!-- create new work package -->
+						<div class="clearfix">
+							<div class="pull-left w30 two-column">
+								<div class="box-detail">
+									<div class="box-header">
+										Work Package
+									</div>
+									<div class="box-body">
+										<div class="form-group">
+											<label>Work Package Name *</label>
+											<input type="text" name="Work Package Name" class="form-control must-fill">
+										</div>
+										<div class="form-group">
+											<label>Business Area</label>
+											<select class="form-control">
+												<option>Testing</option>
+												<option>Testing 2</option>
+											</select>
+										</div>
+										<div class="form-group">
+											<label>Distribution</label>
+											<select class="form-control">
+												<option>ATPCO</option>
+												<option>Market</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>	
+							<div class="pull-left w70 two-column">
+								<div class="box-detail box-comment">
+									<div class="box-header">
+										Work Sheets
+									</div>
+									<div class="box-body">
+										<div class="clearfix worksheet-list">
+											<div class="pull-left w30 worksheet-option">
+												<div class="form-group">
+													<div class="checkbox-wrapper">
+														<label class="black">
+															<input type="checkbox" name="">
+															Specified Fares
+														</label>
+													</div>
+												</div>
+											</div>
+											<div class="pull-left w70 worksheet-disabled">
+												<div class="form-group">
+													<label>Name</label>
+													<input type="text" name="Name" disabled class="form-control">
+												</div>
+												<div class="form-group">
+													<label>Sales Country Group</label>
+													<select class="form-control" disabled>
+														<option>Testing</option>
+														<option>Testing 2</option>
+													</select>
+												</div>
+												<div class="form-group">
+													<label>Product Type</label>
+													<select class="form-control" disabled>
+														<option>Option 1</option>
+														<option>Option 2</option>
+													</select>
+												</div>
+												<div class="form-group">
+													<label>Product Sub Type</label>
+													<select class="form-control" disabled>
+														<option>Option 1</option>
+														<option>Option 2</option>
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="clearfix worksheet-list">
+											<div class="pull-left w30 worksheet-option">
+												<div class="form-group">
+													<div class="checkbox-wrapper">
+														<label class="black">
+															<input type="checkbox" name="">
+															Add Ons
+														</label>
+													</div>
+												</div>
+											</div>
+											<div class="pull-left w70 worksheet-disabled">
+												<div class="form-group">
+													<label>Name</label>
+													<input type="text" name="Name" disabled class="form-control">
+												</div>
+												<div class="form-group">
+													<label>Sales Country Group</label>
+													<select class="form-control" disabled>
+														<option>Testing</option>
+														<option>Testing 2</option>
+													</select>
+												</div>
+												<div class="form-group">
+													<label>Product Type</label>
+													<select class="form-control" disabled>
+														<option>Option 1</option>
+														<option>Option 2</option>
+													</select>
+												</div>
+												<div class="form-group">
+													<label>Product Sub Type</label>
+													<select class="form-control" disabled>
+														<option>Option 1</option>
+														<option>Option 2</option>
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="worksheet-list">
+											<div class="form-group mb0">
+												<div class="checkbox-wrapper">
+													<label class="black">
+														<input type="checkbox" name="">
+														Rules
+													</label>
+												</div>
+											</div>
+											<div class="form-group mb0">
+												<div class="checkbox-wrapper">
+													<label class="black">
+														<input type="checkbox" name="">
+														Fare Class
+													</label>
+												</div>
+											</div>
+											<div class="form-group mb0">
+												<div class="checkbox-wrapper disabled">
+													<label class="black">
+														<input type="checkbox" name="" disabled>
+														Foot Notes
+													</label>
+												</div>
+											</div>
+											<div class="form-group mb0">
+												<div class="checkbox-wrapper disabled">
+													<label class="black">
+														<input type="checkbox" name="" disabled>
+														Routings
+													</label>
+												</div>
+											</div>
+											<div class="form-group mb0">
+												<div class="checkbox-wrapper">
+													<label class="black">
+														<input type="checkbox" name="">
+														Filling Instructions
+													</label>
+												</div>
+											</div>
+										</div>										
+										<div class="clearfix worksheet-list">
+											<div class="pull-left w30 worksheet-option">
+												<div class="form-group">
+													<div class="checkbox-wrapper">
+														<label class="black">
+															<input type="checkbox" name="">
+															Attachment
+														</label>
+													</div>
+												</div>
+											</div>
+											<div class="pull-left w70 worksheet-disabled">
+												<div class="form-group">
+													<label>Sales Country Group</label>
+													<select class="form-control" disabled>
+														<option>Testing</option>
+														<option>Testing 2</option>
+													</select>
+												</div>
+												<div class="form-group">
+													<label>Product Type</label>
+													<select class="form-control" disabled>
+														<option>Option 1</option>
+														<option>Option 2</option>
+													</select>
+												</div>
+												<div class="form-group">
+													<label>Product Sub Type</label>
+													<select class="form-control" disabled>
+														<option>Option 1</option>
+														<option>Option 2</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>						
+						</div>
+
+						<div class="text-center pv1">
+							<button class="btn btn-default small js-createWorkOrder" data-id="0">OK</button>
+							<button class="btn btn-default small btn-back js-back" data-id="0">Cancel</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- page content detail 2 -->
+			<div class="page-content">
+				<div class="content-header">
+					<div class="clearfix">
+						<a href="#" class="sidebar-toggle pull-left showLeftPush" data-toggle="push-menu" role="button">
+					        <span class="sr-only">Toggle navigation</span>
+					        <span class="icon-bar"></span>
+					        <span class="icon-bar"></span>
+					        <span class="icon-bar"></span>
+				      	</a>
+					</div>	
+				</div>
+				
+				<div class="panel panel-detail">
+					<div class="panel-body">
+						<button class="btn btn-default small btn-back back js-back" data-id="0"><i class="fa fa-arrow-left"></i> Back</button>
+
+						<!-- details -->
+						<div class="clearfix">
+							<div class="pull-left w50 two-column">
+								<div class="box-detail">
+									<div class="box-header">
+										Details
+									</div>
+									<div class="box-body">
+										<div class="clearfix">
+											<div class="pull-left w50 two-column">
+												<div class="form-group">
+													<label>WO ID</label>
+													<input type="text" name="wo id" class="form-control" disabled value="12">
+												</div>
+											</div>
+											<div class="pull-left w50 two-column">
+												<div class="form-group">
+													<label>WO Name</label>
+													<input type="text" name="wo name" class="form-control" value="JKT 48">
+												</div>
+											</div>
+										</div>
+										<div class="clearfix">
+											<div class="pull-left w50 two-column">
+												<div class="form-group">
+													<label>Business Area</label>
+													<input type="text" name="Business Area" class="form-control" disabled value="JKT">
+												</div>
+											</div>
+											<div class="pull-left w50 two-column">
+												<div class="form-group">
+													<label>Created By</label>
+													<input type="text" name="Created By" class="form-control" disabled value="Admin">
+												</div>
+											</div>
+										</div>
+										<div class="clearfix">
+											<div class="pull-left w50 two-column">
+												<div class="form-group">
+													<label>Priority</label>
+													<select class="form-control">
+														<option>Select Priority</option>
+														<option>Low</option>
+														<option>Urgent</option>
+														<option>Top Urgent</option>
+													</select>
+												</div>
+											</div>
+											<div class="pull-left w50 two-column">
+												<div class="form-group">
+													<label>Created Date</label>
+													<div class="input-group">
+														<input type="text" name="Created Date" class="form-control" disabled value="2018-05-07 18:03">
+														<span class="input-group-addon disabled">
+															<i class="fa fa-calendar"></i>
+														</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="clearfix">
+											<div class="pull-left w50 two-column">
+												<div class="form-group">
+													<label>Status</label>
+													<select class="form-control">
+														<option>New</option>
+													</select>
+												</div>
+											</div>
+											<div class="pull-left w50 two-column">
+												<div class="form-group">
+													<label>Filling Date</label>
+													<div class="input-group">
+														<input type="text" name="Filling Date" class="form-control">
+														<span class="input-group-addon">
+															<i class="fa fa-calendar"></i>
+														</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="clearfix">
+											<div class="pull-left w50 two-column">
+												<div class="form-group">
+													<label>Review Level</label>
+													<input type="text" name="Review Level" class="form-control" disabled value="LS01">
+												</div>
+											</div>
+											<div class="pull-left w50 two-column">
+												<div class="form-group">
+													<label>Target Sub</label>
+													<input type="text" name="Target Sub" class="form-control" disabled value="HH:00">
+												</div>
+											</div>
+										</div>
+										<div class="clearfix">
+											<div class="pull-left w50 two-column">
+												<div class="form-group">
+													<label>QA status</label>
+													<select class="form-control">
+														<option>Select Status</option>
+														<option>Pending</option>
+														<option>Passed</option>
+														<option>Failed</option>
+													</select>
+												</div>
+											</div>
+											<div class="pull-left w50 two-column">
+												<div class="form-group">
+													<label>Distribution Date</label>
+													<div class="input-group">
+														<input type="text" name="Distribution Date" class="form-control">
+														<span class="input-group-addon">
+															<i class="fa fa-calendar"></i>
+														</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="clearfix">
+											<div class="pull-left w50 two-column">
+												<div class="form-group">
+													<label>Distribution Type</label>
+													<input type="text" name="Distribution Type" class="form-control" disabled value="Market">
+												</div>
+											</div>
+											<div class="pull-left w50 two-column">
+												<div class="form-group">
+													<label>DIsc/Expiry Date</label>
+													<div class="input-group">
+														<input type="text" name="DIsc/Expiry Date" class="form-control" disabled="">
+														<span class="input-group-addon disabled">
+															<i class="fa fa-calendar"></i>
+														</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="pull-left w50 two-column">
+								<div class="box-detail box-comment">
+									<div class="box-header">
+										Comment
+									</div>
+									<div class="box-body bbgrey">
+										<div class="form-group">
+											<label>Comment</label>
+											<textarea class="form-control" rows="3" placeholder="Enter ..." id="comment-area"></textarea>
+										</div>
+										<div class="clearfix">
+											<div class="pull-right">
+												<button class="btn btn-default small btn-secondary" id="btn-comment"></i>Send</button>
+											</div>
+										</div>										
+									</div>
+									<div class="box-body">
+										<div class="comment-wrapper"></div>
+									</div>
+								</div>
+							</div>
+						</div>						
+						<!-- end of details -->
+					</div>
+				</div>
+
+				<div class="panel panel-tabs">
+					<div class="panel-body">
+						<div class="clearfix mb1">
+							<div class="pull-right">
+								<div class="button-group dropdown">
+									<button class="btn btn-default small">Workflow <i class="fa fa-caret-down"></i></button>
+									<ul class="dropdown-menu" role="menu">
+									    <li>
+									    	<a href="#">Pass Up</a>
+									    </li>
+									</ul>
+								</div>
+								<div class="button-group dropdown">
+									<button class="btn btn-default small">Action <i class="fa fa-caret-down"></i></button>
+									<ul class="dropdown-menu" role="menu">
+									    <li>
+									    	<a href="#">Save and Validate</a>
+									    </li>
+									</ul>
+								</div>	
+								<div class="button-group dropdown">
+									<button class="btn btn-default small">Sheet <i class="fa fa-caret-down"></i></button>
+									<ul class="dropdown-menu" role="menu">
+									    <li>
+									    	<a href="#" data-toggle="modal" data-target="#addNewsheet">Add</a>
+									    </li>
+									    <li>
+									    	<a href="#">Remove</a>
+									    </li>
+									    <li>
+									    	<a href="#">Rename</a>
+									    </li>
+									    <li>
+									    	<a href="#">Copy</a>
+									    </li>
+									</ul>
+								</div>												
+								<button class="btn btn-default small">Save</button>
+							</div>
+						</div>
+						<div class="tab-wrapper" id="distribution-market">
+							<div class="clearfix tab-body">
+								<ul class="clearfix nav-responsive nav nav-tabs">
+								    <li><a href="#market-fares">Market Fares</a></li>
+								    <li><a href="#market-rules">Market Rules</a></li>
+								    <li><a href="#attachment-market">Attachment</a></li>
+								</ul>
+								<div class="tab-content">
+									<div class="tab-pane active" id="market-fares">
+										<div class="pb1 mb1 bbgrey">
+											<div class="clearfix">
+												<div class="pull-left w50 two-column">
+													<div class="form-group">
+														<label>CXR</label>
+														<input type="text" name="cxr" class="form-control" value="GA">
+													</div>
+												</div>
+												<div class="pull-left w50 two-column">
+													<div class="form-group">
+														<label>Approval Reference</label>
+														<input type="text" name="Approval Reference" class="form-control">
+													</div>
+												</div>
+											</div>
+											<div class="clearfix">
+												<div class="pull-left w50 two-column">
+													<div class="form-group">
+														<label>Description</label>
+														<input type="text" name="Description" class="form-control" value="JKT 48">
+													</div>
+												</div>
+												<div class="pull-left w50 two-column">
+													<div class="form-group">
+														<label>Version</label>
+														<select class="form-control">
+															<option>Select Version</option>
+															<option>Current</option>
+														</select>
+													</div>
+												</div>
+											</div>
+										</div>
+										
+										<!-- table details-->
+										<div class="table-wrapper">
+											<div class="datatable-wrapper form-inline">
+												<div class="clearfix">
+													<div class="pull-left">
+														<div class="clearfix">
+															<div class="pull-right datatable-button">
+																<div class="button-group dropdown">
+																	<button class="btn btn-default small btn-secondary">Edit <i class="fa fa-caret-down"></i></button>
+																	<ul class="dropdown-menu" role="menu">
+																	    <li>
+																	    	<a href="#">Clear Selectio</a>
+																	    </li>
+																	    <li>
+																	    	<a href="#">Fill Down</a>
+																	    </li>
+																	    <li>
+																	    	<a href="#">Search/Replace</a>
+																	    </li>
+																	    <li>
+																	    	<a href="#">Add Rows</a>
+																	    </li>
+																	    <li>
+																	    	<a href="#">Delete Selected Rows</a>
+																	    </li>
+																	    <li>
+																	    	<a href="#">Duplicate Selected Rows</a>
+																	    </li>
+																	    <li>
+																	    	<a href="#">Copy Selected Rows</a>
+																	    </li>
+																	    <li>
+																	    	<a href="#">Paste</a>
+																	    </li>
+																	    <li>
+																	    	<a href="#">Paste As Cancel</a>
+																	    </li>
+																	</ul>
+																</div>													
+																<button class="btn btn-default small btn-secondary">Import</button>
+																<button class="btn btn-default small btn-secondary">Export</button>
+																<button class="btn btn-default small btn-secondary">Publish</button>
+																<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalAgent">Agents</button>
+																<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalRatesheet">Rate Sheet</button>
+															</div>
+														</div>																						
+													</div>
+												</div>
+												<div class="table-responsive">
+													<table class="table table-stripped table-bordered datatable">
+														<thead>
+															<tr role="row">
+																<th class="sorting_asc" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" aria-sort="ascending">No</th>
+																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Status</th>
+																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Carrier</th>
+																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Action</th>
+																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Origin</th>
+																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Dest</th>
+																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Cabin</th>
+																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">OW/RT</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr role="row" class="datatable-row">
+																<td>1</td>
+																<td>
+																	<select class="form-control inside-table">
+																		<option>Select Priority</option>
+																		<option>Pending</option>
+																		<option>Approve</option>
+																		<option>Reject</option>
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="carrier" class="form-control" value="GA">
+																</td>																
+																<td>New</td>
+																<td>
+																	<input type="text" name="origin" class="form-control must-fill">
+																</td>
+																<td>
+																	<input type="text" name="destination" class="form-control must-fill">
+																</td>
+																<td>
+																	<select class="form-control inside-table must-fill">
+																		<option>Select Cabin</option>
+																		<option>Y - Economy</option>
+																		<option>F - First Class</option>
+																		<option>C - Business</option>
+																		<option>R - Premium Economy</option>
+																	</select>
+																</td>
+																<td>
+																	<select class="form-control inside-table must-fill">
+																		<option>Select OW/RT</option>
+																		<option>Pending</option>
+																		<option>Approve</option>
+																		<option>Reject</option>
+																	</select>
+																</td>
+															</tr>
+															<tr class="datatable-action">
+																<td colspan="18" class="">
+																	<div class="btn btn-app">
+																		<i class="fa fa-level-up"></i>Move Up
+																	</div>
+																	<div class="btn btn-app">
+																		<i class="fa fa-level-down"></i>Move Down
+																	</div>	
+																</td>
+															</tr>
+															<tr role="row" class="datatable-row">
+																<td>2</td>
+																<td>
+																	<select class="form-control inside-table">
+																		<option>Select Priority</option>
+																		<option>Pending</option>
+																		<option>Approve</option>
+																		<option>Reject</option>
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="carrier" class="form-control" value="GA">
+																</td>																
+																<td>New</td>
+																<td>
+																	<input type="text" name="origin" class="form-control must-fill">
+																</td>
+																<td>
+																	<input type="text" name="destination" class="form-control must-fill">
+																</td>
+																<td>
+																	<select class="form-control inside-table must-fill">
+																		<option>Select Cabin</option>
+																		<option>Y - Economy</option>
+																		<option>F - First Class</option>
+																		<option>C - Business</option>
+																		<option>R - Premium Economy</option>
+																	</select>
+																</td>
+																<td>
+																	<select class="form-control inside-table must-fill">
+																		<option>Select OW/RT</option>
+																		<option>Pending</option>
+																		<option>Approve</option>
+																		<option>Reject</option>
+																	</select>
+																</td>
+															</tr>
+															<tr class="datatable-action">
+																<td colspan="18" class="">
+																	<div class="btn btn-app">
+																		<i class="fa fa-level-up"></i>Move Up
+																	</div>
+																	<div class="btn btn-app">
+																		<i class="fa fa-level-down"></i>Move Down
+																	</div>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+												<div class="clearfix">
+													<div class="pull-left dataTables_info italic">
+														* Field can not be empty.
+													</div>
+												</div>	
+											</div>
+										</div>
+									</div>
+									<div class="tab-pane" id="market-rules">
+										<div class="text-center no-data">No Data Available</div>
+									</div>
+									<div class="tab-pane" id="attachment-market">
+										<div class="text-center no-data">No Attachment Available</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tab-wrapper" id="distribution-ATPCO">
+							<div class="clearfix tab-body">
+								<ul class="clearfix nav-responsive nav nav-tabs">
+								    <li><a href="#ga-fares">GA Fares : SF</a></li>
+								    <li><a href="#add-on">Add Ons</a></li>
+								    <li><a href="#filling-instruction">Filling Instruction</a></li>
+								    <li><a href="#attachment-atpco">Attachment</a></li>
+								    <li><a href="#filling-details">Filling Details</a></li>
+								</ul>
+								<div class="tab-content">
+									<div class="tab-pane active" id="ga-fares">
+										<div class="pb1 mb1 bbgrey">
+											<div class="clearfix">
+												<div class="pull-left w50 two-column">
+													<div class="form-group">
+														<label>CXR</label>
+														<input type="text" name="cxr" class="form-control" value="GA">
+													</div>
+												</div>
+												<div class="pull-left w50 two-column">
+													<div class="form-group">
+														<label>Approval Reference</label>
+														<input type="text" name="Approval Reference" class="form-control">
+													</div>
+												</div>
+											</div>
+											<div class="clearfix">
+												<div class="pull-left w50 two-column">
+													<div class="form-group">
+														<label>Description</label>
+														<input type="text" name="Description" class="form-control" value="JKT 48">
+													</div>
+												</div>
+												<div class="pull-left w50 two-column">
+													<div class="form-group">
+														<label>Version</label>
+														<select class="form-control">
+															<option>Select Version</option>
+															<option>Current</option>
+														</select>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<!-- table details-->
+										<div class="table-wrapper">
+											<div class="datatable-wrapper form-inline">
+												<div class="clearfix">
+													<div class="pull-left">
+														<div class="clearfix">
+															<div class="pull-right datatable-button">
+																<div class="button-group dropdown">
+																	<button class="btn btn-default small btn-secondary">Edit <i class="fa fa-caret-down"></i></button>
+																	<ul class="dropdown-menu" role="menu">
+																	    <li>
+																	    	<a href="#">Clear Selectio</a>
+																	    </li>
+																	    <li>
+																	    	<a href="#">Fill Down</a>
+																	    </li>
+																	    <li>
+																	    	<a href="#">Search/Replace</a>
+																	    </li>
+																	    <li>
+																	    	<a href="#">Add Rows</a>
+																	    </li>
+																	    <li>
+																	    	<a href="#">Delete Selected Rows</a>
+																	    </li>
+																	    <li>
+																	    	<a href="#">Duplicate Selected Rows</a>
+																	    </li>
+																	    <li>
+																	    	<a href="#">Copy Selected Rows</a>
+																	    </li>
+																	    <li>
+																	    	<a href="#">Paste</a>
+																	    </li>
+																	    <li>
+																	    	<a href="#">Paste As Cancel</a>
+																	    </li>
+																	</ul>
+																</div>													
+																<button class="btn btn-default small btn-secondary">Import</button>
+																<button class="btn btn-default small btn-secondary">Export</button>
+																<button class="btn btn-default small btn-secondary">Publish</button>
+																<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalAgent">Agents</button>
+																<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalRatesheet">Rate Sheet</button>
+															</div>
+														</div>																						
+													</div>
+												</div>
+												<div class="table-responsive">
+													<table class="table table-stripped table-bordered datatable">
+														<thead>
+															<tr role="row">
+																<th class="sorting_asc" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" aria-sort="ascending">No</th>
+																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Status</th>
+																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Carrier</th>
+																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Action</th>
+																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Origin</th>
+																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Dest</th>
+																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Cabin</th>
+																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">OW/RT</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr role="row" class="datatable-row">
+																<td>1</td>
+																<td>
+																	<select class="form-control inside-table">
+																		<option>Select Priority</option>
+																		<option>Pending</option>
+																		<option>Approve</option>
+																		<option>Reject</option>
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="carrier" class="form-control" value="GA">
+																</td>																
+																<td>New</td>
+																<td>
+																	<input type="text" name="origin" class="form-control must-fill">
+																</td>
+																<td>
+																	<input type="text" name="destination" class="form-control must-fill">
+																</td>
+																<td>
+																	<select class="form-control inside-table must-fill">
+																		<option>Select Cabin</option>
+																		<option>Y - Economy</option>
+																		<option>F - First Class</option>
+																		<option>C - Business</option>
+																		<option>R - Premium Economy</option>
+																	</select>
+																</td>
+																<td>
+																	<select class="form-control inside-table must-fill">
+																		<option>Select OW/RT</option>
+																		<option>Pending</option>
+																		<option>Approve</option>
+																		<option>Reject</option>
+																	</select>
+																</td>
+															</tr>
+															<tr class="datatable-action">
+																<td colspan="18" class="">
+																	<div class="btn btn-app">
+																		<i class="fa fa-level-up"></i>Move Up
+																	</div>
+																	<div class="btn btn-app">
+																		<i class="fa fa-level-down"></i>Move Down
+																	</div>	
+																	<div class="btn btn-app">
+																		<i class="fa fa-stack-exchange"></i>Derived Fares
+																	</div>
+																</td>
+															</tr>
+															<tr role="row" class="datatable-row">
+																<td>2</td>
+																<td>
+																	<select class="form-control inside-table">
+																		<option>Select Priority</option>
+																		<option>Pending</option>
+																		<option>Approve</option>
+																		<option>Reject</option>
+																	</select>
+																</td>
+																<td>
+																	<input type="text" name="carrier" class="form-control" value="GA">
+																</td>																
+																<td>New</td>
+																<td>
+																	<input type="text" name="origin" class="form-control must-fill">
+																</td>
+																<td>
+																	<input type="text" name="destination" class="form-control must-fill">
+																</td>
+																<td>
+																	<select class="form-control inside-table must-fill">
+																		<option>Select Cabin</option>
+																		<option>Y - Economy</option>
+																		<option>F - First Class</option>
+																		<option>C - Business</option>
+																		<option>R - Premium Economy</option>
+																	</select>
+																</td>
+																<td>
+																	<select class="form-control inside-table must-fill">
+																		<option>Select OW/RT</option>
+																		<option>Pending</option>
+																		<option>Approve</option>
+																		<option>Reject</option>
+																	</select>
+																</td>
+															</tr>
+															<tr class="datatable-action">
+																<td colspan="18" class="">																	
+																	<div class="btn btn-app">
+																		<i class="fa fa-level-up"></i>Move Up
+																	</div>
+																	<div class="btn btn-app">
+																		<i class="fa fa-level-down"></i>Move Down
+																	</div>
+																	<div class="btn btn-app">
+																		<i class="fa fa-stack-exchange"></i>Derived Fares
+																	</div>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+												<div class="clearfix">
+													<div class="pull-left dataTables_info italic">
+														* Field can not be empty.
+													</div>
+												</div>	
+											</div>
+										</div>
+									</div>
+									<div class="tab-pane" id="add-on">
+										<div class="text-center no-data">No Data Available</div>
+									</div>
+									<div class="tab-pane" id="filling-instruction">
+										<div class="text-center no-data">No Data Available</div>
+									</div>
+									<div class="tab-pane" id="attachment-atpco">
+										<div class="text-center no-data">No Attachment Available</div>
+									</div>
+									<div class="tab-pane" id="filling-details">
+										<div class="text-center no-data">No Attachment Available</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>			
+		</div>
+		
+		<script>
+		(function() {
+			
+			var pages = [].slice.call(document.querySelectorAll('.page-wrapper > .page-content')),
+				currentPage = 0,
+				
+				revealerOpts = {
+					// the layers are the elements that move from the sides
+					nmbLayers : 3,
+					// bg color of each layer
+					bgcolor : ['#111', '#fc3', '#fff'],
+					// effect classname
+					effect : 'anim--effect-4',
+					onStart : function(direction) {
+						// next page gets class page--animate-[direction]
+						var nextPage = pages[currentPage === 0 ? 1 : 0];
+						classie.add(nextPage, 'page--animate-' + direction);
+					},
+					onEnd : function(direction) {
+						// remove class page--animate-[direction] from next page
+						var nextPage = pages[currentPage === 0 ? 1 : 0];
+						nextPage.className = 'page-content';
+						
+						var $body = angular.element(document.body);
+                        var $state = $body.injector().get('$state');
+						$state.go('work-package'); 
+					}
+				};
+				revealer = new Revealer(revealerOpts);
+
+			// clicking the page nav buttons
+
+			var dataId;
+			var dataDistribution;
+			
+			$('.js-createWorkOrder').click(function(){
+				reveal('left'); 
+				dataId = $(this).attr('data-id');
+				$('.data-on').show();
+			})
+
+			$('.js-back').click(function(){
+				reveal('left'); 
+				dataId = $(this).attr('data-id');
+			})
+
+			$('.pagenav__button--right').click(function(){
+				reveal('right'); 
+				dataId = $(this).attr('data-id');
+				dataDistribution = $(this).attr('data-distribution');
+				var _href = $('#'+dataDistribution).find('.nav-tabs li:first-child a').attr('href');
+				$('.tab-wrapper').hide();
+				$(".nav-tabs li").removeClass('active');
+				$('#'+dataDistribution).show().find('.nav-tabs li:first-child').addClass('active');
+				$(_href).addClass('active');
+				$('#sideBar-s1').removeClass('sideBar-open')
+				$('.search-wrap').find('i').removeClass('shrink');
+				$('.sideBar').find('.menu-list').removeClass('open');
+				$('.menu-list').removeClass('sub');
+				$('.sub-menu').slideUp(200);
+				$('.page-content').removeClass('pushed');
+			});
+
+			// triggers the effect by calling instance.reveal(direction, callbackTime, callbackFn)
+			function reveal(direction) {
+				var callbackTime = 750,
+					callbackFn = function() {
+						classie.remove(pages[currentPage], 'page--current');
+						currentPage = currentPage === 0 ? dataId : 0;
+						classie.add(pages[currentPage], 'page--current');	
+					};
+
+				revealer.reveal(direction, callbackTime, callbackFn);
+			}
+
+
+			function changeEffect() {
+				revealer.destroy();
+				var revealerOpts = {
+					// the layers are the elements that move from the sides
+					nmbLayers : Number(this.options[this.selectedIndex].getAttribute('data-layers')),
+					// bg color of each layer
+					bgcolor : this.options[this.selectedIndex].getAttribute('data-colors').split(','),
+					// effect classname
+					effect : 'anim--' + this.value,
+					onStart : function(direction) {
+						// next page gets class page--animate-[direction]
+						var nextPage = pages[currentPage === 0 ? dataId : 0];
+						classie.add(nextPage, 'page--animate-' + direction);
+					},
+					onEnd : function(direction) {
+						// remove class page--animate-[direction] from next page
+						var nextPage = pages[currentPage === 0 ? dataId : 0];
+						nextPage.className = 'page-content';
+					}
+				};
+				
+				revealer = new Revealer(revealerOpts);
+			}
+		})();
+		</script>
+		

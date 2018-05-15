@@ -8,7 +8,6 @@
     WorkPackageController.$inject = ['$uibModal', '$state', 'WorkPackage', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams'];
 
     function WorkPackageController($uibModal, $state, WorkPackage, ParseLinks, AlertService, paginationConstants, pagingParams) {
-
         var vm = this;
         vm.reviewLevel = true;
         vm.woStatus = true;
@@ -39,6 +38,7 @@
                 vm.totalItems = headers('X-Total-Count');
                 vm.queryCount = vm.totalItems;
                 vm.workPackages = data;
+                console.log(vm.workPackages);
                 vm.page = pagingParams.page;
             }
             function onError(error) {
