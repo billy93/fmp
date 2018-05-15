@@ -1,0 +1,29 @@
+<form name="editForm" role="form" novalidate ng-submit="vm.save()">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myWorkPackageLabel">Workorder History</h4>
+    </div>
+    <div class="modal-body">
+    		<table class="jh-table table table-striped">
+    			<thead><tr>
+    				<td>Username</td>
+    				<td>Action</td>
+    				<td>Time</td>
+    			</tr>
+    			</thead>
+    			<tbody>
+    				<tr ng-repeat="history in vm.history.slice().reverse() track by $index">
+    					<td>{{history.username}}</td>
+    					<td>{{history.type}}</td>
+    					<td>{{history.createdDate | date : 'short'}}</td>
+    				</tr>
+    			</tbody>
+    		</table>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Close</span>
+        </button>
+    </div>
+</form>

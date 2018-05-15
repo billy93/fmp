@@ -1,0 +1,160 @@
+<form name="editForm" role="form" novalidate ng-submit="vm.save()">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myWorkPackageLabel">Create Work Order</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="tab-content afd">
+        	<div class="row">
+	        	<div class="col-md-12">	
+	        		<div class="form-group row">
+			            <label class="col-md-4">Workorder Name</label>
+			            <input type="text" class="col-md-8" name="name" id="field_name" ng-model="vm.workPackage.name"/>
+			        </div>
+			        
+			        <div class="form-group row">
+			            <label class="col-md-4" for="field_businessArea">Business Area</label>
+			            <div class="col-md-8 no-pad select">	
+			            	<select class="col-md-12" name="priority" ng-model="vm.workPackage.businessArea" id="field_businessArea">
+				                <option value="">Select Business Area</option>
+				                <option value="JKT" >JKT</option>
+				            </select>
+			            </div>
+			        </div>
+			        
+			        <div class="form-group row" ng-show="vm.workPackage.type=='REGULAR' || vm.workPackage.type=='DISCOUNT'">
+			        	<label class="col-md-4" >Distribution Type</label>
+			        	<div class="col-md-8 no-pad select">	
+			        		<select class="col-md-12" name="distributionType" ng-model="vm.workPackage.targetDistribution" id="field_distributionType">
+								<option ng-repeat="x in vm.distributionTypes track by $index">{{x}}</option>
+							</select>
+			        	</div>
+			        </div>
+	        	</div>
+	        </div>
+	        
+	        <div ng-show="vm.workPackage.type=='REGULAR' && vm.workPackage.targetDistribution != null">
+	        	
+	        	<div class="row">
+	        		<div class="col-md-4">	
+	        			<div class="form-group row">
+					        <div class="col-md-12 no-pad checkbox auto">	
+								<label><input type="checkbox" ng-model="vm.workPackage.specifiedFares" value="">Specified Fares</label>
+					        </div>
+						</div>
+					</div>
+					
+					 <div class="row" ng-show="vm.workPackage.specifiedFares"> 
+					    <div class="col-xs-3">
+					        Name
+					        <input type="text" class="form-control" name="name" id="field_name" ng-model="vm.workPackage.fareSheet[0].specifiedFaresName"/>
+					        <input type="hidden" class="form-control" name="carrier" id="field_carrier" ng-model="vm.workPackage.fareSheet[0].fareCarrier"/>
+					    </div>
+					    <div class="col-xs-3">
+					       Fare Type
+					       <select class="form-control"ng-model="vm.workPackage.fareSheet[0].fareType" ng-options="fareType for fareType in vm.fareType"></select>
+					    </div>
+					  </div>
+	        	</div>
+		        <div class="row" ng-show="vm.workPackage.targetDistribution == 'ATPCO'">
+	        		<div class="col-md-4">	
+	        			<div class="form-group row">
+					        <div class="col-md-12 no-pad checkbox auto">	
+								<label><input type="checkbox" ng-model="vm.workPackage.addon" value="">Add Ons</label>
+					        </div>
+						</div>
+					</div>
+					<div class="col-md-8" ng-show="vm.workPackage.addon">
+						<div class="form-group row">
+							<label class="col-md-4" >Name</label>
+					     	<input type="text" class="col-md-8" name="name" id="field_name" ng-model="vm.workPackage.addonFareSheet[0].addonFaresName"/>
+						</div>
+					</div>
+	        	</div>
+	        	<div class="row" ng-show="vm.workPackage.targetDistribution == 'Market'">
+	        		<div class="col-md-4">	
+	        			<div class="form-group row">
+					        <div class="col-md-12 no-pad checkbox auto">	
+								<label><input type="checkbox" ng-model="vm.workPackage.marketRules" value="">Market Rules</label>
+					        </div>
+						</div>
+					</div>
+	        	</div>
+				<div class="row" ng-show="vm.workPackage.targetDistribution == 'ATPCO'">
+	        		<div class="col-md-4">	
+	        			<div class="form-group row">
+					        <div class="col-md-12 no-pad checkbox auto">	
+								<label><input type="checkbox" ng-model="vm.workPackage.filingInstruction" value="">Filing Instructions</label>
+					        </div>
+						</div>
+					</div>
+	        	</div>
+	        	<div class="row">
+	        		<div class="col-md-4">	
+	        			<div class="form-group row">
+					        <div class="col-md-12 no-pad checkbox auto">	
+								<label><input type="checkbox" ng-model="vm.workPackage.attachment" value="">Attachments</label>
+					        </div>
+						</div>
+					</div>
+	        	</div>
+			</div>
+			<div ng-show="vm.workPackage.type=='DISCOUNT' && vm.workPackage.targetDistribution != null"">
+				<div class="row">
+	        		<div class="col-md-4">	
+	        			<div class="form-group row">
+					        <div class="col-md-12 no-pad checkbox auto">	
+								<label><input type="checkbox" ng-model="vm.workPackage.discount" value="">Discount</label>
+					        </div>
+						</div>
+					</div>
+					
+					<div class="row" ng-show="vm.workPackage.discount"> 
+					    <div class="col-xs-3">
+					        Name
+					        <input type="text" class="form-control" name="name" id="field_name" ng-model="vm.workPackage.discountFareSheet[0].discountFaresName"/>
+					        <input type="hidden" class="form-control" name="carrier" id="field_carrier" ng-model="vm.workPackage.discountFareSheet[0].fareCarrier"/>
+					    </div>
+					    <div class="col-xs-3">
+					       Fare Type
+					       <select class="form-control" ng-model="vm.workPackage.discountFareSheet[0].fareType" ng-options="fareType for fareType in vm.fareType"
+					       	name="fareType{{$index}}"
+					       	ng-style="editForm.editFormATPCO.fareType{{$index}}.$error.required && vm.errorStyle"
+				      		ng-options="fareType for fareType in vm.fareType" 
+		      				ng-required="vm.checkRequiredField('discountFareType')"
+		      				ng-disabled="vm.isFieldDisable('discountFareType')"></select>
+					    </div>
+					  </div>
+	        	</div>
+				<div class="row">
+	        		<div class="col-md-4">	
+	        			<div class="form-group row">
+					        <div class="col-md-12 no-pad checkbox auto">	
+								<label><input type="checkbox" ng-disabled="vm.workPackage.targetDistribution== 'Market'" ng-model="vm.workPackage.filingInstruction" value="">Filing Instructions</label>
+					        </div>
+						</div>
+					</div>
+	        	</div>
+				<div class="row">
+	        		<div class="col-md-4">	
+	        			<div class="form-group row">
+					        <div class="col-md-12 no-pad checkbox auto">	
+								<label><input type="checkbox" ng-model="vm.workPackage.attachment" value="">Attachments</label>
+					        </div>
+						</div>
+					</div>
+	        	</div>
+			</div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" data-dismiss="modal" ng-click="vm.clear()">
+            <span data-translate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span>Create</span>
+        </button>
+    </div>
+</form>
