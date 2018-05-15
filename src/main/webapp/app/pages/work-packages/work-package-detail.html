@@ -31,128 +31,114 @@
 										<div class="clearfix">
 											<div class="pull-left w50 two-column">
 												<div class="form-group">
-													<label>WO ID</label>
-													<input type="text" name="wo id" class="form-control" disabled value="12">
+													<label for="field_wpid">WO ID</label>
+													<input type="text" name="wpid" id="field_wpid" class="form-control" disabled ng-model="vm.workPackage.wpid"/>
 												</div>
-											</div>
-											<div class="pull-left w50 two-column">
 												<div class="form-group">
-													<label>WO Name</label>
-													<input type="text" name="wo name" class="form-control" value="JKT 48">
+													<label for="field_businessArea">Business Area</label>
+													<input ng-style="editForm.businessArea.$error.required && vm.errorStyle" ng-required="vm.checkRequiredField('businessArea')" 
+		                    								autocomplete="off" type="text" name="businessArea" ng-model="vm.workPackage.businessArea" class="form-control" value="JKT"
+			            									uib-typeahead="o as o.name for o in vm.businessAreas | filter:{name:$viewValue} | limitTo:5">
 												</div>
-											</div>
-										</div>
-										<div class="clearfix">
-											<div class="pull-left w50 two-column">
 												<div class="form-group">
-													<label>Business Area</label>
-													<input type="text" name="Business Area" class="form-control" disabled value="JKT">
+													<label for="field_priority">Priority</label>
+													<select class="form-control" name="priorityData" ng-model="vm.workPackage.priority" id="field_priority" ng-disabled="vm.isFieldDisable('priority')">
+														<option value="">Select Priority</option>
+										                <option value="LOW" data-translate="fmpApp.Priority.LOW">Low</option>
+										                <option value="URGENT" data-translate="fmpApp.Priority.URGENT">Urgent</option>
+										                <option value="TOP_URGENT" data-translate="fmpApp.Priority.TOP_URGENT">Top Urgent</option>
+				            						</select>
 												</div>
-											</div>
-											<div class="pull-left w50 two-column">
 												<div class="form-group">
-													<label>Created By</label>
-													<input type="text" name="Created By" class="form-control" disabled value="Admin">
-												</div>
-											</div>
-										</div>
-										<div class="clearfix">
-											<div class="pull-left w50 two-column">
-												<div class="form-group">
-													<label>Priority</label>
-													<select class="form-control">
-														<option>Select Priority</option>
-														<option>Low</option>
-														<option>Urgent</option>
-														<option>Top Urgent</option>
+													<label for="field_status">Status</label>
+													<select class="form-control" name="status" ng-model="vm.workPackage.status" id="field_status"  ng-disabled="true">
+														 <option value="">Select Status</option>
+										                <option value="COMPLETED">Completed</option>
+										                <option value="NEW">New</option>
+										                <option value="REVIEWING" >Reviewing</option>
+										                <option value="READY_TO_RELEASE">ReadyToRelease</option>
+										                <option value="PENDING">Pending</option>
+										                <option value="MARKET_DISTRIBUTED">Market Distributed</option>
 													</select>
 												</div>
+												<div class="form-group">
+													<label for="field_reviewLevel">Review Level</label>
+													<input autocomplete="off" type="text" name="review_level" ng-model="vm.workPackage.reviewLevel" class="form-control" disabled>
+												</div>
+												<div class="form-group">
+													<label for="field_distributionType">Distribution Type</label>
+													<input type="text" name="distributionType" class="form-control" disabled ng-model="vm.workPackage.targetDistribution">
+												</div>
 											</div>
 											<div class="pull-left w50 two-column">
 												<div class="form-group">
-													<label>Created Date</label>
+													<label for="field_name">WO Name</label>
+													<input type="text" name="wo name" class="form-control"name="name" id="field_name" ng-style="editForm.name.$error.required && vm.errorStyle"
+			                    						ng-model="vm.workPackage.name" 
+		                    							ng-required="vm.checkRequiredField('workpackageName')" 
+			                    						ng-disabled="vm.isFieldDisable('name')"/>
+												</div>
+												<div class="form-group">
+													<label for="field_createdBy">Created By</label>
+													<input type="text" class="form-control" name="createdBy" id="field_createdBy" ng-disabled="true"
+			                    						ng-model="vm.workPackage.createdBy"/>
+												</div>
+												<div class="form-group">
+													<label for="field_createdDate">Created Date</label>
 													<div class="input-group">
-														<input type="text" name="Created Date" class="form-control" disabled value="2018-05-07 18:03">
+														<input id="field_createdDate" type="text" ng-disabled="true" name="createdDate" class="form-control" datetime-picker="{{dateformat}}" ng-model="vm.workPackage.createdDate" is-open="vm.datePickerOpenStatus.createdDate">
 														<span class="input-group-addon disabled">
-															<i class="fa fa-calendar"></i>
+															<i ng-disabled="true" ng-click="vm.openCalendar('createdDate')" class="fa fa-calendar"></i>
 														</span>
 													</div>
 												</div>
-											</div>
-										</div>
-										<div class="clearfix">
-											<div class="pull-left w50 two-column">
 												<div class="form-group">
-													<label>Status</label>
-													<select class="form-control">
-														<option>New</option>
-													</select>
-												</div>
-											</div>
-											<div class="pull-left w50 two-column">
-												<div class="form-group">
-													<label>Filling Date</label>
+													<label for="field_fillingDate">Filling Date</label>
 													<div class="input-group">
-														<input type="text" name="Filling Date" class="form-control">
+														<input type="text" id="field_fillingDate" name="filingDate" class="form-control"
+														ng-style="editForm.filingDate.$error.required && vm.errorStyle" ng-required="vm.checkRequiredField('filingDate')" 
+														datetime-picker="{{dateformat}}" ng-model="vm.workPackage.filingDate" is-open="vm.datePickerOpenStatus.filingDate"  ng-disabled="vm.isFieldDisable('filingDate')"/>
 														<span class="input-group-addon">
-															<i class="fa fa-calendar"></i>
+															<i class="fa fa-calendar" ng-click="vm.openCalendar('filingDate')" ng-disabled="vm.isFieldDisable('filingDate')"></i>
 														</span>
 													</div>
 												</div>
-											</div>
-										</div>
-										<div class="clearfix">
-											<div class="pull-left w50 two-column">
 												<div class="form-group">
-													<label>Review Level</label>
-													<input type="text" name="Review Level" class="form-control" disabled value="LS01">
+													<label for="field_expPax">Exp Pax</label>
+													<input type="text" name="expPax" class="form-control"name="name" id="field_expPax"
+			                    						ng-model="vm.workPackage.expPax" />
 												</div>
-											</div>
-											<div class="pull-left w50 two-column">
 												<div class="form-group">
-													<label>Target Sub</label>
-													<input type="text" name="Target Sub" class="form-control" disabled value="HH:00">
+													<label for="field_expRev">Exp Rev</label>
+													<input type="text" name="expPax" class="form-control"name="name" id="field_expRev"
+			                    						ng-model="vm.workPackage.expRev" />
 												</div>
-											</div>
-										</div>
-										<div class="clearfix">
-											<div class="pull-left w50 two-column">
 												<div class="form-group">
-													<label>QA status</label>
-													<select class="form-control">
-														<option>Select Status</option>
-														<option>Pending</option>
-														<option>Passed</option>
-														<option>Failed</option>
-													</select>
-												</div>
-											</div>
-											<div class="pull-left w50 two-column">
-												<div class="form-group">
-													<label>Distribution Date</label>
+													<label for="field_saleDate">Sale Start Date</label>
 													<div class="input-group">
-														<input type="text" name="Distribution Date" class="form-control">
+														<input id="field_saleDate" type="text" ng-style="editForm.saleDate.$error.required && vm.errorStyle"
+		                    								ng-required="vm.checkRequiredField('saleDate')" name="saleDate" ng-disabled="vm.isFieldDisable('saleDate')" datetime-picker="{{dateformat}}" ng-model="vm.workPackage.saleDate" is-open="vm.datePickerOpenStatus.saleDate" class="form-control">
 														<span class="input-group-addon">
-															<i class="fa fa-calendar"></i>
+															<i class="fa fa-calendar" ng-click="vm.openCalendar('saleDate')" ng-disabled="vm.isFieldDisable('saleDate')"></i>
 														</span>
 													</div>
 												</div>
-											</div>
-										</div>
-										<div class="clearfix">
-											<div class="pull-left w50 two-column">
+												
 												<div class="form-group">
-													<label>Distribution Type</label>
-													<input type="text" name="Distribution Type" class="form-control" disabled value="Market">
-												</div>
-											</div>
-											<div class="pull-left w50 two-column">
-												<div class="form-group">
-													<label>DIsc/Expiry Date</label>
+													<label for="field_distributionDate">Distribution Date</label>
 													<div class="input-group">
-														<input type="text" name="DIsc/Expiry Date" class="form-control" disabled="">
+														<input type="text" id="field_distributionDate" name="distributionDate" class="form-control" ng-disabled="vm.isFieldDisable('distributionDate')" datetime-picker="{{dateformat}}" ng-model="vm.workPackage.distributionDate" is-open="vm.datePickerOpenStatus.distributionDate">
 														<span class="input-group-addon disabled">
-															<i class="fa fa-calendar"></i>
+															<i class="fa fa-calendar" ng-click="vm.openCalendar('distributionDate')" ng-disabled="vm.isFieldDisable('distributionDate')"></i>
+														</span>
+													</div>
+												</div>
+												<div class="form-group">
+													<label for="field_discExpiryDate">Disc/Expiry Date</label>
+													<div class="input-group">
+														<input type="text" id="field_discExpiryDate" name="discExpiryDate" class="form-control" datetime-picker="{{dateformat}}" ng-model="vm.workPackage.discExpiryDate" is-open="vm.datePickerOpenStatus.discExpiryDate"/>
+														<span class="input-group-addon disabled">
+															<i class="fa fa-calendar" ng-click="vm.openCalendar('discExpiryDate')" ng-disabled="true"></i>
 														</span>
 													</div>
 												</div>

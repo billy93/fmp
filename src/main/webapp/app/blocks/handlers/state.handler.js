@@ -46,10 +46,13 @@
                 }
                 $window.document.title = titleKey;
                 
-                $('body').append("<script src='content/js/modernizr-custom.js'></script>" +
-                			       "<script src='content/js/plugins.js'></script>" +
-                			       "<script src='content/js/revealer.js'></script>" +
-                			       "<script src='content/js/main.js'></script>");
+                if($('#scripts').length == 0){
+                	$('body').append("<div id='scripts'><script src='content/js/modernizr-custom.js'></script>" +
+         			       "<script src='content/js/plugins.js'></script>" +
+         			       "<script src='content/js/revealer.js'></script>" +
+         			       "<script src='content/js/main.js'></script></div>");
+                }
+                
             });
 
             $rootScope.$on('$destroy', function () {
