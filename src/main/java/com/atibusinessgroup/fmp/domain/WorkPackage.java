@@ -1,0 +1,930 @@
+package com.atibusinessgroup.fmp.domain;
+
+import java.io.Serializable;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+
+import com.atibusinessgroup.fmp.domain.enumeration.PackageType;
+import com.atibusinessgroup.fmp.domain.enumeration.Priority;
+import com.atibusinessgroup.fmp.domain.enumeration.Status;
+
+/**
+ * A WorkPackage.
+ */
+@Document(collection = "work_package")
+public class WorkPackage extends AbstractAuditingEntity implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    private String id;
+
+    @Field("addon")
+    private boolean addon;
+    
+    @Field("market_rules")
+    private boolean marketRules;
+    
+    @Field("filing_instruction")
+    private boolean filingInstruction;
+    
+    @Field("attachment")
+    private boolean attachment;
+    
+    //HEADER
+    @Field("exp_pax")
+    private String expPax;
+    
+    @Field("exp_rev")
+    private String expRev;
+    
+    @Field("review_level")
+    private String reviewLevel;
+    
+    @Field("sideway_review_level")
+    private String sidewayReviewLevel;
+    
+    @Field("distribution_review_level")
+    private String distributionReviewLevel;
+    
+    @Field("batch_string")
+    private String batchString;
+    
+    @Field("comment")
+    private List<Comment> comment;
+    
+    @Field("interoffice_comment")
+    private List<Comment> interofficeComment;
+    
+    @Field("ratesheet_comment")
+    private String ratesheetComment;
+    
+    @Field("status")
+    private Status status;
+
+    @Field("wpid")
+    private String wpid;
+
+    @Field("name")
+    private String name;
+
+    @Field("business_area")
+    private String businessArea;
+    
+    @Field("priority")
+    private Priority priority;
+
+    @Field("filing_date")
+    private ZonedDateTime filingDate;
+
+    @Field("sale_date")
+    private ZonedDateTime saleDate;
+
+    @Field("target_distribution")
+    private String targetDistribution;
+    
+    @Field("distribution_date")
+    private ZonedDateTime distributionDate;
+
+    @Field("filling_status")
+    private Status fillingStatus;
+
+    @Field("filling_error")
+    private String fillingError;
+
+    @Field("locked_by")
+    private String lockedBy;
+
+    @Field("locked_since")
+    private ZonedDateTime lockedSince;
+
+    @Field("type")
+    private PackageType type;
+
+    @Field("contract_fmp")
+    private String contractFMP;
+
+    @Field("change_type")
+    private String changeType;
+
+    @Field("approval_reference")
+    private String approvalReference;
+
+    @Field("fare_sheet")
+    private List<WorkPackageFareSheet> fareSheet;
+    
+    @Field("discount_fare_sheet")
+    private List<WorkPackageFareSheet> discountFareSheet;
+    
+    @Field("addon_fare_sheet")
+    private List<WorkPackageFareSheet> addonFareSheet;
+    
+    public static class WorkPackageFareSheet{
+    	@Field("sheet_number")
+    	private int sheetNumber;
+    	
+    	@Field("fares")
+    	private List<WorkPackageFare> fares = new ArrayList<>();
+    	
+    	//Regular ATPCO
+        @Field("specified_fares_name")
+        private String specifiedFaresName;        
+
+        //Addon Fares
+        @Field("addon_fares_name")
+        private String addonFaresName;
+        
+        //Discount Fares
+        @Field("discount_fares_name")
+        private String discountFaresName;
+        
+        @Field("account_code")
+        private String accountCode;
+        //End Discount Fares
+        
+    	@Field("fare_carrier")
+        private String fareCarrier;
+    	
+        @Field("approval_reference")
+        private String approvalReference;
+
+        @Field("fare_type")
+        private String fareType;
+
+        @Field("effective_date")
+        private String effectiveDate;
+
+        @Field("discontinue_date")
+        private String discontinueDate;
+
+        public int getSheetNumber() {
+			return sheetNumber;
+		}
+        
+        public void setSheetNumber(int sheetNumber) {
+			this.sheetNumber = sheetNumber;
+		}
+        
+		public List<WorkPackageFare> getFares() {
+			return fares;
+		}
+
+		public void setFares(List<WorkPackageFare> fares) {
+			this.fares = fares;
+		}
+
+		public String getSpecifiedFaresName() {
+			return specifiedFaresName;
+		}
+
+		public void setSpecifiedFaresName(String specifiedFaresName) {
+			this.specifiedFaresName = specifiedFaresName;
+		}
+
+		public String getFareCarrier() {
+			return fareCarrier;
+		}
+
+		public void setFareCarrier(String fareCarrier) {
+			this.fareCarrier = fareCarrier;
+		}
+
+		public String getApprovalReference() {
+			return approvalReference;
+		}
+
+		public void setApprovalReference(String approvalReference) {
+			this.approvalReference = approvalReference;
+		}
+
+		public String getFareType() {
+			return fareType;
+		}
+
+		public void setFareType(String fareType) {
+			this.fareType = fareType;
+		}
+
+		public String getEffectiveDate() {
+			return effectiveDate;
+		}
+
+		public void setEffectiveDate(String effectiveDate) {
+			this.effectiveDate = effectiveDate;
+		}
+
+		public String getDiscontinueDate() {
+			return discontinueDate;
+		}
+
+		public void setDiscontinueDate(String discontinueDate) {
+			this.discontinueDate = discontinueDate;
+		}
+
+		public String getAddonFaresName() {
+			return addonFaresName;
+		}
+
+		public void setAddonFaresName(String addonFaresName) {
+			this.addonFaresName = addonFaresName;
+		}
+
+		public String getDiscountFaresName() {
+			return discountFaresName;
+		}
+
+		public void setDiscountFaresName(String discountFaresName) {
+			this.discountFaresName = discountFaresName;
+		}
+
+		public String getAccountCode() {
+			return accountCode;
+		}
+
+		public void setAccountCode(String accountCode) {
+			this.accountCode = accountCode;
+		}
+		
+		
+    }
+    
+    private List<FilingInstruction> filingInstructionData = new ArrayList<>();
+    
+    private List<MarketRules> marketRulesData = new ArrayList<>();
+    
+    private List<Attachment> attachmentData = new ArrayList<>();
+    
+    private List<String> agent = new ArrayList<>();
+    
+    private ImportFares importFares;
+    
+    public List<WorkPackageFareSheet> getAddonFareSheet() {
+		return addonFareSheet;
+	}
+
+	public void setAddonFareSheet(List<WorkPackageFareSheet> addonFareSheet) {
+		this.addonFareSheet = addonFareSheet;
+	}
+
+	@Field("filing_detail")
+    private FilingDetail filingDetail;
+    
+    public static class ImportFares {
+    	@Field("file")
+	    private byte[] file;
+
+	    @Field("file_content_type")
+	    private String fileContentType;
+
+		public byte[] getFile() {
+			return file;
+		}
+
+		public void setFile(byte[] file) {
+			this.file = file;
+		}
+
+		public String getFileContentType() {
+			return fileContentType;
+		}
+
+		public void setFileContentType(String fileContentType) {
+			this.fileContentType = fileContentType;
+		}
+    }
+    
+    public static class Comment{
+    		public String comment;
+    		public String username;
+    		public ZonedDateTime createdTime;
+			public String getComment() {
+				return comment;
+			}
+			public void setComment(String comment) {
+				this.comment = comment;
+			}
+			public String getUsername() {
+				return username;
+			}
+			public void setUsername(String username) {
+				this.username = username;
+			}
+			public ZonedDateTime getCreatedTime() {
+				return createdTime;
+			}
+			public void setCreatedTime(ZonedDateTime createdTime) {
+				this.createdTime = createdTime;
+			}
+    }
+    
+    
+    public List<Comment> getInterofficeComment() {
+		return interofficeComment;
+	}
+
+	public void setInterofficeComment(List<Comment> interofficeComment) {
+		this.interofficeComment = interofficeComment;
+	}
+
+	public String getExpPax() {
+		return expPax;
+	}
+
+	public void setExpPax(String expPax) {
+		this.expPax = expPax;
+	}
+
+	public String getExpRev() {
+		return expRev;
+	}
+
+	public void setExpRev(String expRev) {
+		this.expRev = expRev;
+	}
+
+	public ZonedDateTime getSaleDate() {
+		return saleDate;
+	}
+
+	public void setSaleDate(ZonedDateTime saleDate) {
+		this.saleDate = saleDate;
+	}
+
+	public List<WorkPackageFareSheet> getDiscountFareSheet() {
+		return discountFareSheet;
+	}
+
+	public void setDiscountFareSheet(List<WorkPackageFareSheet> discountFareSheet) {
+		this.discountFareSheet = discountFareSheet;
+	}
+
+	public List<WorkPackageFareSheet> getFareSheet() {
+		return fareSheet;
+	}
+
+	public void setFareSheet(List<WorkPackageFareSheet> fareSheet) {
+		this.fareSheet = fareSheet;
+	}
+
+	public String getChangeType() {
+		return changeType;
+	}
+
+	public void setChangeType(String changeType) {
+		this.changeType = changeType;
+	}
+
+    public List<String> getAgent() {
+		return agent;
+	}
+
+	public void setAgent(List<String> agent) {
+		this.agent = agent;
+	}
+
+	public ImportFares getImportFares() {
+		return importFares;
+	}
+
+	public void setImportFares(ImportFares importFares) {
+		this.importFares = importFares;
+	}
+
+	public List<Attachment> getAttachmentData() {
+		return attachmentData;
+	}
+
+	public void setAttachmentData(List<Attachment> attachmentData) {
+		this.attachmentData = attachmentData;
+	}
+
+	public List<FilingInstruction> getFilingInstructionData() {
+		return filingInstructionData;
+	}
+
+	public void setFilingInstructionData(List<FilingInstruction> filingInstructionData) {
+		this.filingInstructionData = filingInstructionData;
+	}
+	
+	
+	
+	public List<MarketRules> getMarketRulesData() {
+		return marketRulesData;
+	}
+
+	public void setMarketRulesData(List<MarketRules> marketRulesData) {
+		this.marketRulesData = marketRulesData;
+	}
+
+	public String getContractFMP() {
+		return contractFMP;
+	}
+
+	public void setContractFMP(String contractFMP) {
+		this.contractFMP = contractFMP;
+	}
+
+	public static class Attachment{
+		private String comment;
+		
+	    @Field("file")
+	    private byte[] file;
+
+	    @Field("file_content_type")
+	    private String fileContentType;
+
+		public String getComment() {
+			return comment;
+		}
+
+		public void setComment(String comment) {
+			this.comment = comment;
+		}
+
+		public byte[] getFile() {
+			return file;
+		}
+
+		public void setFile(byte[] file) {
+			this.file = file;
+		}
+
+		public String getFileContentType() {
+			return fileContentType;
+		}
+
+		public void setFileContentType(String fileContentType) {
+			this.fileContentType = fileContentType;
+		}
+}
+
+
+	public static class FilingInstruction{
+    		private String status;
+    		private String tarno;
+    		private String tarcd;
+    		private String cxr;
+    		private String comment;
+    		
+    	    @Field("file")
+    	    private byte[] file;
+
+    	    @Field("file_content_type")
+    	    private String fileContentType;
+
+			public String getStatus() {
+				return status;
+			}
+
+			public void setStatus(String status) {
+				this.status = status;
+			}
+
+			public String getTarno() {
+				return tarno;
+			}
+
+			public void setTarno(String tarno) {
+				this.tarno = tarno;
+			}
+
+			public String getTarcd() {
+				return tarcd;
+			}
+
+			public void setTarcd(String tarcd) {
+				this.tarcd = tarcd;
+			}
+
+			public String getCxr() {
+				return cxr;
+			}
+
+			public void setCxr(String cxr) {
+				this.cxr = cxr;
+			}
+
+			public String getComment() {
+				return comment;
+			}
+
+			public void setComment(String comment) {
+				this.comment = comment;
+			}
+
+			public byte[] getFile() {
+				return file;
+			}
+
+			public void setFile(byte[] file) {
+				this.file = file;
+			}
+
+			public String getFileContentType() {
+				return fileContentType;
+			}
+
+			public void setFileContentType(String fileContentType) {
+				this.fileContentType = fileContentType;
+			}
+    }
+	
+	public static class MarketRules{
+    		private String status;
+    		private String ruleid;
+    		private String cxr;
+    		private String comment;
+    		
+    	    @Field("file")
+    	    private byte[] file;
+
+    	    @Field("file_content_type")
+    	    private String fileContentType;
+
+		public String getStatus() {
+			return status;
+		}
+
+		public void setStatus(String status) {
+			this.status = status;
+		}
+
+		public String getRuleid() {
+			return ruleid;
+		}
+
+		public void setRuleid(String ruleid) {
+			this.ruleid = ruleid;
+		}
+		
+		public String getCxr() {
+			return cxr;
+		}
+
+		public void setCxr(String cxr) {
+			this.cxr = cxr;
+		}
+
+		public String getComment() {
+			return comment;
+		}
+
+		public void setComment(String comment) {
+			this.comment = comment;
+		}
+
+		public byte[] getFile() {
+			return file;
+		}
+
+		public void setFile(byte[] file) {
+			this.file = file;
+		}
+
+		public String getFileContentType() {
+			return fileContentType;
+		}
+
+		public void setFileContentType(String fileContentType) {
+				this.fileContentType = fileContentType;
+			}
+    }
+	
+    public static class FilingDetail{
+    		private String email;
+
+		public String getEmail() {
+			return email;
+		}
+
+		public void setEmail(String email) {
+			this.email = email;
+		}
+		
+    }
+    
+    public FilingDetail getFilingDetail() {
+		return filingDetail;
+	}
+    
+    public void setFilingDetail(FilingDetail filingDetail) {
+		this.filingDetail = filingDetail;
+	}
+    
+	public String getBatchString() {
+		return batchString;
+	}
+
+	public void setBatchString(String batchString) {
+		this.batchString = batchString;
+	}
+
+	public ZonedDateTime getFilingDate() {
+		return filingDate;
+	}
+
+	public void setFilingDate(ZonedDateTime filingDate) {
+		this.filingDate = filingDate;
+	}
+
+	// jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    
+    public String getApprovalReference() {
+		return approvalReference;
+	}
+
+	public void setApprovalReference(String approvalReference) {
+		this.approvalReference = approvalReference;
+	}
+
+	public Status getStatus() {
+        return status;
+    }
+
+    public WorkPackage status(Status status) {
+        this.status = status;
+        return this;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public String getWpid() {
+        return wpid;
+    }
+
+    public WorkPackage wpid(String wpid) {
+        this.wpid = wpid;
+        return this;
+    }
+
+    public void setWpid(String wpid) {
+        this.wpid = wpid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public WorkPackage name(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public WorkPackage priority(Priority priority) {
+        this.priority = priority;
+        return this;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
+    }
+    
+    public ZonedDateTime getDistributionDate() {
+        return distributionDate;
+    }
+
+    public WorkPackage distributionDate(ZonedDateTime distributionDate) {
+        this.distributionDate = distributionDate;
+        return this;
+    }
+
+    public void setDistributionDate(ZonedDateTime distributionDate) {
+        this.distributionDate = distributionDate;
+    }
+
+    public Status getFillingStatus() {
+        return fillingStatus;
+    }
+
+    public WorkPackage fillingStatus(Status fillingStatus) {
+        this.fillingStatus = fillingStatus;
+        return this;
+    }
+
+    public void setFillingStatus(Status fillingStatus) {
+        this.fillingStatus = fillingStatus;
+    }
+
+    public String getFillingError() {
+        return fillingError;
+    }
+
+    public WorkPackage fillingError(String fillingError) {
+        this.fillingError = fillingError;
+        return this;
+    }
+
+    public void setFillingError(String fillingError) {
+        this.fillingError = fillingError;
+    }
+
+    public boolean isAddon() {
+		return addon;
+	}
+
+	public void setAddon(boolean addon) {
+		this.addon = addon;
+	}
+
+	public boolean isMarketRules() {
+		return marketRules;
+	}
+
+	public void setMarketRules(boolean marketRules) {
+		this.marketRules = marketRules;
+	}
+
+	public boolean isFilingInstruction() {
+		return filingInstruction;
+	}
+
+	public void setFilingInstruction(boolean filingInstruction) {
+		this.filingInstruction = filingInstruction;
+	}
+
+	public boolean isAttachment() {
+		return attachment;
+	}
+
+	public void setAttachment(boolean attachment) {
+		this.attachment = attachment;
+	}
+
+	public String getLockedBy() {
+        return lockedBy;
+    }
+
+    public WorkPackage lockedBy(String lockedBy) {
+        this.lockedBy = lockedBy;
+        return this;
+    }
+
+    public void setLockedBy(String lockedBy) {
+        this.lockedBy = lockedBy;
+    }
+
+    public ZonedDateTime getLockedSince() {
+        return lockedSince;
+    }
+
+    public WorkPackage lockedSince(ZonedDateTime lockedSince) {
+        this.lockedSince = lockedSince;
+        return this;
+    }
+
+    public void setLockedSince(ZonedDateTime lockedSince) {
+        this.lockedSince = lockedSince;
+    }
+
+    public PackageType getType() {
+        return type;
+    }
+
+    public WorkPackage type(PackageType type) {
+        this.type = type;
+        return this;
+    }
+
+    public void setType(PackageType type) {
+        this.type = type;
+    }
+    
+    
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    
+
+	public String getRatesheetComment() {
+		return ratesheetComment;
+	}
+
+	public List<Comment> getComment() {
+		return comment;
+	}
+
+	public void setComment(List<Comment> comment) {
+		this.comment = comment;
+	}
+
+	public void setRatesheetComment(String ratesheetComment) {
+		this.ratesheetComment = ratesheetComment;
+	}
+
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        WorkPackage workPackage = (WorkPackage) o;
+        if (workPackage.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), workPackage.getId());
+    }
+
+//    public ProductType getProductType() {
+//		return productType;
+//	}
+//
+//	public void setProductType(ProductType productType) {
+//		this.productType = productType;
+//	}
+
+//	public BusinessArea getBusinessArea() {
+//		return businessArea;
+//	}
+//
+//	public void setBusinessArea(BusinessArea businessArea) {
+//		this.businessArea = businessArea;
+//	}
+
+	public String getReviewLevel() {
+		return reviewLevel;
+	}
+
+	public void setReviewLevel(String reviewLevel) {
+		this.reviewLevel = reviewLevel;
+	}
+
+//	public ProductSubtype getProductSubtype() {
+//		return productSubtype;
+//	}
+//
+//	public void setProductSubtype(ProductSubtype productSubtype) {
+//		this.productSubtype = productSubtype;
+//	}
+
+//	public TargetDistribution getTargetDistribution() {
+//		return targetDistribution;
+//	}
+//
+//	public void setTargetDistribution(TargetDistribution targetDistribution) {
+//		this.targetDistribution = targetDistribution;
+//	}
+
+	@Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
+    }
+
+	public String getBusinessArea() {
+		return businessArea;
+	}
+
+	public void setBusinessArea(String businessArea) {
+		this.businessArea = businessArea;
+	}
+
+	public String getTargetDistribution() {
+		return targetDistribution;
+	}
+
+	public void setTargetDistribution(String targetDistribution) {
+		this.targetDistribution = targetDistribution;
+	}
+
+	
+	public String getSidewayReviewLevel() {
+		return sidewayReviewLevel;
+	}
+
+	public void setSidewayReviewLevel(String sidewayReviewLevel) {
+		this.sidewayReviewLevel = sidewayReviewLevel;
+	}
+
+	public String getDistributionReviewLevel() {
+		return distributionReviewLevel;
+	}
+
+	public void setDistributionReviewLevel(String distributionReviewLevel) {
+		this.distributionReviewLevel = distributionReviewLevel;
+	}
+	
+}

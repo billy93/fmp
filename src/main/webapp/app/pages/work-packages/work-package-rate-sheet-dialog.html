@@ -1,0 +1,143 @@
+<form name="editForm" role="form" novalidate ng-submit="vm.save()">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myWorkPackageLabel"><b>Rate Sheet</b></h4>
+    </div>
+    <div class="modal-body">
+    
+	    <div ng-if="vm.selectHeader">
+	    	<div class="form-group">
+	            <label >Select Fields</label>
+	            <div class="form-group row">
+	            	<div class="col-md-5">
+		            	<select class="form-multiselect-control" multiple name="header" ng-model="vm.header" id="field_carrier" style="height: auto !important; width: 100% !important;">
+							<option value="status">Status</option>
+							<option value="carrier">Carrier</option>
+							<option value="action">Action</option>
+							<option value="tarno">Tar No</option>
+							<option value="tarcd">Tar Cd</option>
+							<option value="global">Global</option>
+							<option value="origin">Origin</option>
+							<option value="destination">Destination</option>
+							<option value="fareBasis">Fare Class</option>
+							<option value="bookingClass">Booking Class</option>
+							<option value="cabin">Cabin</option>
+							<option value="typeOfJourney">OW/RT</option>
+							<option value="footnote">Footnote</option>
+							<option value="rtgno">Routing No</option>
+							<option value="ruleno">Rule No</option>
+							<option value="currency">Currency</option>
+							<option value="amount">Base Amount</option>
+							<option value="amtDiff">Amount Different</option>
+							<option value="percentAmtDiff">% Amount Different</option>
+							<option value="yqyr">YQYR</option>
+							<option value="cat12">Cat 12</option>
+							<option value="totalTaxes">Taxes</option>
+							<option value="tfc">TFC</option>
+							<option value="aif">Target AIF</option>
+							<option value="itinerary">Itinerary </option>
+							<option value="overideIndicator">Override Indicator </option>
+							<option value="travelStart">Travel Start </option>
+							<option value="travelEnd">Travel End </option>
+							<option value="saleStart">Sales Start </option>
+							<option value="saleEnd">Sales End </option>
+							<option value="effDt">EffDt </option>
+							<option value="comment">Comment </option>
+							<option value="travelComplete">Travel Complete </option>
+							<option value="travelCompleteIndicator">Travel Complete Indicator </option>
+							<option value="ratesheetComment">RateSheet Comment </option>
+							<option value="dealCode">Deal Code </option>
+			            </select>
+		            </div>
+		            <div class="col-md-2">
+		            	<div class="arrow-wrapper">
+		            		<span class="arrow-full" ng-click="vm.addAllOriginalAuthorities()">Add All</span>
+		            		<span class="arrow-full" ng-click="vm.addOriginalAuthorities()">Add</span>
+		            		<span class="arrow-full" ng-click="vm.removeSelectedAuthorities()">Remove</span>		            		
+		            		<span class="arrow-full" ng-click="vm.removeAllSelectedAuthorities()">Remove All</span>
+		            	</div>
+		            </div>
+		            <div class="col-md-5">
+		            	<select class="form-control" multiple name="header" ng-model="vm.removedHeader" style="height: auto !important; padding: 0 !important; border-color: black; font-size: 12px;">
+							<option ng-repeat="header in vm.title track by $index">{{header}}</option>
+			            </select>
+		            </div>
+	            </div>
+	         	<div class="form-group row">
+		            <div class="col-md-12 ">
+						<label >Rule Text</label>
+			    		<textarea class="col-md-12" ng-model="vm.ruleText" style="min-width: 100%; min-height:100%" >
+			     		</textarea>
+			    	</div>
+		    	</div>
+	        </div>	
+	    </div>    	
+	    <div ng-if="!vm.selectHeader" style="text-align: center;">
+	    	<img class="logo-img" src="content/images/GA_logo.png"  alt="logo" style="width: 130px; height: 100px; margin-bottom: 15px;"/>
+   			<div ng-model="vm.workPackage ">
+				<span>WORK ID : {{vm.workPackage.wpid}}</span><br>
+				<span>TITLE FARE SHEET : {{vm.workPackage.name}}</span><br>
+				<span>DESCRIPTION OF GA FARES : {{vm.workPackage.specifiedFaresName}}</span><br>
+				<span>NOTES RATESHEET : {{vm.workPackage.ratesheetComment}}</span><br>
+				<span>FARES :</span><br>
+			</div>
+			<div class="row table-wrapper no-mar">
+	    		<div class="table-wrapper no-top-mar no-pad ">
+			    	<div class="table-responsive">
+			        	<table class="jh-table table table-striped">
+				            <thead>
+				                <tr >
+				                	<th ng-if="!vm.isNull">No</th>
+				                	<th ng-repeat="title in vm.title track by $index">{{title}}</th>               		
+				                </tr>
+				            </thead>
+				           	<tbody>
+				           		<tr ng-if="vm.isLoading">
+				           			<td colspan="24" class="no-border">
+				           				<div class="loading-wrapper">
+				           					<div class="sk-cube-grid">
+												<div class="sk-cube sk-cube1"></div>
+											  	<div class="sk-cube sk-cube2"></div>
+											  	<div class="sk-cube sk-cube3"></div>
+											  	<div class="sk-cube sk-cube4"></div>
+											  	<div class="sk-cube sk-cube5"></div>
+											  	<div class="sk-cube sk-cube6"></div>
+											 	<div class="sk-cube sk-cube7"></div>
+											  	<div class="sk-cube sk-cube8"></div>
+											 	<div class="sk-cube sk-cube9"></div>
+											</div>
+											<label>Please wait</label>
+				           				</div>
+				           			</td>
+				           		</tr>
+				           		<tr ng-if="!vm.isLoading" ng-repeat="fares in vm.faresData track by $index">
+				           			<td ng-if="!vm.isNull">{{$index+1}}</td>
+				           			<td ng-repeat="fareData in fares track by $index">{{fareData}}</td>
+			               		</tr>
+			            	</tbody>
+						</table>
+			    	</div>
+		    	</div> 
+	    	</div>
+			<div>
+				<span>RULE TEXT : {{vm.ruleText}}</span><br>
+			</div>
+	 	</div>
+    </div>
+    <div class="modal-footer">
+  		<div ng-if="vm.selectHeader">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.submit()">
+	            <span class="glyphicon glyphicon-export"></span>&nbsp;<span>Submit</span>
+	        </button>
+	        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+	            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Close</span>
+	        </button>
+	  	</div>	  		    
+	    <div ng-if="!vm.selectHeader">
+    		<button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.exportRateSheet()" >
+    		    <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Export</span>
+    		</button>
+	    </div>
+    </div>
+</form>

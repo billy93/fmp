@@ -1,0 +1,2711 @@
+<div class="tab-content">
+
+	<form name="editForm" role="form" novalidate>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="col-md-3">
+			        <div class="form-group row">
+			            <label class="col-md-4" data-translate="fmpApp.workPackage.wpid" for="field_wpid">WO ID</label>
+			            <input type="text" class="col-md-8" name="wpid" id="field_wpid" disabled
+			                    ng-model="vm.workPackage.wpid"/>
+			        </div>
+			        <div class="form-group row">
+			            <label class="col-md-4" for="field_businessArea">Business Area</label>
+			            <input 
+		                    ng-style="editForm.businessArea.$error.required && vm.errorStyle"
+		                    ng-required="vm.checkRequiredField('businessArea')" 
+		                    autocomplete="off" type="text" name="businessArea" ng-model="vm.workPackage.businessArea" class="col-md-8" value="JKT"
+			            		uib-typeahead="o as o.name for o in vm.businessAreas | filter:{name:$viewValue} | limitTo:5">
+			        </div>
+			        <div class="form-group row">
+			            <label class="control-label col-md-4" data-translate="fmpApp.workPackage.priority" for="field_priority">Priority</label>
+			            <div class="col-md-8 no-pad select">
+				            <select class="col-md-12" 
+				             name="priorityData"
+				           
+				             ng-model="vm.workPackage.priority" id="field_priority" ng-disabled="vm.isFieldDisable('priority')">
+				                <option value="">Select Priority</option>
+				                <option value="LOW" data-translate="fmpApp.Priority.LOW">Low</option>
+				                <option value="URGENT" data-translate="fmpApp.Priority.URGENT">Urgent</option>
+				                <option value="TOP_URGENT" data-translate="fmpApp.Priority.TOP_URGENT">Top Urgent</option>
+				            </select>
+			            </div>
+			        </div>
+			        <div class="form-group row">
+			            <label class="col-md-4" data-translate="fmpApp.workPackage.status" for="field_status">Status</label>
+			            <div class="col-md-8 no-pad select">
+				            	<select class="col-md-12" name="status" ng-model="vm.workPackage.status" id="field_status"  ng-disabled="true">
+				                <option value="">Select Status</option>
+				                <option value="COMPLETED">Completed</option>
+				                <option value="NEW">New</option>
+				                <option value="REVIEWING" >Reviewing</option>
+				                <option value="READY_TO_RELEASE">ReadyToRelease</option>
+				                <option value="PENDING">Pending</option>
+				                <option value="MARKET_DISTRIBUTED">Market Distributed</option>
+				            </select>
+			            </div>
+			        </div>
+			        <div class="form-group row">
+			            <label class="col-md-4" for="field_reviewLevel">Review Level</label>
+			            <input autocomplete="off" type="text" name="review_level" ng-model="vm.workPackage.reviewLevel" class="col-md-8" disabled
+			            		>
+			        </div>   
+			        
+			        <div class="form-group row">
+			            <label class="col-md-4">Distribution Type</label>
+			            <input type="text" class="col-md-8" name="wpid" id="field_wpid" disabled
+			                    ng-model="vm.workPackage.targetDistribution"/>
+			        </div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group row">
+			            <label class="control-label col-md-4" data-translate="fmpApp.workPackage.name" for="field_name">Name</label>
+			            <input type="text" class="col-md-8" name="name" id="field_name" ng-style="editForm.name.$error.required && vm.errorStyle"
+			                    ng-model="vm.workPackage.name" 
+		                    	ng-required="vm.checkRequiredField('workpackageName')" 
+			                    ng-disabled="vm.isFieldDisable('name')"/>
+			        </div>
+			        <div class="form-group row">
+			            <label class="col-md-4" for="field_createdBy">Created By</label>
+			            <input type="text" class="col-md-8" name="createdBy" id="field_createdBy" ng-disabled="true"
+			                    ng-model="vm.workPackage.createdBy"/>
+			        </div>
+			        <div class="form-group row">
+			            <label class="col-md-4" for="field_createdDate">Created Date</label>
+		                <div class="col-md-8 input-group">
+		                    <input id="field_createdDate" type="text" ng-disabled="true" class="form-control" name="createdDate" datetime-picker="{{dateformat}}" ng-model="vm.workPackage.createdDate" is-open="vm.datePickerOpenStatus.createdDate"/>
+		                    <span class="input-group-btn">
+		                        <button type="button" class="btn btn-default" ng-disabled="true" ng-click="vm.openCalendar('createdDate')"><i class="glyphicon glyphicon-calendar"></i></button>
+		                    </span>
+		                </div>
+			        </div>
+			        <div class="form-group row">
+			            <label class="control-label col-md-4" for="field_fillingDate">Filling Date</label>
+		                <div class="col-md-8 input-group">
+		                    <input id="field_fillingDate" type="text" class="form-control" 	                    
+		                    ng-style="editForm.filingDate.$error.required && vm.errorStyle"
+		                    ng-required="vm.checkRequiredField('filingDate')" name="filingDate" datetime-picker="{{dateformat}}" ng-model="vm.workPackage.filingDate" is-open="vm.datePickerOpenStatus.filingDate"  ng-disabled="vm.isFieldDisable('filingDate')"/>
+		                    <span class="input-group-btn">
+		                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('filingDate')" ng-disabled="vm.isFieldDisable('filingDate')"><i class="glyphicon glyphicon-calendar"></i></button>
+		                    </span>
+		                </div>		                
+			        </div>
+			         <div class="form-group row">
+			            <label class="col-md-4" for="field_createdBy">Exp Pax</label>
+			            <input type="text" class="col-md-8" name="expPax" id="field_expPax" 
+			                    ng-model="vm.workPackage.expPax"/>
+			        </div>
+			         <div class="form-group row">
+			            <label class="col-md-4" for="field_createdBy">Exp Rev</label>
+			            <input type="text" class="col-md-8" name="expRev" id="field_expRev" 
+			                    ng-model="vm.workPackage.expRev"/>
+			        </div>
+		        	<div class="form-group row">
+			            <label class="col-md-4" for="field_saleDate">Sale Start Date</label>
+		                <div class="col-md-8 input-group">
+		                    <input id="field_saleDate" type="text" class="form-control" 
+		                    ng-style="editForm.saleDate.$error.required && vm.errorStyle"
+		                    ng-required="vm.checkRequiredField('saleDate')" 
+		                    name="saleDate" ng-disabled="vm.isFieldDisable('saleDate')" datetime-picker="{{dateformat}}" ng-model="vm.workPackage.saleDate" is-open="vm.datePickerOpenStatus.saleDate"/>
+		                    <span class="input-group-btn">
+		                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('saleDate')" ng-disabled="vm.isFieldDisable('saleDate')"><i class="glyphicon glyphicon-calendar"></i></button>
+		                    </span>
+		                </div>
+			        </div>
+			        <div class="form-group row">
+			            <label class="col-md-4" for="field_distributionDate">Distribution Date</label>
+		                <div class="col-md-8 input-group">
+		                    <input id="field_distributionDate" type="text" class="form-control" name="distributionDate" ng-disabled="vm.isFieldDisable('distributionDate')" datetime-picker="{{dateformat}}" ng-model="vm.workPackage.distributionDate" is-open="vm.datePickerOpenStatus.distributionDate"/>
+		                    <span class="input-group-btn">
+		                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('distributionDate')" ng-disabled="vm.isFieldDisable('distributionDate')"><i class="glyphicon glyphicon-calendar"></i></button>
+		                    </span>
+		                </div>
+			        </div>
+			        <div class="form-group row">
+			            <label class="col-md-4" data-translate="fmpApp.workPackage.discExpiryDate" for="field_discExpiryDate">Disc/Expiry Date</label>
+			                <div class="col-md-8 input-group">
+			                    <input id="field_discExpiryDate" type="text" class="form-control" ng-disabled="true" name="discExpiryDate" datetime-picker="{{dateformat}}" ng-model="vm.workPackage.discExpiryDate" is-open="vm.datePickerOpenStatus.discExpiryDate"/>
+			                    <span class="input-group-btn">
+			                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('discExpiryDate')" ng-disabled="true"><i class="glyphicon glyphicon-calendar"></i></button>
+			                    </span>
+			                </div>
+			        </div>
+				</div>
+				<div class="col-md-6">
+					<uib-tabset active="commentForm">
+				 		<uib-tab heading="Comment">
+				        	<div class="form-group row">
+				        		<div class="table-wrapper sm-top-bot-mar">
+				        			<div class="form-group row">
+						                <div class="col-md-12 input-group textarea">
+						                    <textarea class="form-control" ng-model="vm.commentString"></textarea>
+						                    <button ng-click="vm.addComment(vm.commentString)" class="btn btn-primary" skip-disable>
+									            Send
+									        </button>
+						                </div>
+							        </div> 
+								    <div class="comment-wrapper" ng-if="vm.workPackage.comment">
+								    	<div class="row">
+								    		<label class="col-md-6 username">{{vm.workPackage.comment[vm.workPackage.comment.length - 1].username}}</label>
+								    		<label class="col-md-6 datetime">{{vm.workPackage.comment[vm.workPackage.comment.length - 1].createdTime | date: 'short'}}</label>
+								    	</div>
+								    	<label class="comment">{{vm.workPackage.comment[vm.workPackage.comment.length - 1].comment}}</label>
+								    </div>
+								    <div class="comment-wrapper" ng-if="vm.workPackage.comment && vm.workPackage.comment.length >= 2">
+								    	<div class="row">
+								    		<label class="col-md-6 username">{{vm.workPackage.comment[vm.workPackage.comment.length - 2].username}}</label>
+								    		<label class="col-md-6 datetime">{{vm.workPackage.comment[vm.workPackage.comment.length - 2].createdTime | date: 'short'}}</label>
+								    	</div>
+								    	<label class="comment">{{vm.workPackage.comment[vm.workPackage.comment.length - 2].comment}}</label>
+								    </div>
+						        </div>
+						        <label class="comment-chevron" id="comment-button" style="min-height: initial" title="Previous Comments" ng-show="vm.workPackage.comment.length > 2">Previous Comments <span class="glyphicon glyphicon-chevron-down"></span></label>
+						        <div class="comment-section-wrapper" id="comment-section">
+						        	<div class="comment-section">
+						        		<div class="comment-wrappers">
+							    			<div class="comment-wrapper" ng-if="$index > 1" ng-repeat="comment in vm.workPackage.comment.slice().reverse() track by $index">
+										    	<div class="row">
+										    		<label class="col-md-6 username">{{comment.username}}</label>
+										    		<label class="col-md-6 datetime">{{comment.createdTime | date: 'short'}}</label>
+										    	</div>
+										    	<label class="comment">{{comment.comment}}</label>
+										    </div>
+							    		</div>
+						        	</div>
+						    	</div>
+						 	</div>
+				      	</uib-tab>
+				      	<uib-tab heading="Inter Office">
+				        	<div class="form-group row">
+				        		<div class="table-wrapper sm-top-bot-mar">
+				        			<div class="form-group row">
+						                <div class="col-md-12 input-group textarea">
+						                    <textarea class="form-control" ng-model="vm.commentIOString" ng-disabled="vm.isFieldDisable('ioComment')"></textarea>
+						                    <button ng-click="vm.addComment(vm.commentString)" class="btn btn-primary" skip-disable>
+									            Send
+									        </button>
+						                </div>
+							        </div> 
+								    <div class="comment-wrapper" ng-if="vm.workPackage.IOcomment">
+								    	<div class="row">
+								    		<label class="col-md-6 username">{{vm.workPackage.comment[vm.workPackage.comment.length - 1].username}}</label>
+								    		<label class="col-md-6 datetime">{{vm.workPackage.comment[vm.workPackage.comment.length - 1].createdTime | date: 'short'}}</label>
+								    	</div>
+								    	<label class="comment">{{vm.workPackage.comment[vm.workPackage.comment.length - 1].comment}}</label>
+								    </div>
+								    <div class="comment-wrapper" ng-if="vm.workPackage.comment && vm.workPackage.comment.length >= 2">
+								    	<div class="row">
+								    		<label class="col-md-6 username">{{vm.workPackage.comment[vm.workPackage.comment.length - 2].username}}</label>
+								    		<label class="col-md-6 datetime">{{vm.workPackage.comment[vm.workPackage.comment.length - 2].createdTime | date: 'short'}}</label>
+								    	</div>
+								    	<label class="comment">{{vm.workPackage.comment[vm.workPackage.comment.length - 2].comment}}</label>
+								    </div>
+						        </div>
+						        <label class="comment-chevron" id="comment-button" style="min-height: initial" title="Previous Comments" ng-show="vm.workPackage.comment.length > 2">Previous Comments <span class="glyphicon glyphicon-chevron-down"></span></label>
+						        <div class="comment-section-wrapper" id="comment-section">
+						        	<div class="comment-section">
+						        		<div class="comment-wrappers">
+							    			<div class="comment-wrapper" ng-if="$index > 1" ng-repeat="comment in vm.workPackage.comment.slice().reverse() track by $index">
+										    	<div class="row">
+										    		<label class="col-md-6 username">{{comment.username}}</label>
+										    		<label class="col-md-6 datetime">{{comment.createdTime | date: 'short'}}</label>
+										    	</div>
+										    	<label class="comment">{{comment.comment}}</label>
+										    </div>
+							    		</div>
+						        	</div>
+						    	</div>
+						 	</div>
+				      	</uib-tab>
+				      	
+						<uib-tab heading="Rate Sheet Comment">
+					        <div class="form-group row">
+					            <div class="table-wrapper">
+					            	<div class="form-group row">
+						                <div class="col-md-12 input-group textarea">
+						                    <textarea class="form-control" ng-model="vm.workPackage.ratesheetComment" name="ratesheetComment"
+						                    ng-disabled="vm.isFieldDisable('ratesheetComment')" 
+						                    ng-style="editForm.ratesheetComment{{$index}}.$error.required && vm.errorStyle"
+						                    ng-required="vm.checkRequiredField('ratesheetComment')"></textarea>
+						                </div>
+						        	</div>
+					            </div>
+					        </div> 
+						</uib-tab>
+				    </uib-tabset>
+				</div>
+			</div>
+		</div>
+	
+		<br/>
+	  	<div class="tab-form-demo">
+	  		<div ng-if="vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'REGULAR'">	  		
+	  			<ng-form name="editFormATPCO" role="form" novalidate>
+		    		<uib-tabset active="activeForm">
+			    		
+			    		<uib-tab ng-repeat="workPackageSheet in vm.workPackage.fareSheet" ng-click="vm.selectTab($index)" 
+			    			heading="GA Fares : {{vm.workPackage.fareSheet[$index].specifiedFaresName}}">
+			    				<div class="tab-content wo">
+			   						<div class="col-md-12 no-pad">
+			   							<div class="col-md-6">
+							      			<!-- <div class="form-group row">
+							      				<label class="col-md-4" >CXR</label>
+									            <input type="text" class="col-md-8" ng-model="workPackageSheet.fareCarrier" ng-disabled="vm.isFieldDisable('fare_carrier')"/>
+							      			</div> -->
+							      			<div class="form-group row">
+									            <label class="col-md-4">Description</label>
+									            <div class="col-md-8 input-group textarea">
+									         		<textarea class="col-md-12" 
+									         		name="description{{$index}}"
+									         		ng-style="editForm.editFormATPCO.description{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"
+									         		ng-model="workPackageSheet.specifiedFaresName" 
+									         		style="min-width: 100%; min-height:100%" 
+									         		ng-required="vm.checkRequiredField('description')"  
+									         		ng-disabled="vm.isFieldDisable('description')">
+							          				</textarea>							          				
+							          			</div>
+									        </div>
+								     		<div class="form-group row">
+							      				<label class="col-md-4" >Fare Type</label>
+							      				<select 
+							      				class="col-md-8" 
+							      				name="fareType{{$index}}"
+							      				ng-model="workPackageSheet.fareType" 
+												ng-style="editForm.editFormATPCO.fareType{{$index}}.$error.required && vm.errorStyle"
+									      		ng-options="fareType for fareType in vm.fareType" 
+							      				ng-required="vm.checkRequiredField('fareType')"
+							      				ng-disabled="vm.isFieldDisable('fareType')"></select>
+							      			</div>
+							      		</div>
+				      					<div class="col-md-6">
+				      						<div class="form-group row">
+									            <label class="col-md-4">Approval Reference</label>
+									            <input type="text" class="col-md-8"
+									             name="approvalReference{{$index}}"
+									             ng-model="workPackageSheet.approvalReference" 
+									             ng-disabled="vm.isFieldDisable('approvalReference')"
+									             ng-style="editForm.editFormATPCO.approvalReference{{$index}}.$error.required && vm.errorStyle"
+									             ng-required="vm.checkRequiredField('approvalReference')"
+									      		/>
+									        </div>
+									        <div class="form-group row">
+									            <label class="col-md-4">Version</label>
+									            <div class="flex form-group col-md-8 no-pad">
+						     						<button type="button" class="btn btn-default"  ng-click="vm.previousVersion()" skip-disable><span class="glyphicon glyphicon-chevron-left" skip-disable></span></button>
+						     						<input type="text" class="col-md-6" ng-model="workPackageSheet.version"/>
+						     						<button type="button" class="btn btn-default"  ng-click="vm.nextVersion()" skip-disable><span class="glyphicon glyphicon-chevron-right" skip-disable></span></button>
+												</div>
+									        </div>
+								     	</div>								     	
+			      					</div>
+			      				</div>
+			      				<br/>
+			      				
+					      		<div class="row action-btn-wrapper">
+						      		<div class="col-md-8 text-left">
+										<div class="btn-group" uib-dropdown is-open="vm.editButton.isopen">
+											<button type="button" class="btn btn-primary" ng-click="vm.derivedFares()">
+									        	Derived Fares
+									      	</button>
+											<button type="button" class="btn btn-primary">
+						        				Move Up
+						      				</button>
+											<button type="button" class="btn btn-primary">
+										        Move Down
+											</button>
+										   	<button type="button" class="btn btn-primary" ng-click="vm.agent()">
+										        Agents
+											</button>
+										  	<button type="button" class="btn btn-primary" ng-click="vm.ratesheet()">
+										        Rate Sheet
+										  	</button>
+											<div class="btn-group" uib-dropdown is-open="vm.editButton.isopen">
+												<button type="button" class="btn btn-primary dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled">
+										        	Edit <span class="caret"></span>
+										      	</button>
+												<ul class="dropdown-menu" role="menu">
+												  	<li><a href="#">Clear Selection</a></li>
+													<li><a href="#">Fill Down</a></li>
+													<li><a href="#">Search/Replace</a></li>
+													<li><a ng-click="vm.addFares()">Add Rows</a></li>
+													<li><a ng-click="vm.deleteFaresSelected()">Delete Selected Rows</a></li>
+													<li><a ng-click="vm.duplicateFaresSelected()">Duplicate Selected Rows</a></li>
+													<li><a href="#">Copy Selected Rows</a></li>
+													<li><a ng-click="vm.paste()">Paste</a></li>
+													<li><a ng-click="vm.pasteAsCancel()">Paste as Cancel</a></li>
+													<li><a href="#">Calculate TFC</a></li>
+												</ul>
+											</div>
+											<button type="button" class="btn btn-primary dropdown-toggle" ngf-select class="btn btn-default btn-block"
+										               ngf-change="vm.importFare($file)">
+						        				Import 
+						      				</button>
+									      	<button type="button" class="btn btn-primary dropdown-toggle" ng-click="vm.exportFares()">
+									        	Export 
+									      	</button>
+							      		</div>
+							      	</div>
+						    		</div>
+						    	
+						    	<div class="row table-wrapper no-mar">
+						    		<div class="table-wrapper no-top-mar no-pad ">
+								    	<div class="table-responsive">
+								        	<table class="jh-table table table-striped">
+									            <thead>
+									                <tr>
+								                		<th>No</th>
+								                		<th>Status</th>
+									                	<th>Carrier</th>		                	
+								                		<th>Action</th>
+									                	<th>Tar No</th>
+									                	<th>Tar Cd</th>
+									                	<th>Global</th>
+									                	<th>Origin</th>
+									                	<th>Dest</th>
+									                	<th>Fare Cls</th>
+									                	<th>Bkg Cls</th>
+									                	<th>Cabin</th>
+									                	<th>OW/RT</th>
+									                	<th>Ftnt</th>
+									                	<th>Rtg No</th>
+									                	<th>Rule No</th>
+									                	<th>Curr</th>
+									                	<th>Base Amt</th>
+									                	
+									                	<th>Target AIF</th>
+									                	<!-- <th>Amt Diff</th>
+									                	<th>% Amt Diff</th>
+									                	
+									                	<th ng-show="vm.showTFC">YQYR</th>
+									                	<th ng-show="vm.showTFC">Cat 12</th>
+									                	<th ng-show="vm.showTFC">Taxes</th>
+									                	<th>TFC <span ng-click="vm.showTFC = !vm.showTFC"><i ng-if="vm.showTFC" class="glyphicon glyphicon-minus"></i><i ng-if="!vm.showTFC" class="glyphicon glyphicon-plus"></i></span></th>       	
+									               		<th>Target AIF</th>
+									               		<th>Itinerary</th>
+									               		<th>Override Indicator</th>
+									               	 -->	
+									               	 
+									               	 	<th>Travel Start</th>
+									               		<th>Travel End</th>		               		
+									               		<th>Sales Start</th>
+									               		<th>Sales End</th>	
+									               		<th>Comment</th>	               		
+									               		<th>Travel Complete</th>	               		
+									               		<th>Travel Complete Indicator</th>	               		
+									               		<th>RateSheet Comment</th>	        		
+									                </tr>
+									            </thead>
+									           	<tbody>
+									           		<tr ng-if="vm.isLoading">
+									           			<td colspan="24" class="no-border">
+									           				<div class="loading-wrapper">
+									           					<div class="sk-cube-grid">
+																	<div class="sk-cube sk-cube1"></div>
+																  	<div class="sk-cube sk-cube2"></div>
+																  	<div class="sk-cube sk-cube3"></div>
+																  	<div class="sk-cube sk-cube4"></div>
+																  	<div class="sk-cube sk-cube5"></div>
+																  	<div class="sk-cube sk-cube6"></div>
+																 	<div class="sk-cube sk-cube7"></div>
+																  	<div class="sk-cube sk-cube8"></div>
+																 	<div class="sk-cube sk-cube9"></div>
+																</div>
+																<label>Please wait</label>
+									           				</div>
+									           			</td>
+									           		</tr>
+									           		<tr ng-if="vm.workPackage.fareSheet[vm.selectedTab].fares.length == 0">
+									           			<td colspan="24" class="empty">
+									           				No Data Available
+									           			</td>
+									           		</tr>
+											       
+									           		<tr ng-if="!vm.isLoading" ng-click="vm.selectedFare = fare; vm.applyRule(fare.id)" ng-class="{'selected': vm.selectedFare == fare}" ng-repeat="fare in vm.workPackage.fareSheet[vm.selectedTab].fares track by $index">
+									           			<td>{{$index+1}}</td>
+									           			<td class="input">
+									           				<span ng-if="vm.isFieldEditable(fare, 'status')">
+									           					<select class="form-control" name="status{{$index}}" ng-model="fare.status" id="field_status" 
+									           						ng-disabled="vm.isFieldDisable('status')"
+														             ng-style="editForm.editFormATPCO.status{{$index}}.$error.required && vm.errorStyle"
+														             ng-required="vm.checkRequiredField('status')">
+													                <option value="">Select Priority</option>
+													                <option value="PENDING" >Pending</option>
+													                <option value="APPROVED">Approve</option>
+													                <option value="REJECTED">Reject</option>
+													            </select>
+									           				</span>
+									           				<span ng-if="!vm.isFieldEditable(fare, 'status')">
+									           					{{fare.status}}
+									           				</span>
+									           			</td>
+									           			<td class="input">
+									           				<span ng-if="vm.isFieldEditable(fare, 'carrier')">
+									           					<input type="text" class="form-control" name="wpid" id="field_carrier"
+										                    		ng-model="fare.carrier"
+										                    		ng-disabled="vm.isFieldDisable('carrier')"
+														            ng-style="editForm.editFormATPCO.carrier{{$index}}.$error.required && vm.errorStyle"
+														            ng-required="vm.checkRequiredField('carrier')"/>
+									           				</span>
+									           				<span ng-if="!vm.isFieldEditable(fare, 'carrier')">
+									           					{{fare.carrier}}
+									           				</span>
+														</td>
+									           			<td>{{fare.action}}</td>
+									           			
+									           			
+									           			<td class="input" >	           			
+									           				<span ng-if="vm.isFieldEditable(fare, 'tarno')">
+								
+									           					<input type="text" class="form-control" name="tarno{{$index}}" id="field_tarno" 
+									           					ng-required="vm.checkRequiredField('tarno') && fare.action != 'Canceled'"  
+									           					ng-style="editForm.editFormATPCO.tarno{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"
+										                    	ng-model="fare.tarno" 
+										                    	ng-disabled="vm.isFieldDisable('tarno')" />
+									           				</span>
+									           				<span ng-if="!vm.isFieldEditable(fare, 'tarno')">
+									           					{{fare.tarno}}
+									           				</span>
+									           			</td>
+									           			<td class="input" >
+									           				<span ng-if="vm.isFieldEditable(fare, 'tarcd')">
+									           					<input type="text" class="form-control" name="tarcd{{$index}}" id="field_tarcd" 
+									           					ng-disabled="vm.isFieldDisable('tarcd')"
+									           					ng-required="vm.checkRequiredField('tarcd') && fare.action != 'Canceled'"  
+									           					ng-style="editForm.editFormATPCO.tarcd{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"
+										                    	ng-model="fare.tarcd"/>
+									           				</span>
+									           				<span ng-if="!vm.isFieldEditable(fare, 'tarcd')">
+										           				{{fare.tarcd}}
+									           				</span>
+									           			</td>
+									           			<td>EH</td>
+									           			
+									           			
+									                		<td class="input" >
+									                			<span ng-if="vm.isFieldEditable(fare, 'origin')">
+									                				<input type="text" class="form-control" name="origin{{$index}}" id="field_origin" 
+									                				ng-disabled="vm.isFieldDisable('origin')"
+									                				ng-required="vm.checkRequiredField('origin') && fare.action != 'Canceled'"  
+									                				ng-style="editForm.editFormATPCO.origin{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"
+										                    		ng-model="fare.origin"/>
+									                			
+									                			</span>
+									                			<span ng-if="!vm.isFieldEditable(fare, 'origin')">
+									                			{{fare.origin}}
+									                			</span>
+									                		</td>
+									                    
+									                    <td class="input" >
+															<span ng-if="vm.isFieldEditable(fare, 'destination')">
+									                				<input type="text" class="form-control" name="destination{{$index}}" id="field_destination" 
+									                				ng-disabled="vm.isFieldDisable('destination')"
+									                				ng-required="vm.checkRequiredField('destination') && fare.action != 'Canceled'"  
+									                				ng-style="editForm.editFormATPCO.destination{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"
+										                    		ng-model="fare.destination"/>
+									                			
+									                			</span>
+									                			<span ng-if="!vm.isFieldEditable(fare, 'destination')">
+									                			{{fare.destination}}
+									                			</span>
+														</td>
+									                    
+									                    <td class="input" >
+									                    		<span ng-if="vm.isFieldEditable(fare, 'farebasis')">
+									                				<input type="text" class="form-control" name="farebasis{{$index}}" id="field_farebasis"
+									                				ng-disabled="vm.isFieldDisable('farebasis')"
+									                				ng-required="vm.checkRequiredField('farebasis') && fare.action != 'Canceled'" 
+									                				ng-style="editForm.editFormATPCO.farebasis{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"									                				
+										                    		ng-model="fare.fareBasis"/>
+									                			
+									                			</span>
+									                			<span ng-if="!vm.isFieldEditable(fare, 'farebasis')">
+									                			{{fare.fareBasis}}
+									                			</span>
+									                    	</td>
+									                    
+									           			<td class="input" >
+									           				<span ng-if="vm.isFieldEditable(fare, 'bookingClass')">
+									                				<input type="text" class="form-control" name="bookingClass{{$index}}" id="field_bookingClass"
+									                				ng-disabled="vm.isFieldDisable('bookingClass')"
+									                				ng-required="vm.checkRequiredField('bookingClass') && fare.action != 'Canceled'" 
+									                				ng-style="editForm.editFormATPCO.bookingClass{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"
+										                    		ng-model="fare.bookingClass"/>
+									                			
+									                			</span>
+									                			<span ng-if="!vm.isFieldEditable(fare, 'bookingClass')">
+									                				{{fare.bookingClass}}
+									                			</span>
+									           			</td>
+									           			<td class="input">
+									           				<span ng-if="vm.isFieldEditable(fare, 'cabin')">
+									           						
+									           						<select class="col-md-12" 
+													             name="cabin{{$index}}"
+													             ng-required="vm.checkRequiredField('cabin')"
+													             ng-style="!editForm.editFormATPCO.cabin{{$index}}.$valid && vm.errorStyle"
+													             ng-model="fare.cabin" id="field_cabin" 
+													             ng-disabled="vm.isFieldDisable('cabin')">
+													                <option value="">Select Cabin</option>
+													                <option>Y - Economy</option>
+													                <option>F - First Class</option>
+													                <option>C - Business</option>
+													                <option>R - Premium Economy</option>
+													            </select>
+									                				<!-- <input type="text" class="form-control" name="cabin{{$index}}" id="field_bookingClass"
+									                				ng-disabled="fare.action == 'Canceled'"
+									                				ng-required="vm.checkRequiredField('cabin') && fare.action != 'Canceled'" 
+																ng-style="editForm.editFormATPCO.cabin{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"
+										                    		
+										                    		ng-model="fare.cabin"/> -->
+									                			
+									                			</span>
+									                			<span ng-if="!vm.isFieldEditable(fare, 'cabin')">
+									                				{{fare.cabin}}
+									                			</span>
+									           			</td>
+									           			<td class="input">
+									           				<span ng-if="vm.isFieldEditable(fare, 'typeOfJourney')">
+									                				<select class="col-md-12" 
+														             name="typeOfJourney{{$index}}"
+														             ng-required="vm.checkRequiredField('typeOfJourney')"
+														            ng-style="!editForm.editFormATPCO.typeOfJourney{{$index}}.$valid && vm.errorStyle"
+														             ng-model="fare.typeOfJourney" id="field_typeOfJourney"
+														              ng-disabled="vm.isFieldDisable('typeOfJourney')">
+														                <option value="">Select OW/RT</option>
+														                <option>One Way</option>
+														                <option>Return</option>
+														                <option>One Way Only</option>
+														            </select>
+									                				<!-- <input type="text" class="form-control" name="typeOfJourney{{$index}}" id="field_owrt"
+									                				ng-disabled="fare.action == 'Canceled'"
+									                				ng-required="vm.checkRequiredField('typeOfJourney') && fare.action != 'Canceled'" ng-style="editForm.editFormATPCO.typeOfJourney{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"
+										                    		ng-model="fare.typeOfJourney"/> -->
+									                			</span>
+									                			<span ng-if="!vm.isFieldEditable(fare, 'typeOfJourney')">
+									                				<span ng-if="fare.typeOfJourney == 'One Way'">1</span>
+										           				<span ng-if="fare.typeOfJourney == 'Return'">2</span>
+										           				<span ng-if="fare.typeOfJourney == 'One Way Only'">3</span>
+									                			</span>
+									           			</td>
+								               			<td class="input">
+								               				<span ng-if="vm.isFieldEditable(fare, 'footnote')">
+									                				<input type="text" class="form-control" name="footnote{{$index}}" id="field_footnote"
+									                				ng-style="!editForm.editFormATPCO.footnote{{$index}}.$valid && vm.errorStyle"
+														            ng-disabled="vm.isFieldDisable('footnote')"
+														            ng-required="vm.checkRequiredField('footnote')"
+										                    		ng-model="fare.footnote"/>
+									                			
+									                			</span>
+									                			<span ng-if="!vm.isFieldEditable(fare, 'footnote')">
+									                				{{fare.footnote}}
+									                			</span>
+								               			</td>
+								               			<td class="input" >
+								               				<span ng-if="vm.isFieldEditable(fare, 'rtgno')">
+									                				<input type="text" class="form-control" name="rtgno{{$index}}" id="field_bookingClass"
+									                				ng-disabled="vm.isFieldDisable('rtgno')"
+									                				ng-required="vm.checkRequiredField('rtgno')" 
+									                				ng-style="editForm.editFormATPCO.rtgno{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"
+										                    		ng-model="fare.rtgno"/>
+									                			
+									                			</span>
+									                			<span ng-if="!vm.isFieldEditable(fare, 'rtgno')">
+									                				{{fare.rtgno}}
+									                			</span>
+								               			</td>
+								               			<td class="input" >
+								               				<span ng-if="vm.isFieldEditable(fare, 'ruleno')">
+									                				<input type="text" class="form-control" name="ruleno{{$index}}" id="field_bookingClass"
+									                				ng-disabled="vm.isFieldDisable('ruleno')"
+									                				ng-required="vm.checkRequiredField('ruleno')" 
+									                				ng-style="editForm.editFormATPCO.ruleno{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"
+										                    		ng-model="fare.ruleno"/>
+									                			
+									                			</span>
+									                			<span ng-if="!vm.isFieldEditable(fare, 'ruleno')">
+									                				{{fare.ruleno}}
+									                			</span>
+								               			</td>
+								               			<td class="input" >
+								               				<span ng-if="vm.isFieldEditable(fare, 'currency')">
+									                				<input type="text" class="form-control" name="currency{{$index}}" id="field_bookingClass"
+									                				ng-disabled="vm.isFieldDisable('currency')"
+									                				ng-required="vm.checkRequiredField('currency')" 
+									                				ng-style="editForm.editFormATPCO.currency{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"
+										                    		ng-model="fare.currency"/>
+									                			
+									                			</span>
+									                			<span ng-if="!vm.isFieldEditable(fare, 'currency')">
+									                				{{fare.currency}}
+									                			</span>
+								               			</td>
+								               			<td class="input" >
+								               				<span ng-if="vm.isFieldEditable(fare, 'amount')">
+									                				<input type="text" class="form-control" name="amount{{$index}}" id="field_bookingClass"
+									                				ng-disabled="vm.isFieldDisable('amount')"
+									                				ng-required="vm.checkRequiredField('amount')" ng-style="editForm.editFormATPCO.amount{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"
+										                    		ng-model="fare.amount"/>
+									                			
+									                			</span>
+									                			<span ng-if="!vm.isFieldEditable(fare, 'amount')">
+									                				{{fare.amount}}
+									                			</span>
+								               			</td>
+								               			<!--  
+								               			<td>{{fare.recommendedAmount - fare.amount}}</td>
+								               			<td>{{(fare.recommendedAmount - fare.amount) / fare.amount * 100 | number : 2}} %</td>
+								               		    <td ng-show="vm.showTFC">{{fare.yqyr}}</td>
+									               		<td ng-show="vm.showTFC">{{fare.cat12}}</td>
+									               		<td ng-show="vm.showTFC">{{fare.totalTax}}</td>   
+									               		<td>{{fare.tfc}}</td>   
+									               		<td class="input"  >
+									               			<span ng-if="vm.isFieldEditable(fare, 'aif')">
+									                				<input type="text" class="form-control" name="aif{{$index}}" id="field_bookingClass"
+									                				ng-disabled="fare.action == 'Canceled'"
+									                				ng-required="vm.checkRequiredField('aif')" ng-style="editForm.editFormATPCO.aif{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"
+										                    		ng-change="vm.fareAifChange(fare)"
+										                    		ng-model="fare.aif"/>
+									                			
+									                			</span>
+									                			<span ng-if="!vm.isFieldEditable(fare, 'aif')">
+									               				{{fare.aif}}
+									                			</span>
+									               		</td>   
+									               		
+									               		<td></td>
+								               			<td></td>
+								               			-->
+								               			
+								               			<td class="input" >
+									               			<span ng-if="vm.isFieldEditable(fare, 'aif')">
+									                				<input type="text" class="form-control" name="aif{{$index}}" id="field_bookingClass"
+									                				ng-disabled="vm.isFieldDisable('aif')"
+									                				ng-required="vm.checkRequiredField('aif')" ng-style="editForm.editFormATPCO.aif{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"							
+										                    		ng-model="fare.aif"/>
+									                			
+									                			</span>
+									                			<span ng-if="!vm.isFieldEditable(fare, 'aif')">
+									               				{{fare.aif}}
+									                			</span>
+									               		</td> 
+									               		
+								               			<td class="input">
+								               				<span ng-if="vm.isFieldEditable(fare, 'travelStartDate')">
+									                				<input type="text" class="form-control" name="travelStartDate{{$index}}" id="field_bookingClass"
+									                				ng-disabled="vm.isFieldDisable('travelStartDate')"
+									                				ng-required="vm.checkRequiredField('travelStartDate')"
+									                				ng-style="editForm.editFormATPCO.travelStartDate{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"
+										                    		ng-model="fare.travelStart"/>
+									                			
+									                			</span>
+									                			<span ng-if="!vm.isFieldEditable(fare, 'travelStartDate')">
+									               				{{fare.travelStart}}
+									                			</span>
+								               			
+								               			</td>
+								               			<td class="input">
+								               				<span ng-if="vm.isFieldEditable(fare, 'travelEndDate')">
+									                				<input type="text" class="form-control" name="travelEndDate{{$index}}" id="field_bookingClass"
+									                				ng-disabled="vm.isFieldDisable('travelEndDate')"
+									                				ng-required="vm.checkRequiredField('travelEndDate')"
+									                				ng-style="editForm.editFormATPCO.travelEndDate{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"										                    		
+										                    		ng-model="fare.travelEnd"/>
+									                			
+									                			</span>
+									                			<span ng-if="!vm.isFieldEditable(fare, 'travelEndDate')">
+									               				{{fare.travelEnd}}
+									                			</span>
+								               			</td>
+								               			<td class="input">
+								               				<span ng-if="vm.isFieldEditable(fare, 'saleStartDate')">
+									                				<input type="text" class="form-control" name="saleStartDate{{$index}}" id="field_bookingClass"
+									                				ng-disabled="vm.isFieldDisable('saleStartDate')"									                				
+									                				ng-required="vm.checkRequiredField('saleStartDate')"
+										                    		ng-style="editForm.editFormATPCO.saleStartDate{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"										                    		
+										                    		ng-model="fare.saleStart"/>
+									                			
+									                			</span>
+									                			<span ng-if="!vm.isFieldEditable(fare, 'saleStartDate')">
+									               				{{fare.saleStart}}
+									                			</span>
+								               			</td>
+								               			<td class="input">
+								               					<span ng-if="vm.isFieldEditable(fare, 'saleEndDate')">
+									                				<input type="text" class="form-control" name="saleEndDate{{$index}}" id="field_bookingClass"
+									                				ng-disabled="vm.isFieldDisable('saleEndDate')"
+									                				ng-required="vm.checkRequiredField('saleEndDate')"
+										                    		ng-style="editForm.editFormATPCO.saleEndDate{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"										                    		
+										                    		ng-model="fare.saleEnd"/>
+									                			
+									                			</span>
+									                			<span ng-if="!vm.isFieldEditable(fare, 'saleEndDate')">
+									               				{{fare.saleEnd}}
+									                			</span>
+								               			</td>
+								               			<td class="input">
+								               				<input type="text" class="form-control" name="wpid" id="field_bookingClass"
+										                    		ng-model="fare.comment"/>
+								               			</td>
+								               			<td class="input">
+								               				<span ng-if="vm.isFieldEditable(fare, 'travelComplete')">
+									                				<input type="text" class="form-control" name="travelComplete{{$index}}" id="field_bookingClass"
+									                				ng-disabled="vm.isFieldDisable('travelComplete')"
+									                				ng-required="vm.checkRequiredField('travelComplete')"
+										                    		ng-style="editForm.editFormATPCO.travelComplete{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"										                    		
+										                    		
+									                				ng-model="fare.travelComplete"/>
+									                			
+									                			</span>
+									                			<span ng-if="!vm.isFieldEditable(fare, 'travelComplete')">
+									               				{{fare.travelComplete}}
+									                			</span>
+								               			</td>
+								               			<td class="input">
+								               				<span ng-if="vm.isFieldEditable(fare, 'travelIndicator')">
+									                				<input type="text" class="form-control" name="travelIndicator{{$index}}" id="field_bookingClass"
+									                				ng-disabled="vm.isFieldDisable('travelIndicator')"
+									                				ng-required="vm.checkRequiredField('travelIndicator')"
+										                    		ng-style="editForm.editFormATPCO.travelIndicator{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"										                    		
+										                    		
+									                				ng-model="fare.travelCompleteIndicator"/>
+									                			
+									                			</span>
+									                			<span ng-if="!vm.isFieldEditable(fare, 'travelIndicator')">
+									               				{{fare.travelCompleteIndicator}}
+									                			</span>
+								               			</td>
+								               			<td class="input">
+								               				<span ng-if="vm.isFieldEditable(fare, 'ratesheetComment')">
+									                				<input type="text" class="form-control" name="ratesheetComment{{$index}}" id="field_bookingClass"
+									                				ng-disabled="vm.isFieldDisable('ratesheetComment')"
+									                				ng-required="vm.checkRequiredField('ratesheetComment')"
+										                    		ng-style="editForm.editFormATPCO.ratesheetComment{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"										                    		
+										                    		
+										                    		ng-model="fare.ratesheetComment"/>
+									                			
+									                			</span>
+									                			<span ng-if="!vm.isFieldEditable(fare, 'ratesheetComment')">
+									               				{{fare.ratesheetComment}}
+									                			</span>
+								               			</td>
+								               		</tr>
+								            	</tbody>
+											</table>
+								    	</div>
+							    	</div> 
+						    	</div>
+						</uib-tab>
+		       			<uib-tab ng-repeat="workPackageSheet in vm.workPackage.addonFareSheet" ng-click="vm.selectAddonTab($index)"  
+		       			heading="Add-Ons Fares : {{vm.workPackage.addonFareSheet[$index].addonFaresName}}">
+		       				<div class="tab-content wo">
+		       					<div class="col-md-12 no-pad">
+						      		<div class="col-md-4">
+						      			<div class="form-group row">
+								            <label class="col-md-4">Description</label>
+								            <div class="col-md-8 input-group textarea">
+								         		<textarea class="col-md-12" 
+								         		name="addonFaresName{{$index}}"
+								         		ng-model="workPackageSheet.addonFaresName" 
+								         		style="min-width: 100%; min-height:100%"
+								         		ng-style="editForm.editFormATPCO.addonFaresName{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"
+								         		ng-required="vm.checkRequiredField('addonFaresName')"  
+								         		ng-disabled="vm.isFieldDisable('addonFaresName')"
+								         		>
+						          				</textarea>
+						          			</div>
+								        </div>
+						      		</div>
+			      				</div>
+			      				<br/>
+			        				<div class="row action-btn-wrapper">
+						      		<div class="col-md-8 no-pad text-left">
+						      			<button type="button" class="btn btn-primary">
+									        Move Up
+										</button>
+										<button type="button" class="btn btn-primary">
+									        Move Down
+										</button>
+										<div class="btn-group" uib-dropdown is-open="vm.editButton.isopen">
+										      <button type="button" class="btn btn-primary dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled">
+										        Edit <span class="caret"></span>
+										      </button>
+										      
+										      <ul class="dropdown-menu" role="menu">
+										        <li><a href="#">Clear Selection</a></li>
+										        <li><a href="#">Fill Down</a></li>
+												<li><a href="#">Search/Replace</a></li>
+												<li><a ng-click="vm.addAddon()">Add Rows</a></li>
+												<li><a ng-click="vm.deleteAddonFaresSelected()">Delete Selected Rows</a></li>
+												<li><a ng-click="vm.duplicateAddonFaresSelected()">Duplicate Selected Rows</a></li>
+												<li><a href="#">Copy Selected Rows</a></li>
+												<li><a href="#">Paste</a></li>
+												<li><a href="#">Paste as Cancel</a></li>
+										      </ul>
+									    </div>
+										<button type="button" class="btn btn-primary dropdown-toggle" >
+									        Import 
+										</button>
+									 	<button type="button" class="btn btn-primary dropdown-toggle">
+									        Export 
+									  	</button>
+						      		</div>
+								</div>
+								
+								<div class="row table-wrapper no-mar">
+							    		<div class="table-wrapper no-top-mar no-pad ">
+									    	<div class="table-responsive">
+									        	<table class="jh-table table table-striped">
+							            			<thead>
+							                			<tr>
+									                		<th>No</th>
+									                		<th>Status</th>
+										                	<th>Carrier</th>		                	
+									                		<th>Action</th>
+										                	<th>Tar No</th>
+										                	<th>Tar Cd</th>
+										                	<th>Global</th>
+										                	<th>Origin</th>
+										                	<th>Dest</th>
+										                	<th>Addon Bucket</th>
+										                	<th>OW/RT</th>
+										                	<th>Ftnt</th>
+										                	<th>Zone</th>
+										                	<th>Rtg No</th>
+										                	<th>Filing Curr</th>
+										                	<th>Base Amt</th>
+										                	<th>Amt Diff</th>
+										                	<th>% Amt Diff</th>
+										                <th>Travel Start</th>
+									               		<th>Travel End</th>		               		
+									               		<th>Sales Start</th>
+									               		<th>Sales End</th>	
+									               		<th>EffDt</th>	 
+									               		<th>Comment</th>	               		
+									               		<th>Travel Complete</th>	               		
+									               		<th>Travel Complete Indicator</th>			
+							                			</tr>
+							            			</thead>
+							           			<tbody>
+						           					<tr ng-if="vm.workPackage.addonFareSheet.fares.length == 0">
+									           			<td colspan="27" class="empty">
+									           				No Data Available
+									           			</td>
+									           		</tr>
+											        	<tr ng-class="{selected: addonFares === vm.selectedFareAddon}" ng-click="vm.rowAddonFaresSelected(addonFares)"
+											           		ng-repeat="addonFares in vm.workPackage.addonFareSheet[vm.selectedAddonTab].fares track by $index">
+											           			<td class="input">{{$index+1}}</td>
+											           			<td class="input">
+											           				<select class="form-control"  name="addonFareStatus{{$index}}" ng-model="addonFares.status" id="field_status"
+											           				ng-style="editForm.editFormATPCO.addonFareStatus{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"
+													         		ng-model="addonFares.status" 
+													         		ng-required="vm.checkRequiredField('addonFareStatus')"  
+													         		ng-disabled="vm.isFieldDisable('addonFareStatus')">
+												           				<option value="">Select Status</option>
+														                <option value="PENDING" >Pending</option>
+														                <option value="APPROVED">Approve</option>
+														                <option value="REJECTED">Reject</option>
+															        </select>
+											           			</td>
+											           			<td class="input"><input type="text" class="form-control" ng-model="addonFares.carrier" 
+											           				name="addonFareCarrier{{$index}}"
+											           				ng-disabled="vm.isFieldDisable('addonFareCarrier')"
+														            ng-style="editForm.editFormATPCO.addonFareCarrier{{$index}}.$error.required && vm.errorStyle"
+														            ng-required="vm.checkRequiredField('addonFareCarrier')"/></td>
+											           			<td class="input">
+											           			{{addonFares.action}}
+											           				<!-- <select class="form-control"  name="status" ng-model="addonFares.action" id="field_status">
+												           				<option value="">Select Action</option>
+														                <option value="Increase" >Increase</option>
+														                <option value="Decrease">Decrease</option>
+														                <option value="New">New</option>
+															        </select> -->
+											           			</td>
+											           			<td class="input">
+											           				<input type="text" class="form-control" ng-model="addonFares.tarno"  name="addonFareTarno{{$index}}"
+											           				ng-disabled="vm.isFieldDisable('addonFareTarno')"
+														            ng-style="editForm.editFormATPCO.addonFareTarno{{$index}}.$error.required && vm.errorStyle"
+														            ng-required="vm.checkRequiredField('addonFareTarno')" />
+											           			</td>
+											           			<td class="input">
+											           				<input type="text" class="form-control" ng-model="addonFares.tarcd"  name="addonFareTarcd{{$index}}"
+											           				ng-disabled="vm.isFieldDisable('addonFareTarcd')"
+														            ng-style="editForm.editFormATPCO.addonFareTarcd{{$index}}.$error.required && vm.errorStyle"
+														            ng-required="vm.checkRequiredField('addonFareTarcd')" />
+											           			</td>
+											           			<td class="input">
+											           				<input type="text" class="form-control" ng-model="addonFares.global" name="addonFareTarcd{{$index}}"
+											           				ng-disabled="vm.isFieldDisable('addonFareTarcd')"
+														            ng-style="editForm.editFormATPCO.addonFareTarcd{{$index}}.$error.required && vm.errorStyle"
+														            ng-required="vm.checkRequiredField('addonFareTarcd')"/>
+											           			</td>
+											           			<td class="input">
+											           				<input type="text" class="form-control" ng-model="addonFares.origin" name="addonFareOrigin{{$index}}"
+											           				ng-disabled="vm.isFieldDisable('addonFareOrigin')"
+														            ng-style="editForm.editFormATPCO.addonFareOrigin{{$index}}.$error.required && vm.errorStyle"
+														            ng-required="vm.checkRequiredField('addonFareOrigin')" />
+											           			</td>
+											           			<td class="input">
+											           				<input type="text" class="form-control" ng-model="addonFares.destination" name="addonFareDestination{{$index}}"
+											           				ng-disabled="vm.isFieldDisable('addonFareDestination')"
+														            ng-style="editForm.editFormATPCO.addonFareDestination{{$index}}.$error.required && vm.errorStyle"
+														            ng-required="vm.checkRequiredField('addonFareDestination')"/>
+											           			</td>
+											           			<td class="input">
+											           				<input type="text" class="form-control" ng-model="addonFares.bucket" name="addonFareBucket{{$index}}"
+											           				ng-disabled="vm.isFieldDisable('addonFareBucket')"
+														            ng-style="editForm.editFormATPCO.addonFareBucket{{$index}}.$error.required && vm.errorStyle"
+														            ng-required="vm.checkRequiredField('addonFareBucket')" />
+											           			</td>
+											           			<td class="input">
+											           				<select class="col-md-12" 
+														             name="addonFareTypeOfJourney{{$index}}"
+														             ng-model="addonFares.typeOfJourney" id="field_typeOfJourney"
+											           				ng-disabled="vm.isFieldDisable('addonFareTypeOfJourney')"
+														            ng-style="editForm.editFormATPCO.addonFareTypeOfJourney{{$index}}.$error.required && vm.errorStyle"
+														            ng-required="vm.checkRequiredField('addonFareTypeOfJourney')">
+														                <option value="">Select OW/RT</option>
+														                <option>One Way</option>
+														                <option>Return</option>
+														                <option>One Way Only</option>
+														            </select>
+											           			</td>
+											           			<td class="input">
+											           				<input type="text" class="form-control" ng-model="addonFares.footnote" name="addonFareFootnote{{$index}}"
+											           				ng-disabled="vm.isFieldDisable('addonFareFootnote')"
+														            ng-style="editForm.editFormATPCO.addonFareFootnote{{$index}}.$error.required && vm.errorStyle"
+														            ng-required="vm.checkRequiredField('addonFareFootnote')"/>
+											           			</td>
+											           			<td class="input">
+											           				<input type="text" class="form-control" ng-model="addonFares.zone"
+											           				name="addonFareZone{{$index}}"
+											           				ng-disabled="vm.isFieldDisable('addonFareZone')"
+														            ng-style="editForm.editFormATPCO.addonFareZone{{$index}}.$error.required && vm.errorStyle"
+														            ng-required="vm.checkRequiredField('addonFareZone')" />
+											           			</td>
+											           			<td class="input">
+											           				<input type="text" class="form-control" ng-model="addonFares.rtgno"
+											           				name="addonFareRtgno{{$index}}"
+											           				ng-disabled="vm.isFieldDisable('addonFareRtgno')"
+														            ng-style="editForm.editFormATPCO.addonFareRtgno{{$index}}.$error.required && vm.errorStyle"
+														            ng-required="vm.checkRequiredField('addonFareRtgno')"  />
+											           			</td>
+											           			<td class="input">
+											           				<input type="text" class="form-control" ng-model="addonFares.currency"
+											           				name="addonFareCurrency{{$index}}"
+											           				ng-disabled="vm.isFieldDisable('addonFareCurrency')"
+														            ng-style="editForm.editFormATPCO.addonFareCurrency{{$index}}.$error.required && vm.errorStyle"
+														            ng-required="vm.checkRequiredField('addonFareCurrency')"  />
+											           			</td>
+											           			<td class="input">
+											           				<input type="text" class="form-control" ng-model="addonFares.amount"
+											           				name="addonFareAmount{{$index}}"
+											           				ng-disabled="vm.isFieldDisable('addonFareAmount')"
+														            ng-style="editForm.editFormATPCO.addonFareAmount{{$index}}.$error.required && vm.errorStyle"
+														            ng-required="vm.checkRequiredField('addonFareAmount')"  />
+											           			</td>
+											           			<td class="input">
+											           				<input type="text" class="form-control" ng-model="addonFares.amountDiff"
+											           				name="addonFareZone{{$index}}"
+											           				ng-disabled="vm.isFieldDisable('addonFareZone')"
+														            ng-style="editForm.editFormATPCO.addonFareZone{{$index}}.$error.required && vm.errorStyle"
+														            ng-required="vm.checkRequiredField('addonFareZone')"  />
+											           			</td>
+											           			<td class="input">
+											           				<input type="text" class="form-control" ng-model="addonFares.amountDiffPctg"
+											           				name="addonFareZone{{$index}}"
+											           				ng-disabled="vm.isFieldDisable('addonFareZone')"
+														            ng-style="editForm.editFormATPCO.addonFareZone{{$index}}.$error.required && vm.errorStyle"
+														            ng-required="vm.checkRequiredField('addonFareZone')"  />
+											           			</td>
+											           			<td class="input">
+											           				<input type="text" class="form-control" ng-model="addonFares.travelStart"
+											           				name="addonFareTravelStart{{$index}}"
+											           				ng-disabled="vm.isFieldDisable('addonFareTravelStart')"
+														            ng-style="editForm.editFormATPCO.addonFareTravelStart{{$index}}.$error.required && vm.errorStyle"
+														            ng-required="vm.checkRequiredField('addonFareTravelStart')"  />
+											           			</td>
+											           			<td class="input">
+											           				<input type="text" class="form-control" ng-model="addonFares.travelEnd"
+											           				name="addonFareTravelEnd{{$index}}"
+											           				ng-disabled="vm.isFieldDisable('addonFareTravelEnd')"
+														            ng-style="editForm.editFormATPCO.addonFareTravelEnd{{$index}}.$error.required && vm.errorStyle"
+														            ng-required="vm.checkRequiredField('addonFareTravelEnd')"  />
+											           			</td>
+											           			<td class="input">
+											           				<input type="text" class="form-control" ng-model="addonFares.saleStart"
+											           				name="addonFareSaleStart{{$index}}"
+											           				ng-disabled="vm.isFieldDisable('addonFareSaleStart')"
+														            ng-style="editForm.editFormATPCO.addonFareSaleStart{{$index}}.$error.required && vm.errorStyle"
+														            ng-required="vm.checkRequiredField('addonFareSaleStart')" />
+											           			</td>
+											           			<td class="input">
+											           				<input type="text" class="form-control" ng-model="addonFares.saleEnd" 
+											           				name="addonFareSaleEnd{{$index}}"
+											           				ng-disabled="vm.isFieldDisable('addonFareSaleEnd')"
+														            ng-style="editForm.editFormATPCO.addonFareSaleEnd{{$index}}.$error.required && vm.errorStyle"
+														            ng-required="vm.checkRequiredField('addonFareSaleEnd')" />
+											           			</td>
+											           			<td class="input">
+											           				<input type="text" class="form-control" ng-model="addonFares.comment"
+											           				name="addonFareComment{{$index}}"
+											           				ng-disabled="vm.isFieldDisable('addonFareComment')"
+														            ng-style="editForm.editFormATPCO.addonFareComment{{$index}}.$error.required && vm.errorStyle"
+														            ng-required="vm.checkRequiredField('addonFareComment')"  />
+											           			</td>
+											           			<td class="input">
+											           				<input type="text" class="form-control" ng-model="addonFares.travelComplete"
+											           				name="addonFareTravelComplete{{$index}}"
+											           				ng-disabled="vm.isFieldDisable('addonFareTravelComplete')"
+														            ng-style="editForm.editFormATPCO.addonFareTravelComplete{{$index}}.$error.required && vm.errorStyle"
+														            ng-required="vm.checkRequiredField('addonFareTravelComplete')"  />
+											           			</td>
+											           			<td class="input">
+											           				<input type="text" class="form-control" ng-model="addonFares.travelCompleteIndicator"
+											           				name="addonFareTravelIndicator{{$index}}"
+											           				ng-disabled="vm.isFieldDisable('addonFareTravelIndicator')"
+														            ng-style="editForm.editFormATPCO.addonFareTravelIndicator{{$index}}.$error.required && vm.errorStyle"
+														            ng-required="vm.checkRequiredField('addonFareTravelIndicator')"  />
+											           			</td>
+										               		</tr>
+						            				</tbody>
+				        						</table>
+			      						</div>
+			       					</div>
+		       					</div>
+		       				</div>
+		      			</uib-tab>
+		      			<uib-tab heading="Filing Instruction" ng-if="vm.workPackage.filingInstruction">
+				      		<div class="tab-content wp">
+				      			<div class="action-btn-wrapper">
+				      				<div class="col-md-12 text-right no-pad">
+				      					<button ng-click="vm.addFiling()" class="btn btn-primary">Add</button>
+				      				</div>
+				      			</div>
+				       			<div class="col-md-12">
+				       				<label class="full-ib md-bot-mar text-center empty" ng-if="!vm.workPackage.filingInstructionData || vm.workPackage.filingInstructionData.length == 0">
+				       					No Filing Instruction Available
+				       				</label>
+				       				<div ng-repeat="filingInstructionData in vm.workPackage.filingInstructionData track by $index" class="form-repeat">
+				       					<button ng-click="vm.removeFiling(filingInstructionData)" class="bordered delete"><span class="glyphicon glyphicon-remove"></span></button>
+						       			<div class="row">
+							        		<div class="col-md-6">							      			
+								      			<div class="form-group row">
+								      				<label class="col-md-4">Comment</label>
+								      				<div class="col-md-8 input-group textarea">
+								      					<textarea class="col-md-12" ng-model="filingInstructionData.comment"></textarea>
+								      				</div>
+								      			</div>
+							        		</div>							        		
+							      		</div>
+							     	</div>
+				       			</div>
+				       		</div>
+				      	</uib-tab>
+		      		  	<uib-tab heading="Attachment" ng-if="vm.workPackage.attachment">
+							<div class="tab-content wo">
+				     			<div class="action-btn-wrapper">
+				     				<div class="col-md-12 text-right no-pad">
+				     					<button ng-click="vm.addAttachment()" class="btn btn-primary">Add</button>
+				     				</div>
+				     			</div>
+				     			<div class="col-md-12">
+				       				<label class="full-ib md-bot-mar text-center empty" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">
+				       					No Attachment Available
+				       				</label>
+				       				<div ng-repeat="attachment in vm.workPackage.attachmentData track by $index" class="form-repeat">
+				       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete"><span class="glyphicon glyphicon-remove"></span></button>
+						       			<label class="user">admin <span class="vseparator no-mar"></span> 12JAN18 09:15:16</label>
+						       			<div class="row">
+							        		<div class="col-md-6">
+								      			<div class="form-group row">
+								      				<label class="col-md-4">Comment</label>
+								      				<div class="col-md-8 input-group textarea">
+								      					<textarea class="col-md-12" ng-model="attachment.comment"></textarea>
+								      				</div>
+								      			</div>
+							        		</div>
+							        		<div class="col-md-6">
+							        			<div class="form-group file" ngf-drop ngf-change="vm.setFileAttachment($file, attachment)">
+										            <label class="control-label">File Attachment</label>
+										            <div>
+										                <div ng-if="attachment.file" class="help-block clearfix">
+										                    <a class="pull-left" ng-click="vm.openFile(attachment.fileContentType, attachment.file)" data-translate="entity.action.open">open</a><br>
+										                    <span class="pull-left">{{attachment.fileContentType}}, {{vm.byteSize(attachment.file)}}</span>
+										                    <button type="button" ng-click="attachment.file=null;attachment.fileContentType=null;"
+										                            class="btn btn-default btn-xs pull-right delete grey">
+										                        <span class="glyphicon glyphicon-remove"></span>
+										                    </button>
+										                </div>
+										                <button type="button" ngf-select class="btn btn-default btn-block"
+										                        ngf-change="vm.setFile($file, attachment)">
+										                    Add file
+										                </button>
+										            </div>
+										            <input type="hidden" class="form-control" name="file" id="field_file"
+										                    ng-model="attachment.file"
+										                    />
+										            <input type="hidden" class="form-control" name="fileContentType" id="field_fileContentType"
+										                    ng-model="attachment.fileContentType" />
+										        </div>
+							        		</div>
+							      		</div>
+							     	</div>
+							     </div>
+					   		</div>
+					 	</uib-tab>
+		      			<uib-tab heading="Filing Details">
+					      	<div class="tab-content wp">
+					      		<div class="row">
+					      			<div class="col-md-6">
+					      				<div class="form-group row">
+						      				<label class="col-md-4">Work Unit</label>
+						      				<div class="col-md-8 no-pad radio">
+						      					<label class="col-md-6"><input type="radio" ng-model="vm.workPackage.filingDetail.workUnitType" ng-change="vm.loadAll()" value="existing">Use Existing Work Unit</label>
+												<label class="col-md-6"><input type="radio" ng-model="vm.workPackage.filingDetail.workUnitType" ng-change="vm.loadAll()" value="new">Use New Work Unit</label>
+						      				</div>
+						      			</div>
+						      			<div class="form-group row">
+						      				<label class="col-md-4">Email Notifications</label>
+						      			 	<input type="text" class="col-md-8" ng-model="vm.workPackage.filingDetail.email"/>	
+						      			</div>
+						      			<div class="form-group row">
+						      				<label class="col-md-4">Release Instruction</label>
+						      			 	<div class="col-md-8 no-pad select">	
+												<select class="col-md-12" name="status" ng-model="vm.workPackage.filingDetail.releaseInstruction" id="field_status">
+									                <option value="">Select Release Instruction</option>
+									                <option value="Release Batches">Release Work Unit / Batch</option>
+									                <option value="Create Batches">Do not Release Work Unit / Batch</option>
+									            </select>
+											</div>
+						      			</div>
+					      			</div>
+					      			<div class="col-md-6">
+					      				<div class="form-group row">
+						      				<label class="col-md-4">Work Unit ID</label>
+						      			 	<input type="text" class="col-md-8" ng-model="vm.workPackage.filingDetail.workUnitId"/>	
+						      			</div>
+						      			<div class="form-group row">
+						      				<label class="col-md-4">Create Date</label>
+						      			 	<input type="text" class="col-md-8" ng-model="vm.workPackage.filingDetail.workUnitId"/>	
+						      			</div>
+						      			<div class="form-group row">
+						      				<label class="col-md-4">Organization</label>
+						      			 	<input type="text" class="col-md-8" ng-model="vm.workPackage.filingDetail.workUnitId"/>	
+						      			</div>
+					      			</div>
+						 		</div>
+						 		<br/>
+						 		<div class="row">
+								    <div class="col-md-6">
+										<p class="no-mar" style="padding: 13px 0;">Tariffs : </p>
+										<table class="jh-table table table-striped">
+								          <thead>
+								              <tr>
+								              		<th>No</th>
+								              		<th>TarType</th>               		
+								              		<th>TarNo</th>               		
+								              		<th>TarCd</th>               		
+								              		<th>CXR</th>               		
+								              		<th>Release Instruction</th>               		
+								              </tr>
+								          </thead>
+								         	<tbody>
+								         		<tr ng-if="!vm.tarif || vm.tarif.length == 0">
+								           			<td colspan="6" class="empty">
+								           				No Tariff Available
+								           			</td>
+								           		</tr>
+								         		<tr ng-class="{'even': fare.id % 2 == 0, 'odd': fare.id % 2 != 0}" ng-click="vm.applyRule(fare.id)" ng-repeat="tarif in vm.tarif track by $index" >
+								      				<td>{{$index+1}}</td>
+								      				<td>Fare</td>
+								      				<td><span ng-if="">008</span></td>
+								      				<td>BUAS</td>
+								      				<td>GA</td>
+								      				<td>{{vm.filingDetails.releaseInstruction}}</td>
+								            		</tr>
+								         		</tbody>
+								      	</table>
+							     	</div>
+							     	<div class="col-md-6">
+							        	<div class="action-btn-wrapper no-pad">
+							        		<div class="col-md-6 no-pad">
+							        			<p class="no-mar">Batch & GFS Numbers :</p>
+							        		</div>
+							        		<div class="col-md-6 no-pad text-right">
+							        			<button ng-click="vm.addBatch()" class="btn btn-primary">Add</button>
+							        		</div>
+							        	</div>
+							        	
+										<table class="jh-table table table-striped">
+								            <thead>
+								                <tr>
+							                		<th>Batch No</th>
+							                		<th>Gfs Ref</th>               		
+							                		<th>Gfs Date</th>  
+							                		<th>Action</th>     		
+								                </tr>
+								            </thead>
+								           	<tbody>
+								           		<tr ng-if="!vm.batch || vm.batch.length == 0">
+								           			<td colspan="4" class="empty">
+								           				No Batch Available
+								           			</td>
+								           		</tr>
+								           		<tr ng-class="{'even': fare.id % 2 == 0, 'odd': fare.id % 2 != 0}" ng-click="vm.applyRule(fare.id)" ng-repeat="batch in vm.batch track by $index">	
+													<td>
+														<input class="form-control" type="text" ng-model="vm.batch[$index].no"/>
+													</td>	
+													<td>
+														<input class="form-control" type="text" ng-model="vm.batch[$index].gfsref"/>
+													</td>
+													<td>
+													
+															
+														<input class="form-control" type="text" ng-model="vm.batch[$index].gfsdate"/>
+													</td>	
+													<td>
+														<button ng-click="vm.removeBatch(batch)">X</button>
+													</td>
+							               		</tr>
+							            		</tbody>
+								        	</table>
+							        	</div>
+									</div>
+					      		</div>
+					     </uib-tab>
+			    		
+		    		</uib-tabset>
+	    		</ng-form>
+	   		</div>
+	   
+		   	<div ng-if="vm.workPackage.targetDistribution == 'Market' && vm.workPackage.type == 'REGULAR'">
+		   		<ng-form name="editFormMarket" role="form" novalidate>
+					<uib-tabset active="activeForm1">
+				    		<uib-tab index="0" heading="Market Fares">
+				    			<div class="tab-content wo">
+				    				<div class="col-md-12 no-pad">
+			    						<div class="col-md-6">
+							      			<div class="form-group row">
+							      				<label class="col-md-4" >CXR</label>
+									            <input type="text" class="col-md-8" ng-model="vm.workPackage.fareCarrier"/>
+							      			</div>
+							      			<div class="form-group row">
+									            <label class="col-md-4">Description</label>
+									            <div class="col-md-8 input-group textarea">
+									            	<textarea class="col-md-12" ng-model="vm.workPackage.specifiedFaresName"></textarea>
+									            </div> 
+									        </div>
+							      		</div>
+							      		<div class="col-md-6">
+							      			<div class="form-group row">
+									            <label class="col-md-4">Approval Reference</label>
+									                <input type="text" class="col-md-8" ng-model="vm.workPackage.approvalReference"/>
+									        </div>
+									        <div class="form-group row">
+									            <label class="col-md-4">Version</label>
+									            <div class="flex form-group col-md-8 no-pad">
+						     						<button type="button" class="btn btn-default"  ng-click="vm.previousVersion()" skip-disable><span class="glyphicon glyphicon-chevron-left" skip-disable></span></button>
+						     						<input type="text" class="col-md-6" ng-model="vm.workPackage.version"/>
+						     						<button type="button" class="btn btn-default"  ng-click="vm.nextVersion()" skip-disable><span class="glyphicon glyphicon-chevron-right" skip-disable></span></button>
+												</div>
+											</div>
+								     	</div>
+							      	</div>
+							      	<br/>
+							      	<div class="row action-btn-wrapper">
+							      		<div class="col-md-8 text-left">
+											<button type="button" class="btn btn-primary">
+												Move Up
+											</button>
+											<button type="button" class="btn btn-primary">
+												Move Down
+											</button>
+											<button type="button" class="btn btn-primary">
+												Agents
+											</button>
+											<button type="button" class="btn btn-primary">
+												Rate Sheet
+											</button>
+											<div class="btn-group" uib-dropdown is-open="vm.editButton.isopen">
+											      <button type="button" class="btn btn-primary dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled">
+											        Edit <span class="caret"></span>
+											      </button>
+													<ul class="dropdown-menu" role="menu">
+													        <li><a href="#">Clear Selection</a></li>
+													        <li><a href="#">Fill Down</a></li>
+															<li><a href="#">Search/Replace</a></li>
+															<li><a ng-click="vm.addMarketFares()">Add Rows</a></li>
+															<li><a ng-click="vm.deleteMarketFaresSelected()">Delete Selected Rows</a></li>
+															<li><a ng-click="vm.duplicateMarketFaresSelected()">Duplicate Selected Rows</a></li>
+															<li><a >Copy Selected Rows</a></li>
+															<li><a href="#">Paste</a></li>
+															<li><a href="#">Paste as Cancel</a></li>
+													      </ul>
+												    </div>
+											<button type="button" class="btn btn-primary dropdown-toggle" ngf-select class="btn btn-default btn-block"
+											               ngf-change="vm.importFareMarket($file)">
+									        	Import 
+									      	</button>
+									      	<button type="button" class="btn btn-primary dropdown-toggle" ng-click="vm.exportFaresMarket()">
+									        	Export 
+									      	</button>
+									      	<button type="button" class="btn btn-primary dropdown-toggle" ng-click="vm.publish()">
+									        	Publish 
+									      	</button>
+									      </div>
+									      <div class="col-md-4 no-pad text-right">
+									      </div>
+									</div>
+									<div class="row table-wrapper no-mar no-pad">
+						    			<div class="table-wrapper no-top-mar no-pad ">
+									    	<div class="table-responsive">
+									        	<table class="jh-table table table-striped">
+										            <thead>
+										                <tr>
+									                		<th>No</th>
+									                		<th>Status</th>
+										                	<th>Carrier</th>		                	
+									                		<th>Action</th>
+										                	<th>Origin</th>
+										                	<th>Dest</th>
+										                	<th>Fare Cls</th>
+										                	<th>Bkg Cls</th>
+										                	<th>SSN</th>
+										                	<th>Cabin</th>
+										                	<th>OW/RT</th>
+										                	<th>Rtg No</th>
+										                	<th>Rule Id</th>
+										                	<th>Curr</th>
+										                	<th>Base Amt</th>
+										                	<th>Prev Base Amt</th>
+										                	<th>Prev Base Amt Diff</th>
+										                	<th>% Prev Base Amt Diff</th>
+											                <th>Travel Start</th>
+										               		<th>Travel End</th>		               		
+										               		<th>Sales Start</th>
+										               		<th>Sales End</th>	
+										               		<th>Comment</th>	               		
+										               		<th>Travel Complete</th>	               		
+										               		<th>Travel Complete Indicator</th>	               		
+										               		<th>RateSheet Comment</th>	               		
+										               		<th>Deal Code</th>	               		
+										                </tr>
+										            </thead>
+										           	<tbody>
+										           		<tr ng-if="vm.isLoading">
+										           			<td colspan="24" class="no-border">
+										           				<div class="loading-wrapper">
+										           					<div class="sk-cube-grid">
+																		<div class="sk-cube sk-cube1"></div>
+																	  	<div class="sk-cube sk-cube2"></div>
+																	  	<div class="sk-cube sk-cube3"></div>
+																	  	<div class="sk-cube sk-cube4"></div>
+																	  	<div class="sk-cube sk-cube5"></div>
+																	  	<div class="sk-cube sk-cube6"></div>
+																	 	<div class="sk-cube sk-cube7"></div>
+																	  	<div class="sk-cube sk-cube8"></div>
+																	 	<div class="sk-cube sk-cube9"></div>
+																	</div>
+																	<label>Please wait</label>
+										           				</div>
+										           			</td>
+										           		</tr>
+										           		<tr ng-if="!vm.isLoading" ng-repeat="fare in vm.workPackage.marketFares track by $index" 
+										           			ng-click="vm.rowMarketFaresSelected(fare)"
+										           			>
+										           			<td>{{$index+1}}</td>
+										           			<td class="input">
+																<select class="form-control"  name="priority" ng-model="fare.status" id="field_status">
+													                <option value="">Select Priority</option>
+													                <option value="PENDING" >Pending</option>
+													                <option value="APPROVED">Approve</option>
+													                <option value="REJECTED">Reject</option>
+													            </select>
+															</td>
+										           			<td class="input">
+										           				<input type="text" class="form-control" name="wpid" id="field_wpid"
+											                    		ng-model="fare.carrier" ng-disabled="fare.action == 'Canceled'"/>
+										           			</td>
+										           			<td>N</td>
+										           			
+										           			
+										           			
+									                		<td class="input">
+									                			<input type="text" class="form-control" name="origin{{$index}}" id="field_origin" 
+									                				ng-disabled="fare.action == 'Canceled'"
+										                    		ng-model="fare.origin"/>
+									                		</td>
+										                    <td class="input">
+										                    		<input type="text" class="form-control" name="destination{{$index}}" id="field_destination" 
+										                				ng-disabled="fare.action == 'Canceled'"
+											                    		ng-model="fare.destination"/>
+										                    </td>
+										                    
+										                    <td class="input">
+										                    		<input type="text" class="form-control" name="farebasis{{$index}}" id="field_farebasis"
+										                				ng-disabled="fare.action == 'Canceled'"
+											                    		ng-model="fare.fareBasis"/>
+										                    </td>
+										                    
+										           			<td class="input">
+										           				<input type="text" class="form-control" name="bookingClass{{$index}}" id="field_bookingClass"
+										                				ng-disabled="fare.action == 'Canceled'"
+											                    		ng-model="fare.bookingClass"/>
+										           			</td>
+										           			<td></td>
+										           			<td class="input">
+										           				<select class="col-md-12" 
+														             name="cabin{{$index}}"
+														             ng-model="fare.cabin" id="field_cabin" ng-disabled="fare.action == 'Canceled'">
+														                <option value="">Select Cabin</option>
+														                <option>Y - Economy</option>
+														                <option>F - First Class</option>
+														                <option>C - Business</option>
+														                <option>R - Premium Economy</option>
+														            </select>
+										           				<!-- <input type="text" class="form-control" name="cabin{{$index}}" id="field_bookingClass"
+										                				ng-disabled="fare.action == 'Canceled'"
+										                				ng-required="vm.checkRequiredField('cabin') && fare.action != 'Canceled'" 
+																	ng-style="editForm.cabin{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"
+											                    		
+											                    		ng-model="fare.cabin"/> -->
+										           			</td>
+										           			<td class="input">
+										           				<select class="col-md-12" 
+															             name="typeOfJourney{{$index}}"
+															             ng-model="fare.typeOfJourney" id="field_typeOfJourney" ng-disabled="fare.action == 'Canceled'">
+															                <option value="">Select OW/RT</option>
+															                <option>One Way</option>
+															                <option>Return</option>
+															                <option>One Way Only</option>
+															            </select>
+										           				<!-- <input type="text" class="form-control" name="typeOfJourney{{$index}}" id="field_owrt"
+										                				ng-disabled="fare.action == 'Canceled'"
+										                				ng-required="vm.checkRequiredField('typeOfJourney') && fare.action != 'Canceled'" ng-style="editForm.typeOfJourney{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"
+											                    		ng-model="fare.typeOfJourney"/> -->
+										           			</td>
+									               			<td class="input">
+									               				<input type="text" class="form-control" name="rtgno{{$index}}" id="field_bookingClass"
+										                				ng-disabled="fare.action == 'Canceled'"
+											                    		ng-model="fare.rtgno"/>
+									               			</td>
+									               			<td class="input">
+									               				<input type="text" class="form-control" name="ruleno{{$index}}" id="field_bookingClass"
+										                				ng-disabled="fare.action == 'Canceled'"
+											                    		ng-model="fare.ruleno"/>
+									               			</td>
+									               			<td class="input">
+									               				<input type="text" class="form-control" name="currency{{$index}}" id="field_bookingClass"
+										                				ng-disabled="fare.action == 'Canceled'"
+											                    		ng-model="fare.currency"/>
+									               			</td>
+									               			<td class="input">
+									               				<input type="text" class="form-control" name="amount{{$index}}" id="field_bookingClass"
+										                				ng-disabled="fare.action == 'Canceled'"
+											                    		ng-model="fare.amount"/>
+									               			</td>
+									               			<td></td>
+									               			<td></td>
+									               			<td></td>
+									               			
+									               			
+									               			<td class="input">
+								               				<span ng-if="vm.isFieldEditable(fare, 'travelStartDate')">
+									                				<input type="text" class="form-control" name="wpid" id="field_bookingClass"
+									                				ng-disabled="fare.action == 'Canceled'"
+										                    		ng-model="fare.travelStart"/>
+									                			
+									                			</span>
+									                			<span ng-if="!vm.isFieldEditable(fare, 'travelStartDate')">
+									               				{{fare.travelStart}}
+									                			</span>
+								               			
+									               			</td>
+									               			<td class="input">
+									               				<span ng-if="vm.isFieldEditable(fare, 'travelEndDate')">
+										                				<input type="text" class="form-control" name="wpid" id="field_bookingClass"
+										                				ng-disabled="fare.action == 'Canceled'"
+											                    		ng-model="fare.travelEnd"/>
+										                			
+										                			</span>
+										                			<span ng-if="!vm.isFieldEditable(fare, 'travelEndDate')">
+										               				{{fare.travelEnd}}
+										                			</span>
+									               			</td>
+									               			<td class="input">
+									               				<span ng-if="vm.isFieldEditable(fare, 'saleStartDate')">
+										                				<input type="text" class="form-control" name="wpid" id="field_bookingClass"
+										                				ng-disabled="fare.action == 'Canceled'"
+											                    		ng-model="fare.saleStart"/>
+										                			
+										                			</span>
+										                			<span ng-if="!vm.isFieldEditable(fare, 'saleStartDate')">
+										               				{{fare.saleStart}}
+										                			</span>
+									               			</td>
+									               			<td class="input">
+									               					<span ng-if="vm.isFieldEditable(fare, 'saleEndDate')">
+										                				<input type="text" class="form-control" name="wpid" id="field_bookingClass"
+										                				ng-disabled="fare.action == 'Canceled'"
+											                    		ng-model="fare.saleEnd"/>
+										                			
+										                			</span>
+										                			<span ng-if="!vm.isFieldEditable(fare, 'saleEndDate')">
+										               				{{fare.saleEnd}}
+										                			</span>
+									               			</td>
+									               			<td class="input">
+									               			<input type="text" class="form-control" name="wpid" id="field_bookingClass"
+										                				ng-disabled="fare.action == 'Canceled'"
+											                    		ng-model="fare.comment"/></td>	
+									               			<td class="input">	<input type="text" class="form-control" name="wpid" id="field_bookingClass"
+										                				ng-disabled="fare.action == 'Canceled'"
+											                    		ng-model="fare.travelComplete"/></td>	
+									               			<td class="input"><input type="text" class="form-control" name="wpid" id="field_bookingClass"
+										                				ng-disabled="fare.action == 'Canceled'"
+											                    		ng-model="fare.travelCompleteIndicator"/></td>
+									               			<td class="input"><input type="text" class="form-control" name="wpid" id="field_bookingClass"
+											                    		ng-model="fare.ratesheetComment"/>
+										                			</td>	
+									               			<td class="input"><input type="text" class="form-control" name="wpid" id="field_bookingClass"
+											                    		ng-model="fare.dealCode"/></td>		
+									               		</tr>
+									            	</tbody>
+										   		</table>
+											</div>
+										</div>
+									</div>
+									<label class="full-ib text-center">
+				        	 			<span ng-click="vm.rulesMenu = !vm.rulesMenu" title="Show Rules" class="glyphicon glyphicon-menu-down"></span>
+									</label>
+									<div class="rules-wrapper" ng-show="!vm.rulesMenu">
+										<div class="row">
+											<div class="col-md-12">
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.eligibility}">1 Eligibility
+														<div class="rule-content">
+															{{vm.selectedFareMarket.fareRule.eligibility}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.dayTime}">2 Day/Time
+														<div class="rule-content">
+															{{vm.selectedFareMarket.fareRule.dayTime}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.seasonality}">3 Season App
+														<div class="rule-content">
+															{{vm.selectedFareMarket.fareRule.seasonality}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.flightApp}">4 Flight App
+														<div class="rule-content">
+															{{vm.selectedFareMarket.fareRule.flightApp}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.advBkg}">5 Adv Bkg
+														<div class="rule-content">
+															{{vm.selectedFareMarket.fareRule.advBkg}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.minStay}">6 Min Stay
+														<div class="rule-content">
+															{{vm.selectedFareMarket.fareRule.minStay}}
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.maxStay}">7 Max Stay
+														<div class="rule-content">
+															{{vm.selectedFareMarket.fareRule.maxStay}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.stopover}">8 Stopover
+														<div class="rule-content">
+															{{vm.selectedFareMarket.fareRule.stopover}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.transfers}">9 Transfers
+														<div class="rule-content" ng-class="{'available': vm.selectedFareMarket.fareRule.transfers}">
+															{{vm.selectedFareMarket.fareRule.transfers}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.combination}">10 Comb'ty
+														<div class="rule-content" ng-class="{'available': vm.selectedFareMarket.fareRule.combination}">
+															{{vm.selectedFareMarket.fareRule.combination}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.blackouts}">11 Blackouts
+														<div class="rule-content" ng-class="{'available': vm.selectedFareMarket.fareRule.blackouts}">
+															{{vm.selectedFareMarket.fareRule.blackouts}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.surcharges}">12 Surcharges
+														<div class="rule-content" ng-class="{'available': vm.selectedFareMarket.fareRule.surcharges}">
+															{{vm.selectedFareMarket.fareRule.surcharges}}
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.accompaniedTravel}">13 Accmp Tvl
+														<div class="rule-content" ng-class="{'available': vm.selectedFareMarket.fareRule.accompaniedTravel}">
+															{{vm.selectedFareMarket.fareRule.accompaniedTravel}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.travelRestriction}">14 Tvl Rest
+														<div class="rule-content" ng-class="{'available': vm.selectedFareMarket.fareRule.travelRestriction}">
+															{{vm.selectedFareMarket.fareRule.travelRestriction}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.salesRestriction}">15 Sale Rest
+														<div class="rule-content" ng-class="{'available': vm.selectedFareMarket.fareRule.salesRestriction}">
+															{{vm.selectedFareMarket.fareRule.salesRestriction}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.penalties}">16 Penalties
+														<div class="rule-content" ng-class="{'available': vm.selectedFareMarket.fareRule.penalties}">
+															{{vm.selectedFareMarket.fareRule.penalties}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.hiIntPt}">17 Hi Int Pt
+														<div class="rule-content" ng-class="{'available': vm.selectedFareMarket.fareRule.hiIntPt}">
+															{{vm.selectedFareMarket.fareRule.hiIntPt}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.tktEndorse}">18 Tkt Endorse
+														<div class="rule-content" ng-class="{'available': vm.selectedFareMarket.fareRule.tktEndorse}">
+															{{vm.selectedFareMarket.fareRule.tktEndorse}}
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.childDisc}">19 Child Disc
+														<div class="rule-content" ng-class="{'available': vm.selectedFareMarket.fareRule.childDisc}">
+															{{vm.selectedFareMarket.fareRule.childDisc}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.tourDisc}">20 Tour Disc
+														<div class="rule-content" ng-class="{'available': vm.selectedFareMarket.fareRule.tourDisc}">
+															{{vm.selectedFareMarket.fareRule.tourDisc}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.agentsDisc}">21 Agents Disc
+														<div class="rule-content" ng-class="{'available': vm.selectedFareMarket.fareRule.agentsDisc}">
+															{{vm.selectedFareMarket.fareRule.agentsDisc}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.otherDisc}">22 Other Disc
+														<div class="rule-content" ng-class="{'available': vm.selectedFareMarket.fareRule.otherDisc}">
+															{{vm.selectedFareMarket.fareRule.otherDisc}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.miscTags}">23 Misc Tags
+														<div class="rule-content" ng-class="{'available': vm.selectedFareMarket.fareRule.miscTags}">
+															{{vm.selectedFareMarket.fareRule.miscTags}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.groups}">26 Groups
+														<div class="rule-content" ng-class="{'available': vm.selectedFareMarket.fareRule.groups}">
+															{{vm.selectedFareMarket.fareRule.groups}}
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.tours}">27 Tours
+														<div class="rule-content" ng-class="{'available': vm.selectedFareMarket.fareRule.tours}">
+															{{vm.selectedFareMarket.fareRule.tours}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.visitCountry}">28 Visit Cntry
+														<div class="rule-content" ng-class="{'available': vm.selectedFareMarket.fareRule.visitCountry}">
+															{{vm.selectedFareMarket.fareRule.visitCountry}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.deposits}">29 Deposits
+														<div class="rule-content" ng-class="{'available': vm.selectedFareMarket.fareRule.deposits}">
+															{{vm.selectedFareMarket.fareRule.deposits}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.volChanges}">31 Vol Chgs
+														<div class="rule-content" ng-class="{'available': vm.selectedFareMarket.fareRule.volChanges}">
+															{{vm.selectedFareMarket.fareRule.volChanges}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.volRefunds}">33 Vol Refunds
+														<div class="rule-content" ng-class="{'available': vm.selectedFareMarket.fareRule.volRefunds}">
+															{{vm.selectedFareMarket.fareRule.volRefunds}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.negFares}">35 Neg Fares
+														<div class="rule-content" ng-class="{'available': vm.selectedFareMarket.fareRule.negFares}">
+															{{vm.selectedFareMarket.fareRule.negFares}}
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-12">
+												<div class="col-md-2">
+													<div class="rule" ng-class="{'available': vm.selectedFareMarket.fareRule.ruleApp}">50 Rule App
+														<div class="rule-content" ng-class="{'available': vm.selectedFareMarket.fareRule.ruleApp}">
+															{{vm.selectedFareMarket.fareRule.ruleApp}}
+														</div>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="rule">Actions</div>
+												</div>
+											</div>
+										</div>
+									</div> 
+				    			</div>
+				      	</uib-tab>
+				  		<uib-tab index="1" heading="Market Rules">
+				       		<div class="tab-content wo">
+				       			<div class="action-btn-wrapper">
+				       				<div class="col-md-12 text-right no-pad">
+				       					<button ng-click="vm.addMarketRules()" class="btn btn-primary">Add</button>
+				       				</div>
+				       			</div>
+				       			<div class="col-md-12">
+				       				<div ng-repeat="marketRules in vm.workPackage.marketRulesData track by $index" class="form-repeat">
+				       					<button ng-click="vm.removeMarketRules(marketRules)" class="bordered delete"><span class="glyphicon glyphicon-remove"></span></button>
+					       				<label class="user">admin <span class="vseparator no-mar"></span> 12JAN18 09:15:16</label>
+							        	<div class="row">
+							        		<div class="col-md-6">
+								      			<div class="form-group row">
+								      				<label class="col-md-4" >Status</label>
+								      				<div class="col-md-8 no-pad select">
+								      					<select class="col-md-12" name="qaStatus" ng-model="marketRules.status" id="field_qaStatus">
+											                <option value="">Select Status</option>
+											                <option value="PENDING" >Pending</option>
+											                <option value="APPROVED">Approve</option>
+											                <option value="REJECTED">Reject</option>
+											            </select>	
+								      				</div>
+								      			</div>
+								      			<div class="form-group row" ng-init="marketRules.cxr = 'GA'">
+								      				<label class="col-md-4" >CXR</label>
+										            <input type="text" class="col-md-8" ng-model="marketRules.cxr" disabled/>
+								      			</div>
+								      			<div class="form-group row">
+								      				<label class="col-md-4">Market Rule Id</label>
+									             	<input type="text" class="col-md-8" ng-model="marketRules.ruleid"/>
+								      			</div>
+								      			<div class="form-group row">
+								      				<label class="col-md-4">Comment</label>
+								      				<div class="col-md-8 input-group textarea">
+								      					<textarea class="col-md-12" ng-model="marketRules.comment"></textarea>
+								      				</div>
+								      			</div>
+							        		</div>
+							        		<div class="col-md-6">
+							        			<div class="form-group row file" ngf-drop ngf-change="vm.setFile($file, marketRules)">
+										            <label class="control-label">File Attachment</label>
+										            <div>
+										                <div ng-if="marketRules.file" class="help-block clearfix">
+										                    <a class="pull-left" ng-click="vm.openFile(marketRules.fileContentType, marketRules.file)" data-translate="entity.action.open">open</a><br>
+										                    <span class="pull-left">{{marketRules.fileContentType}}, {{vm.byteSize(marketRules.file)}}</span>
+										                    <button type="button" ng-click="marketRules.file=null;marketRules.fileContentType=null;"
+										                            class="btn btn-default btn-xs pull-right delete grey">
+										                        <span class="glyphicon glyphicon-remove"></span>
+										                    </button>
+										                </div>
+										                <div class="action-btn-wrapper no-pad">
+										                	<button type="button" ngf-select class="btn btn-primary btn-block"
+											                        ngf-change="vm.setFile($file, marketRules)">
+											                    Add file
+											                </button>
+										                </div>
+										            </div>
+										            <input type="hidden" class="form-control" name="file" id="field_file" ng-model="marketRules.file"/>
+										            <input type="hidden" class="form-control" name="fileContentType" id="field_fileContentType" ng-model="marketRules.fileContentType"/>
+										        </div>
+							        		</div>
+							      		</div>
+									</div>
+				       			</div>
+				       		</div>
+				      </uib-tab>
+				      	<uib-tab index="2" heading="Attachment">
+				    			<div class="tab-content wo">
+				       			<div class="action-btn-wrapper">
+				       				<div class="col-md-12 text-right no-pad">
+				       					<button ng-click="vm.addAttachment()" class="btn btn-primary">Add</button>
+				       				</div>
+				       			</div>
+				       			<div class="col-md-12">
+				       				<label class="full-ib md-bot-mar text-center empty" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">
+				       					No Attachment Available
+				       				</label>
+				       				<div ng-repeat="attachment in vm.workPackage.attachmentData track by $index" class="form-repeat">
+				       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete"><span class="glyphicon glyphicon-remove"></span></button>
+				       					<label class="user">admin <span class="vseparator no-mar"></span> 12JAN18 09:15:16</label>
+							      		<div class="row">
+							      			<div class="col-md-6">
+							      				<div class="form-group row">
+							      					<label class="col-md-4">Comment</label>
+							      					<div class="col-md-8 input-group textarea">
+								      					<textarea class="col-md-12" ng-model="attachment.comment"></textarea>
+								      				</div>
+							      				</div>
+							      			</div>
+							      			<div class="col-md-6">
+							        			<div class="form-group row file" ngf-drop ngf-change="vm.setFile($file, attachment)">
+										            <label class="control-label">File Attachment</label>
+										            <div>
+										                <div ng-if="attachment.file" class="help-block clearfix">
+										                    <a class="pull-left" ng-click="vm.openFile(attachment.fileContentType, attachment.file)" data-translate="entity.action.open">open</a><br>
+										                    <span class="pull-left">{{attachment.fileContentType}}, {{vm.byteSize(attachment.file)}}</span>
+										                    <button type="button" ng-click="attachment.file=null;attachment.fileContentType=null;"
+										                            class="btn btn-default btn-xs pull-right delete">
+										                        <span class="glyphicon glyphicon-remove"></span>
+										                    </button>
+										                </div>
+										                <button type="button" ngf-select class="btn btn-default btn-block"
+										                        ngf-change="vm.setFile($file, attachment)">
+										                    Add file
+										                </button>
+										            </div>
+										            <input type="hidden" class="form-control" name="file" id="field_file"
+										                    ng-model="attachment.file"
+										                    />
+										            <input type="hidden" class="form-control" name="fileContentType" id="field_fileContentType"
+										                    ng-model="attachment.fileContentType" />
+										        </div>
+							        		</div>
+							      		</div>
+							     	</div>
+				       			</div>
+				       		</div>
+						</uib-tab>
+					</uib-tabset>
+				</ng-form>
+			</div>
+	   
+	   		<div ng-if="vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'DISCOUNT'">
+	   			<ng-form name="editFormDiscount" role="form" novalidate>
+			   		<uib-tabset active="activeForm2">
+			   			<uib-tab ng-repeat="workPackageDiscountSheet in vm.workPackage.discountFareSheet" ng-click="vm.selectTab($index)" 
+			    			heading="Discount Fares : {{vm.workPackage.discountFareSheet[$index].discountFaresName}}" heading="Discount">
+			   				
+			   				<div class="tab-content wo">
+			    				<div class="col-md-12 no-pad">
+			    					<div class="col-md-6">
+						      			<div class="form-group row">
+								            <label class="col-md-4">Approval Reference</label>
+								                <input type="text" class="col-md-8" ng-model="workPackageDiscountSheet.approvalReference"
+								                name="discountApprovalReference{{$index}}"
+								            		ng-style="editForm.editFormDiscount.discountApprovalReference{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"
+									         		ng-required="vm.checkRequiredField('discountApprovalReference')"  
+									         		ng-disabled="vm.isFieldDisable('discountApprovalReference')"/>
+								        </div>
+								        <div class="form-group row">
+								            <label class="col-md-4">Account Code</label>
+								                <input type="text" class="col-md-8" ng-model="workPackageDiscountSheet.accountCode"
+								                name="discountAccountCode{{$index}}"
+								            		ng-style="editForm.editFormDiscount.discountAccountCode{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"
+									         		ng-model="workPackageSheet.discountFaresName" 
+									         		ng-required="vm.checkRequiredField('discountAccountCode')"  
+									         		ng-disabled="vm.isFieldDisable('discountAccountCode')"/>
+								        </div>
+						      			<div class="form-group row">
+								            <label class="col-md-4">Description</label>
+								            <div class="col-md-8 input-group textarea">
+								            	<textarea class="col-md-12" ng-model="workPackageDiscountSheet.discountFaresName" 
+								            		name="discountFaresName{{$index}}"
+								            		ng-style="editForm.editFormDiscount.discountFaresName{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"
+									         		ng-model="workPackageSheet.discountFaresName" 
+									         		ng-required="vm.checkRequiredField('discountFaresName')"  
+									         		ng-disabled="vm.isFieldDisable('discountFaresName')"></textarea>
+								            </div> 
+								        </div>
+						      		</div>
+						      		
+						      		<div class="col-md-6">
+							      			<div class="form-group row">
+								      				<label class="col-md-4" >Fare Type</label>
+								      				<select 
+								      				class="col-md-4" 
+								      				name="fareType{{$index}}"
+								      				ng-model="workPackageDiscountSheet.fareType" 
+													ng-style="editForm.editFormDiscount.fareType{{$index}}.$error.required && vm.errorStyle"
+										      		ng-options="fareType for fareType in vm.fareType" 
+								      				ng-required="vm.checkRequiredField('fareType')"
+								      				ng-disabled="vm.isFieldDisable('fareType')"></select>
+							      			</div>
+									        <div class="form-group row">
+									            <label class="col-md-4">Version</label>
+									            <div class="flex form-group no-pad">
+						     						<button type="button" class="btn btn-default"  ng-click="vm.previousVersion()" skip-disable><span class="glyphicon glyphicon-chevron-left" skip-disable></span></button>
+						     						<input type="text" class="col-md-6" ng-model="vm.workPackage.version"/>
+						     						<button type="button" class="btn btn-default"  ng-click="vm.nextVersion()" skip-disable><span class="glyphicon glyphicon-chevron-right" skip-disable></span></button>
+												</div>
+											</div>
+							     	</div>
+			    				</div>
+			    			</div>
+			    			
+			    			<br/>
+			    				
+			    			<div class="row action-btn-wrapper">
+						      		<div class="col-md-8 text-left">
+										<button type="button" class="btn btn-primary" ng-click="vm.derivedFaresDiscount()">
+											Derived Fares
+										</button>
+										<button type="button" class="btn btn-primary">
+											Move Up
+										</button>
+										<button type="button" class="btn btn-primary">
+											Move Down
+										</button>
+										<div class="btn-group" uib-dropdown is-open="vm.editDiscountButton.isopen">
+									      <button type="button" class="btn btn-primary dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled">
+									        Edit <span class="caret"></span>
+									      </button>
+									      <ul class="dropdown-menu" role="menu">
+									        <li><a href="#">Clear Selection</a></li>
+									        <li><a href="#">Fill Down</a></li>
+											<li><a href="#">Search/Replace</a></li>
+											<li><a ng-click="vm.addDiscountFares()">Add Rows</a></li>
+											<li><a ng-click="vm.deleteFaresDiscountSelected()">Delete Selected Rows</a></li>
+											<li><a ng-click="vm.duplicateFaresDiscountSelected()">Duplicate Selected Rows</a></li>
+											<li><a href="#">Copy Selected Rows</a></li>
+											<li><a href="#">Paste</a></li>
+									      </ul>
+									    </div>
+										<button type="button" class="btn btn-primary dropdown-toggle" ngf-select class="btn btn-default btn-block"
+										               ngf-change="vm.importFareDiscount($file)">
+								        	Import 
+								      	</button>
+								      	<button type="button" class="btn btn-primary dropdown-toggle" ng-click="vm.exportFaresDiscount()">
+								        	Export 
+								      	</button>
+								      </div>
+									  <div class="col-md-4 no-pad text-right">
+									  </div>
+								</div>
+								
+							<div class="row table-wrapper no-mar">
+				    			<div class="table-wrapper no-top-mar no-pad ">
+							    	<div class="table-responsive">
+							        	<table class="jh-table table table-striped">
+								            <thead>
+							                <tr>
+						                		<th>No</th>
+						                		<th>Status</th>
+						                		<th>FBR Tariff Code</th>
+							                	<th>Loc 1 Type</th>		                	
+						                		<th>Loc 1</th>
+							                	<th>Loc 2 Type</th>
+							                	<th>Loc 2</th>
+							                	<th>Base FareCls</th>
+							                	<th>Base Rule No</th>
+							                	<th>Base Tariff Code</th>
+							                	<th>Calc Type</th>
+							                	<th>% of Base Fare</th>
+							                	<th>Curr</th>
+							                	<th>Specified Amount</th>
+							                	<th>PAX Type</th>
+							                	<th>Fare Type</th>
+								             	<th>Tkt Code</th>
+							               		<th>Tkt Des</th>
+							               		<th>Base Fare OW/RT</th>
+							               		<th>Global</th>
+							               		<th>Rtg No</th>		               		
+							               		<th>Rtg No Tarno</th>
+							               		<th>New FareCls</th>	
+							               		<th>New OW/RT</th>	 
+							               		<th>New BkgCd</th>	 
+							               		<th>Travel Start</th>	   
+							               		<th>Travel End</th>	   
+							               		<th>Sale Start</th>	   
+							               		<th>Sale End</th>	   
+							               		<th>Comment</th>	  
+							               		<th>Travel Complete</th>	  
+							               		<th>Travel Complete Indicator</th>	               		
+							                </tr>
+							            </thead>
+							           	<tbody>
+							           		<tr ng-if="vm.isLoading">
+							           			<td colspan="24" class="no-border">
+							           				<div class="loading-wrapper">
+							           					<div class="sk-cube-grid">
+															<div class="sk-cube sk-cube1"></div>
+														  	<div class="sk-cube sk-cube2"></div>
+														  	<div class="sk-cube sk-cube3"></div>
+														  	<div class="sk-cube sk-cube4"></div>
+														  	<div class="sk-cube sk-cube5"></div>
+														  	<div class="sk-cube sk-cube6"></div>
+														 	<div class="sk-cube sk-cube7"></div>
+														  	<div class="sk-cube sk-cube8"></div>
+														 	<div class="sk-cube sk-cube9"></div>
+														</div>
+														<label>Please wait</label>
+							           				</div>
+							           			</td>
+							           		</tr>
+						               		<tr ng-if="!vm.isLoading" ng-class="{selected: fares === vm.selectedFareDiscount}" ng-click="vm.rowFaresDiscountSelected(fares)" 
+						               		ng-repeat="fares in vm.workPackage.discountFareSheet[vm.selectedTab].fares track by $index">
+							           			<td class="input">{{$index + 1}}</td>
+							           			<td class="input">
+							           				<select class="form-control"  name="discountStatus{{$index}}" ng-model="fares.status" id="field_status"
+							           				ng-style="editForm.editFormDiscount.discountStatus{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"									         		
+									         		style="min-width: 100%; min-height:100%" 
+									         		ng-required="vm.checkRequiredField('discountStatus')"  
+									         		ng-disabled="vm.isFieldDisable('discountStatus')"
+									         		>
+								           				<option value="">Select Status</option>
+										                <option value="PENDING" >Pending</option>
+										                <option value="APPROVED">Approve</option>
+										                <option value="REJECTED">Reject</option>
+											        </select>
+							           			</td>
+							           			<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.fbrTariffCode"
+							           				name="discountTariffCode{{$index}}"
+							           				ng-style="editForm.editFormDiscount.discountTariffCode{{$index}}.$error.required && fares.action != 'Canceled' && vm.errorStyle"									         		
+									         		style="min-width: 100%; min-height:100%" 
+									         		ng-required="vm.checkRequiredField('discountTariffCode')"  
+									         		ng-disabled="vm.isFieldDisable('discountTariffCode')" />
+							           			</td>
+							           			<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.loc1Type"
+							           				name="discountLoc1Type{{$index}}"
+							           				ng-style="editForm.editFormDiscount.discountLoc1Type{{$index}}.$error.required && fares.action != 'Canceled' && vm.errorStyle"									         		
+									         		style="min-width: 100%; min-height:100%" 
+									         		ng-required="vm.checkRequiredField('discountLoc1Type')"  
+									         		ng-disabled="vm.isFieldDisable('discountLoc1Type')" />
+							           			</td>
+							           			<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.loc1"
+							           				name="discountLoc1{{$index}}"
+							           				ng-style="editForm.editFormDiscount.discountLoc1{{$index}}.$error.required && fares.action != 'Canceled' && vm.errorStyle"									         		
+									         		style="min-width: 100%; min-height:100%" 
+									         		ng-required="vm.checkRequiredField('discountLoc1')"  
+									         		ng-disabled="vm.isFieldDisable('discountLoc1')" />
+							           			</td>
+							           			<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.loc2Type"
+							           				name="discountLoc2Type{{$index}}"
+							           				ng-style="editForm.editFormDiscount.discountLoc2Type{{$index}}.$error.required && fares.action != 'Canceled' && vm.errorStyle"									         		
+									         		style="min-width: 100%; min-height:100%" 
+									         		ng-required="vm.checkRequiredField('discountLoc2Type')"  
+									         		ng-disabled="vm.isFieldDisable('discountLoc2Type')" />
+							           			</td>
+							           			<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.loc2" 
+							           				name="discountLoc2{{$index}}"
+							           				ng-style="editForm.editFormDiscount.discountLoc2{{$index}}.$error.required && fares.action != 'Canceled' && vm.errorStyle"									         		
+									         		style="min-width: 100%; min-height:100%" 
+									         		ng-required="vm.checkRequiredField('discountLoc2')"  
+									         		ng-disabled="vm.isFieldDisable('discountLoc2')" />			           				
+							           			</td>
+							           			<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.baseFareBasis" 
+							           				name="discountBaseFareBasis{{$index}}"
+							           				ng-style="editForm.editFormDiscount.discountBaseFareBasis{{$index}}.$error.required && fares.action != 'Canceled' && vm.errorStyle"									         		
+									         		style="min-width: 100%; min-height:100%" 
+									         		ng-required="vm.checkRequiredField('discountBaseFareBasis')"  
+									         		ng-disabled="vm.isFieldDisable('discountBaseFareBasis')"/>			           			
+							           			</td>
+							           			<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.baseRuleno" 
+							           				name="discountBaseRuleno{{$index}}"
+							           				ng-style="editForm.editFormDiscount.discountBaseRuleno{{$index}}.$error.required && fares.action != 'Canceled' && vm.errorStyle"									         		
+									         		style="min-width: 100%; min-height:100%" 
+									         		ng-required="vm.checkRequiredField('discountBaseRuleno')"  
+									         		ng-disabled="vm.isFieldDisable('discountBaseRuleno')"/>	
+							           			</td>
+							           			<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.baseTariffCode" 
+							           				name="discountBaseTariffCode{{$index}}"
+							           				ng-style="editForm.editFormDiscount.discountBaseTariffCode{{$index}}.$error.required && fares.action != 'Canceled' && vm.errorStyle"									         		
+									         		style="min-width: 100%; min-height:100%" 
+									         		ng-required="vm.checkRequiredField('discountBaseTariffCode')"  
+									         		ng-disabled="vm.isFieldDisable('discountBaseTariffCode')"/>	
+							           			</td>
+							           			<td class="input">
+							           				<select class="form-control"  name="status" ng-model="fares.calcType" 
+							           				name="discountCalcType{{$index}}"
+							           				ng-style="!editForm.editFormDiscount.discountCalcType{{$index}}.$valid && fares.action != 'Canceled' && vm.errorStyle"									         		
+									         		style="min-width: 100%; min-height:100%" 
+									         		ng-required="vm.checkRequiredField('discountCalcType')"  
+									         		ng-disabled="vm.isFieldDisable('discountCalcType')">
+								           				<option value="">Select Calc Type</option>
+										                <option value="SPECIFIED" >Specified</option>
+										                <option value="CALCULATED">Calculated</option>
+											        </select>
+							           			</td>
+							           			<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.percentBaseFare" />	
+							           			</td>
+							           			<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.currency" />	
+							           			</td>
+							           			<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.amount" />	
+							           			</td>
+							           			<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.passengerType" 
+							           				name="discountPaxType{{$index}}"
+							           				ng-style="editForm.editFormDiscount.discountPaxType{{$index}}.$error.required && fares.action != 'Canceled' && vm.errorStyle"									         		
+									         		style="min-width: 100%; min-height:100%" 
+									         		ng-required="vm.checkRequiredField('discountPaxType')"  
+									         		ng-disabled="vm.isFieldDisable('discountPaxType')" />	
+							           			</td>
+							           			<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.fareType" />	
+							           			</td>
+							           			<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.ticketCode"
+							           				name="discountTicketCode{{$index}}"
+							           				ng-style="editForm.editFormDiscount.discountTicketCode{{$index}}.$error.required && fares.action != 'Canceled' && vm.errorStyle"									         		
+									         		style="min-width: 100%; min-height:100%" 
+									         		ng-required="vm.checkRequiredField('discountTicketCode')"  
+									         		ng-disabled="vm.isFieldDisable('discountTicketCode')" 
+							           				 />	
+							           			</td>
+							           			<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.ticketDesignator" 
+							           				name="discountTicketDesignator{{$index}}"
+							           				ng-style="editForm.editFormDiscount.discountTicketDesignator{{$index}}.$error.required && fares.action != 'Canceled' && vm.errorStyle"									         		
+									         		style="min-width: 100%; min-height:100%" 
+									         		ng-required="vm.checkRequiredField('discountTicketDesignator')"  
+									         		ng-disabled="vm.isFieldDisable('discountTicketDesignator')" />	
+							           			</td>
+							           			<td class="input">
+							           				<select class="col-md-12" 
+											             name="discountBaseFareOwRt{{$index}}"
+											             ng-model="fares.baseFareOwRt" id="field_typeOfJourney"
+											             ng-style="editForm.editFormDiscount.discountBaseFareOwRt{{$index}}.$error.required && fares.action != 'Canceled' && vm.errorStyle"									         		
+										         		style="min-width: 100%; min-height:100%" 
+										         		ng-required="vm.checkRequiredField('discountBaseFareOwRt')"  
+										         		ng-disabled="vm.isFieldDisable('discountBaseFareOwRt')">
+											                <option value="">Select OW/RT</option>
+											                <option>One Way</option>
+											                <option>Return</option>
+											                <option>One Way Only</option>
+											            </select>
+							           			</td>
+							           			<td class="input">
+							           				EH
+							           			</td>
+							           			<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.rtgno" 
+							           				name="discountRtgno{{$index}}"
+											             ng-style="editForm.editFormDiscount.discountRtgno{{$index}}.$error.required && fares.action != 'Canceled' && vm.errorStyle"									         		
+										         		style="min-width: 100%; min-height:100%" 
+										         		ng-required="vm.checkRequiredField('discountRtgno')"  
+										         		ng-disabled="vm.isFieldDisable('discountRtgno')"/>	
+							           			</td>
+							           			<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.rtgnoTarno" 
+							           				name="discountRtgnoTarno{{$index}}"
+											             ng-style="editForm.editFormDiscount.discountRtgnoTarno{{$index}}.$error.required && fares.action != 'Canceled' && vm.errorStyle"									         		
+										         		style="min-width: 100%; min-height:100%" 
+										         		ng-required="vm.checkRequiredField('discountRtgnoTarno')"  
+										         		ng-disabled="vm.isFieldDisable('discountRtgnoTarno')"/>	
+							           			</td>
+							           			<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.newFareBasis"
+							           				name="discountNewFareBasis{{$index}}"
+											             ng-model="fares.baseFareOwRt" id="field_typeOfJourney"
+											             ng-style="editForm.editFormDiscount.discountNewFareBasis{{$index}}.$error.required && fares.action != 'Canceled' && vm.errorStyle"									         		
+										         		style="min-width: 100%; min-height:100%" 
+										         		ng-required="vm.checkRequiredField('discountNewFareBasis')"  
+										         		ng-disabled="vm.isFieldDisable('discountNewFareBasis')" />	
+							           			</td>
+							           			<td class="input">
+							           				<select class="col-md-12" 
+											             name="discountNewBaseFareOwRt{{$index}}"
+											             ng-model="fares.newBaseFareOwRt"
+														ng-style="editForm.editFormDiscount.discountBaseFareOwRt{{$index}}.$error.required && fares.action != 'Canceled' && vm.errorStyle"									         		
+										         		style="min-width: 100%; min-height:100%" 
+										         		ng-required="vm.checkRequiredField('discountNewBaseFareOwRt')"  
+										         		ng-disabled="vm.isFieldDisable('discountNewBaseFareOwRt')">
+											                <option value="">Select OW/RT</option>
+											                <option>One Way</option>
+											                <option>Return</option>
+											                <option>One Way Only</option>
+											            </select>
+							              		</td>
+							              		<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.newBookingCode" 
+							           				name="discountNewBookingCode{{$index}}"
+														ng-style="editForm.editFormDiscount.discountNewBookingCode{{$index}}.$error.required && fares.action != 'Canceled' && vm.errorStyle"									         		
+										         		style="min-width: 100%; min-height:100%" 
+										         		ng-required="vm.checkRequiredField('discountNewBookingCode')"  
+										         		ng-disabled="vm.isFieldDisable('discountNewBookingCode')"/>	
+							           			</td>
+							           			
+							           			<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.travelStartDate" 
+							           				name="discountTravelStartDate{{$index}}"
+							           				ng-style="editForm.editFormDiscount.discountTravelStartDate{{$index}}.$error.required && fares.action != 'Canceled' && vm.errorStyle"									         		
+										         		style="min-width: 100%; min-height:100%" 
+										         		ng-required="vm.checkRequiredField('discountTravelStartDate')"  
+										         		ng-disabled="vm.isFieldDisable('discountTravelStartDate')"/>	
+							           			</td>
+							           			
+							           			<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.travelEndDate" 
+							           				name="discountTravelEndDate{{$index}}"
+							           				ng-style="editForm.editFormDiscount.discountTravelEndDate{{$index}}.$error.required && fares.action != 'Canceled' && vm.errorStyle"									         		
+										         		style="min-width: 100%; min-height:100%" 
+										         		ng-required="vm.checkRequiredField('discountTravelEndDate')"  
+										         		ng-disabled="vm.isFieldDisable('discountTravelEndDate')"/>	
+							           			</td>
+							           			
+							           			<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.saleStartDate" 
+							           				name="discountSaleStartDate{{$index}}"
+							           				ng-style="editForm.editFormDiscount.discountSaleStartDate{{$index}}.$error.required && fares.action != 'Canceled' && vm.errorStyle"									         		
+										         		style="min-width: 100%; min-height:100%" 
+										         		ng-required="vm.checkRequiredField('discountSaleStartDate')"  
+										         		ng-disabled="vm.isFieldDisable('discountSaleStartDate')"/>	
+							           			</td>
+							           			
+							           			<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.saleEndDate"
+							           				name="discountSaleEndDate{{$index}}"
+							           				ng-style="editForm.editFormDiscount.discountSaleEndDate{{$index}}.$error.required && fares.action != 'Canceled' && vm.errorStyle"									         		
+										         		style="min-width: 100%; min-height:100%" 
+										         		ng-required="vm.checkRequiredField('discountSaleEndDate')"  
+										         		ng-disabled="vm.isFieldDisable('discountSaleEndDate')" />	
+							           			</td>
+							           			
+							           			<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.comment" name="discountComment{{$index}}"
+							           				ng-style="editForm.editFormDiscount.discountComment{{$index}}.$error.required && fares.action != 'Canceled' && vm.errorStyle"									         		
+										         		style="min-width: 100%; min-height:100%" 
+										         		ng-required="vm.checkRequiredField('discountComment')"  
+										         		ng-disabled="vm.isFieldDisable('discountComment')" />	
+							           			</td>
+							           			
+							           			<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.travelComplete"
+							           				name="discountTravelComplete{{$index}}"
+							           				ng-style="editForm.editFormDiscount.discountTravelComplete{{$index}}.$error.required && fares.action != 'Canceled' && vm.errorStyle"									         		
+										         		style="min-width: 100%; min-height:100%" 
+										         		ng-required="vm.checkRequiredField('discountTravelComplete')"  
+										         		ng-disabled="vm.isFieldDisable('discountTravelComplete')"  />
+							           			</td>
+							           			
+							           			<td class="input">
+							           				<input type="text" class="form-control" ng-model="fares.travelCompleteIndicator"
+							           				name="discountTravelCompleteIndicator{{$index}}"
+							           				ng-style="editForm.editFormDiscount.discountTravelCompleteIndicator{{$index}}.$error.required && fares.action != 'Canceled' && vm.errorStyle"									         		
+										         		style="min-width: 100%; min-height:100%" 
+										         		ng-required="vm.checkRequiredField('discountTravelCompleteIndicator')"  
+										         		ng-disabled="vm.isFieldDisable('discountTravelCompleteIndicator')"  />
+							           			</td>
+						               		</tr>
+						            		</tbody>
+					        			</table>
+					        		</div>
+						    	</div>
+						 	</div>
+						</uib-tab>
+						
+						
+			   			<uib-tab heading="Filing Instruction">
+			   				<div class="tab-content wo">
+				       			<div class="action-btn-wrapper">
+				       				<div class="col-md-12 text-right no-pad">
+				       					<button ng-click="vm.addFiling()" class="btn btn-primary">Add</button>
+				       				</div>
+				       			</div>
+				       			<div class="col-md-12">
+				       				<label class="full-ib md-bot-mar text-center empty" ng-if="!vm.workPackage.filingInstructionData || vm.workPackage.filingInstructionData.length == 0">
+				       					No Attachment Available
+				       				</label>
+				       				<div ng-repeat="filingInstructionData in vm.workPackage.filingInstructionData track by $index" class="form-repeat">
+				       					<button ng-click="vm.removeFiling(filingInstructionData)" class="bordered delete"><span class="glyphicon glyphicon-remove"></span></button>
+				       					<label class="user">admin <span class="vseparator no-mar"></span> 12JAN18 09:15:16</label>
+							      		<div class="row">
+							        		<div class="col-md-6">
+								      			<div class="form-group row">
+								      				<label class="col-md-4" >Status</label>
+								      				<div class="col-md-8 no-pad select">
+								      					<select class="col-md-12" name="qaStatus" ng-model="filingInstructionData.status" id="field_qaStatus">
+											                <option value="">Select Status</option>
+											                <option value="PENDING" >Pending</option>
+											                <option value="PASSED">Passed</option>
+											                <option value="FAILED" >Failed</option>
+											            </select>	
+								      				</div>
+								      			</div>
+								      			<div class="form-group row" ng-init="marketRules.cxr = 'GA'">
+								      				<label class="col-md-4" >CXR</label>
+										            <input type="text" class="col-md-8" ng-model="filingInstructionData.cxr" disabled/>
+								      			</div>
+								      			<div class="form-group row">
+								      				<label class="col-md-4">Tar No & Tar Cd</label>
+								      				<div class="col-md-8 input-group textarea">
+								      					<textarea class="col-md-12" ng-model="filingInstructionData.tarno"></textarea>
+								      				</div>
+								      			</div>
+								      			<div class="form-group row">
+								      				<label class="col-md-4">Comment</label>
+								      				<div class="col-md-8 input-group textarea">
+								      					<textarea class="col-md-12" ng-model="filingInstructionData.comment"></textarea>
+								      				</div>
+								      			</div>
+							      			</div>
+							      			<div class="col-md-6">
+							        			<div class="form-group file" ngf-drop ngf-change="vm.setFile($file, filingInstructionData)">
+										            <label class="control-label">File Attachment</label>
+										            <div>
+										                <div ng-if="filingInstructionData.file" class="help-block clearfix">
+										                    <a class="pull-left" ng-click="vm.openFile(filingInstructionData.fileContentType, filingInstructionData.file)" data-translate="entity.action.open">open</a><br>
+										                    <span class="pull-left">{{filingInstructionData.fileContentType}}, {{vm.byteSize(filingInstructionData.file)}}</span>
+										                    <button type="button" ng-click="filingInstructionData.file=null;filingInstructionData.fileContentType=null;"
+										                            class="btn btn-default btn-xs pull-right delete grey">
+										                        <span class="glyphicon glyphicon-remove"></span>
+										                    </button>
+										                </div>
+										                <button type="button" ngf-select class="btn btn-default btn-block"
+										                        ngf-change="vm.setFile($file, filingInstructionData)">
+										                    Add file
+										                </button>
+										            </div>
+										            <input type="hidden" class="form-control" name="file" id="field_file"
+										                    ng-model="vm.testing.file"
+										                    />
+										            <input type="hidden" class="form-control" name="fileContentType" id="field_fileContentType"
+										                    ng-model="vm.testing.fileContentType" />
+										        </div>
+							        		</div>
+							      		</div>
+							     	</div>
+							     </div>
+							</div>
+			      		</uib-tab>
+			      		<uib-tab heading="Attachment">
+			      			<div class="action-btn-wrapper">
+			     				<div class="col-md-12 text-right no-pad">
+			     					<button ng-click="vm.addAttachment()" class="btn btn-primary">Add</button>
+			     				</div>
+			     			</div>
+			     			<label class="full-ib md-bot-mar text-center empty" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">
+		       					No Attachment Available
+		       				</label>
+			     			<div ng-repeat="attachment in vm.workPackage.attachmentData track by $index" class="form-repeat">
+			     				<button ng-click="vm.removeAttachment(attachment)" class="bordered delete"><span class="glyphicon glyphicon-remove"></span></button>
+						     	<label class="user">admin <span class="vseparator no-mar"></span> 12JAN18 09:15:16</label>
+					      		<div class="row">
+					        		<div class="col-md-6">
+						      			<div class="form-group row">
+						      				<label class="col-md-4">Comment</label>
+						      				<div class="col-md-8 input-group textarea">
+						      					<textarea class="col-md-12" ng-model="attachment.comment"></textarea>
+						      				</div>
+						      			</div>
+					        		</div>
+					        		<div class="col-md-6">
+					        			<div class="form-group file" ngf-drop ngf-change="vm.setFileAttachment($file, attachment)">
+								            <label class="control-label">File Attachment</label>
+								            <div>
+								                <div ng-if="attachment.file" class="help-block clearfix">
+								                    <a class="pull-left" ng-click="vm.openFile(attachment.fileContentType, attachment.file)" data-translate="entity.action.open">open</a><br>
+								                    <span class="pull-left">{{attachment.fileContentType}}, {{vm.byteSize(attachment.file)}}</span>
+								                    <button type="button" ng-click="attachment.file=null;attachment.fileContentType=null;"
+								                            class="btn btn-default btn-xs pull-right delete grey">
+								                        <span class="glyphicon glyphicon-remove"></span>
+								                    </button>
+								                </div>
+								                <button type="button" ngf-select class="btn btn-default btn-block"
+								                        ngf-change="vm.setFile($file, attachment)">
+								                    Add file
+								                </button>
+								            </div>
+								            <input type="hidden" class="form-control" name="file" id="field_file"
+								                    ng-model="attachment.file"
+								                    />
+								            <input type="hidden" class="form-control" name="fileContentType" id="field_fileContentType"
+								                    ng-model="attachment.fileContentType" />
+								        </div>
+					        		</div>
+					      		</div>
+			     			</div>
+			      		</uib-tab>
+			      		<uib-tab heading="Filing Details">
+					        <div class="row">
+						        <div class="col-md-4">
+									<div class="form-group row">
+						    			<label>
+									    	<input type="radio" ng-model="vm.filingDetail.workUnit.type" value="existing">
+									    	Use Existing Work Unit
+									  	</label><br/>
+									</div>
+									<div class="form-group row">
+									  	<label>
+									    	<input type="radio" ng-model="vm.filingDetail.workUnit.type" ng-value="new">
+									    	Use new Work Unit
+									 	</label><br/>
+							  		</div>
+						    		<div class="form-group row">
+						    			<label class="col-md-4" >Email Notifications</label>
+						 	           	<input type="text" class="form-control" ng-model="vm.filingDetail.email"/>
+						    		</div>
+						    		<div class="form-group row">
+						    			<label class="col-md-4" >Release Instruction</label>
+						    			<select class="col-md-12" name="status" ng-model="vm.filingDetails.releaseInstruction" id="field_status">
+							                <option value="">Select Release Instruction</option>
+							                <option value="Release Batches">Release Work Unit / Batch</option>
+							                <option value="Create Batches">Do not Release Work Unit / Batch</option>
+							            </select>
+						    		</div>
+						  		</div>
+						    	<div class="col-md-2">
+						    		<div class="form-group row">
+						    			<label>
+									 		Work Unit ID
+									  	</label><br/>
+									  	<input type="text" class="form-control" ng-model="vm.filingDetail.workUnit.id"/>
+									</div>
+						  		</div>
+						    	<div class="col-md-2">
+							    	<div class="form-group row">
+							    		<label>
+									   		Create Date
+									  	</label><br/>
+										<input type="text" class="form-control" ng-model="vm.filingDetail.workUnit.id"/>
+									</div>
+						   		</div>
+						    	<div class="col-md-2">
+						    		<div class="form-group row">
+						    			<label>
+									   		Organization
+									  	</label><br/>
+										<input type="text" class="form-control" ng-model="vm.filingDetail.workUnit.id"/>
+									</div>
+						  		</div>
+					 		</div>
+			 				<div class="row">
+							    <div class="col-md-6">
+									<p>Tariffs : </p>
+									<table class="jh-table table table-striped">
+							          	<thead>
+							              	<tr>
+							              		<th>No</th>
+							              		<th>TarType</th>               		
+							              		<th>TarNo</th>               		
+							              		<th>TarCd</th>               		
+							              		<th>CXR</th>               		
+							              		<th>Release Instruction</th>               		
+							              	</tr>
+							          	</thead>
+							         	<tbody>
+							         		<tr ng-if="vm.isLoading">
+							         			<td colspan="24" class="no-border">
+							         				<div class="loading-wrapper">
+							         					<div class="sk-cube-grid">
+													<div class="sk-cube sk-cube1"></div>
+												  	<div class="sk-cube sk-cube2"></div>
+												  	<div class="sk-cube sk-cube3"></div>
+												  	<div class="sk-cube sk-cube4"></div>
+												  	<div class="sk-cube sk-cube5"></div>
+												  	<div class="sk-cube sk-cube6"></div>
+												 	<div class="sk-cube sk-cube7"></div>
+												  	<div class="sk-cube sk-cube8"></div>
+												 	<div class="sk-cube sk-cube9"></div>
+												</div>
+												<label>Please wait</label>
+							         				</div>
+							         			</td>
+							         		</tr>
+							         		<tr ng-if="!vm.isLoading" ng-class="{'even': fare.id % 2 == 0, 'odd': fare.id % 2 != 0}" 
+							         		ng-click="vm.rowTarifSelected(tarif)" 
+							         		ng-repeat="tarif in vm.workPackage.tarif track by $index" >
+							      				<td>{{$index+1}}</td>
+							      				<td>Fare</td>
+							      				<td><span ng-if="">008</span></td>
+							      				<td>BUAS</td>
+							      				<td>GA</td>
+							      				<td>{{vm.filingDetails.releaseInstruction}}</td>
+							         		</tr>
+							    		</tbody>
+							      	</table>
+						     	</div>
+			     				<div class="col-md-6">
+						        	<p>Batch & GFS Numbers : <button ng-click="vm.addBatch()">+</button></p>
+									<table class="jh-table table table-striped">
+							            <thead>
+							                <tr>
+							                		<th>BatchNo</th>
+							                		<th>GfsRef</th>               		
+							                		<th>GfsDate</th>  
+							                		<th>Action</th>     		
+							                </tr>
+							            </thead>
+							           	<tbody>
+							           		<tr ng-if="vm.isLoading">
+							           			<td colspan="24" class="no-border">
+							           				<div class="loading-wrapper">
+							           					<div class="sk-cube-grid">
+															<div class="sk-cube sk-cube1"></div>
+														  	<div class="sk-cube sk-cube2"></div>
+														  	<div class="sk-cube sk-cube3"></div>
+														  	<div class="sk-cube sk-cube4"></div>
+														  	<div class="sk-cube sk-cube5"></div>
+														  	<div class="sk-cube sk-cube6"></div>
+														 	<div class="sk-cube sk-cube7"></div>
+														  	<div class="sk-cube sk-cube8"></div>
+														 	<div class="sk-cube sk-cube9"></div>
+														</div>
+														<label>Please wait</label>
+							           				</div>
+							           			</td>
+							           		</tr>
+							           		<tr ng-if="!vm.isLoading" ng-class="{'even': fare.id % 2 == 0, 'odd': fare.id % 2 != 0}" ng-click="vm.applyRule(fare.id)" ng-repeat="batch in vm.batch track by $index">	
+												<td>
+													<input class="form-control" type="text" ng-model="vm.batch[$index].no"/>
+												</td>	
+												<td>
+													<input class="form-control" type="text" ng-model="vm.batch[$index].gfsref"/>
+												</td>
+												<td>
+												
+														
+													<input class="form-control" type="text" ng-model="vm.batch[$index].gfsdate"/>
+												</td>	
+												<td>
+													<button ng-click="vm.removeBatch(batch)">X</button>
+												</td>
+						               		</tr>
+						            		</tbody>
+							    	</table>
+			        			</div>
+							</div>
+			      		</uib-tab>
+					</uib-tabset>
+				</ng-form>
+			</div>
+		</div>
+		
+	  	<div class="col-md-12 text-center">
+	  		<div class="row action-btn-wrapper">
+		  		<div class="btn-group" uib-dropdown is-open="vm.workflowButton.isopen" ng-show="vm.workPackage.status != 'COMPLETED' && vm.workPackage.status != 'MARKET_DISTRIBUTED'">
+				      <button type="button" class="btn btn-primary dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled">
+				        Workflow <span class="caret"></span>
+				      </button>
+				      <ul class="dropdown-menu" role="menu">
+				        <li><a ng-click="vm.passUp()" 
+				        ng-class="{disabled : editForm.$invalid }" 
+				        ng-show="vm.workPackage.reviewLevel != 'HO' && vm.workPackage.reviewLevel != 'Distribution' && vm.workPackage.reviewLevel != 'Route Management'">Pass Up</a></li>
+				        <li><a ng-click="vm.passDown()" 
+				        ng-show="vm.workPackage.reviewLevel != 'LSO'  && vm.workPackage.reviewLevel != 'Route Management' && vm.workPackage.reviewLevel != 'Distribution'">Pass Down</a></li>
+				        <li><a ng-click="vm.passSideway()" 
+				        ng-class="{disabled : editForm.$invalid }" 
+				        ng-show="vm.workPackage.reviewLevel == 'HO' || vm.workPackage.reviewLevel == 'Route Management'">Pass Sideways</a></li>
+				        <li class="divider"></li>
+				        <li><a ng-click="vm.approve()" 
+				        ng-class="{disabled : editForm.$invalid }" 
+				        ng-show="vm.workPackage.reviewLevel == 'HO'">Approve</a></li>
+				        <li><a ng-click="vm.referback()" 
+				        ng-show="vm.workPackage.reviewLevel == 'Distribution'"
+				        >Refer Back</a></li>
+				      </ul>
+			    </div>
+				<div class="btn-group" uib-dropdown is-open="vm.actionButton.isopen" ng-show="vm.workPackage.status != 'COMPLETED' && vm.workPackage.status != 'MARKET_DISTRIBUTED'">
+				      <button type="button" class="btn btn-primary dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled">
+				        Action <span class="caret"></span>
+				      </button>
+				      <ul class="dropdown-menu" role="menu">
+				        <li><a href="#">Save and Validate</a></li>
+				        <li><a ng-click="vm.createBatches()" ng-show="vm.workPackage.type != 'DISCOUNT' && vm.workPackage.reviewLevel == 'Distribution' && vm.workPackage.status != 'READY_TO_RELEASE'">Create Batches</a></li>
+				        <li><a ng-click="vm.reviseBatches()" ng-show="vm.workPackage.type != 'DISCOUNT' && vm.workPackage.reviewLevel == 'Distribution'">Revise Batches</a></li>
+				        <li><a ng-click="vm.completeBatches()" ng-show="vm.workPackage.reviewLevel == 'Distribution' && ((vm.workPackage.status == 'READY_TO_RELEASE' && vm.workPackage.type == 'REGULAR') || vm.workPackage.type == 'DISCOUNT')">Complete</a></li>
+				      </ul>
+			    </div>
+				<div class="btn-group" uib-dropdown is-open="vm.sheetButton.isopen" ng-show="vm.workPackage.status != 'COMPLETED' && vm.workPackage.status != 'MARKET_DISTRIBUTED'">
+				      <button type="button" class="btn btn-primary dropdown-toggle" uib-dropdown-toggle ng-disabled="disabled">
+				        Sheet <span class="caret"></span>
+				      </button>
+				      <ul class="dropdown-menu" role="menu">
+				        <li><a ng-click="vm.addSheet()">Add</a></li>
+				        <li><a ng-click="vm.removeSheet()">Remove</a></li>
+				        <li><a href="#">Rename</a></li>
+				        <li><a ng-click="vm.copySheet()">Copy</a></li>
+				      </ul>
+			    </div>
+		  	</div>
+		    <div class="row action-btn-wrapper">
+		    	<button type="button" ng-click="vm.save()" class="btn btn-primary dropdown-toggle" >
+		        	Save 
+		      	</button>
+		      	<button skip-disable type="button" ui-sref="work-package" class="btn btn-primary dropdown-toggle">
+		        	Close 
+		      	</button>
+		    </div>
+	  	</div>
+	</form>
+</div>

@@ -1,0 +1,103 @@
+	<div class="modal-header">
+       <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+               ng-click="vm.clear()">&times;</button>
+       <h4 class="modal-title" id="myWorkPackageLabel">Derived Fares</h4>
+   </div>
+   <div class="modal-body">
+   		<div class="tab-content wp">
+		    	<div class="row action-btn-wrapper">
+				<div class="col-md-12 text-right">
+					<button ng-click="vm.exportDerivedFares()" class="btn btn-primary">Export</button>
+				</div>
+		   	</div>
+	    		<div class="table-wrapper">
+	    			<div class="table-responsive">
+			    		<table class="jh-table table table-striped">
+			    			<thead>
+				    			<tr>
+				    				<th>Spec/Calc</th>
+				    				<th>Src</th>
+				    				<th>Tarno</th>
+				    				<th>Cxr</th>
+				    				<th>Orig</th>
+				    				<th>OrigCn</th>
+				    				<th>Dest</th>
+				    				<th>DestCn</th>
+				    				<th>Derived Fare Basis Code</th>
+				    				<th>Tkt Des</th>
+				    				<th>Tkt Cd</th>
+				    				<th>Bkg Cls</th>
+				    				<th>Cabin</th>
+				    				<th>OW/RT</th>
+				    				<th>Ftnt1</th>
+				    				<th>Ftnt2</th>
+				    				<th>RtgNo</th>
+				    				<th>RuleNo</th>
+				    				<th>Curr</th>
+				    				<th>Derived Fare Base Amt</th>
+				    				<th>Base Amt</th>
+				    				<th>Ref Amt</th>
+				    				<th>EffDt</th>
+				    				<th>DiscDt</th>
+				    				<th>Global</th>
+				    				<th>Fare Type</th>
+				    				<th>Amt Diff</th>
+				    				<th>Pct Diff</th>			    				
+				    				<th>Base Tarno</th>			    				
+				    				<th>Base Cxr</th>			    				
+				    				<th>Base Orig</th>			    				
+				    				<th>Base Orig Cn</th>			    				
+				    				<th>Base Dest</th>			    				
+				    				<th>Base Dest Cn</th>			    				
+				    			</tr>
+			    			</thead>
+			    			<tbody>
+			    				<tr ng-repeat="fare in vm.workPackageFare track by $index">
+			    					<td>{{vm.fareSelected.calcType}}</td>
+			    					<td>A</td>
+			    					<td>{{vm.fareSelected.tarno}}</td>		    	
+			    					<td>{{vm.fareSelected.carrier}}</td>
+			    					<td>{{vm.fareSelected.loc1}}</td>				
+			    					<td>{{vm.fareSelected.loc1Type}}</td>			
+			    					<td>{{vm.fareSelected.loc2}}</td>				
+			    					<td>{{vm.fareSelected.loc2Type}}</td>				
+			    					<td>{{fare.fareBasis}}</td>
+			    					<td>{{vm.fareSelected.ticketDesignator}}</td>
+			    					<td>{{vm.fareSelected.ticketCode}}</td>
+			    					<td>{{fare.bookingClass}}</td>
+			    					<td>{{fare.cabinClass}}</td>
+			    					<td>{{fare.typeOfJourney}}</td>
+			    					<td>{{fare.footnote1}}</td>
+			    					<td>{{fare.footnote2}}</td>
+			    					<td>{{fare.routingNo}}</td>
+			    					<td>{{fare.ruleId}}</td>
+			    					<td>{{fare.currency}}</td>
+			    					<td>
+			    						{{parseInt(fare.amount) + (fare.amount * vm.fareSelected.percentBaseFare / 100)}}
+			    					</td>
+			    					<td>{{fare.amount}}</td>
+			    					<td></td>
+			    					<td>{{fare.effectiveDate}}</td>
+			    					<td>{{fare.discontinueDate}}</td>
+			    					<td>{{fare.global}}</td>
+			    					<td>{{fare.fareType}}</td>
+			    					<td>{{(fare.amount * vm.fareSelected.percentBaseFare / 100)}}</td>
+								<td>{{vm.fareSelected.percentBaseFare}}</td>		
+								<td></td>
+								<td>{{fare.carrier}}</td>    					
+								<td>{{fare.origin}}</td>    					
+								<td>City</td>    					
+								<td>{{fare.destination}}</td>    					
+								<td>City</td>    					
+		    					</tr>
+		    				</tbody>
+		    			</table>
+	   			</div>
+	   		</div>
+   		</div>
+   </div>
+   <div class="modal-footer">
+       <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+           <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Close</span>
+       </button>
+   </div>
