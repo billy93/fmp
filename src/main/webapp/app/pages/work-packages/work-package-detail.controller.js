@@ -21,8 +21,8 @@
      * @param Clipboard
      * @returns
      */
-    WorkPackageDetailController.$inject = ['FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'DerivedFares', 'Clipboard', 'user'];
-    function WorkPackageDetailController(FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, DerivedFares, Clipboard, user) {
+    WorkPackageDetailController.$inject = ['FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user'];
+    function WorkPackageDetailController(FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user) {
        var vm = this;
       
         vm.rulesMenu = true;

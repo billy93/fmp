@@ -8,136 +8,78 @@
     stateConfig.$inject = ['$stateProvider'];
 
     function stateConfig($stateProvider) {
-    	
-    	 $stateProvider
-         .state('work-package', {
-         	parent: 'app',
-             url: '/work-package?page&sort&search',
-             data: {
-                 authorities: ['ROLE_USER'],
-                 pageTitle: 'Work Package Query'
-             },
-             views: {
-                 'content@': {
-                     templateUrl: 'app/pages/work-packages/work-packages.html',
-                     controller: 'WorkPackageController',
-                     controllerAs: 'vm'
-                 }
-             },
-             params: {
-                 page: {
-                     value: '1',
-                     squash: true
-                 },
-                 sort: {
-                     value: 'id,asc',
-                     squash: true
-                 },
-                 search: null
-             },
-             resolve: {
-                 pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
-                     return {
-                         page: PaginationUtil.parsePage($stateParams.page),
-                         sort: $stateParams.sort,
-                         predicate: PaginationUtil.parsePredicate($stateParams.sort),
-                         ascending: PaginationUtil.parseAscending($stateParams.sort),
-                         search: $stateParams.search
-                     };
-                 }],
-             }
-         })
-         
-//        $stateProvider
-//        .state('work-package', {
-//            parent: 'app',
-//            url: '/work-package?page&sort&search',
-//            data: {
-//                authorities: ['ROLE_USER'],
-//                pageTitle: 'Work Queue'
-//            },
-//            views: {
-//                'content@': {
-//                    templateUrl: 'app/pages/work-packages/work-packages.html',
-//                    controller: 'WorkPackageController',
-//                    controllerAs: 'vm'
-//                }
-//            },
-//            params: {
-//                page: {
-//                    value: '1',
-//                    squash: true
-//                },
-//                sort: {
-//                    value: 'id,asc',
-//                    squash: true
-//                },
-//                search: null
-//            },
-//            resolve: {
-//                pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
-//                    return {
-//                        page: PaginationUtil.parsePage($stateParams.page),
-//                        sort: $stateParams.sort,
-//                        predicate: PaginationUtil.parsePredicate($stateParams.sort),
-//                        ascending: PaginationUtil.parseAscending($stateParams.sort),
-//                        search: $stateParams.search
-//                    };
-//                }],
-//                translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-////                    $translatePartialLoader.addPart('workPackage');
-////                    $translatePartialLoader.addPart('status');
-////                    $translatePartialLoader.addPart('priority');
-////                    $translatePartialLoader.addPart('status');
-////                    $translatePartialLoader.addPart('status');
-////                    $translatePartialLoader.addPart('packageType');
-////                    $translatePartialLoader.addPart('global');
-//                    return $translate.refresh();
-//                }]
-//            }
-//        })
-//        .state('work-package-detail', {
-//            parent: 'work-package',
-//            url: '/work-package/{id}',
-//            data: {
-//                authorities: ['ROLE_USER'],
-//                pageTitle: 'fmpApp.workPackage.detail.title'
-//            },
-//            views: {
-//                'content@': {
-//                    templateUrl: 'app/entities/work-package/work-package-detail.html',
-//                    controller: 'WorkPackageDetailController',
-//                    controllerAs: 'vm'
-//                }
-//            },
-//            resolve: {
-//                translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-//                    $translatePartialLoader.addPart('workPackage');
-//                    $translatePartialLoader.addPart('status');
-//                    $translatePartialLoader.addPart('priority');
-//                    $translatePartialLoader.addPart('status');
-//                    $translatePartialLoader.addPart('status');
-//                    $translatePartialLoader.addPart('packageType');
-//                    return $translate.refresh();
-//                }],
-//                entity: ['$stateParams', 'WorkPackage', function($stateParams, WorkPackage) {
-//                    return WorkPackage.get({id : $stateParams.id}).$promise;
-//                }],
-//                user: ['$stateParams', 'User', 'Principal', function($stateParams, User, Principal) {
-//                	return Principal.identity().then(function(account) {
-//                        return User.get({login : account.login}).$promise;
-//                    });
-//                }],
-//                previousState: ["$state", function ($state) {
-//                    var currentStateData = {
-//                        name: $state.current.name || 'work-package',
-//                        params: $state.params,
-//                        url: $state.href($state.current.name, $state.params)
-//                    };
-//                    return currentStateData;
-//                }]
-//            }
-//        })
+        $stateProvider
+        .state('work-package', {
+            parent: 'app',
+            url: '/work-package?page&sort&search',
+            data: {
+                authorities: ['ROLE_USER'],
+                pageTitle: 'Work Queue'
+            },
+            views: {
+                'content@': {
+                    templateUrl: 'app/pages/work-packages/work-packages.html',
+                    controller: 'WorkPackageController',
+                    controllerAs: 'vm'
+                }
+            },
+            params: {
+                page: {
+                    value: '1',
+                    squash: true
+                },
+                sort: {
+                    value: 'id,asc',
+                    squash: true
+                },
+                search: null
+            },
+            resolve: {
+                pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
+                    return {
+                        page: PaginationUtil.parsePage($stateParams.page),
+                        sort: $stateParams.sort,
+                        predicate: PaginationUtil.parsePredicate($stateParams.sort),
+                        ascending: PaginationUtil.parseAscending($stateParams.sort),
+                        search: $stateParams.search
+                    };
+                }]
+            }
+        })
+        
+        .state('work-package-detail', {
+            parent: 'work-package',
+            url: '/{id}/edit',
+            data: {
+                authorities: ['ROLE_USER'],
+                pageTitle: 'fmpApp.workPackage.detail.title'
+            },
+            views: {
+                'content@': {
+                    templateUrl: 'app/pages/work-packages/work-package-detail.html',
+                    controller: 'WorkPackageDetailController',
+                    controllerAs: 'vm'
+                }
+            },
+            resolve: {
+                entity: ['$stateParams', 'WorkPackage', function($stateParams, WorkPackage) {
+                    return WorkPackage.get({id : $stateParams.id}).$promise;
+                }],
+                user: ['$stateParams', 'User', 'Principal', function($stateParams, User, Principal) {
+                	return Principal.identity().then(function(account) {
+                        return User.get({login : account.login}).$promise;
+                    });
+                }],
+                previousState: ["$state", function ($state) {
+                    var currentStateData = {
+                        name: $state.current.name || 'work-package',
+                        params: $state.params,
+                        url: $state.href($state.current.name, $state.params)
+                    };
+                    return currentStateData;
+                }]
+            }
+        })
 //        .state('work-package-detail.edit', {
 //            parent: 'work-package-detail',
 //            url: '/detail/edit',

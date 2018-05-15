@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.validation.constraints.*;
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -76,7 +77,8 @@ public class UserDTO {
 
 	private Integer failedLoginCounter;
 	
-	
+    private List<String> reviewLevels;
+    
 	public UserDTO() {
 		// Empty constructor needed for Jackson.
 	}
@@ -107,6 +109,16 @@ public class UserDTO {
 		this.suspended = user.getSuspended();
 		this.lastLoginDateTime = user.getLastLoginDateTime();
 		this.failedLoginCounter = user.getFailedLoginCounter();
+		this.reviewLevels = user.getReviewLevels();
+	}
+
+	
+	public List<String> getReviewLevels() {
+		return reviewLevels;
+	}
+
+	public void setReviewLevels(List<String> reviewLevels) {
+		this.reviewLevels = reviewLevels;
 	}
 
 	public String getId() {
