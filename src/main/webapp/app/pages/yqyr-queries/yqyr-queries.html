@@ -1,0 +1,287 @@
+<div>
+    <h2>YQ/YR Query</h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+	    <div class="col-md-12 no-pad mb1">
+			<div class="col-md-3">	
+		     	<div class="form-group row">
+					<label class="col-md-4" for="cxr">CXR</label>
+			        <input type="text" class="col-md-8" name="cxr" ng-model="vm.cxr" id="cxr">
+		        </div>
+		     	<div class="form-group row">
+					<label class="col-md-4" for="pointOfSale">Point of Sale</label>
+					<input type="text" class="col-md-8" name="pointOfSale" ng-model="vm.pointOfSale" id="pointOfSale">
+		        </div>
+		        <div class="form-group row">
+					<label class="col-md-4" for="pointOfTicketing">Point of Ticketing</label>
+					<input type="text" class="col-md-8" name="pointOfTicketing" ng-model="vm.pointOfTicketing" id="pointOfTicketing">
+		        </div>
+		    <div class="form-group row">
+	            <label class="col-md-4" for="travelDate">Travel Date</label>
+	            <div class="col-md-8 input-group">
+	                <input id="travelDate" type="text" class="form-control" name="travelDate" datetime-picker="{{dateformat}}" ng-model="vm.travelDate" is-open="vm.datePickerOpenStatus.travelDate"/>
+	                <span class="input-group-btn">
+	                    <button type="button" class="btn btn-default" ng-click="vm.openCalendar('travelDate')"><i class="glyphicon glyphicon-calendar"></i></button>
+	                </span>
+	            </div>
+	        </div>
+		    <div class="form-group row">
+		        <label class="col-md-4" for="ticketingDate">Ticketing Date</label>
+		        <div class="col-md-8 input-group">
+		            <input id="ticketingDate" type="text" class="form-control" name="ticketingDate" datetime-picker="{{dateformat}}" ng-model="vm.ticketingDate" is-open="vm.datePickerOpenStatus.ticketingDate"/>
+		            <span class="input-group-btn">
+		                <button type="button" class="btn btn-default" ng-click="vm.openCalendar('ticketingDate')"><i class="glyphicon glyphicon-calendar"></i></button>
+		            </span>
+		        </div>
+	        </div>
+			</div>
+		   	<div class="col-md-3">	
+		   		<div class="form-group row">
+					<label class="col-md-4" for="origin">Origin</label>
+			        <input type="text" class="col-md-8" name="origin" ng-model="vm.origin" id="origin">
+		        </div>
+		        <div class="form-group row">
+					<label class="col-md-4" for="destination">Destination</label>
+			        <input type="text" class="col-md-8" name="destination" ng-model="vm.destination" id="destination">
+		        </div>
+		        <div class="form-group row">
+					<label class="col-md-4" for="via">Via</label>
+					<input type="text" class="col-md-8" name="via" ng-model="vm.via" id="via">
+		        </div>
+		        <div class="form-group row">
+					<label class="col-md-4" for="applyAs">Apply As</label>
+					<div class="col-md-8 no-pad">	
+			        	<select class=col-md-12 name="applyAs" id="applyAs" ng-model="vm.applyAs">
+			        		<option value="Both" selected >Both</option>
+				            <option value="Journey">Journey</option>
+				            <option value="Sector">Sector</option>
+				        </select>
+			        </div>
+		        </div>
+		 	</div>
+		 	<div class="col-md-3">	
+		   		<div class="form-group row">
+					<label class="col-md-4" for="fareClass">Fare Class</label>
+			        <input ng-disabled="vm.applyResolution === true || vm.isBlankFareClass === true" type="text" class="col-md-4" name="fareClass" ng-model="vm.fareClass" id="fareClass">
+			        <input ng-disabled="vm.applyResolution === true" type="checkbox" class="col-md-2" id="isBlankFareClass" name="isBlankFareClass" ng-model="vm.isBlankFareClass">
+			       	<label class="col-md-2" for="isBlankFareClass">Blank</label>
+		        </div>
+		        <div class="form-group row">
+					<label class="col-md-4" for="rbd">RBD</label>
+			        <input ng-disabled="vm.applyResolution === true || vm.isBlankRbd === true" type="text" class="col-md-4" name="rbd" ng-model="vm.rbd" id="rbd">
+			        <input ng-disabled="vm.applyResolution === true" type="checkbox" class="col-md-2" id="isBlankRbd" name="isBlankRbd" ng-model="vm.isBlankRbd">
+			       	<label class="col-md-2" for="isBlankRbd">Blank</label>
+		        </div>
+		        <div class="form-group row">
+					<label class="col-md-4" for="paxType">Pax Type</label>
+					<div class="col-md-4 no-pad">	
+			        	<select class=col-md-12 ng-disabled="vm.applyResolution === true || vm.isBlankPaxType === true"  name="paxType" id="paxType" ng-model="vm.paxType">
+			        		<option value="1" selected >Type 1</option>
+				            <option value="2">Type 2</option>
+				            <option value="2">Type 3</option>
+				        </select>
+			        </div>
+			        <input ng-disabled="vm.applyResolution === true" type="checkbox" class="col-md-2" id="isBlankPaxType" name="isBlankPaxType" ng-model="vm.isBlankPaxType">
+			       	<label class="col-md-2" for="isBlankPaxType">Blank</label>
+		        </div>
+		        <div class="form-group row">
+					<label class="col-md-4" for="posCode">Pos Code</label>
+					<input ng-disabled="vm.applyResolution === true || vm.isBlankPosCode === true" type="text" class="col-md-4" name="posCode" ng-model="vm.posCode" id="posCode">
+					<input ng-disabled="vm.applyResolution === true" type="checkbox" class="col-md-2" id="isBlankPosCode" name="isBlankPosCode" ng-model="vm.isBlankPosCode">
+			       	<label class="col-md-2" for="isBlankPosCode">Blank</label>
+		        </div>
+		         <div class="form-group row">
+			         <input class="col-md-4" type="checkbox" id="applyResolution" name="applyResolution" ng-model="vm.applyResolution">
+					 <label class="col-md-4" for="applyResolution">Apply Resolution</label>
+				</div>
+		 	</div>
+		 	<div class="col-md-3">	
+		   		<div class="form-group row">
+					<label class="col-md-4" for="tktDesignator">Tkt Designator</label>
+			        <input ng-disabled="vm.applyResolution === true || vm.isBlankTktDesignator === true" type="text" class="col-md-4" name="tktDesignator" ng-model="vm.tktDesignator" id="tktDesignator">
+			        <input ng-disabled="vm.applyResolution === true" type="checkbox" class="col-md-2" id="isBlankTktDesignator" name="isBlankTktDesignator" ng-model="vm.isBlankTktDesignator">
+			       	<label class="col-md-2" for="isBlankTktDesignator">Blank</label>
+		        </div>
+		        <div class="form-group row">
+					<label class="col-md-4" for="valCxr">Val Cxr</label>
+			        <input ng-disabled="vm.applyResolution === true || vm.isBlankValCxr === true" type="text" class="col-md-4" name="valCxr" ng-model="vm.valCxr" id="valCxr">
+			        <input ng-disabled="vm.applyResolution === true" type="checkbox" class="col-md-2" id="isBlankValCxr" name="isBlankValCxr" ng-model="vm.isBlankValCxr">
+			       	<label class="col-md-2" for="isBlankValCxr">Blank</label>
+		        </div>
+		        <div class="form-group row">
+					<label class="col-md-4" for="opCxr">Op Cxr</label>
+					<input ng-disabled="vm.applyResolution === true || vm.isBlankOpCxr === true" type="text" class="col-md-4" name="opCxr" ng-model="vm.opCxr" id="opCxr">
+					<input ng-disabled="vm.applyResolution === true" type="checkbox" class="col-md-2" id="isBlankOpCxr" name="isBlankOpCxr" ng-model="vm.isBlankOpCxr">
+			       	<label class="col-md-2" for="isBlankOpCxr">Blank</label>
+		        </div>
+		        <div class="form-group row">
+					<label class="col-md-4" for="fltNumber">Flt Number</label>
+					<input ng-disabled="vm.applyResolution === true || vm.isBlankFltNumber === true" type="text" class="col-md-4" name="fltNumber" ng-model="vm.fltNumber" id="fltNumber">
+					<input ng-disabled="vm.applyResolution === true" type="checkbox" class="col-md-2" id="isBlankFltNumber" name="isBlankFltNumber" ng-model="vm.isBlankFltNumber">
+			       	<label class="col-md-2" for="isBlankFltNumber">Blank</label>
+		        </div>
+		        <div class="form-group row">
+					<label class="col-md-4" for="equipment">Equipment</label>
+					<input ng-disabled="vm.applyResolution === true || vm.isBlankEquipment === true" type="text" class="col-md-4" name="equipment" ng-model="vm.equipment" id="equipment">
+					<input ng-disabled="vm.applyResolution === true" type="checkbox" class="col-md-2" id="isBlankEquipment" name="isBlankEquipment" ng-model="vm.isBlankEquipment">
+			       	<label class="col-md-2" for="isBlankEquipment">Blank</label>
+		        </div>
+		 	</div>
+		</div>
+		<div class="action-btn-wrapper no-bot-mar">
+		<div class="col-md-8">
+		</div>
+		<div class="col-md-4 no-pad text-right">
+			<button type="submit" ng-click="vm.loadAddOns()"
+	             class="btn btn-primary btn-sm">
+	         Search
+	     </button>
+		</div>
+	</div>
+    </div> 
+    
+    <br/>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+                <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+	               	<th>CXR</th>
+	               	<th>TC</th>
+	               	<th>SC</th>
+	               	<th>Sequence</th>
+	               	<th>Free AmountT</th>
+	               	<th>Currency</th>
+	               	<th>Free Pct</th>
+	               	<th>Fee Include Tax</th>
+	               	<th>Fee Application</th>
+	               	<th>Journey Direction</th>
+	               	<th>Journey Loc1</th>
+	               	<th>Journey Loc2</th>
+	               	<th>Journey Via</th>
+	               	<th>Journey Wholly Within</th>
+	               	<th>Return to Origin</th>
+	               	<th>Sector/Portion Flag</th>
+	               	<th>Sector Direction</th>
+	               	<th>Sector Loc1</th>
+	               	<th>Sector Loc2</th>
+	               	<th>Sector Via</th>
+	               	<th>Stopover/Connection</th>
+	               	<th>Connection Time</th>
+	               	<th>Connection Exempt</th>
+	               	<th>International/Domestic</th>
+	               	<th>Point of Sale</th>
+	               	<th>Point of Sale Code</th>
+	               	<th>Point of Ticketing</th>
+	               	<th>PAX Type</th>
+	               	<th>RBD</th>
+	               	<th>Fare Class</th>
+	               	<th>Ticket Designator</th>
+	               	<th>Cxr/Flt App</th>
+	               	<th>Val Cxr</th>
+	               	<th>Equipment</th>
+	               	<th>Travel Effective Date</th>
+	               	<th>Travel Discontinued Date</th>
+	               	<th>Ticket Effective Date</th>
+	               	<th>Ticket Discontinued Date</th>
+	               	<th>Comment</th></tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="yqyrQuery in vm.yqyrQueries track by yqyrQuery.id">
+                    <td><a ui-sref="system-parameter-detail({id:yqyrQuery.id})">{{yqyrQuery.id}}</a></td>
+                    <td>{{yqyrQuery.name}}</td>
+                    <td>{{yqyrQuery.value}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="text-center">
+        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
+    </div>
+    <div class="row">
+    	<div class="rules-wrapper">
+    		<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-2 col-sm-2 col-xs-2">
+							<div class="form-group row">
+								<label class="col-md-4">Sub #  :</label>
+					        </div>
+						</div>
+						<div class="col-md-2 col-sm-2 col-xs-2">
+							<div class="form-group row">
+								<label class="col-md-4">Tax Sub Code :</label>
+					        </div>
+						</div>
+						<div class="col-md-2 col-sm-2 col-xs-2">
+							<div class="form-group row">
+								<label class="col-md-4">Fee :</label>
+					        </div>
+						</div>
+						<div class="col-md-2 col-sm-2 col-xs-2">
+							<div class="form-group row">
+								<label class="col-md-4">Travel Dates :</label>
+					        </div>
+						</div>
+						<div class="col-md-2 col-sm-2 col-xs-2">
+							<div class="form-group row">
+								<label class="col-md-4">Pax Type :</label>
+					        </div>
+						</div>
+						<div class="col-md-2 col-sm-2 col-xs-2">
+							<div class="form-group row">
+								<label class="col-md-4">Carrier :</label>
+					        </div>
+						</div>
+					</div>
+			</div>
+			<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-2 col-sm-2 col-xs-2">
+							<div class="form-group row">
+								<label class="col-md-4">Sequence :</label>
+					        </div>
+						</div>
+						<div class="col-md-2 col-sm-2 col-xs-2">
+							<div class="form-group row">
+								<label class="col-md-4">Journey Direction :</label>
+					        </div>
+						</div>
+						<div class="col-md-2 col-sm-2 col-xs-2">
+							<div class="form-group row">
+								<label class="col-md-4">Ticket Dates :</label>
+					        </div>
+						</div>
+						<div class="col-md-2 col-sm-2 col-xs-2">
+							<div class="form-group row">
+								<label class="col-md-4">Cxr/Flight Appl :</label>
+					        </div>
+						</div>
+						<div class="col-md-2 col-sm-2 col-xs-2">
+							<div class="form-group row">
+								<label class="col-md-4">Tax Code :</label>
+					        </div>
+						</div>
+						<div class="col-md-2 col-sm-2 col-xs-2">
+							<div class="form-group row">
+								<label class="col-md-4">Fee Application :</label>
+					        </div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="col-md-2 col-sm-2 col-xs-2">
+							<div class="form-group row">
+								<label class="col-md-4">Sector/Portion Flag :</label>
+					        </div>
+						</div>
+						<div class="col-md-2 col-sm-2 col-xs-2">
+							<div class="form-group row">
+								<label class="col-md-4">Connection Max Time :</label>
+					        </div>
+						</div>
+				</div>
+			</div>
+    	</div>
+    </div>
+</div>
