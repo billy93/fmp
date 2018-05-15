@@ -1,3 +1,5 @@
+<form name="editForm" role="form" novalidate>	
+	
 	<!-- main container -->
 	<div class="main-container clearfix">
 		<div class="page-wrapper">
@@ -192,9 +194,21 @@
 								<div class="button-group dropdown">
 									<button class="btn btn-default small">Workflow <i class="fa fa-caret-down"></i></button>
 									<ul class="dropdown-menu" role="menu">
-									    <li>
-									    	<a href="#">Pass Up</a>
-									    </li>
+									    <li><a ng-click="vm.passUp()" 
+								        ng-class="{disabled : editForm.$invalid }" 
+								        ng-show="vm.workPackage.reviewLevel != 'HO' && vm.workPackage.reviewLevel != 'Distribution' && vm.workPackage.reviewLevel != 'Route Management'">Pass Up</a></li>
+								        <li><a ng-click="vm.passDown()" 
+								        ng-show="vm.workPackage.reviewLevel != 'LSO'  && vm.workPackage.reviewLevel != 'Route Management' && vm.workPackage.reviewLevel != 'Distribution'">Pass Down</a></li>
+								        <li><a ng-click="vm.passSideway()" 
+								        ng-class="{disabled : editForm.$invalid }" 
+								        ng-show="vm.workPackage.reviewLevel == 'HO' || vm.workPackage.reviewLevel == 'Route Management'">Pass Sideways</a></li>
+								        <li class="divider"></li>
+								        <li><a ng-click="vm.approve()" 
+								        ng-class="{disabled : editForm.$invalid }" 
+								        ng-show="vm.workPackage.reviewLevel == 'HO'">Approve</a></li>
+								        <li><a ng-click="vm.referback()" 
+								        ng-show="vm.workPackage.reviewLevel == 'Distribution'"
+								        >Refer Back</a></li>
 									</ul>
 								</div>
 								<div class="button-group dropdown">
@@ -222,467 +236,564 @@
 									    </li>
 									</ul>
 								</div>												
-								<button class="btn btn-default small">Save</button>
+								<button class="btn btn-default small" ng-click="vm.save()">Save</button>
 							</div>
 						</div>
-						<div class="tab-wrapper" id="distribution-market">
-							<div class="clearfix tab-body">
-								<ul class="clearfix nav-responsive nav nav-tabs">
-								    <li><a href="#market-fares">Market Fares</a></li>
-								    <li><a href="#market-rules">Market Rules</a></li>
-								    <li><a href="#attachment-market">Attachment</a></li>
-								</ul>
-								<div class="tab-content">
-									<div class="tab-pane active" id="market-fares">
-										<div class="pb1 mb1 bbgrey">
-											<div class="clearfix">
-												<div class="pull-left w50 two-column">
-													<div class="form-group">
-														<label>CXR</label>
-														<input type="text" name="cxr" class="form-control" value="GA">
-													</div>
-												</div>
-												<div class="pull-left w50 two-column">
-													<div class="form-group">
-														<label>Approval Reference</label>
-														<input type="text" name="Approval Reference" class="form-control">
-													</div>
-												</div>
-											</div>
-											<div class="clearfix">
-												<div class="pull-left w50 two-column">
-													<div class="form-group">
-														<label>Description</label>
-														<input type="text" name="Description" class="form-control" value="JKT 48">
-													</div>
-												</div>
-												<div class="pull-left w50 two-column">
-													<div class="form-group">
-														<label>Version</label>
-														<select class="form-control">
-															<option>Select Version</option>
-															<option>Current</option>
-														</select>
-													</div>
-												</div>
-											</div>
-										</div>
-										
-										<!-- table details-->
-										<div class="table-wrapper">
-											<div class="datatable-wrapper form-inline">
-												<div class="clearfix">
-													<div class="pull-left">
-														<div class="clearfix">
-															<div class="pull-right datatable-button">
-																<div class="button-group dropdown">
-																	<button class="btn btn-default small btn-secondary">Edit <i class="fa fa-caret-down"></i></button>
-																	<ul class="dropdown-menu" role="menu">
-																	    <li>
-																	    	<a href="#">Clear Selectio</a>
-																	    </li>
-																	    <li>
-																	    	<a href="#">Fill Down</a>
-																	    </li>
-																	    <li>
-																	    	<a href="#">Search/Replace</a>
-																	    </li>
-																	    <li>
-																	    	<a href="#">Add Rows</a>
-																	    </li>
-																	    <li>
-																	    	<a href="#">Delete Selected Rows</a>
-																	    </li>
-																	    <li>
-																	    	<a href="#">Duplicate Selected Rows</a>
-																	    </li>
-																	    <li>
-																	    	<a href="#">Copy Selected Rows</a>
-																	    </li>
-																	    <li>
-																	    	<a href="#">Paste</a>
-																	    </li>
-																	    <li>
-																	    	<a href="#">Paste As Cancel</a>
-																	    </li>
-																	</ul>
-																</div>													
-																<button class="btn btn-default small btn-secondary">Import</button>
-																<button class="btn btn-default small btn-secondary">Export</button>
-																<button class="btn btn-default small btn-secondary">Publish</button>
-																<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalAgent">Agents</button>
-																<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalRatesheet">Rate Sheet</button>
-															</div>
-														</div>																						
-													</div>
-												</div>
-												<div class="table-responsive">
-													<table class="table table-stripped table-bordered datatable">
-														<thead>
-															<tr role="row">
-																<th class="sorting_asc" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" aria-sort="ascending">No</th>
-																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Status</th>
-																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Carrier</th>
-																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Action</th>
-																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Origin</th>
-																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Dest</th>
-																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Cabin</th>
-																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">OW/RT</th>
-															</tr>
-														</thead>
-														<tbody>
-															<tr role="row" class="datatable-row">
-																<td>1</td>
-																<td>
-																	<select class="form-control inside-table">
-																		<option>Select Priority</option>
-																		<option>Pending</option>
-																		<option>Approve</option>
-																		<option>Reject</option>
-																	</select>
-																</td>
-																<td>
-																	<input type="text" name="carrier" class="form-control" value="GA">
-																</td>																
-																<td>New</td>
-																<td>
-																	<input type="text" name="origin" class="form-control must-fill">
-																</td>
-																<td>
-																	<input type="text" name="destination" class="form-control must-fill">
-																</td>
-																<td>
-																	<select class="form-control inside-table must-fill">
-																		<option>Select Cabin</option>
-																		<option>Y - Economy</option>
-																		<option>F - First Class</option>
-																		<option>C - Business</option>
-																		<option>R - Premium Economy</option>
-																	</select>
-																</td>
-																<td>
-																	<select class="form-control inside-table must-fill">
-																		<option>Select OW/RT</option>
-																		<option>Pending</option>
-																		<option>Approve</option>
-																		<option>Reject</option>
-																	</select>
-																</td>
-															</tr>
-															<tr class="datatable-action">
-																<td colspan="18" class="">
-																	<div class="btn btn-app">
-																		<i class="fa fa-level-up"></i>Move Up
-																	</div>
-																	<div class="btn btn-app">
-																		<i class="fa fa-level-down"></i>Move Down
-																	</div>	
-																</td>
-															</tr>
-															<tr role="row" class="datatable-row">
-																<td>2</td>
-																<td>
-																	<select class="form-control inside-table">
-																		<option>Select Priority</option>
-																		<option>Pending</option>
-																		<option>Approve</option>
-																		<option>Reject</option>
-																	</select>
-																</td>
-																<td>
-																	<input type="text" name="carrier" class="form-control" value="GA">
-																</td>																
-																<td>New</td>
-																<td>
-																	<input type="text" name="origin" class="form-control must-fill">
-																</td>
-																<td>
-																	<input type="text" name="destination" class="form-control must-fill">
-																</td>
-																<td>
-																	<select class="form-control inside-table must-fill">
-																		<option>Select Cabin</option>
-																		<option>Y - Economy</option>
-																		<option>F - First Class</option>
-																		<option>C - Business</option>
-																		<option>R - Premium Economy</option>
-																	</select>
-																</td>
-																<td>
-																	<select class="form-control inside-table must-fill">
-																		<option>Select OW/RT</option>
-																		<option>Pending</option>
-																		<option>Approve</option>
-																		<option>Reject</option>
-																	</select>
-																</td>
-															</tr>
-															<tr class="datatable-action">
-																<td colspan="18" class="">
-																	<div class="btn btn-app">
-																		<i class="fa fa-level-up"></i>Move Up
-																	</div>
-																	<div class="btn btn-app">
-																		<i class="fa fa-level-down"></i>Move Down
-																	</div>
-																</td>
-															</tr>
-														</tbody>
-													</table>
-												</div>
-												<div class="clearfix">
-													<div class="pull-left dataTables_info italic">
-														* Field can not be empty.
-													</div>
-												</div>	
-											</div>
-										</div>
-									</div>
-									<div class="tab-pane" id="market-rules">
-										<div class="text-center no-data">No Data Available</div>
-									</div>
-									<div class="tab-pane" id="attachment-market">
-										<div class="text-center no-data">No Attachment Available</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="tab-wrapper" id="distribution-ATPCO">
-							<div class="clearfix tab-body">
-								<ul class="clearfix nav-responsive nav nav-tabs">
-								    <li><a href="#ga-fares">GA Fares : SF</a></li>
-								    <li><a href="#add-on">Add Ons</a></li>
-								    <li><a href="#filling-instruction">Filling Instruction</a></li>
-								    <li><a href="#attachment-atpco">Attachment</a></li>
-								    <li><a href="#filling-details">Filling Details</a></li>
-								</ul>
-								<div class="tab-content">
-									<div class="tab-pane active" id="ga-fares">
-										<div class="pb1 mb1 bbgrey">
-											<div class="clearfix">
-												<div class="pull-left w50 two-column">
-													<div class="form-group">
-														<label>CXR</label>
-														<input type="text" name="cxr" class="form-control" value="GA">
-													</div>
-												</div>
-												<div class="pull-left w50 two-column">
-													<div class="form-group">
-														<label>Approval Reference</label>
-														<input type="text" name="Approval Reference" class="form-control">
-													</div>
-												</div>
-											</div>
-											<div class="clearfix">
-												<div class="pull-left w50 two-column">
-													<div class="form-group">
-														<label>Description</label>
-														<input type="text" name="Description" class="form-control" value="JKT 48">
-													</div>
-												</div>
-												<div class="pull-left w50 two-column">
-													<div class="form-group">
-														<label>Version</label>
-														<select class="form-control">
-															<option>Select Version</option>
-															<option>Current</option>
-														</select>
-													</div>
-												</div>
-											</div>
-										</div>
 
-										<!-- table details-->
-										<div class="table-wrapper">
-											<div class="datatable-wrapper form-inline">
-												<div class="clearfix">
-													<div class="pull-left">
-														<div class="clearfix">
-															<div class="pull-right datatable-button">
-																<div class="button-group dropdown">
-																	<button class="btn btn-default small btn-secondary">Edit <i class="fa fa-caret-down"></i></button>
-																	<ul class="dropdown-menu" role="menu">
-																	    <li>
-																	    	<a href="#">Clear Selectio</a>
-																	    </li>
-																	    <li>
-																	    	<a href="#">Fill Down</a>
-																	    </li>
-																	    <li>
-																	    	<a href="#">Search/Replace</a>
-																	    </li>
-																	    <li>
-																	    	<a href="#">Add Rows</a>
-																	    </li>
-																	    <li>
-																	    	<a href="#">Delete Selected Rows</a>
-																	    </li>
-																	    <li>
-																	    	<a href="#">Duplicate Selected Rows</a>
-																	    </li>
-																	    <li>
-																	    	<a href="#">Copy Selected Rows</a>
-																	    </li>
-																	    <li>
-																	    	<a href="#">Paste</a>
-																	    </li>
-																	    <li>
-																	    	<a href="#">Paste As Cancel</a>
-																	    </li>
-																	</ul>
-																</div>													
-																<button class="btn btn-default small btn-secondary">Import</button>
-																<button class="btn btn-default small btn-secondary">Export</button>
-																<button class="btn btn-default small btn-secondary">Publish</button>
-																<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalAgent">Agents</button>
-																<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalRatesheet">Rate Sheet</button>
+						<ng-form name="editFormATPCO" role="form" novalidate>
+							<div class="tab-wrapper" id="distribution-ATPCO">
+								<div class="clearfix tab-body">
+									<ul class="clearfix nav-responsive nav nav-tabs">
+									    <li ng-class="{active:$index==0}" ng-repeat="workPackageSheet in vm.workPackage.fareSheet"><a href="#ga-fares{{$index}}" ng-click="vm.selectTab($index);">GA Fares : {{vm.workPackage.fareSheet[$index].specifiedFaresName}}</a></li>
+									    <li><a href="#add-on">Add Ons</a></li>
+									    <li><a href="#filling-instruction">Filling Instruction</a></li>
+									    <li><a href="#attachment-atpco">Attachment</a></li>
+									    <li><a href="#filling-details">Filling Details</a></li>
+									</ul>
+									<div class="tab-content">
+											<div class="tab-pane" ng-class="{active:$index==0}" ng-repeat="workPackageSheet in vm.workPackage.fareSheet" id="ga-fares{{$index}}">
+												<div class="pb1 mb1 bbgrey">
+													<div class="clearfix">
+														<div class="pull-left w50 two-column">
+															<div class="form-group">
+																<label>Description</label>
+																<input type="text" name="description{{$index}}" class="form-control"
+																ng-class="{'must-fill': editForm.editFormATPCO.description{{$index}}.$error.required && fare.action != 'Canceled'}"
+												         		ng-model="workPackageSheet.specifiedFaresName" 
+												         		ng-required="vm.checkRequiredField('description')"  
+												         		ng-disabled="vm.isFieldDisable('description')">
 															</div>
-														</div>																						
+														</div>
+														<div class="pull-left w50 two-column">
+															<div class="form-group">
+																<label>Approval Reference</label>
+																<input type="text" name="approvalReference{{$index}}" class="form-control" 
+																ng-class="{'must-fill': editForm.editFormATPCO.approvalReference{{$index}}.$error.required && fare.action != 'Canceled'}"
+													            ng-model="workPackageSheet.approvalReference"
+																ng-disabled="vm.isFieldDisable('approvalReference')"
+																ng-required="vm.checkRequiredField('approvalReference')">
+															</div>
+														</div>
+													</div>
+													
+													<div class="clearfix">
+														<div class="pull-left w50 two-column">
+															<div class="form-group">
+																<label>Fare Type</label>
+																
+																<select 
+											      				class="form-control" 
+											      				name="fareType{{$index}}"
+											      				ng-model="workPackageSheet.fareType" 
+																ng-style="editForm.editFormATPCO.fareType{{$index}}.$error.required && vm.errorStyle"
+													      		ng-options="fareType for fareType in vm.fareType" 
+											      				ng-required="vm.checkRequiredField('fareType')"
+											      				ng-disabled="vm.isFieldDisable('fareType')"></select>										      				
+															</div>
+														</div>
+														<div class="pull-left w50 two-column">
+															<div class="form-group">
+																<label>Version</label>
+																<select class="form-control">
+																	<option>Select Version</option>
+																	<option>Current</option>
+																</select>
+															</div>
+														</div>
 													</div>
 												</div>
-												<div class="table-responsive">
-													<table class="table table-stripped table-bordered datatable">
-														<thead>
-															<tr role="row">
-																<th class="sorting_asc" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" aria-sort="ascending">No</th>
-																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Status</th>
-																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Carrier</th>
-																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Action</th>
-																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Origin</th>
-																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Dest</th>
-																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Cabin</th>
-																<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">OW/RT</th>
-															</tr>
-														</thead>
-														<tbody>
-															<tr role="row" class="datatable-row">
-																<td>1</td>
-																<td>
-																	<select class="form-control inside-table">
-																		<option>Select Priority</option>
-																		<option>Pending</option>
-																		<option>Approve</option>
-																		<option>Reject</option>
-																	</select>
-																</td>
-																<td>
-																	<input type="text" name="carrier" class="form-control" value="GA">
-																</td>																
-																<td>New</td>
-																<td>
-																	<input type="text" name="origin" class="form-control must-fill">
-																</td>
-																<td>
-																	<input type="text" name="destination" class="form-control must-fill">
-																</td>
-																<td>
-																	<select class="form-control inside-table must-fill">
-																		<option>Select Cabin</option>
-																		<option>Y - Economy</option>
-																		<option>F - First Class</option>
-																		<option>C - Business</option>
-																		<option>R - Premium Economy</option>
-																	</select>
-																</td>
-																<td>
-																	<select class="form-control inside-table must-fill">
-																		<option>Select OW/RT</option>
-																		<option>Pending</option>
-																		<option>Approve</option>
-																		<option>Reject</option>
-																	</select>
-																</td>
-															</tr>
-															<tr class="datatable-action">
-																<td colspan="18" class="">
-																	<div class="btn btn-app">
-																		<i class="fa fa-level-up"></i>Move Up
+												
+												<!-- table details-->
+												<div class="table-wrapper">
+													<div class="datatable-wrapper form-inline">
+														<div class="clearfix">
+															<div class="pull-left">
+																<div class="clearfix">
+																	<div class="pull-right datatable-button">
+																		<div class="button-group dropdown">
+																			<button class="btn btn-default small btn-secondary">Edit <i class="fa fa-caret-down"></i></button>
+																			<ul class="dropdown-menu" role="menu">
+																			    <li>
+																			    	<a href="#">Clear Selection</a>
+																			    </li>
+																			    <li>
+																			    	<a href="#">Fill Down</a>
+																			    </li>
+																			    <li>
+																			    	<a href="#">Search/Replace</a>
+																			    </li>
+																			    <li>
+																			    	<a href="#">Add Rows</a>
+																			    </li>
+																			    <li>
+																			    	<a href="#">Delete Selected Rows</a>
+																			    </li>
+																			    <li>
+																			    	<a href="#">Duplicate Selected Rows</a>
+																			    </li>
+																			    <li>
+																			    	<a href="#">Copy Selected Rows</a>
+																			    </li>
+																			    <li>
+																			    	<a href="#">Paste</a>
+																			    </li>
+																			    <li>
+																			    	<a href="#">Paste As Cancel</a>
+																			    </li>
+																			</ul>
+																		</div>													
+																		<button class="btn btn-default small btn-secondary">Import</button>
+																		<button class="btn btn-default small btn-secondary">Export</button>
+																		<button class="btn btn-default small btn-secondary">Publish</button>
+																		<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalAgent">Agents</button>
+																		<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalRatesheet">Rate Sheet</button>
 																	</div>
-																	<div class="btn btn-app">
-																		<i class="fa fa-level-down"></i>Move Down
-																	</div>	
-																	<div class="btn btn-app">
-																		<i class="fa fa-stack-exchange"></i>Derived Fares
-																	</div>
-																</td>
-															</tr>
-															<tr role="row" class="datatable-row">
-																<td>2</td>
-																<td>
-																	<select class="form-control inside-table">
-																		<option>Select Priority</option>
-																		<option>Pending</option>
-																		<option>Approve</option>
-																		<option>Reject</option>
-																	</select>
-																</td>
-																<td>
-																	<input type="text" name="carrier" class="form-control" value="GA">
-																</td>																
-																<td>New</td>
-																<td>
-																	<input type="text" name="origin" class="form-control must-fill">
-																</td>
-																<td>
-																	<input type="text" name="destination" class="form-control must-fill">
-																</td>
-																<td>
-																	<select class="form-control inside-table must-fill">
-																		<option>Select Cabin</option>
-																		<option>Y - Economy</option>
-																		<option>F - First Class</option>
-																		<option>C - Business</option>
-																		<option>R - Premium Economy</option>
-																	</select>
-																</td>
-																<td>
-																	<select class="form-control inside-table must-fill">
-																		<option>Select OW/RT</option>
-																		<option>Pending</option>
-																		<option>Approve</option>
-																		<option>Reject</option>
-																	</select>
-																</td>
-															</tr>
-															<tr class="datatable-action">
-																<td colspan="18" class="">																	
-																	<div class="btn btn-app">
-																		<i class="fa fa-level-up"></i>Move Up
-																	</div>
-																	<div class="btn btn-app">
-																		<i class="fa fa-level-down"></i>Move Down
-																	</div>
-																	<div class="btn btn-app">
-																		<i class="fa fa-stack-exchange"></i>Derived Fares
-																	</div>
-																</td>
-															</tr>
-														</tbody>
-													</table>
-												</div>
-												<div class="clearfix">
-													<div class="pull-left dataTables_info italic">
-														* Field can not be empty.
+																</div>																						
+															</div>
+														</div>
+														<div class="table-responsive">
+															<table class="table table-stripped table-bordered datatable">
+																<thead>
+																	<tr role="row">
+																		<th class="sorting_asc" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" aria-sort="ascending">No</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Status</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Carrier</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Action</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tar No</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tar Cd</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Global</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Origin</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Dest</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Fare Cls</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Bkg Cls</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Cabin</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">OW/RT</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Ftnt</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Rtg No</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Rule No</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Curr</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Base Amt</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Target Aif</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Travel Start</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Travel End</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Sale Start</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Sale End</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Comment</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Travel Complete</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Travel Complete Indicator</th>
+																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Ratesheet Comment</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	<tr role="row" class="datatable-row" ng-repeat="fare in vm.workPackage.fareSheet[vm.selectedTab].fares track by $index">
+																		<td>{{$index+1}}</td>
+																		<td>
+																			<span ng-if="vm.isFieldEditable(fare, 'status')">
+																				<select class="form-control inside-table" name="status{{$index}}" ng-model="fare.status" id="field_status" 
+																					ng-class="{'must-fill': ditForm.editFormATPCO.status{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
+												           							ng-disabled="vm.isFieldDisable('status')"
+																	             	ng-required="vm.checkRequiredField('status')">
+																					<option value="">Select Priority</option>
+																	                <option value="PENDING" >Pending</option>
+																	                <option value="APPROVED">Approve</option>
+																	                <option value="REJECTED">Reject</option>
+																				</select>
+																				<span class="form-control inside-table" ng-if="!vm.isFieldEditable(fare, 'status')">
+														           					{{fare.status}}
+														           				</span>
+																			</span>
+																		</td>
+																		<td>
+																			<span ng-if="vm.isFieldEditable(fare, 'carrier')">
+													           					<input type="text" class="form-control" name="carrier{{$index}}" id="field_carrier"
+														                    		ng-model="fare.carrier"
+														                    		ng-disabled="vm.isFieldDisable('carrier')"
+														                    		ng-class="{'must-fill': ditForm.editFormATPCO.carrier{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
+																		            ng-required="vm.checkRequiredField('carrier')"/>
+													           				</span>
+													           				<span ng-if="!vm.isFieldEditable(fare, 'carrier')">
+													           					{{fare.carrier}}
+													           				</span>
+																		</td>																
+																		<td>{{fare.action}}</td>
+																		<td>
+																			<span ng-if="vm.isFieldEditable(fare, 'tarno')">								
+													           					<input type="text" class="form-control" name="tarno{{$index}}" id="field_tarno" 
+													           					ng-required="vm.checkRequiredField('tarno') && fare.action != 'Canceled'"  
+													           					ng-class="{'must-fill': editForm.editFormATPCO.tarno{{$index}}.$error.required && fare.action != 'Canceled'}"	
+														                    	ng-model="fare.tarno" 
+														                    	ng-disabled="vm.isFieldDisable('tarno')" />
+													           				</span>
+													           				<span ng-if="!vm.isFieldEditable(fare, 'tarno')">
+													           					{{fare.tarno}}
+													           				</span>
+																		</td>
+																		<td>
+																			<span ng-if="vm.isFieldEditable(fare, 'tarcd')">
+													           					<input type="text" class="form-control" name="tarcd{{$index}}" id="field_tarcd" 
+													           					ng-disabled="vm.isFieldDisable('tarcd')"
+													           					ng-required="vm.checkRequiredField('tarcd') && fare.action != 'Canceled'"  
+													           					ng-class="{'must-fill': editForm.editFormATPCO.tarcd{{$index}}.$error.required && fare.action != 'Canceled'}"	
+														                    	ng-model="fare.tarcd"/>
+													           				</span>
+													           				<span ng-if="!vm.isFieldEditable(fare, 'tarcd')">
+														           				{{fare.tarcd}}
+													           				</span>
+																		</td>
+																		<td>EH</td>
+																		<td>
+																			<span ng-if="vm.isFieldEditable(fare, 'origin')">
+												                				<input type="text" class="form-control" name="origin{{$index}}" id="field_origin" 
+												                				ng-disabled="vm.isFieldDisable('origin')"
+												                				ng-required="vm.checkRequiredField('origin') && fare.action != 'Canceled'"  
+												                				ng-class="{'must-fill': editForm.editFormATPCO.origin{{$index}}.$error.required && fare.action != 'Canceled'}"	
+														                    	ng-model="fare.origin"/>
+												                			
+												                			</span>
+												                			<span ng-if="!vm.isFieldEditable(fare, 'origin')">
+												                			{{fare.origin}}
+												                			</span>
+																		</td>
+																		<td>
+																			<span ng-if="vm.isFieldEditable(fare, 'destination')">
+												                				<input type="text" class="form-control" name="destination{{$index}}" id="field_destination" 
+												                				ng-disabled="vm.isFieldDisable('destination')"
+												                				ng-required="vm.checkRequiredField('destination') && fare.action != 'Canceled'"  
+												                				ng-class="{'must-fill': editForm.editFormATPCO.destination{{$index}}.$error.required && fare.action != 'Canceled'}"	
+													                    		ng-model="fare.destination"/>
+												                			
+												                			</span>
+												                			<span ng-if="!vm.isFieldEditable(fare, 'destination')">
+												                			{{fare.destination}}
+												                			</span>
+																		</td>
+																		<td>
+																			<span ng-if="vm.isFieldEditable(fare, 'farebasis')">
+												                				<input type="text" class="form-control" name="farebasis{{$index}}" id="field_farebasis"
+												                				ng-disabled="vm.isFieldDisable('farebasis')"
+												                				ng-required="vm.checkRequiredField('farebasis') && fare.action != 'Canceled'" 
+												                				ng-class="{'must-fill': editForm.editFormATPCO.farebasis{{$index}}.$error.required && fare.action != 'Canceled'}"	
+													                    		ng-model="fare.fareBasis"/>												                			
+												                			</span>
+												                			<span ng-if="!vm.isFieldEditable(fare, 'farebasis')">
+												                			{{fare.fareBasis}}
+												                			</span>
+																		</td>	
+																		<td>
+																			<span ng-if="vm.isFieldEditable(fare, 'bookingClass')">
+												                				<input type="text" class="form-control" name="bookingClass{{$index}}" id="field_bookingClass"
+												                				ng-disabled="vm.isFieldDisable('bookingClass')"
+												                				ng-required="vm.checkRequiredField('bookingClass') && fare.action != 'Canceled'" 
+												                				ng-class="{'must-fill': editForm.editFormATPCO.bookingClass{{$index}}.$error.required && fare.action != 'Canceled'}"	
+													                    		ng-model="fare.bookingClass"/>												                			
+												                			</span>
+												                			<span ng-if="!vm.isFieldEditable(fare, 'bookingClass')">
+												                				{{fare.bookingClass}}
+												                			</span>
+																		</td>
+																		<td>
+													           				<span ng-if="vm.isFieldEditable(fare, 'cabin')">									           						
+													           						<select class="col-md-12" 
+																	             name="cabin{{$index}}"
+																	             ng-required="vm.checkRequiredField('cabin')"
+																	             ng-class="{'must-fill': editForm.editFormATPCO.cabin{{$index}}.$error.required && fare.action != 'Canceled'}"	
+																	             ng-model="fare.cabin" id="field_cabin" 
+																	             ng-disabled="vm.isFieldDisable('cabin')">
+																	                <option value="">Select Cabin</option>
+																	                <option>Y - Economy</option>
+																	                <option>F - First Class</option>
+																	                <option>C - Business</option>
+																	                <option>R - Premium Economy</option>
+																	            </select>
+													                				<!-- <input type="text" class="form-control" name="cabin{{$index}}" id="field_bookingClass"
+													                				ng-disabled="fare.action == 'Canceled'"
+													                				ng-required="vm.checkRequiredField('cabin') && fare.action != 'Canceled'" 
+																				ng-style="editForm.editFormATPCO.cabin{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"
+														                    		
+														                    		ng-model="fare.cabin"/> -->
+													                			
+													                			</span>
+													                			<span ng-if="!vm.isFieldEditable(fare, 'cabin')">
+													                				{{fare.cabin}}
+													                			</span>
+													           			</td>
+													           			<td>
+													           				<span ng-if="vm.isFieldEditable(fare, 'typeOfJourney')">
+												                				<select class="col-md-12" 
+																	             name="typeOfJourney{{$index}}"
+																	             ng-required="vm.checkRequiredField('typeOfJourney')"
+																	             ng-class="{'must-fill': editForm.editFormATPCO.typeOfJourney{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+																	             ng-model="fare.typeOfJourney" id="field_typeOfJourney"
+																	             ng-disabled="vm.isFieldDisable('typeOfJourney')">
+																	                <option value="">Select OW/RT</option>
+																	                <option>One Way</option>
+																	                <option>Return</option>
+																	                <option>One Way Only</option>
+																	            </select>
+												                			</span>
+												                			<span ng-if="!vm.isFieldEditable(fare, 'typeOfJourney')">
+												                				<span ng-if="fare.typeOfJourney == 'One Way'">1</span>
+														           				<span ng-if="fare.typeOfJourney == 'Return'">2</span>
+														           				<span ng-if="fare.typeOfJourney == 'One Way Only'">3</span>
+												                			</span>
+													           			</td>
+												               			<td>
+												               				<span ng-if="vm.isFieldEditable(fare, 'footnote')">
+													                				<input type="text" class="form-control" name="footnote{{$index}}" id="field_footnote"
+																		            ng-class="{'must-fill': editForm.editFormATPCO.footnote{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+																		            ng-disabled="vm.isFieldDisable('footnote')"
+																		            ng-required="vm.checkRequiredField('footnote')"
+														                    		ng-model="fare.footnote"/>
+													                			
+													                			</span>
+													                			<span ng-if="!vm.isFieldEditable(fare, 'footnote')">
+													                				{{fare.footnote}}
+													                			</span>
+												               			</td>
+												               			<td>
+												               				<span ng-if="vm.isFieldEditable(fare, 'rtgno')">
+													                				<input type="text" class="form-control" name="rtgno{{$index}}" id="field_bookingClass"
+													                				ng-disabled="vm.isFieldDisable('rtgno')"
+													                				ng-required="vm.checkRequiredField('rtgno')" 
+													                				ng-class="{'must-fill': editForm.editFormATPCO.rtgno{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+																		            ng-model="fare.rtgno"/>
+													                			
+													                			</span>
+													                			<span ng-if="!vm.isFieldEditable(fare, 'rtgno')">
+													                				{{fare.rtgno}}
+													                			</span>
+												               			</td>
+												               			<td>
+												               				<span ng-if="vm.isFieldEditable(fare, 'ruleno')">
+													                				<input type="text" class="form-control" name="ruleno{{$index}}" id="field_bookingClass"
+													                				ng-disabled="vm.isFieldDisable('ruleno')"
+													                				ng-required="vm.checkRequiredField('ruleno')" 
+													                				ng-class="{'must-fill': editForm.editFormATPCO.ruleno{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+																		            ng-model="fare.ruleno"/>
+													                			
+													                			</span>
+													                			<span ng-if="!vm.isFieldEditable(fare, 'ruleno')">
+													                				{{fare.ruleno}}
+													                			</span>
+												               			</td>
+												               			<td>
+												               				<span ng-if="vm.isFieldEditable(fare, 'currency')">
+												                				<input type="text" class="form-control" name="currency{{$index}}" id="field_currency{{$index}}"
+												                				ng-disabled="vm.isFieldDisable('currency')"
+												                				ng-required="vm.checkRequiredField('currency')" 
+												                				ng-class="{'must-fill': editForm.editFormATPCO.currency{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+																	            ng-model="fare.currency"/>
+												                			
+												                			</span>
+												                			<span ng-if="!vm.isFieldEditable(fare, 'currency')">
+												                				{{fare.currency}}
+												                			</span>
+												               			</td>
+												               			<td>
+												               				<span ng-if="vm.isFieldEditable(fare, 'amount')">
+													                				<input type="text" class="form-control" name="amount{{$index}}" id="field_bookingClass"
+													                				ng-disabled="vm.isFieldDisable('amount')"
+													                				ng-required="vm.checkRequiredField('amount')" 
+													                				ng-class="{'must-fill': editForm.editFormATPCO.amount{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+																		            ng-model="fare.amount"/>
+													                			
+													                			</span>
+													                			<span ng-if="!vm.isFieldEditable(fare, 'amount')">
+													                				{{fare.amount}}
+													                			</span>
+												               			</td>
+												               			<!--  
+												               			<td>{{fare.recommendedAmount - fare.amount}}</td>
+												               			<td>{{(fare.recommendedAmount - fare.amount) / fare.amount * 100 | number : 2}} %</td>
+												               		    <td ng-show="vm.showTFC">{{fare.yqyr}}</td>
+													               		<td ng-show="vm.showTFC">{{fare.cat12}}</td>
+													               		<td ng-show="vm.showTFC">{{fare.totalTax}}</td>   
+													               		<td>{{fare.tfc}}</td>   
+													               		<td class="input"  >
+													               			<span ng-if="vm.isFieldEditable(fare, 'aif')">
+													                				<input type="text" class="form-control" name="aif{{$index}}" id="field_bookingClass"
+													                				ng-disabled="fare.action == 'Canceled'"
+													                				ng-required="vm.checkRequiredField('aif')" ng-style="editForm.editFormATPCO.aif{{$index}}.$error.required && fare.action != 'Canceled' && vm.errorStyle"
+														                    		ng-change="vm.fareAifChange(fare)"
+														                    		ng-model="fare.aif"/>
+													                			
+													                			</span>
+													                			<span ng-if="!vm.isFieldEditable(fare, 'aif')">
+													               				{{fare.aif}}
+													                			</span>
+													               		</td>   
+													               		
+													               		<td></td>
+												               			<td></td>
+												               			-->
+												               			
+												               			<td>
+													               			<span ng-if="vm.isFieldEditable(fare, 'aif')">
+													                				<input type="text" class="form-control" name="aif{{$index}}" id="field_bookingClass"
+													                				ng-disabled="vm.isFieldDisable('aif')"
+													                				ng-required="vm.checkRequiredField('aif')" 
+													                				ng-class="{'must-fill': editForm.editFormATPCO.aif{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+																		            ng-model="fare.aif"/>
+													                			
+													                			</span>
+													                			<span ng-if="!vm.isFieldEditable(fare, 'aif')">
+													               				{{fare.aif}}
+													                			</span>
+													               		</td> 
+													               		
+												               			<td>
+												               				<span ng-if="vm.isFieldEditable(fare, 'travelStartDate')">
+													                				<input type="text" class="form-control" name="travelStartDate{{$index}}" id="field_travelStartDate"
+													                				ng-disabled="vm.isFieldDisable('travelStartDate')"
+													                				ng-required="vm.checkRequiredField('travelStartDate')"
+													                				ng-class="{'must-fill': editForm.editFormATPCO.travelStartDate{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+																		            ng-model="fare.travelStart"/>
+													                			
+													                			</span>
+													                			<span ng-if="!vm.isFieldEditable(fare, 'travelStartDate')">
+													               				{{fare.travelStart}}
+													                			</span>
+												               			
+												               			</td>
+												               			<td>
+												               				<span ng-if="vm.isFieldEditable(fare, 'travelEndDate')">
+													                				<input type="text" class="form-control" name="travelEndDate{{$index}}" id="field_travelEndDate"
+													                				ng-disabled="vm.isFieldDisable('travelEndDate')"
+													                				ng-required="vm.checkRequiredField('travelEndDate')"
+													                				ng-class="{'must-fill': editForm.editFormATPCO.travelEndDate{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+																		            ng-model="fare.travelEnd"/>
+													                			
+													                			</span>
+													                			<span ng-if="!vm.isFieldEditable(fare, 'travelEndDate')">
+													               				{{fare.travelEnd}}
+													                			</span>
+												               			</td>
+												               			<td>
+												               				<span ng-if="vm.isFieldEditable(fare, 'saleStartDate')">
+													                				<input type="text" class="form-control" name="saleStartDate{{$index}}" id="field_saleStartDate"
+													                				ng-disabled="vm.isFieldDisable('saleStartDate')"									                				
+													                				ng-required="vm.checkRequiredField('saleStartDate')"
+														                    		ng-class="{'must-fill': editForm.editFormATPCO.saleStartDate{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+																		            ng-model="fare.saleStart"/>
+													                			
+													                			</span>
+													                			<span ng-if="!vm.isFieldEditable(fare, 'saleStartDate')">
+													               				{{fare.saleStart}}
+													                			</span>
+												               			</td>
+												               			<td>
+												               					<span ng-if="vm.isFieldEditable(fare, 'saleEndDate')">
+													                				<input type="text" class="form-control" name="saleEndDate{{$index}}" id="field_saleEndDate"
+													                				ng-disabled="vm.isFieldDisable('saleEndDate')"
+													                				ng-required="vm.checkRequiredField('saleEndDate')"
+														                    		ng-class="{'must-fill': editForm.editFormATPCO.saleEndDate{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+																		            ng-model="fare.saleEnd"/>
+													                			
+													                			</span>
+													                			<span ng-if="!vm.isFieldEditable(fare, 'saleEndDate')">
+													               				{{fare.saleEnd}}
+													                			</span>
+												               			</td>
+												               			<td>
+												               				<input type="text" class="form-control" name="comment{{$index}}" id="field_comment"
+														                    		ng-model="fare.comment"/>
+												               			</td>
+												               			<td>
+												               				<span ng-if="vm.isFieldEditable(fare, 'travelComplete')">
+												                				<input type="text" class="form-control" name="travelComplete{{$index}}" id="field_travelComplete"
+												                				ng-disabled="vm.isFieldDisable('travelComplete')"
+												                				ng-required="vm.checkRequiredField('travelComplete')"
+													                    		ng-class="{'must-fill': editForm.editFormATPCO.travelComplete{{$index}}.$error.required && fare.action != 'Canceled'}"																			            														                    		
+												                				ng-model="fare.travelComplete"/>
+													                			
+													                			</span>
+													                			<span ng-if="!vm.isFieldEditable(fare, 'travelComplete')">
+													               				{{fare.travelComplete}}
+													                			</span>
+												               			</td>
+												               			<td>
+												               				<span ng-if="vm.isFieldEditable(fare, 'travelIndicator')">
+													                				<input type="text" class="form-control" name="travelIndicator{{$index}}" id="field_travelIndicator"
+													                				ng-disabled="vm.isFieldDisable('travelIndicator')"
+													                				ng-required="vm.checkRequiredField('travelIndicator')"
+														                    		ng-class="{'must-fill': editForm.editFormATPCO.travelIndicator{{$index}}.$error.required && fare.action != 'Canceled'}"																			            														                    		
+													                				ng-model="fare.travelCompleteIndicator"/>
+													                			
+													                			</span>
+													                			<span ng-if="!vm.isFieldEditable(fare, 'travelIndicator')">
+													               				{{fare.travelCompleteIndicator}}
+													                			</span>
+												               			</td>
+												               			<td>
+												               				<span ng-if="vm.isFieldEditable(fare, 'ratesheetComment')">
+													                				<input type="text" class="form-control" name="ratesheetComment{{$index}}" id="field_ratesheetComment"
+													                				ng-disabled="vm.isFieldDisable('ratesheetComment')"
+													                				ng-required="vm.checkRequiredField('ratesheetComment')"
+														                    		ng-class="{'must-fill': editForm.editFormATPCO.ratesheetComment{{$index}}.$error.required && fare.action != 'Canceled'}"																			            														                    		
+														                    		ng-model="fare.ratesheetComment"/>
+													                			
+													                			</span>
+													                			<span ng-if="!vm.isFieldEditable(fare, 'ratesheetComment')">
+													               				{{fare.ratesheetComment}}
+													                			</span>
+												               			</td>
+																	</tr>
+																	<tr class="datatable-action">
+																		<td colspan="18" class="">
+																			<div class="btn btn-app">
+																				<i class="fa fa-level-up"></i>Move Up
+																			</div>
+																			<div class="btn btn-app">
+																				<i class="fa fa-level-down"></i>Move Down
+																			</div>	
+																			<div class="btn btn-app">
+																				<i class="fa fa-stack-exchange"></i>Derived Fares
+																			</div>
+																		</td>
+																	</tr>
+																	<tr class="datatable-action">
+																		<td colspan="18" class="">																	
+																			<div class="btn btn-app">
+																				<i class="fa fa-level-up"></i>Move Up
+																			</div>
+																			<div class="btn btn-app">
+																				<i class="fa fa-level-down"></i>Move Down
+																			</div>
+																			<div class="btn btn-app">
+																				<i class="fa fa-stack-exchange"></i>Derived Fares
+																			</div>
+																		</td>
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+														<div class="clearfix">
+															<div class="pull-left dataTables_info italic">
+																* Field can not be empty.
+															</div>
+														</div>	
 													</div>
-												</div>	
+												</div>
+											
 											</div>
-										</div>
-									</div>
-									<div class="tab-pane" id="add-on">
-										<div class="text-center no-data">No Data Available</div>
-									</div>
-									<div class="tab-pane" id="filling-instruction">
-										<div class="text-center no-data">No Data Available</div>
-									</div>
-									<div class="tab-pane" id="attachment-atpco">
-										<div class="text-center no-data">No Attachment Available</div>
-									</div>
-									<div class="tab-pane" id="filling-details">
-										<div class="text-center no-data">No Attachment Available</div>
+										
+											<div class="tab-pane" id="add-on">
+												<div class="text-center no-data">No Data Available</div>
+											</div>
+											<div class="tab-pane" id="filling-instruction">
+												<div class="text-center no-data">No Data Available</div>
+											</div>
+											<div class="tab-pane" id="attachment-atpco">
+												<div class="text-center no-data">No Attachment Available</div>
+											</div>
+											<div class="tab-pane" id="filling-details">
+												<div class="text-center no-data">No Attachment Available</div>
+											</div>
+										
 									</div>
 								</div>
 							</div>
-						</div>
+						</ng-form>
 					</div>
 				</div>
 			</div>			
@@ -867,3 +978,102 @@
 		  	</div>
 		</div>
 	</div>
+	
+</form>
+	
+	<script>
+		(function() {			
+			var pages = [].slice.call(document.querySelectorAll('.page-wrapper > .page-content')),
+				currentPage = 0,
+				
+				revealerOpts = {
+					// the layers are the elements that move from the sides
+					nmbLayers : 3,
+					// bg color of each layer
+					bgcolor : ['#111', '#fc3', '#fff'],
+					// effect classname
+					effect : 'anim--effect-4',
+					onStart : function(direction) {
+						// next page gets class page--animate-[direction]
+						var nextPage = pages[currentPage === 0 ? 1 : 0];
+						classie.add(nextPage, 'page--animate-' + direction);
+					},
+					onEnd : function(direction) {
+						// remove class page--animate-[direction] from next page
+						var nextPage = pages[currentPage === 0 ? 1 : 0];
+						nextPage.className = 'page-content';
+					}
+				};
+				revealer = new Revealer(revealerOpts);
+
+			// clicking the page nav buttons
+
+			var dataId;
+			var dataDistribution;
+			
+			$('.js-createWorkOrder').click(function(){
+				reveal('left'); 
+				dataId = $(this).attr('data-id');
+				$('.data-on').show();
+			})
+
+			$('.js-back').click(function(){
+				reveal('left'); 
+				dataId = $(this).attr('data-id');
+			})
+
+			$('.pagenav__button--right').click(function(){
+				reveal('right'); 
+				dataId = $(this).attr('data-id');
+				dataDistribution = $(this).attr('data-distribution');
+				var _href = $('#'+dataDistribution).find('.nav-tabs li:first-child a').attr('href');
+				$('.tab-wrapper').hide();
+				//$(".nav-tabs li").removeClass('active');
+				//$('#'+dataDistribution).show().find('.nav-tabs li:first-child').addClass('active');
+				$(_href).addClass('active');
+				$('#sideBar-s1').removeClass('sideBar-open')
+				$('.search-wrap').find('i').removeClass('shrink');
+				$('.sideBar').find('.menu-list').removeClass('open');
+				$('.menu-list').removeClass('sub');
+				$('.sub-menu').slideUp(200);
+				$('.page-content').removeClass('pushed');
+			});
+
+			// triggers the effect by calling instance.reveal(direction, callbackTime, callbackFn)
+			function reveal(direction) {
+				var callbackTime = 750,
+					callbackFn = function() {
+						classie.remove(pages[currentPage], 'page--current');
+						currentPage = currentPage === 0 ? dataId : 0;
+						classie.add(pages[currentPage], 'page--current');	
+					};
+
+				revealer.reveal(direction, callbackTime, callbackFn);
+			}
+
+
+			function changeEffect() {
+				revealer.destroy();
+				var revealerOpts = {
+					// the layers are the elements that move from the sides
+					nmbLayers : Number(this.options[this.selectedIndex].getAttribute('data-layers')),
+					// bg color of each layer
+					bgcolor : this.options[this.selectedIndex].getAttribute('data-colors').split(','),
+					// effect classname
+					effect : 'anim--' + this.value,
+					onStart : function(direction) {
+						// next page gets class page--animate-[direction]
+						var nextPage = pages[currentPage === 0 ? dataId : 0];
+						classie.add(nextPage, 'page--animate-' + direction);
+					},
+					onEnd : function(direction) {
+						// remove class page--animate-[direction] from next page
+						var nextPage = pages[currentPage === 0 ? dataId : 0];
+						nextPage.className = 'page-content';
+					}
+				};
+				
+				revealer = new Revealer(revealerOpts);
+			}
+		})();
+		</script>
