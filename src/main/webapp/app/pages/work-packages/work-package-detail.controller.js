@@ -24,7 +24,9 @@
     WorkPackageDetailController.$inject = ['FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user'];
     function WorkPackageDetailController(FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user) {
        var vm = this;
-      
+        vm.currentTab = [true];
+        vm.currentAddonTab = [];
+        
         vm.rulesMenu = true;
         vm.user = user;
         vm.datePickerOpenStatus = {};
@@ -35,14 +37,46 @@
         vm.openFile = DataUtils.openFile;
         vm.account = null;
         vm.workPackage = entity;
-        vm.fareType = ["Yearly", "Promotion", "Ad-hoc", "Corporate", "SPA & Code-share", "Miles"];
-   
+        vm.fareType = {
+        		"":"Select Fare Type", 
+        		"Yearly":"Yearly", 
+        		"Promotion":"Promotion", 
+        		"Ad-hoc":"Ad-hoc", 
+        		"Corporate":"Corporate", 
+        		"SPA & Code-share":"SPA & Code-share",
+        		"Miles":"Miles"};
+        vm.typeOfJourney = {
+        		"":"Select OW/RT", 
+        		"OW":"One Way", 
+        		"RT":"Return", 
+        		"OO":"One Way Only"
+        };
+        vm.cabin = {
+    		"":"Select Cabin", 
+    		"Y":"Y - Economy", 
+    		"F":"F - First Class", 
+    		"C":"C - Business", 
+    		"R":"R - Premium Economy"
+        };
+        vm.status = {
+        	"":"Select Priority",
+        	"PENDING":"Pending",
+        	"APPROVED":"Approve",
+        	"REJECTED":"Reject"
+        };
+        vm.travelCompleteIndicator = {
+        	"": "Select Travel Complete Indicator",
+        	"P" : "Trip Completed",
+        	"c" : "Trip Commence"
+        };
+        
         //FARES TAB
         vm.selectedTab = 0;       
         vm.selectTab = function(index){
+        	vm.resetTab();        	
+        	vm.currentTab[index] = true;
         	vm.selectedTab = index;
         };
-        
         vm.addTab = function(option){
         	if(option.type == 'Fares'){
         		vm.workPackage.fareSheet.push({specifiedFaresName:option.name});
@@ -50,7 +84,7 @@
         	else if(option.type == 'Add-Ons'){
         		vm.workPackage.addonFareSheet.push({addonFaresName:option.name});
         	}
-        }
+        };
         
         vm.removeTab = function(){
         	var index = vm.workPackage.fareSheet.indexOf(vm.selectedTab);
@@ -60,7 +94,7 @@
         
         vm.addSheet = function(){
         	$uibModal.open({
-                templateUrl: 'app/entities/work-package/work-package-add-sheet-dialog.html',
+                templateUrl: 'app/pages/work-packages/work-package-add-sheet-dialog.html',
                 controller: 'WorkPackageAddSheetDialogController',
                 controllerAs: 'vm',
                 backdrop: 'static',
@@ -88,6 +122,8 @@
         //ADDON TAB
         vm.selectedAddonTab = 0;       
         vm.selectAddonTab = function(index){
+        	vm.resetTab();        	
+        	vm.currentAddonTab[index] = true;
         	vm.selectedAddonTab = index;
         };
         
@@ -142,6 +178,37 @@
         	vm.removeDiscountTab();
         };
         //END DISCOUNT TAB
+        
+        //OTHER TAB
+        vm.selectOtherTab = function(tabName){
+        	vm.resetTab();
+        	if(tabName == 'filingInstruction'){
+        		vm.currentTabFilingInstruction = true;
+        	} else if(tabName == 'attachment'){
+        		vm.currentTabAttachment = true;
+        	} else if(tabName == 'filingDetail'){
+        		vm.currentTabFilingDetail = true;
+        	}
+        };
+        //END OTHER TAB
+        
+        
+        vm.resetTab = function(){
+        	for(var x=0;x<vm.currentTab.length;x++){
+        		vm.currentTab[x]=false;
+        	}
+        	for(var x=0;x<vm.currentAddonTab.length;x++){
+        		vm.currentAddonTab[x]=false;
+        	}
+        	vm.currentTabFilingInstruction = false;
+        	vm.currentTabAttachment = false;
+        	vm.currentTabFilingDetail = false;
+        };
+        
+        vm.faresActionButton = [];
+        vm.rowTableClick = function(e, index){
+        	vm.faresActionButton[index] = !vm.faresActionButton[index];
+        }
         
         vm.errorStyle = { 'background-color':'red'};
         vm.selectedFare = null;
@@ -669,7 +736,7 @@
 	    	        else{	    	  		
 		  	    		if(field == 'status'){
 			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["LSO1", "LSO2", "Distribution", "Route Management"];
+			    	  		var reviewLevel = ["LSO", "Distribution", "Route Management"];
 			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
 			    	  	}
 		  	    		else if(field == 'carrier'){
@@ -803,6 +870,60 @@
 			    	  		var reviewLevel = ["Distribution", "Route Management"];
 			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
 			    	  	}
+		  	    		
+		  	    		//ADDON FARE
+		  	    		else if(field == 'addonFareStatus'){
+			    	  	    //cannot be edited by
+			    	  		var reviewLevel = [];
+			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+			    	  	}
+		  	    		else if(field == 'addonFareCarrier'){
+			    	  	    //cannot be edited by
+			    	  		var reviewLevel = [];
+			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+			    	  	}
+		  	    		else if(field == 'addonFareTarno'){
+			    	  	    //cannot be edited by
+			    	  		var reviewLevel = [];
+			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+			    	  	}
+		  	    		else if(field == 'addonFareTarcd'){
+			    	  	    //cannot be edited by
+			    	  		var reviewLevel = [];
+			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+			    	  	}
+		  	    		else if(field == 'addonFareOrigin'){
+			    	  	    //cannot be edited by
+			    	  		var reviewLevel = [];
+			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+			    	  	}
+		  	    		else if(field == 'addonFareDestination'){
+			    	  	    //cannot be edited by
+			    	  		var reviewLevel = [];
+			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+			    	  	}
+		  	    		else if(field == 'addonFareBucket'){
+			    	  	    //cannot be edited by
+			    	  		var reviewLevel = [];
+			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+			    	  	}
+		  	    		
+		  	    		else if(field == 'addonFareCarrier'){
+			    	  	    //cannot be edited by
+			    	  		var reviewLevel = [];
+			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+			    	  	}
+		  	    		else if(field == 'addonFareCarrier'){
+			    	  	    //cannot be edited by
+			    	  		var reviewLevel = [];
+			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+			    	  	}
+		  	    		else if(field == 'addonFareCarrier'){
+			    	  	    //cannot be edited by
+			    	  		var reviewLevel = [];
+			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+			    	  	}
+		  	    		
 	    	        }
     	  		}
     	  		else{
