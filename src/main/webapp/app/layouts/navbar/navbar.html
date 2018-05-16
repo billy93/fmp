@@ -16,14 +16,14 @@
 
 		<!-- left menu -->
 		<ul>
-		    <li class="menu-list has-sub active">
+		    <li class="menu-list has-sub">
 		    	<a href="#">
 		    		<i class="fa fa-file-text"></i><span>Work Queue</span>
 		    	</a>
 		    	<div class="sub-menu">
 		    		<ul>
 		    		    <li>
-		    		    	<a href="work-order.html"><i class="fa fa-circle"></i> Work Order</a>
+		    		    	<a ui-sref="work-package" ng-click="vm.collapseNavbar()"><i class="fa fa-circle"></i> Work Order</a>
 		    		    </li>
 		    		</ul>
 		    	</div>
@@ -36,19 +36,10 @@
 		    	<div class="sub-menu">
 		    		<ul>
 		    		    <li>
-		    		    	<a href="afd-query.html"><i class="fa fa-circle"></i> AFD Query 1</a>
+		    		    	<a ui-sref="afd-query" ng-click="vm.collapseNavbar()"><i class="fa fa-circle"></i> AFD Query</a>
 		    		    </li>
 		    		    <li>
-		    		    	<a href="#"><i class="fa fa-circle"></i> AFD Query 2</a>
-		    		    </li>
-		    		    <li>
-		    		    	<a href="#"><i class="fa fa-circle"></i> AFD Query 3</a>
-		    		    </li>
-		    		    <li>
-		    		    	<a href="#"><i class="fa fa-circle"></i> AFD Query 4</a>
-		    		    </li>
-		    		    <li>
-		    		    	<a href="#"><i class="fa fa-circle"></i> AFD Query 5</a>
+		    		    	<a ui-sref="yqyr-query" ng-click="vm.collapseNavbar()"><i class="fa fa-circle"></i> YQ/YR Query </a>
 		    		    </li>
 		    		</ul>
 		    	</div>
@@ -60,10 +51,17 @@
 		    	</a>
 		    	<div class="tooltip">Fare Recommendation</div>
 		    </li>
-		    <li class="menu-list">
+		    <li class="menu-list has-sub">
 		    	<a href="#">
 		    		<i class="fa fa-list"></i><span>Entities</span>
 		    	</a>
+		    	<div class="sub-menu">
+		    		<ul>
+		    		    <li>
+		    		    	<a ui-sref="system-parameter" ng-click="vm.collapseNavbar()"><i class="fa fa-circle"></i> System Parameter </a>
+		    		    </li>
+		    		</ul>
+		    	</div>
 		    	<div class="tooltip">Entities</div>
 		    </li>
 		</ul>				

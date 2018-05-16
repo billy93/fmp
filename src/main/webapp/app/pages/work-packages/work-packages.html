@@ -404,12 +404,9 @@
 												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">WO Name</th>
 												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Review Level</th>
 												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Priority</th>
-												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Target Sub</th>
 												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Filling Date</th>
 												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Distribution Date</th>
 												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Disc/Expiry Date</th>
-												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Filling Status</th>
-												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Filling Error</th>
 												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Locked By</th>
 												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Locked Since</th>
 											</tr>
@@ -434,12 +431,9 @@
 							                    <td>{{workPackage.name}}</td>
 							                    <td>{{workPackage.reviewLevel}}</td>
 							                    <td data-translate="{{'fmpApp.Priority.' + workPackage.priority}}">{{workPackage.priority}}</td>
-							                    <td>{{workPackage.targetSub}}</td>
 							                    <td>{{workPackage.fillingDate | date:'medium'}}</td>
 							                    <td>{{workPackage.distributionDate | date:'medium'}}</td>
 							                    <td>{{workPackage.discExpiryDate | date:'medium'}}</td>
-							                    <td data-translate="{{'fmpApp.Status.' + workPackage.fillingStatus}}">{{workPackage.fillingStatus}}</td>
-							                    <td>{{workPackage.fillingError}}</td>
 							                    <td>{{workPackage.lockedBy}}</td>
 							                    <td>{{workPackage.lockedSince | date:'medium'}}</td>
 											</tr>										
