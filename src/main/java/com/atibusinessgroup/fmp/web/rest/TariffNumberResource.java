@@ -96,6 +96,21 @@ public class TariffNumberResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/tariff-numbers");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+    
+    /**
+     * GET  /tariff-numbers/getAll : get all the tariffNumbers.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of tariffNumbers in body
+     */
+    @GetMapping("/tariff-numbers/getAll")
+    @Timed
+    public ResponseEntity<List<TariffNumber>> getAllTariffNumbers() {
+        log.debug("REST request to get a page of TariffNumbers");
+        List<TariffNumber> page = tariffNumberRepository.findAll();
+//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/tariff-numbers");
+        return new ResponseEntity<>(page, null, HttpStatus.OK);
+    }
 
     /**
      * GET  /tariff-numbers/:id : get the "id" tariffNumber.

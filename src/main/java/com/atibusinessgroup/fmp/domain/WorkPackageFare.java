@@ -32,6 +32,9 @@ public class WorkPackageFare implements Serializable {
     @Field("recommended_amount")
     private String recommendedAmount;
     
+    @Field("tariff_number")
+    private TariffNumber tariffNumber;
+    
     @Field("tarno")
     private String tarno;
     
@@ -81,6 +84,15 @@ public class WorkPackageFare implements Serializable {
     private String percentBaseFare;
     
     
+    
+	public TariffNumber getTariffNumber() {
+		return tariffNumber;
+	}
+
+	public void setTariffNumber(TariffNumber tariffNumber) {
+		this.tariffNumber = tariffNumber;
+	}
+
 	public String getPercentBaseFare() {
 		return percentBaseFare;
 	}

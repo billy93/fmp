@@ -96,6 +96,21 @@ public class CurrencyResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/currencies");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+    
+    /**
+     * GET  /currencies/getAll: get all the currencies.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of currencies in body
+     */
+    @GetMapping("/currencies/getAll")
+    @Timed
+    public ResponseEntity<List<Currency>> getAllCurrencies() {
+        log.debug("REST request to get a page of Currencies");
+        List<Currency> page = currencyRepository.findAll();
+//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/currencies");
+        return new ResponseEntity<>(page, null, HttpStatus.OK);
+    }
 
     /**
      * GET  /currencies/:id : get the "id" currency.
