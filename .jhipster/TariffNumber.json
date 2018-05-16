@@ -1,0 +1,27 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "tarNo",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "tarCd",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "global",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        }
+    ],
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "tariff_number",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}
