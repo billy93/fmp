@@ -144,8 +144,11 @@ $(function(){
 	});
 
 	// tabs
-	$(".nav-tabs li").on('click',function(){
+	$(".nav-tabs li").on('click',function(e){
+		e.preventDefault();
 		var _href = $(this).find('a').attr('href');
+		var baseurl = window.location.origin+window.location.pathname;
+
 		$(".nav-tabs li").removeClass('active');
 		$(this).addClass('active');
 		$('.tab-content .tab-pane').removeClass('active');

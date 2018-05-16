@@ -632,19 +632,19 @@
       }
 
       function onSaveSuccess (result) {
-    	      $scope.$emit('fmpApp:workPackageUpdate', result);
-    	      var data = result;
-    	      
-    	  data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
-    	  data.saleDate = DateUtils.convertDateTimeFromServer(data.saleDate);
-          data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
-          data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
-          data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
-          data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
-          data.lockedSince = DateUtils.convertDateTimeFromServer(data.lockedSince);
-          
-          vm.workPackage = data;
-          vm.isSaving = false;
+	      //$scope.$emit('fmpApp:workPackageUpdate', result);
+//	      var data = result;
+//    	      
+//    	  data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
+//    	  data.saleDate = DateUtils.convertDateTimeFromServer(data.saleDate);
+//          data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+//          data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
+//          data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
+//          data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
+//          data.lockedSince = DateUtils.convertDateTimeFromServer(data.lockedSince);
+//          
+//          vm.workPackage = data;
+//          vm.isSaving = false;
       }
 
       function onSaveError () {
