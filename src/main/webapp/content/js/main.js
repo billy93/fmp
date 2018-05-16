@@ -102,7 +102,7 @@ $(function(){
 	});
 
 	// comment
-	$("#btn-comment").on('click',function(){
+	/*$("#btn-comment").on('click',function(){
 		var _text = $('#comment-area').val();
 		var currentdate = new Date(); 
     	var datetime = currentdate.getDate() + "/"
@@ -141,7 +141,7 @@ $(function(){
 			alert('diisi dulu mas bro');
 		}
 		$('#comment-area').val('');		
-	});
+	});*/
 
 	// tabs
 	$(".nav-tabs li").on('click',function(e){

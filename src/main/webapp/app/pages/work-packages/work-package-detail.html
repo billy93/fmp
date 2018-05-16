@@ -158,61 +158,66 @@
 										</ul>
 										<div class="tab-content">
 											<div class="tab-pane active" id="comment">
-												<div class="box-header">
-													Comment
-												</div>
+												<div class="box-header"></div>
 												<div class="box-body bbgrey">
 													<div class="form-group">
 														<label>Comment</label>
-														<textarea class="form-control" rows="3" placeholder="Enter ..." id="comment-area"></textarea>
+														<textarea ng-model="vm.commentString" class="form-control" rows="3" placeholder="Enter ..." id="comment-area"></textarea>
 													</div>
 													<div class="clearfix">
 														<div class="pull-right">
-															<button class="btn btn-default small btn-secondary" id="btn-comment"></i>Send</button>
+															<button class="btn btn-default small btn-secondary" ng-click="vm.addComment(vm.commentString)" skip-disable></i>Send</button>
 														</div>
 													</div>										
 												</div>
-												<div class="box-body">
-													<div class="comment-wrapper"></div>
-												</div> 
+									        	 <div class="box-body">
+									        		<div class="comment-wrapper">
+										    			<div class="comment-list" ng-repeat="comment in vm.workPackage.comment.slice().reverse() track by $index">
+													    	<div class="clearfix">
+													    		<div class="pull-left comment-detail">{{comment.username}}</div>
+													    		<div class="pull-right comment-detail">{{comment.createdTime | date: 'short'}}</div>
+													    	</div>
+													    	<div class="comment-message">{{comment.comment}}</div>
+													    </div>
+										    		</div>
+									        	</div>
 											</div>
 											<div class="tab-pane" id="inter-office">
-												<div class="box-header">
-													Inter Office
-												</div>
+												<div class="box-header"></div>
 												<div class="box-body bbgrey">
 													<div class="form-group">
 														<label>Inter Office</label>
-														<textarea class="form-control" rows="3" placeholder="Enter ..." id="inter-office-area"></textarea>
+														<textarea class="form-control" rows="3" placeholder="Enter ..." id="inter-office-area" ng-model="vm.commentIOString" ng-disabled="vm.isFieldDisable('ioComment')"></textarea>
 													</div>
 													<div class="clearfix">
 														<div class="pull-right">
-															<button class="btn btn-default small btn-secondary" id="btn-inter-office"></i>Send</button>
+															<button class="btn btn-default small btn-secondary" id="btn-inter-office" ng-click="vm.addComment(vm.commentString)" skip-disable></i>Send</button>
 														</div>
 													</div>										
 												</div>
 												<div class="box-body">
-													<div class="comment-wrapper"></div>
-												</div> 
+									        		<div class="comment-wrapper">
+										    			<div class="comment-list" ng-repeat="comment in vm.workPackage.comment.slice().reverse() track by $index">
+													    	<div class="clearfix">
+													    		<div class="pull-left comment-detail">{{comment.username}}</div>
+													    		<div class="pull-right comment-detail">{{comment.createdTime | date: 'short'}}</div>
+													    	</div>
+													    	<div class="comment-message">{{comment.comment}}</div>
+													    </div>
+										    		</div>
+									        	</div>
 											</div>
 											<div class="tab-pane" id="rate-sheet-comment">
-												<div class="box-header">
-													Rate Sheet Comment
-												</div>
+												<div class="box-header"></div>
 												<div class="box-body bbgrey">
 													<div class="form-group">
-														<label>Inter Office</label>
-														<textarea class="form-control" rows="3" placeholder="Enter ..." id="rate-sheet-comment-area"></textarea>
-													</div>
-													<div class="clearfix">
-														<div class="pull-right">
-															<button class="btn btn-default small btn-secondary" id="btn-rate-sheet-comment"></i>Send</button>
-														</div>
-													</div>										
-												</div>
-												<div class="box-body">
-													<div class="comment-wrapper"></div>
-												</div> 
+														<label>Rate Sheet Comment</label>
+														<textarea class="form-control" rows="3" placeholder="Enter ..." id="ratesheetComment" ng-model="vm.workPackage.ratesheetComment" name="ratesheetComment"
+						                    ng-disabled="vm.isFieldDisable('ratesheetComment')" 
+						                    ng-style="editForm.ratesheetComment{{$index}}.$error.required && vm.errorStyle"
+						                    ng-required="vm.checkRequiredField('ratesheetComment')"></textarea>
+													</div>								
+												</div>	 
 											</div>
 										</div>
 									</div>
