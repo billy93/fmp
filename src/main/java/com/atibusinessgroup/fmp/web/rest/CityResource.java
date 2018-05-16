@@ -98,6 +98,21 @@ public class CityResource {
     }
 
     /**
+     * GET  /cities : get all the cities.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of cities in body
+     */
+    @GetMapping("/cities/getAll")
+    @Timed
+    public ResponseEntity<List<City>> getAllCities() {
+        log.debug("REST request to get a page of Cities");
+        List<City> page = cityRepository.findAll();
+//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/cities");
+        return new ResponseEntity<>(page, null, HttpStatus.OK);
+    }
+    
+    /**
      * GET  /cities/:id : get the "id" city.
      *
      * @param id the id of the city to retrieve

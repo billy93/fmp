@@ -20,7 +20,8 @@
                     return data;
                 }
             },
-            'update': { method:'PUT' }
+            'update': { method:'PUT' },
+            'getAll': { method: 'GET', isArray: true, url:"api/tariff-numbers/getAll"},
         });
     }
 })();

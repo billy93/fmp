@@ -21,8 +21,8 @@
      * @param Clipboard
      * @returns
      */
-    WorkPackageDetailController.$inject = ['FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user'];
-    function WorkPackageDetailController(FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user) {
+    WorkPackageDetailController.$inject = ['currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user'];
+    function WorkPackageDetailController(currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user) {
        var vm = this;
         vm.currentTab = [true];
         vm.currentAddonTab = [];
@@ -69,7 +69,9 @@
         	"P" : "Trip Completed",
         	"c" : "Trip Commence"
         };
-        
+        vm.tariffNumber = tariffNumber;
+        vm.cities = cities;
+        vm.currencies = currencies;
         //FARES TAB
         vm.selectedTab = 0;       
         vm.selectTab = function(index){

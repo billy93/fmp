@@ -70,6 +70,21 @@
                         return User.get({login : account.login}).$promise;
                     });
                 }],
+                tariffNumber: ['$stateParams', 'TariffNumber', 'Principal', function($stateParams, TariffNumber, Principal) {
+                	return Principal.identity().then(function(account) {
+                        return TariffNumber.getAll().$promise;
+                    });
+                }],
+                cities: ['$stateParams', 'City', 'Principal', function($stateParams, City, Principal) {
+                	return Principal.identity().then(function(account) {
+                        return City.getAll().$promise;
+                    });
+                }],
+                currencies: ['$stateParams', 'Currency', 'Principal', function($stateParams, Currency, Principal) {
+                	return Principal.identity().then(function(account) {
+                        return Currency.getAll().$promise;
+                    });
+                }],
                 previousState: ["$state", function ($state) {
                     var currentStateData = {
                         name: $state.current.name || 'work-package',

@@ -1,3 +1,9 @@
+<style>
+.ui-select-dropdown{
+	min-width:300px;
+}
+</style>
+
 <form name="editForm" role="form" novalidate>	
 	
 	<!-- main container -->
@@ -425,7 +431,7 @@
 																		<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Ratesheet Comment</th>
 																	</tr>
 																</thead>
-																<tbody ng-repeat="fare in vm.workPackage.fareSheet[vm.selectedTab].fares track by $index" ng-click="vm.selectedFare = fare" >
+																<tbody ng-repeat="fare in vm.workPackage.fareSheet[vm.selectedTab].fares track by $index" >
 																	<tr role="row" class="datatable-row" ng-click="vm.rowTableClick($event, $index)">
 																		<td>{{$index+1}}</td>
 																		<td>
@@ -455,7 +461,24 @@
 																		</td>																
 																		<td>{{fare.action}}</td>
 																		<td>
-																			<span ng-if="vm.isFieldEditable(fare, 'tarno')">								
+																			<ui-select ng-model="fare.tariffNumber" name="tarno{{$parent.$index}}{{$index}}" theme="select2" ng-disabled="vm.disabled" title="Choose a person"  class="form-control"
+																			 ng-click="$event.stopPropagation()"
+																			ng-required="vm.checkRequiredField('tarno') && fare.action != 'Canceled'"  
+																			ng-disabled="vm.isFieldDisable('tarno')"
+																			ng-class="{'must-fill': editForm.editFormATPCO.tarno{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+														                    	>
+																			    <ui-select-match placeholder="TarNo">{{$select.selected.tarNo == null ? $select.selected.value.tarNo : $select.selected.tarNo}}</ui-select-match>
+																				 <ui-select-choices style="min-width:300px" repeat="value.value as (key, value) in vm.tariffNumber | filter: { value: { tarNo: $select.search }}">
+																			      <div ng-bind-html="value.value.tarNo | highlight: $select.search"></div>
+																			      <small>
+																			        TarNo : {{value.value.tarNo}}
+																			        TarCd : {{value.value.tarCd}}
+																			        Global : {{value.value.global}}
+																			      </small>
+																			    </ui-select-choices>
+																			  </ui-select>
+																			  
+																			<!-- <span ng-if="vm.isFieldEditable(fare, 'tarno')">								
 													           					<input type="text" class="form-control" name="tarno{{$parent.$index}}{{$index}}" id="field_tarno" 
 													           					ng-required="vm.checkRequiredField('tarno') && fare.action != 'Canceled'"  
 													           					ng-class="{'must-fill': editForm.editFormATPCO.tarno{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
@@ -464,10 +487,28 @@
 													           				</span>
 													           				<span ng-if="!vm.isFieldEditable(fare, 'tarno')">
 													           					{{fare.tarno}}
-													           				</span>
+													           				</span> -->
 																		</td>
 																		<td>
-																			<span ng-if="vm.isFieldEditable(fare, 'tarcd')">
+																			<ui-select ng-model="fare.tariffNumber" theme="select2" ng-disabled="vm.disabled" class="form-control"
+																			 ng-click="$event.stopPropagation()"
+																			name="tarcd{{$parent.$index}}{{$index}}"
+																			ng-required="vm.checkRequiredField('tarcd') && fare.action != 'Canceled'"  
+																			ng-disabled="vm.isFieldDisable('tarcd')"
+																			
+																			ng-class="{'must-fill': editForm.editFormATPCO.tarcd{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+														                    	>
+																			    <ui-select-match placeholder="TarCd">{{$select.selected.tarCd == null ? $select.selected.value.tarCd : $select.selected.tarCd}}</ui-select-match>
+																				 <ui-select-choices style="min-width:300px" repeat="value.value as (key, value) in vm.tariffNumber | filter: { value: { tarCd: $select.search }}">
+																			      <div ng-bind-html="value.value.tarCd | highlight: $select.search"></div>
+																			      <small>
+																			        TarNo : {{value.value.tarNo}}
+																			        TarCd : {{value.value.tarCd}}
+																			        Global : {{value.value.global}}
+																			      </small>
+																			    </ui-select-choices>
+																			  </ui-select>
+																			<!-- <span ng-if="vm.isFieldEditable(fare, 'tarcd')">
 													           					<input type="text" class="form-control" name="tarcd{{$parent.$index}}{{$index}}" id="field_tarcd" 
 													           					ng-disabled="vm.isFieldDisable('tarcd')"
 													           					ng-required="vm.checkRequiredField('tarcd') && fare.action != 'Canceled'"  
@@ -476,13 +517,35 @@
 													           				</span>
 													           				<span ng-if="!vm.isFieldEditable(fare, 'tarcd')">
 														           				{{fare.tarcd}}
-													           				</span>
+													           				</span> -->
 																		</td>
-																		<td>EH</td>
+																		<td>{{fare.tariffNumber.global}}</td>
 																		<td>
-																			<span ng-if="vm.isFieldEditable(fare, 'origin')">
+																			<ui-select ng-model="fare.origin" theme="select2" ng-disabled="vm.disabled" class="form-control"
+																			 ng-click="$event.stopPropagation()"
+																			name="origin{{$parent.$index}}{{$index}}"
+																			ng-required="vm.checkRequiredField('origin') && fare.action != 'Canceled'"  
+																			ng-disabled="vm.isFieldDisable('origin')"
+																			
+																			ng-class="{'must-fill': editForm.editFormATPCO.origin{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+														                    	>
+																			    <ui-select-match placeholder="Origin">{{$select.selected.value.cityCode}}</ui-select-match>
+																				 <ui-select-choices style="min-width:300px" repeat="value.value.cityCode as (key, value) in vm.cities | filter: { value: { cityCode: $select.search }}">
+																			      <div ng-bind-html="value.value.cityCode | highlight: $select.search"></div>
+																			      <small>
+																			        City Code : {{value.value.cityCode}}
+																			        City Name : {{value.value.cityName}}
+																			        Country Code : {{value.value.countryCode}}
+																			        Country Name : {{value.value.countryName}}
+																			        
+																			      </small>
+																			    </ui-select-choices>
+																			  </ui-select>
+																			  
+																			<!-- <span ng-if="vm.isFieldEditable(fare, 'origin')">
 												                				<input type="text" class="form-control" name="origin{{$parent.$index}}{{$index}}" id="field_origin" 
 												                				ng-disabled="vm.isFieldDisable('origin')"
+												                				 ng-click="$event.stopPropagation()"
 												                				ng-required="vm.checkRequiredField('origin') && fare.action != 'Canceled'"  
 												                				ng-class="{'must-fill': editForm.editFormATPCO.origin{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
 														                    	ng-model="fare.origin"/>
@@ -490,12 +553,33 @@
 												                			</span>
 												                			<span ng-if="!vm.isFieldEditable(fare, 'origin')">
 												                			{{fare.origin}}
-												                			</span>
+												                			</span> -->
 																		</td>
 																		<td>
-																			<span ng-if="vm.isFieldEditable(fare, 'destination')">
+																		<ui-select ng-model="fare.destination" theme="select2" ng-disabled="vm.disabled" class="form-control"
+																			 ng-click="$event.stopPropagation()"
+																			name="destination{{$parent.$index}}{{$index}}"
+																			ng-required="vm.checkRequiredField('destination') && fare.action != 'Canceled'"  
+																			ng-disabled="vm.isFieldDisable('destination')"
+																			
+																			ng-class="{'must-fill': editForm.editFormATPCO.destination{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+														                    	>
+																			    <ui-select-match placeholder="Destination">{{$select.selected.value.cityCode}}</ui-select-match>
+																				 <ui-select-choices style="min-width:300px" repeat="value.value.cityCode as (key, value) in vm.cities | filter: { value: { cityCode: $select.search }}">
+																			      <div ng-bind-html="value.value.cityCode | highlight: $select.search"></div>
+																			      <small>
+																			        City Code : {{value.value.cityCode}}
+																			        City Name : {{value.value.cityName}}
+																			        Country Code : {{value.value.countryCode}}
+																			        Country Name : {{value.value.countryName}}
+																			        
+																			      </small>
+																			    </ui-select-choices>
+																			  </ui-select>
+																			<!-- <span ng-if="vm.isFieldEditable(fare, 'destination')">
 												                				<input type="text" class="form-control" name="destination{{$parent.$index}}{{$index}}" id="field_destination" 
 												                				ng-disabled="vm.isFieldDisable('destination')"
+												                				 ng-click="$event.stopPropagation()"
 												                				ng-required="vm.checkRequiredField('destination') && fare.action != 'Canceled'"  
 												                				ng-class="{'must-fill': editForm.editFormATPCO.destination{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
 													                    		ng-model="fare.destination"/>
@@ -503,12 +587,13 @@
 												                			</span>
 												                			<span ng-if="!vm.isFieldEditable(fare, 'destination')">
 												                			{{fare.destination}}
-												                			</span>
+												                			</span> -->
 																		</td>
 																		<td>
 																			<span ng-if="vm.isFieldEditable(fare, 'farebasis')">
 												                				<input type="text" class="form-control" name="farebasis{{$parent.$index}}{{$index}}" id="field_farebasis"
 												                				ng-disabled="vm.isFieldDisable('farebasis')"
+												                				 ng-click="$event.stopPropagation()"
 												                				ng-required="vm.checkRequiredField('farebasis') && fare.action != 'Canceled'" 
 												                				ng-class="{'must-fill': editForm.editFormATPCO.farebasis{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
 													                    		ng-model="fare.fareBasis"/>												                			
@@ -534,6 +619,7 @@
 													           					<select class="form-control" 
 																	             name="cabin{{$parent.$index}}{{$index}}"
 																	             ng-required="vm.checkRequiredField('cabin')"
+																	             ng-click="$event.stopPropagation()"
 																	             ng-class="{'must-fill': !editForm.editFormATPCO.cabin{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"	
 																	             ng-model="fare.cabin" id="field_cabin" 
 																	             ng-disabled="vm.isFieldDisable('cabin')"
@@ -600,14 +686,32 @@
 													                			</span>
 												               			</td>
 												               			<td>
-												               				<span ng-if="vm.isFieldEditable(fare, 'currency')">
+													               			<ui-select ng-model="fare.currency" theme="select2" ng-disabled="vm.disabled" class="form-control"
+																				 ng-click="$event.stopPropagation()"
+																				name="currency{{$parent.$index}}{{$index}}"
+																				ng-required="vm.checkRequiredField('currency') && fare.action != 'Canceled'"  
+																				ng-disabled="vm.isFieldDisable('currency')"
+																				
+																				ng-class="{'must-fill': editForm.editFormATPCO.currency{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+															                    	>
+																				    <ui-select-match placeholder="Currency">{{$select.selected.value.currencyCode}}</ui-select-match>
+																					 <ui-select-choices style="min-width:300px" repeat="value.value.currencyCode as (key, value) in vm.currencies | filter: { value: { currencyCode: $select.search }}">
+																				      <div ng-bind-html="value.value.currencyCode | highlight: $select.search"></div>
+																				      <small>
+																				        Currency Code : {{value.value.currencyCode}}
+																				        Currency Name : {{value.value.currencyName}}
+																				        
+																				      </small>
+																				    </ui-select-choices>
+																				  </ui-select>
+												               				<!-- <span ng-if="vm.isFieldEditable(fare, 'currency')">
 												                				<input type="text" class="form-control" name="currency{{$parent.$index}}{{$index}}" id="field_currency{{$parent.$index}}{{$index}}"
 												                				ng-disabled="vm.isFieldDisable('currency')"
 												                				ng-required="vm.checkRequiredField('currency')" 
 												                				ng-class="{'must-fill': editForm.editFormATPCO.currency{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 																	            ng-model="fare.currency"/>
 												                			
-												                			</span>
+												                			</span> -->
 												                			<span ng-if="!vm.isFieldEditable(fare, 'currency')">
 												                				{{fare.currency}}
 												                			</span>
@@ -1280,7 +1384,7 @@
 											</div>
 											
 											<div class="tab-pane" ng-class="{active:vm.currentTabAttachment}">
-												<div class="text-center no-data">No Attachment Available</div>
+												
 											</div>
 											<div class="tab-pane" ng-class="{active:vm.currentTabFilingDetail}">
 												<div class="text-center no-data">No Attachment Available</div>
@@ -1294,6 +1398,7 @@
 				</div>
 			</div>			
 		</div>
+		
 </form>
 	
 	<script>
