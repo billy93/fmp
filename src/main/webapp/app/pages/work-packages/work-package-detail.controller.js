@@ -1967,6 +1967,20 @@
     	 }
       }
       
+      vm.addInterOffice = function(ioString){
+ 	  	 if(ioString != null){
+ 	    	  if(vm.workPackage.interofficeComment == null){
+ 	      		vm.workPackage.interofficeComment = [];
+ 	      }
+ 	    	  
+     	  	vm.workPackage.interofficeComment.push({
+     	  		comment:ioString
+     	  	});
+     	  	vm.save();
+     	  	vm.addInterOffice = null;
+     	 }
+       }
+      
       
       vm.export = function(){
     	  	alert('EXPORT');
