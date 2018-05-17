@@ -5,74 +5,129 @@
     <div class="table-responsive">
         <table class="jh-table table table-striped">
             <thead>
-                <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-                    <th jh-sort-by="id"><span>ID</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="source"><span>Source</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="sc"><span>S/C</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="tariffCode"><span>Tar Cd</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="carrier"><span>Cxr</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="origin"><span>Orig</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="originCountry"><span>Orig Cn</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="destination"><span>Dest</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="destinationCountry"><span>Dest Cn</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="fareClass"><span>Fare Cls</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="bookingClass"><span>Bkg Cls</span> <span class="glyphicon glyphicon-sort"></span></th> 
-                    <th jh-sort-by="cabin"><span>Cabin</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="owrt"><span>OW/RT</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="footnote"><span>Ftnt</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="routingNo"><span>Rtg No</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="ruleNo"><span>Rule No</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="mpm"><span>MPM</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="currency"><span>Curr</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="baseAmount"><span>Base Amt</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="error"><span>Error</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="tfcCalcDate"><span>TFC Calc Date</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="tfcFocusDate"><span>TFC Focus Date</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="yqyr"><span>YQYR</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="taxes"><span>Taxes</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="tfc"><span>TFC</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="aif"><span>AIF</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="itinerary"><span>Itinerary</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="overrideIndicator"><span>Override Ind</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="effectiveDate"><span>Eff Date</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="discontinueDate"><span>Disc Date</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="gfsRef"><span>GFS Ref</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="global"><span>Global</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="ruleFocusDate"><span>Rule Focus Date</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="sellable"><span>Sellable</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="travelStart"><span>Travel Start</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="travelEnd"><span>Travel End</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="travelComplete"><span>Travel Complete</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="saleStart"><span>Sale Start</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="saleEnd"><span>Sale End</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="resStart"><span>Res Start</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="resEnd"><span>Res End</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="minStay"><span>Min Stay</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="maxStay"><span>Max Stay</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="advancePurchase"><span>Adv Pur</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="advancePurchase"><span>Adv Pur</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="dowIn"><span>DOW In</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="dowOut"><span>DOW Out</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="season"><span>Season</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="firstSeasonDate"><span>F Season Date</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="lastSeasonDate"><span>L Season Date</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="travelDateRanges"><span>Travel Date Ranges</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="fareType"><span>Fare Type</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="paxType"><span>Pax Type</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="wpId"><span>WP Id</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="groupFare"><span>Group Fare</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="refAmount"><span>Ref Amt</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="refYqyr"><span>Ref YQYR</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="refTaxes"><span>Ref Taxes</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="refTfc"><span>Ref TFC</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="refAif"><span>Ref AIF</span> <span class="glyphicon glyphicon-sort"></span></th>
+                <tr>
+                    <th>ID</th>
+                    <th>Source</th>
+                    <th>S/C</th>
+                    <th>Tar Cd</th>
+                    <th>Cxr</th>
+                    <th>Orig</th>
+                    <th>Orig Cn</th>
+                    <th>Dest</th>
+                    <th>Dest Cn</th>
+                    <th>Fare Cls</th>
+                    <th>Bkg Cls</th> 
+                    <th>Cabin</th>
+                    <th>OW/RT</th>
+                    <th>Ftnt</th>
+                    <th>Rtg No</th>
+                    <th>Rule No</th>
+                    <th>MPM</th>
+                    <th>Curr</th>
+                    <th>Base Amt</th>
+                    <th>Error</th>
+                    <th>TFC Calc Date</th>
+                    <th>TFC Focus Date</th>
+                    <th>YQYR</th>
+                    <th>Taxes</th>
+                    <th>TFC</th>
+                    <th>AIF</th>
+                    <th>Itinerary</th>
+                    <th>Override Ind</th>
+                    <th>Eff Date</th>
+                    <th>Disc Date</th>
+                    <th>GFS Ref</th>
+                    <th>Global</th>
+                    <th>Rule Focus Date</th>
+                    <th>Sellable</th>
+                    <th>Travel Start</th>
+                    <th>Travel End</th>
+                    <th>Travel Complete</th>
+                    <th>Sale Start</th>
+                    <th>Sale End</th>
+                    <th>Res Start</th>
+                    <th>Res End</th>
+                    <th>Min Stay</th>
+                    <th>Max Stay</th>
+                    <th>Adv Pur</th>
+                    <th>DOW In</th>
+                    <th>DOW Out</th>
+                    <th>Season</th>
+                    <th>F Season Date</th>
+                    <th>L Season Date</th>
+                    <th>Travel Date Ranges</th>
+                    <th>Fare Type</th>
+                    <th>Pax Type</th>
+                    <th>WP Id</th>
+                    <th>Group Fare</th>
+                    <th>Ref Amt</th>
+                    <th>Ref YQYR</th>
+                    <th>Ref Taxes</th>
+                    <th>Ref TFC</th>
+                    <th>Ref AIF</th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="afdQuery in vm.afdQueries track by afdQuery.id">
-                    <td><a ui-sref="system-parameter-detail({id:afdQuery.id})">{{afdQuery.id}}</a></td>
-                    <td>{{afdQuery.name}}</td>
-                    <td>{{afdQuery.value}}</td>
+                    <td><a ui-sref="system-parameter-detail({id:afdQuery.id})">{{$index + 1}}</a></td>
+                    <td>{{afdQuery.source}}</td>
+                    <td><b>NM</b></td>
+                    <td>{{afdQuery.tariffNo}}</td>
+                    <td>{{afdQuery.carrierCode}}</td>
+                    <td>{{afdQuery.originCity}}</td>
+                    <td>{{afdQuery.originCountry}}</td>
+                    <td>{{afdQuery.destinationCity}}</td>
+                    <td>{{afdQuery.destinationCountry}}</td>
+                    <td>{{afdQuery.fareClassCode}}</td>
+                    <td><b>NM</b></td>
+                    <td><b>NM</b></td>
+                    <td>{{afdQuery.owrt}}</td>
+                    <td>{{afdQuery.footnote}}</td>
+                    <td>{{afdQuery.routingNo}}</td>
+                    <td>{{afdQuery.ruleNo}}</td>
+                    <td>{{afdQuery.maximumPermittedMileage}}</td>
+                    <td>{{afdQuery.fareOriginCurrencyCode}}</td>
+                    <td>{{afdQuery.fareOriginAmount.low}}</td>
+                    <td><b>NM</b></td>
+                    <td><b>NM</b></td>
+                    <td><b>NM</b></td>
+                    <td><b>NM</b></td>
+                    <td><b>NM</b></td>
+                    <td><b>NM</b></td>
+                    <td><b>NM</b></td>
+                    <td><b>NM</b></td>
+                    <td><b>NM</b></td>
+                    <td><span ng-if="afdQuery.tariffEffectiveDateObject == 'indef'">NONE</span><span ng-if="afdQuery.tariffEffectiveDateObject != 'indef'">{{afdQuery.tariffEffectiveDateObject | date:'ddMMMyyyy'}}</span></td>
+                	<td><span ng-if="afdQuery.discontinueDateObject == 'indef'">NONE</span><span ng-if="afdQuery.discontinueDateObject != 'indef'">{{afdQuery.discontinueDateObject | date:'ddMMMyyyy'}}</span></td>
+                	<td><b>NM</b></td>
+                	<td>{{afdQuery.globalIndicator}}</td>
+                	<td><b>NM</b></td>
+                	<td><b>NM</b></td>
+                	<td><b>NM</b></td>
+                	<td><b>NM</b></td>
+                	<td><b>NM</b></td>
+                	<td><span ng-if="afdQuery.firstSaleDateObject == 'indef'">NONE</span><span ng-if="afdQuery.firstSaleDateObject != 'indef'">{{afdQuery.firstSaleDateObject | date:'ddMMMyyyy'}}</span></td>
+                	<td><span ng-if="afdQuery.lastSaleDateObject == 'indef'">NONE</span><span ng-if="afdQuery.lastSaleDateObject != 'indef'">{{afdQuery.lastSaleDateObject | date:'ddMMMyyyy'}}</span></td>
+                	<td><b>NM</b></td>
+                	<td><b>NM</b></td>
+                	<td><b>NM</b></td>
+                	<td><b>NM</b></td>
+                	<td><b>NM</b></td>
+                	<td><b>NM</b></td>
+                	<td><b>NM</b></td>
+                	<td><b>NM</b></td>
+                	<td><b>NM</b></td>
+                	<td><b>NM</b></td>
+                	<td><b>NM</b></td>
+               		<td>{{afdQuery.fareType}}</td>
+                	<td><b>NM</b></td>
+                	<td><b>NM</b></td>
+                	<td><b>NM</b></td>
+                	<td><b>NM</b></td>
+                	<td><b>NM</b></td>
+                	<td><b>NM</b></td>
+                	<td><b>NM</b></td>
+                	<td><b>NM</b></td>
                 </tr>
             </tbody>
         </table>
