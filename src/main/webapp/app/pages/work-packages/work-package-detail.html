@@ -3,7 +3,6 @@
 	min-width:300px;
 }
 </style>
-
 <form name="editForm" role="form" novalidate>	
 	
 	<!-- main container -->
@@ -168,7 +167,8 @@
 												<div class="box-body bbgrey">
 													<div class="form-group">
 														<label>Comment</label>
-														<textarea ng-model="vm.commentString" class="form-control" rows="3" placeholder="Enter ..." id="comment-area"></textarea>
+														<div text-angular="text-angular" name="htmlcontent" ng-model="vm.commentString" ta-disabled='disabled'></div>
+														<!-- <textarea ng-model="vm.commentString" class="form-control" rows="3" placeholder="Enter ..." id="comment-area"></textarea> -->
 													</div>
 													<div class="clearfix">
 														<div class="pull-right">
@@ -183,7 +183,7 @@
 													    		<div class="pull-left comment-detail">{{comment.username}}</div>
 													    		<div class="pull-right comment-detail">{{comment.createdTime | date: 'short'}}</div>
 													    	</div>
-													    	<div class="comment-message">{{comment.comment}}</div>
+													    	<div class="comment-message" ng-bind-html="comment.comment"/>
 													    </div>
 										    		</div>
 									        	</div>
