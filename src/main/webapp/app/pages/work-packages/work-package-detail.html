@@ -174,7 +174,7 @@
 												<div class="box-body bbgrey">
 													<div class="form-group">
 														<label>Comment</label>
-														<div text-angular="text-angular" name="htmlcontent" ng-model="vm.commentString" ta-disabled='disabled'></div>
+														<div text-angular="text-angular" name="comment" ng-model="vm.commentString" ta-disabled='disabled'/>
 														<!-- <textarea ng-model="vm.commentString" class="form-control" rows="3" placeholder="Enter ..." id="comment-area"></textarea> -->
 													</div>
 													<div class="clearfix">
@@ -200,22 +200,22 @@
 												<div class="box-body bbgrey">
 													<div class="form-group">
 														<label>Inter Office</label>
-														<textarea class="form-control" rows="3" placeholder="Enter ..." id="inter-office-area" ng-model="vm.commentIOString" ng-disabled="vm.isFieldDisable('ioComment')"></textarea>
+														<div text-angular="text-angular" name="interOffice" ng-model="vm.ioString" ta-disabled="vm.isFieldDisable('ioComment')" />
 													</div>
 													<div class="clearfix">
 														<div class="pull-right">
-															<button class="btn btn-default small btn-secondary" id="btn-inter-office" ng-click="vm.addComment(vm.commentString)" skip-disable></i>Send</button>
+															<button class="btn btn-default small btn-secondary" id="btn-inter-office" ng-click="vm.addInterOffice(vm.ioString)" ng-disabled="vm.isFieldDisable('ioComment')"></i>Send</button>
 														</div>
 													</div>										
 												</div>
 												<div class="box-body">
 									        		<div class="comment-wrapper">
-										    			<div class="comment-list" ng-repeat="comment in vm.workPackage.comment.slice().reverse() track by $index">
+										    			<div class="comment-list" ng-repeat="comment in vm.workPackage.interofficeComment.slice().reverse() track by $index">
 													    	<div class="clearfix">
 													    		<div class="pull-left comment-detail">{{comment.username}}</div>
 													    		<div class="pull-right comment-detail">{{comment.createdTime | date: 'short'}}</div>
 													    	</div>
-													    	<div class="comment-message">{{comment.comment}}</div>
+													    	<div class="comment-message" ng-bind-html="comment.comment"/>
 													    </div>
 										    		</div>
 									        	</div>
@@ -225,10 +225,10 @@
 												<div class="box-body bbgrey">
 													<div class="form-group">
 														<label>Rate Sheet Comment</label>
-														<textarea class="form-control" rows="3" placeholder="Enter ..." id="ratesheetComment" ng-model="vm.workPackage.ratesheetComment" name="ratesheetComment"
-						                    ng-disabled="vm.isFieldDisable('ratesheetComment')" 
-						                    ng-style="editForm.ratesheetComment{{$index}}.$error.required && vm.errorStyle"
-						                    ng-required="vm.checkRequiredField('ratesheetComment')"></textarea>
+														<textarea class="form-control" rows="3" id="ratesheetComment" ng-model="vm.workPackage.ratesheetComment" name="ratesheetComment"
+									                    ng-disabled="vm.isFieldDisable('ratesheetComment')" 
+									                    ng-style="editForm.ratesheetComment{{$index}}.$error.required && vm.errorStyle"
+									                    ng-required="vm.checkRequiredField('ratesheetComment')"></textarea>
 													</div>								
 												</div>	 
 											</div>
