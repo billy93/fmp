@@ -219,7 +219,7 @@
 			<div class="page-content page--current">
 				<div class="content-header">
 					<div class="clearfix">
-						<a href="#" class="sidebar-toggle pull-left showLeftPush" data-toggle="push-menu" role="button">
+						<a class="sidebar-toggle pull-left showLeftPush" data-toggle="push-menu" role="button">
 					        <span class="sr-only">Toggle navigation</span>
 					        <span class="icon-bar"></span>
 					        <span class="icon-bar"></span>
@@ -379,10 +379,13 @@
 													<button class="btn btn-default small">New <i class="fa fa-caret-down"></i></button>
 													<ul class="dropdown-menu" role="menu">
 													    <li>
-													    	<a href="#" class="pagenav__button pagenav__button--right" data-id="1">Regular Work Order</a>
+													    	<a ui-sref="work-package.new({type:'reguler'})">Regular Work Order</a>
 													    </li>
 													    <li>
-													    	<a href="#">Discount Work Order</a>
+													    	<a ui-sref="work-package.new({type:'discount'})">Discount Work Order</a>
+													    </li>
+													    <li>
+													    	<a ui-sref="work-package.new({type:'waiver'})">Waiver Work Order</a>
 													    </li>
 													</ul>
 												</div>													
@@ -1375,6 +1378,11 @@
 			</div>			
 		</div>
 		
+		<script src='content/js/modernizr-custom.js'></script>
+		<script src='content/js/plugins.js'></script>
+		<script src='content/js/revealer.js'></script>
+		<script src='content/js/main.js'></script>
+
 		<script>
 		(function() {
 			

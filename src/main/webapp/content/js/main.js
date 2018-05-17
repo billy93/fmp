@@ -12,7 +12,7 @@ $(function(){
 	}
 
 	$('.showLeftPush').on('click',function(){	
-		sidebarOpen()
+		sidebarOpen();
 	});
 	
 	$(".table-responsive").mCustomScrollbar({

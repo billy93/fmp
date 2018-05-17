@@ -24,8 +24,9 @@
     WorkPackageDetailController.$inject = ['currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user'];
     function WorkPackageDetailController(currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user) {
        var vm = this;
-        vm.currentTab = [true];
+        vm.currentTab = [];
         vm.currentAddonTab = [];
+        vm.currentDiscountTab = [];
         
         vm.rulesMenu = true;
         vm.user = user;
@@ -72,6 +73,7 @@
         vm.tariffNumber = tariffNumber;
         vm.cities = cities;
         vm.currencies = currencies;
+        
         //FARES TAB
         vm.selectedTab = 0;       
         vm.selectTab = function(index){
@@ -84,14 +86,60 @@
         		vm.workPackage.fareSheet.push({specifiedFaresName:option.name});
         	}
         	else if(option.type == 'Add-Ons'){
+        		vm.workPackage.addon = true;
         		vm.workPackage.addonFareSheet.push({addonFaresName:option.name});
         	}
         };
         
         vm.removeTab = function(){
-        	var index = vm.workPackage.fareSheet.indexOf(vm.selectedTab);
-        	vm.workPackage.fareSheet.splice(index, 1); 
-        	vm.selectedTab = 0;
+        	var findTab = false;
+        	
+        	if(!findTab){
+	        	for(var x=0;x<vm.currentTab.length;x++){
+	        		if(vm.currentTab[x]){
+	        			console.log('Active Fare Tab '+x);
+	        			findTab = true;
+	        			
+	        			var index = vm.workPackage.fareSheet.indexOf(x);
+	                	vm.workPackage.fareSheet.splice(index, 1); 
+	                	vm.selectedTab = 0;
+	        			break;
+	        		}
+	        	}
+        	}
+        	
+        	if(!findTab){
+	        	for(var x=0;x<vm.currentAddonTab.length;x++){
+	        		if(vm.currentAddonTab[x]){
+	        			console.log('Active Addon Tab '+x);
+	        			findTab = true;
+	        			
+	        			var index = vm.workPackage.addonFareSheet.indexOf(x);
+	                	vm.workPackage.addonFareSheet.splice(index, 1); 
+	                	vm.selectedAddonTab = 0;
+	        			break;
+	        		}
+	        	}
+        	}
+        	
+        	if(!findTab){
+	        	for(var x=0;x<vm.currentDiscountTab.length;x++){
+	        		if(vm.currentAddonTab[x]){
+	        			console.log('Active Discount Tab '+x);
+	        			findTab = true;
+	        			
+	        			var index = vm.workPackage.discountFareSheet.indexOf(x);
+	                	vm.workPackage.discountFareSheet.splice(index, 1); 
+	                	vm.selectedDiscountTab = 0;
+	        			break;
+	        		}
+	        	}
+        	}
+        	
+        	if(!findTab){
+        		alert('Sheet cannot be deleted');
+        	}
+        	
         }
         
         vm.addSheet = function(){
@@ -113,7 +161,38 @@
         };
         
         vm.copySheet = function(){
-          	vm.workPackage.fareSheet.push(vm.workPackage.fareSheet[vm.selectedTab]);
+        	var findTab = false;
+        	
+        	if(!findTab){
+	        	for(var x=0;x<vm.currentTab.length;x++){
+	        		if(vm.currentTab[x]){
+	        			console.log('Active Fare Tab '+x);
+	        			findTab = true;
+	        			
+	        			var index = vm.workPackage.fareSheet.indexOf(x);
+	        			vm.workPackage.fareSheet.push(vm.workPackage.fareSheet[x]);
+	        			break;
+	        		}
+	        	}
+        	}
+        	
+        	if(!findTab){
+	        	for(var x=0;x<vm.currentAddonTab.length;x++){
+	        		if(vm.currentAddonTab[x]){
+	        			console.log('Active Addon Tab '+x);
+	        			findTab = true;
+	        			
+	        			var index = vm.workPackage.addonFareSheet.indexOf(x);
+	        			vm.workPackage.addonFareSheet.push(vm.workPackage.addonFareSheet[x]);
+	        			break;
+	        		}
+	        	}
+        	}
+        	
+        	if(!findTab){
+        		alert('Sheet cannot be copied');
+        	}
+//          	vm.workPackage.fareSheet.push(vm.workPackage.fareSheet[vm.selectedTab]);
         };
         
         vm.removeSheet = function(){
@@ -201,6 +280,9 @@
         	}
         	for(var x=0;x<vm.currentAddonTab.length;x++){
         		vm.currentAddonTab[x]=false;
+        	}
+        	for(var x=0;x<vm.currentDiscountTab.length;x++){
+        		vm.currentDiscountTab[x]=false;
         	}
         	vm.currentTabFilingInstruction = false;
         	vm.currentTabAttachment = false;
@@ -714,6 +796,7 @@
           
           vm.workPackage = data;
           vm.isSaving = false;
+          alert('Save success');
       }
 
       function onSaveError () {

@@ -1,0 +1,39 @@
+
+<div>
+    <h2><span data-translate="fmpApp.businessArea.detail.title">Business Area</span> {{vm.businessArea.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span data-translate="fmpApp.businessArea.name">Name</span></dt>
+        <dd>
+            <span>{{vm.businessArea.name}}</span>
+        </dd>
+        <dt><span data-translate="fmpApp.businessArea.description">Description</span></dt>
+        <dd>
+            <span>{{vm.businessArea.description}}</span>
+        </dd>
+        <dt><span data-translate="fmpApp.businessArea.pic">Pic</span></dt>
+        <dd>
+            <span>{{vm.businessArea.pic}}</span>
+        </dd>
+        <dt><span data-translate="fmpApp.businessArea.contactNumber">Contact Number</span></dt>
+        <dd>
+            <span>{{vm.businessArea.contactNumber}}</span>
+        </dd>
+        <dt><span data-translate="fmpApp.businessArea.activeStatus">Active Status</span></dt>
+        <dd>
+            <span>{{vm.businessArea.activeStatus}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            ui-sref="{{ vm.previousState }}"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span data-translate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button" ui-sref="business-area-detail.edit({id:vm.businessArea.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-sm-down" data-translate="entity.action.edit"> Edit</span>
+    </button>
+</div>
