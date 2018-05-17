@@ -25,6 +25,9 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     @Id
     private String id;
 
+    @Field("discount")
+    private boolean discount;
+    
     @Field("addon")
     private boolean addon;
     
@@ -36,6 +39,9 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     
     @Field("attachment")
     private boolean attachment;
+    
+    @Field("specified_fares")
+    private boolean specifiedFares;
     
     //HEADER
     @Field("exp_pax")
@@ -264,7 +270,23 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     
     private ImportFares importFares;
     
-    public List<WorkPackageFareSheet> getAddonFareSheet() {
+    public boolean isDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(boolean discount) {
+		this.discount = discount;
+	}
+
+	public boolean isSpecifiedFares() {
+		return specifiedFares;
+	}
+
+	public void setSpecifiedFares(boolean specifiedFares) {
+		this.specifiedFares = specifiedFares;
+	}
+
+	public List<WorkPackageFareSheet> getAddonFareSheet() {
 		return addonFareSheet;
 	}
 

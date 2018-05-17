@@ -52,7 +52,7 @@
             url: '/{id}/edit',
             data: {
                 authorities: ['ROLE_USER'],
-                pageTitle: 'fmpApp.workPackage.detail.title'
+                pageTitle: 'Work Package'
             },
             views: {
                 'content@': {
@@ -126,61 +126,61 @@
 //                });
 //            }]
 //        })
-//        .state('work-package.new', {
-//            parent: 'work-package',
-//            url: '/new?type',
-//            data: {
-//                authorities: ['ROLE_USER']
-//            },
-//            onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
-//                $uibModal.open({
-//                    templateUrl: 'app/entities/work-package/work-package-dialog.html',
-//                    controller: 'WorkPackageDialogController',
-//                    controllerAs: 'vm',
-//                    backdrop: 'static',
-//                    size: 'lg',
-//                    resolve: {
-//                    	    type: function(){
-//                    	    	return null;
-//                    	    },
-//                        entity: function () {
-//                            return {
-//                                status: null,
-//                                wpid: null,
-//                                name: null,
-//                                priority: null,
-//                                targetSub: null,
-//                                fillingDate: null,
-//                                distributionDate: null,
-//                                discExpiryDate: null,
-//                                fillingStatus: null,
-//                                fillingError: null,
-//                                qaStatus: null,
-//                                queuedDate: null,
-//                                lockedBy: null,
-//                                lockedSince: null,
-//                                type: null,
-//                                id: null
-//                            };
-//                        },
-//                        reviewLevels: ['ReviewLevel', function(ReviewLevel) {
-//                            return ReviewLevel.queryAll().$promise;
-//                        }],
-//                        businessAreas: ['BusinessArea', function(BusinessArea) {
-//                            return BusinessArea.queryAll().$promise;
-//                        }]
-//                    }
-//                }).result.then(function(workPackage) {
-//	                	var params = {
-//	                			id: workPackage.id
-//	                	};
-//                  	$state.go('work-package-detail', params);
-//                    //$state.go('work-package', null, { reload: 'work-package' });
-//                }, function() {
-//                    $state.go('work-package');
-//                });
-//            }]
-//        })
+        .state('work-package.new', {
+            parent: 'work-package',
+            url: '/new?type',
+            data: {
+                authorities: ['ROLE_USER']
+            },
+            onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+                $uibModal.open({
+                    templateUrl: 'app/pages/work-packages/work-package-dialog.html',
+                    controller: 'WorkPackageDialogController',
+                    controllerAs: 'vm',
+                    backdrop: 'static',
+                    size: 'lg',
+                    resolve: {
+                    	    type: function(){
+                    	    	return null;
+                    	    },
+                        entity: function () {
+                            return {
+                                status: null,
+                                wpid: null,
+                                name: null,
+                                priority: null,
+                                targetSub: null,
+                                fillingDate: null,
+                                distributionDate: null,
+                                discExpiryDate: null,
+                                fillingStatus: null,
+                                fillingError: null,
+                                qaStatus: null,
+                                queuedDate: null,
+                                lockedBy: null,
+                                lockedSince: null,
+                                type: null,
+                                id: null
+                            };
+                        },
+                        reviewLevels: ['ReviewLevel', function(ReviewLevel) {
+                            return ReviewLevel.queryAll().$promise;
+                        }],
+                        businessAreas: ['BusinessArea', function(BusinessArea) {
+                            return BusinessArea.queryAll().$promise;
+                        }]
+                    }
+                }).result.then(function(workPackage) {
+	                	var params = {
+	                			id: workPackage.id
+	                	};
+                  	$state.go('work-package-detail', params);
+                    //$state.go('work-package', null, { reload: 'work-package' });
+                }, function() {
+                    $state.go('work-package');
+                });
+            }]
+        })
 //        .state('work-package.new.recommendation', {
 //            parent: 'fares-recommendation',
 //            url: '/new?type',

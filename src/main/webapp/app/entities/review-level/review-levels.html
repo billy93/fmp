@@ -1,0 +1,60 @@
+<div>
+    <h2 data-translate="fmpApp.reviewLevel.home.title">Review Levels</h2>
+    <jhi-alert></jhi-alert>
+    <div class="container-fluid">
+        <div class="row">
+			<div class="col-md-6 no-pad text-left">
+                <button class="btn btn-info big" ui-sref="entities" >
+                    Back
+                </button>
+            </div>
+            <div class="col-md-6 no-pad text-right">                
+            <button class="btn btn-primary" ui-sref="review-level.new" >
+                    <span  data-translate="fmpApp.reviewLevel.home.createLabel">
+                        Create new Review Level
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+                <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+                    <th jh-sort-by="id"><span data-translate="global.field.id">ID</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="name"><span data-translate="fmpApp.reviewLevel.name">Name</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="description"><span data-translate="fmpApp.reviewLevel.description">Description</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="activeStatus"><span data-translate="fmpApp.reviewLevel.activeStatus">Active Status</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="reviewLevel in vm.reviewLevels track by reviewLevel.id">
+                    <td><a ui-sref="review-level-detail({id:reviewLevel.id})">{{reviewLevel.id}}</a></td>
+                    <td>{{reviewLevel.name}}</td>
+                    <td>{{reviewLevel.description}}</td>
+                    <td>{{reviewLevel.activeStatus}}</td>
+                    <td class="text-right">
+                        <div class="btn-group entities flex-btn-group-container">
+                            <button type="submit" title="Edit"
+                                    ui-sref="review-level.edit({id:reviewLevel.id})"
+                                    class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </button>
+                            <button type="submit" title="Delete"
+                                    ui-sref="review-level.delete({id:reviewLevel.id})"
+                                    class="btn btn-danger btn-sm">
+                                <span class="glyphicon glyphicon-remove-circle"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="pagination-wrapper text-center">
+        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
+    </div>
+</div>
