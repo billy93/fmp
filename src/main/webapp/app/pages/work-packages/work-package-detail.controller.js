@@ -74,6 +74,28 @@
         vm.cities = cities;
         vm.currencies = currencies;
         
+        //Comment TAB
+        vm.currentTabComment = true;
+        vm.selectCommentTab = function(tab){
+        	if(tab == 'comment'){
+        		vm.currentTabComment = true;
+        		vm.currentTabInterofficeComment = false;
+        		vm.currentTabRatesheetComment = false;
+        	}
+        	else if(tab == 'interofficeComment'){
+        		vm.currentTabInterofficeComment = true;
+        		vm.currentTabComment = false;
+        		vm.currentTabRatesheetComment = false;
+           	}
+        	else if(tab == 'ratesheetComment'){
+        		vm.currentTabRatesheetComment = true;
+        		vm.currentTabInterofficeComment = false;
+        		vm.currentTabComment = false;
+        	}
+        }
+        
+        //END COMMENT TAB
+        
         //FARES TAB
         vm.selectedTab = 0;       
         vm.selectTab = function(index){

@@ -121,8 +121,15 @@
 												<div class="form-group">
 													<label for="field_saleDate">Sale Start Date</label>
 													<div class="input-group">
-														<input id="field_saleDate" type="text" ng-style="editForm.saleDate.$error.required && vm.errorStyle"
-		                    								ng-required="vm.checkRequiredField('saleDate')" name="saleDate" ng-disabled="vm.isFieldDisable('saleDate')" datetime-picker="{{dateformat}}" ng-model="vm.workPackage.saleDate" is-open="vm.datePickerOpenStatus.saleDate" class="form-control">
+														<input id="field_saleDate" type="text" 
+															ng-class="{'must-fill': editForm.saleDate.$error.required}" 
+		                    								ng-required="vm.checkRequiredField('saleDate')" 
+		                    								name="saleDate" 
+		                    								ng-disabled="vm.isFieldDisable('saleDate')" 
+		                    								datetime-picker="{{dateformat}}" 
+		                    								ng-model="vm.workPackage.saleDate" 
+		                    								is-open="vm.datePickerOpenStatus.saleDate" class="form-control">
+		                    								
 														<span class="input-group-addon">
 															<i class="fa fa-calendar" ng-click="vm.openCalendar('saleDate')" ng-disabled="vm.isFieldDisable('saleDate')"></i>
 														</span>
@@ -157,12 +164,12 @@
 									<!-- -->
 									<div class="clearfix tab-body">
 										<ul class="clearfix nav-responsive nav nav-tabs">
-										    <li><a href="#comment">Comment</a></li>
-										    <li><a href="#inter-office">Inter Office</a></li>
-										    <li><a href="#rate-sheet-comment">Rate Sheet Comment</a></li>
+										    <li ng-class="{active:vm.currentTabComment}"><a ng-click="vm.selectCommentTab('comment')">Comment</a></li>
+										    <li ng-class="{active:vm.currentTabInterofficeComment}"><a ng-click="vm.selectCommentTab('interofficeComment')">Inter Office</a></li>
+										    <li ng-class="{active:vm.currentTabRatesheetComment}"><a ng-click="vm.selectCommentTab('ratesheetComment')">Rate Sheet Comment</a></li>
 										</ul>
 										<div class="tab-content">
-											<div class="tab-pane active" id="comment">
+											<div ng-class="{active:vm.currentTabComment}" class="tab-pane" id="comment">
 												<div class="box-header"></div>
 												<div class="box-body bbgrey">
 													<div class="form-group">
@@ -188,7 +195,7 @@
 										    		</div>
 									        	</div>
 											</div>
-											<div class="tab-pane" id="inter-office">
+											<div ng-class="{active:vm.currentTabInterofficeComment}" class="tab-pane" id="inter-office">
 												<div class="box-header"></div>
 												<div class="box-body bbgrey">
 													<div class="form-group">
@@ -213,7 +220,7 @@
 										    		</div>
 									        	</div>
 											</div>
-											<div class="tab-pane" id="rate-sheet-comment">
+											<div ng-class="{active:vm.currentTabRatesheetComment}" class="tab-pane" id="rate-sheet-comment">
 												<div class="box-header"></div>
 												<div class="box-body bbgrey">
 													<div class="form-group">
