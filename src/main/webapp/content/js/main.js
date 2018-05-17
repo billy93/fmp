@@ -100,6 +100,11 @@ $(function(){
 		$(this).toggleClass('open');
 		$(this).siblings('.box-body').slideToggle(200);
 	});
+	
+	// box detail
+	$(".box-header.box-tab").on('click',function(){
+		$(this).find('.tab-content').slideToggle(200);
+	});
 
 	// comment
 	/*$("#btn-comment").on('click',function(){
