@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.atibusinessgroup.fmp.domain.AtpcoFare;
+import com.atibusinessgroup.fmp.repository.AtpcoFareRepository;
 import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
 import com.codahale.metrics.annotation.Timed;
 
@@ -22,8 +24,10 @@ public class AfdQueryResource {
 
 	private final Logger log = LoggerFactory.getLogger(AfdQueryResource.class);
 
-    public AfdQueryResource() {
-    	
+	private final AtpcoFareRepository atpcoFareRepository;
+	
+    public AfdQueryResource(AtpcoFareRepository atpcoFareRepository) {
+    	this.atpcoFareRepository = atpcoFareRepository;
     }
     
     /**
@@ -34,10 +38,19 @@ public class AfdQueryResource {
      */
     @GetMapping("/afd-queries")
     @Timed
-    public ResponseEntity<List<String>> getAllAfdQueries(Pageable pageable) {
+    public ResponseEntity<List<AtpcoFare>> getAllAfdQueries(Pageable pageable) {
         log.debug("REST request to get a page of AfdQueries");
         
-        Page<String> page = null;
+        Page<AtpcoFare> page = atpcoFareRepository.findAll(pageable);
+        
+        for (AtpcoFare afare:page.getContent()) {
+        	log.debug("");
+        	log.debug("");
+        	log.debug(afare.toString());
+        	log.debug("");
+        	log.debug("");
+        }
+        
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/afd-queries");
         
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
