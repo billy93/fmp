@@ -43,11 +43,6 @@
                         ascending: PaginationUtil.parseAscending($stateParams.sort),
                         search: $stateParams.search
                     };
-                }],
-                translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                    $translatePartialLoader.addPart('businessArea');
-                    $translatePartialLoader.addPart('global');
-                    return $translate.refresh();
                 }]
             }
         })

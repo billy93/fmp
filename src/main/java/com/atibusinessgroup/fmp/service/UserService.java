@@ -105,6 +105,8 @@ public class UserService {
         newUser.setActivated(false);
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
+        newUser.setReviewLevels(new ArrayList<>());
+        newUser.setBusinessAreas(new ArrayList<>());
         authorities.add(authority);
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
@@ -133,6 +135,8 @@ public class UserService {
         String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
         user.setPassword(encryptedPassword);
         user.setResetKey(RandomUtil.generateResetKey());
+        user.setReviewLevels(userDTO.getReviewLevels());
+        user.setBusinessAreas(userDTO.getBusinessAreas());
         user.setResetDate(Instant.now());
         user.setActivated(true);
         user.setEffectiveDateTime(Instant.now());
@@ -203,6 +207,8 @@ public class UserService {
                 user.setActivated(userDTO.isActivated());
                 user.setLangKey(userDTO.getLangKey());
                 user.setEffectiveDateTime(Instant.now());
+                user.setReviewLevels(userDTO.getReviewLevels());
+                user.setBusinessAreas(userDTO.getBusinessAreas());
                 user.setSuspended(userDTO.getSuspended());
                 if(!userDTO.getSuspended()) {
                 	user.setLastLoginDateTime(Instant.now());
