@@ -294,7 +294,7 @@
 							</div>
 						</div>
 
-						<ng-form name="editFormATPCO" role="form" novalidate>
+						<ng-form name="editFormATPCO" role="form" novalidate ng-if="vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'REGULAR'">
 							<div class="tab-wrapper" id="distribution-ATPCO">
 								<div class="clearfix tab-body">
 									<ul class="clearfix nav-responsive nav nav-tabs">
@@ -1891,6 +1891,16 @@
 											</div>										
 									</div>
 								</div>
+							</div>
+						</ng-form>
+						
+						<ng-form name="editFormDiscount" role="form" novalidate ng-if="vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'DISCOUNT'">
+							<div>
+							</div>
+						</ng-form>
+						
+						<ng-form name="editFormMarket" role="form" novalidate ng-if="vm.workPackage.targetDistribution == 'Market' && vm.workPackage.type == 'REGULAR'">
+							<div>
 							</div>
 						</ng-form>
 					</div>
