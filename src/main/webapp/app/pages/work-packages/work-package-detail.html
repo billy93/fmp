@@ -4,11 +4,8 @@
 }
 </style>
 <form name="editForm" role="form" novalidate>	
-	
-	<!-- main container -->
 	<div class="main-container clearfix">
 		<div class="page-wrapper">
-			
 			<div class="page-content page--current">
 				<div class="content-header">
 					<div class="clearfix">
@@ -1775,105 +1772,106 @@
 				</div>
 			</div>			
 		</div>
+	</div>
 </form>
 	
-	<script src='content/js/modernizr-custom.js'></script>
-       <script src='content/js/plugins.js'></script>
-       <script src='content/js/revealer.js'></script>
-       <script src='content/js/main.js'></script>
-	<script>
-		(function() {			
-			var pages = [].slice.call(document.querySelectorAll('.page-wrapper > .page-content')),
-				currentPage = 0,
-				
-				revealerOpts = {
-					// the layers are the elements that move from the sides
-					nmbLayers : 3,
-					// bg color of each layer
-					bgcolor : ['#111', '#fc3', '#fff'],
-					// effect classname
-					effect : 'anim--effect-4',
-					onStart : function(direction) {
-						// next page gets class page--animate-[direction]
-						var nextPage = pages[currentPage === 0 ? 1 : 0];
-						classie.add(nextPage, 'page--animate-' + direction);
-					},
-					onEnd : function(direction) {
-						// remove class page--animate-[direction] from next page
-						var nextPage = pages[currentPage === 0 ? 1 : 0];
-						nextPage.className = 'page-content';
-					}
-				};
-				revealer = new Revealer(revealerOpts);
-
-			// clicking the page nav buttons
-
-			var dataId;
-			var dataDistribution;
+<script src='content/js/modernizr-custom.js'></script>
+<script src='content/js/plugins.js'></script>
+<script src='content/js/revealer.js'></script>
+<script src='content/js/main.js'></script>
+<script>
+	(function() {			
+		var pages = [].slice.call(document.querySelectorAll('.page-wrapper > .page-content')),
+			currentPage = 0,
 			
-			$('.js-createWorkOrder').click(function(){
-				reveal('left'); 
-				dataId = $(this).attr('data-id');
-				$('.data-on').show();
-			})
+			revealerOpts = {
+				// the layers are the elements that move from the sides
+				nmbLayers : 3,
+				// bg color of each layer
+				bgcolor : ['#111', '#fc3', '#fff'],
+				// effect classname
+				effect : 'anim--effect-4',
+				onStart : function(direction) {
+					// next page gets class page--animate-[direction]
+					var nextPage = pages[currentPage === 0 ? 1 : 0];
+					classie.add(nextPage, 'page--animate-' + direction);
+				},
+				onEnd : function(direction) {
+					// remove class page--animate-[direction] from next page
+					var nextPage = pages[currentPage === 0 ? 1 : 0];
+					nextPage.className = 'page-content';
+				}
+			};
+			revealer = new Revealer(revealerOpts);
 
-			$('.js-back').click(function(){
-				reveal('left'); 
-				dataId = $(this).attr('data-id');
-			})
+		// clicking the page nav buttons
 
-			$('.pagenav__button--right').click(function(){
-				reveal('right'); 
-				dataId = $(this).attr('data-id');
-				dataDistribution = $(this).attr('data-distribution');
-				var _href = $('#'+dataDistribution).find('.nav-tabs li:first-child a').attr('href');
-				$('.tab-wrapper').hide();
-				//$(".nav-tabs li").removeClass('active');
-				//$('#'+dataDistribution).show().find('.nav-tabs li:first-child').addClass('active');
-				$(_href).addClass('active');
-				$('#sideBar-s1').removeClass('sideBar-open')
-				$('.search-wrap').find('i').removeClass('shrink');
-				$('.sideBar').find('.menu-list').removeClass('open');
-				$('.menu-list').removeClass('sub');
-				$('.sub-menu').slideUp(200);
-				$('.page-content').removeClass('pushed');
-			});
+		var dataId;
+		var dataDistribution;
+		
+		$('.js-createWorkOrder').click(function(){
+			reveal('left'); 
+			dataId = $(this).attr('data-id');
+			$('.data-on').show();
+		})
 
-			// triggers the effect by calling instance.reveal(direction, callbackTime, callbackFn)
-			function reveal(direction) {
-				var callbackTime = 750,
-					callbackFn = function() {
-						classie.remove(pages[currentPage], 'page--current');
-						currentPage = currentPage === 0 ? dataId : 0;
-						classie.add(pages[currentPage], 'page--current');	
-					};
+		$('.js-back').click(function(){
+			reveal('left'); 
+			dataId = $(this).attr('data-id');
+		})
 
-				revealer.reveal(direction, callbackTime, callbackFn);
-			}
+		$('.pagenav__button--right').click(function(){
+			reveal('right'); 
+			dataId = $(this).attr('data-id');
+			dataDistribution = $(this).attr('data-distribution');
+			var _href = $('#'+dataDistribution).find('.nav-tabs li:first-child a').attr('href');
+			$('.tab-wrapper').hide();
+			//$(".nav-tabs li").removeClass('active');
+			//$('#'+dataDistribution).show().find('.nav-tabs li:first-child').addClass('active');
+			$(_href).addClass('active');
+			$('#sideBar-s1').removeClass('sideBar-open')
+			$('.search-wrap').find('i').removeClass('shrink');
+			$('.sideBar').find('.menu-list').removeClass('open');
+			$('.menu-list').removeClass('sub');
+			$('.sub-menu').slideUp(200);
+			$('.page-content').removeClass('pushed');
+		});
 
-
-			function changeEffect() {
-				revealer.destroy();
-				var revealerOpts = {
-					// the layers are the elements that move from the sides
-					nmbLayers : Number(this.options[this.selectedIndex].getAttribute('data-layers')),
-					// bg color of each layer
-					bgcolor : this.options[this.selectedIndex].getAttribute('data-colors').split(','),
-					// effect classname
-					effect : 'anim--' + this.value,
-					onStart : function(direction) {
-						// next page gets class page--animate-[direction]
-						var nextPage = pages[currentPage === 0 ? dataId : 0];
-						classie.add(nextPage, 'page--animate-' + direction);
-					},
-					onEnd : function(direction) {
-						// remove class page--animate-[direction] from next page
-						var nextPage = pages[currentPage === 0 ? dataId : 0];
-						nextPage.className = 'page-content';
-					}
+		// triggers the effect by calling instance.reveal(direction, callbackTime, callbackFn)
+		function reveal(direction) {
+			var callbackTime = 750,
+				callbackFn = function() {
+					classie.remove(pages[currentPage], 'page--current');
+					currentPage = currentPage === 0 ? dataId : 0;
+					classie.add(pages[currentPage], 'page--current');	
 				};
-				
-				revealer = new Revealer(revealerOpts);
-			}
-		})();
-		</script>
+
+			revealer.reveal(direction, callbackTime, callbackFn);
+		}
+
+
+		function changeEffect() {
+			revealer.destroy();
+			var revealerOpts = {
+				// the layers are the elements that move from the sides
+				nmbLayers : Number(this.options[this.selectedIndex].getAttribute('data-layers')),
+				// bg color of each layer
+				bgcolor : this.options[this.selectedIndex].getAttribute('data-colors').split(','),
+				// effect classname
+				effect : 'anim--' + this.value,
+				onStart : function(direction) {
+					// next page gets class page--animate-[direction]
+					var nextPage = pages[currentPage === 0 ? dataId : 0];
+					classie.add(nextPage, 'page--animate-' + direction);
+				},
+				onEnd : function(direction) {
+					// remove class page--animate-[direction] from next page
+					var nextPage = pages[currentPage === 0 ? dataId : 0];
+					nextPage.className = 'page-content';
+				}
+			};
+			
+			revealer = new Revealer(revealerOpts);
+		}
+	})();
+</script>
