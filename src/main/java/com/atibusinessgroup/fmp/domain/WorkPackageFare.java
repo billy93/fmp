@@ -89,7 +89,6 @@ public class WorkPackageFare implements Serializable {
     @Field("base_rule_no")
     private String baseRuleNo;
     
-
 	@Field("tarif")
     private String tarif;
     
@@ -243,6 +242,17 @@ public class WorkPackageFare implements Serializable {
 	@Field("version")
     private String version;
 	
+	@Field("discount_specified_amount")
+    private String discountSpecifiedAmount;
+	
+	public String getDiscountSpecifiedAmount() {
+		return discountSpecifiedAmount;
+	}
+
+	public void setDiscountSpecifiedAmount(String discountSpecifiedAmount) {
+		this.discountSpecifiedAmount = discountSpecifiedAmount;
+	}
+
 	public String getBaseRuleNo() {
 		return baseRuleNo;
 	}
