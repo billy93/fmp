@@ -89,6 +89,160 @@ public class WorkPackageFare implements Serializable {
     @Field("base_rule_no")
     private String baseRuleNo;
     
+
+	@Field("tarif")
+    private String tarif;
+    
+	@Field("carrier")
+    private String carrier;
+    
+    @Field("booking_class")
+    private String bookingClass;
+    
+    @Field("origin")
+    private String origin;
+    
+    @Field("direction")
+    private String direction;
+    
+    @Field("destination")
+    private String destination;
+    
+    @Field("fare_basis")
+    private String fareBasis;
+   
+    @Field("new_fare_basis")
+    private String newFareBasis;
+
+	@Field("type_of_journey")
+    private String typeOfJourney;
+    
+	@Field("new_type_of_journey")
+    private String newTypeOfJourney;
+    
+    @Field("passenger_type")
+    private String passengerType;
+  
+    @Field("currency")
+    private String currency;
+    
+    @Field("amount")
+    private String amount;
+    
+    @Field("taxes")
+    private List<Tax> taxes;
+    
+    @Field("yqyr")
+    private String yqyr;
+    
+    @Field("cat12")
+    private String cat12;
+    
+    @Field("total_tax")
+    private String totalTax;
+    
+    @Field("tfc")
+    private String tfc;
+    
+    @Field("aif")
+    private String aif;
+    
+    @Field("global")
+    private String global;
+    
+    @Field("cabin_class")
+    private String cabinClass;
+    
+    @Field("travel_start")
+    private String travelStart;
+    
+    @Field("travel_end")
+    private String travelEnd;
+    
+    @Field("sale_start")
+    private String saleStart;
+    
+    @Field("sale_end")
+    private String saleEnd;
+    
+    @Field("travel_complete")
+    private String travelComplete;
+    
+    @Field("travel_complete_indicator")
+    private String travelCompleteIndicator;
+    
+    @Field("dow_in")
+    private String dowIn;
+    
+    @Field("dow_out")
+    private String dowOut;
+    
+    @Field("season_type")
+    private String seasonType;
+    
+    @Field("season_start")
+    private String seasonStart;
+    
+    @Field("season_end")
+    private String seasonEnd;
+    
+    @Field("adv_pur")
+    private String advPur;
+    
+    @Field("min_stay")
+    private String minStay;
+    
+    @Field("max_stay")
+    private String maxStay;
+    
+    @Field("bucket")
+    private String bucket;
+    
+    @Field("zone")
+    private String zone;
+    
+    @Field("rtgno")
+    private String rtgno;
+    
+    @Field("rtgnoTarno")
+    private String rtgnoTarno;
+    
+    @Field("ruleno")
+    private String ruleno;
+    
+    @Field("base_ruleno")
+    private String baseRuleno;
+    
+	@Field("effDt")
+    private String effDt;
+
+    @Field("comment")
+    private String comment;
+    
+    @Field("ratesheet_comment")
+    private String ratesheetComment;
+    
+    @Field("deal_code")
+    private String dealCode;
+    
+    @Field("ticket_code")
+    private String ticketCode;
+    
+    @Field("ticket_designator")
+    private String ticketDesignator;
+    
+    @Field("new_booking_code")
+    private String newBookingCode;
+    
+    @Field("work_package")
+    private ObjectId workPackage;
+    
+    @Field("sheet_number")
+    private int sheetNumber;
+    
+	@Field("version")
+    private String version;
+	
 	public String getBaseRuleNo() {
 		return baseRuleNo;
 	}
@@ -241,9 +395,6 @@ public class WorkPackageFare implements Serializable {
 		this.tarif = tarif;
 	}
 
-	@Field("tarif")
-    private String tarif;
-    
     public String getAction() {
 		return action;
 	}
@@ -260,27 +411,6 @@ public class WorkPackageFare implements Serializable {
 		this.cabin = cabin;
 	}
 
-	@Field("carrier")
-    private String carrier;
-    
-    @Field("booking_class")
-    private String bookingClass;
-    
-    @Field("origin")
-    private String origin;
-    
-    @Field("direction")
-    private String direction;
-    
-    @Field("destination")
-    private String destination;
-    
-    @Field("fare_basis")
-    private String fareBasis;
-   
-    @Field("new_fare_basis")
-    private String newFareBasis;
-    
     public String getNewFareBasis() {
 		return newFareBasis;
 	}
@@ -288,136 +418,7 @@ public class WorkPackageFare implements Serializable {
 	public void setNewFareBasis(String newFareBasis) {
 		this.newFareBasis = newFareBasis;
 	}
-
-	@Field("type_of_journey")
-    private String typeOfJourney;
-    
-	@Field("new_type_of_journey")
-    private String newTypeOfJourney;
-    
-    @Field("passenger_type")
-    private String passengerType;
-  
-    @Field("currency")
-    private String currency;
-    
-    @Field("amount")
-    private String amount;
-    
-    @Field("taxes")
-    private List<Tax> taxes;
-    
-    @Field("yqyr")
-    private String yqyr;
-    
-    @Field("cat12")
-    private String cat12;
-    
-    @Field("total_tax")
-    private String totalTax;
-    
-    @Field("tfc")
-    private String tfc;
-    
-    @Field("aif")
-    private String aif;
-    
-    @Field("global")
-    private String global;
-    
-    @Field("cabin_class")
-    private String cabinClass;
-    
-    @Field("travel_start")
-    private String travelStart;
-    
-    @Field("travel_end")
-    private String travelEnd;
-    
-    @Field("sale_start")
-    private String saleStart;
-    
-    @Field("sale_end")
-    private String saleEnd;
-    
-    @Field("travel_complete")
-    private String travelComplete;
-    
-    @Field("travel_complete_indicator")
-    private String travelCompleteIndicator;
-    
-    @Field("dow_in")
-    private String dowIn;
-    
-    @Field("dow_out")
-    private String dowOut;
-    
-    @Field("season_type")
-    private String seasonType;
-    
-    @Field("season_start")
-    private String seasonStart;
-    
-    @Field("season_end")
-    private String seasonEnd;
-    
-    @Field("adv_pur")
-    private String advPur;
-    
-    @Field("min_stay")
-    private String minStay;
-    
-    @Field("max_stay")
-    private String maxStay;
-    
-    @Field("bucket")
-    private String bucket;
-    
-    @Field("zone")
-    private String zone;
-    
-    @Field("rtgno")
-    private String rtgno;
-    
-    @Field("rtgnoTarno")
-    private String rtgnoTarno;
-    
-    @Field("ruleno")
-    private String ruleno;
-    
-    @Field("base_ruleno")
-    private String baseRuleno;
-    
-	@Field("effDt")
-    private String effDt;
-
-    @Field("comment")
-    private String comment;
-    
-    @Field("ratesheet_comment")
-    private String ratesheetComment;
-    
-    @Field("deal_code")
-    private String dealCode;
-    
-    @Field("ticket_code")
-    private String ticketCode;
-    
-    @Field("ticket_designator")
-    private String ticketDesignator;
-    
-    @Field("new_booking_code")
-    private String newBookingCode;
-    
-    @Field("work_package")
-    private ObjectId workPackage;
-    
-    @Field("sheet_number")
-    private int sheetNumber;
-    
-	@Field("version")
-    private String version;
-
+	
     private boolean added = false;
       
     public int getSheetNumber() {
@@ -899,7 +900,4 @@ public class WorkPackageFare implements Serializable {
 				+ dealCode + ", ticketCode=" + ticketCode + ", ticketDesignator=" + ticketDesignator
 				+ ", newBookingCode=" + newBookingCode + ", workPackage=" + workPackage + ", added=" + added + "]";
 	}
-
-	
-	
 }

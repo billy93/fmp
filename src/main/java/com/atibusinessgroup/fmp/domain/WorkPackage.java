@@ -31,6 +31,9 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     @Field("addon")
     private boolean addon;
     
+    @Field("market_fares")
+    private boolean marketFares;
+    
     @Field("market_rules")
     private boolean marketRules;
     
@@ -131,6 +134,12 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     @Field("addon_fare_sheet")
     private List<WorkPackageFareSheet> addonFareSheet;
     
+    @Field("market_fare_sheet")
+    private List<WorkPackageFareSheet> marketFareSheet;
+    
+    @Field("waiver_fare_sheet")
+    private List<WorkPackageFareSheet> waiverFareSheet;
+    
     public static class WorkPackageFareSheet{
     	@Field("sheet_number")
     	private int sheetNumber;
@@ -157,6 +166,9 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
         private String accountCode;
         //End Discount Fares
         
+        @Field("market_fares_name")
+        private String marketFaresName;
+        
     	@Field("fare_carrier")
         private String fareCarrier;
     	
@@ -178,6 +190,14 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 
 		public void setDiscountFareType(String discountFareType) {
 			this.discountFareType = discountFareType;
+		}
+		
+        public String getMarketFaresName() {
+			return marketFaresName;
+		}
+
+		public void setMarketFaresName(String marketFaresName) {
+			this.marketFaresName = marketFaresName;
 		}
 
 		public int getSheetNumber() {
@@ -281,7 +301,32 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     
     private ImportFares importFares;
     
-    public boolean isDiscount() {
+    
+    public boolean isMarketFares() {
+		return marketFares;
+	}
+
+	public void setMarketFares(boolean marketFares) {
+		this.marketFares = marketFares;
+	}
+
+	public List<WorkPackageFareSheet> getMarketFareSheet() {
+		return marketFareSheet;
+	}
+
+	public void setMarketFareSheet(List<WorkPackageFareSheet> marketFareSheet) {
+		this.marketFareSheet = marketFareSheet;
+	}
+
+	public List<WorkPackageFareSheet> getWaiverFareSheet() {
+		return waiverFareSheet;
+	}
+
+	public void setWaiverFareSheet(List<WorkPackageFareSheet> waiverFareSheet) {
+		this.waiverFareSheet = waiverFareSheet;
+	}
+
+	public boolean isDiscount() {
 		return discount;
 	}
 

@@ -37,11 +37,33 @@
 	        
 	        <div ng-show="vm.workPackage.type=='REGULAR' && vm.workPackage.targetDistribution != null">
 	        	
-	        	<div class="row">
+	        	<div class="row" ng-show="vm.workPackage.targetDistribution == 'Market'">
 	        		<div class="col-md-4">	
 	        			<div class="form-group row">
 					        <div class="col-md-12 no-pad checkbox auto">	
-								<label><input type="checkbox" ng-model="vm.workPackage.specifiedFares" value="">Specified Fares</label>
+								<label><input type="checkbox" ng-model="vm.workPackage.marketFares">Market Fares</label>
+					        </div>
+						</div>
+					</div>
+					
+					 <div class="row" ng-show="vm.workPackage.marketFares"> 
+					    <div class="col-xs-3">
+					        Name
+					        <input type="text" class="form-control" name="name" id="field_name" ng-model="vm.workPackage.marketFareSheet[0].marketFaresName"/>
+					        <input type="hidden" class="form-control" name="carrier" id="field_carrier" ng-model="vm.workPackage.marketFareSheet[0].fareCarrier"/>
+					    </div>
+					    <div class="col-xs-3">
+					       Fare Type
+					       <select class="form-control"ng-model="vm.workPackage.marketFareSheet[0].fareType" ng-options="fareType for fareType in vm.fareType"></select>
+					    </div>
+					 </div>
+	        	</div>
+	        	
+	        	<div class="row" ng-show="vm.workPackage.targetDistribution == 'ATPCO'">
+	        		<div class="col-md-4">	
+	        			<div class="form-group row">
+					        <div class="col-md-12 no-pad checkbox auto">	
+								<label><input type="checkbox" ng-model="vm.workPackage.specifiedFares">Specified Fares</label>
 					        </div>
 						</div>
 					</div>
@@ -58,6 +80,7 @@
 					    </div>
 					  </div>
 	        	</div>
+	        	
 		        <div class="row" ng-show="vm.workPackage.targetDistribution == 'ATPCO'">
 	        		<div class="col-md-4">	
 	        			<div class="form-group row">

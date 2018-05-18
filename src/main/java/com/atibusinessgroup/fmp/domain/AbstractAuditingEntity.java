@@ -21,22 +21,18 @@ public abstract class AbstractAuditingEntity implements Serializable {
 
     @CreatedBy
     @Field("created_by")
-    @JsonIgnore
     private String createdBy;
 
     @CreatedDate
     @Field("created_date")
-    @JsonIgnore
     private Instant createdDate = Instant.now();
 
     @LastModifiedBy
     @Field("last_modified_by")
-    @JsonIgnore
     private String lastModifiedBy;
 
     @LastModifiedDate
     @Field("last_modified_date")
-    @JsonIgnore
     private Instant lastModifiedDate = Instant.now();
 
     public String getCreatedBy() {
