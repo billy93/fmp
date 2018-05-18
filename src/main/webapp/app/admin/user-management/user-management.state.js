@@ -62,7 +62,13 @@
                                 lastModifiedBy: null, lastModifiedDate: null, resetDate: null,
                                 resetKey: null, authorities: null
                             };
-                        }
+                        },
+                        reviewLevels: ['ReviewLevel', function(ReviewLevel) {
+                            return ReviewLevel.queryAll().$promise;
+                        }],
+                        businessAreas: ['BusinessArea', function(BusinessArea) {
+                            return BusinessArea.queryAll().$promise;
+                        }]
                     }
                 }).result.then(function() {
                     $state.go('user-management', null, { reload: true });
@@ -86,6 +92,12 @@
                     resolve: {
                         entity: ['User', function(User) {
                             return User.get({login : $stateParams.login}).$promise;
+                        }],
+                        reviewLevels: ['ReviewLevel', function(ReviewLevel) {
+                            return ReviewLevel.queryAll().$promise;
+                        }],
+                        businessAreas: ['BusinessArea', function(BusinessArea) {
+                            return BusinessArea.queryAll().$promise;
                         }]
                     }
                 }).result.then(function() {

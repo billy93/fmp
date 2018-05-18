@@ -23,7 +23,8 @@
      */
     WorkPackageDetailController.$inject = ['currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user'];
     function WorkPackageDetailController(currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user) {
-       var vm = this;
+    	var vm = this;
+       
         vm.currentTab = [];
         vm.currentAddonTab = [];
         vm.currentDiscountTab = [];
@@ -39,20 +40,27 @@
         vm.openFile = DataUtils.openFile;
         vm.account = null;
         vm.workPackage = entity;
+        vm.tariffNumber = tariffNumber;
+        vm.cities = cities;
+        vm.currencies = currencies;
+        
         vm.fareType = {
-        		"":"Select Fare Type", 
-        		"Yearly":"Yearly", 
-        		"Promotion":"Promotion", 
-        		"Ad-hoc":"Ad-hoc", 
-        		"Corporate":"Corporate", 
-        		"SPA & Code-share":"SPA & Code-share",
-        		"Miles":"Miles"};
-        vm.typeOfJourney = {
-        		"":"Select OW/RT", 
-        		"OW":"One Way", 
-        		"RT":"Return", 
-        		"OO":"One Way Only"
+    		"":"Select Fare Type", 
+    		"Yearly":"Yearly", 
+    		"Promotion":"Promotion", 
+    		"Ad-hoc":"Ad-hoc", 
+    		"Corporate":"Corporate", 
+    		"SPA & Code-share":"SPA & Code-share",
+    		"Miles":"Miles"
         };
+        
+        vm.typeOfJourney = {
+    		"":"Select OW/RT", 
+    		"OW":"One Way", 
+    		"RT":"Return", 
+    		"OO":"One Way Only"
+        };
+        
         vm.cabin = {
     		"":"Select Cabin", 
     		"Y":"Y - Economy", 
@@ -60,20 +68,35 @@
     		"C":"C - Business", 
     		"R":"R - Premium Economy"
         };
+        
         vm.status = {
         	"":"Select Priority",
         	"PENDING":"Pending",
         	"APPROVED":"Approve",
         	"REJECTED":"Reject"
         };
+        
         vm.travelCompleteIndicator = {
         	"": "Select Travel Complete Indicator",
         	"P" : "Trip Completed",
         	"c" : "Trip Commence"
         };
-        vm.tariffNumber = tariffNumber;
-        vm.cities = cities;
-        vm.currencies = currencies;
+        
+        vm.locationType = {
+        	"": "Select Location Type",
+        	"C" : "City",
+        	"N" : "Country",
+    		"S" : "State",
+        	"A" : "Area",
+    		"G" : "City Group"
+        };
+        
+        vm.calculationType = {
+        	"": "Select Calculation Type",
+        	"C" : "Calculated",
+        	"S" : "Specified",
+        	"M" : "Substract Specified from Calculated"
+        };
         
         //Comment TAB
         vm.currentTabComment = true;
@@ -98,12 +121,15 @@
         //END COMMENT TAB
         
         //FARES TAB
-        vm.selectedTab = 0;       
+        vm.selectedTab = 0;  
+        vm.currentTab[0] = true;
+        
         vm.selectTab = function(index){
         	vm.resetTab();        	
         	vm.currentTab[index] = true;
         	vm.selectedTab = index;
         };
+        
         vm.addTab = function(option){
         	if(option.type == 'Fares'){
         		vm.workPackage.specifiedFares = true;
@@ -194,7 +220,9 @@
         //END FARES TAB
         
         //ADDON TAB
-        vm.selectedAddonTab = 0;       
+        vm.selectedAddonTab = 0;     
+//        vm.currentAddonTab[0] = true;
+        
         vm.selectAddonTab = function(index){
         	vm.resetTab();        	
         	vm.currentAddonTab[index] = true;
@@ -225,8 +253,12 @@
         //END ADDON TAB
         
         //DISCOUNT TAB
-        vm.selectedDiscountTab = 0;       
+        vm.selectedDiscountTab = 0; 
+        vm.currentDiscountTab[0] = true;
+        
         vm.selectDiscountTab = function(index){
+        	vm.resetTab();        	
+        	vm.currentDiscountTab[index] = true;
         	vm.selectedDiscountTab = index;
         };
         
@@ -903,222 +935,365 @@
           vm.isSaving = false;
       }
       
-      vm.isFieldEditable = function(fare, field){
-    	  		var currentReviewLevel = [vm.workPackage.reviewLevel];
-    	  		
-    	  		if(currentReviewLevel != "Distribution"){
-	    	        if(fare.status == 'APPROVED' || fare.status == 'REJECTED'){
-	    	        		
-	    	        		if(field == 'status'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["LSO1", "LSO2", "Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-	    	        		else{
-	    	        			return false;
-	    	        		}
-	    	        }
-	    	        else{	    	  		
-		  	    		if(field == 'status'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["LSO", "Distribution", "Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'carrier'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["Distribution", "Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'tarno'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'tarcd'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'origin'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["Distribution", "Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'destination'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["Distribution", "Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'farebasis'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'bookingClass'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'cabin'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["Distribution", "Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'typeOfJourney'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["Distribution", "Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		
-		  	    		else if(field == 'footnote'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["LSO1", "LSO2", "Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		
-		  	    		else if(field == 'rtgno'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		
-		  	    		else if(field == 'rtgno'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		
-		  	    		else if(field == 'ruleno'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		
-		  	    		else if(field == 'currency'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["Distribution", "Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		
-		  	    		else if(field == 'amount'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["Distribution", "Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'aif'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["Distribution", "Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'travelStartDate'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["Distribution", "Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'travelEndDate'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["Distribution", "Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'saleStartDate'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["Distribution", "Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'saleEndDate'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["Distribution", "Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'effDate'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'travelComplete'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["Distribution", "Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'travelIndicator'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["Distribution", "Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'ratesheetComment'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["Distribution", "Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'dealCode'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = ["Distribution", "Route Management"];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		
-		  	    		//ADDON FARE
-		  	    		else if(field == 'addonFareStatus'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = [];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'addonFareCarrier'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = [];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'addonFareTarno'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = [];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'addonFareTarcd'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = [];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'addonFareOrigin'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = [];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'addonFareDestination'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = [];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'addonFareBucket'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = [];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		
-		  	    		else if(field == 'addonFareCarrier'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = [];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'addonFareCarrier'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = [];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		else if(field == 'addonFareCarrier'){
-			    	  	    //cannot be edited by
-			    	  		var reviewLevel = [];
-			    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-			    	  	}
-		  	    		
-	    	        }
-    	  		}
-    	  		else{
-    	  			return true;
-    	  		}
+      vm.isFieldEditable = function(fare, field) {
+	  		var currentReviewLevel = [vm.workPackage.reviewLevel];
+	  		
+	  		if(currentReviewLevel != "Distribution"){
+    	        if(fare.status == 'APPROVED' || fare.status == 'REJECTED'){	
+    	        	if(field == 'status'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["LSO1", "LSO2", "Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	} else{
+	        			return false;
+	        		}
+    	        }
+    	        else {	    	  		
+	  	    		if(field == 'status'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["LSO", "Distribution", "Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		else if(field == 'carrier'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["Distribution", "Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		else if(field == 'tarno'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		else if(field == 'tarcd'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		else if(field == 'origin'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["Distribution", "Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		else if(field == 'destination'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["Distribution", "Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		else if(field == 'farebasis'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		else if(field == 'bookingClass'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		else if(field == 'cabin'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["Distribution", "Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		else if(field == 'typeOfJourney'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["Distribution", "Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		
+	  	    		else if(field == 'footnote'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["LSO1", "LSO2", "Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		
+	  	    		else if(field == 'rtgno'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		
+	  	    		else if(field == 'rtgno'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		
+	  	    		else if(field == 'ruleno'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		
+	  	    		else if(field == 'currency'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["Distribution", "Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		
+	  	    		else if(field == 'amount'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["Distribution", "Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		else if(field == 'aif'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["Distribution", "Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		else if(field == 'travelStartDate'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["Distribution", "Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		else if(field == 'travelEndDate'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["Distribution", "Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		else if(field == 'saleStartDate'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["Distribution", "Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		else if(field == 'saleEndDate'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["Distribution", "Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		else if(field == 'effDate'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		else if(field == 'travelComplete'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["Distribution", "Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		else if(field == 'travelIndicator'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["Distribution", "Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		else if(field == 'ratesheetComment'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["Distribution", "Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		else if(field == 'dealCode'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = ["Distribution", "Route Management"];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		
+	  	    		//ADDON FARE
+	  	    		else if(field == 'addonFareStatus'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = [];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		else if(field == 'addonFareCarrier'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = [];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		else if(field == 'addonFareTarno'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = [];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		else if(field == 'addonFareTarcd'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = [];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		else if(field == 'addonFareOrigin'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = [];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		else if(field == 'addonFareDestination'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = [];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		else if(field == 'addonFareBucket'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = [];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}		  	    		
+	  	    		else if(field == 'addonFareCarrier'){
+		    	  	    //cannot be edited by
+		    	  		var reviewLevel = [];
+		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+		    	  	}
+	  	    		
+	  	    		//DISCOUNT FARE
+	  	    	  	else if(field == 'discountStatus'){
+	  	    	  		//not required by
+	  	    	  		var reviewLevel = ["LSO","Distribution","Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    	  	else if(field == 'discountTariffCode'){
+	  	    	  		//not required by
+	  	    	  		var reviewLevel = ["LSO","Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    	  	else if(field == 'discountLoc1Type'){
+	  	    	  		//not required by
+	  	    	  		var reviewLevel = ["Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    	  	else if(field == 'discountLoc2Type'){
+	  	    	  		//not required by
+	  	    	  		var reviewLevel = ["Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    	  	else if(field == 'discountLoc1'){
+	  	    	  		//not required by
+	  	    	  		var reviewLevel = ["Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    	  	else if(field == 'discountLoc2'){
+	  	    	  		//not required by
+	  	    	  		var reviewLevel = ["Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    		else if(field == 'discountBaseFareBasis'){
+	  	    	  		//not required by
+	  	    	  		var reviewLevel = ["Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    		else if(field == 'discountBaseRuleno'){
+	  	    	  		//not required by
+	  	    	  		var reviewLevel = ["LSO", "HO", "Distribution", "Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    		else if(field == 'discountBaseTariffCode'){
+	  	    	  		//not required by
+	  	    	  		var reviewLevel = ["LSO", "HO", "Distribution", "Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    		else if(field == 'discountCalcType'){
+	  	    	  		//not required by
+	  	    	  		var reviewLevel = ["Distribution", "Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    		else if(field == 'discountPercentageOfBaseFare'){
+	  	    	  		//not required by
+	  	    	  		var reviewLevel = ["Distribution", "Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    		else if(field == 'discountCurrency'){
+	  	    	  		//not required by
+	  	    	  		var reviewLevel = ["Distribution", "Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    		else if(field == 'discountSpecifiedAmount'){
+	  	    	  		//not required by
+	  	    	  		var reviewLevel = ["Distribution", "Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    		else if(field == 'discountPaxType'){
+	  	    	  		//not required by
+	  	    	  		var reviewLevel = ["Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    		else if(field == 'discountFareFareType'){
+	  	    	  		//not required by
+	  	    	  		var reviewLevel = ["Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    		else if(field == 'discountTicketCode'){
+	  	    	  		//not required by
+	  	    			var reviewLevel = ["Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    		else if(field == 'discountTicketDesignator'){
+	  	    	  		//not required by
+	  	    			var reviewLevel = ["Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    		else if(field == 'discountBaseFareOwRt'){
+	  	    	  		//not required by
+	  	    			var reviewLevel = ["Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    		else if(field == 'discountGlobal'){
+	  	    	  		//not required by
+	  	    			var reviewLevel = ["Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    		else if(field == 'discountRtgno'){
+	  	    	  		//not required by
+	  	    			var reviewLevel = ["Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    		else if(field == 'discountRtgnoTarno'){
+	  	    	  		//not required by
+	  	    			var reviewLevel = ["Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    		else if(field == 'discountNewFarebasis'){
+	  	    	  		//not required by
+	  	    			var reviewLevel = ["Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    		else if(field == 'discountNewBaseFareOwRt'){
+	  	    	  		//not required by
+	  	    			var reviewLevel = ["Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    		else if(field == 'discountNewBookingCode'){
+	  	    	  		//not required by
+	  	    			var reviewLevel = ["Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    		else if(field == 'discountTravelStartDate'){
+	  	    	  		//not required by
+	  	    			var reviewLevel = ["Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    		else if(field == 'discountTravelEndDate'){
+	  	    	  		//not required by
+	  	    			var reviewLevel = ["Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    		else if(field == 'discountSaleStartDate'){
+	  	    	  		//not required by
+	  	    			var reviewLevel = ["Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    		else if(field == 'discountSaleEndDate'){
+	  	    	  		//not required by
+	  	    			var reviewLevel = ["Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    		else if(field == 'discountComment'){
+	  	    	  		//not required by
+	  	    			var reviewLevel = ["Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    		else if(field == 'discountTravelComplete'){
+	  	    	  		//not required by
+	  	    			var reviewLevel = ["Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    		else if(field == 'discountTravelCompleteIndicator'){
+	  	    	  		//not required by
+	  	    			var reviewLevel = ["Route Management"];
+	  	    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+	  	    	  	}
+	  	    	  	//END DISCOUNT FARE
+    	        }
+	  		}
+	  		else{
+	  			return true;
+	  		}
       };
       
       
       vm.isFieldDisable = function(field){
-//    	  	var currentReviewLevel = ["Distribution"];
     	    var currentReviewLevel = [vm.workPackage.reviewLevel];
     	    
     	  	if(field == 'priority'){
@@ -1167,17 +1342,22 @@
     	  	else if(field == 'discountFareType'){
     	  	    //not required by
     	  		var reviewLevel = ["Distribution", "Route Management"];
-    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
     		else if(field == 'discountApprovalReference'){
     	  	    //not required by
     	  		var reviewLevel = ["Distribution", "Route Management"];
-    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
-    		else if(field == 'discountAccountCodeReference'){
+    		else if(field == 'discountAccountCode'){
     	  	    //not required by
     	  		var reviewLevel = ["Route Management"];
-    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountFaresName'){
+    	  	    //not required by
+    	  		var reviewLevel = ["Distribution", "Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
     	  	//DISCOUNT 
     	  	
@@ -1307,7 +1487,6 @@
     	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
     	  	
-    	  	
     	  	//ADDON FARES
     	  	else if(field == 'addonFaresName'){
     	  		//cannot be edited by
@@ -1409,21 +1588,182 @@
     	  		var reviewLevel = ["Route Management"];
     	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
+    	  	
+    	  	//DISCOUNT FARE
+    	  	else if(field == 'discountStatus'){
+    	  		//not required by
+    	  		var reviewLevel = ["LSO","HO","Distribution","Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    	  	else if(field == 'discountTariffCode'){
+    	  		//not required by
+    	  		var reviewLevel = ["LSO","Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    	  	else if(field == 'discountLoc1Type'){
+    	  		//not required by
+    	  		var reviewLevel = ["Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    	  	else if(field == 'discountLoc2Type'){
+    	  		//not required by
+    	  		var reviewLevel = ["Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    	  	else if(field == 'discountLoc1'){
+    	  		//not required by
+    	  		var reviewLevel = ["Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    	  	else if(field == 'discountLoc2'){
+    	  		//not required by
+    	  		var reviewLevel = ["Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountBaseFareBasis'){
+    	  		//not required by
+    	  		var reviewLevel = ["Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountBaseRuleno'){
+    	  		//not required by
+    	  		var reviewLevel = ["LSO", "HO", "Distribution", "Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountBaseTariffCode'){
+    	  		//not required by
+    	  		var reviewLevel = ["LSO", "HO", "Distribution", "Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountCalcType'){
+    	  		//not required by
+    	  		var reviewLevel = ["Distribution", "Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountPercentageOfBaseFare'){
+    	  		//not required by
+    	  		var reviewLevel = ["Distribution", "Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountCurrency'){
+    	  		//not required by
+    	  		var reviewLevel = ["Distribution", "Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountSpecifiedAmount'){
+    	  		//not required by
+    	  		var reviewLevel = ["Distribution", "Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountPaxType'){
+    	  		//not required by
+    	  		var reviewLevel = ["Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountFareFareType'){
+    	  		//not required by
+    	  		var reviewLevel = ["Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountTicketCode'){
+    	  		//not required by
+    			var reviewLevel = ["Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountTicketDesignator'){
+    	  		//not required by
+    			var reviewLevel = ["Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountBaseFareOwRt'){
+    	  		//not required by
+    			var reviewLevel = ["Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountGlobal'){
+    	  		//not required by
+    			var reviewLevel = ["Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountRtgno'){
+    	  		//not required by
+    			var reviewLevel = ["Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountRtgnoTarno'){
+    	  		//not required by
+    			var reviewLevel = ["Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountNewFarebasis'){
+    	  		//not required by
+    			var reviewLevel = ["Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountNewBaseFareOwRt'){
+    	  		//not required by
+    			var reviewLevel = ["Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountNewBookingCode'){
+    	  		//not required by
+    			var reviewLevel = ["Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountTravelStartDate'){
+    	  		//not required by
+    			var reviewLevel = ["Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountTravelEndDate'){
+    	  		//not required by
+    			var reviewLevel = ["Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountSaleStartDate'){
+    	  		//not required by
+    			var reviewLevel = ["Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountSaleEndDate'){
+    	  		//not required by
+    			var reviewLevel = ["Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountComment'){
+    	  		//not required by
+    			var reviewLevel = ["Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountTravelComplete'){
+    	  		//not required by
+    			var reviewLevel = ["Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountTravelCompleteIndicator'){
+    	  		//not required by
+    			var reviewLevel = ["Route Management"];
+    	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    	  	//END DISCOUNT FARE
       };
       
       vm.getFieldDisable = function(currentReviewLevel, reviewLevel){
   		var editable = false;
+  		
   		for(var x=0; x<currentReviewLevel.length; x++){
   			if(reviewLevel.indexOf(currentReviewLevel[x]) > -1){
   				editable = true;
-  			break;
+  				break;
+  			}
   		}
-  		}
+  		
   		return editable;
       }
       
       vm.checkRequiredField = function(field){
     	  	var currentReviewLevel = [vm.workPackage.reviewLevel];
+    	  	
     	  	if(field == 'workpackageName'){
     	  		var reviewLevel = ["Distribution", "Route Management"];
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
@@ -1477,8 +1817,12 @@
     	  		var reviewLevel = ["LSO", "HO", "Distribution", "Route Management"];
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
+    		else if(field == 'discountFaresName'){
+    	  	    //not required by
+    	  		var reviewLevel = ["Distribution", "Route Management"];
+    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
     	  	//END DISCOUNT FARE HEADER
-    	  	
     	  	
     	  	//////FARE
     	  	else if(field == 'status'){
@@ -1759,89 +2103,109 @@
     	  		var reviewLevel = ["Distribution", "Route Management"];
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
-    	  	
+    		else if(field == 'discountPercentageOfBaseFare'){
+    	  		//not required by
+    	  		var reviewLevel = ["Distribution", "Route Management"];
+    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountCurrency'){
+    	  		//not required by
+    	  		var reviewLevel = ["Distribution", "Route Management"];
+    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountSpecifiedAmount'){
+    	  		//not required by
+    	  		var reviewLevel = ["Distribution", "Route Management"];
+    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
     		else if(field == 'discountPaxType'){
     	  		//not required by
     	  		var reviewLevel = ["Route Management"];
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
-    	  	
-    		else if(field == 'discountTicketCode'){
+    		else if(field == 'discountFareFareType'){
     	  		//not required by
-    	  		var reviewLevel = ["LSO", "HO", "Disctribution", "Route Management"];
+    	  		var reviewLevel = ["Route Management"];
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
-    	  	
     		else if(field == 'discountTicketDesignator'){
     	  		//not required by
-    	  		var reviewLevel = ["LSO", "HO", "Disctribution", "Route Management"];
+    			var reviewLevel = ["Route Management"];
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
-    	  	
     		else if(field == 'discountTicketCode'){
     	  		//not required by
-    	  		var reviewLevel = ["LSO", "HO", "Disctribution", "Route Management"];
+    			var reviewLevel = ["Route Management"];
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
-    	  	
+    		else if(field == 'discountBaseFareOwRt'){
+    	  		//not required by
+    			var reviewLevel = ["Route Management"];
+    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
+    		else if(field == 'discountGlobal'){
+    	  		//not required by
+    			var reviewLevel = ["Route Management"];
+    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
+    	  	}
     		else if(field == 'discountRtgno'){
     	  		//not required by
-    	  		var reviewLevel = ["LSO", "HO", "Disctribution", "Route Management"];
+    			var reviewLevel = ["Route Management"];
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
     		else if(field == 'discountRtgnoTarno'){
     	  		//not required by
-    	  		var reviewLevel = ["LSO", "HO", "Disctribution", "Route Management"];
+    			var reviewLevel = ["Route Management"];
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
     		else if(field == 'discountNewFarebasis'){
     	  		//not required by
-    	  		var reviewLevel = ["LSO", "HO", "Disctribution", "Route Management"];
+    			var reviewLevel = ["Route Management"];
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
     		else if(field == 'discountNewBaseFareOwRt'){
     	  		//not required by
-    	  		var reviewLevel = ["LSO", "HO", "Disctribution", "Route Management"];
+    			var reviewLevel = ["Route Management"];
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
     		else if(field == 'discountNewBookingCode'){
     	  		//not required by
-    	  		var reviewLevel = ["LSO", "HO", "Disctribution", "Route Management"];
+    			var reviewLevel = ["Route Management"];
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
     		else if(field == 'discountTravelStartDate'){
     	  		//not required by
-    	  		var reviewLevel = ["LSO", "HO", "Disctribution", "Route Management"];
+    			var reviewLevel = ["Route Management"];
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
     		else if(field == 'discountTravelEndDate'){
     	  		//not required by
-    	  		var reviewLevel = ["LSO", "HO", "Disctribution", "Route Management"];
+    			var reviewLevel = ["Route Management"];
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
     		else if(field == 'discountSaleStartDate'){
     	  		//not required by
-    	  		var reviewLevel = ["LSO", "HO", "Disctribution", "Route Management"];
+    			var reviewLevel = ["Route Management"];
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
     		else if(field == 'discountSaleEndDate'){
     	  		//not required by
-    	  		var reviewLevel = ["LSO", "HO", "Disctribution", "Route Management"];
+    			var reviewLevel = ["Route Management"];
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
     		else if(field == 'discountComment'){
     	  		//not required by
-    	  		var reviewLevel = ["LSO", "HO", "Disctribution", "Route Management"];
+    			var reviewLevel = ["Route Management"];
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
     		else if(field == 'discountTravelComplete'){
     	  		//not required by
-    	  		var reviewLevel = ["LSO", "HO", "Disctribution", "Route Management"];
+    			var reviewLevel = ["Route Management"];
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
     		else if(field == 'discountTravelCompleteIndicator'){
     	  		//not required by
-    	  		var reviewLevel = ["LSO", "HO", "Disctribution", "Route Management"];
+    			var reviewLevel = ["Route Management"];
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
     	  	//END DISCOUNT FARE

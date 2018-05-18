@@ -112,8 +112,20 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Field("review_levels")
     private List<String> reviewLevels;
     
+    @Field("business_areas")
+    private List<String> businessAreas;
     
-    public List<String> getReviewLevels() {
+    
+    
+    public List<String> getBusinessAreas() {
+		return businessAreas;
+	}
+
+	public void setBusinessAreas(List<String> businessAreas) {
+		this.businessAreas = businessAreas;
+	}
+
+	public List<String> getReviewLevels() {
 		return reviewLevels;
 	}
 
@@ -315,10 +327,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
 				+ ", imageUrl=" + imageUrl + ", activationKey=" + activationKey + ", resetKey=" + resetKey
 				+ ", resetDate=" + resetDate + ", locked=" + locked + ", lastLockoutDateTime=" + lastLockoutDateTime
 				+ ", suspended=" + suspended + ", lastLoginDateTime=" + lastLoginDateTime + ", failedLoginCounter="
-				+ failedLoginCounter + ", passwordHistory=" + passwordHistory + ", effectiveLockoutDateTime="
-				+ effectiveDateTime + ", discontinueDateTime=" + discontinueDateTime + ", authorities="
-				+ authorities + "]";
-	}
-
-	
+				+ failedLoginCounter + ", passwordHistory=" + passwordHistory + ", effectiveDateTime="
+				+ effectiveDateTime + ", discontinueDateTime=" + discontinueDateTime + ", authorities=" + authorities
+				+ ", reviewLevels=" + reviewLevels + ", businessAreas=" + businessAreas + "]";
+	}	
 }

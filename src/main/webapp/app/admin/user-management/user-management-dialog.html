@@ -75,7 +75,32 @@
 					Your email is invalid.</p>
 			</div>
 		</div>
-
+		<div class="form-group">
+            <label class="control-label" for="field_reviewLevel">Review Level</label>
+            <div class="input-group">
+            	<input autocomplete="off" type="text" name="review_level" ng-model="vm.reviewLevel" class="form-control"
+            		uib-typeahead="o as o.name for o in vm.reviewLevels | filter:{name:$viewValue} | limitTo:5">
+            	<span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="vm.addReviewLevel()"><i class="glyphicon glyphicon-plus"></i></button>
+                </span>
+            </div>
+           	<div class="multi-values">
+           		<label ng-repeat="reviewLevel in vm.user.reviewLevels" ng-click="vm.removeReviewLevel()">{{reviewLevel}}<span class="delete"><i class="glyphicon glyphicon-remove-sign"></i></span></label>
+           	</div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_businessArea">Business Area</label>
+            <div class="input-group">
+            	<input autocomplete="off" type="text" name="business_area" ng-model="vm.businessArea" class="form-control"
+            		uib-typeahead="o as o.name for o in vm.businessAreas | filter:{name:$viewValue} | limitTo:5">
+            	<span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="vm.addBusinessArea()"><i class="glyphicon glyphicon-plus"></i></button>
+                </span>
+            </div>
+           	<div class="multi-values">
+           		<label ng-repeat="businessArea in vm.user.businessAreas" ng-click="vm.removeBusinessArea()">{{businessArea}}<span class="delete"><i class="glyphicon glyphicon-remove-sign"></i></span></label>
+           	</div>
+        </div>  
 		<div class="form-group">
 			<label for="suspended"> <input
 				ng-disabled="vm.user.id === null" type="checkbox" id="suspended"
