@@ -1,5 +1,6 @@
 package com.atibusinessgroup.fmp.web.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.atibusinessgroup.fmp.domain.AtpcoFare;
+import com.atibusinessgroup.fmp.domain.dto.AfdQuery;
 import com.atibusinessgroup.fmp.repository.AtpcoFareRepository;
+import com.atibusinessgroup.fmp.service.mapper.AfdQueryMapper;
 import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
 import com.codahale.metrics.annotation.Timed;
 
@@ -26,8 +29,11 @@ public class AfdQueryResource {
 
 	private final AtpcoFareRepository atpcoFareRepository;
 	
-    public AfdQueryResource(AtpcoFareRepository atpcoFareRepository) {
+	private final AfdQueryMapper afdQueryMapper;
+	
+    public AfdQueryResource(AtpcoFareRepository atpcoFareRepository, AfdQueryMapper afdQueryMapper) {
     	this.atpcoFareRepository = atpcoFareRepository;
+    	this.afdQueryMapper = afdQueryMapper;
     }
     
     /**
@@ -43,13 +49,8 @@ public class AfdQueryResource {
         
         Page<AtpcoFare> page = atpcoFareRepository.findAll(pageable);
         
-        for (AtpcoFare afare:page.getContent()) {
-        	log.debug("");
-        	log.debug("");
-        	log.debug(afare.toString());
-        	log.debug("");
-        	log.debug("");
-        }
+        List<AfdQuery> result = new ArrayList<>();
+        result.addAll(afdQueryMapper.convertAtpcoFare(page.getContent()));
         
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/afd-queries");
         

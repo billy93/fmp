@@ -150,6 +150,9 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
         @Field("discount_fares_name")
         private String discountFaresName;
         
+        @Field("discount_fare_type")
+        private String discountFareType;
+        
         @Field("account_code")
         private String accountCode;
         //End Discount Fares
@@ -169,7 +172,15 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
         @Field("discontinue_date")
         private String discontinueDate;
 
-        public int getSheetNumber() {
+        public String getDiscountFareType() {
+			return discountFareType;
+		}
+
+		public void setDiscountFareType(String discountFareType) {
+			this.discountFareType = discountFareType;
+		}
+
+		public int getSheetNumber() {
 			return sheetNumber;
 		}
         

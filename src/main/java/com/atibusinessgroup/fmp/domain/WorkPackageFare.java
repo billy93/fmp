@@ -77,14 +77,34 @@ public class WorkPackageFare implements Serializable {
     @Field("loc2_type")
     private String loc2Type;
     
+    @Field("base_fare_basis")
+    private String baseFareBasis;
+    
     @Field("calc_type")
     private String calcType;
     
     @Field("percent_base_fare")
     private String percentBaseFare;
     
+    @Field("base_rule_no")
+    private String baseRuleNo;
     
-    
+	public String getBaseRuleNo() {
+		return baseRuleNo;
+	}
+
+	public void setBaseRuleNo(String baseRuleNo) {
+		this.baseRuleNo = baseRuleNo;
+	}
+
+	public String getBaseFareBasis() {
+		return baseFareBasis;
+	}
+
+	public void setBaseFareBasis(String baseFareBasis) {
+		this.baseFareBasis = baseFareBasis;
+	}
+
 	public TariffNumber getTariffNumber() {
 		return tariffNumber;
 	}
