@@ -79,6 +79,8 @@ public class UserDTO {
 	
     private List<String> reviewLevels;
     
+    private List<String> businessAreas;
+    
 	public UserDTO() {
 		// Empty constructor needed for Jackson.
 	}
@@ -110,6 +112,7 @@ public class UserDTO {
 		this.lastLoginDateTime = user.getLastLoginDateTime();
 		this.failedLoginCounter = user.getFailedLoginCounter();
 		this.reviewLevels = user.getReviewLevels();
+		this.businessAreas = user.getBusinessAreas();
 	}
 
 	
@@ -119,6 +122,14 @@ public class UserDTO {
 
 	public void setReviewLevels(List<String> reviewLevels) {
 		this.reviewLevels = reviewLevels;
+	}
+	
+	public List<String> getBusinessAreas() {
+		return businessAreas;
+	}
+
+	public void setBusinessAreas(List<String> businessAreas) {
+		this.businessAreas = businessAreas;
 	}
 
 	public String getId() {
@@ -322,7 +333,9 @@ public class UserDTO {
 				+ ", passwordHistory=" + passwordHistory + ", resetKey=" + resetKey + ", resetDate=" + resetDate
 				+ ", effectiveDateTime=" + effectiveDateTime + ", discontinueDateTime=" + discontinueDateTime
 				+ ", locked=" + locked + ", lastLockoutDateTime=" + lastLockoutDateTime + ", suspended=" + suspended
-				+ ", lastLoginDateTime=" + lastLoginDateTime + ", failedLoginCounter=" + failedLoginCounter + "]";
+				+ ", lastLoginDateTime=" + lastLoginDateTime + ", failedLoginCounter=" + failedLoginCounter
+				+ ", reviewLevels=" + reviewLevels + ", businessAreas=" + businessAreas + "]";
 	}
+
 
 }

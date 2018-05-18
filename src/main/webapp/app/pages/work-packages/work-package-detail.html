@@ -161,16 +161,15 @@
 							</div>
 							<div class="pull-left w50 two-column">
 								<div class="box-detail box-comment">
-									<!-- -->
-									<div class="clearfix tab-body">
+									<div class="clearfix tab-body box-header box-tab">
 										<ul class="clearfix nav-responsive nav nav-tabs">
-										    <li ng-class="{active:vm.currentTabComment}"><a ng-click="vm.selectCommentTab('comment')">Comment</a></li>
-										    <li ng-class="{active:vm.currentTabInterofficeComment}"><a ng-click="vm.selectCommentTab('interofficeComment')">Inter Office</a></li>
-										    <li ng-class="{active:vm.currentTabRatesheetComment}"><a ng-click="vm.selectCommentTab('ratesheetComment')">Rate Sheet Comment</a></li>
+										    <li ng-class="{active:vm.currentTabComment}" ng-click="$event.stopPropagation()"><a ng-click="vm.selectCommentTab('comment')">Comment</a></li>
+										    <li ng-class="{active:vm.currentTabInterofficeComment}" ng-click="$event.stopPropagation()"><a ng-click="vm.selectCommentTab('interofficeComment')">Inter Office</a></li>
+										    <li ng-class="{active:vm.currentTabRatesheetComment}" ng-click="$event.stopPropagation()"><a ng-click="vm.selectCommentTab('ratesheetComment')">Rate Sheet Comment</a></li>
 										</ul>
 										<div class="tab-content">
 											<div ng-class="{active:vm.currentTabComment}" class="tab-pane" id="comment">
-												<div class="box-header"></div>
+												<!-- <div class="box-header"/> -->
 												<div class="box-body bbgrey">
 													<div class="form-group">
 														<label>Comment</label>
@@ -196,7 +195,7 @@
 									        	</div>
 											</div>
 											<div ng-class="{active:vm.currentTabInterofficeComment}" class="tab-pane" id="inter-office">
-												<div class="box-header"></div>
+												<!-- <div class="box-header"/> -->
 												<div class="box-body bbgrey">
 													<div class="form-group">
 														<label>Inter Office</label>
@@ -221,7 +220,7 @@
 									        	</div>
 											</div>
 											<div ng-class="{active:vm.currentTabRatesheetComment}" class="tab-pane" id="rate-sheet-comment">
-												<div class="box-header"></div>
+												<!-- <div class="box-header"/> -->
 												<div class="box-body bbgrey">
 													<div class="form-group">
 														<label>Rate Sheet Comment</label>
