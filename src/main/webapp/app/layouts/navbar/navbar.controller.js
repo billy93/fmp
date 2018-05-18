@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('NavbarController', NavbarController);
 
-    NavbarController.$inject = ['$state', 'Auth', 'Principal', 'ProfileService', 'LoginService'];
+    NavbarController.$inject = ['$state', 'Auth', 'Principal', 'ProfileService', 'LoginService', '$window'];
 
-    function NavbarController ($state, Auth, Principal, ProfileService, LoginService) {
+    function NavbarController ($state, Auth, Principal, ProfileService, LoginService, $window) {
         var vm = this;
 
         vm.isNavbarCollapsed = true;
@@ -32,7 +32,7 @@
         function logout() {
             collapseNavbar();
             Auth.logout();
-            $state.go('home');
+            $state.go('home'); $window.location.reload();
         }
 
         function toggleNavbar() {

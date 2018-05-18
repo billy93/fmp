@@ -6,17 +6,18 @@
         .factory('stateHandler', stateHandler);
 
     stateHandler.$inject = ['$rootScope', '$state', '$sessionStorage', '$localStorage', '$window',
-        'Auth', 'Principal', 'VERSION'];
+        'Auth', 'Principal', 'VERSION', '$ocLazyLoad'];
 
     function stateHandler($rootScope, $state, $sessionStorage, $localStorage, $window,
-        Auth, Principal, VERSION) {
+        Auth, Principal, VERSION, $ocLazyLoad) {
         return {
             initialize: initialize
         };
 
         function initialize() {
             $rootScope.VERSION = VERSION;
-
+            $rootScope.isAuthenticated = Principal.isAuthenticated;
+            
             var stateChangeStart = $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams, fromState) {
                 $rootScope.toState = toState;
                 $rootScope.toStateParams = toStateParams;
@@ -45,14 +46,12 @@
                     titleKey = toState.data.pageTitle;
                 }
                 $window.document.title = titleKey;
-                
-//                if($('#scripts').length == 0){
-//                	$('body').append("<div id='scripts'><script src='content/js/modernizr-custom.js'></script>" +
-//         			       "<script src='content/js/plugins.js'></script>" +
-//         			       "<script src='content/js/revealer.js'></script>" +
-//         			       "<script src='content/js/main.js'></script></div>");
-//                }
-                
+
+            	$ocLazyLoad.load('content/js/modernizr-custom.js');
+               	$ocLazyLoad.load('content/js/plugins.js');
+               	$ocLazyLoad.load('content/js/revealer.js');
+                $ocLazyLoad.load('content/js/main.js');
+            	$ocLazyLoad.load('content/js/home.js');
             });
 
             $rootScope.$on('$destroy', function () {

@@ -40,6 +40,9 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     @Field("filing_instruction")
     private boolean filingInstruction;
     
+    @Field("filing_details")
+    private boolean filingDetails;
+    
     @Field("attachment")
     private boolean attachment;
     
@@ -140,7 +143,16 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     @Field("waiver_fare_sheet")
     private List<WorkPackageFareSheet> waiverFareSheet;
     
-    public static class WorkPackageFareSheet{
+    
+    public boolean isFilingDetails() {
+		return filingDetails;
+	}
+
+	public void setFilingDetails(boolean filingDetails) {
+		this.filingDetails = filingDetails;
+	}
+
+	public static class WorkPackageFareSheet{
     	@Field("sheet_number")
     	private int sheetNumber;
     	

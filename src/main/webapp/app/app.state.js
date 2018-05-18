@@ -15,6 +15,11 @@
                     templateUrl: 'app/layouts/navbar/navbar.html',
                     controller: 'NavbarController',
                     controllerAs: 'vm'
+                },
+                'login@': {
+                    templateUrl: 'app/layouts/login/login.html',
+                    controller: 'HomeLoginController',
+                    controllerAs: 'vm'
                 }
             },
             resolve: {

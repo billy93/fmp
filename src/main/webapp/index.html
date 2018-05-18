@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css">
     <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css">
+    <link rel="stylesheet" href="bower_components/textAngular/dist/textAngular.css">
     <!-- endinject -->
     <!-- endbuild -->
     <!-- build:css content/css/main.css -->
@@ -38,16 +39,25 @@
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     <page-ribbon></page-ribbon>
+    
+	<div ui-view="login" ng-if="!isAuthenticated()" ng-cloak></div>
+    
     <div ui-view="navbar" ng-cloak></div>
-    <div class="container">
-        <div class="well" ui-view="content">
-            <!-- Angular views -->
-        </div>
-
+    
+    <div class="container" ng-if="isAuthenticated()">
+		<div class="main-container clearfix">
+			<div class="page-wrapper">
+				<div class="page-content page--current" ui-view="content">
+		            <!-- Angular views -->
+		        </div>
+			</div>
+		</div>
+		
         <div class="footer" ng-cloak>
             <p data-translate="footer">This is your footer</p>
         </div>
     </div>
+    
     <noscript>
         <h1>You must enable javascript to view this page.</h1>
     </noscript>
@@ -103,6 +113,7 @@
     <script src="bower_components/textAngular/dist/textAngular.js"></script>
     <script src="bower_components/textAngular/dist/textAngular-sanitize.js"></script>
     <script src="bower_components/textAngular/dist/textAngularSetup.js"></script>
+    <script src="bower_components/oclazyload/dist/ocLazyLoad.js"></script>
     <!-- endinject -->
     <!-- endbuild -->
 
@@ -141,6 +152,7 @@
     <script src="app/pages/afd-queries/afd-query.service.js"></script>
     <script src="app/pages/afd-queries/afd-query.controller.js"></script>
     <script src="app/layouts/navbar/navbar.controller.js"></script>
+    <script src="app/layouts/login/login.controller.js"></script>
     <script src="app/layouts/error/error.state.js"></script>
     <script src="app/home/home.state.js"></script>
     <script src="app/home/home.controller.js"></script>

@@ -144,6 +144,30 @@ public class WorkPackageResource {
         
         Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());        
         workPackage.setReviewLevel(user.get().getReviewLevels().get(0));
+        
+        if(workPackage.isSpecifiedFares()) {
+        	workPackage.setFilingDetails(true);
+        }
+        else {
+        	
+        }
+        if(workPackage.isAddon()) {
+        	
+        }
+        else {
+        	workPackage.getAddonFareSheet().clear();
+        }
+        if(workPackage.isMarketFares()) {
+        	
+        } else {
+        	workPackage.getMarketFareSheet().clear();
+        }
+        if(workPackage.isDiscount()) {
+        	
+        } else {
+        	workPackage.getDiscountFareSheet().clear();
+        }
+        
         WorkPackage result = workPackageService.save(workPackage);
         
 //        WorkPackageHistory history = new WorkPackageHistory();

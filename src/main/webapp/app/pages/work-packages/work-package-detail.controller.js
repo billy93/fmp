@@ -106,11 +106,19 @@
         };
         vm.addTab = function(option){
         	if(option.type == 'Fares'){
+        		vm.workPackage.specifiedFares = true;
         		vm.workPackage.fareSheet.push({specifiedFaresName:option.name});
         	}
         	else if(option.type == 'Add-Ons'){
         		vm.workPackage.addon = true;
         		vm.workPackage.addonFareSheet.push({addonFaresName:option.name});
+        	}
+        	else if(option.type == 'Attachment'){
+        		vm.workPackage.attachment = true;        		
+        	}
+        	else if(option.type == 'Filing Instruction'){
+        		vm.workPackage.filingInstruction = true;
+        		
         	}
         };
         
@@ -173,6 +181,14 @@
 	        	}
         	}
         	
+        	if(!findTab && vm.currentTabAttachment){
+        		vm.workPackage.attachment = false;
+        		findTab = true;
+        	}
+        	if(!findTab && vm.currentTabFilingInstruction){
+        		vm.workPackage.filingInstruction = false;
+        		findTab = true;
+        	}
         	return findTab;        	
         }
         //END FARES TAB
@@ -314,6 +330,9 @@
                 size: 'lg',
                 windowClass: 'full-page-modal',
                 resolve: {
+                	workPackage: function(){
+                		return vm.workPackage;
+                	}
                 }
 			}).result.then(function(option) {
 				console.log(option);

@@ -17,7 +17,8 @@
             'angular-loading-bar',
             'ngFileSaver',
             'ui.select',
-            'textAngular'
+            'textAngular',
+            'oc.lazyLoad'
         ])
         .run(run);
 

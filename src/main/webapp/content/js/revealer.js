@@ -8,7 +8,67 @@
  * Copyright 2016, Codrops
  * http://www.codrops.com
  */
-;(function(window) {
+
+( function( window ) {
+
+'use strict';
+
+// class helper functions from bonzo https://github.com/ded/bonzo
+
+function classReg( className ) {
+  return new RegExp("(^|\\s+)" + className + "(\\s+|$)");
+}
+
+// classList support for class management
+// altho to be fair, the api sucks because it won't accept multiple classes at once
+var hasClass, addClass, removeClass;
+
+if ( 'classList' in document.documentElement ) {
+  hasClass = function( elem, c ) {
+    return elem.classList.contains( c );
+  };
+  addClass = function( elem, c ) {
+    elem.classList.add( c );
+  };
+  removeClass = function( elem, c ) {
+    elem.classList.remove( c );
+  };
+}
+else {
+  hasClass = function( elem, c ) {
+    return classReg( c ).test( elem.className );
+  };
+  addClass = function( elem, c ) {
+    if ( !hasClass( elem, c ) ) {
+      elem.className = elem.className + ' ' + c;
+    }
+  };
+  removeClass = function( elem, c ) {
+    elem.className = elem.className.replace( classReg( c ), ' ' );
+  };
+}
+
+function toggleClass( elem, c ) {
+  var fn = hasClass( elem, c ) ? removeClass : addClass;
+  fn( elem, c );
+}
+
+window.classie = {
+  // full names
+  hasClass: hasClass,
+  addClass: addClass,
+  removeClass: removeClass,
+  toggleClass: toggleClass,
+  // short names
+  has: hasClass,
+  add: addClass,
+  remove: removeClass,
+  toggle: toggleClass
+};
+
+})( window );
+
+(function(window) {
 
 	'use strict';
 
@@ -202,3 +262,79 @@
 	window.Revealer = Revealer;
 
 })(window);
+
+(function() {
+    var pages = [].slice.call(document.querySelectorAll('.page-wrapper > .page-content')),
+        currentPage = 0,
+        
+        revealerOpts = {
+            // the layers are the elements that move from the sides
+            nmbLayers : 3,
+            // bg color of each layer
+            bgcolor : ['#111', '#fc3', '#fff'],
+            // effect classname
+            effect : 'anim--effect-4',
+            onStart : function(direction) {
+                // next page gets class page--animate-[direction]
+                var nextPage = pages[currentPage === 0 ? 1 : 0];
+                classie.add(nextPage, 'page--animate-' + direction);
+            },
+            onEnd : function(direction) {
+                // remove class page--animate-[direction] from next page
+                var nextPage = pages[currentPage === 0 ? 1 : 0];
+                nextPage.className = 'page-content';
+            }
+        };
+        revealer = new Revealer(revealerOpts);
+
+    // clicking the page nav buttons
+
+    var dataId;
+
+    $('.js-cancel').click(function(){
+        reveal('left'); 
+        dataId = $(this).attr('data-id');
+    })
+
+    $('.js-index-login').click(function(){
+        reveal('right'); 
+        dataId = $(this).attr('data-id');
+    })
+
+    // triggers the effect by calling instance.reveal(direction, callbackTime, callbackFn)
+    function reveal(direction) {
+        var callbackTime = 750,
+            callbackFn = function() {
+                classie.remove(pages[currentPage], 'page--current');
+                currentPage = currentPage === 0 ? dataId : 0;
+                classie.add(pages[currentPage], 'page--current');   
+            };
+
+        revealer.reveal(direction, callbackTime, callbackFn);
+    }
+
+
+    function changeEffect() {
+        revealer.destroy();
+        var revealerOpts = {
+            // the layers are the elements that move from the sides
+            nmbLayers : Number(this.options[this.selectedIndex].getAttribute('data-layers')),
+            // bg color of each layer
+            bgcolor : this.options[this.selectedIndex].getAttribute('data-colors').split(','),
+            // effect classname
+            effect : 'anim--' + this.value,
+            onStart : function(direction) {
+                // next page gets class page--animate-[direction]
+                var nextPage = pages[currentPage === 0 ? dataId : 0];
+                classie.add(nextPage, 'page--animate-' + direction);
+            },
+            onEnd : function(direction) {
+                // remove class page--animate-[direction] from next page
+                var nextPage = pages[currentPage === 0 ? dataId : 0];
+                nextPage.className = 'page-content';
+            }
+        };
+        
+        revealer = new Revealer(revealerOpts);
+    }
+})();

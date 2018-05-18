@@ -1,71 +1,95 @@
-<div class="sideBar-push">
-<nav class="sideBar sideBar-vertical sideBar-left" id="sideBar-s1">
-		<!-- logo wrapper -->
-		<div class="logo-wrapper">
-			<h1>FMP</h1>
-			<a href="index.html" class="home">
-				<i class="fa fa-home"></i>
+<div ng-if="vm.isAuthenticated()">
+	<div class="sideBar-push" >
+		<nav class="sideBar sideBar-vertical sideBar-left" id="sideBar-s1">
+			<!-- logo wrapper -->
+			<div class="logo-wrapper">
+				<h1>FMP</h1>
+				<a ui-sref="home" ng-click="vm.collapseNavbar()" class="home">
+					<i class="fa fa-home"></i>
+				</a>
+			</div>
+	
+			<!-- search  -->
+			<div class="search-wrap">
+				<i class="fa fa-search"></i>
+				<input type="text" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" value="" name="keywords" id="keywords" maxlength="60">
+			</div>	
+	
+			<!-- left menu -->
+			<ul>
+			    <li class="menu-list has-sub">
+			    	<a>
+			    		<i class="fa fa-file-text"></i><span>Work Queue</span>
+			    	</a>
+			    	<div class="sub-menu">
+			    		<ul>
+			    		    <li>
+			    		    	<a ui-sref="work-package" ng-click="vm.collapseNavbar()"><i class="fa fa-circle"></i> Work Order</a>
+			    		    </li>
+			    		</ul>
+			    	</div>
+			    	<div class="tooltip">Work Order</div>
+			    </li>
+			    <li class="menu-list has-sub">
+			    	<a>
+			    		<i class="fa fa-list-alt"></i><span>AFD Query</span>
+			    	</a>
+			    	<div class="sub-menu">
+			    		<ul>
+			    		    <li>
+			    		    	<a ui-sref="afd-query" ng-click="vm.collapseNavbar()"><i class="fa fa-circle"></i> AFD Query</a>
+			    		    </li>
+			    		    <li>
+			    		    	<a ui-sref="yqyr-query" ng-click="vm.collapseNavbar()"><i class="fa fa-circle"></i> YQ/YR Query </a>
+			    		    </li>
+			    		</ul>
+			    	</div>
+			    	<div class="tooltip">ADF Query</div>
+			    </li>
+			    <li class="menu-list">
+			    	<a>
+			    		<i class="fa fa-paper-plane-o"></i><span>Fare Recommendation</span>
+			    	</a>
+			    	<div class="tooltip">Fare Recommendation</div>
+			    </li>
+			    <li class="menu-list has-sub">
+			    	<a>
+			    		<i class="fa fa-list"></i><span>Entities</span>
+			    	</a>
+			    	<div class="sub-menu">
+			    		<ul>
+			    		    <li>
+			    		    	<a ui-sref="system-parameter" ng-click="vm.collapseNavbar()"><i class="fa fa-circle"></i> System Parameter </a>
+			    		    </li>
+			    		</ul>
+			    	</div>
+			    	<div class="tooltip">Entities</div>
+			    </li>
+			</ul>				
+		</nav>
+	</div>
+	
+	<div class="content-header">
+		<div class="clearfix">
+			<a class="sidebar-toggle pull-left showLeftPush" data-toggle="push-menu" role="button">
+			    <span class="sr-only">Toggle navigation</span>
+			    <span class="icon-bar"></span>
+			    <span class="icon-bar"></span>
+			    <span class="icon-bar"></span>
 			</a>
-		</div>
-
-		<!-- search  -->
-		<div class="search-wrap">
-			<i class="fa fa-search"></i>
-			<input type="text" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" value="" name="keywords" id="keywords" maxlength="60">
+			
+	      	<div class="pull-right">
+	            <ul class="top-right-nav">
+	                <li>
+	                    <a href="#"><i class="fa fa-user"></i>User</a>
+	                </li>
+	                <li>
+	                    <a ng-click="vm.logout()">Sign Out</a>
+	                </li>
+	            </ul>
+	        </div>
 		</div>	
-
-		<!-- left menu -->
-		<ul>
-		    <li class="menu-list has-sub">
-		    	<a href="#">
-		    		<i class="fa fa-file-text"></i><span>Work Queue</span>
-		    	</a>
-		    	<div class="sub-menu">
-		    		<ul>
-		    		    <li>
-		    		    	<a ui-sref="work-package" ng-click="vm.collapseNavbar()"><i class="fa fa-circle"></i> Work Order</a>
-		    		    </li>
-		    		</ul>
-		    	</div>
-		    	<div class="tooltip">Work Order</div>
-		    </li>
-		    <li class="menu-list has-sub">
-		    	<a href="#">
-		    		<i class="fa fa-list-alt"></i><span>AFD Query</span>
-		    	</a>
-		    	<div class="sub-menu">
-		    		<ul>
-		    		    <li>
-		    		    	<a ui-sref="afd-query" ng-click="vm.collapseNavbar()"><i class="fa fa-circle"></i> AFD Query</a>
-		    		    </li>
-		    		    <li>
-		    		    	<a ui-sref="yqyr-query" ng-click="vm.collapseNavbar()"><i class="fa fa-circle"></i> YQ/YR Query </a>
-		    		    </li>
-		    		</ul>
-		    	</div>
-		    	<div class="tooltip">ADF Query</div>
-		    </li>
-		    <li class="menu-list">
-		    	<a href="#">
-		    		<i class="fa fa-paper-plane-o"></i><span>Fare Recommendation</span>
-		    	</a>
-		    	<div class="tooltip">Fare Recommendation</div>
-		    </li>
-		    <li class="menu-list has-sub">
-		    	<a href="#">
-		    		<i class="fa fa-list"></i><span>Entities</span>
-		    	</a>
-		    	<div class="sub-menu">
-		    		<ul>
-		    		    <li>
-		    		    	<a ui-sref="system-parameter" ng-click="vm.collapseNavbar()"><i class="fa fa-circle"></i> System Parameter </a>
-		    		    </li>
-		    		</ul>
-		    	</div>
-		    	<div class="tooltip">Entities</div>
-		    </li>
-		</ul>				
-	</nav>
+	</div>
 </div>
 <!-- <nav class="navbar navbar-default" role="navigation"> -->
 <!--     <div class="container"> -->

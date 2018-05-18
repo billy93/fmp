@@ -7,7 +7,7 @@ $(function(){
 		$('.sideBar').find('.menu-list').toggleClass('open');
 		$('.menu-list').removeClass('sub');
 		$('.sub-menu').slideUp(200);
-		$('.page-content').toggleClass('pushed');
+		$('.sidebar-toggle').toggleClass('pushed');
 		$('.fa-home').toggleClass('hidden')
 	}
 
@@ -99,6 +99,11 @@ $(function(){
 	$(".box-header").on('click',function(){
 		$(this).toggleClass('open');
 		$(this).siblings('.box-body').slideToggle(200);
+	});
+	
+	// box detail
+	$(".box-header.box-tab").on('click',function(){
+		$(this).find('.tab-content').slideToggle(200);
 	});
 
 	// comment
@@ -293,4 +298,3 @@ $(function(){
 	});
 	
 });
-
