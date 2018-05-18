@@ -27,6 +27,7 @@
         vm.currentTab = [];
         vm.currentAddonTab = [];
         vm.currentDiscountTab = [];
+        vm.currentMarketTab = [];
         
         vm.rulesMenu = true;
         vm.user = user;
@@ -159,67 +160,21 @@
         	}
         	
         	if(!findTab){
-        		alert('Sheet cannot be deleted');
+	        	for(var x=0;x<vm.currentMarketTab.length;x++){
+	        		if(vm.currentMarketTab[x]){
+	        			console.log('Active Market Tab '+x);
+	        			findTab = true;
+	        			
+	        			var index = vm.workPackage.marketFareSheet.indexOf(x);
+	                	vm.workPackage.marketFareSheet.splice(index, 1); 
+	                	vm.selectedMarketTab = 0;
+	        			break;
+	        		}
+	        	}
         	}
         	
+        	return findTab;        	
         }
-        
-        vm.addSheet = function(){
-        	$uibModal.open({
-                templateUrl: 'app/pages/work-packages/work-package-add-sheet-dialog.html',
-                controller: 'WorkPackageAddSheetDialogController',
-                controllerAs: 'vm',
-                backdrop: 'static',
-                size: 'lg',
-                windowClass: 'full-page-modal',
-                resolve: {
-                }
-			}).result.then(function(option) {
-				console.log(option);
-				vm.addTab(option);
-            }, function() {
-        			
-            });
-        };
-        
-        vm.copySheet = function(){
-        	var findTab = false;
-        	
-        	if(!findTab){
-	        	for(var x=0;x<vm.currentTab.length;x++){
-	        		if(vm.currentTab[x]){
-	        			console.log('Active Fare Tab '+x);
-	        			findTab = true;
-	        			
-	        			var index = vm.workPackage.fareSheet.indexOf(x);
-	        			vm.workPackage.fareSheet.push(vm.workPackage.fareSheet[x]);
-	        			break;
-	        		}
-	        	}
-        	}
-        	
-        	if(!findTab){
-	        	for(var x=0;x<vm.currentAddonTab.length;x++){
-	        		if(vm.currentAddonTab[x]){
-	        			console.log('Active Addon Tab '+x);
-	        			findTab = true;
-	        			
-	        			var index = vm.workPackage.addonFareSheet.indexOf(x);
-	        			vm.workPackage.addonFareSheet.push(vm.workPackage.addonFareSheet[x]);
-	        			break;
-	        		}
-	        	}
-        	}
-        	
-        	if(!findTab){
-        		alert('Sheet cannot be copied');
-        	}
-//          	vm.workPackage.fareSheet.push(vm.workPackage.fareSheet[vm.selectedTab]);
-        };
-        
-        vm.removeSheet = function(){
-        	vm.removeTab();
-        };
         //END FARES TAB
         
         //ADDON TAB
@@ -281,6 +236,37 @@
         	vm.removeDiscountTab();
         };
         //END DISCOUNT TAB
+
+        //MARKET TAB
+        vm.selectedMarketTab = 0;       
+        vm.selectMarketTab = function(index){
+        	vm.resetTab();        	
+        	vm.currentMarketTab[index] = true;
+        	vm.selectedMarketTab = index;
+        };
+        
+        vm.addMarketTab = function(){
+        	vm.workPackage.marketFareSheet.push({});
+        }
+        
+        vm.removeMarketTab = function(){
+        	var index = vm.workPackage.marketFareSheet.indexOf(vm.selectedMarketTab);
+        	vm.workPackage.marketFareSheet.splice(index, 1); 
+        	vm.selectedMarketTab = 0;
+        }
+        
+        vm.addMarketSheet = function(){
+        	vm.addMarketTab();
+        };
+        
+        vm.copyMarketSheet = function(){
+          	vm.workPackage.marketFareSheet.push(vm.workPackage.marketFareSheet[vm.selectedMarketTab]);
+        };
+        
+        vm.removeMarketSheet = function(){
+        	vm.removeMarketTab();
+        };
+        //END MARKET TAB
         
         //OTHER TAB
         vm.selectOtherTab = function(tabName){
@@ -291,11 +277,13 @@
         		vm.currentTabAttachment = true;
         	} else if(tabName == 'filingDetail'){
         		vm.currentTabFilingDetail = true;
+        	} else if(tabName == 'marketRules'){
+        		vm.currentTabMarketRules = true;
         	}
         };
         //END OTHER TAB
         
-        
+        //RESET TAB FUNCTION
         vm.resetTab = function(){
         	for(var x=0;x<vm.currentTab.length;x++){
         		vm.currentTab[x]=false;
@@ -306,10 +294,89 @@
         	for(var x=0;x<vm.currentDiscountTab.length;x++){
         		vm.currentDiscountTab[x]=false;
         	}
+        	for(var x=0;x<vm.currentMarketTab.length;x++){
+        		vm.currentMarketTab[x]=false;
+        	}
         	vm.currentTabFilingInstruction = false;
         	vm.currentTabAttachment = false;
         	vm.currentTabFilingDetail = false;
+        	vm.currentTabMarketRules = false;
         };
+        //END RESET TAB FUNCTION
+        
+        //SHEET FUNCTION
+        vm.addSheet = function(){
+        	$uibModal.open({
+                templateUrl: 'app/pages/work-packages/work-package-add-sheet-dialog.html',
+                controller: 'WorkPackageAddSheetDialogController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full-page-modal',
+                resolve: {
+                }
+			}).result.then(function(option) {
+				console.log(option);
+				vm.addTab(option);
+            }, function() {
+        			
+            });
+        };
+        
+        vm.copySheet = function(){
+        	var findTab = false;
+        	
+        	if(!findTab){
+	        	for(var x=0;x<vm.currentTab.length;x++){
+	        		if(vm.currentTab[x]){
+	        			console.log('Active Fare Tab '+x);
+	        			findTab = true;
+	        			
+	        			var index = vm.workPackage.fareSheet.indexOf(x);
+	        			vm.workPackage.fareSheet.push(vm.workPackage.fareSheet[x]);
+	        			break;
+	        		}
+	        	}
+        	}
+        	
+        	if(!findTab){
+	        	for(var x=0;x<vm.currentAddonTab.length;x++){
+	        		if(vm.currentAddonTab[x]){
+	        			console.log('Active Addon Tab '+x);
+	        			findTab = true;
+	        			
+	        			var index = vm.workPackage.addonFareSheet.indexOf(x);
+	        			vm.workPackage.addonFareSheet.push(vm.workPackage.addonFareSheet[x]);
+	        			break;
+	        		}
+	        	}
+        	}
+        	
+        	if(!findTab){
+	        	for(var x=0;x<vm.currentMarketTab.length;x++){
+	        		if(vm.currentMarketTab[x]){
+	        			console.log('Active Market Tab '+x);
+	        			findTab = true;
+	        			
+	        			var index = vm.workPackage.marketFareSheet.indexOf(x);
+	        			vm.workPackage.marketFareSheet.push(vm.workPackage.marketFareSheet[x]);
+	        			break;
+	        		}
+	        	}
+        	}
+        	
+        	if(!findTab){
+        		alert('Sheet cannot be copied');
+        	}
+        };
+        
+        vm.removeSheet = function(){
+        	var removed = vm.removeTab();
+        	if(!removed){
+        		alert('Sheet cannot be deleted');
+        	}
+        };
+        //END SHEET FUNCTION
         
         vm.faresActionButton = [];
         vm.rowTableClick = function(e, index){
@@ -427,36 +494,27 @@
  	    //Specific Fares Function
  	    vm.addFares = function(){ 	    	
  	    	if(vm.workPackage.fareSheet[vm.selectedTab].fares == null){
- 	    		console.log("WORKPACKAGE FARES NULL");
  	    		vm.workPackage.fareSheet[vm.selectedTab].fares = [];
-	       	  }
+       	  	}
  	    	
- 	    		vm.workPackage.fareSheet[vm.selectedTab].fares.push({
-	 			  status:"PENDING",
-	 			  action:"New",
-      	 	      carrier:"GA"
-	 		  });
-//	 		  if(vm.workPackage.fares == null){
-//	       		vm.workPackage.fares = [];
-//	       	  }
-//	 		  vm.workPackage.fares.push({
-//	 			  status:"PENDING",
-//	 			  action:"New",
-//      	 	      carrier:"GA"
-//	 		  });
+    		vm.workPackage.fareSheet[vm.selectedTab].fares.push({
+    			status:"PENDING",
+    			action:"New",
+  	 	      	carrier:"GA"
+    		});
  	    }
  	    
         vm.rowFaresSelected = function(workPackageFare){
-	    		vm.selectedFare = workPackageFare;
+        	vm.selectedFare = workPackageFare;
 	    }
         
         vm.deleteFaresSelected = function(){
-        		var index = vm.workPackage.fareSheet[vm.selectedTab].fares.indexOf(vm.selectedFare);
-        		vm.workPackage.fareSheet[vm.selectedTab].fares.splice(index, 1);  
+    		var index = vm.workPackage.fareSheet[vm.selectedTab].fares.indexOf(vm.selectedFare);
+    		vm.workPackage.fareSheet[vm.selectedTab].fares.splice(index, 1);  
 	    }
         
         vm.duplicateFaresSelected = function(){
-        		vm.workPackage.fares.push(JSON.parse(JSON.stringify(vm.selectedFare)));
+    		vm.workPackage.fares.push(JSON.parse(JSON.stringify(vm.selectedFare)));
 	    }
         //End Specific Fares Function
         
@@ -474,48 +532,49 @@
         }
         
         vm.rowAddonFaresSelected = function(workPackageFare){
-	    		vm.selectedFareAddon = workPackageFare;
+	    	vm.selectedFareAddon = workPackageFare;
 	    }
 	    
 	    vm.deleteAddonFaresSelected = function(){
-	    		var index = vm.workPackage.addonFares.indexOf(vm.selectedFareAddon);
-	    		vm.workPackage.addonFares.splice(index, 1);  
+    		var index = vm.workPackage.addonFares.indexOf(vm.selectedFareAddon);
+    		vm.workPackage.addonFares.splice(index, 1);  
 	    }
 	    
 	    vm.duplicateAddonFaresSelected = function(){
-	    		vm.workPackage.addonFares.push(JSON.parse(JSON.stringify(vm.selectedFareAddon)));
+    		vm.workPackage.addonFares.push(JSON.parse(JSON.stringify(vm.selectedFareAddon)));
 	    }
         //End Addon Fares Function
         
 	    //Market Fares Function
 	    vm.addMarketFares = function(){
-	    		if(vm.workPackage.marketFares == null){
-	        		vm.workPackage.marketFares = [];
-	        	}
-	    	  	vm.workPackage.marketFares.push({
-	    	  		status:"PENDING",
-	    	  		carrier:"GA",
-	    	  		action: "NEW"
-	    	  	});
+	    	if(vm.workPackage.marketFareSheet[vm.selectedMarketTab].fares == null){
+        		vm.workPackage.marketFareSheet[vm.selectedMarketTab].fares = [];	      	  	
+        	}
+        	
+        	vm.workPackage.marketFareSheet[vm.selectedAddonTab].fares.push({
+      	  		status:"PENDING",
+      	  		action:"New",
+      	  		carrier:"GA",
+      	  	});
 	    };
 	    
 	    vm.rowMarketFaresSelected = function(workPackageFare){
-	    		vm.selectedFareMarket = workPackageFare;
-	    		for(var x=0;x<vm.workPackage.marketRulesData.length;x++){
-	    			if(workPackageFare.ruleno == vm.workPackage.marketRulesData[x].ruleid){
-	    				vm.selectedFareMarket.fareRule = vm.workPackage.marketRulesData[x].fareRule;
-	    				break;
-	    			}	    			
-	    		}
+    		vm.selectedFareMarket = workPackageFare;
+    		for(var x=0;x<vm.workPackage.marketRulesData.length;x++){
+    			if(workPackageFare.ruleno == vm.workPackage.marketRulesData[x].ruleid){
+    				vm.selectedFareMarket.fareRule = vm.workPackage.marketRulesData[x].fareRule;
+    				break;
+    			}	    			
+    		}
 	    }
 	    
 	    vm.deleteMarketFaresSelected = function(){
-	    		var index = vm.workPackage.marketFares.indexOf(vm.selectedFareMarket);
-	    		vm.workPackage.marketFares.splice(index, 1);  
+    		var index = vm.workPackage.marketFares.indexOf(vm.selectedFareMarket);
+    		vm.workPackage.marketFares.splice(index, 1);  
 	    }
 	    
 	    vm.duplicateMarketFaresSelected = function(){
-	    		vm.workPackage.marketFares.push(JSON.parse(JSON.stringify(vm.selectedFareMarket)));
+    		vm.workPackage.marketFares.push(JSON.parse(JSON.stringify(vm.selectedFareMarket)));
 	    }
 	    //End Market Fares Function
 	    

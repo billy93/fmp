@@ -14,6 +14,7 @@
         vm.workPackage.fareSheet = [{fareCarrier:'GA'}];
         vm.workPackage.addonFareSheet = [{fareCarrier:'GA'}];
         vm.workPackage.discountFareSheet = [{fareCarrier:'GA'}];
+        vm.workPackage.marketFareSheet = [{fareCarrier:'GA'}];
         vm.reviewLevels = reviewLevels;
         vm.businessAreas = businessAreas;
         
