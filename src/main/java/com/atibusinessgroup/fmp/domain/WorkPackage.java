@@ -30,12 +30,22 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     
     @Field("addon")
     private boolean addon;
-    
+
+    //MARKET
     @Field("market_fares")
     private boolean marketFares;
     
     @Field("market_rules")
     private boolean marketRules;
+    //END MARKET
+    
+    //WAIVER
+    @Field("waiver_fares")
+    private boolean waiverFares;
+
+    @Field("waiver_rules")
+    private boolean waiverRules;
+    //END WAIVER
     
     @Field("filing_instruction")
     private boolean filingInstruction;
@@ -90,7 +100,7 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     private String businessArea;
     
     @Field("priority")
-    private Priority priority;
+    private String priority;
 
     @Field("filing_date")
     private ZonedDateTime filingDate;
@@ -143,8 +153,47 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     @Field("waiver_fare_sheet")
     private List<WorkPackageFareSheet> waiverFareSheet;
     
+    @Field("reuse_from")
+    private String reuseFrom;
     
-    public boolean isFilingDetails() {
+    @Field("replace_from")
+    private String replaceFrom;
+    
+    
+
+	public String getReuseFrom() {
+		return reuseFrom;
+	}
+
+	public void setReuseFrom(String reuseFrom) {
+		this.reuseFrom = reuseFrom;
+	}
+
+	public String getReplaceFrom() {
+		return replaceFrom;
+	}
+
+	public void setReplaceFrom(String replaceFrom) {
+		this.replaceFrom = replaceFrom;
+	}
+
+	public boolean isWaiverFares() {
+		return waiverFares;
+	}
+
+	public void setWaiverFares(boolean waiverFares) {
+		this.waiverFares = waiverFares;
+	}
+
+	public boolean isWaiverRules() {
+		return waiverRules;
+	}
+
+	public void setWaiverRules(boolean waiverRules) {
+		this.waiverRules = waiverRules;
+	}
+
+	public boolean isFilingDetails() {
 		return filingDetails;
 	}
 
@@ -178,6 +227,14 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
         private String accountCode;
         //End Discount Fares
         
+        //Waiver Fares
+        @Field("waiver_fares_name")
+        private String waiverFaresName;
+        
+        @Field("waiver_fare_type")
+        private String waiverFareType;        
+        //End Waiver Fares
+        
         @Field("market_fares_name")
         private String marketFaresName;
         
@@ -196,7 +253,23 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
         @Field("discontinue_date")
         private String discontinueDate;
 
-        public String getDiscountFareType() {
+        public String getWaiverFaresName() {
+			return waiverFaresName;
+		}
+
+		public void setWaiverFaresName(String waiverFaresName) {
+			this.waiverFaresName = waiverFaresName;
+		}
+
+		public String getWaiverFareType() {
+			return waiverFareType;
+		}
+
+		public void setWaiverFareType(String waiverFareType) {
+			this.waiverFareType = waiverFareType;
+		}
+
+		public String getDiscountFareType() {
 			return discountFareType;
 		}
 
@@ -529,6 +602,12 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 	    @Field("file_content_type")
 	    private String fileContentType;
 
+	    @Field("username")	    
+	    private String username;
+	    
+	    @Field("createdTime")	    
+		private ZonedDateTime createdTime;
+		
 		public String getComment() {
 			return comment;
 		}
@@ -552,7 +631,24 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 		public void setFileContentType(String fileContentType) {
 			this.fileContentType = fileContentType;
 		}
-}
+
+		public String getUsername() {
+			return username;
+		}
+
+		public void setUsername(String username) {
+			this.username = username;
+		}
+
+		public ZonedDateTime getCreatedTime() {
+			return createdTime;
+		}
+
+		public void setCreatedTime(ZonedDateTime createdTime) {
+			this.createdTime = createdTime;
+		}
+		
+	}
 
 
 	public static class FilingInstruction{
@@ -568,6 +664,13 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     	    @Field("file_content_type")
     	    private String fileContentType;
 
+
+    	    @Field("username")	    
+    	    private String username;
+    	    
+    	    @Field("createdTime")	    
+    		private ZonedDateTime createdTime;
+    	    
 			public String getStatus() {
 				return status;
 			}
@@ -622,6 +725,22 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 
 			public void setFileContentType(String fileContentType) {
 				this.fileContentType = fileContentType;
+			}
+
+			public String getUsername() {
+				return username;
+			}
+
+			public void setUsername(String username) {
+				this.username = username;
+			}
+
+			public ZonedDateTime getCreatedTime() {
+				return createdTime;
+			}
+
+			public void setCreatedTime(ZonedDateTime createdTime) {
+				this.createdTime = createdTime;
 			}
     }
 	
@@ -780,20 +899,15 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
         this.name = name;
     }
 
-    public Priority getPriority() {
-        return priority;
-    }
+    public String getPriority() {
+		return priority;
+	}
 
-    public WorkPackage priority(Priority priority) {
-        this.priority = priority;
-        return this;
-    }
+	public void setPriority(String priority) {
+		this.priority = priority;
+	}
 
-    public void setPriority(Priority priority) {
-        this.priority = priority;
-    }
-    
-    public ZonedDateTime getDistributionDate() {
+	public ZonedDateTime getDistributionDate() {
         return distributionDate;
     }
 

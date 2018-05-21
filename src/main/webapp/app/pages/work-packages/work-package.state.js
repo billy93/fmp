@@ -29,13 +29,16 @@
                     squash: true
                 },
                 sort: {
-                    value: 'id,asc',
+                    value: 'last_modified_date,desc',
                     squash: true
                 },
-                search: null
+                search: null,
+                workPackageFilter: null
             },
             resolve: {
                 pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
+                	console.log($stateParams.sort);
+                	console.log("PREDICATE : "+PaginationUtil.parsePredicate($stateParams.sort));
                     return {
                         page: PaginationUtil.parsePage($stateParams.page),
                         sort: $stateParams.sort,

@@ -98,6 +98,248 @@
         	"M" : "Substract Specified from Calculated"
         };
         
+        vm.fields = [
+        	// REGULAR HEADER FARES FIELD
+        	{
+        		name:"description",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"fareType",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"approvalReference",
+        		editable:["HO"],
+        		mandatory:["HO"]
+        	},
+        	
+        	//REGULAR FARES FIELD
+        	{
+        		name:"status",
+        		editable:["HO"],
+        		mandatory:["HO"]
+        	},
+        	{
+        		name:"carrier",
+        		editable:[],
+        		mandatory:[]
+        	},
+        	{
+        		name:"tarno",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:["HO", "Distribution"]
+        	},
+        	{
+        		name:"tarcd",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:["HO", "Distribution"]
+        	},
+        	{
+        		name:"origin",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"destination",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"farebasis",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:["HO", "Distribution"]
+        	},
+        	{
+        		name:"bookingClass",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:["HO"]
+        	},
+        	{
+        		name:"cabin",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:["LSO", "HO", "Distribution"]
+        	},
+        	{
+        		name:"typeOfJourney",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:["LSO", "HO", "Distribution"]
+        	},
+        	{
+        		name:"footnote",
+        		editable:["HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"rtgno",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:["Distribution"]
+        	},
+        	{
+        		name:"ruleno",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:["Distribution"]
+        	},
+        	{
+        		name:"currency",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:["LSO", "HO", "Distribution"]
+        	},
+        	{
+        		name:"amount",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"aif",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"travelStartDate",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"travelEndDate",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"saleStartDate",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"saleEndDate",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"comment",
+        		editable:["LSO", "HO", "Distribution", "Route Management"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"travelComplete",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"travelIndicator",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"ratesheetComment",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        ];
+        
+        vm.isRequired = function(field){
+        	return vm.checkField(field, 'mandatory');        	 
+        };
+        
+        vm.isEditable = function(field){
+        	return vm.checkField(field, 'editable');    
+        };
+        
+        vm.checkField = function(field, type){
+        	var result = false;
+        	if(type == 'mandatory'){
+        		for(var x=0;x<vm.fields.length;x++){
+        			if(vm.fields[x].name == field){
+        				var reviewLevels = vm.fields[x].mandatory;
+        				if(reviewLevels.indexOf(vm.workPackage.reviewLevel) > -1){
+        					result = true;
+        					break;
+        				}
+        			}
+        		}
+        	}
+        	else if(type == 'editable'){
+        		for(var x=0;x<vm.fields.length;x++){
+        			if(vm.fields[x].name == field){
+        				var reviewLevels = vm.fields[x].editable;
+        				if(reviewLevels.indexOf(vm.workPackage.reviewLevel) > -1){
+        					result = true;
+        					break;
+        				}
+        			}
+        		}
+        	}
+	  		return result;
+	    }
+        
+        //GENERATE TOUR CODE
+        vm.generateTourCode = function(){
+        	$uibModal.open({
+                templateUrl: 'app/pages/work-packages/work-package-generate-tourcode-dialog.html',
+                controller: 'WorkPackageGenerateTourcodeDialogController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full-page-modal',
+                resolve: {
+                	workPackage: function(){
+                		return vm.workPackage;
+                	}
+                }
+			}).result.then(function(option) {
+				var findTab = false;
+	        	
+	        	if(!findTab){
+		        	for(var x=0;x<vm.currentTab.length;x++){
+		        		if(vm.currentTab[x]){
+		        			console.log('Active Fare Tab '+x);
+		        			findTab = true;
+		        			vm.workPackage.fareSheet[x].approvalReference = option.tourcode;		        			
+		        			break;
+		        		}
+		        	}
+	        	}
+	        	
+	        	if(!findTab){
+		        	for(var x=0;x<vm.currentAddonTab.length;x++){
+		        		if(vm.currentAddonTab[x]){
+		        			console.log('Active Addon Tab '+x);
+		        			findTab = true;
+		        			vm.workPackage.addonFareSheet[x].approvalReference = option.tourcode;		        			
+		        			break;
+		        		}
+		        	}
+	        	}
+	        	
+	        	if(!findTab){
+		        	for(var x=0;x<vm.currentDiscountTab.length;x++){
+		        		if(vm.currentAddonTab[x]){
+		        			console.log('Active Discount Tab '+x);
+		        			findTab = true;
+		        			vm.workPackage.discountFareSheet[x].approvalReference = option.tourcode;		        					        			
+		        			break;
+		        		}
+		        	}
+	        	}
+	        	
+	        	if(!findTab){
+		        	for(var x=0;x<vm.currentMarketTab.length;x++){
+		        		if(vm.currentMarketTab[x]){
+		        			console.log('Active Market Tab '+x);
+		        			findTab = true;
+		        			vm.workPackage.marketFareSheet[x].approvalReference = option.tourcode;		        					        					        			
+		        			break;
+		        		}
+		        	}
+	        	}
+            }, function() {
+        			
+            });
+        };
+        //END GENERATE TOUR CODE
+        
         //Comment TAB
         vm.currentTabComment = true;
         vm.selectCommentTab = function(tab){
@@ -559,14 +801,38 @@
         	vm.selectedFare = workPackageFare;
 	    }
         
-        vm.deleteFaresSelected = function(){
-    		var index = vm.workPackage.fareSheet[vm.selectedTab].fares.indexOf(vm.selectedFare);
-    		vm.workPackage.fareSheet[vm.selectedTab].fares.splice(index, 1);  
+        vm.deleteFaresSelected = function(idx){
+    		vm.workPackage.fareSheet[vm.selectedTab].fares.splice(idx, 1);  
+    		vm.faresActionButton[idx] = false;
 	    }
         
         vm.duplicateFaresSelected = function(){
     		vm.workPackage.fares.push(JSON.parse(JSON.stringify(vm.selectedFare)));
 	    }
+        
+        function swap(input, index_A, index_B) {
+    	    var temp = input[index_A];
+
+    	    input[index_A] = input[index_B];
+    	    input[index_B] = temp;
+    	}
+        
+        vm.moveUpFare = function(idx){
+        	if(idx != 0){
+        		swap(vm.workPackage.fareSheet[vm.selectedTab].fares, idx, idx-1);
+        	}
+        }
+        vm.moveDownFare = function(idx){
+        	if(idx != vm.workPackage.fareSheet[vm.selectedTab].fares.length-1){
+        		swap(vm.workPackage.fareSheet[vm.selectedTab].fares, idx, idx+1);
+        	}
+        }
+        
+        vm.clearSelection = function(){
+        	for(var x=0;x<vm.faresActionButton.length;x++){
+        		vm.faresActionButton[x] = false;
+        	}
+        };
         //End Specific Fares Function
         
         //Addon Fares Function

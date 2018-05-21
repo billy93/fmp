@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.atibusinessgroup.fmp.domain.WorkPackage;
 import com.atibusinessgroup.fmp.domain.enumeration.Status;
 import com.atibusinessgroup.fmp.repository.WorkPackageRepository;
+import com.atibusinessgroup.fmp.web.rest.WorkPackageResource.WorkPackageFilter;
 
 
 /**
@@ -81,5 +82,9 @@ public class WorkPackageService {
 	public Page<WorkPackage> findAllByOrderByLastModifiedDate(Pageable pageable) {
 		log.debug("Request to get all WorkPackages");
         return workPackageRepository.findAllByOrderByLastModifiedDateDesc(pageable);
+	}
+	
+	public Page<WorkPackage> findCustom(WorkPackageFilter wpFilter, Pageable pageable){
+		return workPackageRepository.findCustom(wpFilter, pageable);
 	}
 }

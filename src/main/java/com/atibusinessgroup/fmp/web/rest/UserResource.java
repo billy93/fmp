@@ -1,21 +1,28 @@
 package com.atibusinessgroup.fmp.web.rest;
 
-import com.atibusinessgroup.fmp.config.Constants;
-import com.codahale.metrics.annotation.Timed;
-import com.atibusinessgroup.fmp.domain.User;
-import com.atibusinessgroup.fmp.domain.UserHistory;
-import com.atibusinessgroup.fmp.repository.UserRepository;
-import com.atibusinessgroup.fmp.security.AuthoritiesConstants;
-import com.atibusinessgroup.fmp.service.MailService;
-import com.atibusinessgroup.fmp.service.UserService;
-import com.atibusinessgroup.fmp.service.dto.UserDTO;
-import com.atibusinessgroup.fmp.web.rest.errors.BadRequestAlertException;
-import com.atibusinessgroup.fmp.web.rest.errors.EmailAlreadyUsedException;
-import com.atibusinessgroup.fmp.web.rest.errors.LoginAlreadyUsedException;
-import com.atibusinessgroup.fmp.web.rest.util.HeaderUtil;
-import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.Field;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
+import javax.validation.Valid;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -24,14 +31,31 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
+import com.atibusinessgroup.fmp.config.Constants;
+import com.atibusinessgroup.fmp.domain.User;
+import com.atibusinessgroup.fmp.repository.UserRepository;
+import com.atibusinessgroup.fmp.security.AuthoritiesConstants;
+import com.atibusinessgroup.fmp.security.SecurityUtils;
+import com.atibusinessgroup.fmp.service.MailService;
+import com.atibusinessgroup.fmp.service.UserService;
+import com.atibusinessgroup.fmp.service.dto.UserDTO;
+import com.atibusinessgroup.fmp.web.rest.errors.BadRequestAlertException;
+import com.atibusinessgroup.fmp.web.rest.errors.EmailAlreadyUsedException;
+import com.atibusinessgroup.fmp.web.rest.errors.LoginAlreadyUsedException;
+import com.atibusinessgroup.fmp.web.rest.util.HeaderUtil;
+import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
+import com.codahale.metrics.annotation.Timed;
 
-import java.lang.reflect.Field;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing users.
@@ -233,6 +257,200 @@ public class UserResource {
 				.build();
 	}
 
+	/**
+	 * POST /users : Creates a new user.
+	 * <p>
+	 * Creates a new user if the login and email are not already used, and sends an
+	 * mail with an activation link. The user needs to be activated on creation.
+	 *
+	 * @param userDTO
+	 *            the user to create
+	 * @return the ResponseEntity with status 201 (Created) and with body the new
+	 *         user, or with status 400 (Bad Request) if the login or email is
+	 *         already in use
+	 * @throws URISyntaxException
+	 *             if the Location URI syntax is incorrect
+	 * @throws IOException 
+	 * @throws ClientProtocolException 
+	 * @throws BadRequestAlertException
+	 *             400 (Bad Request) if the login or email is already in use
+	 */
+	@PostMapping("/users/generateTourcode")
+	@Timed
+	public ResponseEntity<GenerateTourcode> createUser(@Valid @RequestBody GenerateTourcode generateTourcode) throws URISyntaxException, ClientProtocolException, IOException {
+		log.debug("REST request to Generate Tourcode : {}", generateTourcode);
+		
+		CloseableHttpClient client = HttpClients.createDefault();
+	    HttpPost httpPost = new HttpPost("https://ga-tcgenerator.atibusinessgroup.com/api/generate");
+	    String username = SecurityUtils.getCurrentUserLogin().get();
+	    User u = userRepository.findOneByLogin(username).get();
+	    
+		if(generateTourcode.getDepartment().contentEquals("RZ")) {					 
+		    List<NameValuePair> params = new ArrayList<NameValuePair>();
+		    params.add(new BasicNameValuePair("secret", "ATI_FMP_GARUDA_INDONESIA_SECRET_KEY_1815051038"));
+		    params.add(new BasicNameValuePair("email", u.getEmail()));
+		    params.add(new BasicNameValuePair("department", generateTourcode.getDepartment()));
+		    params.add(new BasicNameValuePair("correspondence", generateTourcode.getCorrespondence()));
+		    params.add(new BasicNameValuePair("area", generateTourcode.getArea()));
+		    params.add(new BasicNameValuePair("subarearz", generateTourcode.getSubarea()));
+		    params.add(new BasicNameValuePair("subject", generateTourcode.getSubject()));
+		    httpPost.setEntity(new UrlEncodedFormEntity(params));
+		 
+		    CloseableHttpResponse response = client.execute(httpPost);
+		    BufferedReader rd = new BufferedReader(
+			        new InputStreamReader(response.getEntity().getContent()));
+
+			StringBuffer result = new StringBuffer();
+			String line = "";
+			while ((line = rd.readLine()) != null) {
+				result.append(line);
+			}
+		    client.close();
+		    
+		    try {
+				JSONObject json = new JSONObject(result.toString());
+				JSONObject tourCode = json.getJSONObject("tour_code");
+				generateTourcode.setTourcode(tourCode.getString("code"));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else if(generateTourcode.getDepartment().contentEquals("RZT")) {					 
+		    List<NameValuePair> params = new ArrayList<NameValuePair>();
+		    params.add(new BasicNameValuePair("secret", "ATI_FMP_GARUDA_INDONESIA_SECRET_KEY_1815051038"));
+		    params.add(new BasicNameValuePair("email", u.getEmail()));
+		    params.add(new BasicNameValuePair("department", generateTourcode.getDepartment()));
+		    params.add(new BasicNameValuePair("fare_type", generateTourcode.getFaretype()));
+		    params.add(new BasicNameValuePair("area", generateTourcode.getArea()));
+		    params.add(new BasicNameValuePair("subarea", generateTourcode.getSubarea()));
+		    params.add(new BasicNameValuePair("subject", generateTourcode.getSubject()));
+		    httpPost.setEntity(new UrlEncodedFormEntity(params));
+		 
+		    CloseableHttpResponse response = client.execute(httpPost);
+		    BufferedReader rd = new BufferedReader(
+			        new InputStreamReader(response.getEntity().getContent()));
+
+			StringBuffer result = new StringBuffer();
+			String line = "";
+			while ((line = rd.readLine()) != null) {
+				result.append(line);
+			}
+		    client.close();
+		    log.debug("RESPONSE RZT : {}", result.toString());
+		    try {
+				JSONObject json = new JSONObject(result.toString());
+				JSONObject tourCode = json.getJSONObject("tour_code");
+				generateTourcode.setTourcode(tourCode.getString("code"));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else if(generateTourcode.getDepartment().contentEquals("RZI") || generateTourcode.getDepartment().contentEquals("RZD")) {					 
+		    List<NameValuePair> params = new ArrayList<NameValuePair>();
+		    params.add(new BasicNameValuePair("secret", "ATI_FMP_GARUDA_INDONESIA_SECRET_KEY_1815051038"));
+		    params.add(new BasicNameValuePair("email", u.getEmail()));
+		    params.add(new BasicNameValuePair("department", generateTourcode.getDepartment()));
+		    params.add(new BasicNameValuePair("fare_type", generateTourcode.getFaretype()));
+		    params.add(new BasicNameValuePair("subject", generateTourcode.getSubject()));
+		    httpPost.setEntity(new UrlEncodedFormEntity(params));
+		 
+		    CloseableHttpResponse response = client.execute(httpPost);
+		    BufferedReader rd = new BufferedReader(
+			        new InputStreamReader(response.getEntity().getContent()));
+
+			StringBuffer result = new StringBuffer();
+			String line = "";
+			while ((line = rd.readLine()) != null) {
+				result.append(line);
+			}
+		    client.close();
+		    
+		    try {
+				JSONObject json = new JSONObject(result.toString());
+				JSONObject tourCode = json.getJSONObject("tour_code");
+				generateTourcode.setTourcode(tourCode.getString("code"));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return new ResponseEntity<GenerateTourcode>(generateTourcode, null, HttpStatus.OK);
+
+//		if (userDTO.getId() != null) {
+//			throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists");
+//			// Lowercase the user login before comparing with database
+//		} else if (userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).isPresent()) {
+//			throw new LoginAlreadyUsedException();
+//		} else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
+//			throw new EmailAlreadyUsedException();
+//		} else {
+//			User newUser = userService.createUser(userDTO);
+//			mailService.sendCreationEmail(newUser);
+//			return ResponseEntity
+//					.created(new URI("/api/users/" + newUser.getLogin())).headers(HeaderUtil
+//							.createAlert("A user is created with identifier " + newUser.getLogin(), newUser.getLogin()))
+//					.body(newUser);
+//		}
+	}
+	
+	private static class GenerateTourcode{
+		private String department;
+		private String correspondence;
+		private String area;
+		private String subarea;
+		private String subject;
+		private String tourcode;
+		private String faretype;
+		
+		
+		public String getFaretype() {
+			return faretype;
+		}
+		public void setFaretype(String faretype) {
+			this.faretype = faretype;
+		}
+		public String getDepartment() {
+			return department;
+		}
+		public void setDepartment(String department) {
+			this.department = department;
+		}
+		public String getCorrespondence() {
+			return correspondence;
+		}
+		public void setCorrespondence(String correspondence) {
+			this.correspondence = correspondence;
+		}
+		public String getArea() {
+			return area;
+		}
+		public void setArea(String area) {
+			this.area = area;
+		}
+		public String getSubarea() {
+			return subarea;
+		}
+		public void setSubarea(String subarea) {
+			this.subarea = subarea;
+		}
+		public String getSubject() {
+			return subject;
+		}
+		public void setSubject(String subject) {
+			this.subject = subject;
+		}
+		public String getTourcode() {
+			return tourcode;
+		}
+		public void setTourcode(String tourcode) {
+			this.tourcode = tourcode;
+		}
+		
+		
+	}
+	
 	private static List<String> changeDataRecord(User s1, User s2) {
 		List<String> values = new ArrayList<>();
 		for (Field field : s1.getClass().getDeclaredFields()) {

@@ -10,16 +10,18 @@ import org.springframework.stereotype.Repository;
 
 import com.atibusinessgroup.fmp.domain.WorkPackage;
 import com.atibusinessgroup.fmp.domain.enumeration.Status;
+import com.atibusinessgroup.fmp.web.rest.WorkPackageResource.WorkPackageFilter;
 
 /**
  * Spring Data MongoDB repository for the WorkPackage entity.
  */
 @SuppressWarnings("unused")
 @Repository
-public interface WorkPackageRepository extends MongoRepository<WorkPackage, String> {
+public interface WorkPackageRepository extends MongoRepository<WorkPackage, String>, WorkPackageRepositoryCustomAnyName{
 
 	@Query("{'status' : ?0}")
 	List<WorkPackage> findAllByStatus(String status);
 
 	Page<WorkPackage> findAllByOrderByLastModifiedDateDesc(Pageable pageable);
+
 }

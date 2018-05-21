@@ -210,11 +210,12 @@ public class UserService {
                 user.setReviewLevels(userDTO.getReviewLevels());
                 user.setBusinessAreas(userDTO.getBusinessAreas());
                 user.setSuspended(userDTO.getSuspended());
-                if(!userDTO.getSuspended()) {
+                user.setDepartment(userDTO.getDepartment());
+                if(userDTO.getSuspended() != null && !userDTO.getSuspended()) {
                 	user.setLastLoginDateTime(Instant.now());
                 }
                 user.setLocked(userDTO.getLocked());
-                if(!userDTO.getLocked()) {
+                if(userDTO.getLocked() != null && !userDTO.getLocked()) {
                 	user.setFailedLoginCounter(0);
                 }
                 if(userDTO.getPassword()!=null || !userDTO.getPassword().isEmpty()) {

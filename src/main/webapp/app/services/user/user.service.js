@@ -19,7 +19,8 @@
             },
             'save': { method:'POST' },
             'update': { method:'PUT' },
-            'delete':{ method:'DELETE'}
+            'delete':{ method:'DELETE'},
+            'generateTourcode':{method:'POST', url:'api/users/generateTourcode'}
         });
 
         return service;

@@ -1,7 +1,5 @@
 
-        
-        
-        (function() {
+        var home = function() {
             // JavaScript Document
 
             // RequestAnimFrame: a browser API for getting smooth animations
@@ -204,4 +202,6 @@
             }
 
             animloop();
-        })();
+        };
+        
+        (home)();

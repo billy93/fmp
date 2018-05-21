@@ -1,0 +1,131 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()">
+	
+	<!-- <div class="modal-header">
+       <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+               ng-click="vm.clear()">&times;</button>
+       <h4 class="modal-title" id="myWorkPackageLabel">Add Sheet</h4>
+   </div>
+   <div class="modal-body">
+   	   	<div class="form-group">
+            <label>Workorder Fares Type</label>
+            <select class="form-control" name="sheetType" ng-model="vm.option.type"
+                    ng-options="type as type for type in vm.types track by type">
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Workorder Fares Name</label>
+            <input type="text" class="form-control" name="name" id="field_name"
+                    ng-model="vm.option.name"
+                    />
+        </div>
+   </div>
+   <div class="modal-footer">
+       <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+           <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Close</span>
+       </button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span data-translate="entity.action.save">Save</span>
+        </button>
+   </div> -->
+   
+      		<div class="modal-header">
+				        <h5 class="modal-title" id="addNewsheetLabel">Generate Tourcode</h5>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+		      		</div>
+		      		<div class="modal-body">
+		      			<div class="box-detail" ng-if="vm.account.department == 'RZ'">
+		      				<div class="box-header">
+								Generate Tourcode Parameter
+							</div>
+							
+		      				<div class="box-body">
+		      					<div class="form-group">
+									<label>Correspondence</label>
+									<select class="form-control" name="correspondence" ng-model="vm.option.correspondence"
+									        ng-options="type as type for type in vm.correspondences track by type">
+						            </select>
+								</div>
+								<div class="form-group">
+									<label>Area</label>
+									<select class="form-control" name="areas" ng-model="vm.option.area"
+									        ng-options="type as type for type in vm.areas track by type">
+						            </select>
+								</div>
+								<div class="form-group">
+									<label>Sub Area</label>
+									<select class="form-control" name="sub_areas" ng-model="vm.option.subarea"
+									        ng-options="type as type for type in vm.subareas track by type">
+						            </select>
+								</div>
+								<div class="form-group">
+									<label>Subject</label>
+									<input type="text" class="form-control"
+									name="name" id="field_name"
+				                    ng-model="vm.option.subject"
+				                    />
+								</div>
+		      				</div>
+		      			</div>						
+			      	</div>
+			      	<div class="box-detail" ng-if="vm.account.department == 'RZT'">
+	      				<div class="box-header">
+							Generate Tourcode Parameter
+						</div>
+						
+	      				<div class="box-body">
+	      					<div class="form-group">
+								<label>Fare Type</label>
+								<select class="form-control" name="faretype" ng-model="vm.option.faretype"
+								        ng-options="type as type for type in vm.fareType track by type">
+					            </select>
+							</div>
+							<div class="form-group">
+								<label>Area</label>
+								<select class="form-control" name="areas" ng-model="vm.option.area"
+								        ng-options="type as type for type in vm.areas track by type">
+					            </select>
+							</div>
+							<div class="form-group">
+								<label>Sub Area</label>
+								<select class="form-control" name="sub_areas" ng-model="vm.option.subarea"
+								        ng-options="type as type for type in vm.subareas track by type">
+					            </select>
+							</div>
+							<div class="form-group">
+								<label>Subject</label>
+								<input type="text" class="form-control"
+								name="name" id="field_name"
+			                    ng-model="vm.option.subject"
+			                    />
+							</div>
+      					</div>
+			      	</div>
+			      	<div class="box-detail" ng-if="vm.account.department == 'RZI' || vm.account.department == 'RZD'">
+	      				<div class="box-header">
+							Generate Tourcode Parameter
+						</div>
+						
+	      				<div class="box-body">
+	      					<div class="form-group">
+								<label>Fare Type</label>
+								<select class="form-control" name="faretype" ng-model="vm.option.faretype"
+								        ng-options="type as type for type in vm.fareType track by type">
+					            </select>
+							</div>
+							<div class="form-group">
+								<label>Subject</label>
+								<input type="text" class="form-control"
+								name="name" id="field_name"
+			                    ng-model="vm.option.subject"
+			                    />
+							</div>
+      					</div>
+			      	</div>
+		      		<div class="modal-footer">				        
+				        <button type="submit" class="btn btn-secondary" ng-disabled="editForm.$invalid || vm.isSaving">Generate</button>
+				        <button type="button" class="btn btn-back" data-dismiss="modal" ng-click="vm.clear()">Close</button>
+		      		</div>
+</form>
