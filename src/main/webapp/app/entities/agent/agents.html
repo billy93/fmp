@@ -1,0 +1,146 @@
+<div>
+    <h2>Agents</h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+	    <div class="col-md-12 no-pad mb1">
+			<div class="col-md-3">	
+		     	<div class="form-group row">
+					<label class="col-md-4" for="agentType">Agent Type</label>
+			        <input type="text" class="col-md-8" name="agentType" ng-model="vm.agentType" id="agentType">
+		        </div>
+		     	<div class="form-group row">
+					<label class="col-md-4" for="agentCategory">Agent Category</label>
+					<input type="text" class="col-md-8" name="agentCategory" ng-model="vm.agentCategory" id="agentCategory">
+		        </div>
+			</div>
+		   	<div class="col-md-3">	
+		   		<div class="form-group row">
+					<label class="col-md-4" for="posCountry">Pos Country</label>
+			        <input type="text" class="col-md-8" name="posCountry" ng-model="vm.posCountry" id="posCountry">
+		        </div>
+		        <div class="form-group row">
+					<label class="col-md-4" for="agentName">Agent Name</label>
+			        <input type="text" class="col-md-8" name="agentName" ng-model="vm.agentName" id="agentName">
+		        </div>
+		 	</div>
+		 	<div class="col-md-3">	
+		   		<div class="form-group row">
+					<label class="col-md-4" for="posCity">Pos City</label>
+			        <input type="text" class="col-md-8" name="posCity" ng-model="vm.posCity" id="posCity">
+		        </div>
+		        <div class="form-group row">
+					<label class="col-md-4" for="iataCode">IATA Code</label>
+			        <input type="text" class="col-md-8" name="iataCode" ng-model="vm.iataCode" id="iataCode">
+		        </div>
+		 	</div>
+		 	<div class="col-md-3">	
+		         <div class="form-group row">
+			         <input class="col-md-4" type="checkbox" id="isDeleted" name="isDeleted" ng-model="vm.isDeleted">
+					 <label class="col-md-8" for="isDeleted">Show Deleted</label>
+				</div>
+		 	</div>
+		 	<div class="col-md-3">	
+		         <div class="col-md-4 no-pad text-right">
+					<button type="submit" ng-click="vm.searchByParam()"
+			             class="btn btn-primary btn-sm">
+			         Query
+			     </button>
+				</div>
+		 	</div>
+		</div>
+		<div class="action-btn-wrapper no-bot-mar">
+		<div class="col-md-8">
+		</div>
+		
+	</div>
+    </div> 
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-4 no-padding-left">
+                <button class="btn btn-primary" ui-sref="agent.new" >
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span >
+                        Create new Agent
+                    </span>
+                </button>
+                 <button class="btn btn-primary" ng-click="vm.exportAgencies()">
+                    <span class="glyphicon glyphicon-upload" ></span>
+                    <span >
+                        Export
+                    </span>
+                </button>
+                <button class="btn btn-primary" ngf-select class="btn btn-default btn-block"
+			               ngf-change="vm.importAgencies($file)" >
+                    <span class="glyphicon glyphicon-download"></span>
+                    <span >
+                        Import
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+                <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+                    <th jh-sort-by="agentName"><span>Agent Name</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="agentType"><span>Agent Type</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="agentCategory"><span>Agent Category</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="posCity"><span>Pos City</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="pdeudoCity"><span>Pseudo City</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="address"><span>Address</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="telephone"><span>Telephone</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="fax"><span>Fax</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="email"><span>Email</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="contact"><span>Contact</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="iataCode"><span>Iata Code</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="isDeleted"><span>Is Deleted</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="agent in vm.agents track by agent.id">
+                    <td>{{agent.agentName}}</td>
+                    <td>{{agent.agentType}}</td>
+                    <td>{{agent.agentCategory}}</td>
+                    <td>{{agent.posCity}}</td>
+                    <td>{{agent.pdeudoCity}}</td>
+                    <td>{{agent.address}}</td>
+                    <td>{{agent.telephone}}</td>
+                    <td>{{agent.fax}}</td>
+                    <td>{{agent.email}}</td>
+                    <td>{{agent.contact}}</td>
+                    <td>{{agent.iataCode}}</td>
+                    <td>{{agent.isDeleted}}</td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit"
+                                    ui-sref="agent-detail({id:agent.id})"
+                                    class="btn btn-info btn-sm">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                                <span class="hidden-sm-down"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="agent.edit({id:agent.id})"
+                                    class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="hidden-sm-down"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="agent.delete({id:agent.id})"
+                                    class="btn btn-danger btn-sm">
+                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                <span class="hidden-sm-down"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="text-center">
+        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
+    </div>
+</div>
