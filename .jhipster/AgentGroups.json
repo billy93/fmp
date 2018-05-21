@@ -1,0 +1,19 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "agencyGroupName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "agentName",
+            "fieldType": "String"
+        }
+    ],
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "agent_groups",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}

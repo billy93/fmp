@@ -217,7 +217,7 @@ public class UserService {
                 if(!userDTO.getLocked()) {
                 	user.setFailedLoginCounter(0);
                 }
-                if(userDTO.getPassword()!=null || !userDTO.getPassword().isEmpty()) {
+                if(userDTO.getPassword()!=null && !userDTO.getPassword().isEmpty()) {
                 	String encryptedPassword = passwordEncoder.encode(userDTO.getPassword());
                     user.setPassword(encryptedPassword);
                     PasswordHistory ph = new PasswordHistory();
