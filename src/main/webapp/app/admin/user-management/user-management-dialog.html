@@ -101,6 +101,18 @@
            		<label ng-repeat="businessArea in vm.user.businessAreas" ng-click="vm.removeBusinessArea()">{{businessArea}}<span class="delete"><i class="glyphicon glyphicon-remove-sign"></i></span></label>
            	</div>
         </div>  
+        <div class="form-group">
+            <label class="control-label" for="field_department">Department</label>
+            
+            <input type="text" class="form-control"
+				name="department" ng-model="vm.user.department" ng-maxlength="50">
+
+			<div ng-show="editForm.department.$invalid">
+				<p class="help-block" ng-show="editForm.department.$error.maxlength">
+					This field cannot be longer than 50 characters.</p>
+			</div>
+            
+        </div>
 		<div class="form-group">
 			<label for="suspended"> <input
 				ng-disabled="vm.user.id === null" type="checkbox" id="suspended"

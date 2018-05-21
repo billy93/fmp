@@ -9,6 +9,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -28,6 +29,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,10 +45,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.atibusinessgroup.fmp.domain.Counter;
+import com.atibusinessgroup.fmp.domain.Priority;
 import com.atibusinessgroup.fmp.domain.User;
 import com.atibusinessgroup.fmp.domain.WorkPackage;
 import com.atibusinessgroup.fmp.domain.WorkPackage.Attachment;
 import com.atibusinessgroup.fmp.domain.WorkPackage.Comment;
+import com.atibusinessgroup.fmp.domain.WorkPackage.FilingInstruction;
 import com.atibusinessgroup.fmp.domain.WorkPackage.ImportFares;
 import com.atibusinessgroup.fmp.domain.WorkPackageFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageHistory;
@@ -54,6 +60,7 @@ import com.atibusinessgroup.fmp.repository.ContractFMPRepository;
 import com.atibusinessgroup.fmp.repository.ContractFareFMPRepository;
 import com.atibusinessgroup.fmp.repository.CounterRepository;
 import com.atibusinessgroup.fmp.repository.FormRepository;
+import com.atibusinessgroup.fmp.repository.PriorityRepository;
 import com.atibusinessgroup.fmp.repository.UserRepository;
 import com.atibusinessgroup.fmp.repository.WorkPackageFareHistoryDataRepository;
 import com.atibusinessgroup.fmp.repository.WorkPackageHistoryDataRepository;
@@ -107,10 +114,11 @@ public class WorkPackageResource {
     private final WorkPackageHistoryDataRepository workPackageHistoryDataRepository;
     private final WorkPackageFareHistoryDataRepository workPackageFareHistoryDataRepository;
     private final CounterRepository counterRepository;
+    private final PriorityRepository priorityRepository;
     
     public WorkPackageResource(WorkPackageService workPackageService, WorkPackageFareService workPackageFareService, TargetDistributionService targetDistributionService, BusinessAreaService businessAreaService, ReviewLevelService reviewLevelService, UserService userService, UserRepository userRepository, WorkPackageHistoryService workPackageHistoryService,
     		ContractFMPRepository contractFMPRepository, FormRepository formRepository, WorkPackageHistoryDataRepository workPackageHistoryDataRepository,
-    		WorkPackageFareHistoryDataRepository workPackageFareHistoryDataRepository, ContractFareFMPRepository contractFareFMPRepository, CounterRepository counterRepository) {
+    		WorkPackageFareHistoryDataRepository workPackageFareHistoryDataRepository, ContractFareFMPRepository contractFareFMPRepository, CounterRepository counterRepository, PriorityRepository priorityRepository) {
         this.workPackageService = workPackageService;
         this.workPackageFareService = workPackageFareService;
         this.targetDistributionService = targetDistributionService;
@@ -125,6 +133,7 @@ public class WorkPackageResource {
         this.workPackageFareHistoryDataRepository = workPackageFareHistoryDataRepository;
         this.contractFareFMPRepository = contractFareFMPRepository;
         this.counterRepository = counterRepository;
+        this.priorityRepository = priorityRepository;
     }
 
     /**
@@ -194,11 +203,17 @@ public class WorkPackageResource {
         log.debug("REST request to save reuse WorkPackage : {}", workPackage);
         
         WorkPackage wp = workPackageService.findOne(workPackage.getId());
+        wp.setReuseFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
         wp.setReviewLevel("LSO");
         wp.setComment(null);
-        wp.setFilingInstructionData(null);                       
+        wp.setInterofficeComment(null);
+        wp.setFilingInstructionData(null);     
+        wp.setCreatedBy(null);
+        wp.setCreatedDate(null);
+        wp.setLastModifiedBy(null);
+        wp.setLastModifiedDate(null);
         WorkPackage result = workPackageService.save(wp);
         
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
@@ -219,9 +234,14 @@ public class WorkPackageResource {
         log.debug("REST request to save reuse WorkPackage : {}", workPackage);
                
         WorkPackage wp = workPackageService.findOne(workPackage.getId());
+        wp.setReplaceFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
         wp.setReviewLevel("LSO");
+        wp.setCreatedBy(null);
+        wp.setCreatedDate(null);
+        wp.setLastModifiedBy(null);
+        wp.setLastModifiedDate(null);
         WorkPackage result = workPackageService.save(wp);
         
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
@@ -1194,10 +1214,10 @@ public class WorkPackageResource {
             workPackageHistoryService.save(history);
         }
 
-		List<WorkPackageFare> fares = workPackageFareService.findAllByWorkPackageAndFareType(workPackage.getId(), null);
-		for(WorkPackageFare fare : fares) {
-			workPackageFareService.delete(fare.getId());
-		}
+//		List<WorkPackageFare> fares = workPackageFareService.findAllByWorkPackageAndFareType(workPackage.getId(), null);
+//		for(WorkPackageFare fare : fares) {
+//			workPackageFareService.delete(fare.getId());
+//		}
 		
 		/*
 		// Regular Fares
@@ -1319,19 +1339,54 @@ public class WorkPackageResource {
 	    	}
     	}
     	
+    	if(workPackage.getInterofficeComment() != null) {
+	    	for(Comment comments : workPackage.getInterofficeComment()) {
+	    		if(comments.getUsername() == null && comments.getCreatedTime() == null) {
+	    			comments.setUsername(SecurityUtils.getCurrentUserLogin().get());
+	    			comments.setCreatedTime(ZonedDateTime.now());
+	    		}
+	    	}
+    	}
     	
-//    	workPackage.getFares().clear();
-//    	workPackage.getAddonFares().clear();
-//    	workPackage.getDiscountFares().clear();
-//    	workPackage.getMarketFares().clear();
+    	if(workPackage.getAttachmentData() != null) {
+    		for(Attachment attachment : workPackage.getAttachmentData()) {
+    			if(attachment.getUsername() == null && attachment.getCreatedTime() == null) {
+    				attachment.setUsername(SecurityUtils.getCurrentUserLogin().get());
+    				attachment.setCreatedTime(ZonedDateTime.now());
+    			}
+    		}
+    	}
     	
-//    	workPackage.getFareSheet().clear();
-//    	workPackage.getAddonFares().clear();
-//    	workPackage.getMarketFares().clear();
+    	if(workPackage.getFilingInstructionData() != null) {
+    		for(FilingInstruction filingInstruction : workPackage.getFilingInstructionData()) {
+    			if(filingInstruction.getUsername() == null && filingInstruction.getCreatedTime() == null) {
+    				filingInstruction.setUsername(SecurityUtils.getCurrentUserLogin().get());
+    				filingInstruction.setCreatedTime(ZonedDateTime.now());
+    			}
+    		}
+    	}
     	
+    	Sort sort = new Sort(Direction.ASC, "priority");
+    	List<Priority> priorities = priorityRepository.findAll(sort);
+    	for(Priority p : priorities) {
+    		if(p.getType().contentEquals("DAYS")) {
+    			long val = zonedDateTimeDifference(ZonedDateTime.now(), workPackage.getSaleDate(), ChronoUnit.DAYS);
+    			long value = p.getValue();
+    			log.debug("VAL : {}", val);
+    			if(val <= value) {    				
+    				workPackage.setPriority(p.getName());
+    				log.debug("PRIORITY : {}", p.getName());
+    				break;
+    			}
+    		}
+    	}
     	workPackage = workPackageService.save(workPackage);
 	    	
         return getWorkPackage(workPackage.getId());    	
+    }
+    
+    static long zonedDateTimeDifference(ZonedDateTime d1, ZonedDateTime d2, ChronoUnit unit){
+        return unit.between(d1, d2);
     }
 
     /**
@@ -1342,13 +1397,194 @@ public class WorkPackageResource {
      */
     @GetMapping("/work-packages")
     @Timed
-    public ResponseEntity<List<WorkPackage>> getAllWorkPackages(Pageable pageable) {
-        log.debug("REST request to get a page of WorkPackages");
-        Page<WorkPackage> page = workPackageService.findAllByOrderByLastModifiedDate(pageable);       
+    public ResponseEntity<List<WorkPackage>> getAllWorkPackages(WorkPackageFilter filter, Pageable pageable) {
+        log.debug("REST request to get a page of WorkPackages {}", filter);
+//        Page<WorkPackage> page = workPackageService.findAllByOrderByLastModifiedDate(pageable);       
+        Page<WorkPackage> page = workPackageService.findCustom(filter, pageable);       
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/work-packages");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+    public static class WorkPackageFilter{
+    	public ReviewLevel reviewLevel;
+    	public Status status;
+    	public DistributionType distributionType;
+    	public Type type;
+    	
+    	public static class ReviewLevel{
+    		public boolean ho;
+    		public boolean lso;
+    		public boolean distribution;
+    		public boolean routeManagement;
+    		
+    		public ReviewLevel() {
+				// TODO Auto-generated constructor stub
+			}
+    		
+			public boolean isHo() {
+				return ho;
+			}
+			public void setHo(boolean ho) {
+				this.ho = ho;
+			}
+			public boolean isLso() {
+				return lso;
+			}
+			public void setLso(boolean lso) {
+				this.lso = lso;
+			}
+			public boolean isDistribution() {
+				return distribution;
+			}
+			public void setDistribution(boolean distribution) {
+				this.distribution = distribution;
+			}
+			public boolean isRouteManagement() {
+				return routeManagement;
+			}
+			public void setRouteManagement(boolean routeManagement) {
+				this.routeManagement = routeManagement;
+			}
+			@Override
+			public String toString() {
+				return "ReviewLevel [ho=" + ho + ", lso=" + lso + ", distribution=" + distribution
+						+ ", routeManagement=" + routeManagement + "]";
+			}
+    	}
+
+    	public static class Status{
+    		public boolean newStatus;
+    		public boolean distributed;
+    		public boolean reviewing;
+    		public boolean readyToRelease;
+    		public boolean pending;
+    		public boolean completed;
+			public boolean isNewStatus() {
+				return newStatus;
+			}
+			public void setNewStatus(boolean newStatus) {
+				this.newStatus = newStatus;
+			}
+			public boolean isDistributed() {
+				return distributed;
+			}
+			public void setDistributed(boolean distributed) {
+				this.distributed = distributed;
+			}
+			public boolean isReviewing() {
+				return reviewing;
+			}
+			public void setReviewing(boolean reviewing) {
+				this.reviewing = reviewing;
+			}
+			public boolean isReadyToRelease() {
+				return readyToRelease;
+			}
+			public void setReadyToRelease(boolean readyToRelease) {
+				this.readyToRelease = readyToRelease;
+			}
+			public boolean isPending() {
+				return pending;
+			}
+			public void setPending(boolean pending) {
+				this.pending = pending;
+			}
+			public boolean isCompleted() {
+				return completed;
+			}
+			public void setCompleted(boolean completed) {
+				this.completed = completed;
+			}
+    		
+    		
+    	}
+    	
+    	public static class DistributionType{
+    		public boolean atpco;
+    		public boolean market;
+    		public boolean waiver;
+			public boolean isAtpco() {
+				return atpco;
+			}
+			public void setAtpco(boolean atpco) {
+				this.atpco = atpco;
+			}
+			public boolean isMarket() {
+				return market;
+			}
+			public void setMarket(boolean market) {
+				this.market = market;
+			}
+			public boolean isWaiver() {
+				return waiver;
+			}
+			public void setWaiver(boolean waiver) {
+				this.waiver = waiver;
+			}
+    	}
+    
+    	public static class Type{
+    		public boolean regular;
+    		public boolean discount;
+    		public boolean waiver;
+			public boolean isRegular() {
+				return regular;
+			}
+			public void setRegular(boolean regular) {
+				this.regular = regular;
+			}
+			public boolean isDiscount() {
+				return discount;
+			}
+			public void setDiscount(boolean discount) {
+				this.discount = discount;
+			}
+			public boolean isWaiver() {
+				return waiver;
+			}
+			public void setWaiver(boolean waiver) {
+				this.waiver = waiver;
+			}
+    	}
+    	
+		public ReviewLevel getReviewLevel() {
+			return reviewLevel;
+		}
+
+		public void setReviewLevel(ReviewLevel reviewLevel) {
+			this.reviewLevel = reviewLevel;
+		}
+
+		public Status getStatus() {
+			return status;
+		}
+
+		public void setStatus(Status status) {
+			this.status = status;
+		}
+
+		public DistributionType getDistributionType() {
+			return distributionType;
+		}
+
+		public void setDistributionType(DistributionType distributionType) {
+			this.distributionType = distributionType;
+		}
+
+		public Type getType() {
+			return type;
+		}
+
+		public void setType(Type type) {
+			this.type = type;
+		}
+
+		@Override
+		public String toString() {
+			return "WorkPackageFilter [reviewLevel=" + reviewLevel + "]";
+		}
+    }
+    
     /**
      * GET  /work-packages/:id : get the "id" workPackage.
      *

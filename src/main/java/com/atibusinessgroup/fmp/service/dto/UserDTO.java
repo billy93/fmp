@@ -81,6 +81,8 @@ public class UserDTO {
     
     private List<String> businessAreas;
     
+    private String department;
+    
 	public UserDTO() {
 		// Empty constructor needed for Jackson.
 	}
@@ -113,9 +115,18 @@ public class UserDTO {
 		this.failedLoginCounter = user.getFailedLoginCounter();
 		this.reviewLevels = user.getReviewLevels();
 		this.businessAreas = user.getBusinessAreas();
+		this.department = user.getDepartment();
 	}
 
 	
+	public String getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
+	}
+
 	public List<String> getReviewLevels() {
 		return reviewLevels;
 	}

@@ -115,9 +115,19 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Field("business_areas")
     private List<String> businessAreas;
     
+    @Field("department")
+    private String department;
     
     
-    public List<String> getBusinessAreas() {
+    public String getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
+	}
+
+	public List<String> getBusinessAreas() {
 		return businessAreas;
 	}
 

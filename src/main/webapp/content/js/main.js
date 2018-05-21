@@ -1,4 +1,6 @@
-$(function(){
+
+var REinit = function() {
+    /// PLACE HERE ALL YOUR DOC.READY SCRIPTS
 	// sidebar menu
 	function sidebarOpen(){
 		$('.showLeftPush').toggleClass('active');
@@ -296,5 +298,10 @@ $(function(){
 	    return false;    //<---- Add this line
 	  }
 	});
-	
-});
+}
+
+$(REinit);
+
+
+
+

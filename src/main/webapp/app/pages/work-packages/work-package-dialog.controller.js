@@ -15,6 +15,7 @@
         vm.workPackage.addonFareSheet = [{fareCarrier:'GA'}];
         vm.workPackage.discountFareSheet = [{fareCarrier:'GA'}];
         vm.workPackage.marketFareSheet = [{fareCarrier:'GA'}];
+        vm.workPackage.waiverFareSheet = [{fareCarrier:'GA'}];
         vm.reviewLevels = reviewLevels;
         vm.businessAreas = businessAreas;
         
@@ -44,7 +45,7 @@
         
         if($stateParams.type == 'reguler'){
         		vm.workPackage.type = 'REGULAR';
-        		vm.distributionTypes = ['ATPCO', 'Market'];
+        		vm.distributionTypes = ['ATPCO', 'MARKET'];
         }
         else if($stateParams.type == 'discount'){
         		vm.workPackage.type = 'DISCOUNT';
@@ -52,7 +53,7 @@
         }
         else if($stateParams.type == 'waiver'){
     		vm.workPackage.type = 'WAIVER';
-    		//vm.distributionTypes = ['ATPCO'];
+//    		vm.distributionTypes = ['ATPCO'];
         }
         
         $timeout(function (){

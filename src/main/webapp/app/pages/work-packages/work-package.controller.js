@@ -5,23 +5,70 @@
         .module('fmpApp')
         .controller('WorkPackageController', WorkPackageController);
 
-    WorkPackageController.$inject = ['$uibModal', '$state', 'WorkPackage', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams'];
+    WorkPackageController.$inject = ['$uibModal', '$state', '$stateParams', 'WorkPackage', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams'];
 
-    function WorkPackageController($uibModal, $state, WorkPackage, ParseLinks, AlertService, paginationConstants, pagingParams) {
+    function WorkPackageController($uibModal, $state, $stateParams, WorkPackage, ParseLinks, AlertService, paginationConstants, pagingParams) {
         var vm = this;
         vm.reviewLevel = true;
         vm.woStatus = true;
         vm.distributionType = true;
         vm.loadPage = loadPage;
+        vm.workPackageActionButton = [];
         vm.predicate = pagingParams.predicate;
         vm.reverse = pagingParams.ascending;
         vm.transition = transition;
         vm.itemsPerPage = paginationConstants.itemsPerPage;
-
+        
+        if($stateParams.workPackageFilter != null){
+        	vm.workPackageFilter = $stateParams.workPackageFilter;
+        }
+        else{
+	        vm.workPackageFilter = {
+	    		reviewLevel:{
+	    			ho:true,
+	    			lso:true,
+	    			distribution:true,
+	    			routeManagement:true
+	    		},
+	    		distributionType:{
+	    			atpco:true,
+	    			market:true
+	    		},
+	    		status:{
+	    			new:true,
+	    			pending:true,
+	    			reviewing:true,
+	    			readyToRelease:true,
+	    			distributed:true
+	    		},
+	    		type:{
+	    			regular:true,
+	    			discount:true,
+	    			waiver:true
+	    		}
+	        };
+        }
         loadAll();
 
         function loadAll () {
             WorkPackage.query({
+            	"reviewLevel.ho": vm.workPackageFilter.reviewLevel.ho,
+            	"reviewLevel.lso": vm.workPackageFilter.reviewLevel.lso,
+            	"reviewLevel.distribution": vm.workPackageFilter.reviewLevel.distribution,
+            	"reviewLevel.routeManagement": vm.workPackageFilter.reviewLevel.routeManagement,
+            	
+            	"status.newStatus": vm.workPackageFilter.status.new,
+            	"status.pending": vm.workPackageFilter.status.pending,
+            	"status.reviewing": vm.workPackageFilter.status.reviewing,
+            	"status.readyToRelease": vm.workPackageFilter.status.readyToRelease,
+            	"status.distributed": vm.workPackageFilter.status.distributed,
+            	
+            	"distributionType.atpco":vm.workPackageFilter.distributionType.atpco,
+            	"distributionType.market":vm.workPackageFilter.distributionType.market,
+            	
+            	"type.regular":vm.workPackageFilter.type.regular,
+            	"type.discount":vm.workPackageFilter.type.discount,
+            	"type.waiver":vm.workPackageFilter.type.waiver,
                 page: pagingParams.page - 1,
                 size: vm.itemsPerPage,
                 sort: sort()
@@ -53,23 +100,24 @@
 
         function transition() {
             $state.transitionTo($state.$current, {
+            	workPackageFilter: vm.workPackageFilter,
                 page: vm.page,
                 sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
                 search: vm.currentSearch
             });
         }
         
-        vm.rowSelected = function(workPackage){
-        		vm.selectedRow = workPackage;
-        		console.log(workPackage);
+        vm.rowSelected = function(idx, workPackage){
+    		vm.selectedRow = workPackage;
+    		vm.workPackageActionButton[idx] = !vm.workPackageActionButton[idx];
         }
         
-        vm.reuse = function(){
-        	WorkPackage.reuse(vm.selectedRow, onReuseSuccess, onReuseFailed);
+        vm.reuse = function(index){
+        	WorkPackage.reuse(vm.workPackages[index], onReuseSuccess, onReuseFailed);
         	
         	function onReuseSuccess(result){
         		alert('Reuse Success');
-        		$state.go('work-package-detail.edit', {id:result.id});
+        		$state.go('work-package-detail', {id:result.id});
         	}
         	
         	function onReuseFailed(error){
@@ -77,12 +125,12 @@
         	}
         }
         
-        vm.replace = function(){
-        	WorkPackage.replace(vm.selectedRow, onReplaceSuccess, onReplceFailed);
+        vm.replace = function(index){
+        	WorkPackage.replace(vm.workPackages[index], onReplaceSuccess, onReplceFailed);
         	
         	function onReplaceSuccess(result){
         		alert('Replace Success '+result.id);
-        		$state.go('work-package-detail.edit', {id:result.id});
+        		$state.go('work-package-detail', {id:result.id});
 
         	}
         	
@@ -120,6 +168,11 @@
         		}
         }
 
+        vm.refresh = function(){
+        	loadAll();
+        	console.log(vm.workPackageFilter);
+        }
+        
         $('.js-filter-toggle').click(function(e){
             e.preventDefault();
             e.stopPropagation();
