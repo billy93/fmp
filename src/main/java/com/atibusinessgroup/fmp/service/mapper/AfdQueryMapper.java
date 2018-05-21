@@ -16,6 +16,7 @@ public class AfdQueryMapper {
 		
 		for (AtpcoFare afare:afares) {
 			AfdQuery afd = new AfdQuery();
+			afd.setAtpcoFareId(afare.getId());
 			afd.setSource(afare.getSource());
 			afd.setSc("S");
 			afd.setTariffNo(afare.getTariffNo());
@@ -25,9 +26,19 @@ public class AfdQueryMapper {
 			afd.setDestinationCity(afare.getDestinationCity());
 			afd.setDestinationCountry(afare.getDestinationCountry());
 			afd.setFareClassCode(afare.getFareClassCode());
-			
-			
-			
+			afd.setOwrt(afare.getOwrt());
+			afd.setFootnote(afare.getFootnote());
+			afd.setRoutingNo(afare.getRoutingNo());
+			afd.setRuleNo(afare.getRuleNo());
+			afd.setMaximumPermittedMileage(afare.getMaximumPermittedMileage());
+			afd.setCurrencyCode(afare.getFareOriginCurrencyCode());
+			afd.setBaseAmount(afare.getFareOriginAmount().bigDecimalValue().doubleValue());
+			afd.setEffectiveDate(afare.getTariffEffectiveDateObject());
+			afd.setDiscontinueDate(afare.getDiscontinueDateObject());
+			afd.setGlobalIndicator(afare.getGlobalIndicator());
+			afd.setSaleStartDate(afare.getFirstSaleDateObject());
+			afd.setSaleEndDate(afare.getLastSaleDateObject());
+			afd.setFareType(afare.getFareType());
 			
 			result.add(afd);
 		}

@@ -1,6 +1,7 @@
 package com.atibusinessgroup.fmp.domain.dto;
 
 public class AfdQuery {
+	private String atpcoFareId;
 	private String source;
 	private String sc;
 	private String tariffNo;
@@ -60,6 +61,16 @@ public class AfdQuery {
 	private double refTfc;
 	private double refAif;
 	
+	public AfdQuery() {};
+	
+	public String getAtpcoFareId() {
+		return atpcoFareId;
+	}
+
+	public void setAtpcoFareId(String atpcoFareId) {
+		this.atpcoFareId = atpcoFareId;
+	}
+
 	public String getSource() {
 		return source;
 	}
@@ -522,5 +533,28 @@ public class AfdQuery {
 	
 	public void setRefAif(double refAif) {
 		this.refAif = refAif;
+	}
+
+	@Override
+	public String toString() {
+		return "AfdQuery [atpcoFareId=" + atpcoFareId + ", source=" + source + ", sc=" + sc + ", tariffNo=" + tariffNo
+				+ ", carrierCode=" + carrierCode + ", originCity=" + originCity + ", originCountry=" + originCountry
+				+ ", destinationCity=" + destinationCity + ", destinationCountry=" + destinationCountry
+				+ ", fareClassCode=" + fareClassCode + ", bookingClass=" + bookingClass + ", cabin=" + cabin + ", owrt="
+				+ owrt + ", footnote=" + footnote + ", routingNo=" + routingNo + ", ruleNo=" + ruleNo
+				+ ", maximumPermittedMileage=" + maximumPermittedMileage + ", currencyCode=" + currencyCode
+				+ ", baseAmount=" + baseAmount + ", error=" + error + ", tfcCalculationDate=" + tfcCalculationDate
+				+ ", tfcFocusDate=" + tfcFocusDate + ", yqyr=" + yqyr + ", taxes=" + taxes + ", tfc=" + tfc + ", aif="
+				+ aif + ", itinerary=" + itinerary + ", overrideIndicator=" + overrideIndicator + ", effectiveDate="
+				+ effectiveDate + ", discontinueDate=" + discontinueDate + ", gfsReference=" + gfsReference
+				+ ", globalIndicator=" + globalIndicator + ", ruleFocusDate=" + ruleFocusDate + ", sellable=" + sellable
+				+ ", travelStartDate=" + travelStartDate + ", travelEndDate=" + travelEndDate + ", travelComplete="
+				+ travelComplete + ", saleStartDate=" + saleStartDate + ", saleEndDate=" + saleEndDate
+				+ ", resStartDate=" + resStartDate + ", resEndDate=" + resEndDate + ", minStay=" + minStay
+				+ ", maxStay=" + maxStay + ", advancePurchase=" + advancePurchase + ", dowIn=" + dowIn + ", dowOut="
+				+ dowOut + ", season=" + season + ", firstSeasonDate=" + firstSeasonDate + ", lastSeasonDate="
+				+ lastSeasonDate + ", travelDateRanges=" + travelDateRanges + ", fareType=" + fareType + ", paxType="
+				+ paxType + ", wpId=" + wpId + ", groupFare=" + groupFare + ", refAmount=" + refAmount + ", refYqyr="
+				+ refYqyr + ", refTaxes=" + refTaxes + ", refTfc=" + refTfc + ", refAif=" + refAif + "]";
 	}
 }

@@ -596,14 +596,12 @@ public class WorkPackageResource {
 			Iterator<Row> iterator = datatypeSheet.iterator();
 			iterator.next();
 			
-
-            List<WorkPackageFare> workPackageFares = new ArrayList<WorkPackageFare>();
-			
             while (iterator.hasNext()) {
                 Row currentRow = iterator.next();
                 Iterator<Cell> cellIterator = currentRow.iterator();
 
                 WorkPackageFare wpFare = new WorkPackageFare();
+                
                 for(int cell=0;cell<30;cell++) {
                     Cell currentCell = currentRow.getCell(cell);
 
@@ -614,85 +612,101 @@ public class WorkPackageResource {
                     	
                     }
                     if(cell == 0) {
-                    		wpFare.setStatus(value);
+                    	wpFare.setStatus(value);
                     }
                     else if(cell == 1) {
+                		wpFare.setTarcd(value);
+                    }
+                    else if(cell == 2) {
 	                		wpFare.setLoc1Type(value);
 	                }
-                    else if(cell == 2) {
+                    else if(cell == 3) {
 	                		wpFare.setLoc1(value);
 	                }
-                    else if(cell == 3) {
+                    else if(cell == 4) {
 	                		wpFare.setLoc2Type(value);
 	                }
-                    else if(cell == 4) {
+                    else if(cell == 5) {
 	                		wpFare.setLoc2(value);
 	                }
-                    else if(cell == 5) {
+                    else if(cell == 6) {
 	                		wpFare.setFareBasis(value);
 	                }
-                    else if(cell == 6) {
+                    else if(cell == 7) {
 	                		wpFare.setBaseRuleno(value);
 	                }
-                    else if(cell == 7) {
-	                		wpFare.setCalcType(value);
-	                }
                     else if(cell == 8) {
-                			wpFare.setPercentBaseFare(value);
+                		wpFare.setTarcd(value);
                     }
                     else if(cell == 9) {
-                    		wpFare.setCurrency(value);	
+	                		wpFare.setCalcType(value);
 	                }
                     else if(cell == 10) {
-	        				wpFare.setAmount(value);	
-	                }
+                			wpFare.setPercentBaseFare(value);
+                    }
                     else if(cell == 11) {
-	        				wpFare.setPassengerType(value);	
+                    		wpFare.setCurrency(value);	
 	                }
                     else if(cell == 12) {
-	        				wpFare.setFareType(value);	
+	        				wpFare.setAmount(value);	
 	                }
                     else if(cell == 13) {
-                    		wpFare.setTicketCode(value);
+	        				wpFare.setPassengerType(value);	
 	                }
                     else if(cell == 14) {
-                			wpFare.setTicketDesignator(value);
+	        				wpFare.setFareType(value);	
 	                }
                     else if(cell == 15) {
-                			wpFare.setTypeOfJourney(value);
+                    		wpFare.setTicketCode(value);
 	                }
                     else if(cell == 16) {
-                    		wpFare.setGlobal(value);
+                			wpFare.setTicketDesignator(value);
 	                }
                     else if(cell == 17) {
-                    		wpFare.setRtgno(value);
+                			wpFare.setTypeOfJourney(value);
 	                }
                     else if(cell == 18) {
-                    		wpFare.setRtgnoTarno(value);
+                    		wpFare.setGlobal(value);
 	                }
                     else if(cell == 19) {
-                    		wpFare.setNewFareBasis(value);
+                    		wpFare.setRtgno(value);
 	                }
                     else if(cell == 20) {
-                    		wpFare.setNewTypeOfJourney(value);
+                    		wpFare.setRtgnoTarno(value);
 	                }
                     else if(cell == 21) {
-                    		wpFare.setComment(value);
+                    		wpFare.setNewFareBasis(value);
 	                }
                     else if(cell == 22) {
-                    		wpFare.setNewBookingCode(value);
+                    		wpFare.setNewTypeOfJourney(value);
 	                }
                     else if(cell == 23) {
-                    		wpFare.setCarrier(value);
+                    		wpFare.setNewBookingCode(value);
 	                }
                     else if(cell == 24) {
-                    		wpFare.setTarno(value);
-	                }
+                		wpFare.setTravelStart(value);
+                    }
                     else if(cell == 25) {
-	                		wpFare.setRuleno(value);
+                		wpFare.setTravelEnd(value);
+                    }
+                    else if(cell == 26) {
+                		wpFare.setSaleStart(value);
+                    }
+                    else if(cell == 27) {
+                		wpFare.setSaleEnd(value);
+                    }
+                    else if(cell == 28) {
+                		wpFare.setComment(value);
+                    }
+                    else if(cell == 29) {
+                    		wpFare.setTravelComplete(value);
+	                }
+                    else if(cell == 30) {
+                    		wpFare.setTravelCompleteIndicator(value);
 	                }
                 }
-                workPackageFares.add(wpFare);
+                
+                workPackage.getDiscountFareSheet().get(0).getFares().add(wpFare);
             }			
             
             workPackage = workPackageService.save(workPackage);
@@ -704,7 +718,6 @@ public class WorkPackageResource {
 //            		workPackage.getMarketFares().add(fare);
 //            }
             
-            workPackage = workPackageService.save(workPackage);
 
 //			WorkPackageFare
 		} catch (IOException e) {
@@ -1044,112 +1057,134 @@ public class WorkPackageResource {
         cell = row.createCell(1);
         cell.setCellValue("Status");
         cell = row.createCell(2);
-        cell.setCellValue("Loc1 Type");
+        cell.setCellValue("FBR Tariff Code");
         cell = row.createCell(3);
-        cell.setCellValue("Loc1");
+        cell.setCellValue("Loc1 Type");
         cell = row.createCell(4);
-        cell.setCellValue("Loc2 Type");
+        cell.setCellValue("Loc1");
         cell = row.createCell(5);
-        cell.setCellValue("Loc2");
+        cell.setCellValue("Loc2 Type");
         cell = row.createCell(6);
-        cell.setCellValue("Fare Cls");
+        cell.setCellValue("Loc2");
         cell = row.createCell(7);
-        cell.setCellValue("Base Rule No");
+        cell.setCellValue("Base Fare Cls");
         cell = row.createCell(8);
-        cell.setCellValue("Calc Type");
+        cell.setCellValue("Base Rule No");
         cell = row.createCell(9);
-        cell.setCellValue("% Of Base Fare");
+        cell.setCellValue("Base Tariff Code");
         cell = row.createCell(10);
-        cell.setCellValue("Curr");
+        cell.setCellValue("Calc Type");
         cell = row.createCell(11);
-        cell.setCellValue("Specified Amount");
+        cell.setCellValue("% Of Base Fare");
         cell = row.createCell(12);
-        cell.setCellValue("Pax Type");
+        cell.setCellValue("Curr");
         cell = row.createCell(13);
-        cell.setCellValue("Fare Type");
+        cell.setCellValue("Specified Amount");
         cell = row.createCell(14);
-        cell.setCellValue("Tkt Code");
+        cell.setCellValue("Pax Type");
         cell = row.createCell(15);
-        cell.setCellValue("Tkt Des");
+        cell.setCellValue("Fare Type");
         cell = row.createCell(16);
-        cell.setCellValue("OW/RT");
+        cell.setCellValue("Tkt Code");
         cell = row.createCell(17);
-        cell.setCellValue("Global");
+        cell.setCellValue("Tkt Des");
         cell = row.createCell(18);
-        cell.setCellValue("Rtg No");
+        cell.setCellValue("OW/RT");
         cell = row.createCell(19);
-        cell.setCellValue("Rtg No Tarno");
+        cell.setCellValue("Global");
         cell = row.createCell(20);
-        cell.setCellValue("New Farecls");
+        cell.setCellValue("Rtg No");
         cell = row.createCell(21);
-        cell.setCellValue("New OW/RT");
+        cell.setCellValue("Rtg No Tarno");
         cell = row.createCell(22);
-        cell.setCellValue("Comment");
+        cell.setCellValue("New Farecls");
         cell = row.createCell(23);
-        cell.setCellValue("New BKGCD");
+        cell.setCellValue("New OW/RT");
         cell = row.createCell(24);
-        cell.setCellValue("CXR");
+        cell.setCellValue("New Bkg Cd");
         cell = row.createCell(25);
-        cell.setCellValue("Tarno");
+        cell.setCellValue("Travel Start");
         cell = row.createCell(26);
-        cell.setCellValue("Ruleno");
+        cell.setCellValue("Travel End");
         cell = row.createCell(27);
+        cell.setCellValue("Sale Start");
+        cell = row.createCell(28);
+        cell.setCellValue("Sale End");
+        cell = row.createCell(29);
+        cell.setCellValue("Comment");
+        cell = row.createCell(30);
+        cell.setCellValue("Travel Complete");
+        cell = row.createCell(31);
+        cell.setCellValue("Travel Complete Indicator");
         
-        List<WorkPackageFare> fares = workPackageFareService.findAllByWorkPackageAndFareType(workPackage.getId(), "DISCOUNT");
+        WorkPackage wp = workPackageService.findOne(workPackage.getId());
+        
+        List<WorkPackageFare> fares = wp.getDiscountFareSheet().get(0).getFares();
+        
         for(int i=0; i<fares.size(); i++) {
         		XSSFRow rows = spreadsheet.createRow(i+2);
             cell = rows.createCell(1);
             cell.setCellValue(fares.get(i).getStatus());
             cell = rows.createCell(2);
-            cell.setCellValue(fares.get(i).getLoc1Type());
+            cell.setCellValue(fares.get(i).getTarcd());
             cell = rows.createCell(3);
-            cell.setCellValue(fares.get(i).getLoc1());
+            cell.setCellValue(fares.get(i).getLoc1Type());
             cell = rows.createCell(4);
-            cell.setCellValue(fares.get(i).getLoc2Type());
+            cell.setCellValue(fares.get(i).getLoc1());
             cell = rows.createCell(5);
-            cell.setCellValue(fares.get(i).getLoc2());
+            cell.setCellValue(fares.get(i).getLoc2Type());
             cell = rows.createCell(6);
-            cell.setCellValue(fares.get(i).getFareBasis());
+            cell.setCellValue(fares.get(i).getLoc2());
             cell = rows.createCell(7);
-            cell.setCellValue(fares.get(i).getBaseRuleno());
+            cell.setCellValue(fares.get(i).getFareBasis());
             cell = rows.createCell(8);
-            cell.setCellValue(fares.get(i).getCalcType());
+            cell.setCellValue(fares.get(i).getBaseRuleno());
             cell = rows.createCell(9);
-            cell.setCellValue(fares.get(i).getPercentBaseFare());
+            cell.setCellValue(fares.get(i).getTarcd());
             cell = rows.createCell(10);
-            cell.setCellValue(fares.get(i).getCurrency());
+            cell.setCellValue(fares.get(i).getCalcType());
             cell = rows.createCell(11);
-            cell.setCellValue(fares.get(i).getAmount());
+            cell.setCellValue(fares.get(i).getPercentBaseFare());
             cell = rows.createCell(12);
-            cell.setCellValue(fares.get(i).getPassengerType());
+            cell.setCellValue(fares.get(i).getCurrency());
             cell = rows.createCell(13);
-            cell.setCellValue(fares.get(i).getFareType());
+            cell.setCellValue(fares.get(i).getAmount());
             cell = rows.createCell(14);
-            cell.setCellValue(fares.get(i).getTicketCode());
+            cell.setCellValue(fares.get(i).getPassengerType());
             cell = rows.createCell(15);
-            cell.setCellValue(fares.get(i).getTicketDesignator());
+            cell.setCellValue(fares.get(i).getFareType());
             cell = rows.createCell(16);
-            cell.setCellValue(fares.get(i).getTypeOfJourney());
+            cell.setCellValue(fares.get(i).getTicketCode());
             cell = rows.createCell(17);
-            cell.setCellValue(fares.get(i).getGlobal());
+            cell.setCellValue(fares.get(i).getTicketDesignator());
             cell = rows.createCell(18);
-            cell.setCellValue(fares.get(i).getRtgno());
+            cell.setCellValue(fares.get(i).getTypeOfJourney());
             cell = rows.createCell(19);
-            cell.setCellValue(fares.get(i).getRtgnoTarno());
+            cell.setCellValue(fares.get(i).getGlobal());
             cell = rows.createCell(20);
-            cell.setCellValue(fares.get(i).getNewFareBasis());
+            cell.setCellValue(fares.get(i).getRtgno());
             cell = rows.createCell(21);
-            cell.setCellValue(fares.get(i).getNewTypeOfJourney());
+            cell.setCellValue(fares.get(i).getRtgnoTarno());
             cell = rows.createCell(22);
-            cell.setCellValue(fares.get(i).getComment());
+            cell.setCellValue(fares.get(i).getNewFareBasis());
             cell = rows.createCell(23);
-            cell.setCellValue(fares.get(i).getNewBookingCode());
+            cell.setCellValue(fares.get(i).getNewTypeOfJourney());
             cell = rows.createCell(24);
-            cell.setCellValue(fares.get(i).getCarrier());
+            cell.setCellValue(fares.get(i).getNewBookingCode());
             cell = rows.createCell(25);
-            cell.setCellValue(fares.get(i).getTarno());
+            cell.setCellValue(fares.get(i).getTravelStart());
             cell = rows.createCell(26);
-            cell.setCellValue(fares.get(i).getRuleno());
+            cell.setCellValue(fares.get(i).getTravelEnd());
+            cell = rows.createCell(27);
+            cell.setCellValue(fares.get(i).getSaleStart());
+            cell = rows.createCell(28);
+            cell.setCellValue(fares.get(i).getSaleEnd());
+            cell = rows.createCell(29);
+            cell.setCellValue(fares.get(i).getComment());
+            cell = rows.createCell(30);
+            cell.setCellValue(fares.get(i).getTravelComplete());
+            cell = rows.createCell(31);
+            cell.setCellValue(fares.get(i).getTravelCompleteIndicator());
         }
         
         ByteArrayOutputStream output = new ByteArrayOutputStream();

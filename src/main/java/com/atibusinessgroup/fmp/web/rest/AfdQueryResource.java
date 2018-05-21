@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.atibusinessgroup.fmp.domain.AtpcoFare;
+import com.atibusinessgroup.fmp.domain.AtpcoRecord2;
 import com.atibusinessgroup.fmp.domain.dto.AfdQuery;
 import com.atibusinessgroup.fmp.repository.AtpcoFareRepository;
+import com.atibusinessgroup.fmp.repository.AtpcoRecord2Repository;
 import com.atibusinessgroup.fmp.service.mapper.AfdQueryMapper;
 import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
 import com.codahale.metrics.annotation.Timed;
@@ -29,11 +31,14 @@ public class AfdQueryResource {
 
 	private final AtpcoFareRepository atpcoFareRepository;
 	
+	private final AtpcoRecord2Repository atpcoRecord2Repository;
+	
 	private final AfdQueryMapper afdQueryMapper;
 	
-    public AfdQueryResource(AtpcoFareRepository atpcoFareRepository, AfdQueryMapper afdQueryMapper) {
+    public AfdQueryResource(AtpcoFareRepository atpcoFareRepository, AfdQueryMapper afdQueryMapper, AtpcoRecord2Repository atpcoRecord2Repository) {
     	this.atpcoFareRepository = atpcoFareRepository;
     	this.afdQueryMapper = afdQueryMapper;
+    	this.atpcoRecord2Repository = atpcoRecord2Repository;
     }
     
     /**
@@ -44,7 +49,7 @@ public class AfdQueryResource {
      */
     @GetMapping("/afd-queries")
     @Timed
-    public ResponseEntity<List<AtpcoFare>> getAllAfdQueries(Pageable pageable) {
+    public ResponseEntity<List<AfdQuery>> getAllAfdQueries(Pageable pageable) {
         log.debug("REST request to get a page of AfdQueries");
         
         Page<AtpcoFare> page = atpcoFareRepository.findAll(pageable);
@@ -54,6 +59,22 @@ public class AfdQueryResource {
         
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/afd-queries");
         
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return new ResponseEntity<>(result, headers, HttpStatus.OK);
+    }
+    
+    /**
+     * GET  /afd-queries/rules : get afd query rules.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of rules in body
+     */
+    @GetMapping("/afd-queries/rules")
+    @Timed
+    public ResponseEntity<List<AtpcoRecord2>> getAfdQueryRules(AfdQuery afdQuery) {
+        log.debug("REST request to get AfdQueries rules: {}", afdQuery);
+        
+//        List<AtpcoRecord2> result = atpcoRecord2Repository.findAllBy;
+        List<AtpcoRecord2> result = new ArrayList<>();
+        
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
