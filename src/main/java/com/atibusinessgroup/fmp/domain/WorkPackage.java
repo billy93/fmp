@@ -11,7 +11,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import com.atibusinessgroup.fmp.domain.enumeration.PackageType;
-import com.atibusinessgroup.fmp.domain.enumeration.Priority;
 import com.atibusinessgroup.fmp.domain.enumeration.Status;
 
 /**
@@ -159,7 +158,28 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     @Field("replace_from")
     private String replaceFrom;
     
+    private ApproveConfig approveConfig;
     
+    public static class ApproveConfig{
+    	public List<String> email;
+
+		public List<String> getEmail() {
+			return email;
+		}
+
+		public void setEmail(List<String> email) {
+			this.email = email;
+		}    	    	
+    }
+    
+    
+	public ApproveConfig getApproveConfig() {
+		return approveConfig;
+	}
+
+	public void setApproveConfig(ApproveConfig approveConfig) {
+		this.approveConfig = approveConfig;
+	}
 
 	public String getReuseFrom() {
 		return reuseFrom;

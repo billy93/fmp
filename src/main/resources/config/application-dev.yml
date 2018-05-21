@@ -35,10 +35,10 @@ spring:
             uri: mongodb://localhost:27017
             database: fmp
     mail:
-        host: localhost
+        host: mail.atibusinessgroup.com
         port: 25
-        username: laurensius.sakti@atibusinessgroup.com 
-        password: ati2018
+        username: andreas.sutandi@atibusinessgroup.com 
+        password: ati2016
     messages:
         cache-seconds: 1
     thymeleaf:

@@ -99,6 +99,43 @@
         };
         
         vm.fields = [
+        	// WORKSHEET HEADER
+        	{
+        		name:"businessArea",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"status",
+        		editable:[],
+        		mandatory:[]
+        	},
+        	{
+        		name:"reviewLevel",
+        		editable:[],
+        		mandatory:[]
+        	},
+        	{
+        		name:"workpackageName",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"filingDate",
+        		editable:["LSO", "HO"],
+        		mandatory:["HO"]
+        	},
+        	{
+        		name:"saleDate",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"ioComment",
+        		editable:["HO"],
+        		mandatory:["HO"]
+        	},
+        	
         	// REGULAR HEADER FARES FIELD
         	{
         		name:"description",
@@ -235,6 +272,66 @@
         	{
         		name:"ratesheetComment",
         		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	//END REGULAR FARES FIELD
+        	
+        	// ADDON HEADER FARES FIELD
+        	{
+        		name:"addonFaresName",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	
+        	//ADDON FARES FIELD
+        	{
+        		name:"addonFareStatus",
+        		editable:["HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"addonFareCarrier",
+        		editable:[],
+        		mandatory:[]
+        	},
+        	{
+        		name:"addonFareTarno",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:["Distribution"]
+        	},
+        	{
+        		name:"addonFareTarcd",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:["Distribution"]
+        	},
+        	{
+        		name:"addonFareOrigin",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:["Distribution"]
+        	},
+        	{
+        		name:"addonFareDestination",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:["Distribution"]
+        	},
+        	{
+        		name:"addonFareBucket",
+        		editable:["HO", "Distribution"],
+        		mandatory:["Distribution"]
+        	},
+        	{
+        		name:"addonFareTypeOfJourney",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:["LSO", "HO","Distribution"]
+        	},
+        	{
+        		name:"addonFareFootnote",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"addonFareZone",
+        		editable:["LSO", "HO", "Distribution"],
         		mandatory:[]
         	},
         ];
@@ -1112,15 +1209,34 @@
 	  };
 	  
 	  vm.approve = function(){
-		    if (confirm("Are you sure to Approve this workorder?")) {
-		    		WorkPackage.approve(vm.workPackage, function(){
-		    			alert('Approve Success');
-		    			$state.go('work-package');
-		    		}, function(){
-		    			alert('Approve Failed');
-		    		});
-		    } else {
-		    }
+		  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-approve-email-dialog.html',
+              controller: 'WorkPackageApproveEmailDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              resolve: {
+                  workPackage: vm.workPackage,
+                  email : function(){
+                	  return ["billyfebram@gmail.com", "laurensius.sakti@atibusinessgroup.com"];
+              	  }
+              }
+          }).result.then(function(config) {
+        	  vm.workPackage.approveConfig = config;
+        	  console.log(config);
+        	  WorkPackage.approve(vm.workPackage, function(){
+	    			alert('Approve Success');
+	    			$state.go('work-package');
+    		}, function(){
+    			alert('Approve Failed');
+    		});
+//	  		    if (confirm("Are you sure to Approve this workorder?")) {
+	  		    		
+//	  		    } else {
+//	  		    }
+          }, function() {
+      			
+          });
 	  };
 	  
 	  vm.referback = function(){

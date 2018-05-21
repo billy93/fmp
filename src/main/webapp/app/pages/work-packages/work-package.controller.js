@@ -45,7 +45,7 @@
 	    			regular:true,
 	    			discount:true,
 	    			waiver:true
-	    		}
+	    		},
 	        };
         }
         loadAll();
@@ -69,6 +69,8 @@
             	"type.regular":vm.workPackageFilter.type.regular,
             	"type.discount":vm.workPackageFilter.type.discount,
             	"type.waiver":vm.workPackageFilter.type.waiver,
+            	
+            	"approvalReference": vm.workPackageFilter.approvalReference,
                 page: pagingParams.page - 1,
                 size: vm.itemsPerPage,
                 sort: sort()

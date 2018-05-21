@@ -105,6 +105,7 @@ public class SystemParameterResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+
     /**
      * GET  /system-parameters/:id : get the "id" systemParameter.
      *
@@ -116,6 +117,20 @@ public class SystemParameterResource {
     public ResponseEntity<SystemParameter> getSystemParameter(@PathVariable String id) {
         log.debug("REST request to get SystemParameter : {}", id);
         SystemParameter systemParameter = systemParameterService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(systemParameter));
+    }
+    
+    /**
+     * GET  /system-parameters/:id : get the "id" systemParameter.
+     *
+     * @param id the id of the systemParameter to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the systemParameter, or with status 404 (Not Found)
+     */
+    @GetMapping("/system-parameters/findByName/{name}")
+    @Timed
+    public ResponseEntity<SystemParameter> getSystemParameterByName(@PathVariable String name) {
+        log.debug("REST request to get SystemParameter : {}", name);
+        SystemParameter systemParameter = systemParameterService.findOneByName(name);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(systemParameter));
     }
 

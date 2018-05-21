@@ -1,6 +1,8 @@
 package com.atibusinessgroup.fmp.service;
 
+import com.atibusinessgroup.fmp.domain.MimeTypeConstants;
 import com.atibusinessgroup.fmp.domain.User;
+import com.atibusinessgroup.fmp.domain.WorkPackage.Attachment;
 
 import io.github.jhipster.config.JHipsterProperties;
 
@@ -8,6 +10,7 @@ import org.apache.commons.lang3.CharEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -99,6 +102,37 @@ public class MailService {
         String content = templateEngine.process(templateName, context);
         String subject = messageSource.getMessage(titleKey, null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
+    }
+    
+    @Async
+    public void sendEmailWithAttachment(String from, String to[], String subject, String content, boolean isMultipart, boolean isHtml, List<Attachment> data) {
+        log.debug("Send email[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
+            isMultipart, isHtml, to, subject, content);
+
+        // Prepare message using a Spring helper
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        try {
+            MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, CharEncoding.UTF_8);
+            
+            int i=0;
+            for(Attachment attachment : data) {
+                ByteArrayResource byteArray = new ByteArrayResource(attachment.getFile());
+                message.addAttachment("Attachment-"+i+"."+MimeTypeConstants.getMimeType(attachment.getFileContentType()), byteArray);            	
+                i++;
+            }
+            message.setTo(to);
+            message.setFrom(from);
+            message.setSubject(subject);
+            message.setText(content, isHtml);
+            javaMailSender.send(mimeMessage);
+            log.debug("Sent email to User '{}'", to);
+        } catch (Exception e) {
+            if (log.isDebugEnabled()) {
+                log.warn("Email could not be sent to user '{}'", to, e);
+            } else {
+                log.warn("Email could not be sent to user '{}': {}", to, e.getMessage());
+            }
+        }
     }
     
     @Async
