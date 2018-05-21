@@ -32,6 +32,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
@@ -71,6 +72,7 @@ public class AgentResource {
         if (agent.getId() != null) {
             throw new BadRequestAlertException("A new agent cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        agent.setIsDeleted(false);
         Agent result = agentRepository.save(agent);
         return ResponseEntity.created(new URI("/api/agents/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -116,14 +118,22 @@ public class AgentResource {
      *
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of agents in body
+     * @throws IllegalAccessException 
      */
     @GetMapping("/agents")
     @Timed
-    public ResponseEntity<List<Agent>> getAllAgents(Pageable pageable) {
-        log.debug("REST request to get a page of Agents");
-        Page<Agent> page = agentRepository.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/agents");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    public ResponseEntity<List<Agent>> getAllAgents(Agent filter, Pageable pageable) throws IllegalAccessException {
+        log.debug("REST request to get a page of Agents {}", filter);
+      
+        if(checkNull(filter)) {
+        	Page<Agent> page = agentRepository.findAll(pageable);
+            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/agents");
+            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        }else {
+        	Page<Agent> page = agentRepository.findCustom(filter, pageable);   
+            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/agents");
+            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);     	
+        }
     }
 
     /**
@@ -150,12 +160,15 @@ public class AgentResource {
     @Timed
     public ResponseEntity<Void> deleteAgent(@PathVariable String id) {
         log.debug("REST request to delete Agent : {}", id);
-        agentRepository.delete(id);
+//        agentRepository.delete(id);
+        Agent agent = agentRepository.findOne(id);
+        agent.setIsDeleted(true);
+        agentRepository.save(agent);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
     }
     
     /**
-     * POST  /work-packages/export-fares : Export work package fares
+     * POST  /agents/export-agents : Export work agents fares
      *
      * @param workPackage the workPackage to create
      * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
@@ -415,5 +428,16 @@ public class AgentResource {
 		}
         
         return agenciesResult;
+    }
+    
+    public boolean checkNull(Object object) throws IllegalAccessException {
+        for (Field f : object.getClass().getDeclaredFields()) {
+        	f.setAccessible(true);
+            if (f.get(object) != null) {
+            	log.debug("FIELD NAME : {}",f.getName());
+                return false;
+            }
+        }
+        return true;            
     }
 }
