@@ -44,6 +44,7 @@
         vm.tariffNumber = tariffNumber;
         vm.cities = cities;
         vm.currencies = currencies;
+        vm.indexSelectedTab = 0;
         
         vm.fareType = {
     		"":"Select Fare Type", 
@@ -818,6 +819,7 @@
         	vm.resetTab();        	
         	vm.currentTab[index] = true;
         	vm.selectedTab = index;
+        	vm.indexSelectedTab = index;
         };
         
         vm.addTab = function(option){
@@ -3274,13 +3276,14 @@
       
       vm.ratesheet = function(){
     	  	  $uibModal.open({
-              templateUrl: 'app/entities/work-package/work-package-rate-sheet-dialog.html',
+              templateUrl: 'app/pages/work-packages/work-package-rate-sheet-dialog.html',
               controller: 'WorkPackageRateSheetDialogController',
               controllerAs: 'vm',
               backdrop: 'static',
               size: 'lg',
               resolve: {
-                  entity: vm.workPackage
+                  entity: vm.workPackage,
+                  index : vm.indexSelectedTab
               }
           }).result.then(function(ratesheet) {
           	  

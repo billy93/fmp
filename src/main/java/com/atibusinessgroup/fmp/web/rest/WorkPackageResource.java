@@ -80,11 +80,14 @@ import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import io.github.jhipster.web.util.ResponseUtil;
@@ -2313,6 +2316,38 @@ public class WorkPackageResource {
             .body(workPackage);
     }
 
+    public static class WorkPackageRateSheet {
+    	private WorkPackage wp;
+    	private String ruleText;
+    	private String index;
+    	private String[] header;
+    	
+		public WorkPackage getWp() {
+			return wp;
+		}
+		public void setWp(WorkPackage wp) {
+			this.wp = wp;
+		}
+		public String getRuleText() {
+			return ruleText;
+		}
+		public void setRuleText(String ruleText) {
+			this.ruleText = ruleText;
+		}
+		public String getIndex() {
+			return index;
+		}
+		public void setIndex(String index) {
+			this.index = index;
+		}
+		public String[] getHeader() {
+			return header;
+		}
+		public void setHeader(String[] header) {
+			this.header = header;
+		}
+		
+    }
 	/**
      * POST  /work-packages/export-fares : Export work package fares
      *
@@ -2325,71 +2360,16 @@ public class WorkPackageResource {
      */
     @PostMapping("/work-packages/export-ratesheet")
     @Timed
-    public ResponseEntity<Attachment> exportRateSheetWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException, MalformedURLException, IOException, DocumentException {
-    	log.debug("REST request to save exportFares : {}", workPackage);
-
-        /*XSSFWorkbook workbook = new XSSFWorkbook(); 
-        XSSFSheet spreadsheet = workbook.createSheet("Workorder Fare");
+    public ResponseEntity<Attachment> exportRateSheetWorkPackage(@RequestBody WorkPackageRateSheet wprs) throws URISyntaxException, MalformedURLException, IOException, DocumentException {
+    	log.debug("REST request to save exportFares : {}{}", wprs.getWp(), wprs.getRuleText());
         
-        XSSFRow row = spreadsheet.createRow(1);
-        XSSFCell cell;
-
-        cell = row.createCell(1);
-        cell.setCellValue("Status");
-        cell = row.createCell(2);
-        cell.setCellValue("Carrier");
-        cell = row.createCell(3);
-        cell.setCellValue("Action");
-        cell = row.createCell(4);
-        cell.setCellValue("Tar No");
-        cell = row.createCell(5);
-        cell.setCellValue("Tar Cd");
-        cell = row.createCell(6);
-        cell.setCellValue("Global");
-        cell = row.createCell(7);
-        cell.setCellValue("Origin");
-        cell = row.createCell(8);
-        cell.setCellValue("Dest");
-        cell = row.createCell(9);
-        cell.setCellValue("Fare Cls");
-        cell = row.createCell(10);
-        cell.setCellValue("Bkg Cls");
-        cell = row.createCell(11);
-        cell.setCellValue("Cabin");
-        cell = row.createCell(12);
-
-        
-        List<WorkPackageFare> fares = workPackageFareService.findAllByWorkPackage(workPackage.getId());
-        for(int i=0; i<fares.size(); i++) {
-        		XSSFRow rows = spreadsheet.createRow(i+2);
-            cell = rows.createCell(1);
-            cell.setCellValue(fares.get(i).getStatus());
-            cell = rows.createCell(2);
-            cell.setCellValue(fares.get(i).getCarrier());
-            cell = rows.createCell(3);
-            cell.setCellValue(fares.get(i).getAction());
-            cell = rows.createCell(4);
-            cell.setCellValue(fares.get(i).getTarno());
-            cell = rows.createCell(5);
-            cell.setCellValue(fares.get(i).getTarcd());
-            cell = rows.createCell(6);
-            cell.setCellValue(fares.get(i).getGlobal());
-            cell = rows.createCell(7);
-            cell.setCellValue(fares.get(i).getOrigin());
-            cell = rows.createCell(8);
-            cell.setCellValue(fares.get(i).getDestination());
-            cell = rows.createCell(9);
-            cell.setCellValue(fares.get(i).getFareBasis());
-            cell = rows.createCell(10);
-            cell.setCellValue(fares.get(i).getBookingClass());
-            cell = rows.createCell(11);
-            cell.setCellValue(fares.get(i).getCabin());
-            cell = rows.createCell(12);
-            cell.setCellValue(fares.get(i).getTypeOfJourney());
-
-        }*/
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
+        WorkPackage workPackage = wprs.getWp();
+        String ruleText = wprs.getRuleText();
+        int idx = Integer.parseInt(wprs.getIndex());
+        String[] header = wprs.getHeader();
+        
     	Document document = new Document(PageSize.A4,30,30,60,0);
 //    	PdfWriter.getInstance(document, new FileOutputStream("iTextHelloWorld.pdf"));
     	PdfWriter.getInstance(document, output);
@@ -2411,21 +2391,21 @@ public class WorkPackageResource {
         Paragraph p6 = new Paragraph();
 
         p1.setFont(font);               
-        p1.add(content[0]);        
+        p1.add(content[0]+" "+ workPackage.getWpid());        
     	document.add(p1);
     	document.add(new Chunk(" "));
         p2.setFont(font);               
-        p2.add(content[1]);
+        p2.add(content[1]+" "+workPackage.getName());
         document.add(p2);
     	document.add(new Chunk(" "));
 
         p3.setFont(font);               
-        p3.add(content[2]);
+        p3.add(content[2]+" "+workPackage.getFareSheet().get(idx).getSpecifiedFaresName());
     	document.add(p3);
     	document.add(new Chunk(" "));
 
         p4.setFont(font);               
-        p4.add(content[3]);
+        p4.add(content[3]+" "+workPackage.getRatesheetComment());
     	document.add(p4);
     	document.add(new Chunk(" "));
 
@@ -2434,8 +2414,86 @@ public class WorkPackageResource {
     	document.add(p5);
     	document.add(new Chunk(" "));
     	
+    	Integer count = header.length;
+    	PdfPTable table;
+    	if(count < 25) {
+    		table = new PdfPTable(count);
+    	}else {
+    		table = new PdfPTable(24);
+    	}
+		table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
+		for(int l=0; l<header.length ;l++) {
+			table.addCell(header[l]);
+		}
+		table.setHeaderRows(1);
+        
+	  
+        PdfPCell[] cells = table.getRow(0).getCells(); 
+        	for (int j=0;j<cells.length;j++){
+        			cells[j].setBackgroundColor(BaseColor.GRAY);
+        	}
+        	log.debug("cek : "+workPackage.getFareSheet().size());
+        	for(int l=0; l<workPackage.getFareSheet().size();l++) {
+        		for (int i=0;i<header.length;i++){
+            		if(header[i].contentEquals("Status")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getStatus());
+            		}else if(header[i].contentEquals("Carrier")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getCarrier());
+            		}else if(header[i].contentEquals("Action")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getAction());
+            		}else if(header[i].contentEquals("Tar No")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getTariffNumber().getTarNo());
+            		}else if(header[i].contentEquals("Tar Cd")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getTariffNumber().getTarCd());
+            		}else if(header[i].contentEquals("Global")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getTariffNumber().getGlobal());
+            		}else if(header[i].contentEquals("Origin")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getOrigin());
+            		}else if(header[i].contentEquals("Destination")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getDestination());
+            		}else if(header[i].contentEquals("Fare Class")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getFareBasis());
+            		}else if(header[i].contentEquals("Booking Class")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getBookingClass());
+            		}else if(header[i].contentEquals("Cabin")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getCabin());
+            		}else if(header[i].contentEquals("OW/RT")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getCabin());
+            		}else if(header[i].contentEquals("Footnote")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getFootnote1());
+            		}else if(header[i].contentEquals("Routing No")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getRtgno());
+            		}else if(header[i].contentEquals("Rule No")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getRuleno());
+            		}else if(header[i].contentEquals("Currency")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getCurrency());
+            		}else if(header[i].contentEquals("Base Amt")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getBaseRuleNo());
+            		}else if(header[i].contentEquals("Amt Different")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getBaseRuleNo());
+            		}else if(header[i].contentEquals("% Amt Different")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getBaseRuleNo());
+            		}else if(header[i].contentEquals("YQYR")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getYqyr());
+            		}else if(header[i].contentEquals("Cat 12")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getCat12());
+            		}else if(header[i].contentEquals("TFC")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getTfc());
+            		}else if(header[i].contentEquals("Target AIF")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getAif());
+            		}else if(header[i].contentEquals("Itinerary")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getItinerary());
+            		}
+            		else {
+            			table.addCell("-");
+            		}
+            	}        		
+        	}
+        	
+          document.add(table);
+	
         p6.setFont(font);               
-        p6.add(content[5]);
+        p6.add(content[5]+" "+ruleText);
     	document.add(p6);
     	document.add(new Chunk(" "));
 
