@@ -34,7 +34,7 @@
         }
         
         
-        vm.fareType = ["Yearly", "Promotion", "Ad-hoc", "Corporate", "SPA & Code-share", "Miles"];
+        vm.fareType = ["Yearly", "Promotion", "Ad-hoc", "Corporate", "SPA & Code-share", "Miles", "Waiver"];
         
         
         vm.distributionTypes = ['ATPCO'];
@@ -53,7 +53,7 @@
         }
         else if($stateParams.type == 'waiver'){
     		vm.workPackage.type = 'WAIVER';
-//    		vm.distributionTypes = ['ATPCO'];
+    		vm.distributionTypes = ['MARKET'];
         }
         
         $timeout(function (){

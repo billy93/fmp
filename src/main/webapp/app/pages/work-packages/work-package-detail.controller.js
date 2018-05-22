@@ -29,7 +29,8 @@
         vm.currentAddonTab = [];
         vm.currentDiscountTab = [];
         vm.currentMarketTab = [];
-        
+        vm.currentWaiverTab = [];
+         
         vm.rulesMenu = true;
         vm.user = user;
         vm.datePickerOpenStatus = {};
@@ -96,6 +97,23 @@
         	"C" : "Calculated",
         	"S" : "Specified",
         	"M" : "Substract Specified from Calculated"
+        };
+        
+        vm.ssn = {
+        	"": "Select SSN Type",
+        	"C" : "Christmas",
+        	"E" : "Easter",
+        	"F" : "4th Level",
+            "H" : "High Peak",
+            "J" : "Basic",
+            "L" : "Low/Off-Peak",
+            "N" : "Chinese New Year",
+            "O" : "Shoulder",
+            "P" : "Peak Of Peak",
+            "Q" : "Holiday Surcharge",
+            "T" : "5th Level",
+            "Y" : "7th Level",
+            "Z" : "Second Winter"
         };
         
         vm.fields = [
@@ -334,6 +352,170 @@
         		editable:["LSO", "HO", "Distribution"],
         		mandatory:[]
         	},
+        	{
+        		name:"addonFareRtgno",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"addonFareCurrency",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"addonFareAmount",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"addonFareTravelStartDate",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"addonFareTravelEndDate",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"addonFareSaleStartDate",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"addonFareSaleEndDate",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"addonFareComment",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"addonFareTravelComplete",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"addonFareTravelIndicator",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	
+        	
+        	// MARKET FARE HEADER
+        	{
+        		name:"marketFareDescription",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"marketApprovalReference",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"marketFareType",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	
+        	
+        	//MARKET FARE
+        	{
+        		name:"marketFareStatus",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"marketFareOrigin",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"marketFareDestination",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"marketFareFarebasis",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"marketFareBookingClass",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"marketFareSsn",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	
+        	{
+        		name:"marketFareCabin",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	
+        	{
+        		name:"marketFareTypeOfJourney",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"marketFareRuleno",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"marketFareCurrency",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"marketFareBaseAmt",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},        	        	
+        	{
+        		name:"marketFareTravelStartDate",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"marketFareTravelEndDate",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"marketFareSaleStartDate",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"marketFareSaleEndDate",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"marketFareTravelComplete",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"marketFareTravelIndicator",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"marketFareRatesheetComment",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	
         ];
         
         vm.isRequired = function(field){
@@ -427,6 +609,18 @@
 		        			console.log('Active Market Tab '+x);
 		        			findTab = true;
 		        			vm.workPackage.marketFareSheet[x].approvalReference = option.tourcode;		        					        					        			
+		        			break;
+		        		}
+		        	}
+	        	}
+	        	
+	        	
+	        	if(!findTab){
+		        	for(var x=0;x<vm.currentWaiverTab.length;x++){
+		        		if(vm.currentWaiverTab[x]){
+		        			console.log('Active Waiver Tab '+x);
+		        			findTab = true;
+		        			vm.workPackage.waiverFareSheet[x].waiverApprovalReference = option.tourcode;		        					        					        			
 		        			break;
 		        		}
 		        	}
@@ -546,6 +740,20 @@
 	        	}
         	}
         	
+        	if(!findTab){
+	        	for(var x=0;x<vm.currentWavierTab.length;x++){
+	        		if(vm.currentWaiverTab[x]){
+	        			console.log('Active Waiver Tab '+x);
+	        			findTab = true;
+	        			
+	        			var index = vm.workPackage.waiverFareSheet.indexOf(x);
+	                	vm.workPackage.waiverFareSheet.splice(index, 1); 
+	                	vm.selectedWaiverTab = 0;
+	        			break;
+	        		}
+	        	}
+        	}
+        	
         	if(!findTab && vm.currentTabAttachment){
         		vm.workPackage.attachment = false;
         		findTab = true;
@@ -655,6 +863,37 @@
         };
         //END MARKET TAB
         
+        //WAIVER TAB
+        vm.selectedWaiverTab = 0;       
+        vm.selectWaiverTab = function(index){
+        	vm.resetTab();        	
+        	vm.currentWaiverTab[index] = true;
+        	vm.selectedWaiverTab = index;
+        };
+        
+        vm.addWaiverTab = function(){
+        	vm.workPackage.waiverFareSheet.push({});
+        }
+        
+        vm.removeWaiverTab = function(){
+        	var index = vm.workPackage.waiverFareSheet.indexOf(vm.selectedWaiverTab);
+        	vm.workPackage.waiverFareSheet.splice(index, 1); 
+        	vm.selectedWaiverTab = 0;
+        }
+        
+        vm.addWaiverSheet = function(){
+        	vm.addWaiverTab();
+        };
+        
+        vm.copyWaiverSheet = function(){
+          	vm.workPackage.waiverFareSheet.push(vm.workPackage.waiverFareSheet[vm.selectedWaiverTab]);
+        };
+        
+        vm.removeWaiverSheet = function(){
+        	vm.removeWaiverTab();
+        };
+        //END WAIVER TAB
+        
         //OTHER TAB
         vm.selectOtherTab = function(tabName){
         	vm.resetTab();
@@ -666,6 +905,8 @@
         		vm.currentTabFilingDetail = true;
         	} else if(tabName == 'marketRules'){
         		vm.currentTabMarketRules = true;
+        	} else if(tabName == 'waiverRules'){
+        		vm.currentTabWaiverRules = true;
         	}
         };
         //END OTHER TAB
@@ -684,10 +925,14 @@
         	for(var x=0;x<vm.currentMarketTab.length;x++){
         		vm.currentMarketTab[x]=false;
         	}
+        	for(var x=0;x<vm.currentWaiverTab.length;x++){
+        		vm.currentWaiverTab[x]=false;
+        	}
         	vm.currentTabFilingInstruction = false;
         	vm.currentTabAttachment = false;
         	vm.currentTabFilingDetail = false;
         	vm.currentTabMarketRules = false;
+        	vm.currentTabWaiverRules = false;
         };
         //END RESET TAB FUNCTION
         
@@ -769,8 +1014,22 @@
         //END SHEET FUNCTION
         
         vm.faresActionButton = [];
-        vm.rowTableClick = function(e, index){
-        	vm.faresActionButton[index] = !vm.faresActionButton[index];
+        vm.marketFaresActionButton = [];
+        vm.discountFaresActionButton = [];
+        vm.waiverFaresActionButton = [];
+        vm.rowTableClick = function(e, index, type){
+        	if(type == 'fares'){
+        		vm.faresActionButton[index] = !vm.faresActionButton[index];
+        	}
+        	else if(type == 'market'){
+        		vm.marketFaresActionButton[index] = !vm.marketFaresActionButton[index];
+        	}
+        	else if(type == 'discount'){
+        		vm.discountFaresActionButton[index] = !vm.discountFaresActionButton[index];
+        	}
+        	else if(type == 'waiver'){
+        		vm.waiverFaresActionButton[index] = !vm.waiverFaresActionButton[index];
+        	}
         }
         
         vm.errorStyle = { 'background-color':'red'};
@@ -965,7 +1224,7 @@
         		vm.workPackage.marketFareSheet[vm.selectedMarketTab].fares = [];	      	  	
         	}
         	
-        	vm.workPackage.marketFareSheet[vm.selectedAddonTab].fares.push({
+        	vm.workPackage.marketFareSheet[vm.selectedMarketTab].fares.push({
       	  		status:"PENDING",
       	  		action:"New",
       	  		carrier:"GA",
@@ -991,6 +1250,40 @@
     		vm.workPackage.marketFares.push(JSON.parse(JSON.stringify(vm.selectedFareMarket)));
 	    }
 	    //End Market Fares Function
+	    
+	    
+	    //Waiver Fares Function
+	    vm.addWaiverFares = function(){
+	    	if(vm.workPackage.waiverFareSheet[vm.selectedWaiverTab].fares == null){
+        		vm.workPackage.waiverFareSheet[vm.selectedWaiverTab].fares = [];	      	  	
+        	}
+        	
+        	vm.workPackage.waiverFareSheet[vm.selectedWaiverTab].fares.push({
+      	  		status:"PENDING",
+      	  		action:"New",
+      	  		carrier:"GA",
+      	  	});
+	    };
+	    
+	    vm.rowWaiverFaresSelected = function(workPackageFare){
+    		vm.selectedFareWaiver = workPackageFare;
+    		for(var x=0;x<vm.workPackage.waiverRulesData.length;x++){
+    			if(workPackageFare.ruleno == vm.workPackage.waiverRulesData[x].ruleid){
+    				vm.selectedFareWaiver.fareRule = vm.workPackage.waiverRulesData[x].fareRule;
+    				break;
+    			}	    			
+    		}
+	    }
+	    
+	    vm.deleteWaiverFaresSelected = function(){
+    		var index = vm.workPackage.waiverFares.indexOf(vm.selectedFareWaiver);
+    		vm.workPackage.waiverFares.splice(index, 1);  
+	    }
+	    
+	    vm.duplicateWaiverFaresSelected = function(){
+    		vm.workPackage.waiverFares.push(JSON.parse(JSON.stringify(vm.selectedFareWaiver)));
+	    }
+	    //End Waiver Fares Function
 	    
 	    //Filing Details
 	    vm.workPackage.tarif = [{},{}];

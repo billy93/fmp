@@ -60,6 +60,9 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		if(wpFilter.status.reviewing) {
 			status.add("REVIEWING");
 		}
+		if(wpFilter.status.withdraw) {
+			status.add("WITHDRAW");
+		}
 		Criteria statusCriteria = Criteria.where("status").in(status);
 		//END STATUS
 		

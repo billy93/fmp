@@ -62,6 +62,9 @@
 	        'replace': {
 				method:'POST', url:'api/work-packages/replace'
 	        },
+	        'withdraw': {
+				method:'POST', url:'api/work-packages/withdraw'
+	        },
 	        'history': { method: 'GET', isArray: true, url:'api/work-packages/history/:id'},	        
 	        'changeVersion': { method: 'POST', url:'api/work-packages/changeVersion'},	        
 	        'importFares': { method: 'POST',  url:'api/work-packages/import-fares'},

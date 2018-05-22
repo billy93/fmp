@@ -39,7 +39,10 @@
 	    			pending:true,
 	    			reviewing:true,
 	    			readyToRelease:true,
-	    			distributed:true
+	    			distributed:true,
+	    			withdraw:true,
+	    			discontinue:true,
+	    			referred:true
 	    		},
 	    		type:{
 	    			regular:true,
@@ -62,6 +65,7 @@
             	"status.reviewing": vm.workPackageFilter.status.reviewing,
             	"status.readyToRelease": vm.workPackageFilter.status.readyToRelease,
             	"status.distributed": vm.workPackageFilter.status.distributed,
+            	"status.withdraw": vm.workPackageFilter.status.withdraw,
             	
             	"distributionType.atpco":vm.workPackageFilter.distributionType.atpco,
             	"distributionType.market":vm.workPackageFilter.distributionType.market,
@@ -140,6 +144,20 @@
         		
         	}
         }
+        vm.withdraw = function(index){
+        	WorkPackage.withdraw(vm.workPackages[index], onWithdrawSuccess, onWithdrawFailed);
+        	
+        	function onWithdrawSuccess(result){
+        		alert('Withdraw Success '+result.id);
+        		$state.go('work-package-detail', {id:result.id});
+
+        	}
+        	
+        	function onWithdrawFailed(error){
+        		
+        	}
+        }
+        
         vm.showHistory = function(){
         		if(vm.selectedRow != null){
         			WorkPackage.history({id:vm.selectedRow.id}, onSuccess, onError);

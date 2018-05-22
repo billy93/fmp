@@ -252,7 +252,19 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
         private String waiverFaresName;
         
         @Field("waiver_fare_type")
-        private String waiverFareType;        
+        private String waiverFareType;     
+        
+        @Field("waiver_approval_reference")
+        private String waiverApprovalReference;
+        
+        @Field("waiver_agent_name")
+        private String waiverAgentName;    
+        
+        @Field("waiver_iata_no")
+        private String waiverIataNo;
+        
+        @Field("waiver_approval_date")
+        private String waiverApprovalDate;
         //End Waiver Fares
         
         @Field("market_fares_name")

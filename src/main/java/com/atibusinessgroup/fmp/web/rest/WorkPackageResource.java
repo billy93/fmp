@@ -1463,6 +1463,14 @@ public class WorkPackageResource {
     		public boolean readyToRelease;
     		public boolean pending;
     		public boolean completed;
+    		public boolean withdraw;
+    		
+			public boolean isWithdraw() {
+				return withdraw;
+			}
+			public void setWithdraw(boolean withdraw) {
+				this.withdraw = withdraw;
+			}
 			public boolean isNewStatus() {
 				return newStatus;
 			}
@@ -1727,6 +1735,61 @@ public class WorkPackageResource {
             .body(result);
     }
     
+    /**
+     * POST  /work-packages/withdraw : withdraw
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/work-packages/withdraw")
+    @Timed
+    public ResponseEntity<WorkPackage> withdrawWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
+        log.debug("REST request to withdraw WorkPackage : {}", workPackage);
+        if (workPackage.getId() == null) {
+            throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
+        }
+        
+        WorkPackage result = workPackageService.findOne(workPackage.getId());
+        result.setStatus(Status.WITHDRAW);
+        workPackageService.save(result);
+        /*
+        saveHistoryData(workPackage);
+        
+        //updateWorkPackage(workPackage);
+                        
+        WorkPackage result = workPackageService.findOne(workPackage.getId());
+        String reviewLevel = result.getReviewLevel();
+        if(reviewLevel.contentEquals("LSO")) {
+    		result.setReviewLevel("HO");
+    		result.setStatus(Status.PENDING);
+        }
+//        else if(reviewLevel.contentEquals("LSO2")) {
+//    		result.setReviewLevel("HO1");
+//    		result.setStatus(Status.PENDING);
+//        }
+//        else if(reviewLevel.contentEquals("HO1")) {
+//    		result.setReviewLevel("HO2");
+//    		result.setStatus(Status.PENDING);
+//        }
+//        else if(reviewLevel.contentEquals("HO2")) {
+//        		//cannot passup
+//        }
+        
+        workPackageService.save(result);
+        
+        
+        WorkPackageHistory history = new WorkPackageHistory();
+        history.setWorkPackage(new ObjectId(result.getId()));
+        history.setType("PASSUP");
+        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        workPackageHistoryService.save(history);
+        */
+        
+        return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
     private void saveHistoryData(WorkPackage workPackage) {
 		// TODO Auto-generated method stub
     		String woId = workPackage.getId();        
@@ -1927,12 +1990,19 @@ public class WorkPackageResource {
 	        content += "</thead>";  
 	        
 	        content += "<tbody>";  
-	        	for(Comment c : workPackage.getInterofficeComment()) {
-			        content += "<tr>";
-			        	content += 	"<td>"+c.getComment()+"</td>";
-			        	content += 	"<td>"+c.getUsername()+"</td>";
-			        	content += 	"<td>"+c.getCreatedTime().toString()+"</td>";
-			        content += "</tr>";
+	        	if(workPackage.getInterofficeComment() != null) {
+		        	for(Comment c : workPackage.getInterofficeComment()) {
+				        content += "<tr>";
+				        	content += 	"<td>"+c.getComment()+"</td>";
+				        	content += 	"<td>"+c.getUsername()+"</td>";
+				        	content += 	"<td>"+c.getCreatedTime().toString()+"</td>";
+				        content += "</tr>";
+		        	}
+	        	}
+	        	else {
+	        		content += "<tr>";
+		        		content += 	"<td colspan='3'>No Interoffice Comment</td>";
+		        	content += "</tr>";
 	        	}
         	content += "</tbody>";  
         content += "</table>";
