@@ -503,9 +503,9 @@
                 <configuration>
                     <path>/FMP</path>
                     <update>true</update>
-                    <url>http://localhost:8018/manager/text</url>
+                    <url>http://localhost:8092/manager/text</url>
                     <username>admin</username>
-                    <password>@p412BakS0</password>
+                    <password>$3ter@hGwD0n9</password>
                 </configuration>
             </plugin>
             <!-- jhipster-needle-maven-add-plugin -->
