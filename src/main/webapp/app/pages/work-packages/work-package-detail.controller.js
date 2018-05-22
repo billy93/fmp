@@ -565,18 +565,18 @@
         	// MARKET FARE HEADER
         	{
         		name:"marketFareDescription",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
         	},
         	{
         		name:"marketApprovalReference",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO"],
         		mandatory:[]
         	},
         	{
         		name:"marketFareType",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
         	},
         	
         	
