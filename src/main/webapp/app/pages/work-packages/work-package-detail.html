@@ -1907,7 +1907,7 @@
 											<label>Description</label>
 											<input type="text" name="marketFareDescription{{$parent.$index}}{{$index}}" class="form-control"
 											ng-class="{'must-fill': editForm.editFormMarket.marketFareDescription{{$parent.$index}}{{$index}}.$error.required}"
-							         		ng-model="workPackageSheet.specifiedFaresName" 
+							         		ng-model="workPackageSheet.marketFaresName" 
 							         		ng-required="vm.isRequired('marketFareDescription')"  
 							         		ng-disabled="!vm.isEditable('marketFareDescription')">
 										</div>
@@ -1940,7 +1940,7 @@
 									</div>
 									<div class="pull-left w50 two-column">
 										<div class="form-group">
-											<label>Group Fares Checkbox</label>
+											<label>Group Fares</label>
 											<input class="form-control" type="checkbox" ng-model="workPackageSheet.groupFares"/>																						      				
 										</div>
 									</div>

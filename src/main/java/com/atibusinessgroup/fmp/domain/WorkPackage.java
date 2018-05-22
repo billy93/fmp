@@ -267,8 +267,13 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
         private String waiverApprovalDate;
         //End Waiver Fares
         
+        //Market Fares
         @Field("market_fares_name")
         private String marketFaresName;
+        
+        @Field("group_fares")
+        private boolean groupFares;
+        //End Market Fares
         
     	@Field("fare_carrier")
         private String fareCarrier;
@@ -285,7 +290,48 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
         @Field("discontinue_date")
         private String discontinueDate;
 
-        public String getWaiverFaresName() {
+        
+        public String getWaiverApprovalReference() {
+			return waiverApprovalReference;
+		}
+
+		public void setWaiverApprovalReference(String waiverApprovalReference) {
+			this.waiverApprovalReference = waiverApprovalReference;
+		}
+
+		public String getWaiverAgentName() {
+			return waiverAgentName;
+		}
+
+		public void setWaiverAgentName(String waiverAgentName) {
+			this.waiverAgentName = waiverAgentName;
+		}
+
+		public String getWaiverIataNo() {
+			return waiverIataNo;
+		}
+
+		public void setWaiverIataNo(String waiverIataNo) {
+			this.waiverIataNo = waiverIataNo;
+		}
+
+		public String getWaiverApprovalDate() {
+			return waiverApprovalDate;
+		}
+
+		public void setWaiverApprovalDate(String waiverApprovalDate) {
+			this.waiverApprovalDate = waiverApprovalDate;
+		}
+
+		public boolean isGroupFares() {
+			return groupFares;
+		}
+
+		public void setGroupFares(boolean groupFares) {
+			this.groupFares = groupFares;
+		}
+
+		public String getWaiverFaresName() {
 			return waiverFaresName;
 		}
 
