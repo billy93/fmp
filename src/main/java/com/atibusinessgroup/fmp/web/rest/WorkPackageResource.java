@@ -2275,61 +2275,64 @@ public class WorkPackageResource {
         	for (int j=0;j<cells.length;j++){
         			cells[j].setBackgroundColor(BaseColor.GRAY);
         	}
-        	for (int i=0;i<header.length;i++){
-//        		table.addCell(workPackage.getFareSheet().get(idx).getFares().get(0).getStatus());
-        		if(header[i].contentEquals("Status")) {
-        			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(0).getStatus());
-        		}else if(header[i].contentEquals("Carrier")) {
-        			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(0).getCarrier());
-        		}else if(header[i].contentEquals("Action")) {
-        			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(0).getAction());
-        		}else if(header[i].contentEquals("Tar No")) {
-        			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(0).getTariffNumber().getTarNo());
-        		}else if(header[i].contentEquals("Tar Cd")) {
-        			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(0).getTariffNumber().getTarCd());
-        		}else if(header[i].contentEquals("Global")) {
-        			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(0).getTariffNumber().getGlobal());
-        		}else if(header[i].contentEquals("Origin")) {
-        			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(0).getOrigin());
-        		}else if(header[i].contentEquals("Destination")) {
-        			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(0).getDestination());
-        		}else if(header[i].contentEquals("Fare Class")) {
-        			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(0).getFareBasis());
-        		}else if(header[i].contentEquals("Booking Class")) {
-        			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(0).getBookingClass());
-        		}else if(header[i].contentEquals("Cabin")) {
-        			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(0).getCabin());
-        		}else if(header[i].contentEquals("OW/RT")) {
-        			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(0).getCabin());
-        		}else if(header[i].contentEquals("Footnote")) {
-        			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(0).getFootnote1());
-        		}else if(header[i].contentEquals("Routing No")) {
-        			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(0).getRtgno());
-        		}else if(header[i].contentEquals("Rule No")) {
-        			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(0).getRuleno());
-        		}else if(header[i].contentEquals("Currency")) {
-        			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(0).getCurrency());
-        		}else if(header[i].contentEquals("Base Amt")) {
-        			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(0).getBaseRuleNo());
-        		}else if(header[i].contentEquals("Amt Different")) {
-        			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(0).getBaseRuleNo());
-        		}else if(header[i].contentEquals("% Amt Different")) {
-        			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(0).getBaseRuleNo());
-        		}else if(header[i].contentEquals("YQYR")) {
-        			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(0).getYqyr());
-        		}else if(header[i].contentEquals("Cat 12")) {
-        			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(0).getCat12());
-        		}else if(header[i].contentEquals("TFC")) {
-        			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(0).getTfc());
-        		}else if(header[i].contentEquals("Target AIF")) {
-        			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(0).getAif());
-        		}else if(header[i].contentEquals("Itinerary")) {
-        			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(0).getItinerary());
-        		}
-        		else {
-        			table.addCell("-");
-        		}
+        	log.debug("cek : "+workPackage.getFareSheet().size());
+        	for(int l=0; l<workPackage.getFareSheet().size();l++) {
+        		for (int i=0;i<header.length;i++){
+            		if(header[i].contentEquals("Status")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getStatus());
+            		}else if(header[i].contentEquals("Carrier")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getCarrier());
+            		}else if(header[i].contentEquals("Action")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getAction());
+            		}else if(header[i].contentEquals("Tar No")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getTariffNumber().getTarNo());
+            		}else if(header[i].contentEquals("Tar Cd")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getTariffNumber().getTarCd());
+            		}else if(header[i].contentEquals("Global")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getTariffNumber().getGlobal());
+            		}else if(header[i].contentEquals("Origin")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getOrigin());
+            		}else if(header[i].contentEquals("Destination")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getDestination());
+            		}else if(header[i].contentEquals("Fare Class")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getFareBasis());
+            		}else if(header[i].contentEquals("Booking Class")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getBookingClass());
+            		}else if(header[i].contentEquals("Cabin")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getCabin());
+            		}else if(header[i].contentEquals("OW/RT")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getCabin());
+            		}else if(header[i].contentEquals("Footnote")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getFootnote1());
+            		}else if(header[i].contentEquals("Routing No")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getRtgno());
+            		}else if(header[i].contentEquals("Rule No")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getRuleno());
+            		}else if(header[i].contentEquals("Currency")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getCurrency());
+            		}else if(header[i].contentEquals("Base Amt")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getBaseRuleNo());
+            		}else if(header[i].contentEquals("Amt Different")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getBaseRuleNo());
+            		}else if(header[i].contentEquals("% Amt Different")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getBaseRuleNo());
+            		}else if(header[i].contentEquals("YQYR")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getYqyr());
+            		}else if(header[i].contentEquals("Cat 12")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getCat12());
+            		}else if(header[i].contentEquals("TFC")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getTfc());
+            		}else if(header[i].contentEquals("Target AIF")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getAif());
+            		}else if(header[i].contentEquals("Itinerary")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getItinerary());
+            		}
+            		else {
+            			table.addCell("-");
+            		}
+            	}        		
         	}
+        	
           document.add(table);
 	
         p6.setFont(font);               
