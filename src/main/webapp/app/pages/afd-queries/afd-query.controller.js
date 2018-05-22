@@ -56,5 +56,13 @@
                 search: vm.currentSearch
             });
         }
+        
+        vm.getRules = function(afdQuery) {
+        	AfdQuery.getRules(afdQuery, function(data) {
+        		console.log(data);
+        	}, function(error) {
+        		console.log(error);
+        	});
+        }
     }
 })();

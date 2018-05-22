@@ -67,11 +67,11 @@
                     <th>Ref AIF</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr ng-repeat="afdQuery in vm.afdQueries track by afdQuery.id">
+            <tbody ng-repeat="afdQuery in vm.afdQueries track by afdQuery.atpcoFareId">
+                <tr ng-click="vm.selectedRow = afdQuery.atpcoFareId; vm.getRules(afdQuery)">
                     <td><a ui-sref="system-parameter-detail({id:afdQuery.id})">{{$index + 1}}</a></td>
                     <td>{{afdQuery.source}}</td>
-                    <td><b>NM</b></td>
+                    <td>{{afdQuery.sc}}</td>
                     <td>{{afdQuery.tariffNo}}</td>
                     <td>{{afdQuery.carrierCode}}</td>
                     <td>{{afdQuery.originCity}}</td>
@@ -86,8 +86,8 @@
                     <td>{{afdQuery.routingNo}}</td>
                     <td>{{afdQuery.ruleNo}}</td>
                     <td>{{afdQuery.maximumPermittedMileage}}</td>
-                    <td>{{afdQuery.fareOriginCurrencyCode}}</td>
-                    <td>{{afdQuery.fareOriginAmount.low}}</td>
+                    <td>{{afdQuery.currencyCode}}</td>
+                    <td>{{afdQuery.baseAmount}}</td>
                     <td><b>NM</b></td>
                     <td><b>NM</b></td>
                     <td><b>NM</b></td>
@@ -97,8 +97,8 @@
                     <td><b>NM</b></td>
                     <td><b>NM</b></td>
                     <td><b>NM</b></td>
-                    <td><span ng-if="afdQuery.tariffEffectiveDateObject == 'indef'">NONE</span><span ng-if="afdQuery.tariffEffectiveDateObject != 'indef'">{{afdQuery.tariffEffectiveDateObject | date:'ddMMMyyyy'}}</span></td>
-                	<td><span ng-if="afdQuery.discontinueDateObject == 'indef'">NONE</span><span ng-if="afdQuery.discontinueDateObject != 'indef'">{{afdQuery.discontinueDateObject | date:'ddMMMyyyy'}}</span></td>
+                    <td><span ng-if="afdQuery.effectiveDate == 'indef'">NONE</span><span ng-if="afdQuery.effectiveDate != 'indef'">{{afdQuery.effectiveDate | date:'ddMMMyyyy'}}</span></td>
+                	<td><span ng-if="afdQuery.discontinueDate == 'indef'">NONE</span><span ng-if="afdQuery.discontinueDate != 'indef'">{{afdQuery.discontinueDate | date:'ddMMMyyyy'}}</span></td>
                 	<td><b>NM</b></td>
                 	<td>{{afdQuery.globalIndicator}}</td>
                 	<td><b>NM</b></td>
@@ -106,8 +106,8 @@
                 	<td><b>NM</b></td>
                 	<td><b>NM</b></td>
                 	<td><b>NM</b></td>
-                	<td><span ng-if="afdQuery.firstSaleDateObject == 'indef'">NONE</span><span ng-if="afdQuery.firstSaleDateObject != 'indef'">{{afdQuery.firstSaleDateObject | date:'ddMMMyyyy'}}</span></td>
-                	<td><span ng-if="afdQuery.lastSaleDateObject == 'indef'">NONE</span><span ng-if="afdQuery.lastSaleDateObject != 'indef'">{{afdQuery.lastSaleDateObject | date:'ddMMMyyyy'}}</span></td>
+                	<td><span ng-if="afdQuery.saleStartDate == 'indef'">NONE</span><span ng-if="afdQuery.saleStartDate != 'indef'">{{afdQuery.saleStartDate | date:'ddMMMyyyy'}}</span></td>
+                	<td><span ng-if="afdQuery.saleEndDate == 'indef'">NONE</span><span ng-if="afdQuery.saleEndDate != 'indef'">{{afdQuery.saleEndDate | date:'ddMMMyyyy'}}</span></td>
                 	<td><b>NM</b></td>
                 	<td><b>NM</b></td>
                 	<td><b>NM</b></td>
@@ -129,6 +129,11 @@
                 	<td><b>NM</b></td>
                 	<td><b>NM</b></td>
                 </tr>
+            	<tr ng-if="vm.selectedRow == afdQuery.atpcoFareId">
+            		<div>
+            			
+            		</div>
+            	</tr>
             </tbody>
         </table>
     </div>
