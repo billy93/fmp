@@ -2433,7 +2433,7 @@ public class WorkPackageResource {
         			cells[j].setBackgroundColor(BaseColor.GRAY);
         	}
         	log.debug("cek : "+workPackage.getFareSheet().size());
-        	for(int l=0; l<workPackage.getFareSheet().size();l++) {
+        	for(int l=0; l<workPackage.getFareSheet().get(idx).getFares().size();l++) {
         		for (int i=0;i<header.length;i++){
             		if(header[i].contentEquals("Status")) {
             			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getStatus());
