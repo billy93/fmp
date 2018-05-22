@@ -245,6 +245,263 @@ public class WorkPackageFare implements Serializable {
 	@Field("discount_specified_amount")
     private String discountSpecifiedAmount;
 	
+	
+	//WAIVER
+	@Field("waiver_type")
+    private String waiverType;
+	
+	@Field("waiver_full_partial")
+	private String waiverFullPartial;
+	
+	@Field("waiver_pnr")
+	private String waiverPnr;
+	
+	@Field("waiver_tkt_from")
+	private String waiverTktFrom;
+	
+	@Field("waiver_tkt_to")
+	private String waiverTktTo;
+	
+	@Field("waiver_ori")
+	private String waiverOri;
+
+	@Field("waiver_dest")
+	private String waiverDest;
+
+	@Field("waiver_original_itinerary")
+	private String waiverOriginalItinerary;
+
+	@Field("waiver_new_itinerary")
+	private String waiverNewItinerary;
+
+	@Field("waiver_original_basic_fare")
+	private String waiverOriginalBasicFare;
+	
+	@Field("waiver_new_basic_fare")
+	private String waiverNewBasicFare;
+
+	@Field("waiver_approved_fare")
+	private String waiverApprovedFare;
+
+	@Field("waiver_fare_lost")
+	private String waiverFareLost;
+
+	@Field("waiver_calculated_pn")
+	private String waiverCalculatedPn;
+
+	@Field("waiver_original_pn")
+	private String waiverOriginalPn;
+
+	@Field("waiver_approved_pn")
+	private String waiverApprovedPn;
+
+	@Field("waiver_penalty_lost_percent")
+	private String waiverPenaltyLostPercent;
+
+	@Field("waive_penalty_lost_amount")
+	private String waiverPenaltyLostAmount;
+
+	@Field("waiver_currency")
+	private String waiverCurrency;
+
+	@Field("waiver_total_pax")
+	private String waiverTotalPax;
+
+	@Field("waiver_total_lost")
+	private String waiverTotalLost;
+
+	@Field("waiver_approver")
+	private String waiverApprover;
+
+	@Field("waiver_remark")
+	private String waiverRemark;
+
+	
+	
+	public String getWaiverType() {
+		return waiverType;
+	}
+
+	public void setWaiverType(String waiverType) {
+		this.waiverType = waiverType;
+	}
+
+	public String getWaiverFullPartial() {
+		return waiverFullPartial;
+	}
+
+	public void setWaiverFullPartial(String waiverFullPartial) {
+		this.waiverFullPartial = waiverFullPartial;
+	}
+
+	public String getWaiverPnr() {
+		return waiverPnr;
+	}
+
+	public void setWaiverPnr(String waiverPnr) {
+		this.waiverPnr = waiverPnr;
+	}
+
+	public String getWaiverTktFrom() {
+		return waiverTktFrom;
+	}
+
+	public void setWaiverTktFrom(String waiverTktFrom) {
+		this.waiverTktFrom = waiverTktFrom;
+	}
+
+	public String getWaiverTktTo() {
+		return waiverTktTo;
+	}
+
+	public void setWaiverTktTo(String waiverTktTo) {
+		this.waiverTktTo = waiverTktTo;
+	}
+
+	public String getWaiverOri() {
+		return waiverOri;
+	}
+
+	public void setWaiverOri(String waiverOri) {
+		this.waiverOri = waiverOri;
+	}
+
+	public String getWaiverDest() {
+		return waiverDest;
+	}
+
+	public void setWaiverDest(String waiverDest) {
+		this.waiverDest = waiverDest;
+	}
+
+	public String getWaiverOriginalItinerary() {
+		return waiverOriginalItinerary;
+	}
+
+	public void setWaiverOriginalItinerary(String waiverOriginalItinerary) {
+		this.waiverOriginalItinerary = waiverOriginalItinerary;
+	}
+
+	public String getWaiverNewItinerary() {
+		return waiverNewItinerary;
+	}
+
+	public void setWaiverNewItinerary(String waiverNewItinerary) {
+		this.waiverNewItinerary = waiverNewItinerary;
+	}
+
+	public String getWaiverOriginalBasicFare() {
+		return waiverOriginalBasicFare;
+	}
+
+	public void setWaiverOriginalBasicFare(String waiverOriginalBasicFare) {
+		this.waiverOriginalBasicFare = waiverOriginalBasicFare;
+	}
+
+	public String getWaiverNewBasicFare() {
+		return waiverNewBasicFare;
+	}
+
+	public void setWaiverNewBasicFare(String waiverNewBasicFare) {
+		this.waiverNewBasicFare = waiverNewBasicFare;
+	}
+
+	public String getWaiverApprovedFare() {
+		return waiverApprovedFare;
+	}
+
+	public void setWaiverApprovedFare(String waiverApprovedFare) {
+		this.waiverApprovedFare = waiverApprovedFare;
+	}
+
+	public String getWaiverFareLost() {
+		return waiverFareLost;
+	}
+
+	public void setWaiverFareLost(String waiverFareLost) {
+		this.waiverFareLost = waiverFareLost;
+	}
+
+	public String getWaiverCalculatedPn() {
+		return waiverCalculatedPn;
+	}
+
+	public void setWaiverCalculatedPn(String waiverCalculatedPn) {
+		this.waiverCalculatedPn = waiverCalculatedPn;
+	}
+
+	public String getWaiverOriginalPn() {
+		return waiverOriginalPn;
+	}
+
+	public void setWaiverOriginalPn(String waiverOriginalPn) {
+		this.waiverOriginalPn = waiverOriginalPn;
+	}
+
+	public String getWaiverApprovedPn() {
+		return waiverApprovedPn;
+	}
+
+	public void setWaiverApprovedPn(String waiverApprovedPn) {
+		this.waiverApprovedPn = waiverApprovedPn;
+	}
+
+	public String getWaiverPenaltyLostPercent() {
+		return waiverPenaltyLostPercent;
+	}
+
+	public void setWaiverPenaltyLostPercent(String waiverPenaltyLostPercent) {
+		this.waiverPenaltyLostPercent = waiverPenaltyLostPercent;
+	}
+
+	public String getWaiverPenaltyLostAmount() {
+		return waiverPenaltyLostAmount;
+	}
+
+	public void setWaiverPenaltyLostAmount(String waiverPenaltyLostAmount) {
+		this.waiverPenaltyLostAmount = waiverPenaltyLostAmount;
+	}
+
+	public String getWaiverCurrency() {
+		return waiverCurrency;
+	}
+
+	public void setWaiverCurrency(String waiverCurrency) {
+		this.waiverCurrency = waiverCurrency;
+	}
+
+	public String getWaiverTotalPax() {
+		return waiverTotalPax;
+	}
+
+	public void setWaiverTotalPax(String waiverTotalPax) {
+		this.waiverTotalPax = waiverTotalPax;
+	}
+
+	public String getWaiverTotalLost() {
+		return waiverTotalLost;
+	}
+
+	public void setWaiverTotalLost(String waiverTotalLost) {
+		this.waiverTotalLost = waiverTotalLost;
+	}
+
+	public String getWaiverApprover() {
+		return waiverApprover;
+	}
+
+	public void setWaiverApprover(String waiverApprover) {
+		this.waiverApprover = waiverApprover;
+	}
+
+	public String getWaiverRemark() {
+		return waiverRemark;
+	}
+
+	public void setWaiverRemark(String waiverRemark) {
+		this.waiverRemark = waiverRemark;
+	}
+
 	public String getDiscountSpecifiedAmount() {
 		return discountSpecifiedAmount;
 	}

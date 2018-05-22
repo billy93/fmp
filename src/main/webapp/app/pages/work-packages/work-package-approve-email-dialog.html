@@ -1,0 +1,44 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()">
+	
+      		<div class="modal-header">
+		        <h5 class="modal-title" id="addNewsheetLabel">Approve</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+      		</div>
+      		<div class="modal-body">
+      			<div class="box-detail">
+      				<div class="box-header">
+						Approve Configuration
+					</div>
+					
+      				<div class="box-body">
+      					<div class="form-group">
+							<label class="control-label" for="field_include">Include Attachment?</label>
+						</div>
+      					<div class="form-group">
+							<label class="control-label" for="field_email">Email</label>
+				            <div class="input-group">
+				            	<input autocomplete="off" type="email" name="add_email" ng-model="vm.email" class="form-control" />
+				            	<span class="input-group-btn">
+				                    <button type="button" class="btn btn-default" ng-click="vm.addEmail()"><i class="glyphicon glyphicon-plus"></i></button>
+				                </span>
+				            </div>
+						</div>
+						<div class="multi-values" >
+							<span ng-repeat="email in vm.option.email track by $index">
+			           		<label name="remove_email" >
+			           			{{email}}<span class="delete"  ng-click="vm.removeEmail()"><i class="glyphicon glyphicon-remove-sign"></i></span>
+			           		</label>
+			           		<br/><br/>
+			           		</span>
+			           	</div>
+      				</div>
+      			</div>						
+	      	</div>		      		
+      		<div class="modal-footer">				        
+		        <button type="submit" class="btn btn-secondary" ng-disabled="editForm.$invalid || vm.isSaving">Save</button>
+		        <button type="button" class="btn btn-back" data-dismiss="modal" ng-click="vm.clear()">Close</button>
+      		</div>
+</form>

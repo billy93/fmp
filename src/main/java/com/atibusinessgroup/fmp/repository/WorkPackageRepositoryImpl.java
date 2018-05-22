@@ -60,6 +60,9 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		if(wpFilter.status.reviewing) {
 			status.add("REVIEWING");
 		}
+		if(wpFilter.status.withdraw) {
+			status.add("WITHDRAW");
+		}
 		Criteria statusCriteria = Criteria.where("status").in(status);
 		//END STATUS
 		
@@ -88,11 +91,17 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		Criteria typesCriteria = Criteria.where("type").in(types);
 		//END TYPES
 		
+		Criteria approvalReference = new Criteria();
+		if(wpFilter.getApprovalReference() != null && !wpFilter.getApprovalReference().contentEquals("")) {
+			approvalReference = Criteria.where("fare_sheet.approval_reference").regex(wpFilter.getApprovalReference(), "i");
+		}
+		
 		Query query = new Query(new Criteria().andOperator(
 			reviewLevels.size() > 0 ? reviewLevelCriteria : new Criteria(),
 			status.size() > 0 ? statusCriteria : new Criteria(),
 			distributionTypes.size() > 0 ?	distributionTypesCriteria : new Criteria(),
-			types.size() > 0 ? typesCriteria : new Criteria()
+			types.size() > 0 ? typesCriteria : new Criteria(),
+			approvalReference					
 		)).with(pageable);
 		List<WorkPackage> workPackages = mongoTemplate.find(query, WorkPackage.class);
 		

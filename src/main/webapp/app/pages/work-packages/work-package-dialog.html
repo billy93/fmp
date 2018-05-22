@@ -24,7 +24,7 @@
 			            </div>
 			        </div>
 			        
-			        <div class="form-group row" ng-show="vm.workPackage.type=='REGULAR' || vm.workPackage.type=='DISCOUNT'">
+			        <div class="form-group row" ng-show="vm.workPackage.type=='REGULAR' || vm.workPackage.type=='DISCOUNT' || vm.workPackage.type=='WAIVER'">
 			        	<label class="col-md-4" >Distribution Type</label>
 			        	<div class="col-md-8 no-pad select">	
 			        		<select class="col-md-12" name="distributionType" ng-model="vm.workPackage.targetDistribution" id="field_distributionType">
@@ -170,7 +170,7 @@
 					</div>
 	        	</div>
 			</div>
-        	<div ng-show="vm.workPackage.type=='WAIVER'">
+        	<div ng-show="vm.workPackage.type=='WAIVER'  && vm.workPackage.targetDistribution != null">
 	        	
 	        	<div class="row">
 	        		<div class="col-md-4">	

@@ -31,7 +31,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -66,6 +65,7 @@ import com.atibusinessgroup.fmp.repository.WorkPackageFareHistoryDataRepository;
 import com.atibusinessgroup.fmp.repository.WorkPackageHistoryDataRepository;
 import com.atibusinessgroup.fmp.security.SecurityUtils;
 import com.atibusinessgroup.fmp.service.BusinessAreaService;
+import com.atibusinessgroup.fmp.service.MailService;
 import com.atibusinessgroup.fmp.service.ReviewLevelService;
 import com.atibusinessgroup.fmp.service.TargetDistributionService;
 import com.atibusinessgroup.fmp.service.UserService;
@@ -115,10 +115,10 @@ public class WorkPackageResource {
     private final WorkPackageFareHistoryDataRepository workPackageFareHistoryDataRepository;
     private final CounterRepository counterRepository;
     private final PriorityRepository priorityRepository;
-    
+    private final MailService mailService;
     public WorkPackageResource(WorkPackageService workPackageService, WorkPackageFareService workPackageFareService, TargetDistributionService targetDistributionService, BusinessAreaService businessAreaService, ReviewLevelService reviewLevelService, UserService userService, UserRepository userRepository, WorkPackageHistoryService workPackageHistoryService,
     		ContractFMPRepository contractFMPRepository, FormRepository formRepository, WorkPackageHistoryDataRepository workPackageHistoryDataRepository,
-    		WorkPackageFareHistoryDataRepository workPackageFareHistoryDataRepository, ContractFareFMPRepository contractFareFMPRepository, CounterRepository counterRepository, PriorityRepository priorityRepository) {
+    		WorkPackageFareHistoryDataRepository workPackageFareHistoryDataRepository, ContractFareFMPRepository contractFareFMPRepository, CounterRepository counterRepository, PriorityRepository priorityRepository, MailService mailService) {
         this.workPackageService = workPackageService;
         this.workPackageFareService = workPackageFareService;
         this.targetDistributionService = targetDistributionService;
@@ -134,6 +134,7 @@ public class WorkPackageResource {
         this.contractFareFMPRepository = contractFareFMPRepository;
         this.counterRepository = counterRepository;
         this.priorityRepository = priorityRepository;
+        this.mailService = mailService;
     }
 
     /**
@@ -1401,19 +1402,21 @@ public class WorkPackageResource {
     		}
     	}
     	
-    	Sort sort = new Sort(Direction.ASC, "priority");
-    	List<Priority> priorities = priorityRepository.findAll(sort);
-    	for(Priority p : priorities) {
-    		if(p.getType().contentEquals("DAYS")) {
-    			long val = zonedDateTimeDifference(ZonedDateTime.now(), workPackage.getSaleDate(), ChronoUnit.DAYS);
-    			long value = p.getValue();
-    			log.debug("VAL : {}", val);
-    			if(val <= value) {    				
-    				workPackage.setPriority(p.getName());
-    				log.debug("PRIORITY : {}", p.getName());
-    				break;
-    			}
-    		}
+    	if(workPackage.getSaleDate() != null) {
+	    	Sort sort = new Sort(Direction.ASC, "priority");
+	    	List<Priority> priorities = priorityRepository.findAll(sort);
+	    	for(Priority p : priorities) {
+	    		if(p.getType().contentEquals("DAYS")) {
+	    			long val = zonedDateTimeDifference(ZonedDateTime.now(), workPackage.getSaleDate(), ChronoUnit.DAYS);
+	    			long value = p.getValue();
+	    			log.debug("VAL : {}", val);
+	    			if(val <= value) {    				
+	    				workPackage.setPriority(p.getName());
+	    				log.debug("PRIORITY : {}", p.getName());
+	    				break;
+	    			}
+	    		}
+	    	}
     	}
     	workPackage = workPackageService.save(workPackage);
 	    	
@@ -1445,6 +1448,7 @@ public class WorkPackageResource {
     	public Status status;
     	public DistributionType distributionType;
     	public Type type;
+    	public String approvalReference;
     	
     	public static class ReviewLevel{
     		public boolean ho;
@@ -1494,6 +1498,14 @@ public class WorkPackageResource {
     		public boolean readyToRelease;
     		public boolean pending;
     		public boolean completed;
+    		public boolean withdraw;
+    		
+			public boolean isWithdraw() {
+				return withdraw;
+			}
+			public void setWithdraw(boolean withdraw) {
+				this.withdraw = withdraw;
+			}
 			public boolean isNewStatus() {
 				return newStatus;
 			}
@@ -1612,6 +1624,15 @@ public class WorkPackageResource {
 
 		public void setType(Type type) {
 			this.type = type;
+		}
+
+		
+		public String getApprovalReference() {
+			return approvalReference;
+		}
+
+		public void setApprovalReference(String approvalReference) {
+			this.approvalReference = approvalReference;
 		}
 
 		@Override
@@ -1749,6 +1770,61 @@ public class WorkPackageResource {
             .body(result);
     }
     
+    /**
+     * POST  /work-packages/withdraw : withdraw
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/work-packages/withdraw")
+    @Timed
+    public ResponseEntity<WorkPackage> withdrawWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
+        log.debug("REST request to withdraw WorkPackage : {}", workPackage);
+        if (workPackage.getId() == null) {
+            throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
+        }
+        
+        WorkPackage result = workPackageService.findOne(workPackage.getId());
+        result.setStatus(Status.WITHDRAW);
+        workPackageService.save(result);
+        /*
+        saveHistoryData(workPackage);
+        
+        //updateWorkPackage(workPackage);
+                        
+        WorkPackage result = workPackageService.findOne(workPackage.getId());
+        String reviewLevel = result.getReviewLevel();
+        if(reviewLevel.contentEquals("LSO")) {
+    		result.setReviewLevel("HO");
+    		result.setStatus(Status.PENDING);
+        }
+//        else if(reviewLevel.contentEquals("LSO2")) {
+//    		result.setReviewLevel("HO1");
+//    		result.setStatus(Status.PENDING);
+//        }
+//        else if(reviewLevel.contentEquals("HO1")) {
+//    		result.setReviewLevel("HO2");
+//    		result.setStatus(Status.PENDING);
+//        }
+//        else if(reviewLevel.contentEquals("HO2")) {
+//        		//cannot passup
+//        }
+        
+        workPackageService.save(result);
+        
+        
+        WorkPackageHistory history = new WorkPackageHistory();
+        history.setWorkPackage(new ObjectId(result.getId()));
+        history.setType("PASSUP");
+        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        workPackageHistoryService.save(history);
+        */
+        
+        return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
     private void saveHistoryData(WorkPackage workPackage) {
 		// TODO Auto-generated method stub
     		String woId = workPackage.getId();        
@@ -1877,7 +1953,7 @@ public class WorkPackageResource {
         
         if(result.getSidewayReviewLevel() == null) {
     		result.setSidewayReviewLevel(reviewLevel);
-    		result.setReviewLevel("Route Management");
+    		result.setReviewLevel("ROUTE_MANAGEMENT");
         }
         else {
      		result.setReviewLevel(result.getSidewayReviewLevel());
@@ -1920,7 +1996,7 @@ public class WorkPackageResource {
         
         if(reviewLevel.contentEquals("HO")) {
     		result.setDistributionReviewLevel(reviewLevel);
-    		result.setReviewLevel("Distribution");
+    		result.setReviewLevel("DISTRIBUTION");
     		result.setStatus(Status.PENDING);        		
 	    }
         workPackageService.save(result);
@@ -1931,6 +2007,42 @@ public class WorkPackageResource {
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
         
+        String[] emailData = new String[workPackage.getApproveConfig().getEmail().size()];
+        for (int i=0;i<workPackage.getApproveConfig().getEmail().size();i++) {
+        	emailData[i] = workPackage.getApproveConfig().getEmail().get(i);
+        }
+        User u = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
+        
+        String content = "<h2>Inter Office Comment</h2>";
+        content += "<br/></br>";
+        content += "<table>";
+        	content += "<thead>";        
+	        content += "<tr>";
+	        	content += 	"<th>Message</th>";
+	        	content += 	"<th>Username</th>";
+	        	content += 	"<th>Date</th>";
+	        content += "</tr>";
+	        content += "</thead>";  
+	        
+	        content += "<tbody>";  
+	        	if(workPackage.getInterofficeComment() != null) {
+		        	for(Comment c : workPackage.getInterofficeComment()) {
+				        content += "<tr>";
+				        	content += 	"<td>"+c.getComment()+"</td>";
+				        	content += 	"<td>"+c.getUsername()+"</td>";
+				        	content += 	"<td>"+c.getCreatedTime().toString()+"</td>";
+				        content += "</tr>";
+		        	}
+	        	}
+	        	else {
+	        		content += "<tr>";
+		        		content += 	"<td colspan='3'>No Interoffice Comment</td>";
+		        	content += "</tr>";
+	        	}
+        	content += "</tbody>";  
+        content += "</table>";
+        
+        mailService.sendEmailWithAttachment(u.getEmail(), emailData, "Approve", content, true, true, workPackage.getAttachmentData());
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);

@@ -39,13 +39,16 @@
 	    			pending:true,
 	    			reviewing:true,
 	    			readyToRelease:true,
-	    			distributed:true
+	    			distributed:true,
+	    			withdraw:true,
+	    			discontinue:true,
+	    			referred:true
 	    		},
 	    		type:{
 	    			regular:true,
 	    			discount:true,
 	    			waiver:true
-	    		}
+	    		},
 	        };
         }
         loadAll();
@@ -62,6 +65,7 @@
             	"status.reviewing": vm.workPackageFilter.status.reviewing,
             	"status.readyToRelease": vm.workPackageFilter.status.readyToRelease,
             	"status.distributed": vm.workPackageFilter.status.distributed,
+            	"status.withdraw": vm.workPackageFilter.status.withdraw,
             	
             	"distributionType.atpco":vm.workPackageFilter.distributionType.atpco,
             	"distributionType.market":vm.workPackageFilter.distributionType.market,
@@ -69,6 +73,8 @@
             	"type.regular":vm.workPackageFilter.type.regular,
             	"type.discount":vm.workPackageFilter.type.discount,
             	"type.waiver":vm.workPackageFilter.type.waiver,
+            	
+            	"approvalReference": vm.workPackageFilter.approvalReference,
                 page: pagingParams.page - 1,
                 size: vm.itemsPerPage,
                 sort: sort()
@@ -138,6 +144,20 @@
         		
         	}
         }
+        vm.withdraw = function(index){
+        	WorkPackage.withdraw(vm.workPackages[index], onWithdrawSuccess, onWithdrawFailed);
+        	
+        	function onWithdrawSuccess(result){
+        		alert('Withdraw Success '+result.id);
+        		$state.go('work-package-detail', {id:result.id});
+
+        	}
+        	
+        	function onWithdrawFailed(error){
+        		
+        	}
+        }
+        
         vm.showHistory = function(){
         		if(vm.selectedRow != null){
         			WorkPackage.history({id:vm.selectedRow.id}, onSuccess, onError);
