@@ -388,8 +388,8 @@
 														<button class="btn btn-default small btn-secondary" ngf-select  ngf-change="vm.importFare($file)">Import</button>
 														<button class="btn btn-default small btn-secondary">Export</button>
 														<!-- <button class="btn btn-default small btn-secondary">Publish</button>
-														<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalAgent">Agents</button>
-														<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalRatesheet">Rate Sheet</button> -->
+														<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalAgent">Agents</button>-->
+														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()">Rate Sheet</button> 
 													</div>
 												</div>																						
 											</div>
@@ -2282,7 +2282,7 @@
 													<button class="btn btn-default small btn-secondary">Export</button>
 													<button class="btn btn-default small btn-secondary">Publish</button>
 													<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalAgent">Agents</button>
-													<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalRatesheet">Rate Sheet</button>
+													<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()">Rate Sheet</button>
 												</div>
 											</div>	
 										</div>
