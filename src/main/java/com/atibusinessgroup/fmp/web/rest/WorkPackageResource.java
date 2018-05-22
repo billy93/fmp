@@ -422,6 +422,7 @@ public class WorkPackageResource {
             }			
             
             workPackage = workPackageService.findOne(workPackage.getId());
+//            workPackage.getFareSheet().get(0).getFares().addAll(workPackageFares);
             workPackage.getFareSheet().get(0).getFares().addAll(workPackageFares);
             workPackage = workPackageService.save(workPackage);
 		} catch (IOException e) {
@@ -807,10 +808,12 @@ public class WorkPackageResource {
         cell = row.createCell(29);
         cell.setCellValue("Ratesheet Comment");
         cell = row.createCell(30);
-        cell.setCellValue("Deal Code");
-        cell = row.createCell(31);
+//        cell.setCellValue("Deal Code");
+//        cell = row.createCell(31);
         
-        List<WorkPackageFare> fares = workPackageFareService.findAllByWorkPackage(workPackage.getId());
+//        List<WorkPackageFare> fares = workPackageFareService.findAllByWorkPackage(workPackage.getId());
+        WorkPackage wp = workPackageService.findOne(workPackage.getId());
+        List<WorkPackageFare> fares = wp.getFareSheet().get(0).getFares();
         for(int i=0; i<fares.size(); i++) {
         		XSSFRow rows = spreadsheet.createRow(i+2);
             cell = rows.createCell(1);
@@ -820,11 +823,17 @@ public class WorkPackageResource {
             cell = rows.createCell(3);
             cell.setCellValue(fares.get(i).getAction());
             cell = rows.createCell(4);
-            cell.setCellValue(fares.get(i).getTarno());
+            if(fares.get(i).getTariffNumber() != null) {
+            	cell.setCellValue(fares.get(i).getTariffNumber().getTarNo());
+            }
             cell = rows.createCell(5);
-            cell.setCellValue(fares.get(i).getTarcd());
+            if(fares.get(i).getTariffNumber() != null) {
+            	cell.setCellValue(fares.get(i).getTariffNumber().getTarCd());
+            }
             cell = rows.createCell(6);
-            cell.setCellValue(fares.get(i).getGlobal());
+            if(fares.get(i).getTariffNumber() != null) {
+            	cell.setCellValue(fares.get(i).getTariffNumber().getGlobal());
+            }
             cell = rows.createCell(7);
             cell.setCellValue(fares.get(i).getOrigin());
             cell = rows.createCell(8);
@@ -871,8 +880,8 @@ public class WorkPackageResource {
             cell.setCellValue(fares.get(i).getTravelCompleteIndicator());
             cell = rows.createCell(29);
             cell.setCellValue(fares.get(i).getRatesheetComment());
-            cell = rows.createCell(30);
-            cell.setCellValue(fares.get(i).getDealCode());
+//            cell = rows.createCell(30);
+//            cell.setCellValue(fares.get(i).getDealCode());
         }
         
         ByteArrayOutputStream output = new ByteArrayOutputStream();
