@@ -13,7 +13,7 @@
         vm.agent = entity;
         vm.clear = clear;
         vm.save = save;
-        vm.optionAgentType=['Bulk,Consolidator','Corporate/TMC','Ethnic Market','Retailers','Seamen','Student','Tour operator','VFR','Web/E-Channel','Worker'];
+        vm.optionAgentType=['Bulk','Consolidator','Corporate/TMC','Ethnic Market','Retailers','Seamen','Student','Tour operator','VFR','Web/E-Channel','Worker'];
 
         $timeout(function (){
             angular.element('.form-group:eq(1)>input').focus();

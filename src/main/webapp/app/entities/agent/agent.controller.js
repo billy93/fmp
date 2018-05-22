@@ -16,11 +16,20 @@
         vm.reverse = pagingParams.ascending;
         vm.transition = transition;
         vm.itemsPerPage = paginationConstants.itemsPerPage;
+        vm.optionDelete= [null,true,false];
+        vm.optionAgentType=[null,'Bulk','Consolidator','Corporate/TMC','Ethnic Market','Retailers','Seamen','Student','Tour operator','VFR','Web/E-Channel','Worker'];
 
         loadAll();
 
         function loadAll () {
             Agent.query({
+            	"agentType" : vm.agentType,
+            	"agentCategory" : vm.agentCategory,
+            	"posCountry" : vm.posCountry,
+            	"agentName" : vm.agentName,
+            	"posCity" : vm.posCity,
+            	"iataCode"  : vm.iataCode,
+            	"isDeleted" : vm.isDeleted,
                 page: pagingParams.page - 1,
                 size: vm.itemsPerPage,
                 sort: sort()
@@ -49,6 +58,20 @@
             vm.transition();
         }
 
+        vm.searchQuery = function() {
+			loadAll();
+		}
+        
+        vm.reset = function() {
+        	vm.agentType = null,
+        	vm.agentCategory = null,
+        	vm.posCountry = null,
+        	vm.agentName = null,
+        	vm.posCity = null,
+        	vm.iataCode = null,
+        	vm.isDeleted = null
+		}
+        
         function transition() {
             $state.transitionTo($state.$current, {
                 page: vm.page,
