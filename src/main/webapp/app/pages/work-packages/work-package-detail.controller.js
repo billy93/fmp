@@ -3142,9 +3142,9 @@
                     	  	vm.workPackage.filingDate = DateUtils.convertDateTimeFromServer(vm.workPackage.filingDate);
                     	  	vm.workPackage.createdDate = DateUtils.convertDateTimeFromServer(vm.workPackage.createdDate);
                     	  	vm.workPackage.distributionDate = DateUtils.convertDateTimeFromServer(vm.workPackage.distributionDate);
-                         vm.workPackage.discExpiryDate = DateUtils.convertDateTimeFromServer(vm.workPackage.discExpiryDate);
-                         vm.workPackage.queuedDate = DateUtils.convertDateTimeFromServer(vm.workPackage.queuedDate);
-                         vm.workPackage.lockedSince = DateUtils.convertDateTimeFromServer(vm.workPackage.lockedSince);
+                        // vm.workPackage.discExpiryDate = DateUtils.convertDateTimeFromServer(vm.workPackage.discExpiryDate);
+                        // vm.workPackage.queuedDate = DateUtils.convertDateTimeFromServer(vm.workPackage.queuedDate);
+                        // vm.workPackage.lockedSince = DateUtils.convertDateTimeFromServer(vm.workPackage.lockedSince);
                       }
                       
                       function onImportFailure(){
@@ -3298,7 +3298,7 @@
 	    	 	}
     	  
 	  	  $uibModal.open({
-	          templateUrl: 'app/entities/work-package/work-package-agent-dialog.html',
+	          templateUrl: 'app/pages/work-packages/work-package-agent-dialog.html',
 	          controller: 'WorkPackageAgentDialogController',
 	          controllerAs: 'vm',
 	          backdrop: 'static',

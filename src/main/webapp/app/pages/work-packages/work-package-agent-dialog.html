@@ -15,7 +15,10 @@
                 </span>
             </div>
            	<div class="multi-values" >
-           			<label name="remove_Agent" ng-model="vm.remove" ng-repeat="agent in vm.agents track by $index">{{agent}}<span class="delete"  ng-click="vm.removeAgent()"><i class="glyphicon glyphicon-remove-sign"></i></span></label>
+           			<span ng-repeat="agent in vm.agents track by $index">           			
+           				<label name="remove_Agent" ng-model="vm.remove" >{{agent}}<span class="delete"  ng-click="vm.removeAgent()"><i class="glyphicon glyphicon-remove-sign"></i></span></label>
+           				<br/>
+           			</span>
            	</div>
         </div>
     </div>

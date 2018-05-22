@@ -378,8 +378,8 @@
 														</div>													
 														<button class="btn btn-default small btn-secondary" ngf-select  ngf-change="vm.importFare($file)">Import</button>
 														<button class="btn btn-default small btn-secondary" ng-click="vm.exportFares()">Export</button>
-														<!-- <button class="btn btn-default small btn-secondary">Publish</button>
-														<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalAgent">Agents</button>-->
+														<!-- <button class="btn btn-default small btn-secondary">Publish</button> -->
+														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.agent()">Agents</button>
 														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()">Rate Sheet</button> 
 													</div>
 												</div>																						
@@ -1920,6 +1920,7 @@
 								            ng-model="workPackageSheet.approvalReference"
 											ng-disabled="!vm.isEditable('marketApprovalReference')"
 											ng-required="vm.isRequired('marketApprovalReference')">
+											<button ng-click="vm.generateTourCode()">Generate Tour Code</button>
 										</div>
 									</div>
 								</div>											
@@ -1969,25 +1970,10 @@
 														<button class="btn btn-default small btn-secondary">Edit <i class="fa fa-caret-down"></i></button>
 														<ul class="dropdown-menu" role="menu">
 														    <li>
-														    	<a href="#">Clear Selection</a>
-														    </li>
-														    <li>
-														    	<a href="#">Fill Down</a>
-														    </li>
-														    <li>
-														    	<a href="#">Search/Replace</a>
+														    	<a ng-click="vm.clearSelection()">Clear Selection</a>
 														    </li>
 														    <li>
 														    	<a ng-click="vm.addMarketFares()">Add Rows</a>
-														    </li>
-														    <li>
-														    	<a href="#">Delete Selected Rows</a>
-														    </li>
-														    <li>
-														    	<a href="#">Duplicate Selected Rows</a>
-														    </li>
-														    <li>
-														    	<a href="#">Copy Selected Rows</a>
 														    </li>
 														    <li>
 														    	<a href="#">Paste</a>
@@ -1997,7 +1983,7 @@
 														    </li>
 														</ul>
 													</div>													
-													<button class="btn btn-default small btn-secondary">Import</button>
+													<button class="btn btn-default small btn-secondary" ngf-select  ngf-change="vm.importFareMarket($file)">Import</button>
 													<button class="btn btn-default small btn-secondary">Export</button>
 													<button class="btn btn-default small btn-secondary">Publish</button>
 													<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalAgent">Agents</button>

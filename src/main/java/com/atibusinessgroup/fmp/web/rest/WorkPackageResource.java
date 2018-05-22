@@ -558,6 +558,7 @@ public class WorkPackageResource {
                 workPackageFares.add(wpFare);
             }			
             
+            workPackage.getMarketFareSheet().get(0).getFares().addAll(workPackageFares);
             workPackage = workPackageService.save(workPackage);
             
 //            for(WorkPackageFare wpf : workPackageFares) {
