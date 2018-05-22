@@ -1422,7 +1422,6 @@ public class WorkPackageResource {
 	    		if(p.getType().contentEquals("DAYS")) {
 	    			long val = zonedDateTimeDifference(ZonedDateTime.now(), workPackage.getSaleDate(), ChronoUnit.DAYS);
 	    			long value = p.getValue();
-	    			log.debug("VAL : {}", val);
 	    			if(val <= value) {    				
 	    				workPackage.setPriority(p.getName());
 	    				log.debug("PRIORITY : {}", p.getName());
@@ -1462,6 +1461,8 @@ public class WorkPackageResource {
     	public DistributionType distributionType;
     	public Type type;
     	public String approvalReference;
+    	public boolean replace;
+    	public boolean reuse;
     	
     	public static class ReviewLevel{
     		public boolean ho;
@@ -1607,6 +1608,22 @@ public class WorkPackageResource {
 			}
     	}
     	
+		public boolean isReplace() {
+			return replace;
+		}
+
+		public void setReplace(boolean replace) {
+			this.replace = replace;
+		}
+
+		public boolean isReuse() {
+			return reuse;
+		}
+
+		public void setReuse(boolean reuse) {
+			this.reuse = reuse;
+		}
+
 		public ReviewLevel getReviewLevel() {
 			return reviewLevel;
 		}

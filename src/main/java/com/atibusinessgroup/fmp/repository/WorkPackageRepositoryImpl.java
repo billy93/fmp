@@ -91,6 +91,13 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		Criteria typesCriteria = Criteria.where("type").in(types);
 		//END TYPES
 		
+		if(wpFilter.replace) {
+			
+		}
+		
+		if(wpFilter.reuse) {
+			
+		}
 		Criteria approvalReference = new Criteria();
 		if(wpFilter.getApprovalReference() != null && !wpFilter.getApprovalReference().contentEquals("")) {
 			approvalReference = Criteria.where("fare_sheet.approval_reference").regex(wpFilter.getApprovalReference(), "i");

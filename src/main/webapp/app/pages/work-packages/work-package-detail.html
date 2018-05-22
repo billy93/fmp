@@ -320,7 +320,7 @@
 									            ng-model="workPackageSheet.approvalReference"
 												ng-disabled="!vm.isEditable('approvalReference')"
 												ng-required="vm.isRequired('approvalReference')">
-												<button ng-click="vm.generateTourCode()">Generate Tour Code</button>
+												<button ng-click="vm.generateTourCode()" ng-disabled="!vm.isEditable('approvalReference')">Generate Tour Code</button>
 											</div>
 										</div>
 									</div>

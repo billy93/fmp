@@ -47,8 +47,8 @@
         		if (!vm.user.reviewLevels)
         			vm.user.reviewLevels = [];
         		
-        		if (vm.user.reviewLevels.indexOf(vm.reviewLevel.name) == -1) {
-        			vm.user.reviewLevels.push(vm.reviewLevel.name);
+        		if (vm.user.reviewLevels.indexOf(vm.reviewLevel) == -1) {
+        			vm.user.reviewLevels.push(vm.reviewLevel);
         		}
         		
         		vm.reviewLevel = null;
