@@ -239,6 +239,21 @@ public class UserResource {
 		log.debug("REST request to get User : {}", login);
 		return ResponseUtil.wrapOrNotFound(userService.getUserWithAuthoritiesByLogin(login).map(UserDTO::new));
 	}
+	
+	/**
+	 * GET /users/getBusinessArea/:login : get the "login" user.
+	 *
+	 * @param login
+	 *            the login of the user to find
+	 * @return the ResponseEntity with status 200 (OK) and with body the "login"
+	 *         user, or with status 404 (Not Found)
+	 */
+	@GetMapping("/users/getBusinessArea")
+	@Timed
+	public ResponseEntity<List<String>> getUserBusinessArea() {
+		log.debug("REST request to get User Business Area : {}");
+		return ResponseUtil.wrapOrNotFound(userService.getUserBusinessAreaByLogin(SecurityUtils.getCurrentUserLogin().get()));
+	}
 
 	/**
 	 * DELETE /users/:login : delete the "login" User.

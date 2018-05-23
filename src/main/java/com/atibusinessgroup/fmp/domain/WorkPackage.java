@@ -824,6 +824,7 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 	
 	public static class MarketRules{
     		private String status;
+    		private String username;
     		private String ruleid;
     		private String cxr;
     		private String comment;
@@ -833,6 +834,18 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 
     	    @Field("file_content_type")
     	    private String fileContentType;
+
+    	    @Field("createdTime")	    
+    		private ZonedDateTime createdTime;
+    	    
+    	   
+		public String getUsername() {
+				return username;
+			}
+
+			public void setUsername(String username) {
+				this.username = username;
+			}
 
 		public String getStatus() {
 			return status;
@@ -881,7 +894,17 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 		public void setFileContentType(String fileContentType) {
 				this.fileContentType = fileContentType;
 			}
-    }
+
+		public ZonedDateTime getCreatedTime() {
+			return createdTime;
+		}
+
+		public void setCreatedTime(ZonedDateTime createdTime) {
+			this.createdTime = createdTime;
+		}
+   
+		
+	}
 	
     public static class FilingDetail{
     		private String email;

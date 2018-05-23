@@ -25,12 +25,19 @@
 									</div>
 									<div class="form-group">
 										<label for="field_businessArea">Business Area</label>
-										<input 
+										 <select class="form-control" 
+										 name="businessArea"
+										 ng-class="{'must-fill': !editForm.businessArea.$valid}"							      				
+										 ng-model="vm.workPackage.businessArea" 
+					       						ng-options="key as value for (key , value) in vm.businessArea"
+					       						ng-required="vm.isRequired('businessArea')" 
+					       						ng-class="{'must-fill': editForm.businessArea.$error.required}" ></select>
+										<!-- <input 
 										ng-class="{'must-fill': editForm.businessArea.$error.required}" 
 										    name="businessArea"
 											ng-required="vm.isRequired('businessArea')" 
                    								autocomplete="off" type="text" name="businessArea" ng-model="vm.workPackage.businessArea" class="form-control" value="JKT"
-            									uib-typeahead="o as o.name for o in vm.businessAreas | filter:{name:$viewValue} | limitTo:5">
+            									uib-typeahead="o as o.name for o in vm.businessAreas | filter:{name:$viewValue} | limitTo:5"> -->
 									</div>
 									<div class="form-group">
 										<label for="field_priority">Priority</label>
@@ -2276,24 +2283,9 @@
 		       				</label>
 							<div ng-repeat="marketRules in vm.workPackage.marketRulesData track by $index" class="form-repeat">
 		       					<button ng-click="vm.removeMarketRules(marketRules)" class="bordered delete"><span class="glyphicon glyphicon-remove"></span></button>
-			       				<label class="user">admin <span class="vseparator no-mar"></span> 12JAN18 09:15:16</label>
+			       				<label class="user">{{marketRules.username}} <span class="vseparator no-mar"></span> {{marketRules.createdTime | date:'short'}}</label>
 					        	<div class="row">
-					        		<div class="col-md-6">
-						      			<div class="form-group row">
-						      				<label class="col-md-4" >Status</label>
-						      				<div class="col-md-8 no-pad select">
-						      					<select class="col-md-12" name="qaStatus" ng-model="marketRules.status" id="field_qaStatus">
-									                <option value="">Select Status</option>
-									                <option value="PENDING" >Pending</option>
-									                <option value="APPROVED">Approve</option>
-									                <option value="REJECTED">Reject</option>
-									            </select>	
-						      				</div>
-						      			</div>
-						      			<div class="form-group row" ng-init="marketRules.cxr = 'GA'">
-						      				<label class="col-md-4" >CXR</label>
-								            <input type="text" class="col-md-8" ng-model="marketRules.cxr" disabled/>
-						      			</div>
+					        		<div class="col-md-6">						      			
 						      			<div class="form-group row">
 						      				<label class="col-md-4">Market Rule Id</label>
 							             	<input type="text" class="col-md-8" ng-model="marketRules.ruleid"/>

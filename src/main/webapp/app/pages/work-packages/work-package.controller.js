@@ -43,8 +43,8 @@
 	    			withdraw:true,
 	    			discontinue:true,
 	    			referred:true,
-	    			replace:true,
-	    			reuse:true
+	    			replace:false,
+	    			reuse:false
 	    		},
 	    		type:{
 	    			regular:true,

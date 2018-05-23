@@ -88,6 +88,12 @@
                         return Currency.getAll().$promise;
                     });
                 }],
+                fareTypes: ['FareType', function(FareType) {
+                    return FareType.getAll().$promise;
+                }],
+                businessAreas: ['User', function(User) {
+                    return User.getBusinessArea().$promise;
+                }],
                 previousState: ["$state", function ($state) {
                     var currentStateData = {
                         name: $state.current.name || 'work-package',
@@ -169,9 +175,12 @@
                         reviewLevels: ['ReviewLevel', function(ReviewLevel) {
                             return ReviewLevel.queryAll().$promise;
                         }],
-                        businessAreas: ['BusinessArea', function(BusinessArea) {
-                            return BusinessArea.queryAll().$promise;
-                        }]
+                        businessAreas: ['User', function(User) {
+                            return User.getBusinessArea().$promise;
+                        }],
+                        fareTypes: ['FareType', function(FareType) {
+                            return FareType.getAll().$promise;
+                        }],
                     }
                 }).result.then(function(workPackage) {
 	                	var params = {

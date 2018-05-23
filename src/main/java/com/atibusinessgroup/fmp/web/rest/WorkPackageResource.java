@@ -51,6 +51,7 @@ import com.atibusinessgroup.fmp.domain.WorkPackage.Attachment;
 import com.atibusinessgroup.fmp.domain.WorkPackage.Comment;
 import com.atibusinessgroup.fmp.domain.WorkPackage.FilingInstruction;
 import com.atibusinessgroup.fmp.domain.WorkPackage.ImportFares;
+import com.atibusinessgroup.fmp.domain.WorkPackage.MarketRules;
 import com.atibusinessgroup.fmp.domain.WorkPackageFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageHistory;
 import com.atibusinessgroup.fmp.domain.WorkPackageHistoryData;
@@ -180,6 +181,8 @@ public class WorkPackageResource {
         } else {
         	workPackage.getDiscountFareSheet().clear();
         }
+        
+        workPackage.setStatus(Status.NEW);
         
         WorkPackage result = workPackageService.save(workPackage);
         
@@ -1236,13 +1239,6 @@ public class WorkPackageResource {
             return createWorkPackage(workPackage);
         }
         
-    	if(workPackage.getStatus() == null) {
-    		workPackage.setStatus(Status.NEW);
-    	}
-    	else if(workPackage.getStatus() == Status.PENDING) {
-			workPackage.setStatus(Status.REVIEWING);
-		}
-	    
     	if(workPackage.getWpid() == null) {
     		isWorkPackageNew = true;
     		
@@ -1415,19 +1411,37 @@ public class WorkPackageResource {
     		}
     	}
     	
+    	if(workPackage.getMarketRulesData() != null) {
+    		for(MarketRules marketRules : workPackage.getMarketRulesData()) {
+    			if(marketRules.getUsername() == null && marketRules.getCreatedTime() == null) {
+    				marketRules.setUsername(SecurityUtils.getCurrentUserLogin().get());
+    				marketRules.setCreatedTime(ZonedDateTime.now());
+    			}
+    		}
+    	}
     	if(workPackage.getSaleDate() != null) {
 	    	Sort sort = new Sort(Direction.ASC, "priority");
 	    	List<Priority> priorities = priorityRepository.findAll(sort);
+	    	
+	    	boolean found = false;
+	    	
 	    	for(Priority p : priorities) {
 	    		if(p.getType().contentEquals("DAYS")) {
 	    			long val = zonedDateTimeDifference(ZonedDateTime.now(), workPackage.getSaleDate(), ChronoUnit.DAYS);
 	    			long value = p.getValue();
+
 	    			if(val <= value) {    				
 	    				workPackage.setPriority(p.getName());
-	    				log.debug("PRIORITY : {}", p.getName());
+	    				found = true;
 	    				break;
 	    			}
 	    		}
+	    	}
+	    	
+	    	if(!found) {
+		    	Sort sortDesc = new Sort(Direction.DESC, "priority");
+		    	List<Priority> prioritiesDesc = priorityRepository.findAll(sortDesc);
+		    	workPackage.setPriority(prioritiesDesc.get(0).getName());
 	    	}
     	}
     	workPackage = workPackageService.save(workPackage);
@@ -1678,7 +1692,10 @@ public class WorkPackageResource {
     public ResponseEntity<WorkPackage> getWorkPackage(@PathVariable String id) {
         log.debug("REST request to get WorkPackage : {}", id);
         WorkPackage workPackage = workPackageService.findOne(id);
-        
+        if(workPackage.getStatus() == Status.PENDING) {
+        	workPackage.setStatus(Status.REVIEWING);
+        	workPackageService.save(workPackage);
+        }
 //        List<WorkPackageFare> fares = workPackageFareService.findAllByWorkPackageAndFareType(workPackage.getId(), null);
 //        log.debug("REST request to set WorkPackageFARES : {}", fares.size());
 //        workPackage.setFares(fares);

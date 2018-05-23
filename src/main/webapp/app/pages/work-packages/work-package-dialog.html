@@ -17,10 +17,13 @@
 			        <div class="form-group row">
 			            <label class="col-md-4" for="field_businessArea">Business Area</label>
 			            <div class="col-md-8 no-pad select">	
-			            	<select class="col-md-12" name="priority" ng-model="vm.workPackage.businessArea" id="field_businessArea">
+			            	<!-- <select class="col-md-12" name="priority" ng-model="vm.workPackage.businessArea" id="field_businessArea">
 				                <option value="">Select Business Area</option>
 				                <option value="JKT" >JKT</option>
-				            </select>
+				            </select> -->
+				            <select class="col-md-12" name="businessArea" ng-model="vm.workPackage.businessArea" id="field_businessArea">
+								<option ng-repeat="x in vm.businessAreas track by $index">{{x}}</option>
+							</select>
 			            </div>
 			        </div>
 			        
@@ -54,7 +57,8 @@
 					    </div>
 					    <div class="col-xs-3">
 					       Fare Type
-					       <select class="form-control"ng-model="vm.workPackage.marketFareSheet[0].fareType" ng-options="fareType for fareType in vm.fareType"></select>
+					       <select class="form-control" ng-model="vm.workPackage.marketFareSheet[0].fareType" 
+					       ng-options="key as value for (key , value) in vm.fareType"></select>
 					    </div>
 					 </div>
 	        	</div>
@@ -76,7 +80,8 @@
 					    </div>
 					    <div class="col-xs-3">
 					       Fare Type
-					       <select class="form-control"ng-model="vm.workPackage.fareSheet[0].fareType" ng-options="fareType for fareType in vm.fareType"></select>
+					       <select class="form-control"ng-model="vm.workPackage.fareSheet[0].fareType" 
+					       ng-options="key as value for (key , value) in vm.fareType"></select>
 					    </div>
 					  </div>
 	        	</div>
@@ -142,10 +147,10 @@
 					    </div>
 					    <div class="col-xs-3">
 					       Fare Type
-					       <select class="form-control" ng-model="vm.workPackage.discountFareSheet[0].fareType" ng-options="fareType for fareType in vm.fareType"
+					       <select class="form-control" ng-model="vm.workPackage.discountFareSheet[0].fareType"
 					       	name="fareType{{$index}}"
 					       	ng-style="editForm.editFormATPCO.fareType{{$index}}.$error.required && vm.errorStyle"
-				      		ng-options="fareType for fareType in vm.fareType" 
+				      		ng-options="key as value for (key , value) in vm.fareType"
 		      				ng-required="vm.checkRequiredField('discountFareType')"
 		      				ng-disabled="vm.isFieldDisable('discountFareType')"></select>
 					    </div>
@@ -190,7 +195,7 @@
 				    </div>
 				    <div class="col-xs-3">
 				       Fare Type
-				       <select class="form-control"ng-model="vm.workPackage.waiverFareSheet[0].fareType" ng-options="fareType for fareType in vm.fareType"></select>
+				       <select class="form-control"ng-model="vm.workPackage.waiverFareSheet[0].fareType" ng-options="key as value for (key , value) in vm.fareType"></select>
 				    </div>
 				</div>	    
 				    	

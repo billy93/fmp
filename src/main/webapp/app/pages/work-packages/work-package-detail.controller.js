@@ -21,8 +21,8 @@
      * @param Clipboard
      * @returns
      */
-    WorkPackageDetailController.$inject = ['currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user'];
-    function WorkPackageDetailController(currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user) {
+    WorkPackageDetailController.$inject = ['currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'GlobalService', 'businessAreas'];
+    function WorkPackageDetailController(currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, GlobalService, businessAreas) {
     	var vm = this;
        
         vm.currentTab = [];
@@ -46,15 +46,25 @@
         vm.currencies = currencies;
         vm.indexSelectedTab = 0;
         
-        vm.fareType = {
-    		"":"Select Fare Type", 
-    		"Yearly":"Yearly", 
-    		"Promotion":"Promotion", 
-    		"Ad-hoc":"Ad-hoc", 
-    		"Corporate":"Corporate", 
-    		"SPA & Code-share":"SPA & Code-share",
-    		"Miles":"Miles"
-        };
+        vm.fareType = {};
+        for(var x=0;x<fareTypes.length;x++){
+        	vm.fareType[fareTypes[x].name] = fareTypes[x].name;
+        }
+        
+        vm.businessArea = {};
+        for(var x=0;x<businessAreas.length;x++){
+        	vm.businessArea[businessAreas[x]] = businessAreas[x];
+        }
+        
+//        vm.fareType = {
+//    		"":"Select Fare Type", 
+//    		"Yearly":"Yearly", 
+//    		"Promotion":"Promotion", 
+//    		"Ad-hoc":"Ad-hoc", 
+//    		"Corporate":"Corporate", 
+//    		"SPA & Code-share":"SPA & Code-share",
+//    		"Miles":"Miles"
+//        };
         
         vm.typeOfJourney = {
     		"":"Select OW/RT", 
@@ -3411,5 +3421,7 @@
 	    		  $('#comment-section').addClass('show');
 	    	  }
       });
+      
+      GlobalService.sayHello();
     }
 })();
