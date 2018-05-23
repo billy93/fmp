@@ -10,7 +10,6 @@
     function GlobalService($http) {
     	 return {
     		navbar: function(){
-    			console.log("TRIGGER SIDEBAR");
 	    		function sidebarOpen(){    			
 	    			$('.showLeftPush').toggleClass('active');
 	    			$('#sideBar-s1').toggleClass('sideBar-open');
@@ -126,11 +125,14 @@
 		    	});
 		    
 		    	// input
-		    	$('input.must-fill').on('input',function(){
-		    	  	$(this).removeClass('must-fill');
-		    	  	if($(this).val() == ''){
-		    	  		$(this).addClass('must-fill');
-		    	  	}
+		    	$(document).ready(function(){
+			    	$('input.must-fill').on('input',function(){
+			    		console.log('aaa');
+			    	  	$(this).removeClass('must-fill');
+			    	  	if($(this).val() == ''){
+			    	  		$(this).addClass('must-fill');
+			    	  	}
+			    	});
 		    	});
 		    
 		    	// select
@@ -141,8 +143,23 @@
 		    	  	}
 		    	});
 		    },
-		    fungsi2: function(a){
-		    	alert('CALL GLOBAL FUNCTION 2 '+a);
+		    
+		    mustFill: function(a){
+		    	$(document).ready(function(){
+		    		$('select.must-fill').on('change',function(){
+			    		$(this).removeClass('must-fill');
+			    	  	if($(this).find('option')[0].selected === true){
+			    	  		$(this).addClass('must-fill');
+			    	  	}
+			    	});
+			    	$('input.must-fill').on('input',function(){
+			    		console.log('aaa');
+			    	  	$(this).removeClass('must-fill');
+			    	  	if($(this).val() == ''){
+			    	  		$(this).addClass('must-fill');
+			    	  	}
+			    	});
+		    	});
 		    }
 		 };
     }

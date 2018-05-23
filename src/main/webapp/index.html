@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en" dir="ltr">
+<html class="js" lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -42,7 +42,7 @@
     
 	<div ui-view="login" ng-if="!isAuthenticated()" ng-cloak></div>
     
-    <div ui-view="navbar" ng-cloak></div>
+    <div ui-view="navbar" ng-if="vm.isAuthenticated()" ng-cloak></div>
     
     <div ng-if="isAuthenticated()">
 		<div class="main-container clearfix">
@@ -292,7 +292,9 @@
     <!-- endinject -->
     <!-- endbuild -->
     
+    <script src="content/js/modernizr-custom.js"></script>
     <script src="content/js/plugins.js"></script>
+    <script src="content/js/revealer.js"></script>
     
 </body>
 </html>
