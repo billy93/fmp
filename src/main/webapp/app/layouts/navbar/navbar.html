@@ -4,7 +4,7 @@
 			<!-- logo wrapper -->
 			<div class="logo-wrapper">
 				<h1  ui-sref="home">FMP</h1>
-				<a ui-sref="home" class="home">
+				<a ui-sref="home" class="dashboard">
 					<i class="fa fa-home"></i>
 				</a>
 			</div>
@@ -18,20 +18,20 @@
 			<!-- left menu -->
 			<!-- left menu -->
 		<ul>
-		    <li class="menu-list has-sub" ng-click="vm.toggleMenu($event)">
+		    <li class="menu-list has-sub">
 		    	<a href="#">
 		    		<i class="fa fa-file-text"></i><span>Work Queue</span>
 		    	</a>
 		    	<div class="sub-menu">
 		    		<ul>
 		    		    <li>
-		    		    	<a ui-sref="work-package" ng-click="vm.collapseNavbar()"><i class="fa fa-circle"></i> Work Order</a>
+		    		    	<a ui-sref="work-package" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Work Order</a>
 		    		    </li>
 		    		</ul>
 		    	</div>
 		    	<div class="tooltip">Work Order</div>
 		    </li>
-		    <li class="menu-list has-sub" ng-click="vm.toggleMenu($event)">
+		    <li class="menu-list has-sub">
 		    	<a href="#">
 		    		<i class="fa fa-list-alt"></i><span>AFD Query</span>
 		    	</a>
@@ -60,7 +60,7 @@
 		    	<div class="sub-menu">
 		    		<ul>
 		    			<li>
-		    		    	<a ui-sref="agent" ng-click="vm.collapseNavbar()"><i class="fa fa-circle"></i> Agent </a>
+		    		    	<a ui-sref="agent" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Agent </a>
 		    		    </li>
 		    			<li>
 		    		    	<a ui-sref="agent-groups" ng-click="vm.collapseNavbar()"><i class="fa fa-circle"></i> Agent Group</a>
@@ -99,7 +99,7 @@
 	
 	<div class="content-header">
 		<div class="clearfix">
-			<a class="sidebar-toggle pull-left showLeftPush" data-toggle="push-menu" ng-click="vm.toggle()">
+			<a class="sidebar-toggle pull-left showLeftPush" id="show" data-toggle="push-menu">
 			    <span class="sr-only">Toggle navigation</span>
 			    <span class="icon-bar"></span>
 			    <span class="icon-bar"></span>
