@@ -6,10 +6,10 @@
         .factory('stateHandler', stateHandler);
 
     stateHandler.$inject = ['$rootScope', '$state', '$sessionStorage', '$localStorage', '$window',
-        'Auth', 'Principal', 'VERSION', '$ocLazyLoad'];
+        'Auth', 'Principal', 'VERSION', 'Idle'];
 
     function stateHandler($rootScope, $state, $sessionStorage, $localStorage, $window,
-        Auth, Principal, VERSION, $ocLazyLoad) {
+        Auth, Principal, VERSION, Idle) {
         return {
             initialize: initialize
         };
@@ -56,6 +56,16 @@
                 	 $window.document.title = titleKey;
                     titleKey = toState.data.pageTitle;
                 }
+                
+                Idle.watch();
+                
+                $rootScope.$on('IdleStart', function() {
+                	console.log('sign out');
+                	Idle.unwatch();
+                	Auth.logout();
+                    $state.go('home'); $window.location.reload();
+                     
+            	});
             });
 
             $rootScope.$on('$destroy', function () {
