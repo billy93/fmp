@@ -1,33 +1,31 @@
 <form name="editForm" role="form" novalidate ng-submit="vm.save()">
     <div class="modal-header">
+    	<h5 class="modal-title" id="myWorkPackageLabel">Add Agent</h5>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                 ng-click="vm.clear()">&times;</button>
-        <h4 class="modal-title" id="myWorkPackageLabel">Add Agent</h4>
     </div>
     <div class="modal-body">    		
-    		<div class="form-group">
-            <label class="control-label" for="field_reviewLevel">Agent</label>
+   		<div class="form-group mb5px">
+           	<label for="field_reviewLevel">Agent</label>
             <div class="input-group">
             	<input autocomplete="off" type="text" name="add_Agent" ng-model="vm.agent" class="form-control"
             		uib-typeahead="o.agentName as o.agentName for o in vm.agencies | filter:{agentName:$viewValue} | limitTo:5">
-            	<span class="input-group-btn">
-                    <button type="button" class="btn btn-default" ng-click="vm.addAgents()"><i class="glyphicon glyphicon-plus"></i></button>
-                </span>
+                <span class="input-group-addon add-agent">
+					<i class="fa fa-plus" ng-click="vm.addAgents()"></i>
+				</span>
             </div>
-           	<div class="multi-values" >
-           			<span ng-repeat="agent in vm.agents track by $index">           			
-           				<label name="remove_Agent" ng-model="vm.remove" >{{agent}}<span class="delete"  ng-click="vm.removeAgent()"><i class="glyphicon glyphicon-remove-sign"></i></span></label>
-           				<br/>
-           			</span>
-           	</div>
         </div>
+        <div class="agent-list-wrapper">
+           	<div class="agent-list" ng-repeat="agent in vm.agents track by $index">
+           		<span ng-model="vm.remove">{{agent}}</span>
+           		<div class='remove-agent' ng-click="vm.removeAgent()">
+           			<i class='fa fa-close'></i>
+           		</div>
+           	</div>
+		</div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
-            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Close</span>
-        </button>
-            <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
-            <span class="glyphicon glyphicon-save"></span>&nbsp;<span data-translate="entity.action.save">Save</span>
-    	</button>
+    	<button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-secondary" data-translate="entity.action.save">Save changes</button>
+        <button type="button" ng-click="vm.clear()" class="btn btn-back" data-dismiss="modal">Close</button>
     </div>
 </form>
