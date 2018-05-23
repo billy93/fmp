@@ -44,7 +44,7 @@
     
     <div ui-view="navbar" ng-cloak></div>
     
-    <div class="container" ng-if="isAuthenticated()">
+    <div ng-if="isAuthenticated()">
 		<div class="main-container clearfix">
 			<div class="page-wrapper">
 				<div class="page-content page--current" ui-view="content">
@@ -121,6 +121,7 @@
     <!-- inject:js -->
     <script src="app/app.module.js"></script>
     <script src="app/services/user/user.service.js"></script>
+    <script src="app/services/global/global.service.js"></script>
     <script src="app/services/profiles/profile.service.js"></script>
     <script src="app/services/profiles/page-ribbon.directive.js"></script>
     <script src="app/services/auth/register.service.js"></script>
@@ -290,5 +291,8 @@
     <script src="app/account/account.state.js"></script>
     <!-- endinject -->
     <!-- endbuild -->
+    
+    <script src="content/js/plugins.js"></script>
+    
 </body>
 </html>
