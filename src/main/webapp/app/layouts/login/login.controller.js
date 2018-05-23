@@ -11,7 +11,7 @@
         var vm = this;
 
         vm.isAuthenticated = Principal.isAuthenticated;
-        
+        vm.authenticationError = false;
         vm.login = login;
 
         function login(event) {

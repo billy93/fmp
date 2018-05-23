@@ -163,7 +163,7 @@
 									<div class="box-body bbgrey">
 										<div class="form-group">
 											<label>Comment</label>
-											<div text-angular="text-angular" name="comment" ng-model="vm.commentString" ta-disabled='disabled'/>
+											<div text-angular="text-angular" name="comment" ng-model="vm.commentString" ta-paste="vm.stripFormat($html)" ta-toolbar="[['h1','h2','h3'],['bold','italics','underline'],['redo','undo'],['ul','ol'],['justifyLeft','justifyCenter','justifyRight','justifyFull']]"/>
 											<!-- <textarea ng-model="vm.commentString" class="form-control" rows="3" placeholder="Enter ..." id="comment-area"></textarea> -->
 										</div>
 										<div class="clearfix">
@@ -189,7 +189,7 @@
 									<div class="box-body bbgrey">
 										<div class="form-group">
 											<label>Inter Office</label>
-											<div text-angular="text-angular" name="interOffice" ng-model="vm.ioString" ta-disabled="vm.isFieldDisable('ioComment')" />
+											<div text-angular="text-angular" name="interOffice" ng-model="vm.ioString" ta-disabled="vm.isFieldDisable('ioComment')" ta-paste="vm.stripFormat($html)" ta-toolbar="[['h1','h2','h3'],['bold','italics','underline'],['redo','undo'],['ul','ol'],['justifyLeft','justifyCenter','justifyRight','justifyFull']]" />
 										</div>
 										<div class="clearfix">
 											<div class="pull-right">
