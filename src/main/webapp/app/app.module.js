@@ -18,8 +18,9 @@
             'ngFileSaver',
             'ui.select',
             'textAngular',
-            'oc.lazyLoad'
+            'ngIdle'
         ])
+        .config(config)
         .run(run);
 
     run.$inject = ['stateHandler'];
@@ -27,4 +28,12 @@
     function run(stateHandler) {
         stateHandler.initialize();
     }
+    
+    config.$inject = ['IdleProvider','KeepaliveProvider'];
+
+    
+    function config(IdleProvider, KeepaliveProvider) {
+		// configure Idle settings
+		IdleProvider.idle(1200); // in seconds
+	}
 })();

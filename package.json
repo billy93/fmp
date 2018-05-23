@@ -65,5 +65,8 @@
   },
   "scripts": {
     "test": "gulp test"
+  },
+  "dependencies": {
+    "@ng-idle/core": "^2.0.0-beta.15"
   }
 }
