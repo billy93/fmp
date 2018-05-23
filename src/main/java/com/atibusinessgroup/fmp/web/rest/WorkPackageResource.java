@@ -1461,8 +1461,6 @@ public class WorkPackageResource {
     	public DistributionType distributionType;
     	public Type type;
     	public String approvalReference;
-    	public boolean replace;
-    	public boolean reuse;
     	
     	public static class ReviewLevel{
     		public boolean ho;
@@ -1513,7 +1511,9 @@ public class WorkPackageResource {
     		public boolean pending;
     		public boolean completed;
     		public boolean withdraw;
-    		
+        	public boolean replace;
+        	public boolean reuse;
+        	
 			public boolean isWithdraw() {
 				return withdraw;
 			}
@@ -1555,6 +1555,18 @@ public class WorkPackageResource {
 			}
 			public void setCompleted(boolean completed) {
 				this.completed = completed;
+			}
+			public boolean isReplace() {
+				return replace;
+			}
+			public void setReplace(boolean replace) {
+				this.replace = replace;
+			}
+			public boolean isReuse() {
+				return reuse;
+			}
+			public void setReuse(boolean reuse) {
+				this.reuse = reuse;
 			}
     		
     		
@@ -1608,22 +1620,6 @@ public class WorkPackageResource {
 			}
     	}
     	
-		public boolean isReplace() {
-			return replace;
-		}
-
-		public void setReplace(boolean replace) {
-			this.replace = replace;
-		}
-
-		public boolean isReuse() {
-			return reuse;
-		}
-
-		public void setReuse(boolean reuse) {
-			this.reuse = reuse;
-		}
-
 		public ReviewLevel getReviewLevel() {
 			return reviewLevel;
 		}

@@ -47,11 +47,11 @@
                 }
                 $window.document.title = titleKey;
 
-            	$ocLazyLoad.load('content/js/modernizr-custom.js');
-               	$ocLazyLoad.load('content/js/plugins.js');
-               	$ocLazyLoad.load('content/js/revealer.js');
-                $ocLazyLoad.load('content/js/main.js');
-            	$ocLazyLoad.load('content/js/home.js');            	
+//            	$ocLazyLoad.load('content/js/modernizr-custom.js');
+//               	$ocLazyLoad.load('content/js/plugins.js');
+//               	$ocLazyLoad.load('content/js/revealer.js');
+//                $ocLazyLoad.load('content/js/main.js');
+//            	$ocLazyLoad.load('content/js/home.js');            	
             });
 
             $rootScope.$on('$destroy', function () {

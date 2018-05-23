@@ -91,24 +91,37 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		Criteria typesCriteria = Criteria.where("type").in(types);
 		//END TYPES
 		
-		if(wpFilter.replace) {
-			
+		Criteria replaceCriteria = new Criteria();
+		if(wpFilter.status.replace) {
+			replaceCriteria = Criteria.where("replace_from").ne(null);
 		}
 		
-		if(wpFilter.reuse) {
-			
+		Criteria reuseCriteria = new Criteria();
+		if(wpFilter.status.reuse) {
+			reuseCriteria = Criteria.where("reuse_from").ne(null);
+		}		
+		
+		Criteria reuseReplaceCriteria = new Criteria();
+		if(wpFilter.status.replace && wpFilter.status.reuse) {
+			reuseReplaceCriteria = new Criteria().orOperator(reuseCriteria, replaceCriteria);
 		}
+		
 		Criteria approvalReference = new Criteria();
 		if(wpFilter.getApprovalReference() != null && !wpFilter.getApprovalReference().contentEquals("")) {
 			approvalReference = Criteria.where("fare_sheet.approval_reference").regex(wpFilter.getApprovalReference(), "i");
 		}
 		
-		Query query = new Query(new Criteria().andOperator(
-			reviewLevels.size() > 0 ? reviewLevelCriteria : new Criteria(),
-			status.size() > 0 ? statusCriteria : new Criteria(),
-			distributionTypes.size() > 0 ?	distributionTypesCriteria : new Criteria(),
-			types.size() > 0 ? typesCriteria : new Criteria(),
-			approvalReference					
+		Query query = new Query(
+			new Criteria().andOperator(
+				reviewLevels.size() > 0 ? reviewLevelCriteria : new Criteria(),
+				status.size() > 0 ? statusCriteria : new Criteria(),
+				distributionTypes.size() > 0 ?	distributionTypesCriteria : new Criteria(),
+				types.size() > 0 ? typesCriteria : new Criteria(),
+				approvalReference,
+				wpFilter.status.replace && wpFilter.status.reuse ? reuseReplaceCriteria : 
+					wpFilter.status.replace ? replaceCriteria : 
+						wpFilter.status.reuse ? reuseCriteria : new Criteria()
+						
 		)).with(pageable);
 		List<WorkPackage> workPackages = mongoTemplate.find(query, WorkPackage.class);
 		

@@ -3,8 +3,8 @@
 		<nav class="sideBar sideBar-vertical sideBar-left" id="sideBar-s1">
 			<!-- logo wrapper -->
 			<div class="logo-wrapper">
-				<h1>FMP</h1>
-				<a ui-sref="home" ng-click="vm.collapseNavbar()" class="home">
+				<h1  ui-sref="home">FMP</h1>
+				<a ui-sref="home" class="home">
 					<i class="fa fa-home"></i>
 				</a>
 			</div>
@@ -18,7 +18,7 @@
 			<!-- left menu -->
 			<!-- left menu -->
 		<ul>
-		    <li class="menu-list has-sub">
+		    <li class="menu-list has-sub" ng-click="vm.toggleMenu($event)">
 		    	<a href="#">
 		    		<i class="fa fa-file-text"></i><span>Work Queue</span>
 		    	</a>
@@ -31,7 +31,7 @@
 		    	</div>
 		    	<div class="tooltip">Work Order</div>
 		    </li>
-		    <li class="menu-list has-sub">
+		    <li class="menu-list has-sub" ng-click="vm.toggleMenu($event)">
 		    	<a href="#">
 		    		<i class="fa fa-list-alt"></i><span>AFD Query</span>
 		    	</a>
@@ -47,13 +47,13 @@
 		    	</div>
 		    	<div class="tooltip">ADF Query</div>
 		    </li>
-		    <li class="menu-list">
+		    <li class="menu-list" ng-click="vm.toggleMenu($event)">
 		    	<a href="#">
 		    		<i class="fa fa-paper-plane-o"></i><span>Fare Recommendation</span>
 		    	</a>
 		    	<div class="tooltip">Fare Recommendation</div>
 		    </li>
-		    <li class="menu-list has-sub">
+		    <li class="menu-list has-sub" ng-click="vm.toggleMenu($event)">
 		    	<a href="#">
 		    		<i class="fa fa-list"></i><span>Entities</span>
 		    	</a>
@@ -99,7 +99,7 @@
 	
 	<div class="content-header">
 		<div class="clearfix">
-			<a class="sidebar-toggle pull-left showLeftPush" data-toggle="push-menu" role="button">
+			<a class="sidebar-toggle pull-left showLeftPush" data-toggle="push-menu" ng-click="vm.toggle()">
 			    <span class="sr-only">Toggle navigation</span>
 			    <span class="icon-bar"></span>
 			    <span class="icon-bar"></span>
@@ -109,7 +109,7 @@
 	      	<div class="pull-right">
 	            <ul class="top-right-nav">
 	                <li>
-	                    <a href="#"><i class="fa fa-user"></i>User</a>
+	                    <a><i class="fa fa-user"></i>User</a>
 	                </li>
 	                <li>
 	                    <a ng-click="vm.logout()">Sign Out</a>

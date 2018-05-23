@@ -214,21 +214,7 @@
 </div> -->
 
 
-			<div class="content-header">
-				<div class="clearfix">
-					<a class="sidebar-toggle pull-left showLeftPush" data-toggle="push-menu" role="button">
-				        <span class="sr-only">Toggle navigation</span>
-				        <span class="icon-bar"></span>
-				        <span class="icon-bar"></span>
-				        <span class="icon-bar"></span>
-			      	</a>
-				</div>	
-			</div>
-			<div class="content-title">
-				<h2>Work Order Queue</h2>
-				<p>My Business Area: <span>JKT</span></p>
-			</div>
-
+			
 			<!-- table panel -->
 			<div class="panel">
 				<div class="panel-body">
@@ -339,11 +325,11 @@
 												</div>
 												<div class="checkbox-wrapper">
 													<label>
-														<input type="checkbox" ng-model="vm.workPackageFilter.replace">
+														<input type="checkbox" ng-model="vm.workPackageFilter.status.replace">
 															Replace
 													</label>
 													<label>
-														<input type="checkbox" ng-model="vm.workPackageFilter.reuse">
+														<input type="checkbox" ng-model="vm.workPackageFilter.status.reuse">
 															Reuse
 													</label>
 												</div>
@@ -559,6 +545,11 @@
 									</tbody>	
 								</table>
 							</div>
+							
+							<div class="text-center">
+						        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+						        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
+						    </div>
 							<div class="clearfix data-on">
 								<div class="pull-left dataTables_info">
 									Showing 1 to 10 of 57 entries

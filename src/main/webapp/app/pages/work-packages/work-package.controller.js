@@ -42,7 +42,9 @@
 	    			distributed:true,
 	    			withdraw:true,
 	    			discontinue:true,
-	    			referred:true
+	    			referred:true,
+	    			replace:true,
+	    			reuse:true
 	    		},
 	    		type:{
 	    			regular:true,
@@ -66,7 +68,8 @@
             	"status.readyToRelease": vm.workPackageFilter.status.readyToRelease,
             	"status.distributed": vm.workPackageFilter.status.distributed,
             	"status.withdraw": vm.workPackageFilter.status.withdraw,
-            	
+            	"status.replace": vm.workPackageFilter.status.replace,
+            	"status.reuse": vm.workPackageFilter.status.reuse,
             	"distributionType.atpco":vm.workPackageFilter.distributionType.atpco,
             	"distributionType.market":vm.workPackageFilter.distributionType.market,
             	
