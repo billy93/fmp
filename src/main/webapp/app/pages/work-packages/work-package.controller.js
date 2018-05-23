@@ -216,5 +216,6 @@
         });
         
         GlobalService.sayHello();
+        GlobalService.mustFill();
     }
 })();

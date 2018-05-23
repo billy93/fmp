@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('WorkPackageDialogController', WorkPackageDialogController);
 
-    WorkPackageDialogController.$inject = ['type', '$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'WorkPackage', 'reviewLevels', 'businessAreas'];
+    WorkPackageDialogController.$inject = ['type', '$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'WorkPackage', 'reviewLevels', 'businessAreas', 'GlobalService'];
 
-    function WorkPackageDialogController (type, $timeout, $scope, $stateParams, $uibModalInstance, entity, WorkPackage, reviewLevels, businessAreas) {
+    function WorkPackageDialogController (type, $timeout, $scope, $stateParams, $uibModalInstance, entity, WorkPackage, reviewLevels, businessAreas, GlobalService) {
         var vm = this;
 
         vm.workPackage = entity;
@@ -92,5 +92,7 @@
         function openCalendar (date) {
             vm.datePickerOpenStatus[date] = true;
         }
+        
+        GlobalService.mustFill();
     }
 })();
