@@ -925,6 +925,12 @@
         }
         //END FARES TAB
         
+        
+        vm.stripFormat = function ($html) {
+        	console.log("called");
+            return $html.replace(/<img[^>]*>/g/n,"");
+          };
+        
         //ADDON TAB
         vm.selectedAddonTab = 0;     
 //        vm.currentAddonTab[0] = true;

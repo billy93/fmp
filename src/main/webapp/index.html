@@ -28,9 +28,7 @@
      <!-- build:css content/css/fmp.css -->
     <link rel="stylesheet" href="content/css/fmp.css">
     <!-- endbuild -->
-    <!-- build:css content/css/textAngular.css -->
-    <link rel="stylesheet" href="bower_components/textAngular/dist/textAngular.css">
-    <!-- endbuild -->
+    
     <link rel="shortcut icon" href="favicon.ico" />
     <link rel="manifest" href="manifest.webapp" />
 </head>
@@ -44,7 +42,7 @@
     
     <div ui-view="navbar" ng-cloak></div>
     
-    <div ng-if="isAuthenticated()">
+    <div ng-if="isAuthenticated() || exceptionalState">
 		<div class="main-container clearfix">
 			<div class="page-wrapper">
 				<div class="page-content page--current" ui-view="content">
