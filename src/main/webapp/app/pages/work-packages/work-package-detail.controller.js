@@ -39,6 +39,7 @@
         vm.getCalendar = getCalendar;
         vm.importData = {};
         
+        vm.ioString =null;
         vm.openFile = DataUtils.openFile;
         vm.account = null;
         vm.workPackage = entity;
@@ -3494,17 +3495,17 @@
 	   		console.log(filing.isDeleted);
 	   };
       
-      vm.addInterOffice = function(ioString){
- 	  	 if(ioString != null){
+      vm.addInterOffice = function(){
+ 	  	 if(vm.ioString != null){
  	    	  if(vm.workPackage.interofficeComment == null){
  	      		vm.workPackage.interofficeComment = [];
  	      }
  	    	  
      	  	vm.workPackage.interofficeComment.push({
-     	  		comment:ioString
+     	  		comment:vm.ioString
      	  	});
      	  	vm.save();
-     	  	vm.addInterOffice = null;
+     	  	vm.ioString = null;
      	 }
        }
       
