@@ -97,6 +97,9 @@
                 priorities: ['Priority', function(Priority) {
                     return Priority.getAll().$promise;
                 }],
+                passengers: ['Passenger', function(Passenger) {
+                    return Passenger.getAll().$promise;
+                }],
                 previousState: ["$state", function ($state) {
                     var currentStateData = {
                         name: $state.current.name || 'work-package',

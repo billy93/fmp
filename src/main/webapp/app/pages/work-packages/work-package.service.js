@@ -39,6 +39,37 @@
                         		}
                         	}
                         }
+                        
+                        if(data.marketFareSheet.length > 0){
+                        	for(var x=0;x<data.marketFareSheet.length;x++){
+                        		var fares = data.marketFareSheet[x].fares;
+                        		for(var y=0;y<fares.length;y++){
+	                        		if(fares[y] != null){
+	                        			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
+	                        			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
+	                        			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
+	                        			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
+	                        			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+	                        		}
+                        		}
+                        	}
+                        }
+                        
+                        
+                        if(data.discountFareSheet.length > 0){
+                        	for(var x=0;x<data.discountFareSheet.length;x++){
+                        		var fares = data.discountFareSheet[x].fares;
+                        		for(var y=0;y<fares.length;y++){
+	                        		if(fares[y] != null){
+	                        			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
+	                        			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
+	                        			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
+	                        			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
+	                        			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+	                        		}
+                        		}
+                        	}
+                        }
                     }
                     return data;
                 }

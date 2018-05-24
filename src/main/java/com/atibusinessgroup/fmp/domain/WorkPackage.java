@@ -295,6 +295,9 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
         @Field("discount_fare_type")
         private String discountFareType;
         
+        @Field("discount_approval_reference")
+        private String discountApprovalReference;
+        
         @Field("account_code")
         private String accountCode;
         //End Discount Fares
@@ -346,7 +349,16 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
         private String discontinueDate;
 
         
-        public String getWaiverIocNumber() {
+        
+        public String getDiscountApprovalReference() {
+			return discountApprovalReference;
+		}
+
+		public void setDiscountApprovalReference(String discountApprovalReference) {
+			this.discountApprovalReference = discountApprovalReference;
+		}
+
+		public String getWaiverIocNumber() {
 			return waiverIocNumber;
 		}
 

@@ -18,7 +18,7 @@
         for(var x=0;x<fareTypes.length;x++){
         	vm.fareType[fareTypes[x].name] = fareTypes[x].name;
         }
-        console.log(vm.fareType);
+        
         if(vm.workPackage.type == 'REGULAR' && vm.workPackage.targetDistribution == 'MARKET'){
         	 vm.types = ["Market Fares"];
         }
