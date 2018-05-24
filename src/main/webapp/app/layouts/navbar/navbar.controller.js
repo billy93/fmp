@@ -23,34 +23,24 @@
         vm.toggleNavbar = toggleNavbar;
         vm.collapseNavbar = collapseNavbar;
         vm.$state = $state;
+        vm.loginInfo = null;
 
-//        vm.toggle = function(){
-//        	$('.showLeftPush').toggleClass('active')
-//    		$('#sideBar-s1').toggleClass('sideBar-open');
-//    		$('.search-wrap').find('i').toggleClass('shrink');
-//    		$('.sideBar').find('.menu-list').toggleClass('open');
-//    		$('.menu-list').removeClass('sub');
-//    		$('.sub-menu').slideUp(200);
-//    		$('.sidebar-toggle').toggleClass('pushed');
-//    		$('.fa-home').toggleClass('hidden');
-//        }
-//        
-//        vm.toggleMenu = function(e){
-//        	e.preventDefault();
-//        	var element = angular.element(e.currentTarget);
-//        	if(element.hasClass('open')){
-//    			$('.menu-list').not(element).removeClass('sub');
-//    			$('.menu-list').not(element).find('.sub-menu').slideUp(200);
-//    			element.toggleClass('sub');
-//    			element.find('.sub-menu').slideToggle(200);
-//    		}
-//    		else{
-//    			if (element.hasClass('has-sub')){
-//    				element.toggleClass('sub');
-//    				element.find('.sub-menu').slideToggle(200);
-//    			}
-//    		}	
-//        };
+     
+        var copyAccount = function (account) {
+            return {
+                activated: account.activated,
+                email: account.email,
+                firstName: account.firstName,
+                langKey: account.langKey,
+                lastName: account.lastName,
+                login: account.login
+            };
+        };
+        
+        Principal.identity().then(function(account) {
+            vm.loginInfo = copyAccount(account);
+        });
+        
         
         vm.test = function(){
         	 
