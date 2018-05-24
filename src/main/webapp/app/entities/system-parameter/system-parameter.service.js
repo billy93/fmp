@@ -21,7 +21,8 @@
                 }
             },
             'update': { method:'PUT' }, 
-            'getPasswordParameter': { method: 'GET', isArray: true, url: 'api/system-parameters/passwords' }
+            'getPasswordParameter': { method: 'GET', isArray: true, url: 'api/system-parameters/passwords' },
+            'getSystemParameterByName': { method: 'GET', url: 'api/system-parameters/findByName/:name' },
         });
     }
 })();

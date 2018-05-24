@@ -40,7 +40,7 @@
 	    			reviewing:true,
 	    			readyToRelease:true,
 	    			distributed:true,
-	    			withdraw:true,
+	    			withdrawn:true,
 	    			discontinue:true,
 	    			referred:true,
 	    			replace:false,
@@ -122,29 +122,92 @@
         }
         
         vm.reuse = function(index){
-        	WorkPackage.reuse(vm.workPackages[index], onReuseSuccess, onReuseFailed);
-        	
-        	function onReuseSuccess(result){
-        		alert('Reuse Success');
-        		$state.go('work-package-detail', {id:result.id});
+        	vm.workPackages[index].reuseReplaceConfig = {};
+        	if(vm.workPackages[index].status == 'NEW'){
+        		$uibModal.open({
+                    templateUrl: 'app/pages/work-packages/work-package-reuse-replace-confirm-dialog.html',
+                    controller: 'WorkPackageReuseReplaceConfirmDialogController',
+                    controllerAs: 'vm',
+                    backdrop: 'static',
+                    size: 'lg',
+                    windowClass: 'full-page-modal',
+                    resolve: {
+                    	workPackage: function(){
+                    		return vm.workPackages[index];
+                    	}
+                    }
+    			}).result.then(function(option) {
+    				vm.workPackages[index].reuseReplaceConfig.attachment = option.attachment;
+    				
+    				WorkPackage.reuse(vm.workPackages[index], onReuseSuccess, onReuseFailed);
+    	        	
+    				function onReuseSuccess(result){
+    	        		alert('Reuse Success');
+    	        		$state.go('work-package-detail', {id:result.id});
+    	        	}
+    	        	
+    	        	function onReuseFailed(error){
+    	        		
+    	        	}
+    			});
         	}
-        	
-        	function onReuseFailed(error){
-        		
+        	else{
+        		WorkPackage.reuse(vm.workPackages[index], onReuseSuccess, onReuseFailed);
+	        	
+				function onReuseSuccess(result){
+	        		alert('Reuse Success');
+	        		$state.go('work-package-detail', {id:result.id});
+	        	}
+	        	
+	        	function onReuseFailed(error){
+	        		
+	        	}
         	}
         }
         
         vm.replace = function(index){
-        	WorkPackage.replace(vm.workPackages[index], onReplaceSuccess, onReplceFailed);
-        	
-        	function onReplaceSuccess(result){
-        		alert('Replace Success '+result.id);
-        		$state.go('work-package-detail', {id:result.id});
-
+        	vm.workPackages[index].reuseReplaceConfig = {};
+        	if(vm.workPackages[index].status == 'NEW'){
+        		$uibModal.open({
+                    templateUrl: 'app/pages/work-packages/work-package-reuse-replace-confirm-dialog.html',
+                    controller: 'WorkPackageReuseReplaceConfirmDialogController',
+                    controllerAs: 'vm',
+                    backdrop: 'static',
+                    size: 'lg',
+                    windowClass: 'full-page-modal',
+                    resolve: {
+                    	workPackage: function(){
+                    		return vm.workPackages[index];
+                    	}
+                    }
+    			}).result.then(function(option) {
+    				vm.workPackages[index].reuseReplaceConfig.attachment = option.attachment;
+    				
+    				WorkPackage.replace(vm.workPackages[index], onReplaceSuccess, onReplceFailed);
+    	        	
+    	        	function onReplaceSuccess(result){
+    	        		alert('Replace Success');
+    	        		$state.go('work-package-detail', {id:result.id});
+    	
+    	        	}
+    	        	
+    	        	function onReplceFailed(error){
+    	        		
+    	        	}
+    			});
         	}
-        	
-        	function onReplceFailed(error){
-        		
+        	else{
+	        	WorkPackage.replace(vm.workPackages[index], onReplaceSuccess, onReplceFailed);
+	        	
+	        	function onReplaceSuccess(result){
+	        		alert('Replace Success');
+	        		$state.go('work-package-detail', {id:result.id});
+	
+	        	}
+	        	
+	        	function onReplceFailed(error){
+	        		
+	        	}
         	}
         }
         vm.withdraw = function(index){
@@ -161,34 +224,30 @@
         	}
         }
         
-        vm.showHistory = function(){
-        		if(vm.selectedRow != null){
-        			WorkPackage.history({id:vm.selectedRow.id}, onSuccess, onError);
-        			
-        			function onSuccess(history){
-        				$uibModal.open({
-                            templateUrl: 'app/entities/work-package/work-package-history-dialog.html',
-                            controller: 'WorkPackageHistoryDialogController',
-                            controllerAs: 'vm',
-                            backdrop: 'static',
-                            size: 'lg',
-                            resolve: {
-                                entity: history.$promise
-                            }
-                        }).result.then(function(workPackage) {
-                        	  
-                        }, function() {
-                    			
-                        });
-        			}
-        			
-        			function onError(){
-        				
-        			}
-        			
-        		}else{
-        			alert('Select workorder first');
-        		}
+        vm.showHistory = function(index){
+    		WorkPackage.history({id:vm.workPackages[index].id}, onSuccess, onError);
+    			
+			function onSuccess(history){
+				$uibModal.open({
+                    templateUrl: 'app/pages/work-packages/work-package-history-dialog.html',
+                    controller: 'WorkPackageHistoryDialogController',
+                    controllerAs: 'vm',
+                    backdrop: 'static',
+                    size: 'lg',
+                    resolve: {
+                        entity: history.$promise
+                    }
+                }).result.then(function(workPackage) {
+                	  
+                }, function() {
+            			
+                });
+			}
+			
+			function onError(){
+				
+			}
+        	
         }
 
         vm.refresh = function(){

@@ -159,17 +159,60 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     private String replaceFrom;
     
     private ApproveConfig approveConfig;
+    private ReuseReplaceConfig reuseReplaceConfig;
+    
+
+    public ReuseReplaceConfig getReuseReplaceConfig() {
+		return reuseReplaceConfig;
+	}
+
+	public void setReuseReplaceConfig(ReuseReplaceConfig reuseReplaceConfig) {
+		this.reuseReplaceConfig = reuseReplaceConfig;
+	}
+
+	public static class ReuseReplaceConfig{
+    	public boolean attachment;
+
+		public boolean isAttachment() {
+			return attachment;
+		}
+
+		public void setAttachment(boolean attachment) {
+			this.attachment = attachment;
+		}
+
+    	
+    }
     
     public static class ApproveConfig{
     	public List<String> email;
-
+    	public List<String> ccEmail;
+    	public boolean attachment;
+    	
 		public List<String> getEmail() {
 			return email;
 		}
 
 		public void setEmail(List<String> email) {
 			this.email = email;
-		}    	    	
+		}
+
+		public boolean isAttachment() {
+			return attachment;
+		}
+
+		public void setAttachment(boolean attachment) {
+			this.attachment = attachment;
+		}
+
+		public List<String> getCcEmail() {
+			return ccEmail;
+		}
+
+		public void setCcEmail(List<String> ccEmail) {
+			this.ccEmail = ccEmail;
+		}
+
     }
     
     

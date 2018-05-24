@@ -588,99 +588,108 @@
         		editable:["LSO", "HO"],
         		mandatory:["LSO", "HO"]
         	},
-        	
+        	{
+        		name:"marketGroupFares",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
         	
         	//MARKET FARE
         	{
         		name:"marketFareStatus",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["HO"],
         		mandatory:[]
         	},
         	{
-        		name:"marketFareOrigin",
-        		editable:["LSO", "HO", "Distribution"],
+        		name:"marketFareCarrier",
+        		editable:[],
         		mandatory:[]
+        	},        	
+        	{
+        		name:"marketFareOrigin",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
         	},
         	{
         		name:"marketFareDestination",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
         	},
         	{
         		name:"marketFareFarebasis",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["HO"]
         	},
         	{
         		name:"marketFareBookingClass",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["HO"]
         	},
         	{
         		name:"marketFareSsn",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO"],
         		mandatory:[]
         	},
         	
         	{
         		name:"marketFareCabin",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
         	},
         	
         	{
         		name:"marketFareTypeOfJourney",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
         	},
         	{
         		name:"marketFareRuleno",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["HO"]
         	},
         	{
         		name:"marketFareCurrency",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
         	},
         	{
         		name:"marketFareBaseAmt",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
         	},        	        	
         	{
         		name:"marketFareTravelStartDate",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
         	},
         	{
         		name:"marketFareTravelEndDate",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
         	},
         	{
         		name:"marketFareSaleStartDate",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
         	},
         	{
         		name:"marketFareSaleEndDate",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
         	},
         	{
         		name:"marketFareTravelComplete",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO"],
         		mandatory:[]
         	},
         	{
         		name:"marketFareTravelIndicator",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO"],
         		mandatory:[]
         	},
         	{
         		name:"marketFareRatesheetComment",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO"],
         		mandatory:[]
         	},
         	
@@ -1696,24 +1705,22 @@
               backdrop: 'static',
               size: 'lg',
               resolve: {
-                  workPackage: vm.workPackage,
-                  email : function(){
-                	  return ["billyfebram@gmail.com", "laurensius.sakti@atibusinessgroup.com"];
-              	  }
+                  workPackage: vm.workPackage,              	  
+	              email: ['SystemParameter', function(SystemParameter) {
+	                   return SystemParameter.getSystemParameterByName({name : 'APPROVE_EMAIL'}).$promise;
+	              }],
+	              ccEmail: ['SystemParameter', function(SystemParameter) {
+	                   return SystemParameter.getSystemParameterByName({name : 'APPROVE_CC_EMAIL'}).$promise;
+	              }],
               }
           }).result.then(function(config) {
         	  vm.workPackage.approveConfig = config;
-        	  console.log(config);
         	  WorkPackage.approve(vm.workPackage, function(){
 	    			alert('Approve Success');
 	    			$state.go('work-package');
     		}, function(){
     			alert('Approve Failed');
     		});
-//	  		    if (confirm("Are you sure to Approve this workorder?")) {
-	  		    		
-//	  		    } else {
-//	  		    }
           }, function() {
       			
           });

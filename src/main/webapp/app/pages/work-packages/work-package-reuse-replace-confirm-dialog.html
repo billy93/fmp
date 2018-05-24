@@ -1,0 +1,27 @@
+<form name="editForm" role="form" novalidate ng-submit="vm.save()">
+    <div class="modal-header">
+    	<h5 class="modal-title" id="myWorkPackageLabel">Reuse/Replace Confirmation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+    </div>
+    <div class="modal-body">    	
+   		<div class="clearfix">
+			<div class="pull-left w50">	
+		   		<div class="form-group">
+					<div class="custom-label semibold">Include Attachment</div>
+					<div class="checkbox-wrapper">
+						<input type="checkbox" ng-model="vm.option.attachment">
+						Attachment
+					</div>
+				</div>
+			</div>
+		</div>
+    </div>
+    <div class="modal-footer">
+    	<button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-secondary" data-translate="entity.action.save">Save changes</button>
+        <button type="button" ng-click="vm.clear()" class="btn btn-back" data-dismiss="modal">Close</button>
+    </div>
+</form>
+
+
+

@@ -299,6 +299,14 @@
 		    <artifactId>httpclient</artifactId>
 		    <version>4.5.5</version>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.apache.tika/tika-core -->
+		<dependency>
+		    <groupId>org.apache.tika</groupId>
+		    <artifactId>tika-core</artifactId>
+		    <version>1.18</version>
+		</dependency>
+				
     </dependencies>
 
     <build>
