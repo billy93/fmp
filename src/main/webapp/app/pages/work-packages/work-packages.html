@@ -1,4 +1,8 @@
-
+<style>
+	.locked{
+		background-color:yellow;
+	}
+</style>
 			<!-- table panel -->
 			<div class="panel">
 				<div class="panel-body">
@@ -189,7 +193,7 @@
 									</thead>
 									<tbody ng-repeat="workPackage in vm.workPackages track by $index" >
 										<tr role="row" class="datatable-row" 
-											ng-click="vm.rowSelected($index, workPackage)" ng-class="{selected: workPackage === vm.selectedRow}">
+											ng-click="vm.rowSelected($index, workPackage)" ng-class="{selected: workPackage === vm.selectedRow, locked: workPackage.locked}">
 											<td class="text-right">
 						                        <div class="btn-group entities flex-btn-group-container">
 						                            <button type="submit" title="Edit"

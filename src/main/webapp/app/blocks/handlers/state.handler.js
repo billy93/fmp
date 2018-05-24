@@ -58,10 +58,9 @@
                 Idle.watch();
                 
                 $rootScope.$on('IdleStart', function() {
-                	console.log('sign out');
                 	Idle.unwatch();
                 	Auth.logout();
-                	$state.go('home'); 
+                	$state.go('home');
             	});
             });
 

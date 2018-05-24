@@ -35,9 +35,11 @@
         vm.user = user;
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
-        
+        vm.openCalendarRow = openCalendarRow;
+        vm.getCalendar = getCalendar;
         vm.importData = {};
         
+        vm.ioString =null;
         vm.openFile = DataUtils.openFile;
         vm.account = null;
         vm.workPackage = entity;
@@ -45,7 +47,7 @@
         vm.cities = cities;
         vm.currencies = currencies;
         vm.indexSelectedTab = 0;
-        
+        $scope.dateformat = "yyyy-MM-dd";
         vm.fareType = {};
         for(var x=0;x<fareTypes.length;x++){
         	vm.fareType[fareTypes[x].name] = fareTypes[x].name;
@@ -60,7 +62,6 @@
         for(var x=0;x<priorities.length;x++){
         	vm.priority[priorities[x].name] = priorities[x].name;
         }
-        console.log(vm.priority);
 //        vm.fareType = {
 //    		"":"Select Fare Type", 
 //    		"Yearly":"Yearly", 
@@ -1004,7 +1005,19 @@
         vm.addTab = function(option){
         	if(option.type == 'Fares'){
         		vm.workPackage.specifiedFares = true;
-        		vm.workPackage.fareSheet.push({specifiedFaresName:option.name});
+        		vm.workPackage.fareSheet.push({specifiedFaresName:option.name, fareType:option.fareType});
+        	}
+        	else if(option.type == 'Market Fares'){
+        		vm.workPackage.marketFares = true;
+        		vm.workPackage.marketFareSheet.push({marketFaresName:option.name, waiverFareType:option.fareType});
+        	}
+        	else if(option.type == 'Waiver Fares'){
+        		vm.workPackage.waiverFares = true;
+        		vm.workPackage.waiverFareSheet.push({waiverFaresName:option.name, marketFareType:option.fareType});
+        	}
+        	else if(option.type == 'Discount Fares'){
+        		vm.workPackage.discountFares = true;
+        		vm.workPackage.discountFareSheet.push({discountFaresName:option.name, discountFareType:option.fareType});
         	}
         	else if(option.type == 'Add-Ons'){
         		vm.workPackage.addon = true;
@@ -1780,11 +1793,20 @@
         vm.datePickerOpenStatus.filingDate = false;
         vm.datePickerOpenStatus.distributionDate = false;
         vm.datePickerOpenStatus.discExpiryDate = false;
-        
+
         function openCalendar (date) {
+        	console.log(date);
             vm.datePickerOpenStatus[date] = true;
         }
+        function openCalendarRow(variable, sheet, row) {
+        	//console.log("SHEET : "+sheet+" | ROW : "+row);
+        	vm.datePickerOpenStatus[variable][sheet+row] = true;
+            //vm.datePickerOpenStatus[date] = true;
+        }
         
+        function getCalendar (date){
+        	return vm.datePickerOpenStatus[date];
+        }
        
         
         vm.addFiling = function(){
@@ -1855,6 +1877,36 @@
 		    } else {
 		    }
 	  };
+	  
+	  vm.resendApprove = function(){
+		  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-approve-email-dialog.html',
+              controller: 'WorkPackageApproveEmailDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              resolve: {
+                  workPackage: vm.workPackage,              	  
+	              email: ['SystemParameter', function(SystemParameter) {
+	                   return SystemParameter.getSystemParameterByName({name : 'APPROVE_EMAIL'}).$promise;
+	              }],
+	              ccEmail: ['SystemParameter', function(SystemParameter) {
+	                   return SystemParameter.getSystemParameterByName({name : 'APPROVE_CC_EMAIL'}).$promise;
+	              }],
+              }
+          }).result.then(function(config) {
+        	  vm.workPackage.approveConfig = config;
+        	  	WorkPackage.resendApprove(vm.workPackage, function(){
+	    			alert('Resend Success');
+	    			$state.go('work-package');
+    		}, function(){
+    			alert('Approve Failed');
+    		});
+          }, function() {
+      			
+          });
+	  };
+	  
 	  
 	  vm.approve = function(){
 		  $uibModal.open({
@@ -1946,17 +1998,31 @@
 	      $scope.$emit('fmpApp:workPackageUpdate', result);
 	      var data = result;
     	      
-    	  data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
-    	  data.saleDate = DateUtils.convertDateTimeFromServer(data.saleDate);
+	      data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
           data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
           data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
           data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
           data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
           data.lockedSince = DateUtils.convertDateTimeFromServer(data.lockedSince);
+          data.saleDate = DateUtils.convertDateTimeFromServer(data.saleDate);
+          
+          if(data.fareSheet.length > 0){
+          	for(var x=0;x<data.fareSheet.length;x++){
+          		var fares = data.fareSheet[x].fares;
+          		for(var y=0;y<fares.length;y++){
+              		if(fares[y] != null){
+              			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
+              			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
+              			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
+              			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
+            			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+              		}
+          		}
+          	}
+          }
           
           vm.workPackage = data;
           vm.isSaving = false;
-          alert('Save success');
       }
 
       function onSaveError () {
@@ -3438,18 +3504,19 @@
       }
       
       
-      vm.addCommentFillingInstruction = function(commentString){
- 	  	 if(commentString != null){
- 	    	  if(vm.workPackage.filingInstructionData == null){
- 	      		vm.workPackage.filingInstructionData = [];
- 	      }
- 	    	  
-     	  	vm.workPackage.filingInstructionData.push({
-     	  		status:"PENDING", tarno:"", cxr:"GA", comment:commentString, file:"", fileContentType:"", isDeleted:false
-     	  	});
-     	  	vm.save();
-     	  	vm.commentStringFillingInstruction = null;
-     	 }
+      vm.addCommentFillingInstruction = function() {
+ 	  	 	if (vm.commentStringFillingInstruction != null) {
+	 	  		 if (vm.workPackage.filingInstructionData == null) {
+	 	      		vm.workPackage.filingInstructionData = [];
+	 	  		 }
+	 	    	  
+	 	  		 vm.workPackage.filingInstructionData.push({ 
+	     	  		status:"PENDING", tarno:"", cxr:"GA", comment:vm.commentStringFillingInstruction, file:"", fileContentType:"", isDeleted:false
+	 	  		 });
+	 	  		 
+	 	  		 vm.save();
+	 	  		 vm.commentStringFillingInstruction = null;
+ 	  	 	}
        }
       
       vm.removeFiling = function(filing){
@@ -3457,17 +3524,17 @@
 	   		console.log(filing.isDeleted);
 	   };
       
-      vm.addInterOffice = function(ioString){
- 	  	 if(ioString != null){
+      vm.addInterOffice = function(){
+ 	  	 if(vm.ioString != null){
  	    	  if(vm.workPackage.interofficeComment == null){
  	      		vm.workPackage.interofficeComment = [];
  	      }
  	    	  
      	  	vm.workPackage.interofficeComment.push({
-     	  		comment:ioString
+     	  		comment:vm.ioString
      	  	});
      	  	vm.save();
-     	  	vm.addInterOffice = null;
+     	  	vm.ioString = null;
      	 }
        }
       
@@ -3640,6 +3707,30 @@
       			
           });
       }
-      GlobalService.sayHello();
+      
+      vm.downloadTemplate = function(){
+    	  WorkPackage.downloadMarketRules(vm.workPackage, onDownloadSuccess, onDownloadFailure);
+    	  function onDownloadSuccess(result){
+    		  var fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+  			var templateFilename = "MarketRules.xlsx";
+  			var blob = b64toBlob(result.file, fileType);
+  			FileSaver.saveAs(blob, templateFilename);
+    	  }
+    	  function onDownloadFailure(err){
+    		  console.log(err);
+    	  }    	  
+      };
+      
+      vm.close = function(){
+    	  vm.workPackage.locked = false;
+    	  WorkPackage.unlock(vm.workPackage, onUnlockedSuccess, onUnlockedFailure);
+    	  function onUnlockedSuccess (result) {
+    		  $state.go("work-package");
+    	  }
+    	  function onUnlockedFailure (error) {
+    		  
+    	  }
+      }
+//      GlobalService.sayHello();
     }
 })();

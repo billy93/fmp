@@ -2,11 +2,14 @@ package com.atibusinessgroup.fmp.web.rest;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -407,16 +410,16 @@ public class WorkPackageResource {
 	        				wpFare.setOverrideIndicator(value);	
 	                }
                     else if(cell == 20) {
-	                    	wpFare.setTravelStart(value);
+	                    	wpFare.setTravelStart(ZonedDateTime.now());
 	                }
                     else if(cell == 21) {
-                    		wpFare.setTravelEnd(value);
+                    		wpFare.setTravelEnd(ZonedDateTime.now());
 	                }
                     else if(cell == 22) {
-                    		wpFare.setSaleStart(value);
+                    		wpFare.setSaleStart(ZonedDateTime.now());
 	                }
                     else if(cell == 23) {
-                    		wpFare.setSaleEnd(value);
+                    		wpFare.setSaleEnd(ZonedDateTime.now());
 	                }
                     else if(cell == 24) {
                     		wpFare.setEffDt(value);
@@ -425,7 +428,7 @@ public class WorkPackageResource {
                     		wpFare.setComment(value);
 	                }
                     else if(cell == 26) {
-                    		wpFare.setTravelComplete(value);
+                    		wpFare.setTravelComplete(ZonedDateTime.now());
 	                }
                     else if(cell == 27) {
                     		wpFare.setTravelCompleteIndicator(value);
@@ -544,22 +547,22 @@ public class WorkPackageResource {
 //	        				wpFare.setAmount(value);	
 	                }
                     else if(cell == 17) {
-                    		wpFare.setTravelStart(value);
+                    		wpFare.setTravelStart(ZonedDateTime.now());
 	                }
                     else if(cell == 18) {
-                    		wpFare.setTravelEnd(value);
+                    		wpFare.setTravelEnd(ZonedDateTime.now());
 	                }
                     else if(cell == 19) {
-                    		wpFare.setSaleStart(value);
+                    		wpFare.setSaleStart(ZonedDateTime.now());
 	                }
                     else if(cell == 20) {
-                    		wpFare.setSaleEnd(value);
+                    		wpFare.setSaleEnd(ZonedDateTime.now());
 	                }
                     else if(cell == 21) {
                     		wpFare.setComment(value);
 	                }
                     else if(cell == 22) {
-                    		wpFare.setTravelComplete(value);
+                    		wpFare.setTravelComplete(ZonedDateTime.now());
 	                }
                     else if(cell == 23) {
                     		wpFare.setTravelCompleteIndicator(value);
@@ -706,22 +709,22 @@ public class WorkPackageResource {
                     		wpFare.setNewBookingCode(value);
 	                }
                     else if(cell == 24) {
-                		wpFare.setTravelStart(value);
+                		wpFare.setTravelStart(ZonedDateTime.now());
                     }
                     else if(cell == 25) {
-                		wpFare.setTravelEnd(value);
+                		wpFare.setTravelEnd(ZonedDateTime.now());
                     }
                     else if(cell == 26) {
-                		wpFare.setSaleStart(value);
+                		wpFare.setSaleStart(ZonedDateTime.now());
                     }
                     else if(cell == 27) {
-                		wpFare.setSaleEnd(value);
+                		wpFare.setSaleEnd(ZonedDateTime.now());
                     }
                     else if(cell == 28) {
                 		wpFare.setComment(value);
                     }
                     else if(cell == 29) {
-                    		wpFare.setTravelComplete(value);
+                    		wpFare.setTravelComplete(ZonedDateTime.now());
 	                }
                     else if(cell == 30) {
                     		wpFare.setTravelCompleteIndicator(value);
@@ -883,19 +886,19 @@ public class WorkPackageResource {
             cell = rows.createCell(20);
             cell.setCellValue(fares.get(i).getOverrideIndicator());
             cell = rows.createCell(21);
-            cell.setCellValue(fares.get(i).getTravelStart());
+            cell.setCellValue(fares.get(i).getTravelStart().toString());
             cell = rows.createCell(22);
-            cell.setCellValue(fares.get(i).getTravelEnd());
+            cell.setCellValue(fares.get(i).getTravelEnd().toString());
             cell = rows.createCell(23);
-            cell.setCellValue(fares.get(i).getSaleStart());
+            cell.setCellValue(fares.get(i).getSaleStart().toString());
             cell = rows.createCell(24);
-            cell.setCellValue(fares.get(i).getSaleEnd());
+            cell.setCellValue(fares.get(i).getSaleEnd().toString());
             cell = rows.createCell(25);
             cell.setCellValue(fares.get(i).getEffDate());
             cell = rows.createCell(26);
             cell.setCellValue(fares.get(i).getComment());
             cell = rows.createCell(27);
-            cell.setCellValue(fares.get(i).getTravelComplete());
+            cell.setCellValue(fares.get(i).getTravelComplete().toString());
             cell = rows.createCell(28);
             cell.setCellValue(fares.get(i).getTravelCompleteIndicator());
             cell = rows.createCell(29);
@@ -1031,17 +1034,17 @@ public class WorkPackageResource {
             cell.setCellValue("");
 
             
-            cell.setCellValue(fares.get(i).getTravelStart());
+            cell.setCellValue(fares.get(i).getTravelStart().toString());
             cell = rows.createCell(19);
-            cell.setCellValue(fares.get(i).getTravelEnd());
+            cell.setCellValue(fares.get(i).getTravelEnd().toString());
             cell = rows.createCell(20);
-            cell.setCellValue(fares.get(i).getSaleStart());
+            cell.setCellValue(fares.get(i).getSaleStart().toString());
             cell = rows.createCell(21);
-            cell.setCellValue(fares.get(i).getSaleEnd());
+            cell.setCellValue(fares.get(i).getSaleEnd().toString());
             cell = rows.createCell(22);
             cell.setCellValue(fares.get(i).getComment());
             cell = rows.createCell(23);
-            cell.setCellValue(fares.get(i).getTravelComplete());
+            cell.setCellValue(fares.get(i).getTravelComplete().toString());
             cell = rows.createCell(24);
             cell.setCellValue(fares.get(i).getTravelCompleteIndicator());
             cell = rows.createCell(25);
@@ -1202,17 +1205,17 @@ public class WorkPackageResource {
             cell = rows.createCell(24);
             cell.setCellValue(fares.get(i).getNewBookingCode());
             cell = rows.createCell(25);
-            cell.setCellValue(fares.get(i).getTravelStart());
+            cell.setCellValue(fares.get(i).getTravelStart().toString());
             cell = rows.createCell(26);
-            cell.setCellValue(fares.get(i).getTravelEnd());
+            cell.setCellValue(fares.get(i).getTravelEnd().toString());
             cell = rows.createCell(27);
-            cell.setCellValue(fares.get(i).getSaleStart());
+            cell.setCellValue(fares.get(i).getSaleStart().toString());
             cell = rows.createCell(28);
-            cell.setCellValue(fares.get(i).getSaleEnd());
+            cell.setCellValue(fares.get(i).getSaleEnd().toString());
             cell = rows.createCell(29);
             cell.setCellValue(fares.get(i).getComment());
             cell = rows.createCell(30);
-            cell.setCellValue(fares.get(i).getTravelComplete());
+            cell.setCellValue(fares.get(i).getTravelComplete().toString());
             cell = rows.createCell(31);
             cell.setCellValue(fares.get(i).getTravelCompleteIndicator());
         }
@@ -1230,6 +1233,37 @@ public class WorkPackageResource {
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
             .body(att);
+    }
+    
+    
+    /**
+     * POST  /work-packages/download-market-rules : Download Market Rules Template
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/work-packages/download-market-rules")
+    @Timed
+    public ResponseEntity<Attachment> downloadMarketRules(@RequestBody WorkPackage workPackage) throws URISyntaxException {
+    	log.debug("REST request to download Market Rules : {}", workPackage);
+
+    	String namaFile = "MarketRules.xlsx";
+//    	String filename = "/Users/billy/Downloads/" + namaFile;
+    	String filename = "/home/development/xml/" + namaFile;
+    	byte[] templateFile = null;
+    	if (new File(filename).exists()) {            
+            try {
+                templateFile = Files.readAllBytes(Paths.get(filename));
+            } catch (IOException e) {
+                return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("contract", "Error occured when retrieving template file, please try again later.", "Fail Template File")).body(null);
+            }
+        }
+	    Attachment att = new Attachment();
+	    att.setFile(templateFile);
+	    return ResponseEntity.ok()
+	        .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
+	        .body(att);
     }
     
     /**
@@ -1262,15 +1296,15 @@ public class WorkPackageResource {
     		workPackage.setWpid(String.valueOf(c.getSequenceValue()));
         }
     	
-	    workPackage = workPackageService.save(workPackage);
-	        
-        if(isWorkPackageNew) {
-        	WorkPackageHistory history = new WorkPackageHistory();
-            history.setWorkPackage(new ObjectId(workPackage.getId()));
-            history.setType("CREATE");
-            history.setUsername(SecurityUtils.getCurrentUserLogin().get());
-            workPackageHistoryService.save(history);
-        }
+//	    workPackage = workPackageService.save(workPackage);
+//	        
+//        if(isWorkPackageNew) {
+//        	WorkPackageHistory history = new WorkPackageHistory();
+//            history.setWorkPackage(new ObjectId(workPackage.getId()));
+//            history.setType("CREATE");
+//            history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+//            workPackageHistoryService.save(history);
+//        }
 
 //		List<WorkPackageFare> fares = workPackageFareService.findAllByWorkPackageAndFareType(workPackage.getId(), null);
 //		for(WorkPackageFare fare : fares) {
@@ -1417,6 +1451,8 @@ public class WorkPackageResource {
     	
     	if(workPackage.getFilingInstructionData() != null) {
     		for(FilingInstruction filingInstruction : workPackage.getFilingInstructionData()) {
+    			log.debug("LOGIN BY : "+ filingInstruction.getUsername() + " " + filingInstruction.getCreatedTime());
+    			
     			if(filingInstruction.getUsername() == null && filingInstruction.getCreatedTime() == null) {
     				filingInstruction.setUsername(SecurityUtils.getCurrentUserLogin().get());
     				filingInstruction.setCreatedTime(ZonedDateTime.now());
@@ -1717,6 +1753,11 @@ public class WorkPackageResource {
         	workPackage.setStatus(Status.REVIEWING);
         	workPackageService.save(workPackage);
         }
+        
+        workPackage.setLocked(true);
+        workPackage.setLockedBy(SecurityUtils.getCurrentUserLogin().get());
+        workPackage.setLockedSince(ZonedDateTime.now());
+        workPackage = workPackageService.save(workPackage);
 //        List<WorkPackageFare> fares = workPackageFareService.findAllByWorkPackageAndFareType(workPackage.getId(), null);
 //        log.debug("REST request to set WorkPackageFARES : {}", fares.size());
 //        workPackage.setFares(fares);
@@ -1806,6 +1847,7 @@ public class WorkPackageResource {
         if(reviewLevel.contentEquals("LSO")) {
     		result.setReviewLevel("HO");
     		result.setStatus(Status.PENDING);
+    		result.setLocked(false);
         }
 //        else if(reviewLevel.contentEquals("LSO2")) {
 //    		result.setReviewLevel("HO1");
@@ -1832,6 +1874,30 @@ public class WorkPackageResource {
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
+    }
+    
+    /**
+     * POST  /work-packages/unlock : unlock
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/work-packages/unlock")
+    @Timed
+    public ResponseEntity<WorkPackage> unlockWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
+        log.debug("REST request to withdraw WorkPackage : {}", workPackage);
+        if (workPackage.getId() == null) {
+            throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
+        }
+        
+        WorkPackage result = workPackageService.findOne(workPackage.getId());
+        result.setLocked(false);
+        workPackageService.save(result);
+        
+        return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                .body(result);
     }
     
     /**
@@ -1978,6 +2044,7 @@ public class WorkPackageResource {
         if(reviewLevel.contentEquals("HO")) {
     		result.setReviewLevel("LSO");
     		result.setStatus(Status.PENDING);
+    		result.setLocked(false);
         }
         workPackageService.save(result);
         
@@ -2019,6 +2086,7 @@ public class WorkPackageResource {
      		result.setReviewLevel(result.getSidewayReviewLevel());
     		result.setSidewayReviewLevel(null);
         }
+		result.setLocked(false);
         result.setStatus(Status.PENDING);
         workPackageService.save(result);
         
@@ -2058,6 +2126,7 @@ public class WorkPackageResource {
         if(reviewLevel.contentEquals("HO")) {
     		result.setDistributionReviewLevel(reviewLevel);
     		result.setReviewLevel("DISTRIBUTION");
+    		result.setLocked(false);
     		result.setStatus(Status.PENDING);        		
 	    }
         workPackageService.save(result);
@@ -2067,6 +2136,84 @@ public class WorkPackageResource {
         history.setType("APPROVE");
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
+        
+        String[] emailData = null;
+        if(workPackage.getApproveConfig().getEmail() != null && workPackage.getApproveConfig().getEmail().size() > 0) {
+	        emailData = new String[workPackage.getApproveConfig().getEmail().size()];
+	        for (int i=0;i<workPackage.getApproveConfig().getEmail().size();i++) {
+	        	emailData[i] = workPackage.getApproveConfig().getEmail().get(i);
+	        }
+        }
+        
+        String[] emailDataCc = null;
+        if(workPackage.getApproveConfig().getCcEmail() != null && workPackage.getApproveConfig().getCcEmail().size() > 0) {
+	        emailDataCc = new String[workPackage.getApproveConfig().getCcEmail().size()];        
+	        for (int i=0;i<workPackage.getApproveConfig().getCcEmail().size();i++) {
+	        	emailDataCc[i] = workPackage.getApproveConfig().getCcEmail().get(i);
+	        }
+        }
+        User u = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
+        
+        String content = "<h2>Inter Office Comment</h2>";
+        content += "<br/></br>";
+        content += "<table>";
+        	content += "<thead>";        
+	        content += "<tr>";
+	        	content += 	"<th>Message</th>";
+	        	content += 	"<th>Username</th>";
+	        	content += 	"<th>Date</th>";
+	        content += "</tr>";
+	        content += "</thead>";  
+	        
+	        content += "<tbody>";  
+	        	if(workPackage.getInterofficeComment() != null) {
+		        	for(Comment c : workPackage.getInterofficeComment()) {
+				        content += "<tr>";
+				        	content += 	"<td>"+c.getComment()+"</td>";
+				        	content += 	"<td>"+c.getUsername()+"</td>";
+				        	content += 	"<td>"+c.getCreatedTime().toString()+"</td>";
+				        content += "</tr>";
+		        	}
+	        	}
+	        	else {
+	        		content += "<tr>";
+		        		content += 	"<td colspan='3'>No Interoffice Comment</td>";
+		        	content += "</tr>";
+	        	}
+        	content += "</tbody>";  
+        content += "</table>";
+        
+        if(workPackage.getApproveConfig().attachment) {
+        	log.debug("SEND EMAIL WITH ATTACHMENT");
+        	mailService.sendEmailWithAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true, workPackage.getAttachmentData());
+        }
+        else {
+        	log.debug("SEND EMAIL WITHOUT ATTACHMENT");
+        	mailService.sendEmailWithoutAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true);
+        }
+        return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+    
+    /**
+     * POST  /work-packages/resend-approve : Approve
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/work-packages/resend-approve")
+    @Timed
+    public ResponseEntity<WorkPackage> resendApproveWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
+        log.debug("REST request to resend approve WorkPackage : {}", workPackage);
+        if (workPackage.getId() == null) {
+            throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
+        }
+        
+        WorkPackage result = workPackageService.findOne(workPackage.getId());
+        result.setLocked(false);
+        workPackageService.save(result);
         
         String[] emailData = null;
         if(workPackage.getApproveConfig().getEmail() != null && workPackage.getApproveConfig().getEmail().size() > 0) {
@@ -2151,6 +2298,7 @@ public class WorkPackageResource {
         result.setReviewLevel(result.getDistributionReviewLevel());
         result.setDistributionReviewLevel(null);
         result.setStatus(Status.REFERRED);
+		result.setLocked(false);
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
