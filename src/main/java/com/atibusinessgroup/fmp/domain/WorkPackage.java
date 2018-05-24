@@ -58,6 +58,9 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     @Field("specified_fares")
     private boolean specifiedFares;
     
+    @Field("locked")
+    private boolean locked;
+    
     //HEADER
     @Field("exp_pax")
     private String expPax;
@@ -162,7 +165,15 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     private ReuseReplaceConfig reuseReplaceConfig;
     
 
-    public ReuseReplaceConfig getReuseReplaceConfig() {
+    public boolean isLocked() {
+		return locked;
+	}
+
+	public void setLocked(boolean locked) {
+		this.locked = locked;
+	}
+
+	public ReuseReplaceConfig getReuseReplaceConfig() {
 		return reuseReplaceConfig;
 	}
 
@@ -180,8 +191,6 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 		public void setAttachment(boolean attachment) {
 			this.attachment = attachment;
 		}
-
-    	
     }
     
     public static class ApproveConfig{

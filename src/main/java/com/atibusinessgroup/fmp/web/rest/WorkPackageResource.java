@@ -1432,7 +1432,8 @@ public class WorkPackageResource {
     			}
     		}
     	}
-    	if(workPackage.getSaleDate() != null && (workPackage.getStatus() != Status.DISTRIBUTED)) {
+    	
+    	if(workPackage.getSaleDate() != null && (workPackage.getStatus() != Status.DISTRIBUTED) && workPackage.getTargetDistribution().contentEquals("ATPCO")) {
 	    	Sort sort = new Sort(Direction.ASC, "priority");
 	    	List<Priority> priorities = priorityRepository.findAll(sort);
 	    	
@@ -2114,9 +2115,11 @@ public class WorkPackageResource {
         content += "</table>";
         
         if(workPackage.getApproveConfig().attachment) {
+        	log.debug("SEND EMAIL WITH ATTACHMENT");
         	mailService.sendEmailWithAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true, workPackage.getAttachmentData());
         }
         else {
+        	log.debug("SEND EMAIL WITHOUT ATTACHMENT");
         	mailService.sendEmailWithoutAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true);
         }
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))

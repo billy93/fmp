@@ -111,7 +111,9 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 			reuseCriteria = Criteria.where("reuse_from").ne(null);
 		}	
 		
+		Criteria wpidCriteria = Criteria.where("wpid").ne(null);
 		Criteria criteriaAnd1Query = new Criteria().andOperator(
+				wpidCriteria,
 				reviewLevels.size() > 0 ? reviewLevelCriteria : new Criteria(),
 				status.size() > 0 ? statusCriteria : new Criteria(),
 				distributionTypes.size() > 0 ?	distributionTypesCriteria : new Criteria(),

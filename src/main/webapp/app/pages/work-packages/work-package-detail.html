@@ -41,7 +41,14 @@
 									</div>
 									<div class="form-group">
 										<label for="field_priority">Priority</label>
-										<input class="form-control" type="text" ng-model="vm.workPackage.priority" disabled/>
+										
+										
+										<input ng-if="vm.workPackage.targetDistribution == 'ATPCO'" class="form-control" type="text" ng-model="vm.workPackage.priority" disabled/>
+										 <select ng-if="vm.workPackage.targetDistribution != 'ATPCO'"  class="form-control" 
+										 name="priority"
+										 ng-class="{'must-fill': !editForm.priority.$valid}"							      				
+										 ng-model="vm.workPackage.priority" 
+			       						 ng-options="key as value for (key , value) in vm.priority"></select>
 									</div>
 									<div class="form-group">
 										<label for="field_status">Status</label>

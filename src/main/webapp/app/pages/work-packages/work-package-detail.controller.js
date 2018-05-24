@@ -21,8 +21,8 @@
      * @param Clipboard
      * @returns
      */
-    WorkPackageDetailController.$inject = ['currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'GlobalService', 'businessAreas'];
-    function WorkPackageDetailController(currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, GlobalService, businessAreas) {
+    WorkPackageDetailController.$inject = ['currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'GlobalService', 'businessAreas', 'priorities'];
+    function WorkPackageDetailController(currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, GlobalService, businessAreas, priorities) {
     	var vm = this;
        
         vm.currentTab = [];
@@ -56,6 +56,11 @@
         	vm.businessArea[businessAreas[x]] = businessAreas[x];
         }
         
+        vm.priority = {};
+        for(var x=0;x<priorities.length;x++){
+        	vm.priority[priorities[x].name] = priorities[x].name;
+        }
+        console.log(vm.priority);
 //        vm.fareType = {
 //    		"":"Select Fare Type", 
 //    		"Yearly":"Yearly", 

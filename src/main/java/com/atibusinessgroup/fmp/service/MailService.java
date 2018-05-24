@@ -145,7 +145,7 @@ public class MailService {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, CharEncoding.UTF_8);
             
             
-            
+            log.debug("ATTACHMENT SIZE : {}", data.size());
             int i=0;
             for(Attachment attachment : data) {
             	MimeTypes allTypes = MimeTypes.getDefaultMimeTypes();
