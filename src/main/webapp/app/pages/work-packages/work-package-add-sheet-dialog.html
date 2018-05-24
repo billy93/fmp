@@ -28,12 +28,13 @@
 				                    ng-model="vm.option.name"
 				                    />
 								</div>
-								<div ng-if="vm.option.type == 'Fares" class="form-group">
+								<div ng-if="vm.option.type == 'Fares' || vm.option.type == 'Market Fares' || vm.option.type == 'Waiver Fares'" class="form-group">
 									<label>Fare Type</label>
 									<select 
 					      				class="form-control" 
 					      				ng-model="vm.option.fareType" 
-										ng-class="{'must-fill':vm.option.fareType==null || vm.option.fareType==''}"></select>
+										ng-class="{'must-fill':vm.option.fareType==null || vm.option.fareType==''}"
+										ng-options="type as type for type in vm.fareType track by $index"></select>
 								</div>
 		      				</div>
 		      			</div>						

@@ -2,11 +2,14 @@ package com.atibusinessgroup.fmp.web.rest;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -407,16 +410,16 @@ public class WorkPackageResource {
 	        				wpFare.setOverrideIndicator(value);	
 	                }
                     else if(cell == 20) {
-	                    	wpFare.setTravelStart(value);
+	                    	wpFare.setTravelStart(ZonedDateTime.now());
 	                }
                     else if(cell == 21) {
-                    		wpFare.setTravelEnd(value);
+                    		wpFare.setTravelEnd(ZonedDateTime.now());
 	                }
                     else if(cell == 22) {
-                    		wpFare.setSaleStart(value);
+                    		wpFare.setSaleStart(ZonedDateTime.now());
 	                }
                     else if(cell == 23) {
-                    		wpFare.setSaleEnd(value);
+                    		wpFare.setSaleEnd(ZonedDateTime.now());
 	                }
                     else if(cell == 24) {
                     		wpFare.setEffDt(value);
@@ -425,7 +428,7 @@ public class WorkPackageResource {
                     		wpFare.setComment(value);
 	                }
                     else if(cell == 26) {
-                    		wpFare.setTravelComplete(value);
+                    		wpFare.setTravelComplete(ZonedDateTime.now());
 	                }
                     else if(cell == 27) {
                     		wpFare.setTravelCompleteIndicator(value);
@@ -544,22 +547,22 @@ public class WorkPackageResource {
 //	        				wpFare.setAmount(value);	
 	                }
                     else if(cell == 17) {
-                    		wpFare.setTravelStart(value);
+                    		wpFare.setTravelStart(ZonedDateTime.now());
 	                }
                     else if(cell == 18) {
-                    		wpFare.setTravelEnd(value);
+                    		wpFare.setTravelEnd(ZonedDateTime.now());
 	                }
                     else if(cell == 19) {
-                    		wpFare.setSaleStart(value);
+                    		wpFare.setSaleStart(ZonedDateTime.now());
 	                }
                     else if(cell == 20) {
-                    		wpFare.setSaleEnd(value);
+                    		wpFare.setSaleEnd(ZonedDateTime.now());
 	                }
                     else if(cell == 21) {
                     		wpFare.setComment(value);
 	                }
                     else if(cell == 22) {
-                    		wpFare.setTravelComplete(value);
+                    		wpFare.setTravelComplete(ZonedDateTime.now());
 	                }
                     else if(cell == 23) {
                     		wpFare.setTravelCompleteIndicator(value);
@@ -706,22 +709,22 @@ public class WorkPackageResource {
                     		wpFare.setNewBookingCode(value);
 	                }
                     else if(cell == 24) {
-                		wpFare.setTravelStart(value);
+                		wpFare.setTravelStart(ZonedDateTime.now());
                     }
                     else if(cell == 25) {
-                		wpFare.setTravelEnd(value);
+                		wpFare.setTravelEnd(ZonedDateTime.now());
                     }
                     else if(cell == 26) {
-                		wpFare.setSaleStart(value);
+                		wpFare.setSaleStart(ZonedDateTime.now());
                     }
                     else if(cell == 27) {
-                		wpFare.setSaleEnd(value);
+                		wpFare.setSaleEnd(ZonedDateTime.now());
                     }
                     else if(cell == 28) {
                 		wpFare.setComment(value);
                     }
                     else if(cell == 29) {
-                    		wpFare.setTravelComplete(value);
+                    		wpFare.setTravelComplete(ZonedDateTime.now());
 	                }
                     else if(cell == 30) {
                     		wpFare.setTravelCompleteIndicator(value);
@@ -883,19 +886,19 @@ public class WorkPackageResource {
             cell = rows.createCell(20);
             cell.setCellValue(fares.get(i).getOverrideIndicator());
             cell = rows.createCell(21);
-            cell.setCellValue(fares.get(i).getTravelStart());
+            cell.setCellValue(fares.get(i).getTravelStart().toString());
             cell = rows.createCell(22);
-            cell.setCellValue(fares.get(i).getTravelEnd());
+            cell.setCellValue(fares.get(i).getTravelEnd().toString());
             cell = rows.createCell(23);
-            cell.setCellValue(fares.get(i).getSaleStart());
+            cell.setCellValue(fares.get(i).getSaleStart().toString());
             cell = rows.createCell(24);
-            cell.setCellValue(fares.get(i).getSaleEnd());
+            cell.setCellValue(fares.get(i).getSaleEnd().toString());
             cell = rows.createCell(25);
             cell.setCellValue(fares.get(i).getEffDate());
             cell = rows.createCell(26);
             cell.setCellValue(fares.get(i).getComment());
             cell = rows.createCell(27);
-            cell.setCellValue(fares.get(i).getTravelComplete());
+            cell.setCellValue(fares.get(i).getTravelComplete().toString());
             cell = rows.createCell(28);
             cell.setCellValue(fares.get(i).getTravelCompleteIndicator());
             cell = rows.createCell(29);
@@ -1031,17 +1034,17 @@ public class WorkPackageResource {
             cell.setCellValue("");
 
             
-            cell.setCellValue(fares.get(i).getTravelStart());
+            cell.setCellValue(fares.get(i).getTravelStart().toString());
             cell = rows.createCell(19);
-            cell.setCellValue(fares.get(i).getTravelEnd());
+            cell.setCellValue(fares.get(i).getTravelEnd().toString());
             cell = rows.createCell(20);
-            cell.setCellValue(fares.get(i).getSaleStart());
+            cell.setCellValue(fares.get(i).getSaleStart().toString());
             cell = rows.createCell(21);
-            cell.setCellValue(fares.get(i).getSaleEnd());
+            cell.setCellValue(fares.get(i).getSaleEnd().toString());
             cell = rows.createCell(22);
             cell.setCellValue(fares.get(i).getComment());
             cell = rows.createCell(23);
-            cell.setCellValue(fares.get(i).getTravelComplete());
+            cell.setCellValue(fares.get(i).getTravelComplete().toString());
             cell = rows.createCell(24);
             cell.setCellValue(fares.get(i).getTravelCompleteIndicator());
             cell = rows.createCell(25);
@@ -1202,17 +1205,17 @@ public class WorkPackageResource {
             cell = rows.createCell(24);
             cell.setCellValue(fares.get(i).getNewBookingCode());
             cell = rows.createCell(25);
-            cell.setCellValue(fares.get(i).getTravelStart());
+            cell.setCellValue(fares.get(i).getTravelStart().toString());
             cell = rows.createCell(26);
-            cell.setCellValue(fares.get(i).getTravelEnd());
+            cell.setCellValue(fares.get(i).getTravelEnd().toString());
             cell = rows.createCell(27);
-            cell.setCellValue(fares.get(i).getSaleStart());
+            cell.setCellValue(fares.get(i).getSaleStart().toString());
             cell = rows.createCell(28);
-            cell.setCellValue(fares.get(i).getSaleEnd());
+            cell.setCellValue(fares.get(i).getSaleEnd().toString());
             cell = rows.createCell(29);
             cell.setCellValue(fares.get(i).getComment());
             cell = rows.createCell(30);
-            cell.setCellValue(fares.get(i).getTravelComplete());
+            cell.setCellValue(fares.get(i).getTravelComplete().toString());
             cell = rows.createCell(31);
             cell.setCellValue(fares.get(i).getTravelCompleteIndicator());
         }
@@ -1230,6 +1233,37 @@ public class WorkPackageResource {
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
             .body(att);
+    }
+    
+    
+    /**
+     * POST  /work-packages/download-market-rules : Download Market Rules Template
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/work-packages/download-market-rules")
+    @Timed
+    public ResponseEntity<Attachment> downloadMarketRules(@RequestBody WorkPackage workPackage) throws URISyntaxException {
+    	log.debug("REST request to download Market Rules : {}", workPackage);
+
+    	String namaFile = "MarketRules.xlsx";
+//    	String filename = "/Users/billy/Downloads/" + namaFile;
+    	String filename = "/home/development/xml/" + namaFile;
+    	byte[] templateFile = null;
+    	if (new File(filename).exists()) {            
+            try {
+                templateFile = Files.readAllBytes(Paths.get(filename));
+            } catch (IOException e) {
+                return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("contract", "Error occured when retrieving template file, please try again later.", "Fail Template File")).body(null);
+            }
+        }
+	    Attachment att = new Attachment();
+	    att.setFile(templateFile);
+	    return ResponseEntity.ok()
+	        .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
+	        .body(att);
     }
     
     /**

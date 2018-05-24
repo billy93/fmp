@@ -24,6 +24,21 @@
                         data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
                         data.lockedSince = DateUtils.convertDateTimeFromServer(data.lockedSince);
                         data.saleDate = DateUtils.convertDateTimeFromServer(data.saleDate);
+                        
+                        if(data.fareSheet.length > 0){
+                        	for(var x=0;x<data.fareSheet.length;x++){
+                        		var fares = data.fareSheet[x].fares;
+                        		for(var y=0;y<fares.length;y++){
+	                        		if(fares[y] != null){
+	                        			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
+	                        			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
+	                        			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
+	                        			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
+	                        			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+	                        		}
+                        		}
+                        	}
+                        }
                     }
                     return data;
                 }
@@ -75,7 +90,8 @@
 	        'exportFaresDiscount': { method: 'POST',  url:'api/work-packages/export-fares-discount'},
 	        'exportDerivedFares': { method: 'POST',  url:'api/work-packages/derived/exportDerivedFares'},
 	        'publish' : { method: 'POST',  url:'api/work-packages/market/publish'},
-	        'exportRateSheet': { method: 'POST',  url:'api/work-packages/export-ratesheet'}
+	        'exportRateSheet': { method: 'POST',  url:'api/work-packages/export-ratesheet'},
+	        'downloadMarketRules': { method: 'POST',  url:'api/work-packages/download-market-rules'}
         });
     }
 })();
