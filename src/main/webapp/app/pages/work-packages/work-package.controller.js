@@ -67,9 +67,10 @@
             	"status.reviewing": vm.workPackageFilter.status.reviewing,
             	"status.readyToRelease": vm.workPackageFilter.status.readyToRelease,
             	"status.distributed": vm.workPackageFilter.status.distributed,
-            	"status.withdraw": vm.workPackageFilter.status.withdraw,
+            	"status.withdrawn": vm.workPackageFilter.status.withdrawn,
             	"status.replace": vm.workPackageFilter.status.replace,
             	"status.reuse": vm.workPackageFilter.status.reuse,
+            	"status.referred": vm.workPackageFilter.status.referred,
             	"distributionType.atpco":vm.workPackageFilter.distributionType.atpco,
             	"distributionType.market":vm.workPackageFilter.distributionType.market,
             	

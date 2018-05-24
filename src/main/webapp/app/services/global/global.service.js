@@ -69,7 +69,6 @@
 		    	// input
 		    	$(document).ready(function(){
 			    	$('input.must-fill').on('input',function(){
-			    		console.log('aaa');
 			    	  	$(this).removeClass('must-fill');
 			    	  	if($(this).val() == ''){
 			    	  		$(this).addClass('must-fill');
@@ -131,7 +130,6 @@
 			    	  	}
 			    	});
 			    	$('input.must-fill').on('input',function(){
-			    		console.log('aaa');
 			    	  	$(this).removeClass('must-fill');
 			    	  	if($(this).val() == ''){
 			    	  		$(this).addClass('must-fill');

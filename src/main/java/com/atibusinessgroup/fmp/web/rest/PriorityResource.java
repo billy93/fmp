@@ -1,6 +1,7 @@
 package com.atibusinessgroup.fmp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.atibusinessgroup.fmp.domain.FareType;
 import com.atibusinessgroup.fmp.domain.Priority;
 
 import com.atibusinessgroup.fmp.repository.PriorityRepository;
@@ -96,7 +97,22 @@ public class PriorityResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/priorities");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
-
+    
+    /**
+     * GET  /priorities : get all the priorities.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of priorities in body
+     */
+    @GetMapping("/priorities/getAll")
+    @Timed
+    public ResponseEntity<List<Priority>> getAllFareTypes() {
+    	log.debug("REST request to get a page of Priorities");
+        List<Priority> page = priorityRepository.findAll();
+//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/fare-types");
+        return new ResponseEntity<>(page, null, HttpStatus.OK);
+    }
+    
     /**
      * GET  /priorities/:id : get the "id" priority.
      *

@@ -96,7 +96,7 @@
 												<div class="checkbox-wrapper">
 													<label>
 														<input type="checkbox" ng-model="vm.workPackageFilter.status.withdrawn">
-														Withdraw
+														Withdrawn
 													</label>
 													<label>
 														<input type="checkbox" ng-model="vm.workPackageFilter.status.referred">
@@ -213,7 +213,7 @@
 							                    			<tr><th  colspan="2"><center>Fare</center></th></tr>
 							                    			<tr>
 							                    				<th>Sheet</th>
-							                    				<th>Value</th>
+							                    				<th>Tour Code</th>
 							                    			</tr>			                    			
 							                    		</thead>
 							                    		<tbody>
@@ -315,7 +315,7 @@
 												<div class="btn btn-app" ng-click="vm.reuse($index)">
 													<i class="fa fa-recycle"></i>Reuse
 												</div>
-												<div class="btn btn-app" ng-click="vm.replace($index)" ng-show="workPackage.targetDistribution == 'ATPCO'">
+												<div class="btn btn-app" ng-click="vm.replace($index)" ng-show="workPackage.targetDistribution != 'ATPCO'">
 													<i class="fa fa-reply"></i>Replace
 												</div>
 												<div class="btn btn-app" ng-click="vm.withdraw($index)">

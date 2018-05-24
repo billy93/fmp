@@ -41,7 +41,14 @@
 									</div>
 									<div class="form-group">
 										<label for="field_priority">Priority</label>
-										<input class="form-control" type="text" ng-model="vm.workPackage.priority" disabled/>
+										
+										
+										<input ng-if="vm.workPackage.targetDistribution == 'ATPCO'" class="form-control" type="text" ng-model="vm.workPackage.priority" disabled/>
+										 <select ng-if="vm.workPackage.targetDistribution != 'ATPCO'"  class="form-control" 
+										 name="priority"
+										 ng-class="{'must-fill': !editForm.priority.$valid}"							      				
+										 ng-model="vm.workPackage.priority" 
+			       						 ng-options="key as value for (key , value) in vm.priority"></select>
 									</div>
 									<div class="form-group">
 										<label for="field_status">Status</label>
@@ -293,7 +300,9 @@
 			
 		
 			<ng-form name="editFormATPCO" role="form" novalidate ng-if="vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'REGULAR'">
+				<div class="box-detail" style="border-top : none; padding: 20px;">
 				<div class="tab-wrapper" id="distribution-ATPCO">
+					
 					<div class="clearfix tab-body">
 						<ul class="clearfix nav-responsive nav nav-tabs">
 						    <li ng-if="vm.workPackage.specifiedFares" ng-class="{active:vm.currentTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.fareSheet track by $index"><a ng-click="vm.selectTab($index);">GA Fares : {{vm.workPackage.fareSheet[$index].specifiedFaresName}}</a></li>
@@ -1165,7 +1174,36 @@
 							<div class="tab-pane" ng-class="{active:vm.currentTabFilingInstruction}" ng-if="vm.workPackage.filingInstruction">
 								
 								<div class="tab-pane" ng-class="{active:vm.currentTabFilingInstruction}">
-									<div class="action-btn-wrapper">
+								
+									<div class="box-header"></div>
+									<div class="box-body bbgrey">
+										<div class="form-group">
+											<label>Comment</label>
+											<div text-angular="text-angular" name="commentFillingInstruction" ng-model="vm.commentStringFillingInstruction" ta-paste="vm.stripFormat($html)" ta-toolbar="[['h1','h2','h3'],['bold','italics','underline'],['redo','undo'],['ul','ol'],['justifyLeft','justifyCenter','justifyRight','justifyFull']]"/>
+										</div>
+										<div class="clearfix">
+											<div class="pull-right">
+												<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction(vm.commentStringFillingInstruction)"></i>Add</button>
+											</div>
+										</div>										
+									</div>
+						        	 <div class="box-body">
+						        		<div class="comment-wrapper">
+							    			<div class="comment-list" ng-repeat="filingInstructionData in vm.workPackage.filingInstructionData track by $index">
+										    	<div class="clearfix">
+										    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
+										    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'short'}}</div>
+										    	</div>
+										    	<label> 
+										    		<input type="checkbox" id="comment-message" name="comment-message" ng-model="filingInstructionData.isDeleted">
+										    		<span>{{filingInstructionData.isDeleted ? "Deleted" : "Delete"}}</span> 
+													<span ng-show="!filingInstructionData.isDeleted" ng-bind-html="filingInstructionData.comment"></span>
+												</label>
+											</div>
+							    		</div>
+						        	</div>									
+								
+									<!-- <div class="action-btn-wrapper">
 					      				<div class="col-md-12 text-right no-pad">
 					      					<button ng-click="vm.addFiling()" class="btn btn-primary">Add</button>
 					      				</div>
@@ -1187,7 +1225,7 @@
 								        		</div>							        		
 								      		</div>
 								     	</div>
-					       			</div>
+					       			</div> -->
 								</div>
 							</div>
 							
@@ -1365,6 +1403,7 @@
 							</div>										
 						</div>
 					</div>
+				</div>
 				</div>
 			</ng-form>
 			

@@ -145,13 +145,14 @@ public class MailService {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, CharEncoding.UTF_8);
             
             
-            
+            log.debug("ATTACHMENT SIZE : {}", data.size());
             int i=0;
             for(Attachment attachment : data) {
             	MimeTypes allTypes = MimeTypes.getDefaultMimeTypes();
                 MimeType mmType = allTypes.forName(attachment.getFileContentType());
                 String ext = mmType.getExtension(); // .jpg
                 
+                log.debug("SEND ATTACHMENT WITH EXTENSION : {}", ext);
                 ByteArrayResource byteArray = new ByteArrayResource(attachment.getFile());
                 message.addAttachment("Attachment-"+i+"."+ext, byteArray);            	
                 i++;

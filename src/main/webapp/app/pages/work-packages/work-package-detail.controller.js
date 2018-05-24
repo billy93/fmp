@@ -21,8 +21,8 @@
      * @param Clipboard
      * @returns
      */
-    WorkPackageDetailController.$inject = ['currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'GlobalService', 'businessAreas'];
-    function WorkPackageDetailController(currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, GlobalService, businessAreas) {
+    WorkPackageDetailController.$inject = ['currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'GlobalService', 'businessAreas', 'priorities'];
+    function WorkPackageDetailController(currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, GlobalService, businessAreas, priorities) {
     	var vm = this;
        
         vm.currentTab = [];
@@ -56,6 +56,11 @@
         	vm.businessArea[businessAreas[x]] = businessAreas[x];
         }
         
+        vm.priority = {};
+        for(var x=0;x<priorities.length;x++){
+        	vm.priority[priorities[x].name] = priorities[x].name;
+        }
+        console.log(vm.priority);
 //        vm.fareType = {
 //    		"":"Select Fare Type", 
 //    		"Yearly":"Yearly", 
@@ -1287,7 +1292,10 @@
                 resolve: {
                 	workPackage: function(){
                 		return vm.workPackage;
-                	}
+                	},
+                    fareTypes: ['FareType', function(FareType) {
+                        return FareType.getAll().$promise;
+                    }],
                 }
 			}).result.then(function(option) {
 				console.log(option);
@@ -1786,11 +1794,7 @@
         		vm.workPackage.filingInstructionData.push({status:"PENDING", tarno:"", cxr:"GA", comment:"", file:"", fileContentType:""});
         }
         
-        vm.removeFiling = function(filing){
-	   		 var index = vm.workPackage.filingInstructionData.indexOf(filing);
-	   		 vm.workPackage.filingInstructionData.splice(index, 1);  
-	   };
-   
+         
 	   vm.addAttachment = function(){
 		 	if(vm.workPackage.attachmentData == null){
 	        		vm.workPackage.attachmentData = [];
@@ -3432,6 +3436,26 @@
     	  	vm.commentString = null;
     	 }
       }
+      
+      
+      vm.addCommentFillingInstruction = function(commentString){
+ 	  	 if(commentString != null){
+ 	    	  if(vm.workPackage.filingInstructionData == null){
+ 	      		vm.workPackage.filingInstructionData = [];
+ 	      }
+ 	    	  
+     	  	vm.workPackage.filingInstructionData.push({
+     	  		status:"PENDING", tarno:"", cxr:"GA", comment:commentString, file:"", fileContentType:"", isDeleted:false
+     	  	});
+     	  	vm.save();
+     	  	vm.commentStringFillingInstruction = null;
+     	 }
+       }
+      
+      vm.removeFiling = function(filing){
+	   		var index = vm.workPackage.filingInstructionData.indexOf(filing); 
+	   		console.log(filing.isDeleted);
+	   };
       
       vm.addInterOffice = function(ioString){
  	  	 if(ioString != null){
