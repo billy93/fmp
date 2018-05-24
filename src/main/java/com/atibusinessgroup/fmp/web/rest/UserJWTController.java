@@ -77,8 +77,7 @@ public class UserJWTController {
 			String jwt = tokenProvider.createToken(authentication, rememberMe);
 			HttpHeaders httpHeaders = new HttpHeaders();
 			httpHeaders.add(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + jwt);
-			httpHeaders.add("ChangePasswordNeeded", "0");
-
+			
 			if (userOptional.isPresent()) {
 				User user = userOptional.get();
 
@@ -87,6 +86,8 @@ public class UserJWTController {
 
 				if (userNeedsToChangePassword(user)) {
 					httpHeaders.add("ChangePasswordNeeded", "1");
+				} else {
+					httpHeaders.add("ChangePasswordNeeded", "0");
 				}
 
 				user = userRepository.save(user);

@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('WorkPackageDialogController', WorkPackageDialogController);
 
-    WorkPackageDialogController.$inject = ['type', '$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'WorkPackage', 'reviewLevels', 'businessAreas'];
+    WorkPackageDialogController.$inject = ['type', '$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'WorkPackage', 'reviewLevels', 'businessAreas', 'GlobalService', 'fareTypes'];
 
-    function WorkPackageDialogController (type, $timeout, $scope, $stateParams, $uibModalInstance, entity, WorkPackage, reviewLevels, businessAreas) {
+    function WorkPackageDialogController (type, $timeout, $scope, $stateParams, $uibModalInstance, entity, WorkPackage, reviewLevels, businessAreas, GlobalService, fareTypes) {
         var vm = this;
 
         vm.workPackage = entity;
@@ -34,8 +34,13 @@
         }
         
         
-        vm.fareType = ["Yearly", "Promotion", "Ad-hoc", "Corporate", "SPA & Code-share", "Miles", "Waiver"];
-        
+//        vm.fareType = ["Yearly", "Promotion", "Ad-hoc", "Corporate", "SPA & Code-share", "Miles", "Waiver"];
+        vm.fareType = {};
+        for(var x=0;x<fareTypes.length;x++){
+        	vm.fareType[fareTypes[x].name] = fareTypes[x].name;
+        }
+//        vm.fareType = fareTypes;
+//        console.log(fareTypes);
         
         vm.distributionTypes = ['ATPCO'];
         
@@ -92,5 +97,7 @@
         function openCalendar (date) {
             vm.datePickerOpenStatus[date] = true;
         }
+        
+        GlobalService.mustFill();
     }
 })();

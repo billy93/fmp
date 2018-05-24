@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('WorkPackageApproveEmailDialogController', WorkPackageApproveEmailDialogController);
 
-    WorkPackageApproveEmailDialogController.$inject = ['email', 'User', 'Principal', 'workPackage', '$scope', '$uibModalInstance', '$state'];
+    WorkPackageApproveEmailDialogController.$inject = ['email', 'ccEmail',  'User', 'Principal', 'workPackage', '$scope', '$uibModalInstance', '$state'];
 
-    function WorkPackageApproveEmailDialogController(email, User, Principal, workPackage, $scope, $uibModalInstance, $state) {
+    function WorkPackageApproveEmailDialogController(email, ccEmail, User, Principal, workPackage, $scope, $uibModalInstance, $state) {
 
         var vm = this;     
         vm.clear = clear;
@@ -22,7 +22,8 @@
         }
         
         vm.workPackage = workPackage;
-        vm.option.email =  email;
+        vm.option.email =  email.value.split(",");
+        vm.option.ccEmail =  ccEmail.value.split(",");
         vm.save = function(){
         	$uibModalInstance.close(vm.option);
         }
@@ -50,6 +51,26 @@
 
         vm.removeEmail = function(index) {
         	vm.option.email.splice(index, 1);
+        }
+        
+        
+        vm.addCcEmail = function() {
+        	if (vm.option != undefined && vm.option.ccEmail != null) {
+        		if (!vm.option.ccEmail) {
+        			vm.option.ccEmail = [];        			
+        		}
+        		
+        		console.log('PUSH CC EMAIL : '+vm.ccEmail);
+        		if (vm.option.ccEmail.indexOf(vm.ccEmail) == -1) {
+        			vm.option.ccEmail.push(vm.ccEmail);
+        		}
+        		
+        		vm.ccEmail = null;
+        	}
+        } 
+
+        vm.removeCcEmail = function(index) {
+        	vm.option.ccEmail.splice(index, 1);
         }
     }
 })();

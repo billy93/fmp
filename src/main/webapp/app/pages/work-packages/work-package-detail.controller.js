@@ -21,8 +21,8 @@
      * @param Clipboard
      * @returns
      */
-    WorkPackageDetailController.$inject = ['currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user'];
-    function WorkPackageDetailController(currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user) {
+    WorkPackageDetailController.$inject = ['currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'GlobalService', 'businessAreas'];
+    function WorkPackageDetailController(currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, GlobalService, businessAreas) {
     	var vm = this;
        
         vm.currentTab = [];
@@ -44,16 +44,27 @@
         vm.tariffNumber = tariffNumber;
         vm.cities = cities;
         vm.currencies = currencies;
+        vm.indexSelectedTab = 0;
         
-        vm.fareType = {
-    		"":"Select Fare Type", 
-    		"Yearly":"Yearly", 
-    		"Promotion":"Promotion", 
-    		"Ad-hoc":"Ad-hoc", 
-    		"Corporate":"Corporate", 
-    		"SPA & Code-share":"SPA & Code-share",
-    		"Miles":"Miles"
-        };
+        vm.fareType = {};
+        for(var x=0;x<fareTypes.length;x++){
+        	vm.fareType[fareTypes[x].name] = fareTypes[x].name;
+        }
+        
+        vm.businessArea = {};
+        for(var x=0;x<businessAreas.length;x++){
+        	vm.businessArea[businessAreas[x]] = businessAreas[x];
+        }
+        
+//        vm.fareType = {
+//    		"":"Select Fare Type", 
+//    		"Yearly":"Yearly", 
+//    		"Promotion":"Promotion", 
+//    		"Ad-hoc":"Ad-hoc", 
+//    		"Corporate":"Corporate", 
+//    		"SPA & Code-share":"SPA & Code-share",
+//    		"Miles":"Miles"
+//        };
         
         vm.typeOfJourney = {
     		"":"Select OW/RT", 
@@ -325,12 +336,12 @@
         	{
         		name:"addonFareOrigin",
         		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["Distribution"]
+        		mandatory:["LSO", "HO", "Distribution"]
         	},
         	{
         		name:"addonFareDestination",
         		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["Distribution"]
+        		mandatory:["LSO", "HO", "Distribution"]
         	},
         	{
         		name:"addonFareBucket",
@@ -349,23 +360,23 @@
         	},
         	{
         		name:"addonFareZone",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["HO", "Distribution"],
+        		mandatory:["Distribution"]
         	},
         	{
         		name:"addonFareRtgno",
         		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		mandatory:["Distribution"]
         	},
         	{
         		name:"addonFareCurrency",
         		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		mandatory:["LSO", "HO", "Distribution"]
         	},
         	{
         		name:"addonFareAmount",
         		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		mandatory:["LSO", "HO"]
         	},
         	{
         		name:"addonFareTravelStartDate",
@@ -403,119 +414,440 @@
         		mandatory:[]
         	},
         	
+        	//DISCOUNT FARE HEADER
+        	{
+        		name:"discountFaresName",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"discountApprovalReference",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountFareType",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"discountAccountCode",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:["LSO", "HO", "Distribution"]
+        	},
+        	
+        	//DISCOUNT FARE
+        	{
+        		name:"discountStatus",
+        		editable:["HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountTariffCode",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:["HO", "Distribution"]
+        	},
+        	{
+        		name:"discountLoc1Type",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:["LSO", "HO", "Distribution"]
+        	},
+        	
+        	{
+        		name:"discountLoc1",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:["LSO", "HO", "Distribution"]
+        	},
+        	{
+        		name:"discountLoc2Type",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:["LSO", "HO", "Distribution"]
+        	},
+        	
+        	{
+        		name:"discountLoc2",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:["LSO", "HO", "Distribution"]
+        	},
+        	
+        	{
+        		name:"discountBaseFareBasis",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:["HO", "Distribution"]
+        	},
+        	{
+        		name:"discountBaseRuleno",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountBaseTariffCode",
+        		editable:["LSO", "HO", "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountCalcType",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"discountPercentageOfBaseFare",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountFareCurrency",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountSpecifiedAmount",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountPaxType",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:["LSO", "HO",  "Distribution"]
+        	},
+        	{
+        		name:"discountFareFareType",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountTicketCode",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:[]
+        	},
+        	
+        	{
+        		name:"discountTicketDesignator",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountBaseFareOwRt",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountNewBookingCode",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountTravelStartDate",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountTravelEndDate",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountSaleStartDate",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountSaleEndDate",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountComment",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountTravelComplete",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountTravelCompleteIndicator",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:[]
+        	},
         	
         	// MARKET FARE HEADER
         	{
         		name:"marketFareDescription",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
         	},
         	{
         		name:"marketApprovalReference",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO"],
         		mandatory:[]
         	},
         	{
         		name:"marketFareType",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"marketGroupFares",
+        		editable:["LSO", "HO"],
         		mandatory:[]
         	},
-        	
         	
         	//MARKET FARE
         	{
         		name:"marketFareStatus",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["HO"],
         		mandatory:[]
         	},
         	{
-        		name:"marketFareOrigin",
-        		editable:["LSO", "HO", "Distribution"],
+        		name:"marketFareCarrier",
+        		editable:[],
         		mandatory:[]
+        	},        	
+        	{
+        		name:"marketFareOrigin",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
         	},
         	{
         		name:"marketFareDestination",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
         	},
         	{
         		name:"marketFareFarebasis",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["HO"]
         	},
         	{
         		name:"marketFareBookingClass",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["HO"]
         	},
         	{
         		name:"marketFareSsn",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO"],
         		mandatory:[]
         	},
         	
         	{
         		name:"marketFareCabin",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
         	},
         	
         	{
         		name:"marketFareTypeOfJourney",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
         	},
         	{
         		name:"marketFareRuleno",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["HO"]
         	},
         	{
         		name:"marketFareCurrency",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
         	},
         	{
         		name:"marketFareBaseAmt",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
         	},        	        	
         	{
         		name:"marketFareTravelStartDate",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
         	},
         	{
         		name:"marketFareTravelEndDate",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
         	},
         	{
         		name:"marketFareSaleStartDate",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
         	},
         	{
         		name:"marketFareSaleEndDate",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:[]
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
         	},
         	{
         		name:"marketFareTravelComplete",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO"],
         		mandatory:[]
         	},
         	{
         		name:"marketFareTravelIndicator",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO"],
         		mandatory:[]
         	},
         	{
         		name:"marketFareRatesheetComment",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO"],
         		mandatory:[]
         	},
         	
+        	//WAIVER FARE HEADER
+        	{
+        		name:"waiverFareDescription",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverApprovalReference",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverFareType",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverAgentName",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	
+        	{
+        		name:"waiverIataNo",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverIocNumber",
+        		editable:[],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverApprovalDate",
+        		editable:[],
+        		mandatory:[]
+        	},
+        	
+        	
+        	//WAIVER FARE
+        	{
+        		name:"waiverType",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverFullPartial",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverPnr",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverTktFrom",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverTktTo",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverOri",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverDest",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverOriginalItinerary",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverNewItinerary",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverOriginalBasicFare",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverNewBasicFare",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverApprovedFare",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverFareLost",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverCalculatedPn",
+        		editable:[],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverOriginalPn",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverApprovedPn",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverPenaltyLostPercent",
+        		editable:[],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverPenaltyLostAmount",
+        		editable:[],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverCurrency",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverTotalPax",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverTotalLost",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverApprover",
+        		editable:[],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverRemark",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	}
         ];
         
         vm.isRequired = function(field){
@@ -661,6 +993,7 @@
         	vm.resetTab();        	
         	vm.currentTab[index] = true;
         	vm.selectedTab = index;
+        	vm.indexSelectedTab = index;
         };
         
         vm.addTab = function(option){
@@ -765,6 +1098,12 @@
         	return findTab;        	
         }
         //END FARES TAB
+        
+        
+        vm.stripFormat = function ($html) {
+        	console.log("called");
+            return $html.replace(/<img[^>]*>/g/n,"");
+          };
         
         //ADDON TAB
         vm.selectedAddonTab = 0;     
@@ -948,7 +1287,10 @@
                 resolve: {
                 	workPackage: function(){
                 		return vm.workPackage;
-                	}
+                	},
+                    fareTypes: ['FareType', function(FareType) {
+                        return FareType.getAll().$promise;
+                    }],
                 }
 			}).result.then(function(option) {
 				console.log(option);
@@ -1187,6 +1529,18 @@
         vm.clearSelection = function(){
         	for(var x=0;x<vm.faresActionButton.length;x++){
         		vm.faresActionButton[x] = false;
+        	}
+        	for(var x=0;x<vm.addonFaresActionButton.length;x++){
+        		vm.addonFaresActionButton[x] = false;
+        	}
+        	for(var x=0;x<vm.discountFaresActionButton.length;x++){
+        		vm.discountFaresActionButton[x] = false;
+        	}
+        	for(var x=0;x<vm.marketFaresActionButton.length;x++){
+        		vm.marketFaresActionButton[x] = false;
+        	}
+        	for(var x=0;x<vm.waiverFaresActionButton.length;x++){
+        		vm.waiverFaresActionButton[x] = false;
         	}
         };
         //End Specific Fares Function
@@ -1509,24 +1863,22 @@
               backdrop: 'static',
               size: 'lg',
               resolve: {
-                  workPackage: vm.workPackage,
-                  email : function(){
-                	  return ["billyfebram@gmail.com", "laurensius.sakti@atibusinessgroup.com"];
-              	  }
+                  workPackage: vm.workPackage,              	  
+	              email: ['SystemParameter', function(SystemParameter) {
+	                   return SystemParameter.getSystemParameterByName({name : 'APPROVE_EMAIL'}).$promise;
+	              }],
+	              ccEmail: ['SystemParameter', function(SystemParameter) {
+	                   return SystemParameter.getSystemParameterByName({name : 'APPROVE_CC_EMAIL'}).$promise;
+	              }],
               }
           }).result.then(function(config) {
         	  vm.workPackage.approveConfig = config;
-        	  console.log(config);
         	  WorkPackage.approve(vm.workPackage, function(){
 	    			alert('Approve Success');
 	    			$state.go('work-package');
     		}, function(){
     			alert('Approve Failed');
     		});
-//	  		    if (confirm("Are you sure to Approve this workorder?")) {
-	  		    		
-//	  		    } else {
-//	  		    }
           }, function() {
       			
           });
@@ -2905,10 +3257,10 @@
                     	  	vm.workPackage = result;
                     	  	vm.workPackage.filingDate = DateUtils.convertDateTimeFromServer(vm.workPackage.filingDate);
                     	  	vm.workPackage.createdDate = DateUtils.convertDateTimeFromServer(vm.workPackage.createdDate);
-                    	  	vm.workPackage.distributionDate = DateUtils.convertDateTimeFromServer(vm.workPackage.distributionDate);
-                         vm.workPackage.discExpiryDate = DateUtils.convertDateTimeFromServer(vm.workPackage.discExpiryDate);
-                         vm.workPackage.queuedDate = DateUtils.convertDateTimeFromServer(vm.workPackage.queuedDate);
-                         vm.workPackage.lockedSince = DateUtils.convertDateTimeFromServer(vm.workPackage.lockedSince);
+                    	 // 	vm.workPackage.distributionDate = DateUtils.convertDateTimeFromServer(vm.workPackage.distributionDate);
+                         //vm.workPackage.discExpiryDate = DateUtils.convertDateTimeFromServer(vm.workPackage.discExpiryDate);
+                         //vm.workPackage.queuedDate = DateUtils.convertDateTimeFromServer(vm.workPackage.queuedDate);
+                         //vm.workPackage.lockedSince = DateUtils.convertDateTimeFromServer(vm.workPackage.lockedSince);
                       }
                       
                       function onImportFailure(){
@@ -2971,9 +3323,9 @@
                     	  	vm.workPackage.filingDate = DateUtils.convertDateTimeFromServer(vm.workPackage.filingDate);
                     	  	vm.workPackage.createdDate = DateUtils.convertDateTimeFromServer(vm.workPackage.createdDate);
                     	  	vm.workPackage.distributionDate = DateUtils.convertDateTimeFromServer(vm.workPackage.distributionDate);
-                         vm.workPackage.discExpiryDate = DateUtils.convertDateTimeFromServer(vm.workPackage.discExpiryDate);
-                         vm.workPackage.queuedDate = DateUtils.convertDateTimeFromServer(vm.workPackage.queuedDate);
-                         vm.workPackage.lockedSince = DateUtils.convertDateTimeFromServer(vm.workPackage.lockedSince);
+                        // vm.workPackage.discExpiryDate = DateUtils.convertDateTimeFromServer(vm.workPackage.discExpiryDate);
+                        // vm.workPackage.queuedDate = DateUtils.convertDateTimeFromServer(vm.workPackage.queuedDate);
+                        // vm.workPackage.lockedSince = DateUtils.convertDateTimeFromServer(vm.workPackage.lockedSince);
                       }
                       
                       function onImportFailure(){
@@ -3105,13 +3457,14 @@
       
       vm.ratesheet = function(){
     	  	  $uibModal.open({
-              templateUrl: 'app/entities/work-package/work-package-rate-sheet-dialog.html',
+              templateUrl: 'app/pages/work-packages/work-package-rate-sheet-dialog.html',
               controller: 'WorkPackageRateSheetDialogController',
               controllerAs: 'vm',
               backdrop: 'static',
               size: 'lg',
               resolve: {
-                  entity: vm.workPackage
+                  entity: vm.workPackage,
+                  index : vm.indexSelectedTab
               }
           }).result.then(function(ratesheet) {
           	  
@@ -3126,7 +3479,7 @@
 	    	 	}
     	  
 	  	  $uibModal.open({
-	          templateUrl: 'app/entities/work-package/work-package-agent-dialog.html',
+	          templateUrl: 'app/pages/work-packages/work-package-agent-dialog.html',
 	          controller: 'WorkPackageAgentDialogController',
 	          controllerAs: 'vm',
 	          backdrop: 'static',
@@ -3233,5 +3586,18 @@
 	    		  $('#comment-section').addClass('show');
 	    	  }
       });
+      
+      //Waiver Function
+      vm.calculateFareLost = function(fare){
+    	  if(fare.waiverApprovedFare != null && fare.waiverNewBasicFare != null){
+    		  fare.waiverFareLost = parseInt(fare.waiverApprovedFare) - parseInt(fare.waiverNewBasicFare);
+    	  }
+      }
+      vm.calculatePenaltyLost = function(fare){
+    	  if(fare.waiverApprovedPn != null && fare.waiverOriginalPn != null){
+    		  fare.waiverPenaltyLostPercent = parseInt(fare.waiverApprovedPn) - parseInt(fare.waiverOriginalPn);
+    	  }
+      }
+      GlobalService.sayHello();
     }
 })();

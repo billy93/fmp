@@ -60,9 +60,13 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		if(wpFilter.status.reviewing) {
 			status.add("REVIEWING");
 		}
-		if(wpFilter.status.withdraw) {
-			status.add("WITHDRAW");
+		if(wpFilter.status.withdrawn) {
+			status.add("WITHDRAWN");
 		}
+		if(wpFilter.status.referred) {
+			status.add("REFERRED");
+		}
+		
 		Criteria statusCriteria = Criteria.where("status").in(status);
 		//END STATUS
 		
@@ -91,18 +95,44 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		Criteria typesCriteria = Criteria.where("type").in(types);
 		//END TYPES
 		
+		
 		Criteria approvalReference = new Criteria();
 		if(wpFilter.getApprovalReference() != null && !wpFilter.getApprovalReference().contentEquals("")) {
 			approvalReference = Criteria.where("fare_sheet.approval_reference").regex(wpFilter.getApprovalReference(), "i");
 		}
 		
-		Query query = new Query(new Criteria().andOperator(
-			reviewLevels.size() > 0 ? reviewLevelCriteria : new Criteria(),
-			status.size() > 0 ? statusCriteria : new Criteria(),
-			distributionTypes.size() > 0 ?	distributionTypesCriteria : new Criteria(),
-			types.size() > 0 ? typesCriteria : new Criteria(),
-			approvalReference					
-		)).with(pageable);
+		Criteria replaceCriteria = new Criteria();
+		if(wpFilter.status.replace) {
+			replaceCriteria = Criteria.where("replace_from").ne(null);
+		}
+		
+		Criteria reuseCriteria = new Criteria();
+		if(wpFilter.status.reuse) {
+			reuseCriteria = Criteria.where("reuse_from").ne(null);
+		}	
+		
+		Criteria criteriaAnd1Query = new Criteria().andOperator(
+				reviewLevels.size() > 0 ? reviewLevelCriteria : new Criteria(),
+				status.size() > 0 ? statusCriteria : new Criteria(),
+				distributionTypes.size() > 0 ?	distributionTypesCriteria : new Criteria(),
+				types.size() > 0 ? typesCriteria : new Criteria(),
+				approvalReference,
+				wpFilter.status.replace && wpFilter.status.reuse ? 
+						new Criteria().orOperator(replaceCriteria, reuseCriteria) : 
+							wpFilter.status.replace ? replaceCriteria :
+								wpFilter.status.reuse ? reuseCriteria : new Criteria()
+//				replaceCriteria, 
+//				reuseCriteria
+		);
+//		Criteria criteriaAnd2Query = new Criteria().orOperator(replaceCriteria, reuseCriteria);
+//		Criteria criteriaQuery = new Criteria().orOperator(criteriaAnd1Query);
+//		Criteria reuseReplaceCriteria = new Criteria();
+//		if(wpFilter.status.replace && wpFilter.status.reuse) {
+//			reuseReplaceCriteria = new Criteria().orOperator(reuseCriteria, replaceCriteria);
+//		}
+//		criteriaAnd1Query.orOperator(criteriaAnd2Query);
+		Query query = new Query(criteriaAnd1Query).with(pageable);
+		
 		List<WorkPackage> workPackages = mongoTemplate.find(query, WorkPackage.class);
 		
 		Page<WorkPackage> page = PageableExecutionUtils.getPage(

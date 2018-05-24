@@ -159,17 +159,60 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     private String replaceFrom;
     
     private ApproveConfig approveConfig;
+    private ReuseReplaceConfig reuseReplaceConfig;
+    
+
+    public ReuseReplaceConfig getReuseReplaceConfig() {
+		return reuseReplaceConfig;
+	}
+
+	public void setReuseReplaceConfig(ReuseReplaceConfig reuseReplaceConfig) {
+		this.reuseReplaceConfig = reuseReplaceConfig;
+	}
+
+	public static class ReuseReplaceConfig{
+    	public boolean attachment;
+
+		public boolean isAttachment() {
+			return attachment;
+		}
+
+		public void setAttachment(boolean attachment) {
+			this.attachment = attachment;
+		}
+
+    	
+    }
     
     public static class ApproveConfig{
     	public List<String> email;
-
+    	public List<String> ccEmail;
+    	public boolean attachment;
+    	
 		public List<String> getEmail() {
 			return email;
 		}
 
 		public void setEmail(List<String> email) {
 			this.email = email;
-		}    	    	
+		}
+
+		public boolean isAttachment() {
+			return attachment;
+		}
+
+		public void setAttachment(boolean attachment) {
+			this.attachment = attachment;
+		}
+
+		public List<String> getCcEmail() {
+			return ccEmail;
+		}
+
+		public void setCcEmail(List<String> ccEmail) {
+			this.ccEmail = ccEmail;
+		}
+
     }
     
     
@@ -263,12 +306,20 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
         @Field("waiver_iata_no")
         private String waiverIataNo;
         
+        @Field("waiver_ioc_number")
+        private String waiverIocNumber;
+        
         @Field("waiver_approval_date")
         private String waiverApprovalDate;
         //End Waiver Fares
         
+        //Market Fares
         @Field("market_fares_name")
         private String marketFaresName;
+        
+        @Field("group_fares")
+        private boolean groupFares;
+        //End Market Fares
         
     	@Field("fare_carrier")
         private String fareCarrier;
@@ -285,7 +336,56 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
         @Field("discontinue_date")
         private String discontinueDate;
 
-        public String getWaiverFaresName() {
+        
+        public String getWaiverIocNumber() {
+			return waiverIocNumber;
+		}
+
+		public void setWaiverIocNumber(String waiverIocNumber) {
+			this.waiverIocNumber = waiverIocNumber;
+		}
+
+		public String getWaiverApprovalReference() {
+			return waiverApprovalReference;
+		}
+
+		public void setWaiverApprovalReference(String waiverApprovalReference) {
+			this.waiverApprovalReference = waiverApprovalReference;
+		}
+
+		public String getWaiverAgentName() {
+			return waiverAgentName;
+		}
+
+		public void setWaiverAgentName(String waiverAgentName) {
+			this.waiverAgentName = waiverAgentName;
+		}
+
+		public String getWaiverIataNo() {
+			return waiverIataNo;
+		}
+
+		public void setWaiverIataNo(String waiverIataNo) {
+			this.waiverIataNo = waiverIataNo;
+		}
+
+		public String getWaiverApprovalDate() {
+			return waiverApprovalDate;
+		}
+
+		public void setWaiverApprovalDate(String waiverApprovalDate) {
+			this.waiverApprovalDate = waiverApprovalDate;
+		}
+
+		public boolean isGroupFares() {
+			return groupFares;
+		}
+
+		public void setGroupFares(boolean groupFares) {
+			this.groupFares = groupFares;
+		}
+
+		public String getWaiverFaresName() {
 			return waiverFaresName;
 		}
 
@@ -778,6 +878,7 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 	
 	public static class MarketRules{
     		private String status;
+    		private String username;
     		private String ruleid;
     		private String cxr;
     		private String comment;
@@ -787,6 +888,18 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 
     	    @Field("file_content_type")
     	    private String fileContentType;
+
+    	    @Field("createdTime")	    
+    		private ZonedDateTime createdTime;
+    	    
+    	   
+		public String getUsername() {
+				return username;
+			}
+
+			public void setUsername(String username) {
+				this.username = username;
+			}
 
 		public String getStatus() {
 			return status;
@@ -835,7 +948,17 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 		public void setFileContentType(String fileContentType) {
 				this.fileContentType = fileContentType;
 			}
-    }
+
+		public ZonedDateTime getCreatedTime() {
+			return createdTime;
+		}
+
+		public void setCreatedTime(ZonedDateTime createdTime) {
+			this.createdTime = createdTime;
+		}
+   
+		
+	}
 	
     public static class FilingDetail{
     		private String email;

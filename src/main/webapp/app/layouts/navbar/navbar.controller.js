@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('NavbarController', NavbarController);
 
-    NavbarController.$inject = ['$state', 'Auth', 'Principal', 'ProfileService', 'LoginService', '$window'];
+    NavbarController.$inject = ['$state', 'Auth', 'Principal', 'ProfileService', 'LoginService', '$window', 'GlobalService'];
 
-    function NavbarController ($state, Auth, Principal, ProfileService, LoginService, $window) {
+    function NavbarController ($state, Auth, Principal, ProfileService, LoginService, $window, GlobalService) {
         var vm = this;
 
         vm.isNavbarCollapsed = true;
@@ -23,7 +23,29 @@
         vm.toggleNavbar = toggleNavbar;
         vm.collapseNavbar = collapseNavbar;
         vm.$state = $state;
+        vm.loginInfo = null;
 
+     
+        var copyAccount = function (account) {
+            return {
+                activated: account.activated,
+                email: account.email,
+                firstName: account.firstName,
+                langKey: account.langKey,
+                lastName: account.lastName,
+                login: account.login
+            };
+        };
+        
+        Principal.identity().then(function(account) {
+            vm.loginInfo = copyAccount(account);
+        });
+        
+        
+        vm.test = function(){
+        	 
+        }
+        
         function login() {
             collapseNavbar();
             LoginService.open();
@@ -32,7 +54,7 @@
         function logout() {
             collapseNavbar();
             Auth.logout();
-            $state.go('home'); $window.location.reload();
+//            $state.go('home'); $window.location.reload();
         }
 
         function toggleNavbar() {
@@ -42,5 +64,8 @@
         function collapseNavbar() {
             vm.isNavbarCollapsed = true;
         }
+        
+        
+        GlobalService.navbar();
     }
 })();

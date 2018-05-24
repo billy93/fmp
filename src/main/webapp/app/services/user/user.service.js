@@ -20,7 +20,8 @@
             'save': { method:'POST' },
             'update': { method:'PUT' },
             'delete':{ method:'DELETE'},
-            'generateTourcode':{method:'POST', url:'api/users/generateTourcode'}
+            'generateTourcode':{method:'POST', url:'api/users/generateTourcode'},
+            'getBusinessArea':{method:'GET',isArray: true, url:'api/users/getBusinessArea'}
         });
 
         return service;

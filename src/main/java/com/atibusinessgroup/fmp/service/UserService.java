@@ -297,6 +297,11 @@ public class UserService {
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
         return userRepository.findOneByLogin(login);
     }
+    
+    public Optional<List<String>> getUserBusinessAreaByLogin(String login) {
+    	User u = userRepository.findOneByLogin(login).get();
+        return Optional.ofNullable(u.getBusinessAreas());
+    }
 
     public Optional<User> getUserWithAuthorities(String id) {
         return Optional.ofNullable(userRepository.findOne(id));

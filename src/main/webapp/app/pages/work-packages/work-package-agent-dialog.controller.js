@@ -5,29 +5,23 @@
         .module('fmpApp')
         .controller('WorkPackageAgentDialogController', WorkPackageAgentDialogController);
 
-    WorkPackageAgentDialogController.$inject = ['$scope', 'FileSaver', 'DataUtils', '$uibModalInstance', 'WorkPackage', '$state', 'entity', 'Agencies'];
+    WorkPackageAgentDialogController.$inject = ['$scope', 'FileSaver', 'DataUtils', '$uibModalInstance', 'WorkPackage', '$state', 'entity', 'Agent'];
 
-    function WorkPackageAgentDialogController($scope, FileSaver, DataUtils, $uibModalInstance, WorkPackage, $state, entity, Agencies) {
+    function WorkPackageAgentDialogController($scope, FileSaver, DataUtils, $uibModalInstance, WorkPackage, $state, entity, Agent) {
 
         var vm = this;
         vm.clear = clear;
         vm.agents = entity.agents;
         vm.agencies = [];
-        
-        console.log(vm.agents);
-        
+                
         vm.save = function(){
         	$uibModalInstance.close(vm.agents);
         }
         
-//        vm.loadAll = function(){
-//        	
-//        }
-        
         loadAll();
 
         function loadAll() {
-            Agencies.query(function(result) {
+            Agent.queryAll(function(result) {
                 vm.agencies = result;
                 vm.searchQuery = null;
                 console.log(vm.agencies);

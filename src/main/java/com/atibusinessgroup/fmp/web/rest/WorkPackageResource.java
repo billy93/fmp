@@ -51,6 +51,7 @@ import com.atibusinessgroup.fmp.domain.WorkPackage.Attachment;
 import com.atibusinessgroup.fmp.domain.WorkPackage.Comment;
 import com.atibusinessgroup.fmp.domain.WorkPackage.FilingInstruction;
 import com.atibusinessgroup.fmp.domain.WorkPackage.ImportFares;
+import com.atibusinessgroup.fmp.domain.WorkPackage.MarketRules;
 import com.atibusinessgroup.fmp.domain.WorkPackageFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageHistory;
 import com.atibusinessgroup.fmp.domain.WorkPackageHistoryData;
@@ -80,11 +81,14 @@ import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import io.github.jhipster.web.util.ResponseUtil;
@@ -178,6 +182,8 @@ public class WorkPackageResource {
         	workPackage.getDiscountFareSheet().clear();
         }
         
+        workPackage.setStatus(Status.NEW);
+        
         WorkPackage result = workPackageService.save(workPackage);
         
 //        WorkPackageHistory history = new WorkPackageHistory();
@@ -207,7 +213,9 @@ public class WorkPackageResource {
         wp.setReuseFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
-        wp.setReviewLevel("LSO");
+        
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
+        wp.setReviewLevel(user.getReviewLevels().get(0));
         wp.setComment(null);
         wp.setInterofficeComment(null);
         wp.setFilingInstructionData(null);     
@@ -215,6 +223,11 @@ public class WorkPackageResource {
         wp.setCreatedDate(null);
         wp.setLastModifiedBy(null);
         wp.setLastModifiedDate(null);
+        wp.setFilingInstruction(false);
+        if(!workPackage.getReuseReplaceConfig().isAttachment()) {
+        	wp.setAttachment(false);
+        	wp.getAttachmentData().clear();
+        }
         WorkPackage result = workPackageService.save(wp);
         
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
@@ -238,11 +251,17 @@ public class WorkPackageResource {
         wp.setReplaceFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
-        wp.setReviewLevel("LSO");
+        
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
+        wp.setReviewLevel(user.getReviewLevels().get(0));
         wp.setCreatedBy(null);
         wp.setCreatedDate(null);
         wp.setLastModifiedBy(null);
         wp.setLastModifiedDate(null);
+        if(!workPackage.getReuseReplaceConfig().isAttachment()) {
+        	wp.setAttachment(false);
+        	wp.getAttachmentData().clear();
+        }
         WorkPackage result = workPackageService.save(wp);
         
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
@@ -422,6 +441,7 @@ public class WorkPackageResource {
             }			
             
             workPackage = workPackageService.findOne(workPackage.getId());
+//            workPackage.getFareSheet().get(0).getFares().addAll(workPackageFares);
             workPackage.getFareSheet().get(0).getFares().addAll(workPackageFares);
             workPackage = workPackageService.save(workPackage);
 		} catch (IOException e) {
@@ -554,6 +574,7 @@ public class WorkPackageResource {
                 workPackageFares.add(wpFare);
             }			
             
+            workPackage.getMarketFareSheet().get(0).getFares().addAll(workPackageFares);
             workPackage = workPackageService.save(workPackage);
             
 //            for(WorkPackageFare wpf : workPackageFares) {
@@ -807,10 +828,12 @@ public class WorkPackageResource {
         cell = row.createCell(29);
         cell.setCellValue("Ratesheet Comment");
         cell = row.createCell(30);
-        cell.setCellValue("Deal Code");
-        cell = row.createCell(31);
+//        cell.setCellValue("Deal Code");
+//        cell = row.createCell(31);
         
-        List<WorkPackageFare> fares = workPackageFareService.findAllByWorkPackage(workPackage.getId());
+//        List<WorkPackageFare> fares = workPackageFareService.findAllByWorkPackage(workPackage.getId());
+        WorkPackage wp = workPackageService.findOne(workPackage.getId());
+        List<WorkPackageFare> fares = wp.getFareSheet().get(0).getFares();
         for(int i=0; i<fares.size(); i++) {
         		XSSFRow rows = spreadsheet.createRow(i+2);
             cell = rows.createCell(1);
@@ -820,11 +843,17 @@ public class WorkPackageResource {
             cell = rows.createCell(3);
             cell.setCellValue(fares.get(i).getAction());
             cell = rows.createCell(4);
-            cell.setCellValue(fares.get(i).getTarno());
+            if(fares.get(i).getTariffNumber() != null) {
+            	cell.setCellValue(fares.get(i).getTariffNumber().getTarNo());
+            }
             cell = rows.createCell(5);
-            cell.setCellValue(fares.get(i).getTarcd());
+            if(fares.get(i).getTariffNumber() != null) {
+            	cell.setCellValue(fares.get(i).getTariffNumber().getTarCd());
+            }
             cell = rows.createCell(6);
-            cell.setCellValue(fares.get(i).getGlobal());
+            if(fares.get(i).getTariffNumber() != null) {
+            	cell.setCellValue(fares.get(i).getTariffNumber().getGlobal());
+            }
             cell = rows.createCell(7);
             cell.setCellValue(fares.get(i).getOrigin());
             cell = rows.createCell(8);
@@ -871,8 +900,8 @@ public class WorkPackageResource {
             cell.setCellValue(fares.get(i).getTravelCompleteIndicator());
             cell = rows.createCell(29);
             cell.setCellValue(fares.get(i).getRatesheetComment());
-            cell = rows.createCell(30);
-            cell.setCellValue(fares.get(i).getDealCode());
+//            cell = rows.createCell(30);
+//            cell.setCellValue(fares.get(i).getDealCode());
         }
         
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -1223,13 +1252,6 @@ public class WorkPackageResource {
             return createWorkPackage(workPackage);
         }
         
-    	if(workPackage.getStatus() == null) {
-    		workPackage.setStatus(Status.NEW);
-    	}
-    	else if(workPackage.getStatus() == Status.PENDING) {
-			workPackage.setStatus(Status.REVIEWING);
-		}
-	    
     	if(workPackage.getWpid() == null) {
     		isWorkPackageNew = true;
     		
@@ -1402,20 +1424,37 @@ public class WorkPackageResource {
     		}
     	}
     	
-    	if(workPackage.getSaleDate() != null) {
+    	if(workPackage.getMarketRulesData() != null) {
+    		for(MarketRules marketRules : workPackage.getMarketRulesData()) {
+    			if(marketRules.getUsername() == null && marketRules.getCreatedTime() == null) {
+    				marketRules.setUsername(SecurityUtils.getCurrentUserLogin().get());
+    				marketRules.setCreatedTime(ZonedDateTime.now());
+    			}
+    		}
+    	}
+    	if(workPackage.getSaleDate() != null && (workPackage.getStatus() != Status.DISTRIBUTED)) {
 	    	Sort sort = new Sort(Direction.ASC, "priority");
 	    	List<Priority> priorities = priorityRepository.findAll(sort);
+	    	
+	    	boolean found = false;
+	    	
 	    	for(Priority p : priorities) {
 	    		if(p.getType().contentEquals("DAYS")) {
 	    			long val = zonedDateTimeDifference(ZonedDateTime.now(), workPackage.getSaleDate(), ChronoUnit.DAYS);
 	    			long value = p.getValue();
-	    			log.debug("VAL : {}", val);
+
 	    			if(val <= value) {    				
 	    				workPackage.setPriority(p.getName());
-	    				log.debug("PRIORITY : {}", p.getName());
+	    				found = true;
 	    				break;
 	    			}
 	    		}
+	    	}
+	    	
+	    	if(!found) {
+		    	Sort sortDesc = new Sort(Direction.DESC, "priority");
+		    	List<Priority> prioritiesDesc = priorityRepository.findAll(sortDesc);
+		    	workPackage.setPriority(prioritiesDesc.get(0).getName());
 	    	}
     	}
     	workPackage = workPackageService.save(workPackage);
@@ -1498,13 +1537,22 @@ public class WorkPackageResource {
     		public boolean readyToRelease;
     		public boolean pending;
     		public boolean completed;
-    		public boolean withdraw;
-    		
-			public boolean isWithdraw() {
-				return withdraw;
+    		public boolean withdrawn;
+        	public boolean replace;
+        	public boolean reuse;
+        	public boolean referred;
+        	
+			public boolean isReferred() {
+				return referred;
 			}
-			public void setWithdraw(boolean withdraw) {
-				this.withdraw = withdraw;
+			public void setReferred(boolean referred) {
+				this.referred = referred;
+			}
+			public boolean isWithdrawn() {
+				return withdrawn;
+			}
+			public void setWithdrawn(boolean withdrawn) {
+				this.withdrawn = withdrawn;
 			}
 			public boolean isNewStatus() {
 				return newStatus;
@@ -1541,6 +1589,18 @@ public class WorkPackageResource {
 			}
 			public void setCompleted(boolean completed) {
 				this.completed = completed;
+			}
+			public boolean isReplace() {
+				return replace;
+			}
+			public void setReplace(boolean replace) {
+				this.replace = replace;
+			}
+			public boolean isReuse() {
+				return reuse;
+			}
+			public void setReuse(boolean reuse) {
+				this.reuse = reuse;
 			}
     		
     		
@@ -1652,7 +1712,10 @@ public class WorkPackageResource {
     public ResponseEntity<WorkPackage> getWorkPackage(@PathVariable String id) {
         log.debug("REST request to get WorkPackage : {}", id);
         WorkPackage workPackage = workPackageService.findOne(id);
-        
+        if(workPackage.getStatus() == Status.PENDING || workPackage.getStatus() == Status.REFERRED) {
+        	workPackage.setStatus(Status.REVIEWING);
+        	workPackageService.save(workPackage);
+        }
 //        List<WorkPackageFare> fares = workPackageFareService.findAllByWorkPackageAndFareType(workPackage.getId(), null);
 //        log.debug("REST request to set WorkPackageFARES : {}", fares.size());
 //        workPackage.setFares(fares);
@@ -1786,7 +1849,7 @@ public class WorkPackageResource {
         }
         
         WorkPackage result = workPackageService.findOne(workPackage.getId());
-        result.setStatus(Status.WITHDRAW);
+        result.setStatus(Status.WITHDRAWN);
         workPackageService.save(result);
         /*
         saveHistoryData(workPackage);
@@ -1944,10 +2007,6 @@ public class WorkPackageResource {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
         
-        saveHistoryData(workPackage);
-        
-        //updateWorkPackage(workPackage);
-        
         WorkPackage result = workPackageService.findOne(workPackage.getId());
         String reviewLevel = result.getReviewLevel();
         
@@ -1959,6 +2018,7 @@ public class WorkPackageResource {
      		result.setReviewLevel(result.getSidewayReviewLevel());
     		result.setSidewayReviewLevel(null);
         }
+        result.setStatus(Status.PENDING);
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -2007,9 +2067,20 @@ public class WorkPackageResource {
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
         
-        String[] emailData = new String[workPackage.getApproveConfig().getEmail().size()];
-        for (int i=0;i<workPackage.getApproveConfig().getEmail().size();i++) {
-        	emailData[i] = workPackage.getApproveConfig().getEmail().get(i);
+        String[] emailData = null;
+        if(workPackage.getApproveConfig().getEmail() != null && workPackage.getApproveConfig().getEmail().size() > 0) {
+	        emailData = new String[workPackage.getApproveConfig().getEmail().size()];
+	        for (int i=0;i<workPackage.getApproveConfig().getEmail().size();i++) {
+	        	emailData[i] = workPackage.getApproveConfig().getEmail().get(i);
+	        }
+        }
+        
+        String[] emailDataCc = null;
+        if(workPackage.getApproveConfig().getCcEmail() != null && workPackage.getApproveConfig().getCcEmail().size() > 0) {
+	        emailDataCc = new String[workPackage.getApproveConfig().getCcEmail().size()];        
+	        for (int i=0;i<workPackage.getApproveConfig().getCcEmail().size();i++) {
+	        	emailDataCc[i] = workPackage.getApproveConfig().getCcEmail().get(i);
+	        }
         }
         User u = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
         
@@ -2042,7 +2113,12 @@ public class WorkPackageResource {
         	content += "</tbody>";  
         content += "</table>";
         
-        mailService.sendEmailWithAttachment(u.getEmail(), emailData, "Approve", content, true, true, workPackage.getAttachmentData());
+        if(workPackage.getApproveConfig().attachment) {
+        	mailService.sendEmailWithAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true, workPackage.getAttachmentData());
+        }
+        else {
+        	mailService.sendEmailWithoutAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true);
+        }
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -2071,6 +2147,7 @@ public class WorkPackageResource {
 
         result.setReviewLevel(result.getDistributionReviewLevel());
         result.setDistributionReviewLevel(null);
+        result.setStatus(Status.REFERRED);
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -2304,6 +2381,38 @@ public class WorkPackageResource {
             .body(workPackage);
     }
 
+    public static class WorkPackageRateSheet {
+    	private WorkPackage wp;
+    	private String ruleText;
+    	private String index;
+    	private String[] header;
+    	
+		public WorkPackage getWp() {
+			return wp;
+		}
+		public void setWp(WorkPackage wp) {
+			this.wp = wp;
+		}
+		public String getRuleText() {
+			return ruleText;
+		}
+		public void setRuleText(String ruleText) {
+			this.ruleText = ruleText;
+		}
+		public String getIndex() {
+			return index;
+		}
+		public void setIndex(String index) {
+			this.index = index;
+		}
+		public String[] getHeader() {
+			return header;
+		}
+		public void setHeader(String[] header) {
+			this.header = header;
+		}
+		
+    }
 	/**
      * POST  /work-packages/export-fares : Export work package fares
      *
@@ -2316,71 +2425,16 @@ public class WorkPackageResource {
      */
     @PostMapping("/work-packages/export-ratesheet")
     @Timed
-    public ResponseEntity<Attachment> exportRateSheetWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException, MalformedURLException, IOException, DocumentException {
-    	log.debug("REST request to save exportFares : {}", workPackage);
-
-        /*XSSFWorkbook workbook = new XSSFWorkbook(); 
-        XSSFSheet spreadsheet = workbook.createSheet("Workorder Fare");
+    public ResponseEntity<Attachment> exportRateSheetWorkPackage(@RequestBody WorkPackageRateSheet wprs) throws URISyntaxException, MalformedURLException, IOException, DocumentException {
+    	log.debug("REST request to save exportFares : {}{}", wprs.getWp(), wprs.getRuleText());
         
-        XSSFRow row = spreadsheet.createRow(1);
-        XSSFCell cell;
-
-        cell = row.createCell(1);
-        cell.setCellValue("Status");
-        cell = row.createCell(2);
-        cell.setCellValue("Carrier");
-        cell = row.createCell(3);
-        cell.setCellValue("Action");
-        cell = row.createCell(4);
-        cell.setCellValue("Tar No");
-        cell = row.createCell(5);
-        cell.setCellValue("Tar Cd");
-        cell = row.createCell(6);
-        cell.setCellValue("Global");
-        cell = row.createCell(7);
-        cell.setCellValue("Origin");
-        cell = row.createCell(8);
-        cell.setCellValue("Dest");
-        cell = row.createCell(9);
-        cell.setCellValue("Fare Cls");
-        cell = row.createCell(10);
-        cell.setCellValue("Bkg Cls");
-        cell = row.createCell(11);
-        cell.setCellValue("Cabin");
-        cell = row.createCell(12);
-
-        
-        List<WorkPackageFare> fares = workPackageFareService.findAllByWorkPackage(workPackage.getId());
-        for(int i=0; i<fares.size(); i++) {
-        		XSSFRow rows = spreadsheet.createRow(i+2);
-            cell = rows.createCell(1);
-            cell.setCellValue(fares.get(i).getStatus());
-            cell = rows.createCell(2);
-            cell.setCellValue(fares.get(i).getCarrier());
-            cell = rows.createCell(3);
-            cell.setCellValue(fares.get(i).getAction());
-            cell = rows.createCell(4);
-            cell.setCellValue(fares.get(i).getTarno());
-            cell = rows.createCell(5);
-            cell.setCellValue(fares.get(i).getTarcd());
-            cell = rows.createCell(6);
-            cell.setCellValue(fares.get(i).getGlobal());
-            cell = rows.createCell(7);
-            cell.setCellValue(fares.get(i).getOrigin());
-            cell = rows.createCell(8);
-            cell.setCellValue(fares.get(i).getDestination());
-            cell = rows.createCell(9);
-            cell.setCellValue(fares.get(i).getFareBasis());
-            cell = rows.createCell(10);
-            cell.setCellValue(fares.get(i).getBookingClass());
-            cell = rows.createCell(11);
-            cell.setCellValue(fares.get(i).getCabin());
-            cell = rows.createCell(12);
-            cell.setCellValue(fares.get(i).getTypeOfJourney());
-
-        }*/
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
+        WorkPackage workPackage = wprs.getWp();
+        String ruleText = wprs.getRuleText();
+        int idx = Integer.parseInt(wprs.getIndex());
+        String[] header = wprs.getHeader();
+        
     	Document document = new Document(PageSize.A4,30,30,60,0);
 //    	PdfWriter.getInstance(document, new FileOutputStream("iTextHelloWorld.pdf"));
     	PdfWriter.getInstance(document, output);
@@ -2402,21 +2456,21 @@ public class WorkPackageResource {
         Paragraph p6 = new Paragraph();
 
         p1.setFont(font);               
-        p1.add(content[0]);        
+        p1.add(content[0]+" "+ workPackage.getWpid());        
     	document.add(p1);
     	document.add(new Chunk(" "));
         p2.setFont(font);               
-        p2.add(content[1]);
+        p2.add(content[1]+" "+workPackage.getName());
         document.add(p2);
     	document.add(new Chunk(" "));
 
         p3.setFont(font);               
-        p3.add(content[2]);
+        p3.add(content[2]+" "+workPackage.getFareSheet().get(idx).getSpecifiedFaresName());
     	document.add(p3);
     	document.add(new Chunk(" "));
 
         p4.setFont(font);               
-        p4.add(content[3]);
+        p4.add(content[3]+" "+workPackage.getRatesheetComment());
     	document.add(p4);
     	document.add(new Chunk(" "));
 
@@ -2425,8 +2479,86 @@ public class WorkPackageResource {
     	document.add(p5);
     	document.add(new Chunk(" "));
     	
+    	Integer count = header.length;
+    	PdfPTable table;
+    	if(count < 25) {
+    		table = new PdfPTable(count);
+    	}else {
+    		table = new PdfPTable(24);
+    	}
+		table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
+		for(int l=0; l<header.length ;l++) {
+			table.addCell(header[l]);
+		}
+		table.setHeaderRows(1);
+        
+	  
+        PdfPCell[] cells = table.getRow(0).getCells(); 
+        	for (int j=0;j<cells.length;j++){
+        			cells[j].setBackgroundColor(BaseColor.GRAY);
+        	}
+        	log.debug("cek : "+workPackage.getFareSheet().size());
+        	for(int l=0; l<workPackage.getFareSheet().get(idx).getFares().size();l++) {
+        		for (int i=0;i<header.length;i++){
+            		if(header[i].contentEquals("Status")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getStatus());
+            		}else if(header[i].contentEquals("Carrier")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getCarrier());
+            		}else if(header[i].contentEquals("Action")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getAction());
+            		}else if(header[i].contentEquals("Tar No")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getTariffNumber().getTarNo());
+            		}else if(header[i].contentEquals("Tar Cd")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getTariffNumber().getTarCd());
+            		}else if(header[i].contentEquals("Global")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getTariffNumber().getGlobal());
+            		}else if(header[i].contentEquals("Origin")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getOrigin());
+            		}else if(header[i].contentEquals("Destination")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getDestination());
+            		}else if(header[i].contentEquals("Fare Class")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getFareBasis());
+            		}else if(header[i].contentEquals("Booking Class")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getBookingClass());
+            		}else if(header[i].contentEquals("Cabin")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getCabin());
+            		}else if(header[i].contentEquals("OW/RT")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getCabin());
+            		}else if(header[i].contentEquals("Footnote")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getFootnote1());
+            		}else if(header[i].contentEquals("Routing No")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getRtgno());
+            		}else if(header[i].contentEquals("Rule No")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getRuleno());
+            		}else if(header[i].contentEquals("Currency")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getCurrency());
+            		}else if(header[i].contentEquals("Base Amt")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getBaseRuleNo());
+            		}else if(header[i].contentEquals("Amt Different")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getBaseRuleNo());
+            		}else if(header[i].contentEquals("% Amt Different")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getBaseRuleNo());
+            		}else if(header[i].contentEquals("YQYR")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getYqyr());
+            		}else if(header[i].contentEquals("Cat 12")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getCat12());
+            		}else if(header[i].contentEquals("TFC")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getTfc());
+            		}else if(header[i].contentEquals("Target AIF")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getAif());
+            		}else if(header[i].contentEquals("Itinerary")) {
+            			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getItinerary());
+            		}
+            		else {
+            			table.addCell("-");
+            		}
+            	}        		
+        	}
+        	
+          document.add(table);
+	
         p6.setFont(font);               
-        p6.add(content[5]);
+        p6.add(content[5]+" "+ruleText);
     	document.add(p6);
     	document.add(new Chunk(" "));
 

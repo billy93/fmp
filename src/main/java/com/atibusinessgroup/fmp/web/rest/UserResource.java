@@ -239,6 +239,21 @@ public class UserResource {
 		log.debug("REST request to get User : {}", login);
 		return ResponseUtil.wrapOrNotFound(userService.getUserWithAuthoritiesByLogin(login).map(UserDTO::new));
 	}
+	
+	/**
+	 * GET /users/getBusinessArea/:login : get the "login" user.
+	 *
+	 * @param login
+	 *            the login of the user to find
+	 * @return the ResponseEntity with status 200 (OK) and with body the "login"
+	 *         user, or with status 404 (Not Found)
+	 */
+	@GetMapping("/users/getBusinessArea")
+	@Timed
+	public ResponseEntity<List<String>> getUserBusinessArea() {
+		log.debug("REST request to get User Business Area : {}");
+		return ResponseUtil.wrapOrNotFound(userService.getUserBusinessAreaByLogin(SecurityUtils.getCurrentUserLogin().get()));
+	}
 
 	/**
 	 * DELETE /users/:login : delete the "login" User.
@@ -479,8 +494,8 @@ public class UserResource {
 
 			if (value1 != null && value2 != null) {
 				if (!Objects.equals(value1, value2)) {
-					log.debug("value1 : "+value1+" value2 : "+value2+" Field : "+field.getName());
-					values.add(field.getName());
+					log.debug("Field : "+field.getName()+" => Old value : "+value1+" New Value : "+value2);
+					values.add(field.getName()+" : Old value = "+value1+" New Value = "+value2);
 				}
 			} else if (value1 == null && value2 == null) {
 			} else {

@@ -25,12 +25,19 @@
 									</div>
 									<div class="form-group">
 										<label for="field_businessArea">Business Area</label>
-										<input 
+										 <select class="form-control" 
+										 name="businessArea"
+										 ng-class="{'must-fill': !editForm.businessArea.$valid}"							      				
+										 ng-model="vm.workPackage.businessArea" 
+					       						ng-options="key as value for (key , value) in vm.businessArea"
+					       						ng-required="vm.isRequired('businessArea')" 
+					       						ng-class="{'must-fill': editForm.businessArea.$error.required}" ></select>
+										<!-- <input 
 										ng-class="{'must-fill': editForm.businessArea.$error.required}" 
 										    name="businessArea"
 											ng-required="vm.isRequired('businessArea')" 
                    								autocomplete="off" type="text" name="businessArea" ng-model="vm.workPackage.businessArea" class="form-control" value="JKT"
-            									uib-typeahead="o as o.name for o in vm.businessAreas | filter:{name:$viewValue} | limitTo:5">
+            									uib-typeahead="o as o.name for o in vm.businessAreas | filter:{name:$viewValue} | limitTo:5"> -->
 									</div>
 									<div class="form-group">
 										<label for="field_priority">Priority</label>
@@ -163,7 +170,7 @@
 									<div class="box-body bbgrey">
 										<div class="form-group">
 											<label>Comment</label>
-											<div text-angular="text-angular" name="comment" ng-model="vm.commentString" ta-disabled='disabled'/>
+											<div text-angular="text-angular" name="comment" ng-model="vm.commentString" ta-paste="vm.stripFormat($html)" ta-toolbar="[['h1','h2','h3'],['bold','italics','underline'],['redo','undo'],['ul','ol'],['justifyLeft','justifyCenter','justifyRight','justifyFull']]"/>
 											<!-- <textarea ng-model="vm.commentString" class="form-control" rows="3" placeholder="Enter ..." id="comment-area"></textarea> -->
 										</div>
 										<div class="clearfix">
@@ -189,7 +196,7 @@
 									<div class="box-body bbgrey">
 										<div class="form-group">
 											<label>Inter Office</label>
-											<div text-angular="text-angular" name="interOffice" ng-model="vm.ioString" ta-disabled="vm.isFieldDisable('ioComment')" />
+											<div text-angular="text-angular" name="interOffice" ng-model="vm.ioString" ta-disabled="vm.isFieldDisable('ioComment')" ta-paste="vm.stripFormat($html)" ta-toolbar="[['h1','h2','h3'],['bold','italics','underline'],['redo','undo'],['ul','ol'],['justifyLeft','justifyCenter','justifyRight','justifyFull']]" />
 										</div>
 										<div class="clearfix">
 											<div class="pull-right">
@@ -316,11 +323,11 @@
 											<div class="form-group">
 												<label>Approval Reference</label>
 												<input type="text" name="approvalReference{{$index}}" class="form-control" 
-												ng-class="{'must-fill': editForm.editFormATPCO.approvalReference{{$index}}.$error.required && fare.action != 'Canceled'}"
+												ng-class="{'must-fill': editForm.editFormATPCO.approvalReference{{$index}}.$error.required}"
 									            ng-model="workPackageSheet.approvalReference"
 												ng-disabled="!vm.isEditable('approvalReference')"
 												ng-required="vm.isRequired('approvalReference')">
-												<button ng-click="vm.generateTourCode()">Generate Tour Code</button>
+												<button ng-click="vm.generateTourCode()" ng-disabled="!vm.isEditable('approvalReference')">Generate Tour Code</button>
 											</div>
 										</div>
 									</div>
@@ -364,24 +371,9 @@
 															<ul class="dropdown-menu" role="menu">
 															    <li>
 															    	<a ng-click="vm.clearSelection()">Clear Selection</a>
-															    </li>
-															    <li>
-															    	<a href="#">Fill Down</a>
-															    </li>
-															    <li>
-															    	<a href="#">Search/Replace</a>
-															    </li>
+															    </li>															   
 															    <li>
 															    	<a ng-click="vm.addFares()">Add Rows</a>
-															    </li>
-															    <li>
-															    	<a href="#">Delete Selected Rows</a>
-															    </li>
-															    <li>
-															    	<a href="#">Duplicate Selected Rows</a>
-															    </li>
-															    <li>
-															    	<a href="#">Copy Selected Rows</a>
 															    </li>
 															    <li>
 															    	<a href="#">Paste</a>
@@ -392,10 +384,10 @@
 															</ul>
 														</div>													
 														<button class="btn btn-default small btn-secondary" ngf-select  ngf-change="vm.importFare($file)">Import</button>
-														<button class="btn btn-default small btn-secondary">Export</button>
-														<!-- <button class="btn btn-default small btn-secondary">Publish</button>
-														<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalAgent">Agents</button>
-														<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalRatesheet">Rate Sheet</button> -->
+														<button class="btn btn-default small btn-secondary" ng-click="vm.exportFares()">Export</button>
+														<!-- <button class="btn btn-default small btn-secondary">Publish</button> -->
+														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.agent()">Agents</button>
+														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()">Rate Sheet</button> 
 													</div>
 												</div>																						
 											</div>
@@ -640,18 +632,12 @@
 									                			</span>
 								               			</td>
 								               			<td>
-								               				<span ng-if="vm.isEditable( 'ruleno')">
-									                				<input type="text" class="form-control" name="ruleno{{$parent.$index}}{{$index}}" id="field_bookingClass"
-									                				ng-disabled="!vm.isEditable('ruleno')"
-									                				ng-click="$event.stopPropagation()"
-									                				ng-required="vm.isRequired('ruleno')" 
-									                				ng-class="{'must-fill': editForm.editFormATPCO.ruleno{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
-														            ng-model="fare.ruleno"/>
-									                			
-									                			</span>
-									                			<span ng-if="!vm.isEditable( 'ruleno')">
-									                				{{fare.ruleno}}
-									                			</span>
+						               						<input type="text" class="form-control" name="ruleno{{$parent.$index}}{{$index}}" id="field_bookingClass"
+							                				ng-disabled="!vm.isEditable('ruleno')"
+							                				ng-click="$event.stopPropagation()"
+							                				ng-required="vm.isRequired('ruleno')" 
+							                				ng-class="{'must-fill': editForm.editFormATPCO.ruleno{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+												            ng-model="fare.ruleno"/>
 								               			</td>
 								               			<td>
 									               			<ui-select ng-model="fare.currency" theme="select2" class="form-control"
@@ -672,31 +658,14 @@
 																      </small>
 																    </ui-select-choices>
 																  </ui-select>
-								               				<!-- <span ng-if="vm.isEditable( 'currency')">
-								                				<input type="text" class="form-control" name="currency{{$parent.$index}}{{$index}}" id="field_currency{{$parent.$index}}{{$index}}"
-								                				ng-disabled="!vm.isEditable('currency')"
-								                				ng-required="vm.isRequired('currency')" 
-								                				ng-class="{'must-fill': editForm.editFormATPCO.currency{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
-													            ng-model="fare.currency"/>
-								                			
-								                			</span> -->
-								                			<span ng-if="!vm.isEditable( 'currency')">
-								                				{{fare.currency}}
-								                			</span>
 								               			</td>
 								               			<td>
-								               				<span ng-if="vm.isEditable( 'amount')">
-									                				<input type="text" class="form-control" name="amount{{$parent.$index}}{{$index}}" id="field_bookingClass"
-									                				ng-disabled="!vm.isEditable('amount')"
-									                				ng-click="$event.stopPropagation()"
-									                				ng-required="vm.isRequired('amount')" 
-									                				ng-class="{'must-fill': editForm.editFormATPCO.amount{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
-														            ng-model="fare.amount"/>
-									                			
-									                			</span>
-									                			<span ng-if="!vm.isEditable( 'amount')">
-									                				{{fare.amount}}
-									                			</span>
+						               						<input type="text" class="form-control" name="amount{{$parent.$index}}{{$index}}" id="field_bookingClass"
+							                				ng-disabled="!vm.isEditable('amount')"
+							                				ng-click="$event.stopPropagation()"
+							                				ng-required="vm.isRequired('amount')" 
+							                				ng-class="{'must-fill': editForm.editFormATPCO.amount{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+												            ng-model="fare.amount"/>									                												                			
 								               			</td>
 								               			<!--  
 								               			<td>{{fare.recommendedAmount - fare.amount}}</td>
@@ -738,111 +707,74 @@
 									                			</span>
 									               		</td> 
 								               			<td>
-								               					<span ng-if="vm.isEditable( 'travelStartDate')">
-									                				<input type="text" class="form-control" name="travelStartDate{{$parent.$index}}{{$index}}" id="field_travelStartDate"
-									                				ng-disabled="!vm.isEditable('travelStartDate')"
-									                				ng-click="$event.stopPropagation()"
-									                				ng-required="vm.isRequired('travelStartDate')"
-									                				ng-class="{'must-fill': editForm.editFormATPCO.travelStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
-														            ng-model="fare.travelStart"
-														            datetime-picker="{{dateformat}}"/>
-																	
-																</span>
-									                			<span ng-if="!vm.isEditable( 'travelStartDate')">
-									               				{{fare.travelStart}}
-									                			</span>
-								               			
+						               						<input type="text" class="form-control" name="travelStartDate{{$parent.$index}}{{$index}}" id="field_travelStartDate"
+							                				ng-disabled="!vm.isEditable('travelStartDate')"
+							                				ng-click="$event.stopPropagation()"
+							                				ng-required="vm.isRequired('travelStartDate')"
+							                				ng-class="{'must-fill': editForm.editFormATPCO.travelStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+												            ng-model="fare.travelStart"
+												            datetime-picker="{{dateformat}}"/>
 								               			</td>
 								               			<td>
-								               				<span ng-if="vm.isEditable( 'travelEndDate')">
-									                				<input type="text" class="form-control" name="travelEndDate{{$parent.$index}}{{$index}}" id="field_travelEndDate"
-									                				ng-disabled="!vm.isEditable('travelEndDate')"
-									                				ng-click="$event.stopPropagation()"
-									                				ng-required="vm.isRequired('travelEndDate')"
-									                				ng-class="{'must-fill': editForm.editFormATPCO.travelEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
-														            ng-model="fare.travelEnd"/>
-									                			
-									                			</span>
-									                			<span ng-if="!vm.isEditable( 'travelEndDate')">
-									               				{{fare.travelEnd}}
-									                			</span>
+						               						<input type="text" class="form-control" name="travelEndDate{{$parent.$index}}{{$index}}" id="field_travelEndDate"
+							                				ng-disabled="!vm.isEditable('travelEndDate')"
+							                				ng-click="$event.stopPropagation()"
+							                				ng-required="vm.isRequired('travelEndDate')"
+							                				ng-class="{'must-fill': editForm.editFormATPCO.travelEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+												            ng-model="fare.travelEnd"/>									                			
 								               			</td>
 								               			<td>
-								               				<span ng-if="vm.isEditable( 'saleStartDate')">
-									                				<input type="text" class="form-control" name="saleStartDate{{$parent.$index}}{{$index}}" id="field_saleStartDate"
-									                				ng-disabled="!vm.isEditable('saleStartDate')"	
-									                				ng-click="$event.stopPropagation()"								                				
-									                				ng-required="vm.isRequired('saleStartDate')"
-										                    		ng-class="{'must-fill': editForm.editFormATPCO.saleStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
-														            ng-model="fare.saleStart"/>
-									                			
-									                			</span>
-									                			<span ng-if="!vm.isEditable( 'saleStartDate')">
-									               				{{fare.saleStart}}
-									                			</span>
+								               				
+															<input id="field_createdDate" 
+																type="text"
+																name="saleStartDate{{$parent.$index}}{{$index}}" id="field_saleStartDate"
+								                				ng-disabled="!vm.isEditable('saleStartDate')"	
+								                				ng-click="$event.stopPropagation()"								                				
+								                				ng-required="vm.isRequired('saleStartDate')"
+									                    		ng-class="{'must-fill': editForm.editFormATPCO.saleStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+													            ng-model="fare.saleStart" 
+													            datetime-picker="{{dateformat}}" 
+													            is-open="vm.datePickerOpenStatus.createdDate">
+															<span class="input-group-addon disabled">
+																<i ng-disabled="true" ng-click="vm.openCalendar('createdDate')" class="fa fa-calendar"></i>
+															</span>
 								               			</td>
 								               			<td>
-								               					<span ng-if="vm.isEditable( 'saleEndDate')">
-									                				<input type="text" class="form-control" name="saleEndDate{{$parent.$index}}{{$index}}" id="field_saleEndDate"
-									                				ng-disabled="!vm.isEditable('saleEndDate')"
-									                				ng-click="$event.stopPropagation()"
-									                				ng-required="vm.isRequired('saleEndDate')"
-										                    		ng-class="{'must-fill': editForm.editFormATPCO.saleEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
-														            ng-model="fare.saleEnd"/>
-									                			
-									                			</span>
-									                			<span ng-if="!vm.isEditable( 'saleEndDate')">
-									               				{{fare.saleEnd}}
-									                			</span>
+						               						<input type="text" class="form-control" name="saleEndDate{{$parent.$index}}{{$index}}" id="field_saleEndDate"
+							                				ng-disabled="!vm.isEditable('saleEndDate')"
+							                				ng-click="$event.stopPropagation()"
+							                				ng-required="vm.isRequired('saleEndDate')"
+								                    		ng-class="{'must-fill': editForm.editFormATPCO.saleEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+												            ng-model="fare.saleEnd"/>									                			
 								               			</td>
 								               			<td>
 								               				<input type="text" class="form-control" name="comment{{$parent.$index}}{{$index}}" id="field_comment"
 										                    		ng-model="fare.comment"/>
 								               			</td>
 								               			<td>
-								               				<span ng-if="vm.isEditable( 'travelComplete')">
-								                				<input type="text" class="form-control" name="travelComplete{{$parent.$index}}{{$index}}" id="field_travelComplete"
-								                				ng-disabled="!vm.isEditable('travelComplete')"
-								                				ng-click="$event.stopPropagation()"
-								                				ng-required="vm.isRequired('travelComplete')"
-									                    		ng-class="{'must-fill': editForm.editFormATPCO.travelComplete{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            														                    		
-								                				ng-model="fare.travelComplete"/>
-									                			
-									                			</span>
-									                			<span ng-if="!vm.isEditable( 'travelComplete')">
-									               				{{fare.travelComplete}}
-									                			</span>
+							               					<input type="text" class="form-control" name="travelComplete{{$parent.$index}}{{$index}}" id="field_travelComplete"
+							                				ng-disabled="!vm.isEditable('travelComplete')"
+							                				ng-click="$event.stopPropagation()"
+							                				ng-required="vm.isRequired('travelComplete')"
+								                    		ng-class="{'must-fill': editForm.editFormATPCO.travelComplete{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            														                    		
+							                				ng-model="fare.travelComplete"/>
 								               			</td>
 								               			<td>
-								               				<span ng-if="vm.isEditable( 'travelIndicator')">
-									                				<select class="form-control" name="travelIndicator{{$parent.$index}}{{$index}}" id="field_travelIndicator"
-									                				ng-disabled="!vm.isEditable('travelIndicator')"
-									                				ng-click="$event.stopPropagation()"
-									                				ng-required="vm.isRequired('travelIndicator')"
-										                    		ng-class="{'must-fill': !editForm.editFormATPCO.travelIndicator{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"	
-										                    		
-										                    		ng-options="key as value for (key , value) in vm.travelCompleteIndicator"
-													             																		            														                    		
-									                				ng-model="fare.travelCompleteIndicator"></select>
-									                			
-									                			</span>
-									                			<span ng-if="!vm.isEditable( 'travelIndicator')">
-									               				{{fare.travelCompleteIndicator}}
-									                			</span>
+						               						<select class="form-control" name="travelIndicator{{$parent.$index}}{{$index}}" id="field_travelIndicator"
+							                				ng-disabled="!vm.isEditable('travelIndicator')"
+							                				ng-click="$event.stopPropagation()"
+							                				ng-required="vm.isRequired('travelIndicator')"
+								                    		ng-class="{'must-fill': !editForm.editFormATPCO.travelIndicator{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"									                    		
+								                    		ng-options="key as value for (key , value) in vm.travelCompleteIndicator"											             																		            														                    		
+							                				ng-model="fare.travelCompleteIndicator"></select>
 								               			</td>
 								               			<td>
-								               				<span ng-if="vm.isEditable( 'ratesheetComment')">
-									                				<input type="text" class="form-control" name="ratesheetComment{{$parent.$index}}{{$index}}" id="field_ratesheetComment"
-									                				ng-disabled="!vm.isEditable('ratesheetComment')"
-									                				ng-click="$event.stopPropagation()"
-									                				ng-required="vm.isRequired('ratesheetComment')"
-										                    		ng-class="{'must-fill': editForm.editFormATPCO.ratesheetComment{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            														                    		
-										                    		ng-model="fare.ratesheetComment"/>
-									                			
-									                			</span>
-									                			<span ng-if="!vm.isEditable( 'ratesheetComment')">
-									               				{{fare.ratesheetComment}}
-									                			</span>
+							                				<input type="text" class="form-control" name="ratesheetComment{{$parent.$index}}{{$index}}" id="field_ratesheetComment"
+							                				ng-disabled="!vm.isEditable('ratesheetComment')"
+							                				ng-click="$event.stopPropagation()"
+							                				ng-required="vm.isRequired('ratesheetComment')"
+								                    		ng-class="{'must-fill': editForm.editFormATPCO.ratesheetComment{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            														                    		
+								                    		ng-model="fare.ratesheetComment"/>
 								               			</td>
 													</tr>
 													<tr class="datatable-action{{$index}}" ng-show="vm.faresActionButton[$index]">
@@ -906,25 +838,10 @@
 															<button class="btn btn-default small btn-secondary">Edit <i class="fa fa-caret-down"></i></button>
 															<ul class="dropdown-menu" role="menu">
 															    <li>
-															    	<a href="#">Clear Selection</a>
-															    </li>
-															    <li>
-															    	<a href="#">Fill Down</a>
-															    </li>
-															    <li>
-															    	<a href="#">Search/Replace</a>
+															    	<a ng-click="vm.clearSelection()">Clear Selection</a>
 															    </li>
 															    <li>
 															    	<a ng-click="vm.addAddon()">Add Rows</a>
-															    </li>
-															    <li>
-															    	<a href="#">Delete Selected Rows</a>
-															    </li>
-															    <li>
-															    	<a href="#">Duplicate Selected Rows</a>
-															    </li>
-															    <li>
-															    	<a href="#">Copy Selected Rows</a>
 															    </li>
 															    <li>
 															    	<a href="#">Paste</a>
@@ -969,7 +886,6 @@
 									               		<th>Travel End</th>		               		
 									               		<th>Sale Start</th>
 									               		<th>Sale End</th>	
-									               		<th>EffDt</th>	 
 									               		<th>Comment</th>	               		
 									               		<th>Travel Complete</th>	               		
 									               		<th>Travel Complete Indicator</th>		
@@ -1008,7 +924,7 @@
 														<td>
 															<ui-select ng-model="fare.tariffNumber" name="addonFareTarno{{$parent.$index}}{{$index}}" theme="select2" title="Tarif Number"  class="form-control"
 															 	ng-click="$event.stopPropagation()"
-																ng-required="vm.isRequired('addonFareTarno') && fare.action != 'Canceled'"  
+																ng-required="vm.isRequired('addonFareTarno')"  
 																ng-disabled="!vm.isEditable('addonFareTarno')"
 																ng-class="{'must-fill': editForm.editFormATPCO.addonFareTarno{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
 									                    	>
@@ -1045,9 +961,9 @@
 														</td>
 														<td>{{fare.tariffNumber.global}}</td>
 														<td>
-															<ui-select ng-model="fare.origin" theme="select2" ng-disabled="vm.disabled" class="form-control"
+															<ui-select ng-model="fare.origin" theme="select2" class="form-control"
 															 ng-click="$event.stopPropagation()"
-															name="origin{{$parent.$index}}{{$index}}"
+															name="addonFareOrigin{{$parent.$index}}{{$index}}"
 															ng-required="vm.isRequired('addonFareOrigin') && fare.action != 'Canceled'"  
 															ng-disabled="!vm.isEditable('addonFareOrigin')"
 															
@@ -1067,7 +983,7 @@
 															  </ui-select>
 														</td>
 														<td>
-															<ui-select ng-model="fare.destination" theme="select2" ng-disabled="vm.disabled" class="form-control"
+															<ui-select ng-model="fare.destination" theme="select2"class="form-control"
 															 ng-click="$event.stopPropagation()"
 															name="addonFareDestination{{$parent.$index}}{{$index}}"
 															ng-required="vm.isRequired('addonFareDestination') && fare.action != 'Canceled'"  
@@ -1183,7 +1099,6 @@
 										                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareSaleEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 														            ng-model="fare.saleEnd"/>
 								               			</td>
-								               			<td></td>
 								               			<td>
 								               				<input type="text" class="form-control" name="addonFareComment{{$parent.$index}}{{$index}}" id="field_comment"
 										                    		ng-model="fare.comment"/>
@@ -1476,8 +1391,8 @@
 						                  <input type="text" name="discountFaresName{{$index}}" class="form-control"
 						                  ng-class="{'must-fill': editForm.editFormDiscount.discountFaresName{{$index}}.$error.required}"
 						                      ng-model="workPackageSheet.discountFaresName" 
-						                      ng-required="vm.checkRequiredField('discountFaresName')"  
-						                      ng-disabled="vm.isFieldDisable('discountFaresName')">
+						                      ng-required="vm.isRequired('discountFaresName')"  
+						                      ng-disabled="!vm.isEditable('discountFaresName')">
 						                </div>
 						              </div>
 						              <div class="pull-left w50 two-column">
@@ -1486,8 +1401,9 @@
 						                  <input type="text" name="discountApprovalReference{{$index}}" class="form-control" 
 						                  ng-class="{'must-fill': editForm.editFormDiscount.discountApprovalReference{{$index}}.$error.required}"
 						                        ng-model="workPackageSheet.discountApprovalReference"
-						                  ng-disabled="vm.isFieldDisable('discountApprovalReference')"
-						                  ng-required="vm.checkRequiredField('discountApprovalReference')">
+						                  ng-disabled="!vm.isEditable('discountApprovalReference')"
+						                  ng-required="vm.isRequired('discountApprovalReference')">
+						                  <button ng-click="vm.generateTourCode()">Generate Tour Code</button>
 						                </div>
 						              </div>
 						            </div>
@@ -1499,8 +1415,8 @@
 						                  <input type="text" name="discountAccountCode{{$index}}" class="form-control" 
 						                  ng-class="{'must-fill': editForm.editFormDiscount.discountAccountCode{{$index}}.$error.required}"
 						                        ng-model="workPackageSheet.accountCode"
-						                  ng-disabled="vm.isFieldDisable('discountAccountCode')"
-						                  ng-required="vm.checkRequiredField('discountAccountCode')">
+						                  ng-disabled="!vm.isEditable('discountAccountCode')"
+						                  ng-required="vm.isRequired('discountAccountCode')">
 						                </div>
 						              </div>
 						              <div class="pull-left w50 two-column">
@@ -1521,8 +1437,8 @@
 						                  <select class="form-control" name="discountFareType{{$index}}" ng-model="workPackageSheet.discountFareType" 
 						                        ng-class="{'must-fill': !editForm.editFormDiscount.discountFareType{{$index}}.$valid}"
 						                        ng-options="key as value for (key , value) in vm.fareType"
-						                        ng-required="vm.checkRequiredField('discountFareType')"
-						                        ng-disabled="vm.isFieldDisable('discountFareType')"></select>										      				
+						                        ng-required="vm.isRequired('discountFareType')"
+						                        ng-disabled="!vm.isEditable('discountFareType')"></select>										      				
 						                </div>
 						              </div>
 						              <div class="pull-left w50 two-column">
@@ -1542,25 +1458,10 @@
 						                        <button class="btn btn-default small btn-secondary">Edit <i class="fa fa-caret-down"></i></button>
 						                        <ul class="dropdown-menu" role="menu">
 						                            <li>
-						                              <a href="#">Clear Selection</a>
-						                            </li>
-						                            <li>
-						                              <a href="#">Fill Down</a>
-						                            </li>
-						                            <li>
-						                              <a href="#">Search/Replace</a>
+						                              <a  ng-click="vm.clearSelection()">Clear Selection</a>
 						                            </li>
 						                            <li>
 						                              <a ng-click="vm.addDiscountFares()">Add Rows</a>
-						                            </li>
-						                            <li>
-						                              <a href="#">Delete Selected Rows</a>
-						                            </li>
-						                            <li>
-						                              <a href="#">Duplicate Selected Rows</a>
-						                            </li>
-						                            <li>
-						                              <a href="#">Copy Selected Rows</a>
 						                            </li>
 						                            <li>
 						                              <a href="#">Paste</a>
@@ -1581,7 +1482,7 @@
 						                <table class="table table-stripped table-bordered datatable">
 						                  <thead>
 						                    <tr role="row">
-						                      <th>No</th>
+						                     		 <th>No</th>
 						                              <th>Status</th>
 						                              <th>FBR Tariff Code</th>
 						                              <th>Loc 1 Type</th>		                	
@@ -1597,7 +1498,7 @@
 						                              <th>Specified Amount</th>
 						                              <th>PAX Type</th>
 						                              <th>Fare Type</th>
-						                            <th>Tkt Code</th>
+						                              <th>Tkt Code</th>
 						                              <th>Tkt Des</th>
 						                              <th>Base Fare OW/RT</th>
 						                              <th>Global</th>
@@ -1619,26 +1520,20 @@
 						                    <tr role="row" class="datatable-row" ng-click="vm.rowTableClick($event, $index, 'discount')">
 						                      <td>{{$index+1}}</td>
 						                      <td>
-						                        <span ng-if="vm.isFieldEditable( 'discountStatus')">
-						                          <select class="form-control inside-table" name="status{{$parent.$index}}{{$index}}" ng-model="fare.status" id="field_status" 
+						                        <select class="form-control inside-table" name="status{{$parent.$index}}{{$index}}" ng-model="fare.status" id="field_status" 
 						                            ng-class="{'must-fill': !editForm.editFormDiscount.status{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"												         		
-						                                  ng-disabled="vm.isFieldDisable('discountStatus')"
+						                                  ng-disabled="!vm.isEditable('discountStatus')"
 						                                  ng-click="$event.stopPropagation()"
-						                                  ng-required="vm.checkRequiredField('discountStatus')"
+						                                  ng-required="vm.isRequired('discountStatus')"
 						                                  ng-options="key as value for (key , value) in vm.status">
-						                          </select>																				
-						                        </span>
-						                        <span class="inside-table" ng-if="!vm.isFieldEditable( 'discountStatus')">
-						                                {{fare.status}}
-						                              </span>
+						                          </select>		
 						                      </td>
 						                      <td>
-						                        <span ng-if="vm.isFieldEditable( 'discountTariffCode')">
-						                          <ui-select ng-model="fare.tarcd" theme="select2" class="form-control"
+						                        <ui-select ng-model="fare.tarcd" theme="select2" class="form-control"
 						                            ng-click="$event.stopPropagation()"
 						                            name="tarcd{{$parent.$index}}{{$index}}"
-						                            ng-required="vm.checkRequiredField('discountTariffCode') && fare.action != 'Canceled'"  
-						                            ng-disabled="vm.isFieldDisable('discountTariffCode')"
+						                            ng-required="vm.isRequired('discountTariffCode') && fare.action != 'Canceled'"  
+						                            ng-disabled="!vm.isEditable('discountTariffCode')"
 						                            ng-class="{'must-fill': editForm.editFormDiscount.tarcd{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}">
 						                            <ui-select-match placeholder="TarCd">{{$select.selected.tarCd == null ? $select.selected.value.tarCd : $select.selected.tarCd}}</ui-select-match>
 						                            <ui-select-choices style="min-width:300px" repeat="value.value as (key, value) in vm.tariffNumber | filter: { value: { tarCd: $select.search }}">
@@ -1650,412 +1545,259 @@
 						                                  </small>
 						                              </ui-select-choices>
 						                          </ui-select>
-						                        </span>
-						                        <span class="inside-table" ng-if="!vm.isFieldEditable( 'discountTariffCode')">
-						                                {{fare.tarcd}}
-						                              </span>
 						                      </td>																
 						                      <td>
-						                        <span ng-if="vm.isFieldEditable( 'discountLoc1Type')">
-						                                  <select class="form-control" 
+						                       	 <select class="form-control" 
 						                                   name="discountLoc1Type{{$parent.$index}}{{$index}}"
 						                                   ng-click="$event.stopPropagation()"
-						                                   ng-required="vm.checkRequiredField('discountLoc1Type')"
+						                                   ng-required="vm.isRequired('discountLoc1Type')"
 						                                   ng-class="{'must-fill': !editForm.editFormDiscount.discountLoc1Type{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"																			            
 						                                   ng-model="fare.loc1Type" id="field_discountLoc1Type"
-						                                   ng-disabled="vm.isFieldDisable('discountLoc1Type')"
+						                                   ng-disabled="!vm.isEditable('discountLoc1Type')"
 						                                   ng-options="key as value for (key , value) in vm.locationType"></select>
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountLoc1Type')">
-						                                  {{fare.loc1Type}}
-						                                </span>
 						                      </td>
 						                      <td>
-						                        <span ng-if="vm.isFieldEditable( 'discountLoc1')">
-						                                  <input type="text" class="form-control" name="discountLoc1{{$parent.$index}}{{$index}}" id="field_origin" 
-						                                    ng-disabled="vm.isFieldDisable('discountLoc1')"
+						                       		<input type="text" class="form-control" name="discountLoc1{{$parent.$index}}{{$index}}" id="field_origin" 
+						                                    ng-disabled="!vm.isEditable('discountLoc1')"
 						                                    ng-click="$event.stopPropagation()"
-						                                    ng-required="vm.checkRequiredField('discountLoc1') && fare.action != 'Canceled'"  
+						                                    ng-required="vm.isRequired('discountLoc1') && fare.action != 'Canceled'"  
 						                                    ng-class="{'must-fill': !editForm.editFormDiscount.discountLoc1{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"		
 						                                      ng-model="fare.loc1"/>
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountLoc1')">
-						                                  {{fare.loc1}}
-						                                </span>
 						                      </td>
 						                      <td>
-						                        <span ng-if="vm.isFieldEditable( 'discountLoc2Type')">
-						                                  <select class="form-control" 
+						                         <select class="form-control" 
 						                                   name="discountLoc2Type{{$parent.$index}}{{$index}}"
-						                                   ng-required="vm.checkRequiredField('discountLoc1Type')"
+						                                   ng-required="vm.isRequired('discountLoc1Type')"
 						                                   ng-class="{'must-fill': !editForm.editFormDiscount.discountLoc2Type{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"																			            
 						                                   ng-model="fare.loc2Type" id="field_discountLoc2Type"
-						                                   ng-disabled="vm.isFieldDisable('discountLoc2Type')"
+						                                   ng-disabled="!vm.isEditable('discountLoc2Type')"
 						                                   ng-click="$event.stopPropagation()"
 						                                   ng-options="key as value for (key , value) in vm.locationType"></select>
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountLoc2Type')">
-						                                  {{fare.loc2Type}}
-						                                </span>
 						                      </td>
 						                      <td>
-						                        <span ng-if="vm.isFieldEditable( 'discountLoc2')">
-						                                  <input type="text" class="form-control" name="discountLoc2{{$parent.$index}}{{$index}}" id="field_origin" 
-						                                    ng-disabled="vm.isFieldDisable('discountLoc2')"
+						                         <input type="text" class="form-control" name="discountLoc2{{$parent.$index}}{{$index}}" id="field_origin" 
+						                                    ng-disabled="!vm.isEditable('discountLoc2')"
 						                                    ng-click="$event.stopPropagation()"
-						                                    ng-required="vm.checkRequiredField('discountLoc2') && fare.action != 'Canceled'"  
+						                                    ng-required="vm.isRequired('discountLoc2') && fare.action != 'Canceled'"  
 						                                    ng-class="{'must-fill': !editForm.editFormDiscount.discountLoc2{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"		
 						                                      ng-model="fare.loc2"/>
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountLoc2')">
-						                                  {{fare.loc2}}
-						                                </span>
 						                      </td>
 						                      <td>
-						                        <span ng-if="vm.isFieldEditable( 'discountBaseFareBasis')">
-						                                  <input type="text" class="form-control" name="discountBaseFareBasis{{$parent.$index}}{{$index}}" id="field_origin" 
-						                                    ng-disabled="vm.isFieldDisable('discountBaseFareBasis')"
+						                         <input type="text" class="form-control" name="discountBaseFareBasis{{$parent.$index}}{{$index}}" id="field_origin" 
+						                                    ng-disabled="!vm.isEditable('discountBaseFareBasis')"
 						                                    ng-click="$event.stopPropagation()"
-						                                    ng-required="vm.checkRequiredField('discountBaseFareBasis') && fare.action != 'Canceled'"  
+						                                    ng-required="vm.isRequired('discountBaseFareBasis') && fare.action != 'Canceled'"  
 						                                    ng-class="{'must-fill': !editForm.editFormDiscount.discountBaseFareBasis{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"		
 						                                      ng-model="fare.baseFareBasis"/>
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountBaseFareBasis')">
-						                                  {{fare.baseFareBasis}}
-						                                </span>
 						                      </td>
 						                      <td>
-						                        <span ng-if="vm.isFieldEditable( 'discountBaseRuleno')">
-						                                  <input type="text" class="form-control" name="discountBaseRuleno{{$parent.$index}}{{$index}}" id="field_origin" 
-						                                    ng-disabled="vm.isFieldDisable('discountBaseRuleno')"
+						                        <input type="text" class="form-control" name="discountBaseRuleno{{$parent.$index}}{{$index}}" id="field_origin" 
+						                                    ng-disabled="!vm.isEditable('discountBaseRuleno')"
 						                                    ng-click="$event.stopPropagation()"
-						                                    ng-required="vm.checkRequiredField('discountBaseRuleno') && fare.action != 'Canceled'"  
+						                                    ng-required="vm.isRequired('discountBaseRuleno') && fare.action != 'Canceled'"  
 						                                    ng-class="{'must-fill': !editForm.editFormDiscount.discountBaseRuleno{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"		
 						                                      ng-model="fare.baseRuleNo"/>
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountBaseRuleno')">
-						                                  {{fare.baseRuleNo}}
-						                                </span>
 						                      </td>
 						                      <td>
-						                        <span ng-if="vm.isFieldEditable( 'discountBaseTariffCode')">
-						                                  <input type="text" class="form-control" name="discountBaseTariffCode{{$parent.$index}}{{$index}}" id="field_farebasis"
-						                                    ng-disabled="vm.isFieldDisable('discountBaseTariffCode')"
+						                         <input type="text" class="form-control" name="discountBaseTariffCode{{$parent.$index}}{{$index}}" id="field_farebasis"
+						                                    ng-disabled="!vm.isEditable('discountBaseTariffCode')"
 						                                    ng-click="$event.stopPropagation()"
-						                                    ng-required="vm.checkRequiredField('discountBaseTariffCode') && fare.action != 'Canceled'" 
+						                                    ng-required="vm.isRequired('discountBaseTariffCode') && fare.action != 'Canceled'" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountBaseTariffCode{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-						                                      ng-model="fare.tarcd"/>												                			
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountBaseTariffCode')">
-						                                {{fare.tarcd}}
-						                                </span>
+						                                      ng-model="fare.tarcd"/>	
 						                      </td>	
 						                      <td>
-						                        <span ng-if="vm.isFieldEditable( 'discountCalcType')">
-						                                  <select class="form-control" 
+						                         <select class="form-control" 
 						                                 name="discountCalcType{{$parent.$index}}{{$index}}"
-						                                 ng-required="vm.checkRequiredField('discountCalcType')"
+						                                 ng-required="vm.isRequired('discountCalcType')"
 						                                 ng-class="{'must-fill': !editForm.editFormDiscount.discountCalcType{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"																			            
 						                                 ng-model="fare.calcType" id="discountCalcType"
 						                                 ng-click="$event.stopPropagation()"
-						                                 ng-disabled="vm.isFieldDisable('discountCalcType')"
+						                                 ng-disabled="!vm.isEditable('discountCalcType')"
 						                                 ng-options="key as value for (key , value) in vm.calculationType"></select>
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountCalcType')">
-						                                  {{fare.calcType}}
-						                                </span>
 						                      </td>
 						                      <td>
-						                              <span ng-if="vm.isFieldEditable( 'discountPercentageOfBaseFare')">
-						                                  <input type="number" class="form-control" name="discountPercentageOfBaseFare{{$parent.$index}}{{$index}}"
-						                                    ng-disabled="vm.isFieldDisable('discountPercentageOfBaseFare')"
+						                           <input type="number" class="form-control" name="discountPercentageOfBaseFare{{$parent.$index}}{{$index}}"
+						                                    ng-disabled="!vm.isEditable('discountPercentageOfBaseFare')"
 						                                    ng-click="$event.stopPropagation()"
-						                                    ng-required="vm.checkRequiredField('discountPercentageOfBaseFare') && fare.action != 'Canceled'" 
+						                                    ng-required="vm.isRequired('discountPercentageOfBaseFare') && fare.action != 'Canceled'" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountPercentageOfBaseFare{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-						                                      ng-model="fare.percentBaseFare"/>												                			
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountPercentageOfBaseFare')">
-						                                  {{fare.percentBaseFare}}
-						                                </span>
+						                                      ng-model="fare.percentBaseFare"/>	
 						                            </td>
 						                            <td>
-						                              <span ng-if="vm.isFieldEditable( 'currency')">
-						                                <ui-select ng-model="fare.currency" theme="select2" ng-disabled="vm.disabled" class="form-control"
-						                            ng-click="$event.stopPropagation()"
-						                            name="currency{{$parent.$index}}{{$index}}"
-						                            ng-required="vm.checkRequiredField('currency') && fare.action != 'Canceled'"  
-						                            ng-disabled="vm.isFieldDisable('currency')"
-						                            ng-class="{'must-fill': editForm.editFormDiscount.currency{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}">
-						                                <ui-select-match placeholder="Currency">{{$select.selected.value.currencyCode}}</ui-select-match>
-						                              <ui-select-choices style="min-width:300px" repeat="value.value.currencyCode as (key, value) in vm.currencies | filter: { value: { currencyCode: $select.search }}">
-						                                  <div ng-bind-html="value.value.currencyCode | highlight: $select.search"></div>
-						                                    <small>
-						                                      Currency Code : {{value.value.currencyCode}}
-						                                      Currency Name : {{value.value.currencyName}}
-						                                    </small>
-						                                </ui-select-choices>
-						                          </ui-select>
-						                        </span>
-						                                <span ng-if="!vm.isFieldEditable( 'currency')">
-						                                  {{fare.currency}}
-						                                </span>
+						                         		<ui-select ng-model="fare.currency" theme="select2" class="form-control"
+								                            ng-click="$event.stopPropagation()"
+								                            name="discountFareCurrency{{$parent.$index}}{{$index}}"
+								                            ng-required="vm.isRequired('discountFareCurrency') && fare.action != 'Canceled'"  
+								                            ng-disabled="!vm.isEditable('discountFareCurrency')"
+								                            ng-class="{'must-fill': editForm.editFormDiscount.discountFareCurrency{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}">
+								                                <ui-select-match placeholder="Currency">{{$select.selected.value.currencyCode}}</ui-select-match>
+								                              <ui-select-choices style="min-width:300px" repeat="value.value.currencyCode as (key, value) in vm.currencies | filter: { value: { currencyCode: $select.search }}">
+								                                  <div ng-bind-html="value.value.currencyCode | highlight: $select.search"></div>
+								                                    <small>
+								                                      Currency Code : {{value.value.currencyCode}}
+								                                      Currency Name : {{value.value.currencyName}}
+								                                    </small>
+								                                </ui-select-choices>
+								                          </ui-select>
 						                            </td>
 						                              <td>
-						                                <span ng-if="vm.isFieldEditable( 'discountSpecifiedAmount')">
-						                                  <input type="number" class="form-control" name="discountSpecifiedAmount{{$parent.$index}}{{$index}}"
-						                                    ng-disabled="vm.isFieldDisable('discountSpecifiedAmount')"
+						                                <input type="number" class="form-control" name="discountSpecifiedAmount{{$parent.$index}}{{$index}}"
+						                                    ng-disabled="!vm.isEditable('discountSpecifiedAmount')"
 						                                    ng-click="$event.stopPropagation()"
 						                                    ng-required="vm.checkRequiredField('discountSpecifiedAmount') && fare.action != 'Canceled'" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountSpecifiedAmount{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-						                                      ng-model="fare.discountSpecifiedAmount"/>												                			
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountSpecifiedAmount')">
-						                                  {{fare.discountSpecifiedAmount}}
-						                                </span>
+						                                      ng-model="fare.discountSpecifiedAmount"/>	
 						                              </td>
 						                              <td>
-						                                <span ng-if="vm.isFieldEditable( 'discountPaxType')">
-						                                  <input type="number" class="form-control" name="discountPaxType{{$parent.$index}}{{$index}}"
-						                                    ng-disabled="vm.isFieldDisable('discountPaxType')"
+						                                <input type="number" class="form-control" name="discountPaxType{{$parent.$index}}{{$index}}"
+						                                    ng-disabled="!vm.isEditable('discountPaxType')"
 						                                    ng-click="$event.stopPropagation()"
-						                                    ng-required="vm.checkRequiredField('discountPaxType') && fare.action != 'Canceled'" 
+						                                    ng-required="vm.isRequired('discountPaxType') && fare.action != 'Canceled'" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountPaxType{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-						                                      ng-model="fare.passengerType"/>												                			
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountPaxType')">
-						                                  {{fare.passengerType}}
-						                                </span>
+						                                      ng-model="fare.passengerType"/>			
 						                              </td>
 						                              <td>
-						                                <span ng-if="vm.isFieldEditable( 'discountFareFareType')">
-						                                  <select class="form-control" 
+						                                <select class="form-control" 
 						                                   name="discountFareFareType{{$parent.$index}}{{$index}}"
-						                                   ng-required="vm.checkRequiredField('discountFareFareType')"
+						                                   ng-required="vm.isRequired('discountFareFareType')"
 						                                   ng-class="{'must-fill': !editForm.editFormDiscount.discountFareFareType{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"																			            
 						                                   ng-model="fare.fareType"
-						                                   ng-disabled="vm.isFieldDisable('discountFareFareType')"
+						                                   ng-disabled="!vm.isEditable('discountFareFareType')"
 						                                   ng-click="$event.stopPropagation()"
 						                                   ng-options="key as value for (key , value) in vm.fareType"></select>
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountFareFareType')">
-						                                  {{fare.fareType}}
-						                                </span>
 						                              </td>
 						                              <td>
-						                                <span ng-if="vm.isFieldEditable( 'discountTicketCode')">
-						                                  <input type="text" class="form-control" name="discountTicketCode{{$parent.$index}}{{$index}}"
-						                                    ng-disabled="vm.isFieldDisable('discountTicketCode')"
+						                                <input type="text" class="form-control" name="discountTicketCode{{$parent.$index}}{{$index}}"
+						                                    ng-disabled="!vm.isEditable('discountTicketCode')"
 						                                    ng-click="$event.stopPropagation()"
-						                                    ng-required="vm.checkRequiredField('discountTicketCode') && fare.action != 'Canceled'" 
+						                                    ng-required="vm.isRequired('discountTicketCode') && fare.action != 'Canceled'" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountTicketCode{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-						                                      ng-model="fare.ticketCode"/>												                			
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountTicketCode')">
-						                                  {{fare.ticketCode}}
-						                                </span>
+						                                      ng-model="fare.ticketCode"/>				
 						                              </td>
 						                              <td>
-						                                <span ng-if="vm.isFieldEditable( 'discountTicketDesignator')">
-						                                  <input type="text" class="form-control" name="discountTicketDesignator{{$parent.$index}}{{$index}}"
-						                                    ng-disabled="vm.isFieldDisable('discountTicketDesignator')"
+						                                <input type="text" class="form-control" name="discountTicketDesignator{{$parent.$index}}{{$index}}"
+						                                    ng-disabled="!vm.isEditable('discountTicketDesignator')"
 						                                    ng-click="$event.stopPropagation()"
-						                                    ng-required="vm.checkRequiredField('discountTicketDesignator') && fare.action != 'Canceled'" 
+						                                    ng-required="vm.isRequired('discountTicketDesignator') && fare.action != 'Canceled'" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountTicketDesignator{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-						                                      ng-model="fare.ticketDesignator"/>												                			
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountTicketDesignator')">
-						                                  {{fare.ticketDesignator}}
-						                                </span>
+						                                      ng-model="fare.ticketDesignator"/>	
 						                              </td>
 						                              <td>
-						                                <span ng-if="vm.isFieldEditable( 'discountBaseFareOwRt')">
-						                                  <select class="form-control" 
+						                                <select class="form-control" 
 						                                 name="discountBaseFareOwRt{{$parent.$index}}{{$index}}"
-						                                 ng-required="vm.checkRequiredField('discountBaseFareOwRt')"
+						                                 ng-required="vm.isRequired('discountBaseFareOwRt')"
 						                                 ng-class="{'must-fill': !editForm.editFormDiscount.discountBaseFareOwRt{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"																			            
 						                                 ng-model="fare.typeOfJourney"
 						                                 ng-click="$event.stopPropagation()"
-						                                 ng-disabled="vm.isFieldDisable('discountBaseFareOwRt')"
+						                                 ng-disabled="!vm.isEditable('discountBaseFareOwRt')"
 						                                 ng-options="key as value for (key , value) in vm.typeOfJourney"></select>
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountBaseFareOwRt')">
-						                                  <span ng-if="fare.typeOfJourney == 'One Way'">1</span>
-						                                <span ng-if="fare.typeOfJourney == 'Return'">2</span>
-						                                <span ng-if="fare.typeOfJourney == 'One Way Only'">3</span>
-						                                </span>
 						                              </td> 
 						                              <td>
-						                                <span ng-if="vm.isFieldEditable( 'discountGlobal')">
-						                                  <input type="text" class="form-control" name="discountGlobal{{$parent.$index}}{{$index}}"
-						                                    ng-disabled="vm.isFieldDisable('discountGlobal')"
+						                                <input type="text" class="form-control" name="discountGlobal{{$parent.$index}}{{$index}}"
+						                                    ng-disabled="!vm.isEditable('discountGlobal')"
 						                                    ng-click="$event.stopPropagation()"
-						                                    ng-required="vm.checkRequiredField('discountGlobal') && fare.action != 'Canceled'" 
+						                                    ng-required="vm.isRequired('discountGlobal') && fare.action != 'Canceled'" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountGlobal{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-						                                      ng-model="fare.global"/>												                			
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountGlobal')">
-						                                  {{fare.global}}
-						                                </span>
+						                                      ng-model="fare.global"/>		
 						                              </td>
 						                              <td>
-						                                <span ng-if="vm.isFieldEditable( 'discountRtgno')">
-						                                  <input type="text" class="form-control" name="discountRtgno{{$parent.$index}}{{$index}}"
-						                                    ng-disabled="vm.isFieldDisable('discountRtgno')"
+						                                <input type="text" class="form-control" name="discountRtgno{{$parent.$index}}{{$index}}"
+						                                    ng-disabled="!vm.isEditable('discountRtgno')"
 						                                    ng-click="$event.stopPropagation()"
-						                                    ng-required="vm.checkRequiredField('discountRtgno') && fare.action != 'Canceled'" 
+						                                    ng-required="vm.isRequired('discountRtgno') && fare.action != 'Canceled'" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountRtgno{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-						                                      ng-model="fare.rtgno"/>												                			
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountRtgno')">
-						                                  {{fare.rtgno}}
-						                                </span>
+						                                      ng-model="fare.rtgno"/>		
 						                              </td>
 						                              <td>
-						                                <span ng-if="vm.isFieldEditable( 'discountRtgnoTarno')">
-						                                  <input type="text" class="form-control" name="discountRtgnoTarno{{$parent.$index}}{{$index}}"
-						                                    ng-disabled="vm.isFieldDisable('discountRtgnoTarno')"
+						                                 <input type="text" class="form-control" name="discountRtgnoTarno{{$parent.$index}}{{$index}}"
+						                                    ng-disabled="!vm.isEditable('discountRtgnoTarno')"
 						                                    ng-click="$event.stopPropagation()"
-						                                    ng-required="vm.checkRequiredField('discountRtgnoTarno') && fare.action != 'Canceled'" 
+						                                    ng-required="vm.isRequired('discountRtgnoTarno') && fare.action != 'Canceled'" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountRtgnoTarno{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-						                                      ng-model="fare.rtgnoTarno"/>												                			
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountRtgnoTarno')">
-						                                  {{fare.rtgnoTarno}}
-						                                </span>
+						                                      ng-model="fare.rtgnoTarno"/>		
 						                              </td>
 						                              <td>
-						                                <span ng-if="vm.isFieldEditable( 'discountNewFarebasis')">
-						                                  <input type="text" class="form-control" name="discountNewFarebasis{{$parent.$index}}{{$index}}"
-						                                    ng-disabled="vm.isFieldDisable('discountNewFarebasis')"
+						                                <input type="text" class="form-control" name="discountNewFarebasis{{$parent.$index}}{{$index}}"
+						                                    ng-disabled="!vm.isEditable('discountNewFarebasis')"
 						                                    ng-click="$event.stopPropagation()"
-						                                    ng-required="vm.checkRequiredField('discountNewFarebasis') && fare.action != 'Canceled'" 
+						                                    ng-required="vm.isRequired('discountNewFarebasis') && fare.action != 'Canceled'" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountNewFarebasis{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-						                                      ng-model="fare.newFareBasis"/>												                			
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountNewFarebasis')">
-						                                  {{fare.newFareBasis}}
-						                                </span>
+						                                      ng-model="fare.newFareBasis"/>	
 						                              </td>
 						                              <td>
-						                                <span ng-if="vm.isFieldEditable( 'discountNewBaseFareOwRt')">
-						                                  <select class="form-control" 
+						                                <select class="form-control" 
 						                                 name="discountNewBaseFareOwRt{{$parent.$index}}{{$index}}"
-						                                 ng-required="vm.checkRequiredField('discountNewBaseFareOwRt')"
+						                                 ng-required="vm.isRequired('discountNewBaseFareOwRt')"
 						                                 ng-class="{'must-fill': !editForm.editFormDiscount.discountNewBaseFareOwRt{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"																			            
 						                                 ng-model="fare.newTypeOfJourney"
 						                                 ng-click="$event.stopPropagation()"
-						                                 ng-disabled="vm.isFieldDisable('discountNewBaseFareOwRt')"
+						                                 ng-disabled="!vm.isEditable('discountNewBaseFareOwRt')"
 						                                 ng-options="key as value for (key , value) in vm.typeOfJourney"></select>
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountNewBaseFareOwRt')">
-						                                  <span ng-if="fare.newTypeOfJourney == 'One Way'">1</span>
-						                                <span ng-if="fare.newTypeOfJourney == 'Return'">2</span>
-						                                <span ng-if="fare.newTypeOfJourney == 'One Way Only'">3</span>
-						                                </span>
 						                              </td>
 						                              <td>
-						                                <span ng-if="vm.isFieldEditable( 'discountNewBookingCode')">
-						                                  <input type="text" class="form-control" name="discountNewBookingCode{{$parent.$index}}{{$index}}"
-						                                    ng-disabled="vm.isFieldDisable('discountNewBookingCode')"
+						                                <input type="text" class="form-control" name="discountNewBookingCode{{$parent.$index}}{{$index}}"
+						                                    ng-disabled="!vm.isEditable('discountNewBookingCode')"
 						                                    ng-click="$event.stopPropagation()"
-						                                    ng-required="vm.checkRequiredField('discountNewBookingCode') && fare.action != 'Canceled'" 
+						                                    ng-required="vm.isRequired('discountNewBookingCode') && fare.action != 'Canceled'" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountNewBookingCode{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-						                                      ng-model="fare.newBookingCode"/>												                			
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountNewBookingCode')">
-						                                  {{fare.newBookingCode}}
-						                                </span>
+						                                      ng-model="fare.newBookingCode"/>
 						                              </td>
 						                              <td>
-						                                <span ng-if="vm.isFieldEditable( 'discountTravelStartDate')">
-						                                  <input type="text" class="form-control" name="discountTravelStartDate{{$parent.$index}}{{$index}}"
-						                                    ng-disabled="vm.isFieldDisable('discountTravelStartDate')"
+						                                <input type="text" class="form-control" name="discountTravelStartDate{{$parent.$index}}{{$index}}"
+						                                    ng-disabled="!vm.isEditable('discountTravelStartDate')"
 						                                    ng-click="$event.stopPropagation()"
-						                                    ng-required="vm.checkRequiredField('discountTravelStartDate') && fare.action != 'Canceled'" 
+						                                    ng-required="vm.isRequired('discountTravelStartDate') && fare.action != 'Canceled'" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountTravelStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-						                                      ng-model="fare.discountTravelStartDate"/>												                			
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountTravelStartDate')">
-						                                  {{fare.discountTravelStartDate}}
-						                                </span>
+						                                      ng-model="fare.discountTravelStartDate"/>	
 						                              </td>
 						                              <td>
-						                                <span ng-if="vm.isFieldEditable( 'discountTravelEndDate')">
-						                                  <input type="text" class="form-control" name="discountTravelEndDate{{$parent.$index}}{{$index}}"
-						                                    ng-disabled="vm.isFieldDisable('discountTravelEndDate')"
+						                                <input type="text" class="form-control" name="discountTravelEndDate{{$parent.$index}}{{$index}}"
+						                                    ng-disabled="!vm.isEditable('discountTravelEndDate')"
 						                                    ng-click="$event.stopPropagation()"
-						                                    ng-required="vm.checkRequiredField('discountTravelEndDate') && fare.action != 'Canceled'" 
+						                                    ng-required="vm.isRequired('discountTravelEndDate') && fare.action != 'Canceled'" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountTravelEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-						                                      ng-model="fare.travelEnd"/>												                			
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountTravelEndDate')">
-						                                  {{fare.travelEnd}}
-						                                </span>
+						                                      ng-model="fare.travelEnd"/>	
 						                              </td>
 						                              <td>
-						                                <span ng-if="vm.isFieldEditable( 'discountSaleStartDate')">
-						                                  <input type="text" class="form-control" name="discountSaleStartDate{{$parent.$index}}{{$index}}"
-						                                    ng-disabled="vm.isFieldDisable('discountSaleStartDate')"
+						                                <input type="text" class="form-control" name="discountSaleStartDate{{$parent.$index}}{{$index}}"
+						                                    ng-disabled="!vm.isEditable('discountSaleStartDate')"
 						                                    ng-click="$event.stopPropagation()"
-						                                    ng-required="vm.checkRequiredField('discountSaleStartDate') && fare.action != 'Canceled'" 
+						                                    ng-required="vm.isRequired('discountSaleStartDate') && fare.action != 'Canceled'" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountSaleStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-						                                      ng-model="fare.saleStart"/>												                			
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountSaleStartDate')">
-						                                  {{fare.saleStart}}
-						                                </span>
+						                                      ng-model="fare.saleStart"/>				
 						                              </td>
 						                              <td>
-						                                <span ng-if="vm.isFieldEditable( 'discountSaleEndDate')">
-						                                  <input type="text" class="form-control" name="discountSaleEndDate{{$parent.$index}}{{$index}}"
-						                                    ng-disabled="vm.isFieldDisable('discountSaleEndDate')"
+						                                <input type="text" class="form-control" name="discountSaleEndDate{{$parent.$index}}{{$index}}"
+						                                    ng-disabled="!vm.isEditable('discountSaleEndDate')"
 						                                    ng-click="$event.stopPropagation()"
-						                                    ng-required="vm.checkRequiredField('discountSaleEndDate') && fare.action != 'Canceled'" 
+						                                    ng-required="vm.isRequired('discountSaleEndDate') && fare.action != 'Canceled'" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountSaleEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-						                                      ng-model="fare.saleEnd"/>												                			
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountSaleEndDate')">
-						                                  {{fare.saleEnd}}
-						                                </span>
+						                                      ng-model="fare.saleEnd"/>						
 						                              </td>
 						                              <td>
-						                                <span ng-if="vm.isFieldEditable( 'discountComment')">
-						                                  <input type="text" class="form-control" name="discountComment{{$parent.$index}}{{$index}}"
-						                                    ng-disabled="vm.isFieldDisable('discountComment')"
+						                                 <input type="text" class="form-control" name="discountComment{{$parent.$index}}{{$index}}"
+						                                    ng-disabled="!vm.isEditable('discountComment')"
 						                                    ng-click="$event.stopPropagation()"
-						                                    ng-required="vm.checkRequiredField('discountComment') && fare.action != 'Canceled'" 
+						                                    ng-required="vm.isRequired('discountComment') && fare.action != 'Canceled'" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountComment{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-						                                      ng-model="fare.comment"/>												                			
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountComment')">
-						                                  {{fare.comment}}
-						                                </span>
+						                                      ng-model="fare.comment"/>	
 						                              </td>
 						                              <td>
-						                                <span ng-if="vm.isFieldEditable( 'discountTravelComplete')">
-						                                  <input type="text" class="form-control" name="discountTravelComplete{{$parent.$index}}{{$index}}"
-						                                    ng-disabled="vm.isFieldDisable('discountTravelComplete')"
+						                                 <input type="text" class="form-control" name="discountTravelComplete{{$parent.$index}}{{$index}}"
+						                                    ng-disabled="!vm.isEditable('discountTravelComplete')"
 						                                    ng-click="$event.stopPropagation()"
-						                                    ng-required="vm.checkRequiredField('discountTravelComplete') && fare.action != 'Canceled'" 
+						                                    ng-required="vm.isRequired('discountTravelComplete') && fare.action != 'Canceled'" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountTravelComplete{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-						                                      ng-model="fare.travelComplete"/>												                			
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountTravelComplete')">
-						                                  {{fare.travelComplete}}
-						                                </span>
+						                                      ng-model="fare.travelComplete"/>	
 						                              </td>
 						                              <td>
-						                                <span ng-if="vm.isFieldEditable( 'discountTravelCompleteIndicator')">
-						                                  <input type="text" class="form-control" name="discountTravelCompleteIndicator{{$parent.$index}}{{$index}}"
-						                                    ng-disabled="vm.isFieldDisable('discountTravelCompleteIndicator')"
+						                                <input type="text" class="form-control" name="discountTravelCompleteIndicator{{$parent.$index}}{{$index}}"
+						                                    ng-disabled="!vm.isEditable('discountTravelCompleteIndicator')"
 						                                    ng-click="$event.stopPropagation()"
-						                                    ng-required="vm.checkRequiredField('discountTravelCompleteIndicator') && fare.action != 'Canceled'" 
+						                                    ng-required="vm.isRequired('discountTravelCompleteIndicator') && fare.action != 'Canceled'" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountTravelCompleteIndicator{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-						                                      ng-model="fare.travelCompleteIndicator"/>												                			
-						                                </span>
-						                                <span ng-if="!vm.isFieldEditable( 'discountTravelCompleteIndicator')">
-						                                  {{fare.travelCompleteIndicator}}
-						                                </span>
+						                                      ng-model="fare.travelCompleteIndicator"/>	
 						                              </td>
 						                    </tr>
 						                    <tr class="datatable-action{{$index}}" ng-show="vm.discountFaresActionButton[$index]">
@@ -2098,493 +1840,509 @@
 		
 			<ng-form name="editFormMarket" role="form" novalidate ng-if="vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.type == 'REGULAR'">
 				<div class="tab-wrapper">
-					<ul class="clearfix nav-responsive nav nav-tabs">
-					    <li ng-if="vm.workPackage.marketFares" ng-class="{active:vm.currentMarketTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.marketFareSheet track by $index"><a ng-click="vm.selectMarketTab($index);">Market Fares : {{vm.workPackage.marketFareSheet[$index].marketFaresName}}</a></li>
-					    <li ng-if="vm.workPackage.marketRules" ng-class="{active:vm.currentTabMarketRules}"><a ng-click="vm.selectOtherTab('marketRules')">Market Rules</a></li>
-					    <li ng-if="vm.workPackage.attachment" ng-class="{active:vm.currentTabAttachment}"><a ng-click="vm.selectOtherTab('attachment')">Attachment</a></li>
-					</ul>
-					<div class="tab-content">
-						<div class="tab-pane" ng-class="{active:vm.currentMarketTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.marketFareSheet track by $index">
-							<div class="pb1 mb1 bbgrey">
-								<div class="clearfix">
-									<div class="pull-left w50 two-column">
-										<div class="form-group">
-											<label>Description</label>
-											<input type="text" name="marketFareDescription{{$parent.$index}}{{$index}}" class="form-control"
-											ng-class="{'must-fill': editForm.editFormMarket.marketFareDescription{{$parent.$index}}{{$index}}.$error.required}"
-							         		ng-model="workPackageSheet.specifiedFaresName" 
-							         		ng-required="vm.isRequired('marketFareDescription')"  
-							         		ng-disabled="!vm.isEditable('marketFareDescription')">
-										</div>
-									</div>
-									<div class="pull-left w50 two-column">
-										<div class="form-group">
-											<label>Approval Reference</label>
-											<input type="text" name="marketApprovalReference{{$parent.$index}}{{$index}}" class="form-control" 
-											ng-class="{'must-fill': editForm.editFormMarket.marketApprovalReference{{$parent.$index}}{{$index}}.$error.required}"
-								            ng-model="workPackageSheet.approvalReference"
-											ng-disabled="!vm.isEditable('marketApprovalReference')"
-											ng-required="vm.isRequired('marketApprovalReference')">
-										</div>
-									</div>
-								</div>											
-								<div class="clearfix">
-									<div class="pull-left w50 two-column">
-										<div class="form-group">
-											<label>Fare Type</label>
-											
-											<select 
-						      				class="form-control" 
-						      				name="marketFareType{{$parent.$index}}{{$index}}"
-						      				ng-model="workPackageSheet.fareType" 
-						      				ng-class="{'must-fill': !editForm.editFormMarket.marketFareType{{$parent.$index}}{{$index}}.$valid}"
-						      				ng-options="key as value for (key , value) in vm.fareType"
-						      				ng-required="vm.isRequired('marketFareType')"
-						      				ng-disabled="!vm.isEditable('marketFareType')"></select>										      				
-										</div>
-									</div>
-									<div class="pull-left w50 two-column">
-										<div class="form-group">
-											<label>Version</label>
-											<select class="form-control">
-												<option>Select Version</option>
-												<option>Current</option>
-											</select>
-										</div>
-									</div>
-								</div>
-							</div>																						
+					<div class="clearfix tab-body">
 						
-							<div class="table-wrapper">
-								<div class="datatable-wrapper form-inline">
+						<ul class="clearfix nav-responsive nav nav-tabs">
+						    <li ng-if="vm.workPackage.marketFares" ng-class="{active:vm.currentMarketTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.marketFareSheet track by $index"><a ng-click="vm.selectMarketTab($index);">Market Fares : {{vm.workPackage.marketFareSheet[$index].marketFaresName}}</a></li>
+						    <li ng-if="vm.workPackage.marketRules" ng-class="{active:vm.currentTabMarketRules}"><a ng-click="vm.selectOtherTab('marketRules')">Market Rules</a></li>
+						    <li ng-if="vm.workPackage.attachment" ng-class="{active:vm.currentTabAttachment}"><a ng-click="vm.selectOtherTab('attachment')">Attachment</a></li>
+							<li ng-if="vm.workPackage.filingInstruction" ng-class="{active:vm.currentTabFilingInstruction}"><a ng-click="vm.selectOtherTab('filingInstruction')">Filing Instruction</a></li>					          
+						</ul>
+						<div class="tab-content">
+							<div class="tab-pane" ng-class="{active:vm.currentMarketTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.marketFareSheet track by $index">
+								<div class="pb1 mb1 bbgrey">
 									<div class="clearfix">
-										<div class="pull-left">
-											<div class="clearfix">
-												<div class="pull-right datatable-button">
-													<div class="button-group dropdown">
-														<button class="btn btn-default small btn-secondary">Edit <i class="fa fa-caret-down"></i></button>
-														<ul class="dropdown-menu" role="menu">
-														    <li>
-														    	<a href="#">Clear Selection</a>
-														    </li>
-														    <li>
-														    	<a href="#">Fill Down</a>
-														    </li>
-														    <li>
-														    	<a href="#">Search/Replace</a>
-														    </li>
-														    <li>
-														    	<a ng-click="vm.addMarketFares()">Add Rows</a>
-														    </li>
-														    <li>
-														    	<a href="#">Delete Selected Rows</a>
-														    </li>
-														    <li>
-														    	<a href="#">Duplicate Selected Rows</a>
-														    </li>
-														    <li>
-														    	<a href="#">Copy Selected Rows</a>
-														    </li>
-														    <li>
-														    	<a href="#">Paste</a>
-														    </li>
-														    <li>
-														    	<a href="#">Paste As Cancel</a>
-														    </li>
-														</ul>
-													</div>													
-													<button class="btn btn-default small btn-secondary">Import</button>
-													<button class="btn btn-default small btn-secondary">Export</button>
-													<button class="btn btn-default small btn-secondary">Publish</button>
-													<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalAgent">Agents</button>
-													<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalRatesheet">Rate Sheet</button>
-												</div>
-											</div>	
+										<div class="pull-left w50 two-column">
+											<div class="form-group">
+												<label>Description</label>
+												<input type="text" name="marketFareDescription{{$parent.$index}}{{$index}}" class="form-control"
+												ng-class="{'must-fill': editForm.editFormMarket.marketFareDescription{{$parent.$index}}{{$index}}.$error.required}"
+								         		ng-model="workPackageSheet.marketFaresName" 
+								         		ng-required="vm.isRequired('marketFareDescription')"  
+								         		ng-disabled="!vm.isEditable('marketFareDescription')">
+											</div>
+										</div>
+										<div class="pull-left w50 two-column">
+											<div class="form-group">
+												<label>Approval Reference</label>
+												<input type="text" name="marketApprovalReference{{$parent.$index}}{{$index}}" class="form-control" 
+												ng-class="{'must-fill': editForm.editFormMarket.marketApprovalReference{{$parent.$index}}{{$index}}.$error.required}"
+									            ng-model="workPackageSheet.approvalReference"
+												ng-disabled="!vm.isEditable('marketApprovalReference')"
+												ng-required="vm.isRequired('marketApprovalReference')">
+												<button ng-click="vm.generateTourCode()">Generate Tour Code</button>
+											</div>
+										</div>
+									</div>											
+									<div class="clearfix">
+										<div class="pull-left w50 two-column">
+											<div class="form-group">
+												<label>Fare Type</label>
+												
+												<select 
+							      				class="form-control" 
+							      				name="marketFareType{{$parent.$index}}{{$index}}"
+							      				ng-model="workPackageSheet.fareType" 
+							      				ng-class="{'must-fill': !editForm.editFormMarket.marketFareType{{$parent.$index}}{{$index}}.$valid}"
+							      				ng-options="key as value for (key , value) in vm.fareType"
+							      				ng-required="vm.isRequired('marketFareType')"
+							      				ng-disabled="!vm.isEditable('marketFareType')"></select>										      				
+											</div>
+										</div>
+										<div class="pull-left w50 two-column">
+											<div class="form-group">
+												<label>Group Fares</label>
+												<input class="form-control" type="checkbox" ng-model="workPackageSheet.groupFares" 
+												ng-disabled="!vm.isEditable('marketGroupFares')"
+												ng-required="vm.isRequired('marketGroupFares')"/>																						      				
+											</div>
 										</div>
 									</div>
-									<div class="table-responsive">
-										<table class="table table-stripped table-bordered datatable">
-											<thead>
-												<tr>
-							                		<th>No</th>
-							                		<th>Status</th>
-								                	<th>Carrier</th>		                	
-								                	<th>Origin</th>
-								                	<th>Dest</th>
-								                	<th>Fare Cls</th>
-								                	<th>Bkg Cls</th>
-								                	<th>SSN</th>
-								                	<th>Cabin</th>
-								                	<th>OW/RT</th>
-								                	<th>Rule Id</th>
-								                	<th>Curr</th>
-								                	<th>Base Amt</th>
-								                	<!-- <th>Prev Base Amt</th>
-								                	<th>Prev Base Amt Diff</th>
-								                	<th>% Prev Base Amt Diff</th> -->
-									                <th>Travel Start</th>
-								               		<th>Travel End</th>		               		
-								               		<th>Sale Start</th>
-								               		<th>Sale End</th>	
-								               		<th>Comment</th>	               		
-								               		<th>Travel Complete</th>	               		
-								               		<th>Travel Complete Indicator</th>	               		
-								               		<th>RateSheet Comment</th>	        		
-								                </tr>
-											</thead>
-											<tbody ng-repeat="fare in vm.workPackage.marketFareSheet[vm.selectedMarketTab].fares track by $index">
-												<tr ng-click="vm.rowTableClick($event, $index, 'market')">
-													<td>{{$index+1}}</td>
-													<td>
-														<select class="form-control inside-table" name="marketFareStatus{{$parent.$index}}{{$index}}" ng-model="fare.status" id="field_status" 
-															ng-class="{'must-fill': !editForm.editFormMarket.marketFareStatus{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"												         		
-						           							ng-disabled="!vm.isEditable('marketFareStatus')"
-											             	ng-required="vm.isRequired('marketFareStatus')"
-											             	ng-options="key as value for (key , value) in vm.status">
-														</select>	
-													</td>
-													<td>
-														<input type="text" class="form-control" name="marketFareCarrier{{$parent.$index}}{{$index}}" id="field_carrier"
-									                    		ng-model="fare.carrier"
-									                    		ng-disabled="!vm.isEditable('marketFareCarrier')"
-									                    		ng-class="{'must-fill': ditForm.editFormMarket.marketFareCarrier{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
-													            ng-required="vm.checkRequiredField('marketFareCarrier')"/>
-													</td>
-													<td>
-														<ui-select ng-model="fare.origin" theme="select2" class="form-control"
-															 ng-click="$event.stopPropagation()"
-															name="marketFareOrigin{{$parent.$index}}{{$index}}"
-															ng-required="vm.isRequired('marketFareOrigin') && fare.action != 'Canceled'"  
-															ng-disabled="!vm.isEditable('marketFareOrigin')"
-															
-															ng-class="{'must-fill': editForm.editFormMarket.marketFareOrigin{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-									                    	>
-														    <ui-select-match placeholder="Origin">{{$select.selected.value.cityCode}}</ui-select-match>
-															 <ui-select-choices style="min-width:300px" repeat="value.value.cityCode as (key, value) in vm.cities | filter: { value: { cityCode: $select.search }}">
-														      <div ng-bind-html="value.value.cityCode | highlight: $select.search"></div>
-														      <small>
-														        City Code : {{value.value.cityCode}}
-														        City Name : {{value.value.cityName}}
-														        Country Code : {{value.value.countryCode}}
-														        Country Name : {{value.value.countryName}}
-														        
-														      </small>
-														    </ui-select-choices>
-														  </ui-select>
-													</td>
-													<td>
-														<ui-select ng-model="fare.destination" theme="select2" class="form-control"
-															 ng-click="$event.stopPropagation()"
-															name="marketFareDestination{{$parent.$index}}{{$index}}"
-															ng-required="vm.isRequired('marketFareDestination') && fare.action != 'Canceled'"  
-															ng-disabled="!vm.isEditable('marketFareDestination')"
-															
-															ng-class="{'must-fill': editForm.editFormMarket.marketFareDestination{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-										                    	>
-														    <ui-select-match placeholder="Destination">{{$select.selected.value.cityCode}}</ui-select-match>
-															 <ui-select-choices style="min-width:300px" repeat="value.value.cityCode as (key, value) in vm.cities | filter: { value: { cityCode: $select.search }}">
-														      <div ng-bind-html="value.value.cityCode | highlight: $select.search"></div>
-														      <small>
-														        City Code : {{value.value.cityCode}}
-														        City Name : {{value.value.cityName}}
-														        Country Code : {{value.value.countryCode}}
-														        Country Name : {{value.value.countryName}}
-														        
-														      </small>
-														    </ui-select-choices>
-														  </ui-select>
-													</td>
-													<td>
-														<input type="text" class="form-control" name="marketFareFarebasis{{$parent.$index}}{{$index}}" id="field_farebasis"
-							                				ng-disabled="!vm.isEditable('marketFareFarebasis')"
-							                				 ng-click="$event.stopPropagation()"
-							                				ng-required="vm.isRequired('marketFareFarebasis') && fare.action != 'Canceled'" 
-							                				ng-class="{'must-fill': editForm.editFormMarket.marketFareFarebasis{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-								                    		ng-model="fare.fareBasis"/>	
-													</td>
-													<td>
-														<input type="text" class="form-control" name="marketFareBookingClass{{$parent.$index}}{{$index}}" id="field_bookingClass"
-							                				ng-disabled="!vm.isEditable('marketFareBookingClass')"
-							                				ng-required="vm.isRequired('marketFareBookingClass') && fare.action != 'Canceled'" 
-							                				ng-class="{'must-fill': editForm.editFormMarket.marketFareBookingClass{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-								                    		ng-model="fare.bookingClass"/>												                			
-							                			
-													</td>
-													<td>
-														<select class="form-control" 
-												             name="marketFareSsn{{$parent.$index}}{{$index}}"
-												             ng-required="vm.isRequired('marketFareSsn')"
-												             ng-click="$event.stopPropagation()"
-												             ng-class="{'must-fill': !editForm.editFormMarket.marketFareSsn{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"	
-												             ng-model="fare.ssn" id="field_ssn" 
-												             ng-disabled="!vm.isEditable('marketFareSsn')"
-												             ng-options="key as value for (key , value) in vm.ssn"></select>	
-													</td>
-													<td>
-														<select class="form-control" 
-												             name="marketFareCabin{{$parent.$index}}{{$index}}"
-												             ng-required="vm.isRequired('marketFareCabin')"
-												             ng-click="$event.stopPropagation()"
-												             ng-class="{'must-fill': !editForm.editFormMarket.marketFareCabin{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"	
-												             ng-model="fare.cabin" id="field_cabin" 
-												             ng-disabled="!vm.isEditable('marketFareCabin')"
-												             ng-options="key as value for (key , value) in vm.cabin"></select>	
-													</td>
-													<td>
-														<select class="form-control" 
-												             name="marketFareTypeOfJourney{{$parent.$index}}{{$index}}"
-												             ng-required="vm.isRequired('marketFareTypeOfJourney')"
-												             ng-class="{'must-fill': !editForm.editFormMarket.marketFareTypeOfJourney{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"																			            
-												             ng-model="fare.typeOfJourney" id="field_typeOfJourney"
-												             ng-disabled="!vm.isEditable('marketFareTypeOfJourney')"
-												             ng-options="key as value for (key , value) in vm.typeOfJourney"></select>
-													</td>
-													<td>
-														<input type="text" class="form-control" name="marketFareRuleno{{$parent.$index}}{{$index}}" id="field_bookingClass"
-							                				ng-disabled="!vm.isEditable('marketFareRuleno')"
-							                				ng-required="vm.isRequired('marketFareRuleno')" 
-							                				ng-class="{'must-fill': editForm.editFormMarket.marketFareRuleno{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
-												            ng-model="fare.ruleno"/>
-													</td>
-													<td>
-														<ui-select ng-model="fare.currency" theme="select2" class="form-control"
-													 		ng-click="$event.stopPropagation()"
-															name="marketFareCurrency{{$parent.$index}}{{$index}}"
-															ng-required="vm.isRequired('marketFareCurrency') && fare.action != 'Canceled'"  
-															ng-disabled="!vm.isEditable('marketFareCurrency')"																		
-															ng-class="{'must-fill': editForm.editFormMarket.marketFareCurrency{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	>
-													    <ui-select-match placeholder="Currency">{{$select.selected.value.currencyCode}}</ui-select-match>
-														 <ui-select-choices style="min-width:300px" repeat="value.value.currencyCode as (key, value) in vm.currencies | filter: { value: { currencyCode: $select.search }}">
-													      <div ng-bind-html="value.value.currencyCode | highlight: $select.search"></div>
-													      <small>
-													        Currency Code : {{value.value.currencyCode}}
-													        Currency Name : {{value.value.currencyName}}
-													        
-													      </small>
-													    </ui-select-choices>
-													  </ui-select>
-													</td>
-													<td>
-														<input type="text" class="form-control" name="marketFareBaseAmt{{$parent.$index}}{{$index}}" id="field_bookingClass"
-							                				ng-disabled="!vm.isEditable('marketFareBaseAmt')"
-							                				ng-required="vm.isRequired('marketFareBaseAmt')" 
-							                				ng-class="{'must-fill': editForm.editFormMarket.marketFareBaseAmt{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
-												            ng-model="fare.amount"/>
-													</td>
-													
-													<td>
-							               				<input type="text" class="form-control" name="marketFareTravelStartDate{{$parent.$index}}{{$index}}" id="field_travelStartDate"
-								                				ng-disabled="!vm.isEditable('marketFareTravelStartDate')"
-								                				ng-click="$event.stopPropagation()"
-								                				ng-required="vm.isRequired('marketFareTravelStartDate')"
-								                				ng-class="{'must-fill': editForm.editFormMarket.marketFareTravelStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
-													            ng-model="fare.travelStart"
-													            datetime-picker="{{dateformat}}"/>
-								               		</td>
-								               			<td>
-								               					<input type="text" class="form-control" name="marketFareTravelEndDate{{$parent.$index}}{{$index}}" id="field_travelEndDate"
-									                				ng-disabled="!vm.isEditable('marketFareTravelEndDate')"
-									                				ng-click="$event.stopPropagation()"
-									                				ng-required="vm.isRequired('marketFareTravelEndDate')"
-									                				ng-class="{'must-fill': editForm.editFormMarket.marketFareTravelEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
-														            ng-model="fare.travelEnd"/>
-								               			</td>
-								               			<td>
-								               				<input type="text" class="form-control" name="marketFareSaleStartDate{{$parent.$index}}{{$index}}" id="field_saleStartDate"
-									                				ng-disabled="!vm.isEditable('marketFareSaleStartDate')"	
-									                				ng-click="$event.stopPropagation()"								                				
-									                				ng-required="vm.isRequired('marketFareSaleStartDate')"
-										                    		ng-class="{'must-fill': editForm.editFormMarket.marketFareSaleStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
-														            ng-model="fare.saleStart"/>
-								               			</td>
-								               			<td>
-								               				<input type="text" class="form-control" name="marketFareSaleEndDate{{$parent.$index}}{{$index}}" id="field_saleEndDate"
-									                				ng-disabled="!vm.isEditable('marketFareSaleEndDate')"
-									                				ng-click="$event.stopPropagation()"
-									                				ng-required="vm.isRequired('marketFareSaleEndDate')"
-										                    		ng-class="{'must-fill': editForm.editFormMarket.marketFareSaleEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
-														            ng-model="fare.saleEnd"/>
-								               			</td>
-								               			<td>
-								               				<input type="text" class="form-control" name="marketFareComment{{$parent.$index}}{{$index}}" id="field_comment"
-										                    		ng-model="fare.comment"/>
-								               			</td>
-								               			<td>
-								               				<input type="text" class="form-control" name="marketFareTravelComplete{{$parent.$index}}{{$index}}" id="field_travelComplete"
-								                				ng-disabled="!vm.isEditable('marketFareTravelComplete')"
-								                				ng-click="$event.stopPropagation()"
-								                				ng-required="vm.isRequired('marketFareTravelComplete')"
-									                    		ng-class="{'must-fill': editForm.editFormMarket.marketFareTravelComplete{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            														                    		
-								                				ng-model="fare.travelComplete"/>
-								               			</td>
-								               			<td>
-								               				<select class="form-control" name="marketFareTravelIndicator{{$parent.$index}}{{$index}}" id="field_travelIndicator"
-									                				ng-disabled="!vm.isEditable('marketFareTravelIndicator')"
-									                				ng-click="$event.stopPropagation()"
-									                				ng-required="vm.isRequired('marketFareTravelIndicator')"
-										                    		ng-class="{'must-fill': !editForm.editFormMarket.marketFareTravelIndicator{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"											                    		
-										                    		ng-options="key as value for (key , value) in vm.travelCompleteIndicator"													             																		            														                    		
-									                				ng-model="fare.travelCompleteIndicator"></select>
-								               			</td>
-								               			<td>
-								               				<input type="text" class="form-control" name="marketFareRatesheetComment{{$parent.$index}}{{$index}}" id="field_ratesheetComment"
-									                				ng-disabled="!vm.isEditable('marketFareRatesheetComment')"
-									                				ng-click="$event.stopPropagation()"
-									                				ng-required="vm.isRequired('marketFareRatesheetComment')"
-										                    		ng-class="{'must-fill': editForm.editFormMarket.marketFareRatesheetComment{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            														                    		
-										                    		ng-model="fare.ratesheetComment"/>
-								               			</td>
-													
-												</tr>
-												<tr class="datatable-action{{$index}}" ng-show="vm.marketFaresActionButton[$index]">
-													<td colspan="18" class="">
-														<div class="btn btn-app">
-															<i class="fa fa-level-up"></i>Move Up
-														</div>
-														<div class="btn btn-app">
-															<i class="fa fa-level-down"></i>Move Down
-														</div>	
-														<div class="btn btn-app">
-															<i class="fa fa-stack-exchange"></i>Derived Fares
-														</div>
-													</td>
-												</tr>
-											</tbody>
-										</table>
+									<div class="clearfix">
+										<div class="pull-left w50 two-column">
+											<div class="form-group">
+												<label>Version</label>
+												<select class="form-control">
+													<option>Select Version</option>
+													<option>Current</option>
+												</select>
+											</div>
+										</div>
+										<div class="pull-left w50 two-column"></div>
 									</div>
-								</div>
-							</div>	
-						</div>
-						
-						<div class="tab-pane" ng-class="{active:vm.currentTabMarketRules}">
-							<div class="action-btn-wrapper">
-			       				<div class="col-md-12 text-right no-pad">
-			       					<button ng-click="vm.addMarketRules()" class="btn btn-primary">Add</button>
-			       				</div>
-			       			</div>
-			       			
-			       			<label class="full-ib md-bot-mar text-center empty" ng-if="!vm.workPackage.marketRulesData || vm.workPackage.marketRulesData.length == 0">
-		       					No Market Rules Available
-		       				</label>
-							<div ng-repeat="marketRules in vm.workPackage.marketRulesData track by $index" class="form-repeat">
-		       					<button ng-click="vm.removeMarketRules(marketRules)" class="bordered delete"><span class="glyphicon glyphicon-remove"></span></button>
-			       				<label class="user">admin <span class="vseparator no-mar"></span> 12JAN18 09:15:16</label>
-					        	<div class="row">
-					        		<div class="col-md-6">
-						      			<div class="form-group row">
-						      				<label class="col-md-4" >Status</label>
-						      				<div class="col-md-8 no-pad select">
-						      					<select class="col-md-12" name="qaStatus" ng-model="marketRules.status" id="field_qaStatus">
-									                <option value="">Select Status</option>
-									                <option value="PENDING" >Pending</option>
-									                <option value="APPROVED">Approve</option>
-									                <option value="REJECTED">Reject</option>
-									            </select>	
-						      				</div>
-						      			</div>
-						      			<div class="form-group row" ng-init="marketRules.cxr = 'GA'">
-						      				<label class="col-md-4" >CXR</label>
-								            <input type="text" class="col-md-8" ng-model="marketRules.cxr" disabled/>
-						      			</div>
-						      			<div class="form-group row">
-						      				<label class="col-md-4">Market Rule Id</label>
-							             	<input type="text" class="col-md-8" ng-model="marketRules.ruleid"/>
-						      			</div>
-						      			<div class="form-group row">
-						      				<label class="col-md-4">Comment</label>
-						      				<div class="col-md-8 input-group textarea">
-						      					<textarea class="col-md-12" ng-model="marketRules.comment"></textarea>
-						      				</div>
-						      			</div>
-					        		</div>
-					        		<div class="col-md-6">
-					        			<div class="form-group row file" ngf-drop ngf-change="vm.setFile($file, marketRules)">
-								            <label class="control-label">File Attachment</label>
-								            <div>
-								                <div ng-if="marketRules.file" class="help-block clearfix">
-								                    <a class="pull-left" ng-click="vm.openFile(marketRules.fileContentType, marketRules.file)" data-translate="entity.action.open">open</a><br>
-								                    <span class="pull-left">{{marketRules.fileContentType}}, {{vm.byteSize(marketRules.file)}}</span>
-								                    <button type="button" ng-click="marketRules.file=null;marketRules.fileContentType=null;"
-								                            class="btn btn-default btn-xs pull-right delete grey">
-								                        <span class="glyphicon glyphicon-remove"></span>
-								                    </button>
-								                </div>
-								                <div class="action-btn-wrapper no-pad">
-								                	<button type="button" ngf-select class="btn btn-primary btn-block"
-									                        ngf-change="vm.setFile($file, marketRules)">
-									                    Add file
-									                </button>
-								                </div>
-								            </div>
-								            <input type="hidden" class="form-control" name="file" id="field_file" ng-model="marketRules.file"/>
-								            <input type="hidden" class="form-control" name="fileContentType" id="field_fileContentType" ng-model="marketRules.fileContentType"/>
-								        </div>
-					        		</div>
-					      		</div>
+								</div>																						
+							
+								<div class="table-wrapper">
+									<div class="datatable-wrapper form-inline">
+										<div class="clearfix">
+											<div class="pull-left">
+												<div class="clearfix">
+													<div class="pull-right datatable-button">
+														<div class="button-group dropdown">
+															<button class="btn btn-default small btn-secondary">Edit <i class="fa fa-caret-down"></i></button>
+															<ul class="dropdown-menu" role="menu">
+															    <li>
+															    	<a ng-click="vm.clearSelection()">Clear Selection</a>
+															    </li>
+															    <li>
+															    	<a ng-click="vm.addMarketFares()">Add Rows</a>
+															    </li>
+															    <li>
+															    	<a href="#">Paste</a>
+															    </li>
+															    <li>
+															    	<a href="#">Paste As Cancel</a>
+															    </li>
+															</ul>
+														</div>													
+														<button class="btn btn-default small btn-secondary" ngf-select  ngf-change="vm.importFareMarket($file)">Import</button>
+														<button class="btn btn-default small btn-secondary">Export</button>
+														<button class="btn btn-default small btn-secondary">Publish</button>
+														<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalAgent">Agents</button>
+														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()">Rate Sheet</button>
+													</div>
+												</div>	
+											</div>
+										</div>
+										<div class="table-responsive">
+											<table class="table table-stripped table-bordered datatable">
+												<thead>
+													<tr>
+								                		<th>No</th>
+								                		<th>Status</th>
+									                	<th>Carrier</th>		                	
+									                	<th>Origin</th>
+									                	<th>Dest</th>
+									                	<th>Fare Cls</th>
+									                	<th>Bkg Cls</th>
+									                	<th>SSN</th>
+									                	<th>Cabin</th>
+									                	<th>OW/RT</th>
+									                	<th>Rule Id</th>
+									                	<th>Curr</th>
+									                	<th>Base Amt</th>
+									                	<!-- <th>Prev Base Amt</th>
+									                	<th>Prev Base Amt Diff</th>
+									                	<th>% Prev Base Amt Diff</th> -->
+										                <th>Travel Start</th>
+									               		<th>Travel End</th>		               		
+									               		<th>Sale Start</th>
+									               		<th>Sale End</th>	
+									               		<th>Comment</th>	               		
+									               		<th>Travel Complete</th>	               		
+									               		<th>Travel Complete Indicator</th>	               		
+									               		<th>RateSheet Comment</th>	        		
+									                </tr>
+												</thead>
+												<tbody ng-repeat="fare in vm.workPackage.marketFareSheet[vm.selectedMarketTab].fares track by $index">
+													<tr ng-click="vm.rowTableClick($event, $index, 'market')">
+														<td>{{$index+1}}</td>
+														<td>
+															<select class="form-control inside-table" name="marketFareStatus{{$parent.$index}}{{$index}}" ng-model="fare.status" id="field_status" 
+																ng-class="{'must-fill': !editForm.editFormMarket.marketFareStatus{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"												         		
+							           							ng-disabled="!vm.isEditable('marketFareStatus')"
+												             	ng-required="vm.isRequired('marketFareStatus')"
+												             	ng-options="key as value for (key , value) in vm.status">
+															</select>	
+														</td>
+														<td>
+															<input type="text" class="form-control" name="marketFareCarrier{{$parent.$index}}{{$index}}" id="field_carrier"
+										                    		ng-model="fare.carrier"
+										                    		ng-disabled="!vm.isEditable('marketFareCarrier')"
+										                    		ng-class="{'must-fill': ditForm.editFormMarket.marketFareCarrier{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
+														            ng-required="vm.checkRequiredField('marketFareCarrier')"/>
+														</td>
+														<td>
+															<ui-select ng-model="fare.origin" theme="select2" class="form-control"
+																 ng-click="$event.stopPropagation()"
+																name="marketFareOrigin{{$parent.$index}}{{$index}}"
+																ng-required="vm.isRequired('marketFareOrigin') && fare.action != 'Canceled'"  
+																ng-disabled="!vm.isEditable('marketFareOrigin')"
+																
+																ng-class="{'must-fill': editForm.editFormMarket.marketFareOrigin{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+										                    	>
+															    <ui-select-match placeholder="Origin">{{$select.selected.value.cityCode}}</ui-select-match>
+																 <ui-select-choices style="min-width:300px" repeat="value.value.cityCode as (key, value) in vm.cities | filter: { value: { cityCode: $select.search }}">
+															      <div ng-bind-html="value.value.cityCode | highlight: $select.search"></div>
+															      <small>
+															        City Code : {{value.value.cityCode}}
+															        City Name : {{value.value.cityName}}
+															        Country Code : {{value.value.countryCode}}
+															        Country Name : {{value.value.countryName}}
+															        
+															      </small>
+															    </ui-select-choices>
+															  </ui-select>
+														</td>
+														<td>
+															<ui-select ng-model="fare.destination" theme="select2" class="form-control"
+																 ng-click="$event.stopPropagation()"
+																name="marketFareDestination{{$parent.$index}}{{$index}}"
+																ng-required="vm.isRequired('marketFareDestination') && fare.action != 'Canceled'"  
+																ng-disabled="!vm.isEditable('marketFareDestination')"
+																
+																ng-class="{'must-fill': editForm.editFormMarket.marketFareDestination{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+											                    	>
+															    <ui-select-match placeholder="Destination">{{$select.selected.value.cityCode}}</ui-select-match>
+																 <ui-select-choices style="min-width:300px" repeat="value.value.cityCode as (key, value) in vm.cities | filter: { value: { cityCode: $select.search }}">
+															      <div ng-bind-html="value.value.cityCode | highlight: $select.search"></div>
+															      <small>
+															        City Code : {{value.value.cityCode}}
+															        City Name : {{value.value.cityName}}
+															        Country Code : {{value.value.countryCode}}
+															        Country Name : {{value.value.countryName}}
+															        
+															      </small>
+															    </ui-select-choices>
+															  </ui-select>
+														</td>
+														<td>
+															<input type="text" class="form-control" name="marketFareFarebasis{{$parent.$index}}{{$index}}" id="field_farebasis"
+								                				ng-disabled="!vm.isEditable('marketFareFarebasis')"
+								                				 ng-click="$event.stopPropagation()"
+								                				ng-required="vm.isRequired('marketFareFarebasis') && fare.action != 'Canceled'" 
+								                				ng-class="{'must-fill': editForm.editFormMarket.marketFareFarebasis{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+									                    		ng-model="fare.fareBasis"/>	
+														</td>
+														<td>
+															<input type="text" class="form-control" name="marketFareBookingClass{{$parent.$index}}{{$index}}" id="field_bookingClass"
+								                				ng-disabled="!vm.isEditable('marketFareBookingClass')"
+								                				ng-required="vm.isRequired('marketFareBookingClass') && fare.action != 'Canceled'" 
+								                				ng-class="{'must-fill': editForm.editFormMarket.marketFareBookingClass{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+									                    		ng-model="fare.bookingClass"/>												                			
+								                			
+														</td>
+														<td>
+															<select class="form-control" 
+													             name="marketFareSsn{{$parent.$index}}{{$index}}"
+													             ng-required="vm.isRequired('marketFareSsn')"
+													             ng-click="$event.stopPropagation()"
+													             ng-class="{'must-fill': !editForm.editFormMarket.marketFareSsn{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"	
+													             ng-model="fare.ssn" id="field_ssn" 
+													             ng-disabled="!vm.isEditable('marketFareSsn')"
+													             ng-options="key as value for (key , value) in vm.ssn"></select>	
+														</td>
+														<td>
+															<select class="form-control" 
+													             name="marketFareCabin{{$parent.$index}}{{$index}}"
+													             ng-required="vm.isRequired('marketFareCabin')"
+													             ng-click="$event.stopPropagation()"
+													             ng-class="{'must-fill': !editForm.editFormMarket.marketFareCabin{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"	
+													             ng-model="fare.cabin" id="field_cabin" 
+													             ng-disabled="!vm.isEditable('marketFareCabin')"
+													             ng-options="key as value for (key , value) in vm.cabin"></select>	
+														</td>
+														<td>
+															<select class="form-control" 
+													             name="marketFareTypeOfJourney{{$parent.$index}}{{$index}}"
+													             ng-required="vm.isRequired('marketFareTypeOfJourney')"
+													             ng-class="{'must-fill': !editForm.editFormMarket.marketFareTypeOfJourney{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"																			            
+													             ng-model="fare.typeOfJourney" id="field_typeOfJourney"
+													             ng-disabled="!vm.isEditable('marketFareTypeOfJourney')"
+													             ng-options="key as value for (key , value) in vm.typeOfJourney"></select>
+														</td>
+														<td>
+															<input type="text" class="form-control" name="marketFareRuleno{{$parent.$index}}{{$index}}" id="field_bookingClass"
+								                				ng-disabled="!vm.isEditable('marketFareRuleno')"
+								                				ng-required="vm.isRequired('marketFareRuleno')" 
+								                				ng-class="{'must-fill': editForm.editFormMarket.marketFareRuleno{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+													            ng-model="fare.ruleno"/>
+														</td>
+														<td>
+															<ui-select ng-model="fare.currency" theme="select2" class="form-control"
+														 		ng-click="$event.stopPropagation()"
+																name="marketFareCurrency{{$parent.$index}}{{$index}}"
+																ng-required="vm.isRequired('marketFareCurrency') && fare.action != 'Canceled'"  
+																ng-disabled="!vm.isEditable('marketFareCurrency')"																		
+																ng-class="{'must-fill': editForm.editFormMarket.marketFareCurrency{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	>
+														    <ui-select-match placeholder="Currency">{{$select.selected.value.currencyCode}}</ui-select-match>
+															 <ui-select-choices style="min-width:300px" repeat="value.value.currencyCode as (key, value) in vm.currencies | filter: { value: { currencyCode: $select.search }}">
+														      <div ng-bind-html="value.value.currencyCode | highlight: $select.search"></div>
+														      <small>
+														        Currency Code : {{value.value.currencyCode}}
+														        Currency Name : {{value.value.currencyName}}
+														        
+														      </small>
+														    </ui-select-choices>
+														  </ui-select>
+														</td>
+														<td>
+															<input type="text" class="form-control" name="marketFareBaseAmt{{$parent.$index}}{{$index}}" id="field_bookingClass"
+								                				ng-disabled="!vm.isEditable('marketFareBaseAmt')"
+								                				ng-required="vm.isRequired('marketFareBaseAmt')" 
+								                				ng-class="{'must-fill': editForm.editFormMarket.marketFareBaseAmt{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+													            ng-model="fare.amount"/>
+														</td>
+														
+														<td>
+								               				<input type="text" class="form-control" name="marketFareTravelStartDate{{$parent.$index}}{{$index}}" id="field_travelStartDate"
+									                				ng-disabled="!vm.isEditable('marketFareTravelStartDate')"
+									                				ng-click="$event.stopPropagation()"
+									                				ng-required="vm.isRequired('marketFareTravelStartDate')"
+									                				ng-class="{'must-fill': editForm.editFormMarket.marketFareTravelStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+														            ng-model="fare.travelStart"/>
+									               		</td>
+									               			<td>
+									               					<input type="text" class="form-control" name="marketFareTravelEndDate{{$parent.$index}}{{$index}}" id="field_travelEndDate"
+										                				ng-disabled="!vm.isEditable('marketFareTravelEndDate')"
+										                				ng-click="$event.stopPropagation()"
+										                				ng-required="vm.isRequired('marketFareTravelEndDate')"
+										                				ng-class="{'must-fill': editForm.editFormMarket.marketFareTravelEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+															            ng-model="fare.travelEnd"/>
+									               			</td>
+									               			<td>
+									               				<input type="text" class="form-control" name="marketFareSaleStartDate{{$parent.$index}}{{$index}}" id="field_saleStartDate"
+										                				ng-disabled="!vm.isEditable('marketFareSaleStartDate')"	
+										                				ng-click="$event.stopPropagation()"								                				
+										                				ng-required="vm.isRequired('marketFareSaleStartDate')"
+											                    		ng-class="{'must-fill': editForm.editFormMarket.marketFareSaleStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+															            ng-model="fare.saleStart"/>
+									               			</td>
+									               			<td>
+									               				<input type="text" class="form-control" name="marketFareSaleEndDate{{$parent.$index}}{{$index}}" id="field_saleEndDate"
+										                				ng-disabled="!vm.isEditable('marketFareSaleEndDate')"
+										                				ng-click="$event.stopPropagation()"
+										                				ng-required="vm.isRequired('marketFareSaleEndDate')"
+											                    		ng-class="{'must-fill': editForm.editFormMarket.marketFareSaleEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+															            ng-model="fare.saleEnd"/>
+									               			</td>
+									               			<td>
+									               				<input type="text" class="form-control" name="marketFareComment{{$parent.$index}}{{$index}}" id="field_comment"
+											                    		ng-model="fare.comment"/>
+									               			</td>
+									               			<td>
+									               				<input type="text" class="form-control" name="marketFareTravelComplete{{$parent.$index}}{{$index}}" id="field_travelComplete"
+									                				ng-disabled="!vm.isEditable('marketFareTravelComplete')"
+									                				ng-click="$event.stopPropagation()"
+									                				ng-required="vm.isRequired('marketFareTravelComplete')"
+										                    		ng-class="{'must-fill': editForm.editFormMarket.marketFareTravelComplete{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            														                    		
+									                				ng-model="fare.travelComplete"/>
+									               			</td>
+									               			<td>
+									               				<select class="form-control" name="marketFareTravelIndicator{{$parent.$index}}{{$index}}" id="field_travelIndicator"
+										                				ng-disabled="!vm.isEditable('marketFareTravelIndicator')"
+										                				ng-click="$event.stopPropagation()"
+										                				ng-required="vm.isRequired('marketFareTravelIndicator')"
+											                    		ng-class="{'must-fill': !editForm.editFormMarket.marketFareTravelIndicator{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"											                    		
+											                    		ng-options="key as value for (key , value) in vm.travelCompleteIndicator"													             																		            														                    		
+										                				ng-model="fare.travelCompleteIndicator"></select>
+									               			</td>
+									               			<td>
+									               				<input type="text" class="form-control" name="marketFareRatesheetComment{{$parent.$index}}{{$index}}" id="field_ratesheetComment"
+										                				ng-disabled="!vm.isEditable('marketFareRatesheetComment')"
+										                				ng-click="$event.stopPropagation()"
+										                				ng-required="vm.isRequired('marketFareRatesheetComment')"
+											                    		ng-class="{'must-fill': editForm.editFormMarket.marketFareRatesheetComment{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            														                    		
+											                    		ng-model="fare.ratesheetComment"/>
+									               			</td>
+														
+													</tr>
+													<tr class="datatable-action{{$index}}" ng-show="vm.marketFaresActionButton[$index]">
+														<td colspan="18" class="">
+															<div class="btn btn-app">
+																<i class="fa fa-level-up"></i>Move Up
+															</div>
+															<div class="btn btn-app">
+																<i class="fa fa-level-down"></i>Move Down
+															</div>	
+															<div class="btn btn-app">
+																<i class="fa fa-stack-exchange"></i>Derived Fares
+															</div>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>	
 							</div>
-		       			</div>
-						
-						<div class="tab-pane" ng-class="{active:vm.currentTabAttachment}">
-							<div class="action-btn-wrapper">
-			     				<div class="col-md-12 text-right no-pad">
-			     					<button ng-click="vm.addAttachment()" class="btn btn-primary">Add</button>
-			     				</div>
-			     			</div>
-			     			
-							<label class="full-ib md-bot-mar text-center empty" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">
-		       					No Attachment Available
-		       				</label>
-		       				<div ng-repeat="attachment in vm.workPackage.attachmentData track by $index" class="form-repeat">
-		       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete"><span class="glyphicon glyphicon-remove"></span></button>
-				       			<label class="user">admin <span class="vseparator no-mar"></span> 12JAN18 09:15:16</label>
-				       			<div class="row">
-					        		<div class="col-md-6">
-						      			<div class="form-group row">
-						      				<label class="col-md-4">Comment</label>
-						      				<div class="col-md-8 input-group textarea">
-						      					<textarea class="col-md-12" ng-model="attachment.comment"></textarea>
-						      				</div>
-						      			</div>
-					        		</div>
-					        		<div class="col-md-6">
-					        			<div class="form-group file" ngf-drop ngf-change="vm.setFileAttachment($file, attachment)">
-								            <label class="control-label">File Attachment</label>
-								            <div>
-								                <div ng-if="attachment.file" class="help-block clearfix">
-								                    <a class="pull-left" ng-click="vm.openFile(attachment.fileContentType, attachment.file)" data-translate="entity.action.open">open</a><br>
-								                    <span class="pull-left">{{attachment.fileContentType}}, {{vm.byteSize(attachment.file)}}</span>
-								                    <button type="button" ng-click="attachment.file=null;attachment.fileContentType=null;"
-								                            class="btn btn-default btn-xs pull-right delete grey">
-								                        <span class="glyphicon glyphicon-remove"></span>
-								                    </button>
-								                </div>
-								                <button type="button" ngf-select class="btn btn-default btn-block"
-								                        ngf-change="vm.setFile($file, attachment)">
-								                    Add file
-								                </button>
-								            </div>
-								            <input type="hidden" class="form-control" name="file" id="field_file"
-								                    ng-model="attachment.file"
-								                    />
-								            <input type="hidden" class="form-control" name="fileContentType" id="field_fileContentType"
-								                    ng-model="attachment.fileContentType" />
-								        </div>
-					        		</div>
-					      		</div>
-					     	</div>
+							
+							<div class="tab-pane" ng-class="{active:vm.currentTabMarketRules}">
+								<div class="action-btn-wrapper">
+				       				<div class="col-md-12 text-right no-pad">
+				       					<button ng-click="vm.addMarketRules()" class="btn btn-primary">Add</button>
+				       				</div>
+				       			</div>
+				       			
+				       			<label class="full-ib md-bot-mar text-center empty" ng-if="!vm.workPackage.marketRulesData || vm.workPackage.marketRulesData.length == 0">
+			       					No Market Rules Available
+			       				</label>
+								<div ng-repeat="marketRules in vm.workPackage.marketRulesData track by $index" class="form-repeat">
+			       					<button ng-click="vm.removeMarketRules(marketRules)" class="bordered delete"><span class="glyphicon glyphicon-remove"></span></button>
+				       				<label class="user">{{marketRules.username}} <span class="vseparator no-mar"></span> {{marketRules.createdTime | date:'short'}}</label>
+						        	<div class="row">
+						        		<div class="col-md-6">						      			
+							      			<div class="form-group row">
+							      				<label class="col-md-4">Market Rule Id</label>
+								             	<input type="text" class="col-md-8" ng-model="marketRules.ruleid"/>
+							      			</div>
+							      			<div class="form-group row">
+							      				<label class="col-md-4">Comment</label>
+							      				<div class="col-md-8 input-group textarea">
+							      					<textarea class="col-md-12" ng-model="marketRules.comment"></textarea>
+							      				</div>
+							      			</div>
+						        		</div>
+						        		<div class="col-md-6">
+						        			<div class="form-group row file" ngf-drop ngf-change="vm.setFile($file, marketRules)">
+									            <label class="control-label">File Attachment</label>
+									            <div>
+									                <div ng-if="marketRules.file" class="help-block clearfix">
+									                    <a class="pull-left" ng-click="vm.openFile(marketRules.fileContentType, marketRules.file)" data-translate="entity.action.open">open</a><br>
+									                    <span class="pull-left">{{marketRules.fileContentType}}, {{vm.byteSize(marketRules.file)}}</span>
+									                    <button type="button" ng-click="marketRules.file=null;marketRules.fileContentType=null;"
+									                            class="btn btn-default btn-xs pull-right delete grey">
+									                        <span class="glyphicon glyphicon-remove"></span>
+									                    </button>
+									                </div>
+									                <div class="action-btn-wrapper no-pad">
+									                	<button type="button" ngf-select class="btn btn-primary btn-block"
+										                        ngf-change="vm.setFile($file, marketRules)">
+										                    Add file
+										                </button>
+									                </div>
+									            </div>
+									            <input type="hidden" class="form-control" name="file" id="field_file" ng-model="marketRules.file"/>
+									            <input type="hidden" class="form-control" name="fileContentType" id="field_fileContentType" ng-model="marketRules.fileContentType"/>
+									        </div>
+						        		</div>
+						      		</div>
+								</div>
+			       			</div>
+							
+							<div class="tab-pane" ng-class="{active:vm.currentTabAttachment}" ng-if="vm.workPackage.attachment">
+								<div class="action-btn-wrapper">
+				     				<div class="col-md-12 text-right no-pad">
+				     					<button ng-click="vm.addAttachment()" class="btn btn-primary">Add</button>
+				     				</div>
+				     			</div>
+				     			
+				     			<div class="col-md-12">
+				     				<div class="text-center no-data" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">No Attachment Available</div>
+								
+								
+					     			<div ng-repeat="attachment in vm.workPackage.attachmentData.slice().reverse() track by $index" class="form-repeat">
+				       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete"><span class="glyphicon glyphicon-remove"></span></button>
+						       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'short'}}</label>
+						       			<div class="row">
+							        		<div class="col-md-6">
+								      			<div class="form-group row">
+								      				<label class="col-md-4">Comment</label>
+								      				<div class="col-md-8 input-group textarea">
+								      					<textarea class="col-md-12" ng-model="attachment.comment"></textarea>
+								      				</div>
+								      			</div>
+							        		</div>
+							        		<div class="col-md-6">
+							        			<div class="form-group file" ngf-drop ngf-change="vm.setFileAttachment($file, attachment)">
+										            <label class="control-label">File Attachment</label>
+										            <div>
+										                <div ng-if="attachment.file" class="help-block clearfix">
+										                    <a class="pull-left" ng-click="vm.openFile(attachment.fileContentType, attachment.file)" data-translate="entity.action.open">open</a><br>
+										                    <span class="pull-left">{{attachment.fileContentType}}, {{vm.byteSize(attachment.file)}}</span>
+										                    <button type="button" ng-click="attachment.file=null;attachment.fileContentType=null;"
+										                            class="btn btn-default btn-xs pull-right delete grey">
+										                        <span class="glyphicon glyphicon-remove"></span>
+										                    </button>
+										                </div>
+										                <button type="button" ngf-select class="btn btn-default btn-block"
+										                        ngf-change="vm.setFile($file, attachment)">
+										                    Add file
+										                </button>
+										            </div>
+										            <input type="hidden" class="form-control" name="file" id="field_file"
+										                    ng-model="attachment.file"
+										                    />
+										            <input type="hidden" class="form-control" name="fileContentType" id="field_fileContentType"
+										                    ng-model="attachment.fileContentType" />
+										        </div>
+							        		</div>
+							      		</div>
+							     	</div>
+							     </div>
+							</div>
+													
+							<div class="tab-pane" ng-class="{active:vm.currentTabFilingInstruction}" ng-if="vm.workPackage.filingInstruction">
+								<div class="action-btn-wrapper">
+				      				<div class="col-md-12 text-right no-pad">
+				      					<button ng-click="vm.addFiling()" class="btn btn-primary">Add</button>
+				      				</div>
+				      			</div>
+				       			<div class="col-md-12">
+				       				<div class="text-center no-data" ng-if="!vm.workPackage.filingInstructionData || vm.workPackage.filingInstructionData.length == 0">No Filing Instruction Available</div>
+							
+				       				<div ng-repeat="filingInstructionData in vm.workPackage.filingInstructionData track by $index" class="form-repeat">
+				       					<button ng-click="vm.removeFiling(filingInstructionData)" class="bordered delete"><span class="glyphicon glyphicon-remove"></span></button>
+						       			<label class="user">{{filingInstructionData.username}} <span class="vseparator no-mar"></span> {{filingInstructionData.createdTime | date: 'short'}}</label>
+					       				<div class="row">
+							        		<div class="col-md-6">							      			
+								      			<div class="form-group row">
+								      				<label class="col-md-4">Comment</label>
+								      				<div class="col-md-8 input-group textarea">
+								      					<textarea class="col-md-12" ng-model="filingInstructionData.comment"></textarea>
+								      				</div>
+								      			</div>
+							        		</div>							        		
+							      		</div>
+							     	</div>
+				       			</div>
+							</div>
+							
 						</div>
+						
 					</div>
 				</div>
 			</ng-form>
 
-			<ng-form name="editFormWaiver" role="form" novalidate ng-if="vm.workPackage.type == 'WAIVER'">
+			<ng-form name="editFormWaiver" role="form" novalidate ng-if="vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.type == 'WAIVER'">
 				<div class="tab-wrapper">
-					<ul class="clearfix nav-responsive nav nav-tabs">
-					    <li ng-if="vm.workPackage.waiverFares" ng-class="{active:vm.currentWaiverTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.waiverFareSheet track by $index"><a ng-click="vm.selectWaiverTab($index);">Waiver Fares : {{vm.workPackage.waiverFareSheet[$index].waiverFaresName}}</a></li>
-					    <li ng-if="vm.workPackage.waiverRules" ng-class="{active:vm.currentTabWaiverRules}"><a ng-click="vm.selectOtherTab('waiverRules')">Waiver Rules</a></li>
-					    <li ng-if="vm.workPackage.attachment" ng-class="{active:vm.currentTabAttachment}"><a ng-click="vm.selectOtherTab('attachment')">Attachment</a></li>
-					</ul>
-					<div class="tab-content">
+					<div class="clearfix tab-body">
+						<ul class="clearfix nav-responsive nav nav-tabs">
+						    <li ng-if="vm.workPackage.waiverFares" ng-class="{active:vm.currentWaiverTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.waiverFareSheet track by $index"><a ng-click="vm.selectWaiverTab($index);">Waiver Fares : {{vm.workPackage.waiverFareSheet[$index].waiverFaresName}}</a></li>
+						    <li ng-if="vm.workPackage.waiverRules" ng-class="{active:vm.currentTabWaiverRules}"><a ng-click="vm.selectOtherTab('waiverRules')">Waiver Rules</a></li>
+						    <li ng-if="vm.workPackage.attachment" ng-class="{active:vm.currentTabAttachment}"><a ng-click="vm.selectOtherTab('attachment')">Attachment</a></li>
+						</ul>
+						<div class="tab-content">
 						<div class="tab-pane" ng-class="{active:vm.currentWaiverTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.waiverFareSheet track by $index">
 							<div class="pb1 mb1 bbgrey">
 								<div class="clearfix">
@@ -2592,14 +2350,20 @@
 										<div class="form-group">
 											<label>Description</label>
 											<input type="text" name="waiverFareDescription{{$parent.$index}}{{$index}}" class="form-control"
-											ng-model="workPackageSheet.waiverFaresName" >
+											ng-model="workPackageSheet.waiverFaresName" 
+											ng-class="{'must-fill': !editForm.editFormWaiver.waiverFareDescription{{$parent.$index}}{{$index}}.$valid}"												         		
+		           							ng-disabled="!vm.isEditable('waiverFareDescription')"
+							             	ng-required="vm.isRequired('waiverFareDescription')">
 										</div>
 									</div>
 									<div class="pull-left w50 two-column">
 										<div class="form-group">
 											<label>Approval Reference</label>
 											<input type="text" name="waiverApprovalReference{{$parent.$index}}{{$index}}" class="form-control" 
-											 ng-model="workPackageSheet.waiverApprovalReference">
+											 ng-model="workPackageSheet.waiverApprovalReference"
+											 ng-class="{'must-fill': !editForm.editFormWaiver.waiverApprovalReference{{$parent.$index}}{{$index}}.$valid}"												         		
+		           							ng-disabled="!vm.isEditable('waiverApprovalReference')"
+							             	ng-required="vm.isRequired('waiverApprovalReference')">
 											 <button ng-click="vm.generateTourCode()">Generate Tour Code</button>
 										</div>
 									</div>
@@ -2613,6 +2377,9 @@
 						      				class="form-control" 
 						      				name="waiverFareType{{$parent.$index}}{{$index}}"
 						      				ng-model="workPackageSheet.waiverFareType" 
+						      				ng-class="{'must-fill': !editForm.editFormWaiver.waiverFareType{{$parent.$index}}{{$index}}.$valid}"												         		
+		           							ng-disabled="!vm.isEditable('waiverFareType')"
+							             	ng-required="vm.isRequired('waiverFareType')"
 						      				ng-options="key as value for (key , value) in vm.fareType"></select>										      				
 										</div>
 									</div>
@@ -2630,13 +2397,19 @@
 									<div class="pull-left w50 two-column">
 										<div class="form-group">
 											<label>Agent Name</label>
-											<input type="text" class="form-control" ng-model="workPackageSheet.waiverAgentName"/>
+											<input name="waiverAgentName{{$parent.$index}}{{$index}}" type="text" class="form-control" ng-model="workPackageSheet.waiverAgentName"
+											ng-class="{'must-fill': !editForm.editFormWaiver.waiverAgentName{{$parent.$index}}{{$index}}.$valid}"												         		
+		           							ng-disabled="!vm.isEditable('waiverAgentName')"
+							             	ng-required="vm.isRequired('waiverAgentName')"/>
 										</div>
 									</div>
 									<div class="pull-left w50 two-column">
 										<div class="form-group">
 											<label>IATA No</label>
-											<input type="text" class="form-control"  ng-model="workPackageSheet.waiverIataNo"/>
+											<input name="waiverIataNo{{$parent.$index}}{{$index}}" type="text" class="form-control"  ng-model="workPackageSheet.waiverIataNo"
+											ng-class="{'must-fill': !editForm.editFormWaiver.waiverIataNo{{$parent.$index}}{{$index}}.$valid}"												         		
+		           							ng-disabled="!vm.isEditable('waiverIataNo')"
+							             	ng-required="vm.isRequired('waiverIataNo')"/>
 										</div>
 									</div>
 								</div>
@@ -2644,7 +2417,19 @@
 									<div class="pull-left w50 two-column">
 										<div class="form-group">
 											<label>Approval Date</label>
-											<input type="text" class="form-control" ng-model="workPackageSheet.waiverApprovalDate"/>
+											<input name="waiverApprovalDate{{$parent.$index}}{{$index}}" type="text" class="form-control" ng-model="workPackageSheet.waiverApprovalDate"
+											ng-class="{'must-fill': !editForm.editFormWaiver.waiverApprovalDate{{$parent.$index}}{{$index}}.$valid}"												         		
+		           							ng-disabled="!vm.isEditable('waiverApprovalDate')"
+							             	ng-required="vm.isRequired('waiverApprovalDate')"/>
+										</div>
+									</div>
+									<div class="pull-left w50 two-column">
+										<div class="form-group">
+											<label>IOC Number</label>
+											<input name="waiverIocNumber{{$parent.$index}}{{$index}}" type="text" class="form-control" ng-model="workPackageSheet.waiverIocNumber"
+											ng-class="{'must-fill': !editForm.editFormWaiver.waiverIocNumber{{$parent.$index}}{{$index}}.$valid}"												         		
+		           							ng-disabled="!vm.isEditable('waiverIocNumber')"
+							             	ng-required="vm.isRequired('waiverIocNumber')"/>
 										</div>
 									</div>
 								</div>
@@ -2663,23 +2448,8 @@
 														    	<a href="#">Clear Selection</a>
 														    </li>
 														    <li>
-														    	<a href="#">Fill Down</a>
-														    </li>
-														    <li>
-														    	<a href="#">Search/Replace</a>
-														    </li>
-														    <li>
 														    	<a ng-click="vm.addWaiverFares()">Add Rows</a>
-														    </li>
-														    <li>
-														    	<a href="#">Delete Selected Rows</a>
-														    </li>
-														    <li>
-														    	<a href="#">Duplicate Selected Rows</a>
-														    </li>
-														    <li>
-														    	<a href="#">Copy Selected Rows</a>
-														    </li>
+														    </li>														    
 														    <li>
 														    	<a href="#">Paste</a>
 														    </li>
@@ -2732,79 +2502,165 @@
 												<tr ng-click="vm.rowTableClick($event, $index, 'waiver')">
 													<td>{{$index+1}}</td>
 													<td>
-														<select class="form-control" ng-model="fare.waiverType">
+														<select class="form-control" ng-model="fare.waiverType" name="waiverType{{$parent.$index}}{{$index}}"
+														ng-class="{'must-fill': !editForm.editFormWaiver.waiverType{{$parent.$index}}{{$index}}.$valid}"												         		
+					           							ng-disabled="!vm.isEditable('waiverType')"
+										             	ng-required="vm.isRequired('waiverType')">
 															<option>SALES</option>
 															<option>FUND</option>
 														</select>
 													</td>
 													<td>
-														<select class="form-control" ng-model="fare.waiverFullPartial">
+														<select class="form-control" ng-model="fare.waiverFullPartial"  name="waiverFullPartial{{$parent.$index}}{{$index}}"
+														ng-class="{'must-fill': !editForm.editFormWaiver.waiverFullPartial{{$parent.$index}}{{$index}}.$valid}"												         		
+					           							ng-disabled="!vm.isEditable('waiverFullPartial')"
+										             	ng-required="vm.isRequired('waiverFullPartial')">
 															<option>FULL</option>
 															<option>PARTIAL</option>
 														</select>
 													</td>
 													<td>
-														<input type="text" class="form-control" ng-model="fare.waiverPnr"/>
+														<input type="text" class="form-control" ng-model="fare.waiverPnr" name="waiverPnr{{$parent.$index}}{{$index}}"
+														ng-class="{'must-fill': !editForm.editFormWaiver.waiverPnr{{$parent.$index}}{{$index}}.$valid}"												         		
+					           							ng-disabled="!vm.isEditable('waiverPnr')"
+										             	ng-required="vm.isRequired('waiverPnr')"/>
 													</td>
 													<td>
-														<input type="text" class="form-control"  ng-model="fare.waiverTktFrom"/>
+														<input type="text" class="form-control"  ng-model="fare.waiverTktFrom" name="waiverTktFrom{{$parent.$index}}{{$index}}"
+														ng-class="{'must-fill': !editForm.editFormWaiver.waiverTktFrom{{$parent.$index}}{{$index}}.$valid}"												         		
+					           							ng-disabled="!vm.isEditable('waiverTktFrom')"
+										             	ng-required="vm.isRequired('waiverTktFrom')"/>
 													</td>
 													<td>
-														<input type="text" class="form-control" ng-model="fare.waiverTktTo"/>
+														<input type="text" class="form-control" ng-model="fare.waiverTktTo" name="waiverTktTo{{$parent.$index}}{{$index}}"
+														ng-class="{'must-fill': !editForm.editFormWaiver.waiverTktTo{{$parent.$index}}{{$index}}.$valid}"												         		
+					           							ng-disabled="!vm.isEditable('waiverTktTo')"
+										             	ng-required="vm.isRequired('waiverTktTo')"/>
 													</td>
 													<td>
-														<input type="text" class="form-control" ng-model="fare.waiverOri"/>
+														<input type="text" class="form-control" ng-model="fare.waiverOri" name="waiverOri{{$parent.$index}}{{$index}}"
+														ng-class="{'must-fill': !editForm.editFormWaiver.waiverOri{{$parent.$index}}{{$index}}.$valid}"												         		
+					           							ng-disabled="!vm.isEditable('waiverOri')"
+										             	ng-required="vm.isRequired('waiverOri')"/>
 													</td>
 													<td>
-														<input type="text" class="form-control" ng-model="fare.waiverDest"/>
+														<input type="text" class="form-control" ng-model="fare.waiverDest" name="waiverDest{{$parent.$index}}{{$index}}"
+														ng-class="{'must-fill': !editForm.editFormWaiver.waiverDest{{$parent.$index}}{{$index}}.$valid}"												         		
+					           							ng-disabled="!vm.isEditable('waiverDest')"
+										             	ng-required="vm.isRequired('waiverDest')"/>
 													</td>
 													<td>
-														<input type="text" class="form-control" ng-model="fare.waiverOriginalItinerary"/>
+														<input type="text" class="form-control" ng-model="fare.waiverOriginalItinerary" name="waiverOriginalItinerary{{$parent.$index}}{{$index}}"
+														ng-class="{'must-fill': !editForm.editFormWaiver.waiverOriginalItinerary{{$parent.$index}}{{$index}}.$valid}"												         		
+					           							ng-disabled="!vm.isEditable('waiverOriginalItinerary')"
+										             	ng-required="vm.isRequired('waiverOriginalItinerary')"/>
 													</td>
 													<td>
-														<input type="text" class="form-control" ng-model="fare.waiverNewItinerary"/>
+														<input type="text" class="form-control" ng-model="fare.waiverNewItinerary" name="waiverNewItinerary{{$parent.$index}}{{$index}}"
+														ng-class="{'must-fill': !editForm.editFormWaiver.waiverNewItinerary{{$parent.$index}}{{$index}}.$valid}"												         		
+					           							ng-disabled="!vm.isEditable('waiverNewItinerary')"
+										             	ng-required="vm.isRequired('waiverNewItinerary')"/>
 													</td>
 													<td>
-														<input type="text" class="form-control" ng-model="fare.waiverOriginalBasicFare"/>
+														<input type="text" class="form-control" ng-model="fare.waiverOriginalBasicFare" name="waiverOriginalBasicFare{{$parent.$index}}{{$index}}"
+														ng-class="{'must-fill': !editForm.editFormWaiver.waiverOriginalBasicFare{{$parent.$index}}{{$index}}.$valid}"												         		
+					           							ng-disabled="!vm.isEditable('waiverOriginalBasicFare')"
+										             	ng-required="vm.isRequired('waiverOriginalBasicFare')"/>
 													</td>
 													<td>
-														<input type="text" class="form-control" ng-model="fare.waiverNewBasicFare"/>
+														<input type="text" class="form-control" ng-model="fare.waiverNewBasicFare" name="waiverNewBasicFare{{$parent.$index}}{{$index}}"
+														ng-change="vm.calculateFareLost(fare)"
+														ng-class="{'must-fill': !editForm.editFormWaiver.waiverNewBasicFare{{$parent.$index}}{{$index}}.$valid}"												         		
+					           							ng-disabled="!vm.isEditable('waiverNewBasicFare')"
+										             	ng-required="vm.isRequired('waiverNewBasicFare')"/>
 													</td>
 													<td>
-														<input type="text" class="form-control" ng-model="fare.waiverApprovedFare"/>
+														<input type="text" class="form-control" ng-model="fare.waiverApprovedFare" name="waiverApprovedFare{{$parent.$index}}{{$index}}"
+														ng-change="vm.calculateFareLost(fare)"
+														ng-class="{'must-fill': !editForm.editFormWaiver.waiverApprovedFare{{$parent.$index}}{{$index}}.$valid}"												         		
+					           							ng-disabled="!vm.isEditable('waiverApprovedFare')"
+										             	ng-required="vm.isRequired('waiverApprovedFare')"/>
 													</td>
 													<td>
-														<input type="text" class="form-control" ng-model="fare.waiverFareLost"/>
+														<input type="text" class="form-control" ng-model="fare.waiverFareLost" name="waiverFareLost{{$parent.$index}}{{$index}}"
+														ng-class="{'must-fill': !editForm.editFormWaiver.waiverFareLost{{$parent.$index}}{{$index}}.$valid}"												         		
+					           							ng-disabled="!vm.isEditable('waiverFareLost')"
+										             	ng-required="vm.isRequired('waiverFareLost')"/>
 													</td>
 													<td>
-														<input type="text" class="form-control" ng-model="fare.waiverCalculatedPn"/>
+														<input type="text" class="form-control" ng-model="fare.waiverCalculatedPn" name="waiverCalculatedPn{{$parent.$index}}{{$index}}"
+														ng-class="{'must-fill': !editForm.editFormWaiver.waiverCalculatedPn{{$parent.$index}}{{$index}}.$valid}"												         		
+					           							ng-disabled="!vm.isEditable('waiverCalculatedPn')"
+										             	ng-required="vm.isRequired('waiverCalculatedPn')"/>
 													</td>
 													<td>
-														<input type="text" class="form-control" ng-model="fare.waiverOriginalPn"/>
+														<input type="text" class="form-control" ng-model="fare.waiverOriginalPn" name="waiverOriginalPn{{$parent.$index}}{{$index}}"
+														ng-change="vm.calculatePenaltyLost(fare)"
+														ng-class="{'must-fill': !editForm.editFormWaiver.waiverOriginalPn{{$parent.$index}}{{$index}}.$valid}"												         		
+					           							ng-disabled="!vm.isEditable('waiverOriginalPn')"
+										             	ng-required="vm.isRequired('waiverOriginalPn')"/>
 													</td>
 													<td>
-														<input type="text" class="form-control" ng-model="fare.waiverApprovedPn"/>
+														<input type="text" class="form-control" ng-model="fare.waiverApprovedPn" name="waiverApprovedPn{{$parent.$index}}{{$index}}"
+														ng-change="vm.calculatePenaltyLost(fare)"
+														ng-class="{'must-fill': !editForm.editFormWaiver.waiverApprovedPn{{$parent.$index}}{{$index}}.$valid}"												         		
+					           							ng-disabled="!vm.isEditable('waiverApprovedPn')"
+										             	ng-required="vm.isRequired('waiverApprovedPn')"/>
 													</td>
 													<td>
-														<input type="text" class="form-control" ng-model="fare.waiverPenaltyLostPercent"/>
+														<input type="text" class="form-control" ng-model="fare.waiverPenaltyLostPercent" name="waiverPenaltyLostPercent{{$parent.$index}}{{$index}}"
+														ng-class="{'must-fill': !editForm.editFormWaiver.waiverPenaltyLostPercent{{$parent.$index}}{{$index}}.$valid}"												         		
+					           							ng-disabled="!vm.isEditable('waiverPenaltyLostPercent')"
+										             	ng-required="vm.isRequired('waiverPenaltyLostPercent')"/>
 													</td>
 													<td>
-														<input type="text" class="form-control" ng-model="fare.waiverPenaltyLostAmount"/>
+														<input type="text" class="form-control" ng-model="fare.waiverPenaltyLostAmount" name="waiverPenaltyLostAmount{{$parent.$index}}{{$index}}"
+														ng-class="{'must-fill': !editForm.editFormWaiver.waiverPenaltyLostAmount{{$parent.$index}}{{$index}}.$valid}"												         		
+					           							ng-disabled="!vm.isEditable('waiverPenaltyLostAmount')"
+										             	ng-required="vm.isRequired('waiverPenaltyLostAmount')"/>
 													</td>
 													<td>
-														<input type="text" class="form-control" ng-model="fare.waiverCurrency"/>
+														<ui-select ng-model="fare.waiverCurrency" theme="select2" class="form-control"
+															 ng-click="$event.stopPropagation()"
+															name="waiverCurrency{{$parent.$index}}{{$index}}"
+															ng-class="{'must-fill': !editForm.editFormWaiver.waiverCurrency{{$parent.$index}}{{$index}}.$valid}"												         								                            
+															ng-required="vm.isRequired('waiverCurrency')"  
+															ng-disabled="!vm.isEditable('waiverCurrency')"
+									                    	>
+														    <ui-select-match placeholder="Currency">{{$select.selected.value.currencyCode}}</ui-select-match>
+															 <ui-select-choices style="min-width:300px" repeat="value.value.currencyCode as (key, value) in vm.currencies | filter: { value: { currencyCode: $select.search }}">
+														      <div ng-bind-html="value.value.currencyCode | highlight: $select.search"></div>
+														      <small>
+														        Currency Code : {{value.value.currencyCode}}
+														        Currency Name : {{value.value.currencyName}}
+														        
+														      </small>
+														    </ui-select-choices>
+														  </ui-select>
 													</td>
 													<td>
-														<input type="text" class="form-control" ng-model="fare.waiverTotalPax"/>
+														<input type="text" class="form-control" ng-model="fare.waiverTotalPax" name="waiverTotalPax{{$parent.$index}}{{$index}}"
+														ng-class="{'must-fill': !editForm.editFormWaiver.waiverTotalPax{{$parent.$index}}{{$index}}.$valid}"												         		
+					           							ng-disabled="!vm.isEditable('waiverTotalPax')"
+										             	ng-required="vm.isRequired('waiverTotalPax')"/>
 													</td>
 													<td>
-														<input type="text" class="form-control" ng-model="fare.waiverTotalLost"/>
+														<input type="text" class="form-control" ng-model="fare.waiverTotalLost" name="waiverTotalLost{{$parent.$index}}{{$index}}"
+														ng-class="{'must-fill': !editForm.editFormWaiver.waiverTotalLost{{$parent.$index}}{{$index}}.$valid}"												         		
+					           							ng-disabled="!vm.isEditable('waiverTotalLost')"
+										             	ng-required="vm.isRequired('waiverTotalLost')"/>
 													</td>
 													<td>
-														<input type="text" class="form-control" ng-model="fare.waiverApprover"/>
+														<input type="text" class="form-control" ng-model="fare.waiverApprover" name="waiverApprover{{$parent.$index}}{{$index}}"
+														ng-class="{'must-fill': !editForm.editFormWaiver.waiverApprover{{$parent.$index}}{{$index}}.$valid}"												         		
+					           							ng-disabled="!vm.isEditable('waiverApprover')"
+										             	ng-required="vm.isRequired('waiverApprover')"/>
 													</td>
 													<td>
-														<input type="text" class="form-control" ng-model="fare.waiverRemark"/>
+														<input type="text" class="form-control" ng-model="fare.waiverRemark" name="waiverRemark{{$parent.$index}}{{$index}}"
+														ng-class="{'must-fill': !editForm.editFormWaiver.waiverRemark{{$parent.$index}}{{$index}}.$valid}"												         		
+					           							ng-disabled="!vm.isEditable('waiverRemark')"
+										             	ng-required="vm.isRequired('waiverRemark')"/>
 													</td>
 												</tr>
 												<tr class="datatable-action{{$index}}" ng-show="vm.waiverFaresActionButton[$index]">
@@ -2944,6 +2800,7 @@
 					      		</div>
 					     	</div>
 						</div>
+					</div>
 					</div>
 				</div>
 			</ng-form>

@@ -6,10 +6,10 @@
         .factory('stateHandler', stateHandler);
 
     stateHandler.$inject = ['$rootScope', '$state', '$sessionStorage', '$localStorage', '$window',
-        'Auth', 'Principal', 'VERSION', '$ocLazyLoad'];
+        'Auth', 'Principal', 'VERSION', 'Idle'];
 
     function stateHandler($rootScope, $state, $sessionStorage, $localStorage, $window,
-        Auth, Principal, VERSION, $ocLazyLoad) {
+        Auth, Principal, VERSION, Idle) {
         return {
             initialize: initialize
         };
@@ -18,11 +18,21 @@
             $rootScope.VERSION = VERSION;
             $rootScope.isAuthenticated = Principal.isAuthenticated;
             
+            $rootScope.exceptionStatesName = [
+            	'requestReset',
+            	'finishReset'
+            ];
+            
             var stateChangeStart = $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams, fromState) {
                 $rootScope.toState = toState;
                 $rootScope.toStateParams = toStateParams;
                 $rootScope.fromState = fromState;
-
+                $rootScope.exceptionalState = false;
+                
+                if($rootScope.exceptionStatesName.indexOf(toState.name) == 1) {
+                	$rootScope.exceptionalState = true;
+                }
+                
                 if (toState.external) {
                     event.preventDefault();
                     $window.open(toState.url, '_self');
@@ -41,15 +51,19 @@
                 } 
                 
                 if (toState.data.pageTitle) {
+                	 $window.document.title = titleKey;
                     titleKey = toState.data.pageTitle;
                 }
-                $window.document.title = titleKey;
-
-            	$ocLazyLoad.load('content/js/modernizr-custom.js');
-               	$ocLazyLoad.load('content/js/plugins.js');
-               	$ocLazyLoad.load('content/js/revealer.js');
-                $ocLazyLoad.load('content/js/main.js');
-            	$ocLazyLoad.load('content/js/home.js');            	
+                
+                Idle.watch();
+                
+                $rootScope.$on('IdleStart', function() {
+                	console.log('sign out');
+                	Idle.unwatch();
+                	Auth.logout();
+                    $state.go('home'); $window.location.reload();
+                     
+            	});
             });
 
             $rootScope.$on('$destroy', function () {
