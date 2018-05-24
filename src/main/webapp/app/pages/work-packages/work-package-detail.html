@@ -388,6 +388,7 @@
 														<!-- <button class="btn btn-default small btn-secondary">Publish</button> -->
 														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.agent()">Agents</button>
 														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()">Rate Sheet</button> 
+														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.routemap()">Route Map</button> 
 													</div>
 												</div>																						
 											</div>
@@ -723,18 +724,19 @@
 							                				ng-class="{'must-fill': editForm.editFormATPCO.travelEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 												            ng-model="fare.travelEnd"/>									                			
 								               			</td>
-								               			<td>
+								               			<td ng-click="$event.stopPropagation()">
 								               				
-															<input id="field_createdDate" 
+															<input id="field_startDate" 
 																type="text"
 																name="saleStartDate{{$parent.$index}}{{$index}}" id="field_saleStartDate"
 								                				ng-disabled="!vm.isEditable('saleStartDate')"	
-								                				ng-click="$event.stopPropagation()"								                				
+								                				ng-click="$event.stopPropagation()"				
+								                				class="form-control input-date"					                				
 								                				ng-required="vm.isRequired('saleStartDate')"
 									                    		ng-class="{'must-fill': editForm.editFormATPCO.saleStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 													            ng-model="fare.saleStart" 
 													            datetime-picker="{{dateformat}}" 
-													            is-open="vm.datePickerOpenStatus.createdDate">
+													            is-open="vm.datePickerOpenStatus.saleDate">
 															<span class="input-group-addon disabled">
 																<i ng-disabled="true" ng-click="vm.openCalendar('createdDate')" class="fa fa-calendar"></i>
 															</span>

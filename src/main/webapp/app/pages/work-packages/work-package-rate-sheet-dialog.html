@@ -1,17 +1,18 @@
 <form name="editForm" role="form" novalidate ng-submit="vm.save()">
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                ng-click="vm.clear()">&times;</button>
-        <h4 class="modal-title" id="myWorkPackageLabel"><b>Rate Sheet</b></h4>
-    </div>
+    	<h5 class="modal-title" id="modalRatesheetLabel">Rate Sheet</h5>
+    	<button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="vm.clear()">
+      		<span aria-hidden="true">&times;</span>
+    	</button>
+	</div>
     <div class="modal-body">
     
 	    <div ng-if="vm.selectHeader">
-	    	<div class="form-group">
+	    	<div class="form-group mb5px">
 	            <label >Select Fields</label>
-	            <div class="form-group row">
-	            	<div class="col-md-5">
-		            	<select class="form-multiselect-control" multiple name="header" ng-model="vm.header" id="field_carrier" style="height: auto !important; width: 100% !important;">
+	            <div class="clearfix mb1">
+					<div class="pull-left w35">
+						<select class="form-control left-select" multiple name="header" ng-model="vm.header" id="field_carrier" style="height: auto !important; width: 100% !important;">
 							<option value="status">Status</option>
 							<option value="carrier">Carrier</option>
 							<option value="action">Action</option>
@@ -49,29 +50,28 @@
 							<option value="ratesheetComment">RateSheet Comment </option>
 							<option value="dealCode">Deal Code </option>
 			            </select>
-		            </div>
-		            <div class="col-md-2">
-		            	<div class="arrow-wrapper">
-		            		<span class="arrow-full" ng-click="vm.addAllOriginalAuthorities()">Add All</span>
-		            		<span class="arrow-full" ng-click="vm.addOriginalAuthorities()">Add</span>
-		            		<span class="arrow-full" ng-click="vm.removeSelectedAuthorities()">Remove</span>		            		
-		            		<span class="arrow-full" ng-click="vm.removeAllSelectedAuthorities()">Remove All</span>
-		            	</div>
-		            </div>
-		            <div class="col-md-5">
-		            	<select class="form-control" multiple name="header" ng-model="vm.removedHeader" style="height: auto !important; padding: 0 !important; border-color: black; font-size: 12px;">
+					</div>
+					<div class="pull-left w30">
+						<div class="ph5px">
+							<div class="text-center action-ratesheet-wrapper">
+								<div class="action-ratesheet js-addAll-ratesheet" ng-click="vm.addAllOriginalAuthorities()">ADD ALL</div>
+								<div class="action-ratesheet js-add-ratesheet" ng-click="vm.addOriginalAuthorities()">ADD</div>
+								<div class="action-ratesheet js-removeAll-ratesheet" ng-click="vm.removeAllSelectedAuthorities()">REMOVE ALL</div>
+								<div class="action-ratesheet js-remove-ratesheet" ng-click="vm.removeSelectedAuthorities()">REMOVE</div>
+							</div>
+						</div>									
+					</div>
+					<div class="pull-left w35">
+						<select class="form-control right-select" multiple name="header" ng-model="vm.removedHeader" style="height: auto !important; padding: 0 !important; border-color: black; font-size: 12px;">
 							<option ng-repeat="header in vm.title track by $index">{{header}}</option>
 			            </select>
-		            </div>
-	            </div>
-	         	<div class="form-group row">
-		            <div class="col-md-12 ">
-						<label >Rule Text</label>
-			    		<textarea class="col-md-12" ng-model="vm.ruleText" style="min-width: 100%; min-height:100%" >
-			     		</textarea>
-			    	</div>
-		    	</div>
+					</div>
+				</div>
 	        </div>	
+			<div class="form-group">
+				<label>Rule Text</label>
+				<textarea class="form-control" rows="3" placeholder="Enter rule here ..." ng-model="vm.ruleText"></textarea>
+			</div>
 	    </div>    	
 	    <div ng-if="!vm.selectHeader" style="text-align: center;">
 	    	<img class="logo-img" src="content/images/GA_logo.png"  alt="logo" style="width: 130px; height: 100px; margin-bottom: 15px;"/>
@@ -127,17 +127,11 @@
     </div>
     <div class="modal-footer">
   		<div ng-if="vm.selectHeader">
-            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.submit()">
-	            <span class="glyphicon glyphicon-export"></span>&nbsp;<span>Submit</span>
-	        </button>
-	        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
-	            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Close</span>
-	        </button>
+            <button type="submit" class="btn btn-secondary" data-dismiss="modal" ng-click="vm.submit()">Submit</button>
+	        <button type="button" ng-click="vm.clear()" class="btn btn-back" data-dismiss="modal">Close</button>
 	  	</div>	  		    
 	    <div ng-if="!vm.selectHeader">
-    		<button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.exportRateSheet()" >
-    		    <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Export</span>
-    		</button>
+    		<button type="submit" class="btn btn-secondary" data-dismiss="modal" ng-click="vm.exportRateSheet()">Export</button>
 	    </div>
     </div>
 </form>

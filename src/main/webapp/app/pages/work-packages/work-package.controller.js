@@ -254,25 +254,7 @@
         	loadAll();
         	console.log(vm.workPackageFilter);
         }
-        
-        $('.js-filter-toggle').click(function(e){
-            e.preventDefault();
-            e.stopPropagation();
-            var _this = $(this);
-            var _login = $('.wq').find('.filter-area');
-            if (!_this.hasClass('is-active')) {
-                _login.fadeIn(200);
-                _this.addClass('is-active');
-                $('.filter_wording').text('Hide Filter');
-                $('.filter_wording').addClass('semibold');
-            }
-            else {
-                _login.fadeOut(100);
-                 _this.removeClass('is-active');
-                 $('.filter_wording').text('Show Filter');
-                 $('.filter_wording').removeClass('semibold');
-            }   
-        });
+       
         
         GlobalService.sayHello();
         GlobalService.mustFill();

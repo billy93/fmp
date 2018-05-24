@@ -122,7 +122,7 @@
 		    	
 		    },
 		    
-		    mustFill: function(a){
+		    mustFill: function(){
 		    	$(document).ready(function(){
 		    		$('select.must-fill').on('change',function(){
 			    		$(this).removeClass('must-fill');
@@ -136,6 +136,19 @@
 			    	  	if($(this).val() == ''){
 			    	  		$(this).addClass('must-fill');
 			    	  	}
+			    	});
+		    	});
+		    },
+		    
+		    boxHeader: function(){
+		    	// box detail
+//		    	$(".box-header.box-tab").on('click',function(){
+//		    		$(this).find('.tab-content').slideToggle(200);
+//		    	});
+		    	$(document).ready(function(){
+			    	$(".box-header").on('click',function(){
+			    		$(this).toggleClass('open');
+			    		$(this).siblings('.box-body').slideToggle(200);
 			    	});
 		    	});
 		    }

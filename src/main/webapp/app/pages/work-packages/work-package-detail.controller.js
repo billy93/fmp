@@ -3595,6 +3595,27 @@
     		  fare.waiverPenaltyLostPercent = parseInt(fare.waiverApprovedPn) - parseInt(fare.waiverOriginalPn);
     	  }
       }
+      
+      vm.routemap = function(){
+    	  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-routemap-dialog.html',
+              controller: 'WorkPackageRoutemapDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              windowClass: 'full-page-modal',
+              resolve: {
+//              	workPackage: function(){
+//              		return vm.workPackage;
+//              	}
+              }
+			}).result.then(function(option) {
+//				console.log(option);
+//				vm.addTab(option);
+          }, function() {
+      			
+          });
+      }
       GlobalService.sayHello();
     }
 })();
