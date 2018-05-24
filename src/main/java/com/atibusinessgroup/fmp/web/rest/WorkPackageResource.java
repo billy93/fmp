@@ -1262,15 +1262,15 @@ public class WorkPackageResource {
     		workPackage.setWpid(String.valueOf(c.getSequenceValue()));
         }
     	
-	    workPackage = workPackageService.save(workPackage);
-	        
-        if(isWorkPackageNew) {
-        	WorkPackageHistory history = new WorkPackageHistory();
-            history.setWorkPackage(new ObjectId(workPackage.getId()));
-            history.setType("CREATE");
-            history.setUsername(SecurityUtils.getCurrentUserLogin().get());
-            workPackageHistoryService.save(history);
-        }
+//	    workPackage = workPackageService.save(workPackage);
+//	        
+//        if(isWorkPackageNew) {
+//        	WorkPackageHistory history = new WorkPackageHistory();
+//            history.setWorkPackage(new ObjectId(workPackage.getId()));
+//            history.setType("CREATE");
+//            history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+//            workPackageHistoryService.save(history);
+//        }
 
 //		List<WorkPackageFare> fares = workPackageFareService.findAllByWorkPackageAndFareType(workPackage.getId(), null);
 //		for(WorkPackageFare fare : fares) {
@@ -1417,6 +1417,8 @@ public class WorkPackageResource {
     	
     	if(workPackage.getFilingInstructionData() != null) {
     		for(FilingInstruction filingInstruction : workPackage.getFilingInstructionData()) {
+    			log.debug("LOGIN BY : "+ filingInstruction.getUsername() + " " + filingInstruction.getCreatedTime());
+    			
     			if(filingInstruction.getUsername() == null && filingInstruction.getCreatedTime() == null) {
     				filingInstruction.setUsername(SecurityUtils.getCurrentUserLogin().get());
     				filingInstruction.setCreatedTime(ZonedDateTime.now());

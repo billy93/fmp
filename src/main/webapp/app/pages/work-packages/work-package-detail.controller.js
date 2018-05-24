@@ -3438,18 +3438,19 @@
       }
       
       
-      vm.addCommentFillingInstruction = function(commentString){
- 	  	 if(commentString != null){
- 	    	  if(vm.workPackage.filingInstructionData == null){
- 	      		vm.workPackage.filingInstructionData = [];
- 	      }
- 	    	  
-     	  	vm.workPackage.filingInstructionData.push({
-     	  		status:"PENDING", tarno:"", cxr:"GA", comment:commentString, file:"", fileContentType:"", isDeleted:false
-     	  	});
-     	  	vm.save();
-     	  	vm.commentStringFillingInstruction = null;
-     	 }
+      vm.addCommentFillingInstruction = function() {
+ 	  	 	if (vm.commentStringFillingInstruction != null) {
+	 	  		 if (vm.workPackage.filingInstructionData == null) {
+	 	      		vm.workPackage.filingInstructionData = [];
+	 	  		 }
+	 	    	  
+	 	  		 vm.workPackage.filingInstructionData.push({ 
+	     	  		status:"PENDING", tarno:"", cxr:"GA", comment:vm.commentStringFillingInstruction, file:"", fileContentType:"", isDeleted:false
+	 	  		 });
+	 	  		 
+	 	  		 vm.save();
+	 	  		 vm.commentStringFillingInstruction = null;
+ 	  	 	}
        }
       
       vm.removeFiling = function(filing){
