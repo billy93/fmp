@@ -248,6 +248,8 @@
 		<div class="panel-body">
 			<div class="clearfix mb1">
 				<div class="pull-right">
+				
+					<button class="btn btn-default small" ng-click="vm.resendApprove()">Resend</button>
 					<div class="button-group dropdown">
 						<button class="btn btn-default small">Workflow <i class="fa fa-caret-down"></i></button>
 						<ul class="dropdown-menu" role="menu">
@@ -294,7 +296,7 @@
 						</ul>
 					</div>												
 					<button class="btn btn-default small" ng-click="vm.save()">Save</button>
-					<button class="btn btn-default small" ui-sref="work-package">Close</button>
+					<button class="btn btn-default small" ng-click="vm.close()">Close</button>
 				</div>
 			</div>
 			

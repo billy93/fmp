@@ -1751,6 +1751,11 @@ public class WorkPackageResource {
         	workPackage.setStatus(Status.REVIEWING);
         	workPackageService.save(workPackage);
         }
+        
+        workPackage.setLocked(true);
+        workPackage.setLockedBy(SecurityUtils.getCurrentUserLogin().get());
+        workPackage.setLockedSince(ZonedDateTime.now());
+        workPackage = workPackageService.save(workPackage);
 //        List<WorkPackageFare> fares = workPackageFareService.findAllByWorkPackageAndFareType(workPackage.getId(), null);
 //        log.debug("REST request to set WorkPackageFARES : {}", fares.size());
 //        workPackage.setFares(fares);
@@ -1840,6 +1845,7 @@ public class WorkPackageResource {
         if(reviewLevel.contentEquals("LSO")) {
     		result.setReviewLevel("HO");
     		result.setStatus(Status.PENDING);
+    		result.setLocked(false);
         }
 //        else if(reviewLevel.contentEquals("LSO2")) {
 //    		result.setReviewLevel("HO1");
@@ -1866,6 +1872,30 @@ public class WorkPackageResource {
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
+    }
+    
+    /**
+     * POST  /work-packages/unlock : unlock
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/work-packages/unlock")
+    @Timed
+    public ResponseEntity<WorkPackage> unlockWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
+        log.debug("REST request to withdraw WorkPackage : {}", workPackage);
+        if (workPackage.getId() == null) {
+            throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
+        }
+        
+        WorkPackage result = workPackageService.findOne(workPackage.getId());
+        result.setLocked(false);
+        workPackageService.save(result);
+        
+        return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                .body(result);
     }
     
     /**
@@ -2012,6 +2042,7 @@ public class WorkPackageResource {
         if(reviewLevel.contentEquals("HO")) {
     		result.setReviewLevel("LSO");
     		result.setStatus(Status.PENDING);
+    		result.setLocked(false);
         }
         workPackageService.save(result);
         
@@ -2053,6 +2084,7 @@ public class WorkPackageResource {
      		result.setReviewLevel(result.getSidewayReviewLevel());
     		result.setSidewayReviewLevel(null);
         }
+		result.setLocked(false);
         result.setStatus(Status.PENDING);
         workPackageService.save(result);
         
@@ -2092,6 +2124,7 @@ public class WorkPackageResource {
         if(reviewLevel.contentEquals("HO")) {
     		result.setDistributionReviewLevel(reviewLevel);
     		result.setReviewLevel("DISTRIBUTION");
+    		result.setLocked(false);
     		result.setStatus(Status.PENDING);        		
 	    }
         workPackageService.save(result);
@@ -2101,6 +2134,84 @@ public class WorkPackageResource {
         history.setType("APPROVE");
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
+        
+        String[] emailData = null;
+        if(workPackage.getApproveConfig().getEmail() != null && workPackage.getApproveConfig().getEmail().size() > 0) {
+	        emailData = new String[workPackage.getApproveConfig().getEmail().size()];
+	        for (int i=0;i<workPackage.getApproveConfig().getEmail().size();i++) {
+	        	emailData[i] = workPackage.getApproveConfig().getEmail().get(i);
+	        }
+        }
+        
+        String[] emailDataCc = null;
+        if(workPackage.getApproveConfig().getCcEmail() != null && workPackage.getApproveConfig().getCcEmail().size() > 0) {
+	        emailDataCc = new String[workPackage.getApproveConfig().getCcEmail().size()];        
+	        for (int i=0;i<workPackage.getApproveConfig().getCcEmail().size();i++) {
+	        	emailDataCc[i] = workPackage.getApproveConfig().getCcEmail().get(i);
+	        }
+        }
+        User u = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
+        
+        String content = "<h2>Inter Office Comment</h2>";
+        content += "<br/></br>";
+        content += "<table>";
+        	content += "<thead>";        
+	        content += "<tr>";
+	        	content += 	"<th>Message</th>";
+	        	content += 	"<th>Username</th>";
+	        	content += 	"<th>Date</th>";
+	        content += "</tr>";
+	        content += "</thead>";  
+	        
+	        content += "<tbody>";  
+	        	if(workPackage.getInterofficeComment() != null) {
+		        	for(Comment c : workPackage.getInterofficeComment()) {
+				        content += "<tr>";
+				        	content += 	"<td>"+c.getComment()+"</td>";
+				        	content += 	"<td>"+c.getUsername()+"</td>";
+				        	content += 	"<td>"+c.getCreatedTime().toString()+"</td>";
+				        content += "</tr>";
+		        	}
+	        	}
+	        	else {
+	        		content += "<tr>";
+		        		content += 	"<td colspan='3'>No Interoffice Comment</td>";
+		        	content += "</tr>";
+	        	}
+        	content += "</tbody>";  
+        content += "</table>";
+        
+        if(workPackage.getApproveConfig().attachment) {
+        	log.debug("SEND EMAIL WITH ATTACHMENT");
+        	mailService.sendEmailWithAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true, workPackage.getAttachmentData());
+        }
+        else {
+        	log.debug("SEND EMAIL WITHOUT ATTACHMENT");
+        	mailService.sendEmailWithoutAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true);
+        }
+        return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+    
+    /**
+     * POST  /work-packages/resend-approve : Approve
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/work-packages/resend-approve")
+    @Timed
+    public ResponseEntity<WorkPackage> resendApproveWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
+        log.debug("REST request to resend approve WorkPackage : {}", workPackage);
+        if (workPackage.getId() == null) {
+            throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
+        }
+        
+        WorkPackage result = workPackageService.findOne(workPackage.getId());
+        result.setLocked(false);
+        workPackageService.save(result);
         
         String[] emailData = null;
         if(workPackage.getApproveConfig().getEmail() != null && workPackage.getApproveConfig().getEmail().size() > 0) {
@@ -2185,6 +2296,7 @@ public class WorkPackageResource {
         result.setReviewLevel(result.getDistributionReviewLevel());
         result.setDistributionReviewLevel(null);
         result.setStatus(Status.REFERRED);
+		result.setLocked(false);
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();

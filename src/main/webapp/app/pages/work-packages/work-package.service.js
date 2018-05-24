@@ -59,6 +59,9 @@
 	        'approve': {
 	    			method:'POST', url:'api/work-packages/approve'
 	        },
+	        'resendApprove': {
+    			method:'POST', url:'api/work-packages/resend-approve'
+	        },
 	        'referback': {
 	    			method:'POST', url:'api/work-packages/referback'
 	        },
@@ -79,6 +82,9 @@
 	        },
 	        'withdraw': {
 				method:'POST', url:'api/work-packages/withdraw'
+	        },
+	        'unlock': {
+				method:'POST', url:'api/work-packages/unlock'
 	        },
 	        'history': { method: 'GET', isArray: true, url:'api/work-packages/history/:id'},	        
 	        'changeVersion': { method: 'POST', url:'api/work-packages/changeVersion'},	        

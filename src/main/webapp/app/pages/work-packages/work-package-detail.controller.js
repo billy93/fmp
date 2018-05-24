@@ -1877,6 +1877,36 @@
 		    }
 	  };
 	  
+	  vm.resendApprove = function(){
+		  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-approve-email-dialog.html',
+              controller: 'WorkPackageApproveEmailDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              resolve: {
+                  workPackage: vm.workPackage,              	  
+	              email: ['SystemParameter', function(SystemParameter) {
+	                   return SystemParameter.getSystemParameterByName({name : 'APPROVE_EMAIL'}).$promise;
+	              }],
+	              ccEmail: ['SystemParameter', function(SystemParameter) {
+	                   return SystemParameter.getSystemParameterByName({name : 'APPROVE_CC_EMAIL'}).$promise;
+	              }],
+              }
+          }).result.then(function(config) {
+        	  vm.workPackage.approveConfig = config;
+        	  	WorkPackage.resendApprove(vm.workPackage, function(){
+	    			alert('Resend Success');
+	    			$state.go('work-package');
+    		}, function(){
+    			alert('Approve Failed');
+    		});
+          }, function() {
+      			
+          });
+	  };
+	  
+	  
 	  vm.approve = function(){
 		  $uibModal.open({
               templateUrl: 'app/pages/work-packages/work-package-approve-email-dialog.html',
@@ -1992,7 +2022,6 @@
           
           vm.workPackage = data;
           vm.isSaving = false;
-          alert('Save success');
       }
 
       function onSaveError () {
@@ -3690,6 +3719,16 @@
     	  }    	  
       };
       
-      GlobalService.sayHello();
+      vm.close = function(){
+    	  vm.workPackage.locked = false;
+    	  WorkPackage.unlock(vm.workPackage, onUnlockedSuccess, onUnlockedFailure);
+    	  function onUnlockedSuccess (result) {
+    		  $state.go("work-package");
+    	  }
+    	  function onUnlockedFailure (error) {
+    		  
+    	  }
+      }
+//      GlobalService.sayHello();
     }
 })();
