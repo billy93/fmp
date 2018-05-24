@@ -248,9 +248,9 @@
 		<div class="panel-body">
 			<div class="clearfix mb1">
 				<div class="pull-right">
-					<div class="button-group dropdown">
+					<div class="button-group dropdown custom">
 						<button class="btn btn-default small">Workflow <i class="fa fa-caret-down"></i></button>
-						<ul class="dropdown-menu" role="menu">
+						<ul class="dropdown-menu custom" role="menu">
 						    <li><a ng-click="vm.passUp()" 
 					        ng-class="{disabled : editForm.$invalid }" 
 					        ng-show="vm.workPackage.reviewLevel != 'HO' && vm.workPackage.reviewLevel != 'DISTRIBUTION' && vm.workPackage.reviewLevel != 'ROUTE_MANAGEMENT'">Pass Up</a></li>
@@ -268,17 +268,17 @@
 					        >Refer Back</a></li>
 						</ul>
 					</div>
-					<div class="button-group dropdown">
+					<div class="button-group dropdown custom">
 						<button class="btn btn-default small">Action <i class="fa fa-caret-down"></i></button>
-						<ul class="dropdown-menu" role="menu">
+						<ul class="dropdown-menu custom" role="menu">
 						    <li>
 						    	<a href="#">Save and Validate</a>
 						    </li>
 						</ul>
 					</div>	
-					<div class="button-group dropdown">
+					<div class="button-group dropdown custom">
 						<button class="btn btn-default small">Sheet <i class="fa fa-caret-down"></i></button>
-						<ul class="dropdown-menu" role="menu">
+						<ul class="dropdown-menu custom" role="menu">
 						    <li>
 						    	<a ng-click="vm.addSheet()" data-toggle="modal" data-target="#addNewsheet">Add</a>
 						    </li>
@@ -375,9 +375,9 @@
 											<div class="pull-left">
 												<div class="clearfix">
 													<div class="pull-right datatable-button">
-														<div class="button-group dropdown">
+														<div class="button-group dropdown custom">
 															<button class="btn btn-default small btn-secondary">Edit <i class="fa fa-caret-down"></i></button>
-															<ul class="dropdown-menu" role="menu">
+															<ul class="dropdown-menu custom" role="menu">
 															    <li>
 															    	<a ng-click="vm.clearSelection()">Clear Selection</a>
 															    </li>															   
@@ -845,9 +845,9 @@
 											<div class="pull-left">
 												<div class="clearfix">
 													<div class="pull-right datatable-button">
-														<div class="button-group dropdown">
+														<div class="button-group dropdown custom">
 															<button class="btn btn-default small btn-secondary">Edit <i class="fa fa-caret-down"></i></button>
-															<ul class="dropdown-menu" role="menu">
+															<ul class="dropdown-menu custom" role="menu">
 															    <li>
 															    	<a ng-click="vm.clearSelection()">Clear Selection</a>
 															    </li>
@@ -866,7 +866,7 @@
 														<button class="btn btn-default small btn-secondary">Export</button>
 														<button class="btn btn-default small btn-secondary">Publish</button>
 														<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalAgent">Agents</button>
-														<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalRatesheet">Rate Sheet</button>
+														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()">Rate Sheet</button>
 													</div>
 												</div>																						
 											</div>
@@ -1189,7 +1189,7 @@
 									</div>
 						        	 <div class="box-body">
 						        		<div class="comment-wrapper">
-							    			<div class="comment-list" ng-repeat="filingInstructionData in vm.workPackage.filingInstructionData track by $index">
+							    			<div class="comment-list" ng-repeat="filingInstructionData in vm.workPackage.filingInstructionData.slice().reverse() track by $index">
 										    	<div class="clearfix">
 										    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
 										    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'short'}}</div>
@@ -1495,9 +1495,9 @@
 						                <div class="pull-left">
 						                  <div class="clearfix">
 						                    <div class="pull-right datatable-button">
-						                      <div class="button-group dropdown">
+						                      <div class="button-group dropdown custom">
 						                        <button class="btn btn-default small btn-secondary">Edit <i class="fa fa-caret-down"></i></button>
-						                        <ul class="dropdown-menu" role="menu">
+						                        <ul class="dropdown-menu custom" role="menu">
 						                            <li>
 						                              <a  ng-click="vm.clearSelection()">Clear Selection</a>
 						                            </li>
@@ -1514,7 +1514,7 @@
 						                      </div>													
 						                      <button class="btn btn-default small btn-secondary" ngf-select ngf-change="vm.importFareDiscount($file)">Import</button>
 						                      <button class="btn btn-default small btn-secondary" ng-click="vm.exportFaresDiscount()">Export</button>
-						                      <button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalAgent">Agents</button>
+						                      <button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.agent()">Agents</button>
 						                    </div>
 						                  </div>
 						                </div>
@@ -1959,9 +1959,9 @@
 											<div class="pull-left">
 												<div class="clearfix">
 													<div class="pull-right datatable-button">
-														<div class="button-group dropdown">
+														<div class="button-group dropdown custom">
 															<button class="btn btn-default small btn-secondary">Edit <i class="fa fa-caret-down"></i></button>
-															<ul class="dropdown-menu" role="menu">
+															<ul class="dropdown-menu custom" role="menu">
 															    <li>
 															    	<a ng-click="vm.clearSelection()">Clear Selection</a>
 															    </li>
@@ -1979,7 +1979,7 @@
 														<button class="btn btn-default small btn-secondary" ngf-select  ngf-change="vm.importFareMarket($file)">Import</button>
 														<button class="btn btn-default small btn-secondary">Export</button>
 														<button class="btn btn-default small btn-secondary">Publish</button>
-														<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalAgent">Agents</button>
+														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.agent()">Agents</button>
 														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()">Rate Sheet</button>
 													</div>
 												</div>	
@@ -2344,29 +2344,33 @@
 							</div>
 													
 							<div class="tab-pane" ng-class="{active:vm.currentTabFilingInstruction}" ng-if="vm.workPackage.filingInstruction">
-								<div class="action-btn-wrapper">
-				      				<div class="col-md-12 text-right no-pad">
-				      					<button ng-click="vm.addFiling()" class="btn btn-primary">Add</button>
-				      				</div>
-				      			</div>
-				       			<div class="col-md-12">
-				       				<div class="text-center no-data" ng-if="!vm.workPackage.filingInstructionData || vm.workPackage.filingInstructionData.length == 0">No Filing Instruction Available</div>
-							
-				       				<div ng-repeat="filingInstructionData in vm.workPackage.filingInstructionData track by $index" class="form-repeat">
-				       					<button ng-click="vm.removeFiling(filingInstructionData)" class="bordered delete"><span class="glyphicon glyphicon-remove"></span></button>
-						       			<label class="user">{{filingInstructionData.username}} <span class="vseparator no-mar"></span> {{filingInstructionData.createdTime | date: 'short'}}</label>
-					       				<div class="row">
-							        		<div class="col-md-6">							      			
-								      			<div class="form-group row">
-								      				<label class="col-md-4">Comment</label>
-								      				<div class="col-md-8 input-group textarea">
-								      					<textarea class="col-md-12" ng-model="filingInstructionData.comment"></textarea>
-								      				</div>
-								      			</div>
-							        		</div>							        		
-							      		</div>
-							     	</div>
-				       			</div>
+									<div class="box-header"></div>
+									<div class="box-body bbgrey">
+										<div class="form-group">
+											<label>Comment</label>
+											<div text-angular="text-angular" name="commentFillingInstruction" ng-model="vm.commentStringFillingInstruction" ta-paste="vm.stripFormat($html)" ta-toolbar="[['h1','h2','h3'],['bold','italics','underline'],['redo','undo'],['ul','ol'],['justifyLeft','justifyCenter','justifyRight','justifyFull']]"/>
+										</div>
+										<div class="clearfix">
+											<div class="pull-right">
+												<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction(vm.commentStringFillingInstruction)"></i>Add</button>
+											</div>
+										</div>										
+									</div>
+						        	 <div class="box-body">
+						        		<div class="comment-wrapper">
+							    			<div class="comment-list" ng-repeat="filingInstructionData in vm.workPackage.filingInstructionData.slice().reverse() track by $index">
+										    	<div class="clearfix">
+										    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
+										    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'short'}}</div>
+										    	</div>
+										    	<label> 
+										    		<input type="checkbox" id="comment-message" name="comment-message" ng-model="filingInstructionData.isDeleted">
+										    		<span>{{filingInstructionData.isDeleted ? "Deleted" : "Delete"}}</span> 
+													<span ng-show="!filingInstructionData.isDeleted" ng-bind-html="filingInstructionData.comment"></span>
+												</label>
+											</div>
+							    		</div>
+						        	</div>	
 							</div>
 							
 						</div>
@@ -2482,9 +2486,9 @@
 										<div class="pull-left">
 											<div class="clearfix">
 												<div class="pull-right datatable-button">
-													<div class="button-group dropdown">
+													<div class="button-group dropdown custom">
 														<button class="btn btn-default small btn-secondary">Edit <i class="fa fa-caret-down"></i></button>
-														<ul class="dropdown-menu" role="menu">
+														<ul class="dropdown-menu custom" role="menu">
 														    <li>
 														    	<a href="#">Clear Selection</a>
 														    </li>
