@@ -1,0 +1,158 @@
+<form name="editForm" role="form" novalidate ng-submit="vm.save()">
+    <div class="modal-header">
+    	<h5 class="modal-title" id="myWorkPackageLabel">Route Map</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+      	<div class="clearfix mb1">
+      		<div class="pull-left ph5px w25">
+      					<div class="form-group mb0">
+							<label>Source</label>
+							<select class="form-control">
+								<option>Source A</option>
+								<option>Source B</option>
+							</select>																
+						</div>
+						<div class="form-group mb0">
+							<label>Route No</label>
+							<input type="text" name="Route No" class="form-control" disabled="">																
+						</div>
+						<div class="form-group mb0">
+							<label>Origin</label>
+							<input type="text" name="Origin" class="form-control" disabled="">																
+						</div>
+						<div class="form-group mb0">
+							<label>Destination</label>
+							<input type="text" name="Destination" class="form-control" disabled="">																
+						</div>
+      				</div>
+      		<div class="pull-left ph5px w25">
+      					<div class="form-group mb0">
+							<label>CXR</label>
+							<select class="form-control">
+								<option>GA</option>
+								<option>GB</option>
+							</select>																
+						</div>
+						<div class="form-group mb0">
+							<label>Start Date</label>
+							<div class="input-group">
+								<input type="text" name="Start Date" class="form-control" disabled value="2018-05-07 18:03">
+								<span class="input-group-addon disabled">
+									<i class="fa fa-calendar"></i>
+								</span>
+							</div>																
+						</div>
+						<div class="form-group mb0">
+							<label>End Date</label>
+							<div class="input-group">
+								<input type="text" name="End Date" class="form-control" disabled value="2018-05-07 18:03">
+								<span class="input-group-addon disabled">
+									<i class="fa fa-calendar"></i>
+								</span>
+							</div>																
+						</div>
+						<div class="form-group mb0">
+							<label>Tariff</label>
+							<select class="form-control">
+								<option>Tariff A</option>
+								<option>Tariff B</option>
+							</select>																
+						</div>
+      				</div>
+      		<div class="pull-left ph5px w25">
+      					<div class="form-group mb0">
+							<label>Sales Country Group</label>
+							<select class="form-control">
+								<option>Sales Country Group A</option>
+								<option>Sales Country Group B</option>
+							</select>																
+						</div>
+						<div class="form-group mb0">
+							<label>Product Type</label>
+							<select class="form-control">
+								<option>Product Type A</option>
+								<option>Product Type B</option>
+							</select>																
+						</div>
+						<div class="form-group mb0">
+							<label>Product Sub-Type</label>
+							<select class="form-control">
+								<option>Product Sub-Type A</option>
+								<option>Product Sub-Type B</option>
+							</select>																
+						</div>
+						<div class="form-group mb0">
+							<div class="checkbox-wrapper" style="padding-left: 5px;">
+								<label class="black">
+									<input type="checkbox" name="radio1">
+									Show Route Map
+								</label>
+							</div>
+						</div>
+      				</div>
+      		<div class="pull-left ph5px w25 text-center" style="margin-top: 33px; padding-left: 35px !important;">
+      					<button class="btn btn-default small btn-secondary btn-third mb5px block">Query</button>
+						<button class="btn btn-default small btn-secondary btn-third mb5px block">Clear</button>
+						<button class="btn btn-default small btn-secondary btn-third mb5px block" style="margin-right: 5px;">Reset</button>
+      				</div>
+      	</div>
+      	<div class="box-detail">
+      				<div class="box-header">Route Map Details</div>	
+      				<div class="box-body">
+      					<div class="datatable-length">
+							<label style="font-weight: 400">records 1 of 29</label>
+						</div>
+						<div class="table-wrapper">
+							<div class="datatable-wrapper form-inline">
+								<div class="table-responsive">
+									<table class="table table-stripped table-bordered datatable">
+										<thead>
+											<tr role="row">
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">CXR</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Route No</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tariff CD</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tariff No</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Start Date</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">End Date</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr role="row" class="datatable-row">
+												<td>A</td>
+												<td>B</td>
+												<td>C</td>
+												<td>D</td>
+												<td>E</td>
+												<td>F</td>
+											</tr>
+											<tr role="row" class="datatable-row">
+												<td>A</td>
+												<td>B</td>
+												<td>C</td>
+												<td>D</td>
+												<td>E</td>
+												<td>F</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+      				</div>		      				
+      			</div>
+    	<div class="box-detail box-comment">
+      		<div class="box-header">Route Map Text: 5001</div>	
+      		<div class="box-body">
+      			<div class="form-group">
+					<textarea class="form-control" rows="3" placeholder="Lorem Ipsum dolor sit amet ..." disabled="" style="height: 200px; overflow: auto"></textarea>
+				</div>
+      		</div>
+      	</div>
+   	</div>
+    <div class="modal-footer">
+    	<button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-secondary" data-translate="entity.action.save">OK</button>
+        <button type="button" ng-click="vm.clear()" class="btn btn-back" data-dismiss="modal">Close</button>
+    </div>
+</form>
