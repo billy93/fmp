@@ -213,7 +213,9 @@ public class WorkPackageResource {
         wp.setReuseFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
-        wp.setReviewLevel("LSO");
+        
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
+        wp.setReviewLevel(user.getReviewLevels().get(0));
         wp.setComment(null);
         wp.setInterofficeComment(null);
         wp.setFilingInstructionData(null);     
@@ -221,6 +223,11 @@ public class WorkPackageResource {
         wp.setCreatedDate(null);
         wp.setLastModifiedBy(null);
         wp.setLastModifiedDate(null);
+        wp.setFilingInstruction(false);
+        if(!workPackage.getReuseReplaceConfig().isAttachment()) {
+        	wp.setAttachment(false);
+        	wp.getAttachmentData().clear();
+        }
         WorkPackage result = workPackageService.save(wp);
         
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
@@ -244,11 +251,17 @@ public class WorkPackageResource {
         wp.setReplaceFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
-        wp.setReviewLevel("LSO");
+        
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
+        wp.setReviewLevel(user.getReviewLevels().get(0));
         wp.setCreatedBy(null);
         wp.setCreatedDate(null);
         wp.setLastModifiedBy(null);
         wp.setLastModifiedDate(null);
+        if(!workPackage.getReuseReplaceConfig().isAttachment()) {
+        	wp.setAttachment(false);
+        	wp.getAttachmentData().clear();
+        }
         WorkPackage result = workPackageService.save(wp);
         
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
@@ -1419,7 +1432,7 @@ public class WorkPackageResource {
     			}
     		}
     	}
-    	if(workPackage.getSaleDate() != null) {
+    	if(workPackage.getSaleDate() != null && (workPackage.getStatus() != Status.DISTRIBUTED)) {
 	    	Sort sort = new Sort(Direction.ASC, "priority");
 	    	List<Priority> priorities = priorityRepository.findAll(sort);
 	    	
@@ -1524,15 +1537,16 @@ public class WorkPackageResource {
     		public boolean readyToRelease;
     		public boolean pending;
     		public boolean completed;
-    		public boolean withdraw;
+    		public boolean withdrawn;
         	public boolean replace;
         	public boolean reuse;
         	
-			public boolean isWithdraw() {
-				return withdraw;
+        	
+			public boolean isWithdrawn() {
+				return withdrawn;
 			}
-			public void setWithdraw(boolean withdraw) {
-				this.withdraw = withdraw;
+			public void setWithdrawn(boolean withdrawn) {
+				this.withdrawn = withdrawn;
 			}
 			public boolean isNewStatus() {
 				return newStatus;
@@ -1829,7 +1843,7 @@ public class WorkPackageResource {
         }
         
         WorkPackage result = workPackageService.findOne(workPackage.getId());
-        result.setStatus(Status.WITHDRAW);
+        result.setStatus(Status.WITHDRAWN);
         workPackageService.save(result);
         /*
         saveHistoryData(workPackage);
@@ -1987,10 +2001,6 @@ public class WorkPackageResource {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
         
-        saveHistoryData(workPackage);
-        
-        //updateWorkPackage(workPackage);
-        
         WorkPackage result = workPackageService.findOne(workPackage.getId());
         String reviewLevel = result.getReviewLevel();
         
@@ -2002,6 +2012,7 @@ public class WorkPackageResource {
      		result.setReviewLevel(result.getSidewayReviewLevel());
     		result.setSidewayReviewLevel(null);
         }
+        result.setStatus(Status.PENDING);
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -2050,9 +2061,20 @@ public class WorkPackageResource {
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
         
-        String[] emailData = new String[workPackage.getApproveConfig().getEmail().size()];
-        for (int i=0;i<workPackage.getApproveConfig().getEmail().size();i++) {
-        	emailData[i] = workPackage.getApproveConfig().getEmail().get(i);
+        String[] emailData = null;
+        if(workPackage.getApproveConfig().getEmail() != null && workPackage.getApproveConfig().getEmail().size() > 0) {
+	        emailData = new String[workPackage.getApproveConfig().getEmail().size()];
+	        for (int i=0;i<workPackage.getApproveConfig().getEmail().size();i++) {
+	        	emailData[i] = workPackage.getApproveConfig().getEmail().get(i);
+	        }
+        }
+        
+        String[] emailDataCc = null;
+        if(workPackage.getApproveConfig().getCcEmail() != null && workPackage.getApproveConfig().getCcEmail().size() > 0) {
+	        emailDataCc = new String[workPackage.getApproveConfig().getCcEmail().size()];        
+	        for (int i=0;i<workPackage.getApproveConfig().getCcEmail().size();i++) {
+	        	emailDataCc[i] = workPackage.getApproveConfig().getCcEmail().get(i);
+	        }
         }
         User u = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
         
@@ -2085,7 +2107,12 @@ public class WorkPackageResource {
         	content += "</tbody>";  
         content += "</table>";
         
-        mailService.sendEmailWithAttachment(u.getEmail(), emailData, "Approve", content, true, true, workPackage.getAttachmentData());
+        if(workPackage.getApproveConfig().attachment) {
+        	mailService.sendEmailWithAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true, workPackage.getAttachmentData());
+        }
+        else {
+        	mailService.sendEmailWithoutAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true);
+        }
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -2114,6 +2141,7 @@ public class WorkPackageResource {
 
         result.setReviewLevel(result.getDistributionReviewLevel());
         result.setDistributionReviewLevel(null);
+//        result.setStatus(Status.REF);
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();

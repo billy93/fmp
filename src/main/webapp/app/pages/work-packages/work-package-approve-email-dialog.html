@@ -16,6 +16,8 @@
       				<div class="box-body">
       					<div class="form-group">
 							<label class="control-label" for="field_include">Include Attachment?</label>
+							<input type="checkbox" ng-model="vm.attachment">
+							Attachment
 						</div>
       					<div class="form-group">
 							<label class="control-label" for="field_email">Email</label>
@@ -25,15 +27,34 @@
 				                    <button type="button" class="btn btn-default" ng-click="vm.addEmail()"><i class="glyphicon glyphicon-plus"></i></button>
 				                </span>
 				            </div>
+				            
+				            <div class="multi-values" >
+								<span ng-repeat="email in vm.option.email track by $index">
+				           		<label name="remove_email" >
+				           			{{email}}<span class="delete"  ng-click="vm.removeEmail()"><i class="glyphicon glyphicon-remove-sign"></i></span>
+				           		</label>
+				           		<br/><br/>
+				           		</span>
+				           	</div>
 						</div>
-						<div class="multi-values" >
-							<span ng-repeat="email in vm.option.email track by $index">
-			           		<label name="remove_email" >
-			           			{{email}}<span class="delete"  ng-click="vm.removeEmail()"><i class="glyphicon glyphicon-remove-sign"></i></span>
-			           		</label>
-			           		<br/><br/>
-			           		</span>
-			           	</div>
+						<div class="form-group">
+							<label class="control-label" for="field_email">Cc Email</label>
+				            <div class="input-group">
+				            	<input autocomplete="off" type="email" name="add_email" ng-model="vm.ccEmail" class="form-control" />
+				            	<span class="input-group-btn">
+				                    <button type="button" class="btn btn-default" ng-click="vm.addCcEmail()"><i class="glyphicon glyphicon-plus"></i></button>
+				                </span>
+				            </div>
+				            
+				            <div class="multi-values" >
+								<span ng-repeat="email in vm.option.ccEmail track by $index">
+				           		<label name="remove_email" >
+				           			{{email}}<span class="delete"  ng-click="vm.removeCcEmail()"><i class="glyphicon glyphicon-remove-sign"></i></span>
+				           		</label>
+				           		<br/><br/>
+				           		</span>
+				           	</div>
+						</div>
       				</div>
       			</div>						
 	      	</div>		      		

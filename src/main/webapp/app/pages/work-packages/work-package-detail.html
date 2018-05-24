@@ -1967,7 +1967,9 @@
 									<div class="pull-left w50 two-column">
 										<div class="form-group">
 											<label>Group Fares</label>
-											<input class="form-control" type="checkbox" ng-model="workPackageSheet.groupFares"/>																						      				
+											<input class="form-control" type="checkbox" ng-model="workPackageSheet.groupFares" 
+											ng-disabled="!vm.isEditable('marketGroupFares')"
+											ng-required="vm.isRequired('marketGroupFares')"/>																						      				
 										</div>
 									</div>
 								</div>
@@ -2193,8 +2195,7 @@
 								                				ng-click="$event.stopPropagation()"
 								                				ng-required="vm.isRequired('marketFareTravelStartDate')"
 								                				ng-class="{'must-fill': editForm.editFormMarket.marketFareTravelStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
-													            ng-model="fare.travelStart"
-													            datetime-picker="{{dateformat}}"/>
+													            ng-model="fare.travelStart"/>
 								               		</td>
 								               			<td>
 								               					<input type="text" class="form-control" name="marketFareTravelEndDate{{$parent.$index}}{{$index}}" id="field_travelEndDate"
