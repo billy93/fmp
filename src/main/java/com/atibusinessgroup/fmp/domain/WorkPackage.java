@@ -306,6 +306,9 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
         @Field("waiver_iata_no")
         private String waiverIataNo;
         
+        @Field("waiver_ioc_number")
+        private String waiverIocNumber;
+        
         @Field("waiver_approval_date")
         private String waiverApprovalDate;
         //End Waiver Fares
@@ -334,7 +337,15 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
         private String discontinueDate;
 
         
-        public String getWaiverApprovalReference() {
+        public String getWaiverIocNumber() {
+			return waiverIocNumber;
+		}
+
+		public void setWaiverIocNumber(String waiverIocNumber) {
+			this.waiverIocNumber = waiverIocNumber;
+		}
+
+		public String getWaiverApprovalReference() {
 			return waiverApprovalReference;
 		}
 

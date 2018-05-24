@@ -190,12 +190,11 @@
 				<div class="row" ng-show="vm.workPackage.waiverFares"> 
 				    <div class="col-xs-3">
 				        Name
-				        <input type="text" class="form-control" name="name" id="field_name" ng-model="vm.workPackage.waiverFareSheet[0].marketFaresName"/>
-				        <input type="hidden" class="form-control" name="carrier" id="field_carrier" ng-model="vm.workPackage.waiverFareSheet[0].fareCarrier"/>
+				        <input type="text" class="form-control" name="name" id="field_name" ng-model="vm.workPackage.waiverFareSheet[0].waiverFaresName"/>
 				    </div>
 				    <div class="col-xs-3">
 				       Fare Type
-				       <select class="form-control"ng-model="vm.workPackage.waiverFareSheet[0].fareType" ng-options="key as value for (key , value) in vm.fareType"></select>
+				       <select class="form-control"ng-model="vm.workPackage.waiverFareSheet[0].waiverFareType" ng-options="key as value for (key , value) in vm.fareType"></select>
 				    </div>
 				</div>	    
 				    	
