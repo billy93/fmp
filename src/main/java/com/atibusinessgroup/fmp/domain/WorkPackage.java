@@ -789,6 +789,7 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     		private String tarcd;
     		private String cxr;
     		private String comment;
+    		private boolean isDeleted;
     		
     	    @Field("file")
     	    private byte[] file;
@@ -803,6 +804,15 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     	    @Field("createdTime")	    
     		private ZonedDateTime createdTime;
     	    
+    	    
+			public boolean getIsDeleted() {
+				return isDeleted;
+			}
+
+			public void setIsDeleted(boolean isDeleted) {
+				this.isDeleted = isDeleted;
+			}
+
 			public String getStatus() {
 				return status;
 			}

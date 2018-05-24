@@ -63,7 +63,6 @@
                 	console.log('sign out');
                 	Idle.unwatch();
                 	Auth.logout();
-                    $state.go('home'); $window.location.reload();
                      
             	});
             });
