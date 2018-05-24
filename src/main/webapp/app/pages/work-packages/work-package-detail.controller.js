@@ -693,6 +693,161 @@
         		mandatory:[]
         	},
         	
+        	//WAIVER FARE HEADER
+        	{
+        		name:"waiverFareDescription",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverApprovalReference",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverFareType",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverAgentName",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	
+        	{
+        		name:"waiverIataNo",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverIocNumber",
+        		editable:[],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverApprovalDate",
+        		editable:[],
+        		mandatory:[]
+        	},
+        	
+        	
+        	//WAIVER FARE
+        	{
+        		name:"waiverType",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverFullPartial",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverPnr",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverTktFrom",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverTktTo",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverOri",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverDest",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverOriginalItinerary",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverNewItinerary",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverOriginalBasicFare",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverNewBasicFare",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverApprovedFare",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverFareLost",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverCalculatedPn",
+        		editable:[],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverOriginalPn",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverApprovedPn",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverPenaltyLostPercent",
+        		editable:[],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverPenaltyLostAmount",
+        		editable:[],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverCurrency",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverTotalPax",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverTotalLost",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverApprover",
+        		editable:[],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverRemark",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	}
         ];
         
         vm.isRequired = function(field){
@@ -3429,6 +3584,17 @@
 	    	  }
       });
       
+      //Waiver Function
+      vm.calculateFareLost = function(fare){
+    	  if(fare.waiverApprovedFare != null && fare.waiverNewBasicFare != null){
+    		  fare.waiverFareLost = parseInt(fare.waiverApprovedFare) - parseInt(fare.waiverNewBasicFare);
+    	  }
+      }
+      vm.calculatePenaltyLost = function(fare){
+    	  if(fare.waiverApprovedPn != null && fare.waiverOriginalPn != null){
+    		  fare.waiverPenaltyLostPercent = parseInt(fare.waiverApprovedPn) - parseInt(fare.waiverOriginalPn);
+    	  }
+      }
       GlobalService.sayHello();
     }
 })();
