@@ -22,12 +22,20 @@
       					<div class="form-group">
 							<label class="control-label" for="field_email">Email</label>
 				            <div class="input-group">
-				            	<input autocomplete="off" type="email" name="add_email" ng-model="vm.email" class="form-control" />
+				            	<input autocomplete="off" type="email" name="email" ng-model="vm.email" class="form-control" />
 				            	<span class="input-group-btn">
-				                    <button type="button" class="btn btn-default" ng-click="vm.addEmail()"><i class="glyphicon glyphicon-plus"></i></button>
+				                    <button type="button" class="btn btn-default" ng-click="vm.addEmail()" ng-disabled="vm.email == null || editForm.email.$error.email"><i class="glyphicon glyphicon-plus"></i></button>
 				                </span>
 				            </div>
-				            
+				            <div ng-show="editForm.email.$invalid">
+								<p class="help-block" ng-show="editForm.email.$error.required">
+									This field is required.</p>
+				
+								<p class="help-block" ng-show="editForm.email.$error.maxlength">
+									This field cannot be longer than 100 characters.</p>
+								<p class="help-block" ng-show="editForm.email.$error.email">
+									Your email is invalid.</p>
+							</div>
 				            <div class="multi-values" >
 								<span ng-repeat="email in vm.option.email track by $index">
 				           		<label name="remove_email" >
@@ -40,12 +48,20 @@
 						<div class="form-group">
 							<label class="control-label" for="field_email">Cc Email</label>
 				            <div class="input-group">
-				            	<input autocomplete="off" type="email" name="add_email" ng-model="vm.ccEmail" class="form-control" />
+				            	<input type="email" name="ccEmail" ng-model="vm.ccEmail" class="form-control" />
 				            	<span class="input-group-btn">
-				                    <button type="button" class="btn btn-default" ng-click="vm.addCcEmail()"><i class="glyphicon glyphicon-plus"></i></button>
+				                    <button type="button" class="btn btn-default" ng-click="vm.addCcEmail()" ng-disabled="vm.ccEmail == null || editForm.ccEmail.$error.email"><i class="glyphicon glyphicon-plus"></i></button>
 				                </span>
 				            </div>
-				            
+				            <div ng-show="editForm.ccEmail.$invalid">
+								<p class="help-block" ng-show="editForm.ccEmail.$error.required">
+									This field is required.</p>
+				
+								<p class="help-block" ng-show="editForm.ccEmail.$error.maxlength">
+									This field cannot be longer than 100 characters.</p>
+								<p class="help-block" ng-show="editForm.ccEmail.$error.email">
+									Your email is invalid.</p>
+							</div>
 				            <div class="multi-values" >
 								<span ng-repeat="email in vm.option.ccEmail track by $index">
 				           		<label name="remove_email" >

@@ -1287,7 +1287,10 @@
                 resolve: {
                 	workPackage: function(){
                 		return vm.workPackage;
-                	}
+                	},
+                    fareTypes: ['FareType', function(FareType) {
+                        return FareType.getAll().$promise;
+                    }],
                 }
 			}).result.then(function(option) {
 				console.log(option);

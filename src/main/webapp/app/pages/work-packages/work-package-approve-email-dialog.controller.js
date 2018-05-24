@@ -60,6 +60,7 @@
         			vm.option.ccEmail = [];        			
         		}
         		
+        		console.log('PUSH CC EMAIL : '+vm.ccEmail);
         		if (vm.option.ccEmail.indexOf(vm.ccEmail) == -1) {
         			vm.option.ccEmail.push(vm.ccEmail);
         		}

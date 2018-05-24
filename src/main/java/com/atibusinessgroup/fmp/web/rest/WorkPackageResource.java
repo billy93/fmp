@@ -1540,8 +1540,14 @@ public class WorkPackageResource {
     		public boolean withdrawn;
         	public boolean replace;
         	public boolean reuse;
+        	public boolean referred;
         	
-        	
+			public boolean isReferred() {
+				return referred;
+			}
+			public void setReferred(boolean referred) {
+				this.referred = referred;
+			}
 			public boolean isWithdrawn() {
 				return withdrawn;
 			}
@@ -1706,7 +1712,7 @@ public class WorkPackageResource {
     public ResponseEntity<WorkPackage> getWorkPackage(@PathVariable String id) {
         log.debug("REST request to get WorkPackage : {}", id);
         WorkPackage workPackage = workPackageService.findOne(id);
-        if(workPackage.getStatus() == Status.PENDING) {
+        if(workPackage.getStatus() == Status.PENDING || workPackage.getStatus() == Status.REFERRED) {
         	workPackage.setStatus(Status.REVIEWING);
         	workPackageService.save(workPackage);
         }
@@ -2141,7 +2147,7 @@ public class WorkPackageResource {
 
         result.setReviewLevel(result.getDistributionReviewLevel());
         result.setDistributionReviewLevel(null);
-//        result.setStatus(Status.REF);
+        result.setStatus(Status.REFERRED);
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
