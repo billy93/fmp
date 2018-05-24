@@ -5,16 +5,19 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.atibusinessgroup.fmp.domain.AtpcoFare;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
 import com.atibusinessgroup.fmp.domain.dto.AfdQuery;
+import com.atibusinessgroup.fmp.domain.dto.AtpcoFareWithRecord1;
 
 @Service
 public class AfdQueryMapper {
 	
-	public List<AfdQuery> convertAtpcoFare(List<AtpcoFare> afares) {
+	public List<AfdQuery> convertAtpcoFare(List<AtpcoFareWithRecord1> a1fares) {
 		List<AfdQuery> result = new ArrayList<>();
 		
-		for (AtpcoFare afare:afares) {
+		for (AtpcoFareWithRecord1 a1fare:a1fares) {
+			AtpcoFare afare = a1fare.getAtpcoFare();
+			
 			AfdQuery afd = new AfdQuery();
 			afd.setAtpcoFareId(afare.getId());
 			afd.setSource(afare.getSource());

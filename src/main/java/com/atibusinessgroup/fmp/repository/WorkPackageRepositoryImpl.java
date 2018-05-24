@@ -14,7 +14,7 @@ import org.springframework.data.repository.support.PageableExecutionUtils;
 import com.atibusinessgroup.fmp.domain.WorkPackage;
 import com.atibusinessgroup.fmp.web.rest.WorkPackageResource.WorkPackageFilter;
 
-public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAnyName{
+public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAnyName {
 
 	@Autowired
     MongoTemplate mongoTemplate;

@@ -1,4 +1,4 @@
-package com.atibusinessgroup.fmp.domain;
+package com.atibusinessgroup.fmp.domain.atpco;
 
 import org.bson.types.Decimal128;
 import org.springframework.data.annotation.Id;

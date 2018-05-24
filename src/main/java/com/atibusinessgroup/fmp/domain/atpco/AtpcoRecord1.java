@@ -1,4 +1,4 @@
-package com.atibusinessgroup.fmp.domain;
+package com.atibusinessgroup.fmp.domain.atpco;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import com.atibusinessgroup.fmp.domain.dto.DataTable;
 
 @Document(collection = "atpco_record_2")
-public class AtpcoRecord2 {
+public class AtpcoRecord1 {
 
 	@Id
     private String id;
@@ -413,7 +413,7 @@ public class AtpcoRecord2 {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		AtpcoRecord2 other = (AtpcoRecord2) obj;
+		AtpcoRecord1 other = (AtpcoRecord1) obj;
 		if (action == null) {
 			if (other.action != null) {
 				return false;
