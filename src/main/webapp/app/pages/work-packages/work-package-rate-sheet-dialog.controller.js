@@ -102,18 +102,20 @@
             	vm.isNull = true;
             }
         	
-        	vm.fares = [];
+        	
         	vm.allFares =[]
     		for(var x= 0; x<vm.workPackage.fareSheet[vm.index].fares.length; x++){
     			vm.allFares.push(vm.workPackage.fareSheet[vm.index].fares[x]);
     		}
 
     		for(var y=0; y<vm.allFares.length;y++){
+    			vm.fares = [];
     			for (var j = 0; j < vm.selectedHeader.length; j++) {
                 	getFares(vm.selectedHeader[j],y);
     			}
-            	vm.faresData.push(vm.fares);
+    			vm.faresData.push(vm.fares);
     		}
+        	
         }
         
         vm.addOriginalAuthorities = function () {       	
