@@ -494,8 +494,8 @@ public class UserResource {
 
 			if (value1 != null && value2 != null) {
 				if (!Objects.equals(value1, value2)) {
-					log.debug("value1 : "+value1+" value2 : "+value2+" Field : "+field.getName());
-					values.add(field.getName());
+					log.debug("Field : "+field.getName()+" => Old value : "+value1+" New Value : "+value2);
+					values.add(field.getName()+" : Old value = "+value1+" New Value = "+value2);
 				}
 			} else if (value1 == null && value2 == null) {
 			} else {
