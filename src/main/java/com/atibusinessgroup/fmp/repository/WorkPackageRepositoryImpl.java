@@ -63,6 +63,10 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		if(wpFilter.status.withdrawn) {
 			status.add("WITHDRAWN");
 		}
+		if(wpFilter.status.referred) {
+			status.add("REFERRED");
+		}
+		
 		Criteria statusCriteria = Criteria.where("status").in(status);
 		//END STATUS
 		

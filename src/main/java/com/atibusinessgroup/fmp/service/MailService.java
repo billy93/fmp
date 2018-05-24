@@ -152,6 +152,7 @@ public class MailService {
                 MimeType mmType = allTypes.forName(attachment.getFileContentType());
                 String ext = mmType.getExtension(); // .jpg
                 
+                log.debug("SEND ATTACHMENT WITH EXTENSION : {}", ext);
                 ByteArrayResource byteArray = new ByteArrayResource(attachment.getFile());
                 message.addAttachment("Attachment-"+i+"."+ext, byteArray);            	
                 i++;
