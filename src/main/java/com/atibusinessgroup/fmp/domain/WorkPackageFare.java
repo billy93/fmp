@@ -1,6 +1,7 @@
 package com.atibusinessgroup.fmp.domain;
 
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -153,19 +154,19 @@ public class WorkPackageFare implements Serializable {
     private String cabinClass;
     
     @Field("travel_start")
-    private String travelStart;
+    private ZonedDateTime travelStart;
     
     @Field("travel_end")
-    private String travelEnd;
+    private ZonedDateTime travelEnd;
     
     @Field("sale_start")
-    private String saleStart;
+    private ZonedDateTime saleStart;
     
     @Field("sale_end")
-    private String saleEnd;
+    private ZonedDateTime saleEnd;
     
     @Field("travel_complete")
-    private String travelComplete;
+    private ZonedDateTime travelComplete;
     
     @Field("travel_complete_indicator")
     private String travelCompleteIndicator;
@@ -752,11 +753,11 @@ public class WorkPackageFare implements Serializable {
 		this.ruleno = ruleno;
 	}
 
-	public String getTravelComplete() {
+	public ZonedDateTime getTravelComplete() {
 		return travelComplete;
 	}
 
-	public void setTravelComplete(String travelComplete) {
+	public void setTravelComplete(ZonedDateTime travelComplete) {
 		this.travelComplete = travelComplete;
 	}
 
@@ -896,35 +897,37 @@ public class WorkPackageFare implements Serializable {
 		this.dowOut = dowOut;
 	}
 
-	public String getSaleStart() {
+	
+
+	public ZonedDateTime getSaleStart() {
 		return saleStart;
 	}
 
-	public void setSaleStart(String saleStart) {
+	public void setSaleStart(ZonedDateTime saleStart) {
 		this.saleStart = saleStart;
 	}
 
-	public String getSaleEnd() {
+	public ZonedDateTime getSaleEnd() {
 		return saleEnd;
 	}
 
-	public void setSaleEnd(String saleEnd) {
+	public void setSaleEnd(ZonedDateTime saleEnd) {
 		this.saleEnd = saleEnd;
 	}
 
-	public String getTravelStart() {
+	public ZonedDateTime getTravelStart() {
 		return travelStart;
 	}
 
-	public void setTravelStart(String travelStart) {
+	public void setTravelStart(ZonedDateTime travelStart) {
 		this.travelStart = travelStart;
 	}
 
-	public String getTravelEnd() {
+	public ZonedDateTime getTravelEnd() {
 		return travelEnd;
 	}
 
-	public void setTravelEnd(String travelEnd) {
+	public void setTravelEnd(ZonedDateTime travelEnd) {
 		this.travelEnd = travelEnd;
 	}
 
