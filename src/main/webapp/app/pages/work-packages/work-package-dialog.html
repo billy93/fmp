@@ -144,11 +144,10 @@
 					    <div class="col-xs-3">
 					        Name
 					        <input type="text" class="form-control" name="name" id="field_name" ng-model="vm.workPackage.discountFareSheet[0].discountFaresName"/>
-					        <input type="hidden" class="form-control" name="carrier" id="field_carrier" ng-model="vm.workPackage.discountFareSheet[0].fareCarrier"/>
 					    </div>
 					    <div class="col-xs-3">
 					       Fare Type
-					       <select class="form-control" ng-model="vm.workPackage.discountFareSheet[0].fareType"
+					       <select class="form-control" ng-model="vm.workPackage.discountFareSheet[0].discountFareType"
 					       	name="fareType{{$index}}"
 					       	ng-style="editForm.editFormATPCO.fareType{{$index}}.$error.required && vm.errorStyle"
 				      		ng-options="key as value for (key , value) in vm.fareType"
