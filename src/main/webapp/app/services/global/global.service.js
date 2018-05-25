@@ -94,7 +94,7 @@
 	    			    }
 	    			});
 
-		    		$(document).on('click','.dropdown.custom', function(){
+		    		$('.dropdown.custom').on('click',function(){
 		    			$(this).toggleClass('open');
 		    			if($(this).hasClass('open')){
 		    				$(this).find('.dropdown-menu.custom').slideDown(100);
