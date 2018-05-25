@@ -1313,8 +1313,8 @@
 				console.log(option);
 				vm.addTab(option);
 
-				GlobalService.sayHello();
-			    GlobalService.boxHeader();
+//				GlobalService.sayHello();
+//			    GlobalService.boxHeader();
             }, function() {
         			
             });
