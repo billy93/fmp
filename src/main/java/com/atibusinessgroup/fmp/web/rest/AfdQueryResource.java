@@ -14,11 +14,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord1;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
 import com.atibusinessgroup.fmp.domain.dto.AfdQuery;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFareWithRecord1;
 import com.atibusinessgroup.fmp.repository.AtpcoRecord2Repository;
 import com.atibusinessgroup.fmp.resository.custom.AtpcoFareCustomRepository;
+import com.atibusinessgroup.fmp.service.AtpcoRecordService;
 import com.atibusinessgroup.fmp.service.mapper.AfdQueryMapper;
 import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
 import com.codahale.metrics.annotation.Timed;
@@ -35,10 +38,14 @@ public class AfdQueryResource {
 	
 	private final AfdQueryMapper afdQueryMapper;
 	
-    public AfdQueryResource(AtpcoFareCustomRepository atpcoFareCustomRepository, AfdQueryMapper afdQueryMapper, AtpcoRecord2Repository atpcoRecord2Repository) {
+	private final AtpcoRecordService atpcoRecordService;
+	
+    public AfdQueryResource(AtpcoFareCustomRepository atpcoFareCustomRepository, AfdQueryMapper afdQueryMapper, AtpcoRecord2Repository atpcoRecord2Repository,
+    		AtpcoRecordService atpcoRecordService) {
     	this.atpcoFareCustomRepository = atpcoFareCustomRepository;
     	this.afdQueryMapper = afdQueryMapper;
     	this.atpcoRecord2Repository = atpcoRecord2Repository;
+    	this.atpcoRecordService = atpcoRecordService;
     }
     
     /**
@@ -54,14 +61,23 @@ public class AfdQueryResource {
         
         //ATPCO
         Page<AtpcoFareWithRecord1> page = atpcoFareCustomRepository.findAtpcoFareWithRecord1(pageable);
-        List<AtpcoFareWithRecord1> afares = page.getContent();
-        
-        for (AtpcoFareWithRecord1 afare:afares) {
-        	
-        }
+        List<AtpcoFareWithRecord1> a1fares = page.getContent();
         
         List<AfdQuery> result = new ArrayList<>();
-        result.addAll(afdQueryMapper.convertAtpcoFare(afares));
+        
+        for (AtpcoFareWithRecord1 a1fare:a1fares) {
+        	AtpcoFare afare = a1fare.getAtpcoFare();
+        	AtpcoRecord1 validRecord1 = null;
+        	
+        	List<AtpcoRecord1> record1s = a1fare.getAtpcoRecord1();
+        	
+        	for (AtpcoRecord1 record1:record1s) {
+        		
+//        		atpcoRecordService.compareMatchingFareAndRecord();
+        	}
+        	
+        	result.add(afdQueryMapper.convertAtpcoFare(afare, validRecord1));
+        }
         
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/afd-queries");
         
