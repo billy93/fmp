@@ -523,19 +523,6 @@
 															      </small>
 															    </ui-select-choices>
 															  </ui-select>
-															  
-															<!-- <span ng-if="vm.isFieldEditable( 'origin')">
-								                				<input type="text" class="form-control" name="origin{{$parent.$index}}{{$index}}" id="field_origin" 
-								                				ng-disabled="!vm.isEditable('origin')"
-								                				 ng-click="$event.stopPropagation()"
-								                				ng-required="vm.isRequired('origin') && fare.action != 'Canceled'"  
-								                				ng-class="{'must-fill': editForm.editFormATPCO.origin{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-										                    	ng-model="fare.origin"/>
-								                			
-								                			</span>
-								                			<span ng-if="!vm.isFieldEditable( 'origin')">
-								                			{{fare.origin}}
-								                			</span> -->
 														</td>
 														<td>
 														<ui-select ng-model="fare.destination" theme="select2" class="form-control"
@@ -558,18 +545,6 @@
 															      </small>
 															    </ui-select-choices>
 															  </ui-select>
-															<!-- <span ng-if="vm.isFieldEditable( 'destination')">
-								                				<input type="text" class="form-control" name="destination{{$parent.$index}}{{$index}}" id="field_destination" 
-								                				ng-disabled="!vm.isEditable('destination')"
-								                				 ng-click="$event.stopPropagation()"
-								                				ng-required="vm.isRequired('destination') && fare.action != 'Canceled'"  
-								                				ng-class="{'must-fill': editForm.editFormATPCO.destination{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-									                    		ng-model="fare.destination"/>
-								                			
-								                			</span>
-								                			<span ng-if="!vm.isEditable( 'destination')">
-								                			{{fare.destination}}
-								                			</span> -->
 														</td>
 														<td>
 															<input type="text" class="form-control" name="farebasis{{$parent.$index}}{{$index}}" id="field_farebasis"
@@ -721,14 +696,6 @@
 																	<i ng-disabled="true" ng-click="vm.openCalendar('travelStartDate'+$parent.$index+''+$index)" class="fa fa-calendar"></i>
 																</span>
 															</span>
-															
-						               						<!-- <input type="text" class="form-control" name="travelStartDate{{$parent.$index}}{{$index}}" id="field_travelStartDate"
-							                				ng-disabled="!vm.isEditable('travelStartDate')"
-							                				ng-click="$event.stopPropagation()"
-							                				ng-required="vm.isRequired('travelStartDate')"
-							                				ng-class="{'must-fill': editForm.editFormATPCO.travelStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
-												            ng-model="fare.travelStart"
-												            datetime-picker="{{dateformat}}"/> -->
 								               			</td>
 								               			<td ng-click="vm.openCalendar('travelEndDate'+$parent.$index+''+$index)">
 								               				<span class="input-group">
@@ -1126,45 +1093,98 @@
 								               			<td></td>
 								               			<td></td>
 									               		
-								               			<td>
-								               				<input type="text" class="form-control" name="addonFareTravelStartDate{{$parent.$index}}{{$index}}" id="field_travelStartDate"
-									                				ng-disabled="!vm.isEditable('addonFareTravelStartDate')"
+									               		<td ng-click="vm.openCalendar('addonFareTravelStartDate'+$parent.$index+''+$index)">
+								               				<span class="input-group">
+																<input id="field_addonFareTravelStartDate" 
+																	type="text"
+																	name="addonFareTravelStartDate{{$parent.$index}}{{$index}}" id="field_travelEndDate"
+									                				ng-disabled="!vm.isEditable('addonFareTravelStartDate')"	
+									                				class="form-control input-date"					                				
 									                				ng-required="vm.isRequired('addonFareTravelStartDate')"
-									                				ng-class="{'must-fill': editForm.editFormATPCO.addonFareTravelStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
-														            ng-model="fare.travelStart"
-														            datetime-picker="{{dateformat}}"/>
+										                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareTravelStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+														            ng-model="fare.travelStart" 
+														            datetime-picker="{{dateformat}}" 
+														            is-open="vm.datePickerOpenStatus['addonFareTravelStartDate'+$parent.$index+''+$index]">
+																<span class="input-group-addon disabled">
+																	<i ng-disabled="true" ng-click="vm.openCalendar('addonFareTravelStartDate'+$parent.$index+''+$index)" class="fa fa-calendar"></i>
+																</span>
+															</span>
 								               			</td>
-								               			<td>
-								               				<input type="text" class="form-control" name="addonFareTravelEndDate{{$parent.$index}}{{$index}}" id="field_travelEndDate"
-									                				ng-disabled="!vm.isEditable('addonFareTravelEndDate')"
+								               			
+								               			<td ng-click="vm.openCalendar('addonFareTravelEndDate'+$parent.$index+''+$index)">
+								               				<span class="input-group">
+																<input id="field_addonFareTravelEndDate" 
+																	type="text"
+																	name="addonFareTravelEndDate{{$parent.$index}}{{$index}}" id="field_travelEndDate"
+									                				ng-disabled="!vm.isEditable('addonFareTravelEndDate')"	
+									                				class="form-control input-date"					                				
 									                				ng-required="vm.isRequired('addonFareTravelEndDate')"
-									                				ng-class="{'must-fill': editForm.editFormATPCO.addonFareTravelEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
-														            ng-model="fare.travelEnd"/>
+										                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareTravelEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+														            ng-model="fare.travelEnd" 
+														            datetime-picker="{{dateformat}}" 
+														            is-open="vm.datePickerOpenStatus['addonFareTravelEndDate'+$parent.$index+''+$index]">
+																<span class="input-group-addon disabled">
+																	<i ng-disabled="true" ng-click="vm.openCalendar('addonFareTravelEndDate'+$parent.$index+''+$index)" class="fa fa-calendar"></i>
+																</span>
+															</span>
 								               			</td>
-								               			<td>
-								               				<input type="text" class="form-control" name="addonFareSaleStartDate{{$parent.$index}}{{$index}}" id="field_saleStartDate"
-									                				ng-disabled="!vm.isEditable('addonFareSaleStartDate')"									                				
+								               			
+								               			<td ng-click="vm.openCalendar('addonFareSaleStartDate'+$parent.$index+''+$index)">
+								               				<span class="input-group">
+																<input id="field_addonFareSaleStartDate" 
+																	type="text"
+																	name="addonFareSaleStartDate{{$parent.$index}}{{$index}}" id="field_travelEndDate"
+									                				ng-disabled="!vm.isEditable('addonFareSaleStartDate')"	
+									                				class="form-control input-date"					                				
 									                				ng-required="vm.isRequired('addonFareSaleStartDate')"
 										                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareSaleStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
-														            ng-model="fare.saleStart"/>
+														            ng-model="fare.saleStart" 
+														            datetime-picker="{{dateformat}}" 
+														            is-open="vm.datePickerOpenStatus['addonFareSaleStartDate'+$parent.$index+''+$index]">
+																<span class="input-group-addon disabled">
+																	<i ng-disabled="true" ng-click="vm.openCalendar('addonFareSaleStartDate'+$parent.$index+''+$index)" class="fa fa-calendar"></i>
+																</span>
+															</span>
 								               			</td>
-								               			<td>
-								               				<input type="text" class="form-control" name="addonFareSaleEndDate{{$parent.$index}}{{$index}}" id="field_saleEndDate"
-									                				ng-disabled="!vm.isEditable('addonFareSaleEndDate')"
+								               			
+								               			<td ng-click="vm.openCalendar('addonFareSaleEndDate'+$parent.$index+''+$index)">
+								               				<span class="input-group">
+																<input id="field_addonFareSaleEndDate" 
+																	type="text"
+																	name="addonFareSaleEndDate{{$parent.$index}}{{$index}}" id="field_travelEndDate"
+									                				ng-disabled="!vm.isEditable('addonFareSaleEndDate')"	
+									                				class="form-control input-date"					                				
 									                				ng-required="vm.isRequired('addonFareSaleEndDate')"
 										                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareSaleEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
-														            ng-model="fare.saleEnd"/>
+														            ng-model="fare.saleEnd" 
+														            datetime-picker="{{dateformat}}" 
+														            is-open="vm.datePickerOpenStatus['addonFareSaleEndDate'+$parent.$index+''+$index]">
+																<span class="input-group-addon disabled">
+																	<i ng-disabled="true" ng-click="vm.openCalendar('addonFareSaleEndDate'+$parent.$index+''+$index)" class="fa fa-calendar"></i>
+																</span>
+															</span>
 								               			</td>
 								               			<td>
 								               				<input type="text" class="form-control" name="addonFareComment{{$parent.$index}}{{$index}}" id="field_comment"
 										                    		ng-model="fare.comment"/>
 								               			</td>
-								               			<td>
-								               				<input type="text" class="form-control" name="addonFareTravelComplete{{$parent.$index}}{{$index}}" id="field_travelComplete"
-								                				ng-disabled="!vm.isEditable('addonFareTravelComplete')"
-								                				ng-required="vm.isRequired('addonFareTravelComplete')"
-									                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareTravelComplete{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            														                    		
-								                				ng-model="fare.travelComplete"/>
+								               			
+								               			<td ng-click="vm.openCalendar('addonFareTravelComplete'+$parent.$index+''+$index)">
+								               				<span class="input-group">
+																<input id="field_addonFareTravelComplete" 
+																	type="text"
+																	name="addonFareTravelComplete{{$parent.$index}}{{$index}}" id="field_travelEndDate"
+									                				ng-disabled="!vm.isEditable('addonFareTravelComplete')"	
+									                				class="form-control input-date"					                				
+									                				ng-required="vm.isRequired('addonFareTravelComplete')"
+										                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareTravelComplete{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+														            ng-model="fare.travelComplete" 
+														            datetime-picker="{{dateformat}}" 
+														            is-open="vm.datePickerOpenStatus['addonFareTravelComplete'+$parent.$index+''+$index]">
+																<span class="input-group-addon disabled">
+																	<i ng-disabled="true" ng-click="vm.openCalendar('addonFareTravelComplete'+$parent.$index+''+$index)" class="fa fa-calendar"></i>
+																</span>
+															</span>
 								               			</td>
 								               			<td>
 								               				<select class="form-control" name="addonFareTravelIndicator{{$index}}" id="field_travelIndicator"

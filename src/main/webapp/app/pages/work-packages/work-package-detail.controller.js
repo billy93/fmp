@@ -1312,6 +1312,9 @@
 			}).result.then(function(option) {
 				console.log(option);
 				vm.addTab(option);
+
+				GlobalService.sayHello();
+			    GlobalService.boxHeader();
             }, function() {
         			
             });
@@ -2071,6 +2074,21 @@
           if(data.fareSheet.length > 0){
           	for(var x=0;x<data.fareSheet.length;x++){
           		var fares = data.fareSheet[x].fares;
+          		for(var y=0;y<fares.length;y++){
+              		if(fares[y] != null){
+              			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
+              			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
+              			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
+              			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
+              			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+              		}
+          		}
+          	}
+          }
+          
+          if(data.addonFareSheet.length > 0){
+          	for(var x=0;x<data.addonFareSheet.length;x++){
+          		var fares = data.addonFareSheet[x].fares;
           		for(var y=0;y<fares.length;y++){
               		if(fares[y] != null){
               			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
