@@ -438,29 +438,19 @@
 													<tr role="row" class="datatable-row" ng-click="vm.rowTableClick($event, $index, 'fares')">
 														<td>{{$index+1}}</td>
 														<td>
-															<span ng-if="vm.isEditable('status')">
-																<select class="form-control inside-table" name="status{{$parent.$index}}{{$index}}" ng-model="fare.status" id="field_status" 
-																	ng-class="{'must-fill': !editForm.editFormATPCO.status{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"												         		
-								           							ng-disabled="!vm.isEditable('status')"
-													             	ng-required="vm.isRequired('status')"
-													             	ng-options="key as value for (key , value) in vm.status">
-																</select>																				
-															</span>
-															<span class="inside-table" ng-if="!vm.isEditable( 'status')">
-									           					{{fare.status}}
-									           				</span>
+															<select class="form-control inside-table" name="status{{$parent.$index}}{{$index}}" ng-model="fare.status" id="field_status" 
+																ng-class="{'must-fill': !editForm.editFormATPCO.status{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"												         		
+							           							ng-disabled="!vm.isEditable('status')"
+												             	ng-required="vm.isRequired('status')"
+												             	ng-options="key as value for (key , value) in vm.status">
+															</select>	
 														</td>
 														<td>
-															<span ng-if="vm.isEditable( 'carrier')">
-									           					<input type="text" class="form-control" name="carrier{{$parent.$index}}{{$index}}" id="field_carrier"
+															<input type="text" class="form-control" name="carrier{{$parent.$index}}{{$index}}" id="field_carrier"
 										                    		ng-model="fare.carrier"
 										                    		ng-disabled="!vm.isEditable('carrier')"
-										                    		ng-class="{'must-fill': ditForm.editFormATPCO.carrier{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
+										                    		ng-class="{'must-fill': editForm.editFormATPCO.carrier{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 														            ng-required="vm.isRequired('carrier')"/>
-									           				</span>
-									           				<span ng-if="!vm.isEditable( 'carrier')">
-									           					{{fare.carrier}}
-									           				</span>
 														</td>																
 														<td>{{fare.action}}</td>
 														<td>
@@ -468,7 +458,7 @@
 															 ng-click="$event.stopPropagation()"
 															ng-required="vm.isRequired('tarno') && fare.action != 'Canceled'"  
 															ng-disabled="!vm.isEditable('tarno')"
-															ng-class="{'must-fill': fare.tariffNumber == null && fare.action != 'Canceled'}"	
+															ng-class="{'must-fill': editForm.editFormATPCO.tarno{{$parent.$index}}{{$index}}.$error.required }"	
 										                    	>
 															    <ui-select-match placeholder="TarNo">{{$select.selected.tarNo == null ? $select.selected.value.tarNo : $select.selected.tarNo}}</ui-select-match>
 																 <ui-select-choices style="min-width:300px" repeat="value.value as (key, value) in vm.tariffNumber | filter: { value: { tarNo: $select.search }}">
@@ -488,7 +478,7 @@
 															ng-required="vm.isRequired('tarcd') && fare.action != 'Canceled'"  
 															ng-disabled="!vm.isEditable('tarcd')"
 															
-															ng-class="{'must-fill': fare.tariffNumber == null && fare.action != 'Canceled'}"	
+															ng-class="{'must-fill': editForm.editFormATPCO.tarcd{{$parent.$index}}{{$index}}.$error.required}"	
 										                    	>
 															    <ui-select-match placeholder="TarCd">{{$select.selected.tarCd == null ? $select.selected.value.tarCd : $select.selected.tarCd}}</ui-select-match>
 																 <ui-select-choices style="min-width:300px" repeat="value.value as (key, value) in vm.tariffNumber | filter: { value: { tarCd: $select.search }}">
