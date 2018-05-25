@@ -309,5 +309,58 @@
     <script src="content/js/plugins.js"></script>
     <script src="content/js/revealer.js"></script>
     
+    <script>
+ // input
+	$(document).ready(function(){
+    	$(document).on('input', 'input.must-fill', function(){
+    	  	$(this).removeClass('must-fill');
+    	  	if($(this).val() == ''){
+    	  		$(this).addClass('must-fill');
+    	  	}
+    	});
+    	
+    	// select
+    	$(document).on('change','select.must-fill',function(){
+    		$(this).removeClass('must-fill');
+    	  	if($(this).find('option')[0].selected === true){
+    	  		$(this).addClass('must-fill');
+    	  	}
+    	});
+    	
+
+//    	dropdown
+    	$(document).mouseup(function (e){	
+		    if($('.dropdown-menu.custom').has(e.target).length === 0)
+		    {
+		        //hide your element
+		        $('.dropdown.custom').removeClass('open');
+		        $('.dropdown-menu.custom').hide();
+		    }
+		});
+
+		$(document).on('click','.dropdown.custom', function(){
+			$(this).toggleClass('open');
+			if($(this).hasClass('open')){
+				$(this).find('.dropdown-menu.custom').slideDown(100);
+			}
+			else{
+				$(this).find('.dropdown-menu.custom').slideUp(100);
+			}		
+		});
+		
+
+//    	filter
+    	$(document).on('click','.filter-label',function(){
+    		$(this).toggleClass('show');
+    		$(this).siblings('.filter-area').slideToggle(200);
+    		if($(this).hasClass('show')){
+    			$(this).html('Hide Filter')
+    		}
+    		else{
+    			$(this).html('Show Filter')
+    		}
+    	});	
+	});
+    </script>
 </body>
 </html>
