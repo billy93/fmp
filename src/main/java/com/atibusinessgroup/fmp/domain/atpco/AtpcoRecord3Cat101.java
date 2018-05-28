@@ -13,7 +13,7 @@ public class AtpcoRecord3Cat101 {
 	@Field("record_sequence")
 	private String record_sequence;
 
-	@Field("record_batch")
+	@Field("fare_comp")
 	private String fare_comp;
 
 	@Field("date_tbl_no_994")
