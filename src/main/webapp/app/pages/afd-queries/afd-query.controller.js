@@ -5,37 +5,47 @@
         .module('fmpApp')
         .controller('AfdQueryController', AfdQueryController);
 
-    AfdQueryController.$inject = ['$state', 'AfdQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', 'queryParams'];
+    AfdQueryController.$inject = ['$state', 'AfdQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams'];
 
-    function AfdQueryController($state, AfdQuery, ParseLinks, AlertService, paginationConstants, pagingParams, queryParams) {
+    function AfdQueryController($state, AfdQuery, ParseLinks, AlertService, paginationConstants, queryParams) {
 
         var vm = this;
+        vm.loadPage = loadPage;
+        vm.itemsPerPage = paginationConstants.itemsPerPage;
+        vm.queryParams = queryParams;
+        vm.loadAll = loadAll;
+        vm.getRules = getRules;
+        vm.reset = reset;
+        vm.page = 1;
         
         vm.datePickerOpenStatus = {};
         vm.dateFormat = "yyyy-MM-dd";
         vm.openCalendar = openCalendar;
         
         vm.sources = [
-        	{key: "A", value: "ATPCO"},
-        	{key: "M", value: "Market"},
-        	{key: "W", value: "Web"},
-        	{key: "C", value: "Competitor Private"}
+        	{key: "", value: "Select Source"},
+        	{key: "A", value: "A - ATPCO"},
+        	{key: "M", value: "M - Market"},
+        	{key: "W", value: "W - Web"},
+        	{key: "C", value: "C - Competitor Private"}
         ]
         
         vm.publicPrivate = [
-    		"Public",
-    		"Private"
+        	{key: "", value: "Select Public/Private"},
+        	{key: "Public", value: "Public"},
+        	{key: "Private", value: "Private"},
         ]
         
         vm.owrts = [
-    		{key: "1", value: "One Way"},
-    		{key: "2", value: "Rount Trip"},
-    		{key: "3", value: "One Way Only"},
+        	{key: "", value: "Select OW/RT"},
+    		{key: "1", value: "1 - One Way"},
+    		{key: "2", value: "2 - Rount Trip"},
+    		{key: "3", value: "3 - One Way Only"},
         ]
         
         vm.dateOptions = [
-        	"Active In",
-        	"Exact Match"
+        	{key: "A", value: "Active In"},
+        	{key: "E", value: "Exact Match"}
         ]
         
         vm.tariffs = "?";
@@ -50,39 +60,21 @@
         
         vm.cabins = "?";
         
-        vm.loadPage = loadPage;
-        vm.predicate = pagingParams.predicate;
-        vm.reverse = pagingParams.ascending;
-        vm.transition = transition;
-        vm.itemsPerPage = paginationConstants.itemsPerPage;
-        vm.queryParams = queryParams;
-        vm.loadAll = loadAll;
-        
         vm.loadAll();
 
         function loadAll () {
-        	console.log(vm.queryParams);
+        	vm.queryParams.page = vm.page - 1;
+        	vm.queryParams.size = vm.itemsPerPage;
         	
-        	AfdQuery.query({
-                page: pagingParams.page - 1,
-                size: vm.itemsPerPage,
-                sort: sort(),
-                queryParam: vm.queryParams
-            }, onSuccess, onError);
-            function sort() {
-                var result = [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc')];
-                if (vm.predicate !== 'id') {
-                    result.push('id');
-                }
-                return result;
-            }
+        	AfdQuery.query(vm.queryParams, onSuccess, onError);
+        	
             function onSuccess(data, headers) {
                 vm.links = ParseLinks.parse(headers('link'));
                 vm.totalItems = headers('X-Total-Count');
                 vm.queryCount = vm.totalItems;
                 vm.afdQueries = data;
-                vm.page = pagingParams.page;
             }
+            
             function onError(error) {
                 AlertService.error(error.data.message);
             }
@@ -90,18 +82,9 @@
 
         function loadPage(page) {
             vm.page = page;
-            vm.transition();
         }
 
-        function transition() {
-            $state.transitionTo($state.$current, {
-                page: vm.page,
-                sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
-                search: vm.currentSearch
-            });
-        }
-        
-        vm.getRules = function(afdQuery) {
+        function getRules(afdQuery) {
         	AfdQuery.getRules(afdQuery, function(data) {
         		console.log(data);
         	}, function(error) {
@@ -114,6 +97,52 @@
             e.stopPropagation();
             
             vm.datePickerOpenStatus[date] = true;
+        }
+        
+        function reset() {
+        	vm.queryParams = {
+        		carrier: null,
+        		source: null,
+        		publicPrivate: null,
+        		tariff: null,
+        		globalIndicator: null,
+        		gaFareType: null,
+        		fareType: null,
+        		fareBasis: null,
+        		origin: null,
+        		destination: null,
+        		owrt: null,
+        		footnote: null,
+        		ruleNo: null,
+        		routingNo: null,
+        		woId: null,
+        		effectiveDateFrom: null,
+        		effectiveDateTo: null,
+        		effectiveDateOption: null,
+        		saleDateFrom: null,
+        		saleDateTo: null,
+        		saleDateOption: null,
+        		travelDateFrom: null,
+        		travelDateTo: null,
+        		travelDateOption: null,
+        		seasonDateFrom: null,
+        		seasonDateTo: null,
+        		seasonDateOption: null,
+        		amountRange: null,
+        		tourCode: null,
+        		paxType: null,
+        		cabin: null,
+        		bookingClass: null,
+        		advancePurchase: null,
+        		minStay: null,
+        		maxStay: null,
+        		includeConstructed: false,
+        		appendResults: false,
+        		biDirectional: false,
+        		calculateTfc: false
+        	}
+        	
+        	vm.loadAll();
         }
     }
 })();
