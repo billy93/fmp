@@ -1896,10 +1896,12 @@
         
         vm.save = save;
         
-        var unsubscribe = $rootScope.$on('fmpApp:workPackageUpdate', function(event, result) {
-            vm.workPackage = result;
+//        var unsubscribe = $rootScope.$on('fmpApp:workPackageUpdate', function(event, result) {
+//            vm.workPackage = result;
+//        });
+        $scope.$on('$destroy', function(){
+        	window.onbeforeunload = null;
         });
-        $scope.$on('$destroy', unsubscribe);
       
         Account.get().$promise
         .then(function(account){
@@ -3926,8 +3928,87 @@
 	   
 	  }
       
+      vm.fillDown = function(workPackageSheet){
+    	  var fares = [];
+    	  for(var x=0;x<workPackageSheet.fares.length;x++){
+    		  if(workPackageSheet.fares[x].selected){
+    			  fares.push({
+    				  index:x, 
+    				  fare:workPackageSheet.fares[x]
+    			  });
+    			  console.log(fares);
+    		  }
+    	  }
+    	  
+    	  for(var x=0;x<workPackageSheet.fares.length;x++){
+//    		  console.log(fares[0].index);
+//    		  if(fares[0].index != x){
+//    			  alert('TEST '+x);
+//	    		  if(fares[0].fare.field['tarno']){
+//	    			  workPackageSheet.fares[x].tariffNumber = fares[0].fare.tariffNumber;
+//	    		  }
+//    		  }
+    	  }
+      }
+      
+      vm.duplicateSelectedFares = function(workPackageSheet){
+    	  for(var x=0;x<workPackageSheet.fares.length;x++){
+    		  if(workPackageSheet.fares[x].field != undefined){
+    			  var selected = false;
+    			  Object.keys(workPackageSheet.fares[x].field).forEach(function(key,index) {
+    				  if(workPackageSheet.fares[x].field[key]){
+    					  selected = true;
+    				  }
+    			 });
+    			  if(selected){
+//    				  console.log("SELECTED : "+selected);
+    				  var copiedFare = angular.copy(workPackageSheet.fares[x]);
+    				  copiedFare.field = null;
+    				  workPackageSheet.fares.push(copiedFare);
+    			  }
+//    			  console.log("X : "+x);
+    		  }
+    	  }
+      }
+      
+      
+      vm.deleteSelectedFares = function(workPackageSheet){
+    	  var fares = [];
+    	  for(var x=0;x<workPackageSheet.fares.length;x++){
+    		  if(workPackageSheet.fares[x].field != undefined){
+    			  var selected = false;
+    			  Object.keys(workPackageSheet.fares[x].field).forEach(function(key,index) {
+    				  if(workPackageSheet.fares[x].field[key]){
+    					  selected = true;
+    				  }
+    			 });
+    			  if(selected){
+    				  fares.push(workPackageSheet.fares[x]);
+//    				  var index = workPackageSheet.fares.indexOf(workPackageSheet.fares[x]);
+//    				  workPackageSheet.fares.splice(index, 1); 
+    				  
+//    				  console.log("SELECTED : "+selected);
+//    				  var copiedFare = angular.copy(workPackageSheet.fares[x]);
+//    				  copiedFare.field = null;
+//    				  workPackageSheet.fares.push(copiedFare);
+    			  }
+//    			  console.log("X : "+x);
+    		  }
+    	  }
+    	  
+    	  for(var y=0;y<fares.length;y++){
+    		  for(var x=0;x<workPackageSheet.fares.length;x++){
+    			  if(workPackageSheet.fares[x] == fares[y]){
+    				  workPackageSheet.fares.splice(x, 1); 
+    				  break;
+    			  }
+    		  }
+    	  }
+      }
       $scope.optionToggled = function(fares){
 	    $scope.isAllSelected = fares.every(function(itm){ return itm.selected; })
 	  }
+      
+      
     }
 })();
