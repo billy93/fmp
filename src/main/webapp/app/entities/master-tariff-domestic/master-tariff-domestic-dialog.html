@@ -1,0 +1,171 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myMasterTariffDomesticLabel">Create or edit a Master Tariff Domestic</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" ng-show="vm.masterTariffDomestic.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="vm.masterTariffDomestic.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label">Fare Tariff</label>
+            <table>
+            	<tr>
+            		<td>
+            			<label class="control-label" for="field_fareTariffName" style="margin-left : 40px;">Name</label>
+            		</td>
+            		<td>
+            			<label class="control-label" for="field_fareTariffCode" style="margin-left : 40px;">Code</label>
+            		</td>
+            	</tr>
+            	<tr>
+            		<td>
+	            		<input type="text" class="form-control" name="fareTariffName" id="field_fareTariffName"
+	                    ng-model="vm.masterTariffDomestic.fareTariff.name" style="margin-left : 40px; width: 200px;"/>
+            		</td>
+            		<td>
+	            		 <input type="text" class="form-control" name="fareTariffCode" id="field_fareTariffCode"
+	                    ng-model="vm.masterTariffDomestic.fareTariff.code" style="margin-left : 40px; width: 200px;"/>
+            		</td>
+            	</tr>
+            </table>
+        </div>
+        <div class="form-group">
+           <label class="control-label">Rule Tariff</label>
+            <table>
+            	<tr>
+            		<td>
+            			<label class="control-label" for="field_ruleTariffName" style="margin-left : 40px;">Name</label>
+            		</td>
+            		<td>
+            			<label class="control-label" for="field_ruleTariffCode" style="margin-left : 40px;">Code</label>
+            		</td>
+            	</tr>
+            	<tr>
+            		<td>
+	            		<input type="text" class="form-control" name="ruleTariffName" id="field_ruleTariffName"
+	                    ng-model="vm.masterTariffDomestic.ruleTariff.name" style="margin-left : 40px; width: 200px;"/>
+            		</td>
+            		<td>
+	            		 <input type="text" class="form-control" name="ruleTariffCode" id="field_ruleTariffCode"
+	                    ng-model="vm.masterTariffDomestic.ruleTariff.code" style="margin-left : 40px; width: 200px;"/>
+            		</td>
+            	</tr>
+            </table>
+        </div>
+        
+        <div class="form-group">
+           <label class="control-label">General Rules</label>
+            <table>
+            	<tr>
+            		<td>
+            			<label class="control-label" for="field_generalRulesName" style="margin-left : 40px;">Name</label>
+            		</td>
+            		<td>
+            			<label class="control-label" for="field_generalRulesCode" style="margin-left : 40px;">Code</label>
+            		</td>
+            	</tr>
+            	<tr>
+            		<td>
+            			<div class="input-group">
+		            		<input type="text" class="form-control" name="generalRulesName" id="field_generalRulesName"
+		                    ng-model="vm.generalRulesName" style="margin-left : 40px; width: 120px;"
+		                    uib-typeahead="o.name as o.generalRulesName for o in vm.masterTariffDomestic.generalRules | limitTo:5"/>
+		               
+	            		 	<span class="input-group-btn">
+			                    <button type="button" class="btn btn-default" ng-click="vm.addGeneralRulesName()"><i class="glyphicon glyphicon-plus"></i></button>
+			                </span>
+		                 </div>
+            		</td>
+            		<td>
+	            		<div class="input-group">
+		            		 <input type="text" class="form-control" name="generalRulesCode" id="field_generalRulesCode"
+		                    ng-model="vm.generalRulesCode" style="margin-left : 40px; width: 120px;"
+		                    uib-typeahead="o.code as o.generalRulesCode for o in vm.masterTariffDomestic.generalRules | limitTo:5"/>
+		                    
+	            			<span class="input-group-btn">
+			                    <button type="button" class="btn btn-default" ng-click="vm.addGeneralRulesCode()"><i class="glyphicon glyphicon-plus"></i></button>
+			                </span>
+			            </div>
+            		</td>
+            	</tr>
+            </table>
+        </div>
+        
+        <div class="form-group">
+           <label class="control-label">Arbitary Tariff</label>
+            <table style="width:100%">
+            	<tr>
+            		<td>
+            			<label class="control-label" for="field_arbitaryTariffName" style="margin-left : 40px;">Name</label>
+            		</td>
+            		<td>
+            			<label class="control-label" for="field_arbitaryTariffCode" style="margin-left : 40px;">Code</label>
+            		</td>
+            	</tr>
+            	<tr>
+            		<td>
+	            		<input type="text" class="form-control" name="arbitaryTariffName" id="field_arbitaryTariffName"
+	                    ng-model="vm.masterTariffDomestic.arbitaryTariff.name" style="margin-left : 40px; width: 200px;"/>
+            		</td>
+            		<td>
+	            		 <input type="text" class="form-control" name="arbitaryTariffCode" id="field_arbitaryTariffCode"
+	                    ng-model="vm.masterTariffDomestic.arbitaryTariff.code" style="margin-left : 40px; width: 200px;"/>
+            		</td>
+            	</tr>
+            </table>
+        </div>
+        
+        <div class="form-group">
+           <label class="control-label">Routing Tariff</label>
+            <table>
+            	<tr>
+            		<td>
+            			<label class="control-label" for="field_routingTariffName" style="margin-left : 40px;">Name</label>
+            		</td>
+            		<td>
+            			<label class="control-label" for="field_routingTariffCode" style="margin-left : 40px;">Code</label>
+            		</td>
+            	</tr>
+            	<tr>
+            		<td>
+	            		<input type="text" class="form-control" name="routingTariffName" id="field_routingTariffName"
+	                    ng-model="vm.masterTariffDomestic.routingTariff.name" style="margin-left : 40px; width: 200px;"/>
+            		</td>
+            		<td>
+	            		 <input type="text" class="form-control" name="routingTariffCode" id="field_routingTariffCode"
+	                    ng-model="vm.masterTariffDomestic.routingTariff.code" style="margin-left : 40px; width: 200px;"/>
+            		</td>
+            	</tr>
+            </table>
+        </div>
+        
+        <div class="form-group">
+            <label class="control-label" for="field_gfsGlobalArea">Gfs Global Area</label>
+            <input type="text" class="form-control" name="gfsGlobalArea" id="field_gfsGlobalArea"
+                    ng-model="vm.masterTariffDomestic.gfsGlobalArea"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_area">Area</label>
+            <input type="text" class="form-control" name="area" id="field_area"
+                    ng-model="vm.masterTariffDomestic.area"
+                    />
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

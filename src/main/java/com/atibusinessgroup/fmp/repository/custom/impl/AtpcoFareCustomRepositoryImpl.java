@@ -22,10 +22,9 @@ import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.aggregation.SkipOperation;
 import org.springframework.data.mongodb.core.aggregation.SortOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
+import com.atibusinessgroup.fmp.domain.dto.AfdQueryParam;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFareWithRecord1;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.resository.custom.AtpcoFareCustomRepository;
@@ -39,9 +38,71 @@ public class AtpcoFareCustomRepositoryImpl implements AtpcoFareCustomRepository 
     MongoTemplate mongoTemplate;
 
 	@Override
-	public Page<AtpcoFareWithRecord1> findAtpcoFareWithRecord1(Pageable pageable) {
+	public Page<AtpcoFareWithRecord1> findAtpcoFareWithRecord1(AfdQueryParam param, Pageable pageable) {
 		
 		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject match = new BasicDBObject();
+				BasicDBObject and = new BasicDBObject();
+				List<BasicDBObject> queries = new ArrayList<>();
+				
+				if (param.getCarrier() != null && !param.getCarrier().isEmpty()) {
+					BasicDBObject carrier = new BasicDBObject();
+					carrier.append("cxr_cd", new BasicDBObject("$in",  Arrays.stream(param.getCarrier().split(",")).map(String::trim).toArray(String[]::new)));
+					queries.add(carrier);
+				}
+				
+				if (param.getOrigin() != null && !param.getOrigin().isEmpty()) {
+					BasicDBObject origin = new BasicDBObject();
+					origin.append("origin_city", new BasicDBObject("$in",  Arrays.stream(param.getOrigin().split(",")).map(String::trim).toArray(String[]::new)));
+					queries.add(origin);
+				}
+				
+				if (param.getDestination() != null && !param.getDestination().isEmpty()) {
+					BasicDBObject destination = new BasicDBObject();
+					destination.append("destination_city", new BasicDBObject("$in",  Arrays.stream(param.getOrigin().split(",")).map(String::trim).toArray(String[]::new)));
+					queries.add(destination);
+				}
+				
+				if (param.getOwrt() != null && !param.getOwrt().isEmpty()) {
+					BasicDBObject owrt = new BasicDBObject();
+					owrt.append("ow_rt", param.getOwrt());
+					queries.add(owrt);
+				}
+				
+				if (param.getFootnote() != null && !param.getFootnote().isEmpty()) {
+					BasicDBObject fnt = new BasicDBObject();
+					fnt.append("ftnt", param.getFootnote());
+					queries.add(fnt);
+				}
+				
+//				if (param.getEffectiveDateFrom() == null) {
+//					param.setEffectiveDateFrom(new Date());
+//				}
+//				
+//				BasicDBObject effectiveFrom = new BasicDBObject();
+//				effectiveFrom.append("$or", Arrays.asList(new BasicDBObject("tar_eff_date", "indef"), new BasicDBObject("tar_eff_date", new BasicDBObject("$gte", param.getEffectiveDateFrom()))));
+//				queries.add(effectiveFrom);
+//				
+//				if (param.getEffectiveDateTo() == null) {
+//					param.setEffectiveDateTo(new Date());
+//				}
+//				
+//				BasicDBObject effectiveTo = new BasicDBObject();
+//				effectiveTo.append("$or", Arrays.asList(new BasicDBObject("tar_eff_date", "indef"), new BasicDBObject("tar_eff_date", new BasicDBObject("$lte", param.getEffectiveDateTo()))));
+//				queries.add(effectiveTo);
+				
+				if (queries.size() > 0) {
+					and.append("$and", queries);
+				}
+				
+				match.append("$match", and);
+				return match;
+			}
+		});
 		
 		ProjectionOperation projectRoot = new ProjectionOperation().and("$$ROOT").as("atpco_fare");
 		aggregationOperations.add(projectRoot);
@@ -75,17 +136,19 @@ public class AtpcoFareCustomRepositoryImpl implements AtpcoFareCustomRepository 
 			}
 		});
 		
+		Aggregation aggregation = newAggregation(aggregationOperations);
+		
 		SkipOperation skip = new SkipOperation(pageable.getPageNumber() * pageable.getPageSize());
 		aggregationOperations.add(skip);
 		
 		LimitOperation limit = new LimitOperation(pageable.getPageSize());
 		aggregationOperations.add(limit);
 	
-		Aggregation aggregation = newAggregation(aggregationOperations);
+		Aggregation aggregationPagination = newAggregation(aggregationOperations);
+				
+		List<AtpcoFareWithRecord1> result = mongoTemplate.aggregate(aggregationPagination, "atpco_fare", AtpcoFareWithRecord1.class).getMappedResults();
 		
-		List<AtpcoFareWithRecord1> result = mongoTemplate.aggregate(aggregation, "atpco_fare", AtpcoFareWithRecord1.class).getMappedResults();
-		
-		return new PageImpl<>(result, pageable, mongoTemplate.count(new Query(), AtpcoFare.class));
+		return new PageImpl<>(result, pageable, mongoTemplate.aggregate(aggregation, "atpco_fare", AtpcoFareWithRecord1.class).getMappedResults().size());
 	}
 
 	@Override

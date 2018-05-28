@@ -5,7 +5,6 @@
  ${AnsiColor.GREEN}██╔══╝    ██║╚██╔╝██║  ██╔═══╝ 
  ${AnsiColor.GREEN}██║       ██║ ╚═╝ ██║  ██║     
  ${AnsiColor.GREEN}╚═╝       ╚═╝     ╚═╝  ╚═╝     
-                           
-
+      
 ${AnsiColor.BRIGHT_BLUE}:: ATI Business Group. JHIPSTER Application :: Running Spring Boot ${spring-boot.version} ::
 :: http://www.atibusinessgroup.com ::${AnsiColor.DEFAULT}

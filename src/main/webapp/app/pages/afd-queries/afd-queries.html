@@ -9,18 +9,18 @@
 							<div class="pull-left col-md-6 no-lpad">
 								<div class="form-group">
 									<div class="custom-label semibold">Carrier</div>
-									<input type="text" class="form-control" name="carrier" id="carrier" ng-model="vm.queryParams.carrier"/>
+									<input type="text" class="form-control" name="carrier" id="carrier" ng-model="vm.queryParams.carrier" uppercase/>
 								</div>
 								<div class="form-group">
 									<div class="custom-label semibold">Source</div>
 									<select class="form-control" name="source" id="source" ng-model="vm.queryParams.source">
-										<option value="{{value.key}}" ng-repeat="value in vm.sources track by $index">{{value.key}} - {{value.value}}</option>
+										<option value="{{value.key}}" ng-repeat="value in vm.sources track by $index">{{value.value}}</option>
 									</select>
 								</div>
 								<div class="form-group">
 									<div class="custom-label semibold">Public/Private</div>
 									<select class="form-control" name="publicPrivate" id="publicPrivate" ng-model="vm.queryParams.publicPrivate">
-										<option value="{{value}}" ng-repeat="value in vm.publicPrivate track by $index">{{value}}</option>
+										<option value="{{value.key}}" ng-repeat="value in vm.publicPrivate track by $index">{{value.value}}</option>
 									</select>
 								</div>
 								<div class="form-group">
@@ -49,11 +49,11 @@
 							<div class="pull-left col-md-6 no-lpad">
 								<div class="form-group">
 									<div class="custom-label semibold">Origin</div>
-									<input type="text" class="form-control" name="origin" id="origin" ng-model="vm.queryParams.origin"/>
+									<input type="text" class="form-control" name="origin" id="origin" ng-model="vm.queryParams.origin" uppercase/>
 								</div>
 								<div class="form-group">
 									<div class="custom-label semibold">Destination</div>
-									<input type="text" class="form-control" name="destination" id="destination" ng-model="vm.queryParams.destination"/>
+									<input type="text" class="form-control" name="destination" id="destination" ng-model="vm.queryParams.destination" uppercase/>
 								</div>
 								<div class="form-group">
 									<div class="custom-label semibold">Global Indicator</div>
@@ -64,20 +64,20 @@
 								<div class="form-group">
 									<div class="custom-label semibold">OW/RT</div>
 									<select class="form-control" name="owrt" id="owrt" ng-model="vm.queryParams.owrt">
-										<option value="{{value.key}}" ng-repeat="value in vm.owrts track by $index">{{value.key}} - {{value.value}}</option>
+										<option value="{{value.key}}" ng-repeat="value in vm.owrts track by $index">{{value.value}}</option>
 									</select>
 								</div>
 								<div class="form-group">
 									<div class="custom-label semibold">Footnote</div>
-									<input type="text" class="form-control" name="footnote" id="footnote" ng-model="vm.queryParams.footnote"/>
+									<input type="text" class="form-control" name="footnote" id="footnote" ng-model="vm.queryParams.footnote" maxlength="2" uppercase/>
 								</div>
 								<div class="form-group">
 									<div class="custom-label semibold">Rule No</div>
-									<input type="text" class="form-control" name="ruleNo" id="ruleNo" ng-model="vm.queryParams.ruleNo"/>
+									<input type="text" class="form-control" name="ruleNo" id="ruleNo" ng-model="vm.queryParams.ruleNo" maxlength="4" uppercase/>
 								</div>
 								<div class="form-group">
 									<div class="custom-label semibold">Routing No</div>
-									<input type="text" class="form-control" name="routingNo" id="routingNo" ng-model="vm.queryParams.routingNo"/>
+									<input type="text" class="form-control" name="routingNo" id="routingNo" ng-model="vm.queryParams.routingNo" maxlength="4" uppercase/>
 								</div>
 							</div>
 						</div>
@@ -99,8 +99,8 @@
 												ng-model="vm.queryParams.effectiveDateTo" placeholder="To"/>
 										</div>
 										<div class="col-md-4 no-rpad">
-											<select class="form-control" name="effectiveDateOption" id="effectiveDateOption" ng-init="vm.queryParams.effectiveDateOption = vm.dateOptions[0]" ng-model="vm.queryParams.effectiveDateOption">
-												<option value="{{value}}" ng-repeat="value in vm.dateOptions track by $index">{{value}}</option>
+											<select class="form-control" name="effectiveDateOption" id="effectiveDateOption" ng-init="vm.queryParams.effectiveDateOption = vm.dateOptions[0].key" ng-model="vm.queryParams.effectiveDateOption">
+												<option value="{{value.key}}" ng-repeat="value in vm.dateOptions track by $index">{{value.value}}</option>
 											</select>
 										</div>
 									</div>
@@ -122,8 +122,8 @@
 												ng-model="vm.queryParams.saleDateTo" placeholder="To"/>
 										</div>
 										<div class="col-md-4 no-rpad">
-											<select class="form-control" name="saleDateOption" id="saleDateOption" ng-init="vm.queryParams.saleDateOption = vm.dateOptions[0]" ng-model="vm.queryParams.saleDateOption">
-												<option value="{{value}}" ng-repeat="value in vm.dateOptions track by $index">{{value}}</option>
+											<select class="form-control" name="saleDateOption" id="saleDateOption" ng-init="vm.queryParams.saleDateOption = vm.dateOptions[0].key" ng-model="vm.queryParams.saleDateOption">
+												<option value="{{value.key}}" ng-repeat="value in vm.dateOptions track by $index">{{value.value}}</option>
 											</select>
 										</div>
 									</div>
@@ -144,8 +144,8 @@
 												ng-model="vm.queryParams.travelDateTo" placeholder="To"/>
 										</div>
 										<div class="col-md-4 no-rpad">
-											<select class="form-control" name="travelDateOption" id="travelDateOption" ng-init="vm.queryParams.travelDateOption = vm.dateOptions[0]" ng-model="vm.queryParams.travelDateOption">
-												<option value="{{value}}" ng-repeat="value in vm.dateOptions track by $index">{{value}}</option>
+											<select class="form-control" name="travelDateOption" id="travelDateOption" ng-init="vm.queryParams.travelDateOption = vm.dateOptions[0].key" ng-model="vm.queryParams.travelDateOption">
+												<option value="{{value.key}}" ng-repeat="value in vm.dateOptions track by $index">{{value.value}}</option>
 											</select>
 										</div>
 									</div>
@@ -166,8 +166,8 @@
 												ng-model="vm.queryParams.seasonDateTo" placeholder="To"/>
 										</div>
 										<div class="col-md-4 no-rpad">
-											<select class="form-control" name="seasonDateOption" id="seasonDateOption" ng-init="vm.queryParams.seasonDateOption = vm.dateOptions[0]" ng-model="vm.queryParams.seasonDateOption">
-												<option value="{{value}}" ng-repeat="value in vm.dateOptions track by $index">{{value}}</option>
+											<select class="form-control" name="seasonDateOption" id="seasonDateOption" ng-init="vm.queryParams.seasonDateOption = vm.dateOptions[0].key" ng-model="vm.queryParams.seasonDateOption">
+												<option value="{{value.key}}" ng-repeat="value in vm.dateOptions track by $index">{{value.value}}</option>
 											</select>
 										</div>
 									</div>
@@ -249,7 +249,7 @@
 									<div class="col-md-4 no-pad">
 										<div class="pull-right query-button-wrapper">
 											<button type="button" class="btn btn-default small pull-right" ng-click="vm.loadAll()">Query</button>
-											<button type="reset" class="btn btn-default small pull-right">Reset</button>
+											<button type="reset" ng-click="vm.reset()" class="btn btn-default small pull-right">Reset</button>
 										</div>
 									</div>
 								</div>
@@ -399,7 +399,7 @@
 			    </div>
 				<div class="text-center">
 			        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
-			        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
+			        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.loadAll()"></uib-pagination>
 			    </div>
 			</div>
 		</div>
