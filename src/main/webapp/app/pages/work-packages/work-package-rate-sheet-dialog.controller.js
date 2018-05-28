@@ -60,7 +60,7 @@
         		  index : vm.index,
                   header : vm.title
           }
-  	  	  WorkPackage.exportRateSheet(wprs, onExportSuccess, onExportFailure);
+  	  	  WorkPackage.exportRateSheetExcel(wprs, onExportSuccess, onExportFailure);
     	  function onExportSuccess(result){
     		var fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
   			var templateFilename = "RateSheet.xlsx";

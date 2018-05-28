@@ -112,7 +112,7 @@
 				           			</td>
 				           		</tr>
 				           		<tr ng-if="!vm.isLoading" ng-repeat="fares in vm.faresData track by $index">
-				           			<td ng-if="!vm.isNull">{{$index+1}}</td>{{vm.faresData.length}}
+				           			<td ng-if="!vm.isNull">{{$index+1}}</td>
 				           			<td ng-repeat="fareData in fares track by $index">{{fareData}}</td>
 			               		</tr>
 			            	</tbody>
