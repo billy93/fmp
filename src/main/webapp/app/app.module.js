@@ -17,7 +17,6 @@
             'angular-loading-bar',
             'ngFileSaver',
             'ui.select',
-            'textAngular',
             'ngIdle',
             'ngWYSIWYG'
         ])
