@@ -99,7 +99,7 @@ public class AccountResource {
 			throw new EmailAlreadyUsedException();
 		});
 		User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-		mailService.sendActivationEmail(user);
+//		mailService.sendActivationEmail(user);
 	}
 
 	/**
@@ -230,8 +230,9 @@ public class AccountResource {
 	@PostMapping(path = "/account/reset-password/init")
 	@Timed
 	public void requestPasswordReset(@RequestBody String mail) {
+		String sender =  systemParameterService.getParameterNameValueString(SystemParameter.EMAIL_SENDER_RESET_PASSWORD);
 		mailService
-				.sendPasswordResetMail(userService.requestPasswordReset(mail).orElseThrow(EmailNotFoundException::new));
+				.sendPasswordResetMail(sender,userService.requestPasswordReset(mail).orElseThrow(EmailNotFoundException::new));
 	}
 
 	/**

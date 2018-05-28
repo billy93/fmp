@@ -5,25 +5,69 @@
         .module('fmpApp')
         .controller('AfdQueryController', AfdQueryController);
 
-    AfdQueryController.$inject = ['$state', 'AfdQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams'];
+    AfdQueryController.$inject = ['$state', 'AfdQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', 'queryParams'];
 
-    function AfdQueryController($state, AfdQuery, ParseLinks, AlertService, paginationConstants, pagingParams) {
+    function AfdQueryController($state, AfdQuery, ParseLinks, AlertService, paginationConstants, pagingParams, queryParams) {
 
         var vm = this;
-
+        
+        vm.datePickerOpenStatus = {};
+        vm.dateFormat = "yyyy-MM-dd";
+        vm.openCalendar = openCalendar;
+        
+        vm.sources = [
+        	{key: "A", value: "ATPCO"},
+        	{key: "M", value: "Market"},
+        	{key: "W", value: "Web"},
+        	{key: "C", value: "Competitor Private"}
+        ]
+        
+        vm.publicPrivate = [
+    		"Public",
+    		"Private"
+        ]
+        
+        vm.owrts = [
+    		{key: "1", value: "One Way"},
+    		{key: "2", value: "Rount Trip"},
+    		{key: "3", value: "One Way Only"},
+        ]
+        
+        vm.dateOptions = [
+        	"Active In",
+        	"Exact Match"
+        ]
+        
+        vm.tariffs = "?";
+        
+        vm.globalIndicators = "?";
+        
+        vm.gaFareTypes = "?";
+        
+        vm.fareTypes = "?";
+        
+        vm.paxTypes = "?";
+        
+        vm.cabins = "?";
+        
         vm.loadPage = loadPage;
         vm.predicate = pagingParams.predicate;
         vm.reverse = pagingParams.ascending;
         vm.transition = transition;
         vm.itemsPerPage = paginationConstants.itemsPerPage;
-
-        loadAll();
+        vm.queryParams = queryParams;
+        vm.loadAll = loadAll;
+        
+        vm.loadAll();
 
         function loadAll () {
+        	console.log(vm.queryParams);
+        	
         	AfdQuery.query({
                 page: pagingParams.page - 1,
                 size: vm.itemsPerPage,
-                sort: sort()
+                sort: sort(),
+                queryParam: vm.queryParams
             }, onSuccess, onError);
             function sort() {
                 var result = [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc')];
@@ -63,6 +107,13 @@
         	}, function(error) {
         		console.log(error);
         	});
+        }
+        
+        function openCalendar (e, date) {
+        	e.preventDefault();
+            e.stopPropagation();
+            
+            vm.datePickerOpenStatus[date] = true;
         }
     }
 })();

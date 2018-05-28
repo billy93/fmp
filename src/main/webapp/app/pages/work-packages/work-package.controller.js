@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('WorkPackageController', WorkPackageController);
 
-    WorkPackageController.$inject = ['$uibModal', '$state', '$stateParams', 'WorkPackage', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', 'GlobalService'];
+    WorkPackageController.$inject = ['$uibModal', '$state', '$stateParams', 'WorkPackage', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams'];
 
-    function WorkPackageController($uibModal, $state, $stateParams, WorkPackage, ParseLinks, AlertService, paginationConstants, pagingParams, GlobalService) {
+    function WorkPackageController($uibModal, $state, $stateParams, WorkPackage, ParseLinks, AlertService, paginationConstants, pagingParams) {
         var vm = this;
         vm.reviewLevel = true;
         vm.woStatus = true;
@@ -256,8 +256,15 @@
         	console.log(vm.workPackageFilter);
         }
        
-        
-        GlobalService.sayHello();
-        GlobalService.mustFill();
+        vm.unlock = function(wp){
+        	 vm.workPackages[wp].locked = false;
+	      	  WorkPackage.unlock(vm.workPackages[wp], onUnlockedSuccess, onUnlockedFailure);
+	      	  function onUnlockedSuccess (result) {
+	      		  alert('Work Package Successful Unlocked');
+	      	  }
+	      	  function onUnlockedFailure (error) {
+	      		  
+	      	  }
+        };
     }
 })();

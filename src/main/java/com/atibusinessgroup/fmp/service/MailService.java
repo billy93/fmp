@@ -59,16 +59,16 @@ public class MailService {
     }
 
     @Async
-    public void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
-        log.debug("Send email[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
-            isMultipart, isHtml, to, subject, content);
+    public void sendEmail(String from, String to, String subject, String content, boolean isMultipart, boolean isHtml) {
+        log.debug("Send email[multipart '{}' and html '{}'] from '{}' to '{}' with subject '{}' and content={}",
+            isMultipart, isHtml, from, to, subject, content);
 
         // Prepare message using a Spring helper
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, CharEncoding.UTF_8);
+            message.setFrom(from);
             message.setTo(to);
-            message.setFrom(jHipsterProperties.getMail().getFrom());
             message.setSubject(subject);
             message.setText(content, isHtml);
             javaMailSender.send(mimeMessage);
@@ -83,27 +83,29 @@ public class MailService {
     }
 
     @Async
-    public void sendEmailFromTemplate(User user, String templateName, String titleKey) {
+    public void sendEmailFromTemplate(String from, User user, String templateName, String titleKey) {
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
+        context.setVariable(from, from);
         context.setVariable(USER, user);
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
         String content = templateEngine.process(templateName, context);
         String subject = messageSource.getMessage(titleKey, null, locale);
-        sendEmail(user.getEmail(), subject, content, false, true);
+        sendEmail(from, user.getEmail(), subject, content, false, true);
 
     }
 
     @Async
-    public void sendEmailFromTemplateWithCustomVariable(User user, String templateName, String titleKey, Map<String, String> customVariable) {
+    public void sendEmailFromTemplateWithCustomVariable(String from, User user, String templateName, String titleKey, Map<String, String> customVariable) {
         Locale locale = Locale.forLanguageTag(user.getLangKey());
         Context context = new Context(locale);
+        context.setVariable(from, from);
         context.setVariable("map", customVariable);
         context.setVariable(USER, user);
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
         String content = templateEngine.process(templateName, context);
         String subject = messageSource.getMessage(titleKey, null, locale);
-        sendEmail(user.getEmail(), subject, content, false, true);
+        sendEmail(from, user.getEmail(), subject, content, false, true);
     }
     
     @Async
@@ -115,12 +117,12 @@ public class MailService {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, CharEncoding.UTF_8);
+            message.setFrom(from);
             message.setTo(to);
             
             if(cc != null) {
             	message.setCc(cc);
             }
-            message.setFrom(from);
             message.setSubject(subject);
             message.setText(content, isHtml);
             javaMailSender.send(mimeMessage);
@@ -157,11 +159,11 @@ public class MailService {
                 message.addAttachment("Attachment-"+i+"."+ext, byteArray);            	
                 i++;
             }
+            message.setFrom(from);
             message.setTo(to);
             if(cc != null) {
                 message.setCc(cc);
             }
-            message.setFrom(from);
             message.setSubject(subject);
             message.setText(content, isHtml);
             javaMailSender.send(mimeMessage);
@@ -176,27 +178,27 @@ public class MailService {
     }
     
     @Async
-    public void sendActivationEmail(User user) {
+    public void sendActivationEmail(String from, User user) {
         log.debug("Sending activation email to '{}'", user.getEmail());
-        sendEmailFromTemplate(user, "activationEmail", "email.activation.title");
+        sendEmailFromTemplate(from, user, "activationEmail", "email.activation.title");
     }
 
     @Async
-    public void sendCreationEmail(User user) {
+    public void sendCreationEmail(String from, User user) {
         log.debug("Sending creation email to '{}'", user.getEmail());
-        sendEmailFromTemplate(user, "creationEmail", "email.activation.title");
+        sendEmailFromTemplate(from, user, "creationEmail", "email.activation.title");
     }
 
     @Async
-    public void sendPasswordResetMail(User user) {
+    public void sendPasswordResetMail(String from, User user) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
-        sendEmailFromTemplate(user, "passwordResetEmail", "email.reset.title");
+        sendEmailFromTemplate(from,user, "passwordResetEmail", "email.reset.title");
     }
     @Async
-    public void sendChangedFieldMail(User user, List<String> changedField) {
+    public void sendChangedFieldMail(String from, User user, List<String> changedField) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
         Map<String, String> customField = new HashMap<>();
         customField.put("field", changedField.toString());
-        sendEmailFromTemplateWithCustomVariable(user, "userChangedField", "email.change.title", customField);
+        sendEmailFromTemplateWithCustomVariable(from, user, "userChangedField", "email.change.title", customField);
     }
 }
