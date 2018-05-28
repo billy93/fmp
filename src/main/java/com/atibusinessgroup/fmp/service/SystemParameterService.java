@@ -87,6 +87,19 @@ public class SystemParameterService {
 		
 		return value;
 	}
+	
+	public String getParameterNameValueString(String parameterName) {
+		String value =null;
+			
+		try {
+			SystemParameter sysParameter = systemParameterRepository.findOneByName(parameterName);
+			value = sysParameter.getValue();
+		} catch (Exception e) {
+			throw new SystemParameterException("Invalid user system parameter name/value (" + parameterName + ")");
+		}
+		
+		return value;
+	}
 
 	public List<SystemParameter> findAll() {
 		// TODO Auto-generated method stub
