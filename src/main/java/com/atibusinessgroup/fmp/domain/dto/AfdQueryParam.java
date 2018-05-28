@@ -42,6 +42,8 @@ public class AfdQueryParam {
 	private boolean appendResults;
 	private boolean biDirectional;
 	private boolean calculateTfc;
+	private int page;
+	private int size;
 	
 	public AfdQueryParam() {
 		
@@ -358,7 +360,23 @@ public class AfdQueryParam {
 	public void setCalculateTfc(boolean calculateTfc) {
 		this.calculateTfc = calculateTfc;
 	}
-	
+
+	public int getPage() {
+		return page;
+	}
+
+	public void setPage(int page) {
+		this.page = page;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -385,6 +403,7 @@ public class AfdQueryParam {
 		result = prime * result + ((minStay == null) ? 0 : minStay.hashCode());
 		result = prime * result + ((origin == null) ? 0 : origin.hashCode());
 		result = prime * result + ((owrt == null) ? 0 : owrt.hashCode());
+		result = prime * result + page;
 		result = prime * result + ((paxType == null) ? 0 : paxType.hashCode());
 		result = prime * result + ((publicPrivate == null) ? 0 : publicPrivate.hashCode());
 		result = prime * result + ((routingNo == null) ? 0 : routingNo.hashCode());
@@ -395,6 +414,7 @@ public class AfdQueryParam {
 		result = prime * result + ((seasonDateFrom == null) ? 0 : seasonDateFrom.hashCode());
 		result = prime * result + ((seasonDateOption == null) ? 0 : seasonDateOption.hashCode());
 		result = prime * result + ((seasonDateTo == null) ? 0 : seasonDateTo.hashCode());
+		result = prime * result + size;
 		result = prime * result + ((source == null) ? 0 : source.hashCode());
 		result = prime * result + ((tariff == null) ? 0 : tariff.hashCode());
 		result = prime * result + ((tourCode == null) ? 0 : tourCode.hashCode());
@@ -555,6 +575,9 @@ public class AfdQueryParam {
 		} else if (!owrt.equals(other.owrt)) {
 			return false;
 		}
+		if (page != other.page) {
+			return false;
+		}
 		if (paxType == null) {
 			if (other.paxType != null) {
 				return false;
@@ -625,6 +648,9 @@ public class AfdQueryParam {
 		} else if (!seasonDateTo.equals(other.seasonDateTo)) {
 			return false;
 		}
+		if (size != other.size) {
+			return false;
+		}
 		if (source == null) {
 			if (other.source != null) {
 				return false;
@@ -692,6 +718,6 @@ public class AfdQueryParam {
 				+ ", cabin=" + cabin + ", bookingClass=" + bookingClass + ", advancePurchase=" + advancePurchase
 				+ ", minStay=" + minStay + ", maxStay=" + maxStay + ", includeConstructed=" + includeConstructed
 				+ ", appendResults=" + appendResults + ", biDirectional=" + biDirectional + ", calculateTfc="
-				+ calculateTfc + "]";
+				+ calculateTfc + ", page=" + page + ", size=" + size + "]";
 	}
 }
