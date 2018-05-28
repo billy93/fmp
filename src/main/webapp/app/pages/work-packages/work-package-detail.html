@@ -131,6 +131,7 @@
                    								name="saleDate" 
                    								ng-disabled="!vm.isEditable('saleDate')" 
                    								datetime-picker="{{dateformat}}" 
+                   								enable-time="false"
                    								ng-model="vm.workPackage.saleDate" 
                    								is-open="vm.datePickerOpenStatus.saleDate" class="form-control">
                    								
@@ -314,7 +315,7 @@
 						</ul>
 						
 						<div class="tab-content">
-							<div class="tab-pane" ng-class="{active:vm.currentTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.fareSheet track by $index">
+							<div class="tab-pane" id="tabAtpco{{$index}}" ng-class="{active:vm.currentTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.fareSheet track by $index">
 								<div class="pb1 mb1 bbgrey">
 									<div class="clearfix">
 										<div class="pull-left w50 two-column">
@@ -381,7 +382,7 @@
 															    	<a ng-click="vm.clearSelection()">Clear Selection</a>
 															    </li>															   
 															    <li>
-															    	<a ng-click="vm.addFares()">Add Rows</a>
+															    	<a ng-click="vm.addFares(workPackageSheet)">Add Rows</a>
 															    </li>
 															    <li>
 															    	<a href="#">Paste</a>
@@ -434,8 +435,8 @@
 														<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Ratesheet Comment</th>
 													</tr>
 												</thead>
-												<tbody ng-repeat="fare in vm.workPackage.fareSheet[vm.selectedTab].fares track by $index" >
-													<tr role="row" class="datatable-row" ng-click="vm.rowTableClick($event, $index, 'fares')">
+												<tbody ng-repeat="fare in workPackageSheet.fares track by $index" >												
+													<tr role="row" class="datatable-row" ng-click="vm.rowTableClick($event, $parent.$index+''+$index, 'fares')">
 														<td>{{$index+1}}</td>
 														<td>
 															<select class="form-control inside-table" name="status{{$parent.$index}}{{$index}}" ng-model="fare.status" id="field_status" 
@@ -549,18 +550,22 @@
 														<td>
 															<input type="text" class="form-control" name="farebasis{{$parent.$index}}{{$index}}" id="field_farebasis"
 								                				ng-disabled="!vm.isEditable('farebasis')"
-								                				 ng-click="$event.stopPropagation()"
+								                				ng-click="$event.stopPropagation()"
 								                				ng-required="vm.isRequired('farebasis') && fare.action != 'Canceled'" 
-								                				ng-class="{'must-fill': editForm.editFormATPCO.farebasis{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-									                    		ng-model="fare.fareBasis"/>				
+								                				ng-model="fare.fareBasis"/>				
 														</td>	
 														<td>
 															<input type="text" class="form-control" name="bookingClass{{$parent.$index}}{{$index}}" id="field_bookingClass"
 								                				ng-click="$event.stopPropagation()"
+								                				ng-maxlength="2"
+								                				maxlength="2"
+								                				ng-pattern="/^[a-zA-Z]{1,2}$/"
 								                				ng-disabled="!vm.isEditable('bookingClass')"
-								                				ng-required="vm.isRequired('bookingClass') && fare.action != 'Canceled'" 
-								                				ng-class="{'must-fill': editForm.editFormATPCO.bookingClass{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-									                    		ng-model="fare.bookingClass"/>				
+								                				ng-required="vm.isRequired('bookingClass')" 
+								                				ng-class="{'must-fill':editForm.editFormATPCO.bookingClass{{$parent.$index}}{{$index}}.$error.required || 
+									                				editForm.editFormATPCO.bookingClass{{$parent.$index}}{{$index}}.$error.maxlength || 
+									                				editForm.editFormATPCO.bookingClass{{$parent.$index}}{{$index}}.$error.pattern}"
+									                    		ng-model="fare.bookingClass"/>	
 														</td>
 														<td>
 									           				<select class="form-control" 
@@ -637,7 +642,7 @@
 						               						<input type="text" class="form-control" name="amount{{$parent.$index}}{{$index}}" id="field_bookingClass"
 							                				ng-disabled="!vm.isEditable('amount')"
 							                				ng-click="$event.stopPropagation()"
-							                				ng-required="vm.isRequired('amount')" 
+							                				ng-required="vm.isRequired('amount', fare)" 
 							                				ng-class="{'must-fill': editForm.editFormATPCO.amount{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 												            ng-model="fare.amount"/>									                												                			
 								               			</td>
@@ -667,18 +672,12 @@
 								               			-->
 								               			
 								               			<td>
-									               			<span ng-if="vm.isEditable( 'aif')">
-									                				<input type="text" class="form-control" name="aif{{$parent.$index}}{{$index}}" id="field_bookingClass"
+									               			<input type="text" class="form-control" name="aif{{$parent.$index}}{{$index}}" id="field_bookingClass"
 									                				ng-disabled="!vm.isEditable('aif')"
 									                				ng-click="$event.stopPropagation()"
-									                				ng-required="vm.isRequired('aif')" 
+									                				ng-required="vm.isRequired('aif', fare)" 
 									                				ng-class="{'must-fill': editForm.editFormATPCO.aif{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 														            ng-model="fare.aif"/>
-									                			
-									                			</span>
-									                			<span ng-if="!vm.isEditable( 'aif')">
-									               				{{fare.aif}}
-									                			</span>
 									               		</td> 
 								               			<td ng-click="vm.openCalendar('travelStartDate'+$parent.$index+''+$index)">
 								               				<span class="input-group">
@@ -691,6 +690,7 @@
 										                    		ng-class="{'must-fill': editForm.editFormATPCO.travelStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 														            ng-model="fare.travelStart" 
 														            datetime-picker="{{dateformat}}" 
+														            enable-time="false"
 														            is-open="vm.datePickerOpenStatus['travelStartDate'+$parent.$index+''+$index]">
 																<span class="input-group-addon disabled">
 																	<i ng-disabled="true" ng-click="vm.openCalendar('travelStartDate'+$parent.$index+''+$index)" class="fa fa-calendar"></i>
@@ -708,6 +708,7 @@
 										                    		ng-class="{'must-fill': editForm.editFormATPCO.travelEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 														            ng-model="fare.travelEnd" 
 														            datetime-picker="{{dateformat}}" 
+														            enable-time="false"
 														            is-open="vm.datePickerOpenStatus['travelEndDate'+$parent.$index+''+$index]">
 																<span class="input-group-addon disabled">
 																	<i ng-disabled="true" ng-click="vm.openCalendar('travelEndDate'+$parent.$index+''+$index)" class="fa fa-calendar"></i>
@@ -732,6 +733,7 @@
 										                    		ng-class="{'must-fill': editForm.editFormATPCO.saleStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 														            ng-model="fare.saleStart" 
 														            datetime-picker="{{dateformat}}" 
+														            enable-time="false"
 														            is-open="vm.datePickerOpenStatus['saleStartDate'+$parent.$index+''+$index]">
 																<span class="input-group-addon disabled">
 																	<i ng-disabled="true" ng-click="vm.openCalendar('saleStartDate'+$parent.$index+''+$index)" class="fa fa-calendar"></i>
@@ -749,6 +751,7 @@
 										                    		ng-class="{'must-fill': editForm.editFormATPCO.saleEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 														            ng-model="fare.saleEnd" 
 														            datetime-picker="{{dateformat}}" 
+														            enable-time="false"
 														            is-open="vm.datePickerOpenStatus['saleEndDate'+$parent.$index+''+$index]">
 																<span class="input-group-addon disabled">
 																	<i ng-disabled="true" ng-click="vm.openCalendar('saleEndDate'+$parent.$index+''+$index)" class="fa fa-calendar"></i>
@@ -770,6 +773,7 @@
 										                    		ng-class="{'must-fill': editForm.editFormATPCO.travelComplete{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 														            ng-model="fare.travelComplete" 
 														            datetime-picker="{{dateformat}}" 
+														            enable-time="false"
 														            is-open="vm.datePickerOpenStatus['travelComplete'+$parent.$index+''+$index]">
 																<span class="input-group-addon disabled">
 																	<i ng-disabled="true" ng-click="vm.openCalendar('travelComplete'+$parent.$index+''+$index)" class="fa fa-calendar"></i>
@@ -800,17 +804,20 @@
 								                    		ng-model="fare.ratesheetComment"/>
 								               			</td>
 													</tr>
-													<tr class="datatable-action{{$index}}" ng-show="vm.faresActionButton[$index]">
+													<tr class="datatable-action{{$index}}" ng-show="vm.faresActionButton[$parent.$index+''+$index]">
 														<td colspan="18" class="">
-															<div class="btn btn-app" ng-click="vm.deleteFaresSelected($index)">
+															<div class="btn btn-app" ng-click="vm.deleteFaresSelected('fares', workPackageSheet, $parent.$index, $index)">
 																<i class="fa fa-trash"></i>Delete
 															</div>
-															<div class="btn btn-app" ng-click="vm.moveUpFare($index)">
+															<div class="btn btn-app" ng-click="vm.moveUpFare(workPackageSheet, $index)">
 																<i class="fa fa-level-up"></i>Move Up
 															</div>
-															<div class="btn btn-app" ng-click="vm.moveDownFare($index)">
+															<div class="btn btn-app" ng-click="vm.moveDownFare(workPackageSheet, $index)">
 																<i class="fa fa-level-down"></i>Move Down
-															</div>	
+															</div>
+															<div class="btn btn-app" ng-click="vm.copyFare(workPackageSheet, $index)">
+																<i class="fa fa-copy"></i>Copy
+															</div>		
 															<div class="btn btn-app">
 																<i class="fa fa-stack-exchange"></i>Derived Fares
 															</div>
@@ -824,7 +831,7 @@
 							
 							</div>
 						
-							<div class="tab-pane" ng-class="{active:vm.currentAddonTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.addonFareSheet track by $index">
+							<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+$index}}" ng-class="{active:vm.currentAddonTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.addonFareSheet track by $index">
 								<div class="pb1 mb1 bbgrey">
 									<div class="clearfix">
 										<div class="pull-left w50 two-column">
@@ -914,8 +921,8 @@
 									               		<th>Travel Complete Indicator</th>		
 													</tr>
 												</thead>
-												<tbody>
-													<tr role="row" class="datatable-row" ng-repeat="fare in vm.workPackage.addonFareSheet[vm.selectedTab].fares track by $index">
+												<tbody ng-repeat="fare in workPackageSheet.fares track by $index">
+													<tr role="row" class="datatable-row" ng-click="vm.rowTableClick($event, $parent.$index+''+$index, 'addon')">
 														<td>{{$index+1}}</td>
 														<td>
 															<select class="form-control inside-table" name="addonFareStatus{{$index}}" ng-model="fare.status" id="field_status" 
@@ -1197,27 +1204,20 @@
 									                				ng-model="fare.travelCompleteIndicator"></select>
 								               			</td>
 													</tr>
-													<tr class="datatable-action">
+													<tr class="datatable-action{{$index}}" ng-show="vm.addonFaresActionButton[$parent.$index+''+$index]">
 														<td colspan="18" class="">
-															<div class="btn btn-app">
+															<div class="btn btn-app" ng-click="vm.deleteFaresSelected(workPackageSheet, $index)">
+																<i class="fa fa-trash"></i>Delete
+															</div>
+															<div class="btn btn-app" ng-click="vm.moveUpFare(workPackageSheet, $index)">
 																<i class="fa fa-level-up"></i>Move Up
 															</div>
-															<div class="btn btn-app">
-																<i class="fa fa-level-down"></i>Move Down
-															</div>	
-															<div class="btn btn-app">
-																<i class="fa fa-stack-exchange"></i>Derived Fares
-															</div>
-														</td>
-													</tr>
-													<tr class="datatable-action">
-														<td colspan="18" class="">																	
-															<div class="btn btn-app">
-																<i class="fa fa-level-up"></i>Move Up
-															</div>
-															<div class="btn btn-app">
+															<div class="btn btn-app" ng-click="vm.moveDownFare(workPackageSheet, $index)">
 																<i class="fa fa-level-down"></i>Move Down
 															</div>
+															<div class="btn btn-app" ng-click="vm.copyFare(workPackageSheet, $index)">
+																<i class="fa fa-copy"></i>Copy
+															</div>		
 															<div class="btn btn-app">
 																<i class="fa fa-stack-exchange"></i>Derived Fares
 															</div>
@@ -1236,23 +1236,20 @@
 							
 							</div>
 																		
-							<div class="tab-pane" ng-class="{active:vm.currentTabFilingInstruction}" ng-if="vm.workPackage.filingInstruction">
-								
-								<div class="tab-pane" ng-class="{active:vm.currentTabFilingInstruction}">
-								
-									<div class="box-header"></div>
-									<div class="box-body bbgrey">
-										<div class="form-group">
-											<label>Comment</label>
-											<div text-angular="text-angular" name="commentFillingInstruction" ng-model="vm.commentStringFillingInstruction" ta-paste="vm.stripFormat($html)" ta-toolbar="[['h1','h2','h3'],['bold','italics','underline'],['redo','undo'],['ul','ol'],['justifyLeft','justifyCenter','justifyRight','justifyFull']]"/>
-										</div>
-										<div class="clearfix">
-											<div class="pull-right">
-												<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()"></i>Add</button>
-											</div>
-										</div>										
+							<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+vm.workPackage.addonFareSheet.length}}"  ng-class="{active:vm.currentTabFilingInstruction}" ng-if="vm.workPackage.filingInstruction">
+								<div class="box-header"></div>
+								<div class="box-body bbgrey">
+									<div class="form-group">
+										<label>Comment</label>
+										<div text-angular="text-angular" name="commentFillingInstruction" ng-model="vm.commentStringFillingInstruction" ta-paste="vm.stripFormat($html)" ta-toolbar="[['h1','h2','h3'],['bold','italics','underline'],['redo','undo'],['ul','ol'],['justifyLeft','justifyCenter','justifyRight','justifyFull']]"/>
 									</div>
-						        	 <div class="box-body">
+									<div class="clearfix">
+										<div class="pull-right">
+											<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()"></i>Add</button>
+										</div>
+									</div>										
+								</div>
+					        	<div class="box-body">
 						        		<div class="comment-wrapper">
 							    			<div class="comment-list" ng-repeat="filingInstructionData in vm.workPackage.filingInstructionData.slice().reverse() track by $index">
 										    	<div class="clearfix">
@@ -1267,34 +1264,9 @@
 											</div>
 							    		</div>
 						        	</div>									
-								
-									<!-- <div class="action-btn-wrapper">
-					      				<div class="col-md-12 text-right no-pad">
-					      					<button ng-click="vm.addFiling()" class="btn btn-primary">Add</button>
-					      				</div>
-					      			</div>
-					       			<div class="col-md-12">
-					       				<div class="text-center no-data" ng-if="!vm.workPackage.filingInstructionData || vm.workPackage.filingInstructionData.length == 0">No Filing Instruction Available</div>
-								
-					       				<div ng-repeat="filingInstructionData in vm.workPackage.filingInstructionData track by $index" class="form-repeat">
-					       					<button ng-click="vm.removeFiling(filingInstructionData)" class="bordered delete"><span class="glyphicon glyphicon-remove"></span></button>
-							       			<label class="user">{{filingInstructionData.username}} <span class="vseparator no-mar"></span> {{filingInstructionData.createdTime | date: 'short'}}</label>
-						       				<div class="row">
-								        		<div class="col-md-6">							      			
-									      			<div class="form-group row">
-									      				<label class="col-md-4">Comment</label>
-									      				<div class="col-md-8 input-group textarea">
-									      					<textarea class="col-md-12" ng-model="filingInstructionData.comment"></textarea>
-									      				</div>
-									      			</div>
-								        		</div>							        		
-								      		</div>
-								     	</div>
-					       			</div> -->
-								</div>
 							</div>
 							
-							<div class="tab-pane" ng-class="{active:vm.currentTabAttachment}" ng-if="vm.workPackage.attachment">
+							<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+vm.workPackage.addonFareSheet.length+1}}" ng-class="{active:vm.currentTabAttachment}" ng-if="vm.workPackage.attachment">
 								<div class="action-btn-wrapper">
 				     				<div class="col-md-12 text-right no-pad">
 				     					<button ng-click="vm.addAttachment()" class="btn btn-primary">Add</button>
@@ -1346,7 +1318,7 @@
 							     </div>
 							</div>
 							
-							<div class="tab-pane" ng-class="{active:vm.currentTabFilingDetail}" ng-if="vm.workPackage.filingDetails">
+							<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+vm.workPackage.addonFareSheet.length+2}}" ng-class="{active:vm.currentTabFilingDetail}" ng-if="vm.workPackage.filingDetails">
 								<div class="tab-content wp">
 						      		<div class="row">
 						      			<div class="col-md-6">
@@ -1622,7 +1594,7 @@
 				                              <th>Travel Complete Indicator</th>	
 						                    </tr>
 						                  </thead>
-						                  <tbody ng-repeat="fare in vm.workPackage.discountFareSheet[vm.selectedDiscountTab].fares track by $index" >
+						                  <tbody ng-repeat="fare in workPackageSheet.fares track by $index" >
 						                    <tr role="row" class="datatable-row" ng-click="vm.rowTableClick($event, $index, 'discount')">
 						                      <td>{{$index+1}}</td>
 						                      <td>
@@ -2145,7 +2117,7 @@
 									               		<th>RateSheet Comment</th>	        		
 									                </tr>
 												</thead>
-												<tbody ng-repeat="fare in vm.workPackage.marketFareSheet[vm.selectedMarketTab].fares track by $index">
+												<tbody ng-repeat="fare in workPackageSheet.fares track by $index">
 													<tr ng-click="vm.rowTableClick($event, $index, 'market')">
 														<td>{{$index+1}}</td>
 														<td>

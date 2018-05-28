@@ -164,8 +164,85 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     private ApproveConfig approveConfig;
     private ReuseReplaceConfig reuseReplaceConfig;
     
+    private Validation validation;
+    private boolean validate;
+    
+    
+    public boolean isValidate() {
+		return validate;
+	}
 
-    public boolean isLocked() {
+	public void setValidate(boolean validate) {
+		this.validate = validate;
+	}
+
+	public static class Validation{
+    	private List<Tab> tab;
+    	
+    	public List<Tab> getTab() {
+			return tab;
+		}
+
+		public void setTab(List<Tab> tab) {
+			this.tab = tab;
+		}
+
+		public static class Tab{
+    		private String name;
+    		private List<Error> warning;
+    		private List<Error> error;
+    		
+    		public String getName() {
+				return name;
+			}
+
+			public void setName(String name) {
+				this.name = name;
+			}
+
+			public List<Error> getWarning() {
+				return warning;
+			}
+
+			public void setWarning(List<Error> warning) {
+				this.warning = warning;
+			}
+
+			public List<Error> getError() {
+				return error;
+			}
+
+			public void setError(List<Error> error) {
+				this.error = error;
+			}
+
+			public static class Error{
+    			private String message;
+
+				public String getMessage() {
+					return message;
+				}
+
+				public void setMessage(String message) {
+					this.message = message;
+				}
+
+				
+    			
+    		}
+    	}
+    }
+    
+    
+    public Validation getValidation() {
+		return validation;
+	}
+
+	public void setValidation(Validation validation) {
+		this.validation = validation;
+	}
+
+	public boolean isLocked() {
 		return locked;
 	}
 

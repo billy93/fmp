@@ -312,20 +312,7 @@
     <script>
  // input
 	$(document).ready(function(){
-    	$(document).on('input', 'input.must-fill', function(){
-    	  	$(this).removeClass('must-fill');
-    	  	if($(this).val() == ''){
-    	  		$(this).addClass('must-fill');
-    	  	}
-    	});
     	
-    	// select
-    	$(document).on('change','select.must-fill',function(){
-    		$(this).removeClass('must-fill');
-    	  	if($(this).find('option')[0].selected === true){
-    	  		$(this).addClass('must-fill');
-    	  	}
-    	});
     	
 
 //    	dropdown

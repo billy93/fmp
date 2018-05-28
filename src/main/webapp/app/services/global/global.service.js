@@ -119,20 +119,20 @@
 		    },
 		    
 		    mustFill: function(){
-		    	$(document).ready(function(){
-		    		$('select.must-fill').on('change',function(){
-			    		$(this).removeClass('must-fill');
-			    	  	if($(this).find('option')[0].selected === true){
-			    	  		$(this).addClass('must-fill');
-			    	  	}
-			    	});
-			    	$('input.must-fill').on('input',function(){
-			    	  	$(this).removeClass('must-fill');
-			    	  	if($(this).val() == ''){
-			    	  		$(this).addClass('must-fill');
-			    	  	}
-			    	});
-		    	});
+//		    	$(document).ready(function(){
+//		    		$('select.must-fill').on('change',function(){
+//			    		$(this).removeClass('must-fill');
+//			    	  	if($(this).find('option')[0].selected === true){
+//			    	  		$(this).addClass('must-fill');
+//			    	  	}
+//			    	});
+//			    	$('input.must-fill').on('input',function(){
+//			    	  	$(this).removeClass('must-fill');
+//			    	  	if($(this).val() == ''){
+//			    	  		$(this).addClass('must-fill');
+//			    	  	}
+//			    	});
+//		    	});
 		    },
 		    
 		    boxHeader: function(){

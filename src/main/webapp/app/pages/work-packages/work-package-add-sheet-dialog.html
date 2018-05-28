@@ -1,45 +1,45 @@
 
 <form name="editForm" role="form" novalidate ng-submit="vm.save()">
-	
-   
-      		<div class="modal-header">
-				        <h5 class="modal-title" id="addNewsheetLabel">Add New Work Sheet</h5>
-				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				          <span aria-hidden="true">&times;</span>
-				        </button>
-		      		</div>
-		      		<div class="modal-body">
-		      			<div class="box-detail">
-		      				<div class="box-header">
-								Work Sheet Parameter
-							</div>
-		      				<div class="box-body">
-		      					<div class="form-group">
-									<label>Work Sheet Fares Type *</label>
-									<select class="form-control must-fill" name="sheetType" ng-model="vm.option.type"
-									ng-class="{'must-fill':vm.option.type==null || vm.option.type==''}"
-						                    ng-options="type as type for type in vm.types track by type">
-						            </select>
-								</div>
-								<div class="form-group">
-									<label>Work Sheet Name *</label>
-									<input type="text" class="form-control"
-									ng-class="{'must-fill':vm.option.name==null || vm.option.name==''}" name="sheetName" id="field_name"
-				                    ng-model="vm.option.name"
-				                    />
-								</div>
-								<div ng-if="vm.option.type == 'Fares' || vm.option.type == 'Market Fares' || vm.option.type == 'Waiver Fares'" class="form-group">
-									<label>Fare Type</label>
-									<select 
-					      				class="form-control" 
-					      				ng-model="vm.option.fareType" 
-										ng-options="type as type for type in vm.fareType track by $index"></select>
-								</div>
-		      				</div>
-		      			</div>						
-			      	</div>
-		      		<div class="modal-footer">				        
-				        <button type="submit" class="btn btn-secondary" ng-disabled="editForm.$invalid || vm.isSaving">Submit</button>
-				        <button type="button" class="btn btn-back" data-dismiss="modal" ng-click="vm.clear()">Close</button>
-		      		</div>
+	<div class="modal-header">
+	        <h5 class="modal-title" id="addNewsheetLabel">Add New Work Sheet</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+    </div>
+	<div class="modal-body">
+   		<div class="box-detail">
+   			<div class="box-header">
+				Work Sheet Parameter
+			</div>
+			<div class="box-body">
+				<div class="form-group">
+					<label>Work Sheet Fares Type *</label>
+					<select class="form-control must-fill" name="sheetType" ng-model="vm.option.type"
+					ng-class="{'must-fill':vm.option.type==null || vm.option.type==''}"
+				                  ng-options="type as type for type in vm.types track by type">
+				          </select>
+				</div>
+				<div class="form-group">
+					<label>Work Sheet Name *</label>
+					<input type="text" class="form-control"
+					ng-class="{'must-fill':vm.option.name==null || vm.option.name==''}" name="sheetName" id="field_name"
+				                ng-model="vm.option.name"
+				                />
+				</div>
+				<div ng-show="vm.option.type == 'Fares' || vm.option.type == 'Market Fares' || vm.option.type == 'Waiver Fares'" class="form-group">
+					<label>Fare Type</label>
+					
+					<select class="form-control must-fill" 
+					ng-class="{'must-fill':vm.option.fareType==null || vm.option.fareType==''}"
+					name="fareType" id="fareType" ng-model="vm.option.fareType">
+				      <option ng-repeat="option in vm.fareType" value="{{option.name}}">{{option.name}}</option>
+				    </select>					
+				</div>
+			</div>
+   		</div>						
+	</div>
+	<div class="modal-footer">				        
+	   <button type="submit" class="btn btn-secondary" ng-disabled="editForm.$invalid || vm.isSaving">Submit</button>
+	   <button type="button" class="btn btn-back" data-dismiss="modal" ng-click="vm.clear()">Close</button>
+	</div>
 </form>

@@ -256,7 +256,17 @@
         	console.log(vm.workPackageFilter);
         }
        
-        
+        vm.unlock = function(wp){
+        	 vm.workPackages[wp].locked = false;
+	      	  WorkPackage.unlock(vm.workPackages[wp], onUnlockedSuccess, onUnlockedFailure);
+	      	  function onUnlockedSuccess (result) {
+	      		  alert('Work Package Successful Unlocked');
+	      		  //$state.go("work-package");
+	      	  }
+	      	  function onUnlockedFailure (error) {
+	      		  
+	      	  }
+        };
         GlobalService.sayHello();
         GlobalService.mustFill();
     }

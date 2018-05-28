@@ -63,15 +63,6 @@
         for(var x=0;x<priorities.length;x++){
         	vm.priority[priorities[x].name] = priorities[x].name;
         }
-//        vm.fareType = {
-//    		"":"Select Fare Type", 
-//    		"Yearly":"Yearly", 
-//    		"Promotion":"Promotion", 
-//    		"Ad-hoc":"Ad-hoc", 
-//    		"Corporate":"Corporate", 
-//    		"SPA & Code-share":"SPA & Code-share",
-//    		"Miles":"Miles"
-//        };
         
         vm.typeOfJourney = {
     		"":"Select OW/RT", 
@@ -263,12 +254,26 @@
         	{
         		name:"amount",
         		editable:["LSO", "HO"],
-        		mandatory:["LSO", "HO"]
+        		mandatory:[        			
+        			"LSO", "HO"
+        		],
+        		mandatoryExtraCondition:[
+        			{
+        				field:"aif",
+        				isEmpty:true
+        			}
+        		]
         	},
         	{
         		name:"aif",
         		editable:["LSO", "HO"],
-        		mandatory:["LSO", "HO"]
+        		mandatory:["LSO", "HO"],
+        		mandatoryExtraCondition:[
+        			{
+        				field:"amount",
+        				isEmpty:true
+        			}
+        		]
         	},
         	{
         		name:"travelStartDate",
@@ -857,15 +862,67 @@
         	}
         ];
         
-        vm.isRequired = function(field){
-        	return vm.checkField(field, 'mandatory');        	 
+        vm.isRequired = function(field, fare){
+        	return vm.checkField(field, 'mandatory', fare);        	 
         };
         
         vm.isEditable = function(field){
         	return vm.checkField(field, 'editable');    
         };
         
-        vm.checkField = function(field, type){
+        vm.checkField = function(field, type, fare){
+        	var result = false;
+        	if(type == 'mandatory'){
+        		for(var x=0;x<vm.fields.length;x++){
+        			if(vm.fields[x].name == field){
+        				var reviewLevels = vm.fields[x].mandatory;
+        				var extraCondition = vm.fields[x].mandatoryExtraCondition;
+        				
+        				if(extraCondition != null && extraCondition.length > 0){
+        					if(reviewLevels.indexOf(vm.workPackage.reviewLevel) > -1){
+	        					for(var y=0;y<extraCondition.length;y++){
+	        						if(fare != null){
+	        							//Check extra condition here
+	        							var field = extraCondition[y].field;
+	        							
+	        							//Check other field empty condition
+	        							var isEmpty = extraCondition[y].isEmpty;
+	        							if(isEmpty){
+	        								if(fare[field] == null || fare[field] == ''){
+	        									result = true;
+	        									break;
+	        								}
+	        							} 
+	        							//End check other field empty condition
+	        						}
+	        					}
+	        					break;
+        					}
+        				}
+        				else{
+	        				if(reviewLevels.indexOf(vm.workPackage.reviewLevel) > -1){
+	        					result = true;
+	        					break;
+	        				}
+        				}
+        			}
+        		}
+        	}
+        	else if(type == 'editable'){
+        		for(var x=0;x<vm.fields.length;x++){
+        			if(vm.fields[x].name == field){
+        				var reviewLevels = vm.fields[x].editable;
+        				if(reviewLevels.indexOf(vm.workPackage.reviewLevel) > -1){
+        					result = true;
+        					break;
+        				}
+        			}
+        		}
+        	}
+	  		return result;
+	    }
+        
+        vm.checkFieldOnly = function(field, type){
         	var result = false;
         	if(type == 'mandatory'){
         		for(var x=0;x<vm.fields.length;x++){
@@ -993,41 +1050,48 @@
         //END COMMENT TAB
         
         //FARES TAB
-//        vm.currentTab[0] = true;
+        vm.currentTab[0] = true;
         vm.selectedTab = 0;
         vm.selectTab = function(index){
-        	console.log("SELECT TAB INDEX : "+index);
-        	vm.resetTab();        	
-        	vm.currentTab[index] = true;
+        	vm.resetTab(); 
+        	if(vm.workPackage.fareSheet.length > 0){
+        		vm.currentTab[index] = true;
+        	}
         };
         
         vm.addTab = function(option){
         	if(option.type == 'Fares'){
         		vm.workPackage.specifiedFares = true;
-        		vm.workPackage.fareSheet.push({specifiedFaresName:option.name, fareType:option.fareType});
+        		vm.workPackage.fareSheet.push({specifiedFaresName:option.name, fareType:option.fareType, fares:[]});
+        		vm.selectTab(vm.workPackage.fareSheet.length-1);
         	}
         	else if(option.type == 'Market Fares'){
         		vm.workPackage.marketFares = true;
-        		vm.workPackage.marketFareSheet.push({marketFaresName:option.name, waiverFareType:option.fareType});
+        		vm.workPackage.marketFareSheet.push({marketFaresName:option.name, marketFareType:option.fareType});
+        		vm.selectMarketTab(vm.workPackage.marketFareSheet.length-1);
         	}
         	else if(option.type == 'Waiver Fares'){
         		vm.workPackage.waiverFares = true;
-        		vm.workPackage.waiverFareSheet.push({waiverFaresName:option.name, marketFareType:option.fareType});
+        		vm.workPackage.waiverFareSheet.push({waiverFaresName:option.name, waiverFareType:option.fareType});
+        		vm.selectWaiverTab(vm.workPackage.waiverFareSheet.length-1);
         	}
         	else if(option.type == 'Discount Fares'){
         		vm.workPackage.discountFares = true;
         		vm.workPackage.discountFareSheet.push({discountFaresName:option.name, discountFareType:option.fareType});
+        		vm.selectDiscountTab(vm.workPackage.discountFareSheet.length-1);
         	}
         	else if(option.type == 'Add-Ons'){
         		vm.workPackage.addon = true;
         		vm.workPackage.addonFareSheet.push({addonFaresName:option.name});
+        		vm.selectAddonTab(vm.workPackage.addonFareSheet.length-1);
         	}
         	else if(option.type == 'Attachment'){
-        		vm.workPackage.attachment = true;        		
+        		vm.workPackage.attachment = true;    
+        		vm.selectOtherTab('attachment');
         	}
         	else if(option.type == 'Filing Instruction'){
         		vm.workPackage.filingInstruction = true;
-        		
+        		vm.selectOtherTab('filingInstruction');
         	}
         };
         
@@ -1042,7 +1106,8 @@
 	        			
 	        			var index = vm.workPackage.fareSheet.indexOf(vm.workPackage.fareSheet[x]);
 	                	vm.workPackage.fareSheet.splice(x, 1); 
-	                	vm.selectedTab = 0;
+	                	//vm.selectedTab = 0;
+	                	//vm.selectTab(0);
 	        			break;
 	        		}
 	        	}
@@ -1056,7 +1121,8 @@
 	        			
 	        			var index = vm.workPackage.addonFareSheet.indexOf(vm.workPackage.addonFareSheet[x]);
 	                	vm.workPackage.addonFareSheet.splice(index, 1); 
-	                	vm.selectedAddonTab = 0;
+	                	//vm.selectedAddonTab = 0;
+	                	//vm.selectAddonTab(0);
 	        			break;
 	        		}
 	        	}
@@ -1070,7 +1136,8 @@
 	        			
 	        			var index = vm.workPackage.discountFareSheet.indexOf(vm.workPackage.discountFareSheet[x]);
 	                	vm.workPackage.discountFareSheet.splice(index, 1); 
-	                	vm.selectedDiscountTab = 0;
+//	                	vm.selectedDiscountTab = 0;
+	                	//vm.selectDiscountTab(0);
 	        			break;
 	        		}
 	        	}
@@ -1084,7 +1151,8 @@
 	        			
 	        			var index = vm.workPackage.marketFareSheet.indexOf(vm.workPackage.marketFareSheet[x]);
 	                	vm.workPackage.marketFareSheet.splice(index, 1); 
-	                	vm.selectedMarketTab = 0;
+//	                	vm.selectedMarketTab = 0;
+	                	//vm.selectMarketTab(0);
 	        			break;
 	        		}
 	        	}
@@ -1098,7 +1166,8 @@
 	        			
 	        			var index = vm.workPackage.waiverFareSheet.indexOf(vm.workPackage.waiverFareSheet[x]);
 	                	vm.workPackage.waiverFareSheet.splice(index, 1); 
-	                	vm.selectedWaiverTab = 0;
+//	                	vm.selectedWaiverTab = 0;
+//	                	vm.selectWaiverTab(0);
 	        			break;
 	        		}
 	        	}
@@ -1127,8 +1196,10 @@
 //        vm.currentAddonTab[0] = true;
         
         vm.selectAddonTab = function(index){
-        	vm.resetTab();        	
-        	vm.currentAddonTab[index] = true;
+        	vm.resetTab(); 
+        	if(vm.workPackage.addonFareSheet.length > 0){
+        		vm.currentAddonTab[index] = true;
+        	}
         	vm.selectedAddonTab = index;
         };
         
@@ -1369,14 +1440,22 @@
         
         vm.removeSheet = function(){
         	var removed = vm.removeTab();
-        	vm.resetTab();
         	if(!removed){
         		alert('Sheet cannot be deleted');
+        	}
+        	else{
+        		console.log(angular.element("#tabAtpco0"));
+        		
+//        		var result = document.getElementsByName("editFormATPCO");
+//        		console.log(result);
+//        		console.log(result[0].children[0].children[0].children[0].children[1].children[0].classList);
+//        		result[0].children[0].children[0].children[0].children[1].children[0].classList.add('active');
         	}
         };
         //END SHEET FUNCTION
         
         vm.faresActionButton = [];
+        vm.addonFaresActionButton = [];
         vm.marketFaresActionButton = [];
         vm.discountFaresActionButton = [];
         vm.waiverFaresActionButton = [];
@@ -1386,6 +1465,9 @@
         	}
         	else if(type == 'market'){
         		vm.marketFaresActionButton[index] = !vm.marketFaresActionButton[index];
+        	}
+        	else if(type == 'addon'){
+        		vm.addonFaresActionButton[index] = !vm.addonFaresActionButton[index];
         	}
         	else if(type == 'discount'){
         		vm.discountFaresActionButton[index] = !vm.discountFaresActionButton[index];
@@ -1504,12 +1586,12 @@
         }
         
  	    //Specific Fares Function
- 	    vm.addFares = function(){ 	    	
- 	    	if(vm.workPackage.fareSheet[vm.selectedTab].fares == null){
- 	    		vm.workPackage.fareSheet[vm.selectedTab].fares = [];
+ 	    vm.addFares = function(fareSheet){ 	    	
+ 	    	if(fareSheet.fares == null){
+ 	    		fareSheet.fares = [];
        	  	}
  	    	
-    		vm.workPackage.fareSheet[vm.selectedTab].fares.push({
+    		fareSheet.fares.push({
     			status:"PENDING",
     			action:"New",
   	 	      	carrier:"GA"
@@ -1520,26 +1602,23 @@
         	vm.selectedFare = workPackageFare;
 	    }
         
-        vm.deleteFaresSelected = function(idx){
-    		vm.workPackage.fareSheet[vm.selectedTab].fares.splice(idx, 1);  
-    		vm.faresActionButton[idx] = false;
-    		
-    		
-//    		for(var x=0;x<vm.faresActionButton.length;x++){
-//        		vm.faresActionButton[x] = false;
-//        	}
-//        	for(var x=0;x<vm.addonFaresActionButton.length;x++){
-//        		vm.addonFaresActionButton[x] = false;
-//        	}
-//        	for(var x=0;x<vm.discountFaresActionButton.length;x++){
-//        		vm.discountFaresActionButton[x] = false;
-//        	}
-//        	for(var x=0;x<vm.marketFaresActionButton.length;x++){
-//        		vm.marketFaresActionButton[x] = false;
-//        	}
-//        	for(var x=0;x<vm.waiverFaresActionButton.length;x++){
-//        		vm.waiverFaresActionButton[x] = false;
-//        	}
+        vm.deleteFaresSelected = function(type, workPackageFare, parentIdx, idx){
+    		if(type == 'fares'){
+    			vm.faresActionButton[parentIdx+''+idx] = false;
+    		}
+    		else if(type == 'market'){
+    			vm.marketFaresActionButton[parentIdx+''+idx] = false;
+    		}
+    		else if(type == 'addon'){
+    			vm.addonFaresActionButton[parentIdx+''+idx] = false;
+    		}
+    		else if(type == 'discount'){
+    			vm.discountFaresActionButton[parentIdx+''+idx] = false;
+    		}
+    		else if(type == 'waiver'){
+    			vm.waiverFaresActionButton[parentIdx+''+idx] = false;
+    		}
+        	workPackageFare.fares.splice(idx, 1);  
 	    }
         
         vm.deleteDiscountFaresSelected = function(idx){
@@ -1564,50 +1643,17 @@
     	    input[index_A] = input[index_B];
     	    input[index_B] = temp;
     	}
-        
-        vm.moveUpFare = function(idx){
+        vm.moveUpFare = function(workPackageSheet, idx){
         	if(idx != 0){
-        		swap(vm.workPackage.fareSheet[vm.selectedTab].fares, idx, idx-1);
+        		swap(workPackageSheet.fares, idx, idx-1);
         	}
         }
-        vm.moveDownFare = function(idx){
-        	if(idx != vm.workPackage.fareSheet[vm.selectedTab].fares.length-1){
-        		swap(vm.workPackage.fareSheet[vm.selectedTab].fares, idx, idx+1);
-        	}
-        }
-        
-        vm.moveUpDiscountFare = function(idx){
-        	if(idx != 0){
-        		swap(vm.workPackage.discountFareSheet[vm.selectedDiscountTab].fares, idx, idx-1);
-        	}
-        }
-        vm.moveDownDiscountFare = function(idx){
-        	if(idx != vm.workPackage.discountFareSheet[vm.selectedDiscountTab].fares.length-1){
-        		swap(vm.workPackage.discountFareSheet[vm.selectedDiscountTab].fares, idx, idx+1);
+        vm.moveDownFare = function(workPackageSheet, idx){
+        	if(idx != workPackageSheet.fares.length-1){
+        		swap(workPackageSheet.fares, idx, idx+1);
         	}
         }
         
-        vm.moveUpMarketFare = function(idx){
-        	if(idx != 0){
-        		swap(vm.workPackage.marketFareSheet[vm.selectedMarketTab].fares, idx, idx-1);
-        	}
-        }
-        vm.moveDownMarketFare = function(idx){
-        	if(idx != vm.workPackage.marketFareSheet[vm.selectedMarketTab].fares.length-1){
-        		swap(vm.workPackage.marketFareSheet[vm.selectedMarketTab].fares, idx, idx+1);
-        	}
-        }
-        
-        vm.moveUpWaiverFare = function(idx){
-        	if(idx != 0){
-        		swap(vm.workPackage.waiverFareSheet[vm.selectedWaiverTab].fares, idx, idx-1);
-        	}
-        }
-        vm.moveDownWaiverFare = function(idx){
-        	if(idx != vm.workPackage.waiverFareSheet[vm.selectedWaiverTab].fares.length-1){
-        		swap(vm.workPackage.waiverFareSheet[vm.selectedWaiverTab].fares, idx, idx+1);
-        	}
-        }
         vm.clearSelection = function(){
         	for(var x=0;x<vm.faresActionButton.length;x++){
         		vm.faresActionButton[x] = false;
