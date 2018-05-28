@@ -2,7 +2,9 @@
 .ui-select-dropdown{
 	min-width:300px;
 }
-
+.highlighted{
+	background-color:yellow;
+}
 </style>
 
 <form name="editForm" role="form" novalidate>	
@@ -380,10 +382,20 @@
 															<ul class="dropdown-menu custom" role="menu">
 															    <li>
 															    	<a ng-click="vm.clearSelection()">Clear Selection</a>
-															    </li>															   
+															    </li>	
 															    <li>
 															    	<a ng-click="vm.addFares(workPackageSheet)">Add Rows</a>
 															    </li>
+															    <li>
+															    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)">Duplicate Selected Rows</a>
+															    </li>
+															    <li>
+															    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)">Delete Selected Rows</a>
+															    </li>
+															     <li>
+															    	<a ng-click="vm.fillDown(workPackageSheet)">Fill Down</a>
+															    </li>															   
+															    
 															    <li>
 															    	<a href="#">Paste</a>
 															    </li>
@@ -406,7 +418,7 @@
 											<table class="table table-stripped table-bordered datatable">
 												<thead>
 													<tr role="row">
-														<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">
+														<!-- <th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">
 															<div class="form-group default-reset" style="padding: 0">
 																<div class="checkbox-wrapper">
 																	<label class="default-reset" style="padding:0; padding-left: 20px; line-height: normal; font-weight: 600; min-height: auto; color: #4b5056">
@@ -415,7 +427,7 @@
 																	</label>
 																</div>
 															</div>															
-														</th>
+														</th> -->
 														<th class="sorting_asc" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" aria-sort="ascending">No</th>
 														<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Status</th>
 														<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Carrier</th>
@@ -446,12 +458,13 @@
 													</tr>
 												</thead>
 												<tbody ng-repeat="fare in workPackageSheet.fares track by $index" >
-													<tr role="row" class="datatable-row" ng-click="vm.rowTableClick($event, $parent.$index+''+$index, 'fares')">
-														<td>
+													<!-- ng-click="vm.rowTableClick($event, $parent.$index+''+$index, 'fares')" -->
+													<tr role="row" class="datatable-row">
+														<!-- <td>
 															<input type="checkbox" ng-model="fare.selected" ng-change="optionToggled(workPackageSheet.fares)">
-														</td>
+														</td> -->
 														<td>{{$index+1}}</td>
-														<td>
+														<td ng-click="fare.field['status'] = !fare.field['status']" ng-class="{highlighted:fare.field['status']}">
 															<select class="form-control inside-table" name="status{{$parent.$index}}{{$index}}" ng-model="fare.status" id="field_status" 
 																ng-class="{'must-fill': !editForm.editFormATPCO.status{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"												         		
 							           							ng-disabled="!vm.isEditable('status')"
@@ -459,16 +472,16 @@
 												             	ng-options="key as value for (key , value) in vm.status">
 															</select>	
 														</td>
-														<td>
+														<td ng-click="fare.field['carrier'] = !fare.field['carrier']" ng-class="{highlighted:fare.field['carrier']}">
 															<input type="text" class="form-control" name="carrier{{$parent.$index}}{{$index}}" id="field_carrier"
 										                    		ng-model="fare.carrier"
 										                    		ng-disabled="!vm.isEditable('carrier')"
 										                    		ng-class="{'must-fill': editForm.editFormATPCO.carrier{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 														            ng-required="vm.isRequired('carrier')"/>
 														</td>																
-														<td>{{fare.action}}</td>
-														<td>
-															<ui-select ng-model="fare.tariffNumber" name="tarno{{$parent.$index}}{{$index}}" theme="select2" title="Choose a person"  class="form-control"
+														<td ng-click="fare.field['action'] = !fare.field['action']" ng-class="{highlighted:fare.field['action']}">{{fare.action}}</td>
+														<td ng-click="fare.field['tarno'] = !fare.field['tarno']" ng-class="{highlighted:fare.field['tarno']}">
+															<ui-select ng-model="fare.tariffNumber" name="tarno{{$parent.$index}}{{$index}}" theme="select2" title="Choose a Tariff"  class="form-control"
 															 ng-click="$event.stopPropagation()"
 															ng-required="vm.isRequired('tarno') && fare.action != 'Canceled'"  
 															ng-disabled="!vm.isEditable('tarno')"
@@ -485,7 +498,7 @@
 															    </ui-select-choices>
 															  </ui-select>
 														</td>
-														<td>
+														<td ng-click="fare.field['tarcd'] = !fare.field['tarcd']" ng-class="{highlighted:fare.field['tarcd']}">
 															<ui-select ng-model="fare.tariffNumber" theme="select2" class="form-control"
 															 ng-click="$event.stopPropagation()"
 															name="tarcd{{$parent.$index}}{{$index}}"
@@ -515,7 +528,7 @@
 										           				{{fare.tarcd}}
 									           				</span> -->
 														</td>
-														<td>{{fare.tariffNumber.global}}</td>
+														<td ng-click="fare.field['global'] = !fare.field['global']" ng-class="{highlighted:fare.field['global']}">{{fare.tariffNumber.global}}</td>
 														<td>
 															<ui-select ng-model="fare.origin" theme="select2" class="form-control"
 															 ng-click="$event.stopPropagation()"
