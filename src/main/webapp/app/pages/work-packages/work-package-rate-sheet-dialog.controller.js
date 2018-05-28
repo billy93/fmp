@@ -37,14 +37,39 @@
           }
   	  	  WorkPackage.exportRateSheet(wprs, onExportSuccess, onExportFailure);
     	  function onExportSuccess(result){
-    		  var fileType = "application/pdf";
+    		var fileType = "application/pdf";
   			var templateFilename = "RateSheet.pdf";
   			var blob = b64toBlob(result.file, fileType);
   			FileSaver.saveAs(blob, templateFilename);
     	  }
     	  
     	  function onExportFailure(){
-    		  
+    		  alert('Export to PDF failed');
+    	  }    	  
+        }
+        
+        function clear () {
+            $uibModalInstance.dismiss('cancel');
+        }
+
+        vm.exportRateSheetExcel  = function(){
+      	  console.log(vm.title);
+          var wprs = {
+        		  wp : vm.workPackage,
+        		  ruleText : vm.ruleText,
+        		  index : vm.index,
+                  header : vm.title
+          }
+  	  	  WorkPackage.exportRateSheet(wprs, onExportSuccess, onExportFailure);
+    	  function onExportSuccess(result){
+    		var fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+  			var templateFilename = "RateSheet.xlsx";
+  			var blob = b64toBlob(result.file, fileType);
+  			FileSaver.saveAs(blob, templateFilename);
+    	  }
+    	  
+    	  function onExportFailure(){
+    		  alert('Export to Excel failed');
     	  }    	  
         }
         

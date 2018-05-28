@@ -2722,4 +2722,28 @@ public class WorkPackageResource {
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
             .body(att);
     }
+    
+    /**
+     * POST  /work-packages-excel/export-fares : Export work package fares
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+	 * @throws IOException 
+	 * @throws MalformedURLException 
+	 * @throws DocumentException 
+     */
+    @PostMapping("/work-packages/export-ratesheet-excel")
+    @Timed
+    public ResponseEntity<Attachment> exportRateSheetWorkPackageExcel(@RequestBody WorkPackageRateSheet wprs) throws URISyntaxException, MalformedURLException, IOException, DocumentException {
+    	log.debug("REST request to save exportFaresExcel : {}{}", wprs.getWp(), wprs.getRuleText());
+    	
+    	XSSFWorkbook workbook = new XSSFWorkbook(); 
+        XSSFSheet spreadsheet = workbook.createSheet("Rate Sheet");
+        
+        XSSFRow row = spreadsheet.createRow(1);
+        XSSFCell cell;
+		return null;
+    }
+        
 }

@@ -131,7 +131,8 @@
 	        <button type="button" ng-click="vm.clear()" class="btn btn-back" data-dismiss="modal">Close</button>
 	  	</div>	  		    
 	    <div ng-if="!vm.selectHeader">
-    		<button type="submit" class="btn btn-secondary" data-dismiss="modal" ng-click="vm.exportRateSheet()">Export</button>
+    		<button type="submit" class="btn btn-secondary" data-dismiss="modal" ng-click="vm.exportRateSheet()">To PDF</button>
+    		<button type="submit" class="btn btn-secondary" data-dismiss="modal" ng-click="vm.exportRateSheetExcel()">To Excel</button>
 	    </div>
     </div>
 </form>
