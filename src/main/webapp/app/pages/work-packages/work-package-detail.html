@@ -2,6 +2,7 @@
 .ui-select-dropdown{
 	min-width:300px;
 }
+
 </style>
 
 <form name="editForm" role="form" novalidate>	
@@ -177,12 +178,11 @@
 									<div class="box-body bbgrey">
 										<div class="form-group">
 											<label>Comment</label>
-											<div text-angular="text-angular" name="comment" ng-model="vm.commentString" ta-paste="vm.stripFormat($html)" ta-toolbar="[['h1','h2','h3'],['bold','italics','underline'],['redo','undo'],['ul','ol'],['justifyLeft','justifyCenter','justifyRight','justifyFull']]"/>
-											<!-- <textarea ng-model="vm.commentString" class="form-control" rows="3" placeholder="Enter ..." id="comment-area"></textarea> -->
+											<wysiwyg-edit content="vm.commentString" config="vm.editorConfig"></wysiwyg-edit>
 										</div>
 										<div class="clearfix">
 											<div class="pull-right">
-												<button class="btn btn-default small btn-secondary" ng-click="vm.addComment(vm.commentString)"></i>Send</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.addComment()"></i>Send</button>
 											</div>
 										</div>										
 									</div>
@@ -193,7 +193,7 @@
 										    		<div class="pull-left comment-detail">{{comment.username}}</div>
 										    		<div class="pull-right comment-detail">{{comment.createdTime | date: 'short'}}</div>
 										    	</div>
-										    	<div class="comment-message" ng-bind-html="comment.comment"/>
+										    	<div class="comment-message" data-ng-bind-html="trustAsHtml(comment.comment)"/>
 										    </div>
 							    		</div>
 						        	</div>
@@ -203,8 +203,8 @@
 									<div class="box-body bbgrey">
 										<div class="form-group">
 											<label>Inter Office</label>
-											<div text-angular="text-angular" name="interOffice" ng-model="vm.ioString" ta-disabled="vm.isFieldDisable('ioComment')" ta-paste="vm.stripFormat($html)" ta-toolbar="[['h1','h2','h3'],['bold','italics','underline'],['redo','undo'],['ul','ol'],['justifyLeft','justifyCenter','justifyRight','justifyFull']]" />
-										</div>
+											<wysiwyg-edit content="vm.ioString" config="vm.editorConfig"></wysiwyg-edit>
+										</div> 
 										<div class="clearfix">
 											<div class="pull-right">
 												<button class="btn btn-default small btn-secondary" id="btn-inter-office" ng-click="vm.addInterOffice()" ng-disabled="!vm.isEditable('ioComment')"></i>Send</button>
@@ -218,7 +218,7 @@
 										    		<div class="pull-left comment-detail">{{comment.username}}</div>
 										    		<div class="pull-right comment-detail">{{comment.createdTime | date: 'short'}}</div>
 										    	</div>
-										    	<div class="comment-message" ng-bind-html="comment.comment"/>
+										    	<div class="comment-message" data-ng-bind-html="trustAsHtml(comment.comment)"/>
 										    </div>
 							    		</div>
 						        	</div>
@@ -1244,7 +1244,7 @@
 									<div class="box-body bbgrey">
 										<div class="form-group">
 											<label>Comment</label>
-											<div text-angular="text-angular" name="commentFillingInstruction" ng-model="vm.commentStringFillingInstruction" ta-paste="vm.stripFormat($html)" ta-toolbar="[['h1','h2','h3'],['bold','italics','underline'],['redo','undo'],['ul','ol'],['justifyLeft','justifyCenter','justifyRight','justifyFull']]"/>
+											<wysiwyg-edit content="vm.commentStringFillingInstruction" config="vm.editorConfig"></wysiwyg-edit>
 										</div>
 										<div class="clearfix">
 											<div class="pull-right">
@@ -1262,35 +1262,11 @@
 										    	<label> 
 										    		<input type="checkbox" id="comment-message" name="comment-message" ng-model="filingInstructionData.isDeleted">
 										    		<span>{{filingInstructionData.isDeleted ? "Deleted" : "Delete"}}</span> 
-													<span ng-show="!filingInstructionData.isDeleted" ng-bind-html="filingInstructionData.comment"></span>
+													<span ng-show="!filingInstructionData.isDeleted" data-ng-bind-html="trustAsHtml(filingInstructionData.comment)"></span>
 												</label>
 											</div>
 							    		</div>
-						        	</div>									
-								
-									<!-- <div class="action-btn-wrapper">
-					      				<div class="col-md-12 text-right no-pad">
-					      					<button ng-click="vm.addFiling()" class="btn btn-primary">Add</button>
-					      				</div>
-					      			</div>
-					       			<div class="col-md-12">
-					       				<div class="text-center no-data" ng-if="!vm.workPackage.filingInstructionData || vm.workPackage.filingInstructionData.length == 0">No Filing Instruction Available</div>
-								
-					       				<div ng-repeat="filingInstructionData in vm.workPackage.filingInstructionData track by $index" class="form-repeat">
-					       					<button ng-click="vm.removeFiling(filingInstructionData)" class="bordered delete"><span class="glyphicon glyphicon-remove"></span></button>
-							       			<label class="user">{{filingInstructionData.username}} <span class="vseparator no-mar"></span> {{filingInstructionData.createdTime | date: 'short'}}</label>
-						       				<div class="row">
-								        		<div class="col-md-6">							      			
-									      			<div class="form-group row">
-									      				<label class="col-md-4">Comment</label>
-									      				<div class="col-md-8 input-group textarea">
-									      					<textarea class="col-md-12" ng-model="filingInstructionData.comment"></textarea>
-									      				</div>
-									      			</div>
-								        		</div>							        		
-								      		</div>
-								     	</div>
-					       			</div> -->
+						        	</div>		
 								</div>
 							</div>
 							
@@ -2536,7 +2512,7 @@
 									<div class="box-body bbgrey">
 										<div class="form-group">
 											<label>Comment</label>
-											<div text-angular="text-angular" name="commentFillingInstruction" ng-model="vm.commentStringFillingInstruction" ta-paste="vm.stripFormat($html)" ta-toolbar="[['h1','h2','h3'],['bold','italics','underline'],['redo','undo'],['ul','ol'],['justifyLeft','justifyCenter','justifyRight','justifyFull']]"/>
+											<wysiwyg-edit content="vm.commentStringFillingInstruction" config="vm.editorConfig"></wysiwyg-edit>
 										</div>
 										<div class="clearfix">
 											<div class="pull-right">
@@ -2554,7 +2530,7 @@
 										    	<label> 
 										    		<input type="checkbox" id="comment-message" name="comment-message" ng-model="filingInstructionData.isDeleted">
 										    		<span>{{filingInstructionData.isDeleted ? "Deleted" : "Delete"}}</span> 
-													<span ng-show="!filingInstructionData.isDeleted" ng-bind-html="filingInstructionData.comment"></span>
+													<span ng-show="!filingInstructionData.isDeleted" data-ng-bind-html="trustAsHtml(filingInstructionData.comment)"></span>
 												</label>
 											</div>
 							    		</div>
