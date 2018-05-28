@@ -20,8 +20,8 @@
      * @param Clipboard
      * @returns
      */
-    WorkPackageDetailController.$inject = ['$sce','currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'GlobalService', 'businessAreas', 'priorities', 'passengers'];
-    function WorkPackageDetailController($sce,currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, GlobalService, businessAreas, priorities, passengers) {
+    WorkPackageDetailController.$inject = ['$sce', 'currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas'];
+    function WorkPackageDetailController($sce, currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas) {
     	var vm = this;
        
     	vm.editorConfig = {
@@ -3667,6 +3667,11 @@
 	              $('.comment-list').css({ 'width': 'calc(100% + ' + _width+ 'px)' });
 	        });
     	 }
+	  	
+	  	$(document).ready(function(){
+	  		var _width = $('.comment-wrapper').outerWidth();
+			$('.comment-list').css({ 'width': 'calc(100% + ' + _width+ 'px)' });
+	  	});
       }
       
       $scope.trustAsHtml = function(string) {
@@ -3908,7 +3913,5 @@
     		  
     	  }
       }
-      GlobalService.sayHello();
-      GlobalService.boxHeader();
     }
 })();
