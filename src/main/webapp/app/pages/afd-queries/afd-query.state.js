@@ -11,7 +11,7 @@
         $stateProvider
         .state('afd-query', {
         	parent: 'app',
-            url: '/afd-query?page&sort&search',
+            url: '/afd-query',
             data: {
                 authorities: ['ROLE_USER'],
                 pageTitle: 'AFD Query'
@@ -22,17 +22,6 @@
                     controller: 'AfdQueryController',
                     controllerAs: 'vm'
                 }
-            },
-            params: {
-                page: {
-                    value: '1',
-                    squash: true
-                },
-                sort: {
-                    value: 'id,asc',
-                    squash: true
-                },
-                search: null
             },
             resolve: {
             	queryParams: [function() {
@@ -77,16 +66,7 @@
                 		biDirectional: false,
                 		calculateTfc: false
                 	}
-            	}],
-                pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
-                    return {
-                        page: PaginationUtil.parsePage($stateParams.page),
-                        sort: $stateParams.sort,
-                        predicate: PaginationUtil.parsePredicate($stateParams.sort),
-                        ascending: PaginationUtil.parseAscending($stateParams.sort),
-                        search: $stateParams.search
-                    };
-                }],
+            	}]
             }
         })
     }
