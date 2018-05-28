@@ -23,11 +23,22 @@
         vm.toggleNavbar = toggleNavbar;
         vm.collapseNavbar = collapseNavbar;
         vm.$state = $state;
+        vm.loginInfo = null;
 
+        var copyAccount = function (account) {
+            return {
+                activated: account.activated,
+                email: account.email,
+                firstName: account.firstName,
+                langKey: account.langKey,
+                lastName: account.lastName,
+                login: account.login
+            };
+        };
         
-        vm.test = function(){
-        	 
-        }
+        Principal.identity().then(function(account) {
+            vm.loginInfo = copyAccount(account);
+        });
         
         function login() {
             collapseNavbar();
@@ -37,7 +48,7 @@
         function logout() {
             collapseNavbar();
             Auth.logout();
-            $state.go('home'); $window.location.reload();
+            $state.go('home'); 
         }
 
         function toggleNavbar() {

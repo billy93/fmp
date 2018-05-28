@@ -19,6 +19,9 @@
                 'login@': {
                     templateUrl: 'app/layouts/login/login.html',
                     controller: 'HomeLoginController',
+                    params: {
+                    	accessdenied:false
+                    },
                     controllerAs: 'vm'
                 }
             },

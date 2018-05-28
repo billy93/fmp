@@ -33,7 +33,6 @@
                 	$rootScope.exceptionalState = true;
                 }
                 
-                // Redirect to a state with an external URL (http://stackoverflow.com/a/30221248/1098564)
                 if (toState.external) {
                     event.preventDefault();
                     $window.open(toState.url, '_self');
@@ -51,7 +50,6 @@
                 	$state.go('password-expired');
                 } 
                 
-                // Set the page title key to the one configured in state or use default one
                 if (toState.data.pageTitle) {
                 	 $window.document.title = titleKey;
                     titleKey = toState.data.pageTitle;
@@ -60,11 +58,9 @@
                 Idle.watch();
                 
                 $rootScope.$on('IdleStart', function() {
-                	console.log('sign out');
                 	Idle.unwatch();
                 	Auth.logout();
-                    $state.go('home'); $window.location.reload();
-                     
+                	$state.go('home');
             	});
             });
 

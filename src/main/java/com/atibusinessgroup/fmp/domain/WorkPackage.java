@@ -58,6 +58,9 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     @Field("specified_fares")
     private boolean specifiedFares;
     
+    @Field("locked")
+    private boolean locked;
+    
     //HEADER
     @Field("exp_pax")
     private String expPax;
@@ -161,8 +164,93 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     private ApproveConfig approveConfig;
     private ReuseReplaceConfig reuseReplaceConfig;
     
+    private Validation validation;
+    private boolean validate;
+    
+    
+    public boolean isValidate() {
+		return validate;
+	}
 
-    public ReuseReplaceConfig getReuseReplaceConfig() {
+	public void setValidate(boolean validate) {
+		this.validate = validate;
+	}
+
+	public static class Validation{
+    	private List<Tab> tab;
+    	
+    	public List<Tab> getTab() {
+			return tab;
+		}
+
+		public void setTab(List<Tab> tab) {
+			this.tab = tab;
+		}
+
+		public static class Tab{
+    		private String name;
+    		private List<Error> warning;
+    		private List<Error> error;
+    		
+    		public String getName() {
+				return name;
+			}
+
+			public void setName(String name) {
+				this.name = name;
+			}
+
+			public List<Error> getWarning() {
+				return warning;
+			}
+
+			public void setWarning(List<Error> warning) {
+				this.warning = warning;
+			}
+
+			public List<Error> getError() {
+				return error;
+			}
+
+			public void setError(List<Error> error) {
+				this.error = error;
+			}
+
+			public static class Error{
+    			private String message;
+
+				public String getMessage() {
+					return message;
+				}
+
+				public void setMessage(String message) {
+					this.message = message;
+				}
+
+				
+    			
+    		}
+    	}
+    }
+    
+    
+    public Validation getValidation() {
+		return validation;
+	}
+
+	public void setValidation(Validation validation) {
+		this.validation = validation;
+	}
+
+	public boolean isLocked() {
+		return locked;
+	}
+
+	public void setLocked(boolean locked) {
+		this.locked = locked;
+	}
+
+	public ReuseReplaceConfig getReuseReplaceConfig() {
 		return reuseReplaceConfig;
 	}
 
@@ -180,8 +268,6 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 		public void setAttachment(boolean attachment) {
 			this.attachment = attachment;
 		}
-
-    	
     }
     
     public static class ApproveConfig{
@@ -286,6 +372,9 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
         @Field("discount_fare_type")
         private String discountFareType;
         
+        @Field("discount_approval_reference")
+        private String discountApprovalReference;
+        
         @Field("account_code")
         private String accountCode;
         //End Discount Fares
@@ -305,6 +394,9 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
         
         @Field("waiver_iata_no")
         private String waiverIataNo;
+        
+        @Field("waiver_ioc_number")
+        private String waiverIocNumber;
         
         @Field("waiver_approval_date")
         private String waiverApprovalDate;
@@ -334,7 +426,24 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
         private String discontinueDate;
 
         
-        public String getWaiverApprovalReference() {
+        
+        public String getDiscountApprovalReference() {
+			return discountApprovalReference;
+		}
+
+		public void setDiscountApprovalReference(String discountApprovalReference) {
+			this.discountApprovalReference = discountApprovalReference;
+		}
+
+		public String getWaiverIocNumber() {
+			return waiverIocNumber;
+		}
+
+		public void setWaiverIocNumber(String waiverIocNumber) {
+			this.waiverIocNumber = waiverIocNumber;
+		}
+
+		public String getWaiverApprovalReference() {
 			return waiverApprovalReference;
 		}
 
@@ -778,6 +887,7 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     		private String tarcd;
     		private String cxr;
     		private String comment;
+    		private boolean isDeleted;
     		
     	    @Field("file")
     	    private byte[] file;
@@ -792,6 +902,15 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     	    @Field("createdTime")	    
     		private ZonedDateTime createdTime;
     	    
+    	    
+			public boolean getIsDeleted() {
+				return isDeleted;
+			}
+
+			public void setIsDeleted(boolean isDeleted) {
+				this.isDeleted = isDeleted;
+			}
+
 			public String getStatus() {
 				return status;
 			}

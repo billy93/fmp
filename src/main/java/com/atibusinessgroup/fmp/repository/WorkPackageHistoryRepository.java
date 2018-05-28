@@ -14,7 +14,7 @@ import com.atibusinessgroup.fmp.domain.WorkPackageHistory;
 @SuppressWarnings("unused")
 @Repository
 public interface WorkPackageHistoryRepository extends MongoRepository<WorkPackageHistory, String> {
-
+	
 	List<WorkPackageHistory> findAllByWorkPackage(ObjectId objectId);
 	
 }

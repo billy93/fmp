@@ -67,9 +67,10 @@
             	"status.reviewing": vm.workPackageFilter.status.reviewing,
             	"status.readyToRelease": vm.workPackageFilter.status.readyToRelease,
             	"status.distributed": vm.workPackageFilter.status.distributed,
-            	"status.withdraw": vm.workPackageFilter.status.withdraw,
+            	"status.withdrawn": vm.workPackageFilter.status.withdrawn,
             	"status.replace": vm.workPackageFilter.status.replace,
             	"status.reuse": vm.workPackageFilter.status.reuse,
+            	"status.referred": vm.workPackageFilter.status.referred,
             	"distributionType.atpco":vm.workPackageFilter.distributionType.atpco,
             	"distributionType.market":vm.workPackageFilter.distributionType.market,
             	
@@ -255,9 +256,15 @@
         	console.log(vm.workPackageFilter);
         }
        
-//        $(document).ready(function(){
-//        	$("#table-workpackage").jsdragtable();
-//        });
-        
+        vm.unlock = function(wp){
+        	 vm.workPackages[wp].locked = false;
+	      	  WorkPackage.unlock(vm.workPackages[wp], onUnlockedSuccess, onUnlockedFailure);
+	      	  function onUnlockedSuccess (result) {
+	      		  alert('Work Package Successful Unlocked');
+	      	  }
+	      	  function onUnlockedFailure (error) {
+	      		  
+	      	  }
+        };
     }
 })();

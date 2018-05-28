@@ -13,7 +13,8 @@
         vm.isAuthenticated = Principal.isAuthenticated;
         vm.authenticationError = false;
         vm.login = login;
-
+        vm.rememberMe = true;
+        
         function login(event) {
         	event.preventDefault();
             Auth.login({

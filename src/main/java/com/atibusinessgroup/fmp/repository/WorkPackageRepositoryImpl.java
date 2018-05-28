@@ -14,7 +14,7 @@ import org.springframework.data.repository.support.PageableExecutionUtils;
 import com.atibusinessgroup.fmp.domain.WorkPackage;
 import com.atibusinessgroup.fmp.web.rest.WorkPackageResource.WorkPackageFilter;
 
-public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAnyName{
+public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAnyName {
 
 	@Autowired
     MongoTemplate mongoTemplate;
@@ -63,6 +63,10 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		if(wpFilter.status.withdrawn) {
 			status.add("WITHDRAWN");
 		}
+		if(wpFilter.status.referred) {
+			status.add("REFERRED");
+		}
+		
 		Criteria statusCriteria = Criteria.where("status").in(status);
 		//END STATUS
 		
@@ -107,7 +111,9 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 			reuseCriteria = Criteria.where("reuse_from").ne(null);
 		}	
 		
+		Criteria wpidCriteria = Criteria.where("wpid").ne(null);
 		Criteria criteriaAnd1Query = new Criteria().andOperator(
+				wpidCriteria,
 				reviewLevels.size() > 0 ? reviewLevelCriteria : new Criteria(),
 				status.size() > 0 ? statusCriteria : new Criteria(),
 				distributionTypes.size() > 0 ?	distributionTypesCriteria : new Criteria(),

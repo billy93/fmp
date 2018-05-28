@@ -1,38 +1,33 @@
 package com.atibusinessgroup.fmp.domain;
 
-import java.io.Serializable;
-import java.time.Instant;
-import java.util.Objects;
-
-import javax.validation.constraints.NotNull;
-
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * A Passenger.
  */
-
 @Document(collection = "passenger")
-public class Passenger extends AbstractAuditingEntity implements Serializable {
+public class Passenger implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     private String id;
 
-    @NotNull
     @Field("code")
     private String code;
-    
-    @NotNull
+
     @Field("name")
     private String name;
 
     @Field("description")
     private String description;
 
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public String getId() {
         return id;
     }
@@ -45,12 +40,22 @@ public class Passenger extends AbstractAuditingEntity implements Serializable {
         return code;
     }
 
+    public Passenger code(String code) {
+        this.code = code;
+        return this;
+    }
+
     public void setCode(String code) {
         this.code = code;
     }
-    
+
     public String getName() {
         return name;
+    }
+
+    public Passenger name(String name) {
+        this.name = name;
+        return this;
     }
 
     public void setName(String name) {
@@ -61,42 +66,16 @@ public class Passenger extends AbstractAuditingEntity implements Serializable {
         return description;
     }
 
+    public Passenger description(String description) {
+        this.description = description;
+        return this;
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
-    public String getCreatedBy() {
-        return super.getCreatedBy();
-    }
-
-    public void setCreatedBy(String createdBy) {
-        super.setCreatedBy(createdBy);;
-    }
-
-    public Instant getCreatedDate() {
-        return super.getCreatedDate();
-    }
-
-    public void setCreatedDate(Instant createdDate) {
-    	super.setCreatedDate(createdDate);
-    }
-
-    public String getLastModifiedBy() {
-        return super.getLastModifiedBy();
-    }
-
-    public void setLastModifiedBy(String lastModifiedBy) {
-        super.setLastModifiedBy(lastModifiedBy);;
-    }
-
-    public Instant getLastModifiedDate() {
-        return super.getLastModifiedDate();
-    }
-
-    public void setLastModifiedDate(Instant lastModifiedDate) {
-        super.setLastModifiedDate(lastModifiedDate);
-    }
-    
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -106,19 +85,24 @@ public class Passenger extends AbstractAuditingEntity implements Serializable {
             return false;
         }
         Passenger passenger = (Passenger) o;
-        if(passenger.id == null || id == null) {
+        if (passenger.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(id, passenger.id);
+        return Objects.equals(getId(), passenger.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
-	@Override
-	public String toString() {
-		return "Passenger [id=" + id + ", code=" + code + ", name=" + name + ", description=" + description + "]";
-	}
+    @Override
+    public String toString() {
+        return "Passenger{" +
+            "id=" + getId() +
+            ", code='" + getCode() + "'" +
+            ", name='" + getName() + "'" +
+            ", description='" + getDescription() + "'" +
+            "}";
+    }
 }

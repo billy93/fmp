@@ -34,7 +34,8 @@
             if(authToken){
                 url += '?access_token=' + authToken;
             }
-            var socket = new SockJS(url);
+            console.log(url);
+            var socket = new SockJS(url, {transports: ['websocket']});
             stompClient = Stomp.over(socket);
             var stateChangeStart;
             var headers = {};

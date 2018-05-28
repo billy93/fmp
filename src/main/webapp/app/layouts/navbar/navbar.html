@@ -78,6 +78,9 @@
 		    		    	<a ui-sref="fare-type" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Fare Type </a>
 		    		    </li>
 		    		    <li>
+		    		    	<a ui-sref="passenger" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Passenger </a>
+		    		    </li>
+		    		    <li>
 		    		    	<a ui-sref="review-level" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Review Level </a>
 		    		    </li>
 		    		    <li>
@@ -112,7 +115,7 @@
 	      	<div class="pull-right">
 	            <ul class="top-right-nav">
 	                <li>
-	                    <a><i class="fa fa-user"></i>User</a>
+	                    <a ui-sref="password"><i class="fa fa-user"></i>{{vm.loginInfo.firstName}}</a>
 	                </li>
 	                <li>
 	                    <a ng-click="vm.logout()">Sign Out</a>

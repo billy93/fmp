@@ -1,4 +1,8 @@
-
+<style>
+	.locked{
+		background-color:yellow;
+	}
+</style>
 			<!-- table panel -->
 			<div class="panel">
 				<div class="panel-body">
@@ -96,7 +100,7 @@
 												<div class="checkbox-wrapper">
 													<label>
 														<input type="checkbox" ng-model="vm.workPackageFilter.status.withdrawn">
-														Withdraw
+														Withdrawn
 													</label>
 													<label>
 														<input type="checkbox" ng-model="vm.workPackageFilter.status.referred">
@@ -189,10 +193,10 @@
 									</thead>
 									<tbody ng-repeat="workPackage in vm.workPackages track by $index" >
 										<tr role="row" class="datatable-row" 
-											ng-click="vm.rowSelected($index, workPackage)" ng-class="{selected: workPackage === vm.selectedRow}">
+											ng-click="vm.rowSelected($index, workPackage)" ng-class="{selected: workPackage === vm.selectedRow, locked: workPackage.locked}">
 											<td class="text-right">
 						                        <div class="btn-group entities flex-btn-group-container">
-						                            <button type="submit" title="Edit"
+						                            <button type="submit" title="Edit" ng-disabled="workPackage.locked"
 						                                    ui-sref="work-package-detail({id:workPackage.id})"
 						                                    class="btn btn-primary btn-sm">
 						                                <span class="glyphicon glyphicon-pencil"></span>
@@ -213,7 +217,7 @@
 							                    			<tr><th  colspan="2"><center>Fare</center></th></tr>
 							                    			<tr>
 							                    				<th>Sheet</th>
-							                    				<th>Value</th>
+							                    				<th>Tour Code</th>
 							                    			</tr>			                    			
 							                    		</thead>
 							                    		<tbody>
@@ -312,10 +316,13 @@
 										</tr>
 										<tr ng-show="vm.workPackageActionButton[$index]">
 											<td colspan="18" class="">
+												<div class="btn btn-app" ng-click="vm.unlock($index)" ng-if="workPackage.locked">
+													<i class="fa fa-unlock"></i>Unlock
+												</div>
 												<div class="btn btn-app" ng-click="vm.reuse($index)">
 													<i class="fa fa-recycle"></i>Reuse
 												</div>
-												<div class="btn btn-app" ng-click="vm.replace($index)" ng-show="workPackage.targetDistribution == 'ATPCO'">
+												<div class="btn btn-app" ng-click="vm.replace($index)" ng-show="workPackage.targetDistribution != 'ATPCO'">
 													<i class="fa fa-reply"></i>Replace
 												</div>
 												<div class="btn btn-app" ng-click="vm.withdraw($index)">

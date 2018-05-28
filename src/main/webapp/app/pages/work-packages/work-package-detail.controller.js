@@ -1,7 +1,6 @@
 (function() {
-    'use strict';
 
-    angular
+	angular
         .module('fmpApp')
         .controller('WorkPackageDetailController', WorkPackageDetailController);
     
@@ -21,10 +20,21 @@
      * @param Clipboard
      * @returns
      */
-    WorkPackageDetailController.$inject = ['currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas'];
-    function WorkPackageDetailController(currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas) {
+    WorkPackageDetailController.$inject = ['$sce', 'currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities'];
+    function WorkPackageDetailController($sce, currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities) {
     	var vm = this;
        
+    	vm.editorConfig = {
+		    sanitize: false,
+		    toolbar: [
+			{ name: 'basicStyling', items: ['bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', '-', 'leftAlign', 'centerAlign', 'rightAlign', 'blockJustify', '-'] },
+			{ name: 'doers', items: ['removeFormatting', 'undo', 'redo', '-'] },
+			{ name: 'colors', items: ['fontColor', 'backgroundColor', '-'] },
+			{ name: 'styling', items: ['font', 'size', 'format'] },
+		    ]
+		};
+    	
+    	
         vm.currentTab = [];
         vm.currentAddonTab = [];
         vm.currentDiscountTab = [];
@@ -35,17 +45,20 @@
         vm.user = user;
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
-        
+        vm.openCalendarRow = openCalendarRow;
+        vm.getCalendar = getCalendar;
         vm.importData = {};
         
+        vm.ioString =null;
         vm.openFile = DataUtils.openFile;
         vm.account = null;
         vm.workPackage = entity;
         vm.tariffNumber = tariffNumber;
         vm.cities = cities;
+        vm.passengers = passengers;
         vm.currencies = currencies;
         vm.indexSelectedTab = 0;
-        
+        $scope.dateformat = "yyyy-MM-dd";
         vm.fareType = {};
         for(var x=0;x<fareTypes.length;x++){
         	vm.fareType[fareTypes[x].name] = fareTypes[x].name;
@@ -56,15 +69,10 @@
         	vm.businessArea[businessAreas[x]] = businessAreas[x];
         }
         
-//        vm.fareType = {
-//    		"":"Select Fare Type", 
-//    		"Yearly":"Yearly", 
-//    		"Promotion":"Promotion", 
-//    		"Ad-hoc":"Ad-hoc", 
-//    		"Corporate":"Corporate", 
-//    		"SPA & Code-share":"SPA & Code-share",
-//    		"Miles":"Miles"
-//        };
+        vm.priority = {};
+        for(var x=0;x<priorities.length;x++){
+        	vm.priority[priorities[x].name] = priorities[x].name;
+        }
         
         vm.typeOfJourney = {
     		"":"Select OW/RT", 
@@ -256,12 +264,26 @@
         	{
         		name:"amount",
         		editable:["LSO", "HO"],
-        		mandatory:["LSO", "HO"]
+        		mandatory:[        			
+        			"LSO", "HO"
+        		],
+        		mandatoryExtraCondition:[
+        			{
+        				field:"aif",
+        				isEmpty:true
+        			}
+        		]
         	},
         	{
         		name:"aif",
         		editable:["LSO", "HO"],
-        		mandatory:["LSO", "HO"]
+        		mandatory:["LSO", "HO"],
+        		mandatoryExtraCondition:[
+        			{
+        				field:"amount",
+        				isEmpty:true
+        			}
+        		]
         	},
         	{
         		name:"travelStartDate",
@@ -693,17 +715,224 @@
         		mandatory:[]
         	},
         	
+        	//WAIVER FARE HEADER
+        	{
+        		name:"waiverFareDescription",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverApprovalReference",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverFareType",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverAgentName",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	
+        	{
+        		name:"waiverIataNo",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverIocNumber",
+        		editable:[],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverApprovalDate",
+        		editable:[],
+        		mandatory:[]
+        	},
+        	
+        	
+        	//WAIVER FARE
+        	{
+        		name:"waiverType",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverFullPartial",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverPnr",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverTktFrom",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverTktTo",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverOri",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverDest",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverOriginalItinerary",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverNewItinerary",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverOriginalBasicFare",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverNewBasicFare",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverApprovedFare",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverFareLost",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverCalculatedPn",
+        		editable:[],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverOriginalPn",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverApprovedPn",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverPenaltyLostPercent",
+        		editable:[],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverPenaltyLostAmount",
+        		editable:[],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverCurrency",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverTotalPax",
+        		editable:["LSO", "HO"],
+        		mandatory:["LSO", "HO"]
+        	},
+        	{
+        		name:"waiverTotalLost",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverApprover",
+        		editable:[],
+        		mandatory:[]
+        	},
+        	{
+        		name:"waiverRemark",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	}
         ];
         
-        vm.isRequired = function(field){
-        	return vm.checkField(field, 'mandatory');        	 
+        vm.isRequired = function(field, fare){
+        	return vm.checkField(field, 'mandatory', fare);        	 
         };
         
         vm.isEditable = function(field){
         	return vm.checkField(field, 'editable');    
         };
         
-        vm.checkField = function(field, type){
+        vm.checkField = function(field, type, fare){
+        	var result = false;
+        	if(type == 'mandatory'){
+        		for(var x=0;x<vm.fields.length;x++){
+        			if(vm.fields[x].name == field){
+        				var reviewLevels = vm.fields[x].mandatory;
+        				var extraCondition = vm.fields[x].mandatoryExtraCondition;
+        				
+        				if(extraCondition != null && extraCondition.length > 0){
+        					if(reviewLevels.indexOf(vm.workPackage.reviewLevel) > -1){
+	        					for(var y=0;y<extraCondition.length;y++){
+	        						if(fare != null){
+	        							//Check extra condition here
+	        							var field = extraCondition[y].field;
+	        							
+	        							//Check other field empty condition
+	        							var isEmpty = extraCondition[y].isEmpty;
+	        							if(isEmpty){
+	        								if(fare[field] == null || fare[field] == ''){
+	        									result = true;
+	        									break;
+	        								}
+	        							} 
+	        							//End check other field empty condition
+	        						}
+	        					}
+	        					break;
+        					}
+        				}
+        				else{
+	        				if(reviewLevels.indexOf(vm.workPackage.reviewLevel) > -1){
+	        					result = true;
+	        					break;
+	        				}
+        				}
+        			}
+        		}
+        	}
+        	else if(type == 'editable'){
+        		for(var x=0;x<vm.fields.length;x++){
+        			if(vm.fields[x].name == field){
+        				var reviewLevels = vm.fields[x].editable;
+        				if(reviewLevels.indexOf(vm.workPackage.reviewLevel) > -1){
+        					result = true;
+        					break;
+        				}
+        			}
+        		}
+        	}
+	  		return result;
+	    }
+        
+        vm.checkFieldOnly = function(field, type){
         	var result = false;
         	if(type == 'mandatory'){
         		for(var x=0;x<vm.fields.length;x++){
@@ -771,10 +1000,10 @@
 	        	
 	        	if(!findTab){
 		        	for(var x=0;x<vm.currentDiscountTab.length;x++){
-		        		if(vm.currentAddonTab[x]){
+		        		if(vm.currentDiscountTab[x]){
 		        			console.log('Active Discount Tab '+x);
 		        			findTab = true;
-		        			vm.workPackage.discountFareSheet[x].approvalReference = option.tourcode;		        					        			
+		        			vm.workPackage.discountFareSheet[x].discountApprovalReference = option.tourcode;		        					        			
 		        			break;
 		        		}
 		        	}
@@ -831,31 +1060,48 @@
         //END COMMENT TAB
         
         //FARES TAB
-        vm.selectedTab = 0;  
         vm.currentTab[0] = true;
-        
+        vm.selectedTab = 0;
         vm.selectTab = function(index){
-        	vm.resetTab();        	
-        	vm.currentTab[index] = true;
-        	vm.selectedTab = index;
-        	vm.indexSelectedTab = index;
+        	vm.resetTab(); 
+        	if(vm.workPackage.fareSheet.length > 0){
+        		vm.currentTab[index] = true;
+        	}
         };
         
         vm.addTab = function(option){
         	if(option.type == 'Fares'){
         		vm.workPackage.specifiedFares = true;
-        		vm.workPackage.fareSheet.push({specifiedFaresName:option.name});
+        		vm.workPackage.fareSheet.push({specifiedFaresName:option.name, fareType:option.fareType, fares:[]});
+        		vm.selectTab(vm.workPackage.fareSheet.length-1);
+        	}
+        	else if(option.type == 'Market Fares'){
+        		vm.workPackage.marketFares = true;
+        		vm.workPackage.marketFareSheet.push({marketFaresName:option.name, marketFareType:option.fareType});
+        		vm.selectMarketTab(vm.workPackage.marketFareSheet.length-1);
+        	}
+        	else if(option.type == 'Waiver Fares'){
+        		vm.workPackage.waiverFares = true;
+        		vm.workPackage.waiverFareSheet.push({waiverFaresName:option.name, waiverFareType:option.fareType});
+        		vm.selectWaiverTab(vm.workPackage.waiverFareSheet.length-1);
+        	}
+        	else if(option.type == 'Discount Fares'){
+        		vm.workPackage.discountFares = true;
+        		vm.workPackage.discountFareSheet.push({discountFaresName:option.name, discountFareType:option.fareType});
+        		vm.selectDiscountTab(vm.workPackage.discountFareSheet.length-1);
         	}
         	else if(option.type == 'Add-Ons'){
         		vm.workPackage.addon = true;
         		vm.workPackage.addonFareSheet.push({addonFaresName:option.name});
+        		vm.selectAddonTab(vm.workPackage.addonFareSheet.length-1);
         	}
         	else if(option.type == 'Attachment'){
-        		vm.workPackage.attachment = true;        		
+        		vm.workPackage.attachment = true;    
+        		vm.selectOtherTab('attachment');
         	}
         	else if(option.type == 'Filing Instruction'){
         		vm.workPackage.filingInstruction = true;
-        		
+        		vm.selectOtherTab('filingInstruction');
         	}
         };
         
@@ -868,9 +1114,10 @@
 	        			console.log('Active Fare Tab '+x);
 	        			findTab = true;
 	        			
-	        			var index = vm.workPackage.fareSheet.indexOf(x);
-	                	vm.workPackage.fareSheet.splice(index, 1); 
-	                	vm.selectedTab = 0;
+	        			var index = vm.workPackage.fareSheet.indexOf(vm.workPackage.fareSheet[x]);
+	                	vm.workPackage.fareSheet.splice(x, 1); 
+	                	//vm.selectedTab = 0;
+	                	//vm.selectTab(0);
 	        			break;
 	        		}
 	        	}
@@ -882,9 +1129,10 @@
 	        			console.log('Active Addon Tab '+x);
 	        			findTab = true;
 	        			
-	        			var index = vm.workPackage.addonFareSheet.indexOf(x);
+	        			var index = vm.workPackage.addonFareSheet.indexOf(vm.workPackage.addonFareSheet[x]);
 	                	vm.workPackage.addonFareSheet.splice(index, 1); 
-	                	vm.selectedAddonTab = 0;
+	                	//vm.selectedAddonTab = 0;
+	                	//vm.selectAddonTab(0);
 	        			break;
 	        		}
 	        	}
@@ -892,13 +1140,14 @@
         	
         	if(!findTab){
 	        	for(var x=0;x<vm.currentDiscountTab.length;x++){
-	        		if(vm.currentAddonTab[x]){
+	        		if(vm.currentDiscountTab[x]){
 	        			console.log('Active Discount Tab '+x);
 	        			findTab = true;
 	        			
-	        			var index = vm.workPackage.discountFareSheet.indexOf(x);
+	        			var index = vm.workPackage.discountFareSheet.indexOf(vm.workPackage.discountFareSheet[x]);
 	                	vm.workPackage.discountFareSheet.splice(index, 1); 
-	                	vm.selectedDiscountTab = 0;
+//	                	vm.selectedDiscountTab = 0;
+	                	//vm.selectDiscountTab(0);
 	        			break;
 	        		}
 	        	}
@@ -910,23 +1159,25 @@
 	        			console.log('Active Market Tab '+x);
 	        			findTab = true;
 	        			
-	        			var index = vm.workPackage.marketFareSheet.indexOf(x);
+	        			var index = vm.workPackage.marketFareSheet.indexOf(vm.workPackage.marketFareSheet[x]);
 	                	vm.workPackage.marketFareSheet.splice(index, 1); 
-	                	vm.selectedMarketTab = 0;
+//	                	vm.selectedMarketTab = 0;
+	                	//vm.selectMarketTab(0);
 	        			break;
 	        		}
 	        	}
         	}
         	
         	if(!findTab){
-	        	for(var x=0;x<vm.currentWavierTab.length;x++){
+	        	for(var x=0;x<vm.currentWaiverTab.length;x++){
 	        		if(vm.currentWaiverTab[x]){
 	        			console.log('Active Waiver Tab '+x);
 	        			findTab = true;
 	        			
-	        			var index = vm.workPackage.waiverFareSheet.indexOf(x);
+	        			var index = vm.workPackage.waiverFareSheet.indexOf(vm.workPackage.waiverFareSheet[x]);
 	                	vm.workPackage.waiverFareSheet.splice(index, 1); 
-	                	vm.selectedWaiverTab = 0;
+//	                	vm.selectedWaiverTab = 0;
+//	                	vm.selectWaiverTab(0);
 	        			break;
 	        		}
 	        	}
@@ -945,18 +1196,15 @@
         //END FARES TAB
         
         
-        vm.stripFormat = function ($html) {
-        	console.log("called");
-            return $html.replace(/<img[^>]*>/g/n,"");
-          };
-        
         //ADDON TAB
         vm.selectedAddonTab = 0;     
 //        vm.currentAddonTab[0] = true;
         
         vm.selectAddonTab = function(index){
-        	vm.resetTab();        	
-        	vm.currentAddonTab[index] = true;
+        	vm.resetTab(); 
+        	if(vm.workPackage.addonFareSheet.length > 0){
+        		vm.currentAddonTab[index] = true;
+        	}
         	vm.selectedAddonTab = index;
         };
         
@@ -1132,11 +1380,17 @@
                 resolve: {
                 	workPackage: function(){
                 		return vm.workPackage;
-                	}
+                	},
+                    fareTypes: ['FareType', function(FareType) {
+                        return FareType.getAll().$promise;
+                    }],
                 }
 			}).result.then(function(option) {
 				console.log(option);
 				vm.addTab(option);
+
+//				GlobalService.sayHello();
+//			    GlobalService.boxHeader();
             }, function() {
         			
             });
@@ -1194,10 +1448,19 @@
         	if(!removed){
         		alert('Sheet cannot be deleted');
         	}
+        	else{
+        		console.log(angular.element("#tabAtpco0"));
+        		
+//        		var result = document.getElementsByName("editFormATPCO");
+//        		console.log(result);
+//        		console.log(result[0].children[0].children[0].children[0].children[1].children[0].classList);
+//        		result[0].children[0].children[0].children[0].children[1].children[0].classList.add('active');
+        	}
         };
         //END SHEET FUNCTION
         
         vm.faresActionButton = [];
+        vm.addonFaresActionButton = [];
         vm.marketFaresActionButton = [];
         vm.discountFaresActionButton = [];
         vm.waiverFaresActionButton = [];
@@ -1207,6 +1470,9 @@
         	}
         	else if(type == 'market'){
         		vm.marketFaresActionButton[index] = !vm.marketFaresActionButton[index];
+        	}
+        	else if(type == 'addon'){
+        		vm.addonFaresActionButton[index] = !vm.addonFaresActionButton[index];
         	}
         	else if(type == 'discount'){
         		vm.discountFaresActionButton[index] = !vm.discountFaresActionButton[index];
@@ -1325,12 +1591,12 @@
         }
         
  	    //Specific Fares Function
- 	    vm.addFares = function(){ 	    	
- 	    	if(vm.workPackage.fareSheet[vm.selectedTab].fares == null){
- 	    		vm.workPackage.fareSheet[vm.selectedTab].fares = [];
+ 	    vm.addFares = function(fareSheet){ 	    	
+ 	    	if(fareSheet.fares == null){
+ 	    		fareSheet.fares = [];
        	  	}
  	    	
-    		vm.workPackage.fareSheet[vm.selectedTab].fares.push({
+    		fareSheet.fares.push({
     			status:"PENDING",
     			action:"New",
   	 	      	carrier:"GA"
@@ -1341,13 +1607,39 @@
         	vm.selectedFare = workPackageFare;
 	    }
         
-        vm.deleteFaresSelected = function(idx){
-    		vm.workPackage.fareSheet[vm.selectedTab].fares.splice(idx, 1);  
-    		vm.faresActionButton[idx] = false;
+        vm.deleteFaresSelected = function(type, workPackageFare, parentIdx, idx){
+    		if(type == 'fares'){
+    			vm.faresActionButton[parentIdx+''+idx] = false;
+    		}
+    		else if(type == 'market'){
+    			vm.marketFaresActionButton[parentIdx+''+idx] = false;
+    		}
+    		else if(type == 'addon'){
+    			vm.addonFaresActionButton[parentIdx+''+idx] = false;
+    		}
+    		else if(type == 'discount'){
+    			vm.discountFaresActionButton[parentIdx+''+idx] = false;
+    		}
+    		else if(type == 'waiver'){
+    			vm.waiverFaresActionButton[parentIdx+''+idx] = false;
+    		}
+        	workPackageFare.fares.splice(idx, 1);  
 	    }
         
-        vm.duplicateFaresSelected = function(){
-    		vm.workPackage.fares.push(JSON.parse(JSON.stringify(vm.selectedFare)));
+        vm.deleteDiscountFaresSelected = function(idx){
+    		vm.workPackage.discountFareSheet[vm.selectedDiscountTab].fares.splice(idx, 1);  
+        }
+        
+        vm.deleteMarketFaresSelected = function(idx){
+    		vm.workPackage.marketFareSheet[vm.selectedMarketTab].fares.splice(idx, 1);  
+        }
+        
+        vm.deleteWaiverFaresSelected = function(idx){
+    		vm.workPackage.waiverFareSheet[vm.selectedWaiverTab].fares.splice(idx, 1);  
+        }
+        
+        vm.duplicateFaresSelected = function(idx){
+    		vm.workPackage.fares.push(JSON.parse(JSON.stringify(vm.workPackage.fares[vm.selectedTab])));
 	    }
         
         function swap(input, index_A, index_B) {
@@ -1356,15 +1648,14 @@
     	    input[index_A] = input[index_B];
     	    input[index_B] = temp;
     	}
-        
-        vm.moveUpFare = function(idx){
+        vm.moveUpFare = function(workPackageSheet, idx){
         	if(idx != 0){
-        		swap(vm.workPackage.fareSheet[vm.selectedTab].fares, idx, idx-1);
+        		swap(workPackageSheet.fares, idx, idx-1);
         	}
         }
-        vm.moveDownFare = function(idx){
-        	if(idx != vm.workPackage.fareSheet[vm.selectedTab].fares.length-1){
-        		swap(vm.workPackage.fareSheet[vm.selectedTab].fares, idx, idx+1);
+        vm.moveDownFare = function(workPackageSheet, idx){
+        	if(idx != workPackageSheet.fares.length-1){
+        		swap(workPackageSheet.fares, idx, idx+1);
         	}
         }
         
@@ -1617,11 +1908,20 @@
         vm.datePickerOpenStatus.filingDate = false;
         vm.datePickerOpenStatus.distributionDate = false;
         vm.datePickerOpenStatus.discExpiryDate = false;
-        
+
         function openCalendar (date) {
+        	console.log(date);
             vm.datePickerOpenStatus[date] = true;
         }
+        function openCalendarRow(variable, sheet, row) {
+        	//console.log("SHEET : "+sheet+" | ROW : "+row);
+        	vm.datePickerOpenStatus[variable][sheet+row] = true;
+            //vm.datePickerOpenStatus[date] = true;
+        }
         
+        function getCalendar (date){
+        	return vm.datePickerOpenStatus[date];
+        }
        
         
         vm.addFiling = function(){
@@ -1631,11 +1931,7 @@
         		vm.workPackage.filingInstructionData.push({status:"PENDING", tarno:"", cxr:"GA", comment:"", file:"", fileContentType:""});
         }
         
-        vm.removeFiling = function(filing){
-	   		 var index = vm.workPackage.filingInstructionData.indexOf(filing);
-	   		 vm.workPackage.filingInstructionData.splice(index, 1);  
-	   };
-   
+         
 	   vm.addAttachment = function(){
 		 	if(vm.workPackage.attachmentData == null){
 	        		vm.workPackage.attachmentData = [];
@@ -1696,6 +1992,36 @@
 		    } else {
 		    }
 	  };
+	  
+	  vm.resendApprove = function(){
+		  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-approve-email-dialog.html',
+              controller: 'WorkPackageApproveEmailDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              resolve: {
+                  workPackage: vm.workPackage,              	  
+	              email: ['SystemParameter', function(SystemParameter) {
+	                   return SystemParameter.getSystemParameterByName({name : 'APPROVE_EMAIL'}).$promise;
+	              }],
+	              ccEmail: ['SystemParameter', function(SystemParameter) {
+	                   return SystemParameter.getSystemParameterByName({name : 'APPROVE_CC_EMAIL'}).$promise;
+	              }],
+              }
+          }).result.then(function(config) {
+        	  vm.workPackage.approveConfig = config;
+        	  	WorkPackage.resendApprove(vm.workPackage, function(){
+	    			alert('Resend Success');
+	    			$state.go('work-package');
+    		}, function(){
+    			alert('Approve Failed');
+    		});
+          }, function() {
+      			
+          });
+	  };
+	  
 	  
 	  vm.approve = function(){
 		  $uibModal.open({
@@ -1784,20 +2110,81 @@
       }
 
       function onSaveSuccess (result) {
+    	  alert("Save Success");
 	      $scope.$emit('fmpApp:workPackageUpdate', result);
 	      var data = result;
     	      
-    	  data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
-    	  data.saleDate = DateUtils.convertDateTimeFromServer(data.saleDate);
+	      data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
           data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
           data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
           data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
           data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
           data.lockedSince = DateUtils.convertDateTimeFromServer(data.lockedSince);
+          data.saleDate = DateUtils.convertDateTimeFromServer(data.saleDate);
+          
+          if(data.fareSheet.length > 0){
+          	for(var x=0;x<data.fareSheet.length;x++){
+          		var fares = data.fareSheet[x].fares;
+          		for(var y=0;y<fares.length;y++){
+              		if(fares[y] != null){
+              			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
+              			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
+              			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
+              			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
+              			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+              		}
+          		}
+          	}
+          }
+          
+          if(data.addonFareSheet.length > 0){
+          	for(var x=0;x<data.addonFareSheet.length;x++){
+          		var fares = data.addonFareSheet[x].fares;
+          		for(var y=0;y<fares.length;y++){
+              		if(fares[y] != null){
+              			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
+              			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
+              			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
+              			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
+              			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+              		}
+          		}
+          	}
+          }
+          
+          if(data.marketFareSheet.length > 0){
+          	for(var x=0;x<data.marketFareSheet.length;x++){
+          		var fares = data.marketFareSheet[x].fares;
+          		for(var y=0;y<fares.length;y++){
+              		if(fares[y] != null){
+              			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
+              			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
+              			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
+              			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
+              			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+              		}
+          		}
+          	}
+          }
+          
+          
+          if(data.discountFareSheet.length > 0){
+          	for(var x=0;x<data.discountFareSheet.length;x++){
+          		var fares = data.discountFareSheet[x].fares;
+          		for(var y=0;y<fares.length;y++){
+              		if(fares[y] != null){
+              			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
+              			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
+              			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
+              			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
+              			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+              		}
+          		}
+          	}
+          }
           
           vm.workPackage = data;
           vm.isSaving = false;
-          alert('Save success');
       }
 
       function onSaveError () {
@@ -3264,37 +3651,73 @@
           }
       };
       
-      vm.addComment = function(commentString){
-	  	 if(commentString != null){
+      vm.addComment = function(){
+	  	 if(vm.commentString != null){
 	    	  if(vm.workPackage.comment == null){
 	      		vm.workPackage.comment = [];
 	      }
 	    	  
     	  	vm.workPackage.comment.push({
-    	  		comment:commentString
+    	  		comment:vm.commentString
     	  	});
     	  	vm.save();
     	  	vm.commentString = null;
+    	  	$(document).ready(function(){
+                var _width = $('.comment-wrapper').outerWidth();
+	              $('.comment-list').css({ 'width': 'calc(100% + ' + _width+ 'px)' });
+	        });
     	 }
 	  	
 	
       }
       
-      vm.addInterOffice = function(ioString){
- 	  	 if(ioString != null){
+      $scope.trustAsHtml = function(string) {
+    	    return $sce.trustAsHtml(string);
+    	};
+      
+      
+      vm.addCommentFillingInstruction = function() {
+ 	  	 	if (vm.commentStringFillingInstruction != null) {
+	 	  		 if (vm.workPackage.filingInstructionData == null) {
+	 	      		vm.workPackage.filingInstructionData = [];
+	 	  		 }
+	 	    	  
+	 	  		 vm.workPackage.filingInstructionData.push({ 
+	     	  		status:"PENDING", tarno:"", cxr:"GA", comment:vm.commentStringFillingInstruction, file:"", fileContentType:"", isDeleted:false
+	 	  		 });
+	 	  		 
+	 	  		 vm.save();
+	 	  		 vm.commentStringFillingInstruction = null;
+	 	  		$(document).ready(function(){
+	                var _width = $('.comment-wrapper').outerWidth();
+		              $('.comment-list').css({ 'width': 'calc(100% + ' + _width+ 'px)' });
+		        });
+ 	  	 	}
+       }
+      
+      vm.removeFiling = function(filing){
+	   		var index = vm.workPackage.filingInstructionData.indexOf(filing); 
+	   		console.log(filing.isDeleted);
+	   };
+      
+      vm.addInterOffice = function(){
+ 	  	 if(vm.ioString != null){
  	    	  if(vm.workPackage.interofficeComment == null){
  	      		vm.workPackage.interofficeComment = [];
  	      }
  	    	  
      	  	vm.workPackage.interofficeComment.push({
-     	  		comment:ioString
+     	  		comment:vm.ioString
      	  	});
      	  	vm.save();
-     	  	vm.addInterOffice = null;
+     	  	vm.ioString = null;
+     	  	$(document).ready(function(){
+                var _width = $('.comment-wrapper').outerWidth();
+	              $('.comment-list').css({ 'width': 'calc(100% + ' + _width+ 'px)' });
+	        });
      	 }
        }
-      
-      
+                
       vm.export = function(){
     	  	alert('EXPORT');
       }
@@ -3431,6 +3854,17 @@
 	    	  }
       });
       
+      //Waiver Function
+      vm.calculateFareLost = function(fare){
+    	  if(fare.waiverApprovedFare != null && fare.waiverNewBasicFare != null){
+    		  fare.waiverFareLost = parseInt(fare.waiverApprovedFare) - parseInt(fare.waiverNewBasicFare);
+    	  }
+      }
+      vm.calculatePenaltyLost = function(fare){
+    	  if(fare.waiverApprovedPn != null && fare.waiverOriginalPn != null){
+    		  fare.waiverPenaltyLostPercent = parseInt(fare.waiverApprovedPn) - parseInt(fare.waiverOriginalPn);
+    	  }
+      }
       
       vm.routemap = function(){
     	  $uibModal.open({
@@ -3453,10 +3887,27 @@
           });
       }
       
-      $(document).ready(function(){
-//	  		var _width = $('.comment-wrapper').outerWidth();
-//			$('.comment-list').css({ 'width': 'calc(100% + ' + _width+ 'px)' });
-	  	});
-      
+      vm.downloadTemplate = function(){
+    	  WorkPackage.downloadMarketRules(vm.workPackage, onDownloadSuccess, onDownloadFailure);
+    	  function onDownloadSuccess(result){
+    		  var fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+  			var templateFilename = "MarketRules.xlsx";
+  			var blob = b64toBlob(result.file, fileType);
+  			FileSaver.saveAs(blob, templateFilename);
+    	  }
+    	  function onDownloadFailure(err){
+    		  console.log(err);
+    	  }    	  
+      };
+      vm.close = function(){
+    	  vm.workPackage.locked = false;
+    	  WorkPackage.unlock(vm.workPackage, onUnlockedSuccess, onUnlockedFailure);
+    	  function onUnlockedSuccess (result) {
+    		  $state.go("work-package");
+    	  }
+    	  function onUnlockedFailure (error) {
+    		  
+    	  }
+      }
     }
 })();
