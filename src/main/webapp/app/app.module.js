@@ -18,7 +18,8 @@
             'ngFileSaver',
             'ui.select',
             'textAngular',
-            'ngIdle'
+            'ngIdle',
+            'ngWYSIWYG'
         ])
         .config(config)
         .run(run);
