@@ -4,6 +4,43 @@ body {
     color: #333;
 }
 
+.no-pad {
+	padding: 0 !important;
+}
+
+.no-lpad {
+	padding-left: 0 !important;	
+}
+
+.no-rpad {
+	padding-right: 0 !important;	
+}
+
+.no-mar {
+	margin: 0 !important;
+}
+
+.no-lmar {
+	margin-left: 0 !important;
+}
+
+.no-rmar {
+	margin-right: 0 !important;
+}
+
+.filter-area div[class^="col-md"] {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.query-button-wrapper {
+	padding: 15px 0;
+}
+
+.query-button-wrapper.pull-right .btn {
+	margin-left: 15px;
+}
+
 /* ==========================================================================
 Hide ng-cloak on page load, https://docs.angularjs.org/api/ng/directive/ngCloak
 ========================================================================== */
