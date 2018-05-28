@@ -12,13 +12,24 @@
         var vm = this;     
         vm.clear = clear;
         vm.workPackage = workPackage;
+        vm.option = {
+        		fareType:"",
+        };
         vm.types = [];
         
-        vm.fareType = {};
-        for(var x=0;x<fareTypes.length;x++){
-        	vm.fareType[fareTypes[x].name] = fareTypes[x].name;
-        }
+        console.log(fareTypes);
+        vm.fareType = [];
         
+//        vm.fareType[""] = "Select Fare Type";
+//        vm.fareType["1"] = "Select Fare Type1";
+//        vm.fareType["2"] = "Select Fare Type2";
+        for(var x=0;x<fareTypes.length;x++){
+        	vm.fareType.push({
+        		name:fareTypes[x].name
+        	});
+//        	vm.fareType[fareTypes[x].name+""+x] = fareTypes[x].name;
+        }
+
         if(vm.workPackage.type == 'REGULAR' && vm.workPackage.targetDistribution == 'MARKET'){
         	 vm.types = ["Market Fares"];
         }

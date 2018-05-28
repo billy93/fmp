@@ -1,144 +1,407 @@
-<div>
-    <h2>AFD Query</h2>
-    <jhi-alert></jhi-alert>
-    <br/>
-    <div class="table-responsive">
-        <table class="jh-table table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Source</th>
-                    <th>S/C</th>
-                    <th>Tar Cd</th>
-                    <th>Cxr</th>
-                    <th>Orig</th>
-                    <th>Orig Cn</th>
-                    <th>Dest</th>
-                    <th>Dest Cn</th>
-                    <th>Fare Cls</th>
-                    <th>Bkg Cls</th> 
-                    <th>Cabin</th>
-                    <th>OW/RT</th>
-                    <th>Ftnt</th>
-                    <th>Rtg No</th>
-                    <th>Rule No</th>
-                    <th>MPM</th>
-                    <th>Curr</th>
-                    <th>Base Amt</th>
-                    <th>Error</th>
-                    <th>TFC Calc Date</th>
-                    <th>TFC Focus Date</th>
-                    <th>YQYR</th>
-                    <th>Taxes</th>
-                    <th>TFC</th>
-                    <th>AIF</th>
-                    <th>Itinerary</th>
-                    <th>Override Ind</th>
-                    <th>Eff Date</th>
-                    <th>Disc Date</th>
-                    <th>GFS Ref</th>
-                    <th>Global</th>
-                    <th>Rule Focus Date</th>
-                    <th>Sellable</th>
-                    <th>Travel Start</th>
-                    <th>Travel End</th>
-                    <th>Travel Complete</th>
-                    <th>Sale Start</th>
-                    <th>Sale End</th>
-                    <th>Res Start</th>
-                    <th>Res End</th>
-                    <th>Min Stay</th>
-                    <th>Max Stay</th>
-                    <th>Adv Pur</th>
-                    <th>DOW In</th>
-                    <th>DOW Out</th>
-                    <th>Season</th>
-                    <th>F Season Date</th>
-                    <th>L Season Date</th>
-                    <th>Travel Date Ranges</th>
-                    <th>Fare Type</th>
-                    <th>Pax Type</th>
-                    <th>WP Id</th>
-                    <th>Group Fare</th>
-                    <th>Ref Amt</th>
-                    <th>Ref YQYR</th>
-                    <th>Ref Taxes</th>
-                    <th>Ref TFC</th>
-                    <th>Ref AIF</th>
-                </tr>
-            </thead>
-            <tbody ng-repeat="afdQuery in vm.afdQueries track by afdQuery.atpcoFareId">
-                <tr ng-click="vm.selectedRow = afdQuery.atpcoFareId; vm.getRules(afdQuery)">
-                    <td><a ui-sref="system-parameter-detail({id:afdQuery.id})">{{$index + 1}}</a></td>
-                    <td>{{afdQuery.source}}</td>
-                    <td>{{afdQuery.sc}}</td>
-                    <td>{{afdQuery.tariffNo}}</td>
-                    <td>{{afdQuery.carrierCode}}</td>
-                    <td>{{afdQuery.originCity}}</td>
-                    <td>{{afdQuery.originCountry}}</td>
-                    <td>{{afdQuery.destinationCity}}</td>
-                    <td>{{afdQuery.destinationCountry}}</td>
-                    <td>{{afdQuery.fareClassCode}}</td>
-                    <td><b>NM</b></td>
-                    <td><b>NM</b></td>
-                    <td>{{afdQuery.owrt}}</td>
-                    <td>{{afdQuery.footnote}}</td>
-                    <td>{{afdQuery.routingNo}}</td>
-                    <td>{{afdQuery.ruleNo}}</td>
-                    <td>{{afdQuery.maximumPermittedMileage}}</td>
-                    <td>{{afdQuery.currencyCode}}</td>
-                    <td>{{afdQuery.baseAmount}}</td>
-                    <td><b>NM</b></td>
-                    <td><b>NM</b></td>
-                    <td><b>NM</b></td>
-                    <td><b>NM</b></td>
-                    <td><b>NM</b></td>
-                    <td><b>NM</b></td>
-                    <td><b>NM</b></td>
-                    <td><b>NM</b></td>
-                    <td><b>NM</b></td>
-                    <td><span ng-if="afdQuery.effectiveDate == 'indef'">NONE</span><span ng-if="afdQuery.effectiveDate != 'indef'">{{afdQuery.effectiveDate | date:'ddMMMyyyy'}}</span></td>
-                	<td><span ng-if="afdQuery.discontinueDate == 'indef'">NONE</span><span ng-if="afdQuery.discontinueDate != 'indef'">{{afdQuery.discontinueDate | date:'ddMMMyyyy'}}</span></td>
-                	<td><b>NM</b></td>
-                	<td>{{afdQuery.globalIndicator}}</td>
-                	<td><b>NM</b></td>
-                	<td><b>NM</b></td>
-                	<td><b>NM</b></td>
-                	<td><b>NM</b></td>
-                	<td><b>NM</b></td>
-                	<td><span ng-if="afdQuery.saleStartDate == 'indef'">NONE</span><span ng-if="afdQuery.saleStartDate != 'indef'">{{afdQuery.saleStartDate | date:'ddMMMyyyy'}}</span></td>
-                	<td><span ng-if="afdQuery.saleEndDate == 'indef'">NONE</span><span ng-if="afdQuery.saleEndDate != 'indef'">{{afdQuery.saleEndDate | date:'ddMMMyyyy'}}</span></td>
-                	<td><b>NM</b></td>
-                	<td><b>NM</b></td>
-                	<td><b>NM</b></td>
-                	<td><b>NM</b></td>
-                	<td><b>NM</b></td>
-                	<td><b>NM</b></td>
-                	<td><b>NM</b></td>
-                	<td><b>NM</b></td>
-                	<td><b>NM</b></td>
-                	<td><b>NM</b></td>
-                	<td><b>NM</b></td>
-               		<td>{{afdQuery.fareType}}</td>
-                	<td><b>NM</b></td>
-                	<td><b>NM</b></td>
-                	<td><b>NM</b></td>
-                	<td><b>NM</b></td>
-                	<td><b>NM</b></td>
-                	<td><b>NM</b></td>
-                	<td><b>NM</b></td>
-                	<td><b>NM</b></td>
-                </tr>
-            	<tr ng-if="vm.selectedRow == afdQuery.atpcoFareId">
-            		<div>
-            			
-            		</div>
-            	</tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="text-center">
-        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
-        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
-    </div>
+<div class="panel">
+	<div class="panel-body">
+		<div class="filter-hero">
+			<div class="filter-label semibold show">Hide Filter</div>							
+			<div class="filter-area">
+				<div class="clearfix">
+					<form name="queryForm" role="form" novalidate>
+						<div class="pull-left col-md-5 no-pad">
+							<div class="pull-left col-md-6 no-lpad">
+								<div class="form-group">
+									<div class="custom-label semibold">Carrier</div>
+									<input type="text" class="form-control" name="carrier" id="carrier" ng-model="vm.queryParams.carrier"/>
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Source</div>
+									<select class="form-control" name="source" id="source" ng-model="vm.queryParams.source">
+										<option value="{{value.key}}" ng-repeat="value in vm.sources track by $index">{{value.key}} - {{value.value}}</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Public/Private</div>
+									<select class="form-control" name="publicPrivate" id="publicPrivate" ng-model="vm.queryParams.publicPrivate">
+										<option value="{{value}}" ng-repeat="value in vm.publicPrivate track by $index">{{value}}</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Tariff</div>
+									<select class="form-control" name="tariff" id="tariff" ng-model="vm.queryParams.tariff">
+										<option value="{{value}}" ng-repeat="value in vm.tariffs track by $index">{{value}}</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">GA Fare Type</div>
+									<select class="form-control" name="gaFareType" id="gaFareType" ng-disabled="vm.queryParams.source != 'M'" ng-model="vm.queryParams.gaFareType">
+										<option value="{{value}}" ng-repeat="value in vm.gaFareTypes track by $index">{{value}}</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Fare Type</div>
+									<select class="form-control" name="fareType" id="fareType" ng-model="vm.queryParams.fareType">
+										<option value="{{value}}" ng-repeat="value in vm.fareTypes track by $index">{{value}}</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Fare Basis</div>
+									<input type="text" class="form-control" name="fareBasis" id="fareBasis" ng-model="vm.queryParams.fareBasis"/>
+								</div>
+							</div>
+							<div class="pull-left col-md-6 no-lpad">
+								<div class="form-group">
+									<div class="custom-label semibold">Origin</div>
+									<input type="text" class="form-control" name="origin" id="origin" ng-model="vm.queryParams.origin"/>
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Destination</div>
+									<input type="text" class="form-control" name="destination" id="destination" ng-model="vm.queryParams.destination"/>
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Global Indicator</div>
+									<select class="form-control" name="globalIndicator" id="globalIndicator" ng-model="vm.queryParams.globalIndicator">
+										<option value="{{value}}" ng-repeat="value in vm.globalIndicators track by $index">{{value}}</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">OW/RT</div>
+									<select class="form-control" name="owrt" id="owrt" ng-model="vm.queryParams.owrt">
+										<option value="{{value.key}}" ng-repeat="value in vm.owrts track by $index">{{value.key}} - {{value.value}}</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Footnote</div>
+									<input type="text" class="form-control" name="footnote" id="footnote" ng-model="vm.queryParams.footnote"/>
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Rule No</div>
+									<input type="text" class="form-control" name="ruleNo" id="ruleNo" ng-model="vm.queryParams.ruleNo"/>
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Routing No</div>
+									<input type="text" class="form-control" name="routingNo" id="routingNo" ng-model="vm.queryParams.routingNo"/>
+								</div>
+							</div>
+						</div>
+						<div class="pull-left col-md-7 no-pad">
+							<div class="col-md-8 no-lpad">
+								<div class="form-group">
+									<div class="custom-label semibold">Effective Date</div>
+									<div class="row no-mar">
+										<div class="col-md-4 no-lpad">
+											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'effectiveDateFrom')" 
+												is-open="vm.datePickerOpenStatus['effectiveDateFrom']" datetime-picker="{{vm.dateFormat}}" 
+												enable-time="false" name="effectiveDateFrom" id="datepicker" 
+												ng-model="vm.queryParams.effectiveDateFrom" placeholder="From"/>
+										</div>
+										<div class="col-md-4 no-pad">
+											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'effectiveDateTo')" 
+												is-open="vm.datePickerOpenStatus['effectiveDateTo']" datetime-picker="{{vm.dateFormat}}" 
+												enable-time="false" name="effectiveDateTo" id="datepicker" 
+												ng-model="vm.queryParams.effectiveDateTo" placeholder="To"/>
+										</div>
+										<div class="col-md-4 no-rpad">
+											<select class="form-control" name="effectiveDateOption" id="effectiveDateOption" ng-init="vm.queryParams.effectiveDateOption = vm.dateOptions[0]" ng-model="vm.queryParams.effectiveDateOption">
+												<option value="{{value}}" ng-repeat="value in vm.dateOptions track by $index">{{value}}</option>
+											</select>
+										</div>
+									</div>
+									
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Sale Date</div>
+									<div class="row no-mar">
+										<div class="col-md-4 no-lpad">
+											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'saleDateFrom')" 
+												is-open="vm.datePickerOpenStatus['saleDateFrom']" datetime-picker="{{vm.dateFormat}}" 
+												enable-time="false" name="saleDateFrom" id="datepicker" 
+												ng-model="vm.queryParams.saleDateFrom" placeholder="From"/>
+										</div>
+										<div class="col-md-4 no-pad">
+											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'saleDateTo')" 
+												is-open="vm.datePickerOpenStatus['saleDateTo']" datetime-picker="{{vm.dateFormat}}" 
+												enable-time="false" name="saleDateTo" id="datepicker" 
+												ng-model="vm.queryParams.saleDateTo" placeholder="To"/>
+										</div>
+										<div class="col-md-4 no-rpad">
+											<select class="form-control" name="saleDateOption" id="saleDateOption" ng-init="vm.queryParams.saleDateOption = vm.dateOptions[0]" ng-model="vm.queryParams.saleDateOption">
+												<option value="{{value}}" ng-repeat="value in vm.dateOptions track by $index">{{value}}</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Travel Date</div>
+									<div class="row no-mar">
+										<div class="col-md-4 no-lpad">
+											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'travelDateFrom')" 
+												is-open="vm.datePickerOpenStatus['travelDateFrom']" datetime-picker="{{vm.dateFormat}}" 
+												enable-time="false" name="travelDateFrom" id="datepicker" 
+												ng-model="vm.queryParams.travelDateFrom" placeholder="From"/>
+										</div>
+										<div class="col-md-4 no-pad">
+											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'travelDateTo')" 
+												is-open="vm.datePickerOpenStatus['travelDateTo']" datetime-picker="{{vm.dateFormat}}" 
+												enable-time="false" name="travelDateTo" id="datepicker" 
+												ng-model="vm.queryParams.travelDateTo" placeholder="To"/>
+										</div>
+										<div class="col-md-4 no-rpad">
+											<select class="form-control" name="travelDateOption" id="travelDateOption" ng-init="vm.queryParams.travelDateOption = vm.dateOptions[0]" ng-model="vm.queryParams.travelDateOption">
+												<option value="{{value}}" ng-repeat="value in vm.dateOptions track by $index">{{value}}</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Season Date</div>
+									<div class="row no-mar">
+										<div class="col-md-4 no-lpad">
+											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'seasonDateFrom')" 
+												is-open="vm.datePickerOpenStatus['seasonDateFrom']" datetime-picker="{{vm.dateFormat}}" 
+												enable-time="false" name="seasonDateFrom" id="datepicker" 
+												ng-model="vm.queryParams.seasonDateFrom" placeholder="From"/>
+										</div>
+										<div class="col-md-4 no-pad">
+											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'seasonDateTo')" 
+												is-open="vm.datePickerOpenStatus['seasonDateTo']" datetime-picker="{{vm.dateFormat}}" 
+												enable-time="false" name="seasonDateTo" id="datepicker" 
+												ng-model="vm.queryParams.seasonDateTo" placeholder="To"/>
+										</div>
+										<div class="col-md-4 no-rpad">
+											<select class="form-control" name="seasonDateOption" id="seasonDateOption" ng-init="vm.queryParams.seasonDateOption = vm.dateOptions[0]" ng-model="vm.queryParams.seasonDateOption">
+												<option value="{{value}}" ng-repeat="value in vm.dateOptions track by $index">{{value}}</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Amount Range</div>
+									<input type="text" class="form-control" name="amountRange" id="amountRange" ng-model="vm.queryParams.amountRange"/>
+								</div>
+								<div class="row no-mar">
+									<div class="col-md-6 no-lpad">
+										<div class="form-group">
+											<div class="custom-label semibold">WO Id</div>
+											<input type="text" class="form-control" name="woId" id="woId" ng-model="vm.queryParams.woId"/>
+										</div>
+									</div>
+									<div class="col-md-6 no-lpad">
+										<div class="form-group">
+											<div class="custom-label semibold">Tour Code</div>
+											<input type="text" class="form-control" name="tourCode" id="tourCode" ng-model="vm.queryParams.tourCode"/>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4 no-lpad">
+								<div class="form-group">
+									<div class="custom-label semibold">Pax Type</div>
+									<select class="form-control" name="paxType" id="paxType" ng-model="vm.queryParams.paxType">
+										<option value="{{value}}" ng-repeat="value in vm.paxTypes track by $index">{{value}}</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Cabin</div>
+									<select class="form-control" name="cabin" id="cabin" ng-model="vm.queryParams.cabin">
+										<option value="{{value}}" ng-repeat="value in vm.cabins track by $index">{{value}}</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Booking Class</div>
+									<input type="text" class="form-control" name="bookingClass" id="bookingClass" ng-model="vm.queryParams.bookingClass"/>
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Advance Purchase</div>
+									<input type="text" class="form-control" name="advancePurchase" id="advancePurchase" ng-model="vm.queryParams.advancePurchase"/>
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Minimum Stay</div>
+									<input type="text" class="form-control" name="minStay" id="minStay" ng-model="vm.queryParams.minStay"/>
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Maximum Stay</div>
+									<input type="text" class="form-control" name="maxStay" id="maxStay" ng-model="vm.queryParams.maxStay"/>
+								</div>
+							</div>
+							<div class="col-md-12 no-lpad">
+								<div class="row no-mar">
+									<div class="col-md-8 no-lpad">
+										<div class="form-group">
+											<div class="custom-label semibold">Additional Options</div>
+											<div class="checkbox-wrapper">
+												<label>
+													<input type="checkbox" name="includeConstructed" ng-model="vm.queryParams.includeConstructed"> 
+													Include Constructed
+												</label>
+												<label>
+													<input type="checkbox" name="appendResults" ng-model="vm.queryParams.appendResults"> 
+													Append Results
+												</label>
+												<label>
+													<input type="checkbox" name="biDirectional" ng-model="vm.queryParams.biDirectional"> 
+													Bi-directional
+												</label>
+												<label>
+													<input type="checkbox" name="calculateTfc" ng-model="vm.queryParams.calculateTfc"> 
+													Calculate TFC
+												</label>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-4 no-pad">
+										<div class="pull-right query-button-wrapper">
+											<button type="button" class="btn btn-default small pull-right" ng-click="vm.loadAll()">Query</button>
+											<button type="reset" class="btn btn-default small pull-right">Reset</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<div class="table-wrapper">
+			<div class="datatable-wrapper form-inline">
+				<div class="table-responsive">
+			        <table class="table table-striped table-bordered datatable">
+			            <thead>
+			                <tr>
+			                    <th>ID</th>
+			                    <th>Source</th>
+			                    <th>S/C</th>
+			                    <th>Tar Cd</th>
+			                    <th>Cxr</th>
+			                    <th>Orig</th>
+			                    <th>Orig Cn</th>
+			                    <th>Dest</th>
+			                    <th>Dest Cn</th>
+			                    <th>Fare Cls</th>
+			                    <th>Bkg Cls</th> 
+			                    <th>Cabin</th>
+			                    <th>OW/RT</th>
+			                    <th>Ftnt</th>
+			                    <th>Rtg No</th>
+			                    <th>Rule No</th>
+			                    <th>MPM</th>
+			                    <th>Curr</th>
+			                    <th>Base Amt</th>
+			                    <th>Error</th>
+			                    <th>TFC Calc Date</th>
+			                    <th>TFC Focus Date</th>
+			                    <th>YQYR</th>
+			                    <th>Taxes</th>
+			                    <th>TFC</th>
+			                    <th>AIF</th>
+			                    <th>Itinerary</th>
+			                    <th>Override Ind</th>
+			                    <th>Eff Date</th>
+			                    <th>Disc Date</th>
+			                    <th>GFS Ref</th>
+			                    <th>Global</th>
+			                    <th>Rule Focus Date</th>
+			                    <th>Sellable</th>
+			                    <th>Travel Start</th>
+			                    <th>Travel End</th>
+			                    <th>Travel Complete</th>
+			                    <th>Sale Start</th>
+			                    <th>Sale End</th>
+			                    <th>Res Start</th>
+			                    <th>Res End</th>
+			                    <th>Min Stay</th>
+			                    <th>Max Stay</th>
+			                    <th>Adv Pur</th>
+			                    <th>DOW In</th>
+			                    <th>DOW Out</th>
+			                    <th>Season</th>
+			                    <th>F Season Date</th>
+			                    <th>L Season Date</th>
+			                    <th>Travel Date Ranges</th>
+			                    <th>Fare Type</th>
+			                    <th>Pax Type</th>
+			                    <th>WO Id</th>
+			                    <th>Group Fare</th>
+			                    <th>Ref Amt</th>
+			                    <th>Ref YQYR</th>
+			                    <th>Ref Taxes</th>
+			                    <th>Ref TFC</th>
+			                    <th>Ref AIF</th>
+			                </tr>
+			            </thead>
+			            <tbody ng-repeat="afdQuery in vm.afdQueries track by afdQuery.atpcoFareId">
+			                <tr ng-click="vm.selectedRow = afdQuery.atpcoFareId; vm.getRules(afdQuery)">
+			                    <td><a ui-sref="system-parameter-detail({id:afdQuery.id})">{{$index + 1}}</a></td>
+			                    <td>{{afdQuery.source}}</td>
+			                    <td>{{afdQuery.sc}}</td>
+			                    <td>{{afdQuery.tariffNo}}</td>
+			                    <td>{{afdQuery.carrierCode}}</td>
+			                    <td>{{afdQuery.originCity}}</td>
+			                    <td>{{afdQuery.originCountry}}</td>
+			                    <td>{{afdQuery.destinationCity}}</td>
+			                    <td>{{afdQuery.destinationCountry}}</td>
+			                    <td>{{afdQuery.fareClassCode}}</td>
+			                    <td>{{afdQuery.bookingClass}}</td>
+			                    <td><b>NM</b></td>
+			                    <td>{{afdQuery.owrt}}</td>
+			                    <td>{{afdQuery.footnote}}</td>
+			                    <td>{{afdQuery.routingNo}}</td>
+			                    <td>{{afdQuery.ruleNo}}</td>
+			                    <td>{{afdQuery.maximumPermittedMileage}}</td>
+			                    <td>{{afdQuery.currencyCode}}</td>
+			                    <td>{{afdQuery.baseAmount}}</td>
+			                    <td><b>NM</b></td>
+			                    <td><b>NM</b></td>
+			                    <td><b>NM</b></td>
+			                    <td><b>NM</b></td>
+			                    <td><b>NM</b></td>
+			                    <td><b>NM</b></td>
+			                    <td><b>NM</b></td>
+			                    <td><b>NM</b></td>
+			                    <td><b>NM</b></td>
+			                    <td><span ng-if="afdQuery.effectiveDate == 'indef'">NONE</span><span ng-if="afdQuery.effectiveDate != 'indef'">{{afdQuery.effectiveDate | date:'ddMMMyyyy'}}</span></td>
+			                	<td><span ng-if="afdQuery.discontinueDate == 'indef'">NONE</span><span ng-if="afdQuery.discontinueDate != 'indef'">{{afdQuery.discontinueDate | date:'ddMMMyyyy'}}</span></td>
+			                	<td><b>NM</b></td>
+			                	<td>{{afdQuery.globalIndicator}}</td>
+			                	<td><b>NM</b></td>
+			                	<td><b>NM</b></td>
+			                	<td><b>NM</b></td>
+			                	<td><b>NM</b></td>
+			                	<td><b>NM</b></td>
+			                	<td><span ng-if="afdQuery.saleStartDate == 'indef'">NONE</span><span ng-if="afdQuery.saleStartDate != 'indef'">{{afdQuery.saleStartDate | date:'ddMMMyyyy'}}</span></td>
+			                	<td><span ng-if="afdQuery.saleEndDate == 'indef'">NONE</span><span ng-if="afdQuery.saleEndDate != 'indef'">{{afdQuery.saleEndDate | date:'ddMMMyyyy'}}</span></td>
+			                	<td><b>NM</b></td>
+			                	<td><b>NM</b></td>
+			                	<td><b>NM</b></td>
+			                	<td><b>NM</b></td>
+			                	<td><b>NM</b></td>
+			                	<td><b>NM</b></td>
+			                	<td><b>NM</b></td>
+			                	<td><b>NM</b></td>
+			                	<td><b>NM</b></td>
+			                	<td><b>NM</b></td>
+			                	<td><b>NM</b></td>
+			               		<td>{{afdQuery.fareType}}</td>
+			                	<td>{{afdQuery.paxType}}</td>
+			                	<td><b>NM</b></td>
+			                	<td><b>NM</b></td>
+			                	<td><b>NM</b></td>
+			                	<td><b>NM</b></td>
+			                	<td><b>NM</b></td>
+			                	<td><b>NM</b></td>
+			                	<td><b>NM</b></td>
+			                </tr>
+			            	<tr ng-if="vm.selectedRow == afdQuery.atpcoFareId">
+			            		<div>
+			            			
+			            		</div>
+			            	</tr>
+			            </tbody>
+			        </table>
+			    </div>
+				<div class="text-center">
+			        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+			        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
+			    </div>
+			</div>
+		</div>
+	</div>
 </div>

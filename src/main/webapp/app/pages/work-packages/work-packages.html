@@ -169,7 +169,7 @@
 								</div>
 							</div>
 							<div class="table-responsive">
-								<table class="table table-stripped table-bordered datatable">
+								<table class="table table-stripped table-bordered datatable" jq-slider>
 									<thead>
 										<tr role="row" jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
 											<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Action</th>
@@ -196,7 +196,7 @@
 											ng-click="vm.rowSelected($index, workPackage)" ng-class="{selected: workPackage === vm.selectedRow, locked: workPackage.locked}">
 											<td class="text-right">
 						                        <div class="btn-group entities flex-btn-group-container">
-						                            <button type="submit" title="Edit"
+						                            <button type="submit" title="Edit" ng-disabled="workPackage.locked"
 						                                    ui-sref="work-package-detail({id:workPackage.id})"
 						                                    class="btn btn-primary btn-sm">
 						                                <span class="glyphicon glyphicon-pencil"></span>
@@ -316,6 +316,9 @@
 										</tr>
 										<tr ng-show="vm.workPackageActionButton[$index]">
 											<td colspan="18" class="">
+												<div class="btn btn-app" ng-click="vm.unlock($index)" ng-if="workPackage.locked">
+													<i class="fa fa-unlock"></i>Unlock
+												</div>
 												<div class="btn btn-app" ng-click="vm.reuse($index)">
 													<i class="fa fa-recycle"></i>Reuse
 												</div>

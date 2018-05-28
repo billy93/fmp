@@ -14,6 +14,15 @@ public class AtpcoRecord2 {
 	@Id
     private String id;
 	
+	@Field("rules_type")
+    private String ruleType;
+	
+	@Field("record_id_map")
+    private String recordIdMap;
+	
+	@Field("record_id")
+    private String recordId;
+	
 	@Field("record_batch")
     private String recordBatch;
 	
@@ -113,6 +122,30 @@ public class AtpcoRecord2 {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getRuleType() {
+		return ruleType;
+	}
+
+	public void setRuleType(String ruleType) {
+		this.ruleType = ruleType;
+	}
+
+	public String getRecordIdMap() {
+		return recordIdMap;
+	}
+
+	public void setRecordIdMap(String recordIdMap) {
+		this.recordIdMap = recordIdMap;
+	}
+
+	public String getRecordId() {
+		return recordId;
+	}
+
+	public void setRecordId(String recordId) {
+		this.recordId = recordId;
 	}
 
 	public String getRecordBatch() {
@@ -392,11 +425,14 @@ public class AtpcoRecord2 {
 		result = prime * result + ((mcn == null) ? 0 : mcn.hashCode());
 		result = prime * result + ((owrt == null) ? 0 : owrt.hashCode());
 		result = prime * result + ((recordBatch == null) ? 0 : recordBatch.hashCode());
+		result = prime * result + ((recordId == null) ? 0 : recordId.hashCode());
+		result = prime * result + ((recordIdMap == null) ? 0 : recordIdMap.hashCode());
 		result = prime * result + recordSequence;
 		result = prime * result + recordType;
 		result = prime * result + ((routingNo == null) ? 0 : routingNo.hashCode());
 		result = prime * result + ((ruleNo == null) ? 0 : ruleNo.hashCode());
 		result = prime * result + ((ruleTariffNo == null) ? 0 : ruleTariffNo.hashCode());
+		result = prime * result + ((ruleType == null) ? 0 : ruleType.hashCode());
 		result = prime * result + ((seasonType == null) ? 0 : seasonType.hashCode());
 		result = prime * result + ((sequenceNo == null) ? 0 : sequenceNo.hashCode());
 		return result;
@@ -589,6 +625,20 @@ public class AtpcoRecord2 {
 		} else if (!recordBatch.equals(other.recordBatch)) {
 			return false;
 		}
+		if (recordId == null) {
+			if (other.recordId != null) {
+				return false;
+			}
+		} else if (!recordId.equals(other.recordId)) {
+			return false;
+		}
+		if (recordIdMap == null) {
+			if (other.recordIdMap != null) {
+				return false;
+			}
+		} else if (!recordIdMap.equals(other.recordIdMap)) {
+			return false;
+		}
 		if (recordSequence != other.recordSequence) {
 			return false;
 		}
@@ -616,6 +666,13 @@ public class AtpcoRecord2 {
 		} else if (!ruleTariffNo.equals(other.ruleTariffNo)) {
 			return false;
 		}
+		if (ruleType == null) {
+			if (other.ruleType != null) {
+				return false;
+			}
+		} else if (!ruleType.equals(other.ruleType)) {
+			return false;
+		}
 		if (seasonType == null) {
 			if (other.seasonType != null) {
 				return false;
@@ -635,15 +692,16 @@ public class AtpcoRecord2 {
 
 	@Override
 	public String toString() {
-		return "AtpcoRecord2 [id=" + id + ", recordBatch=" + recordBatch + ", recordSequence=" + recordSequence
-				+ ", recordType=" + recordType + ", action=" + action + ", ruleTariffNo=" + ruleTariffNo
-				+ ", carrierCode=" + carrierCode + ", ruleNo=" + ruleNo + ", catNo=" + catNo + ", mcn=" + mcn
-				+ ", sequenceNo=" + sequenceNo + ", geoType1=" + geoType1 + ", geoLoc1=" + geoLoc1 + ", geoType2="
-				+ geoType2 + ", geoLoc2=" + geoLoc2 + ", fareClass=" + fareClass + ", fareType=" + fareType
-				+ ", seasonType=" + seasonType + ", dayOfWeekType=" + dayOfWeekType + ", owrt=" + owrt + ", routingNo="
-				+ routingNo + ", footnote=" + footnote + ", jointCarrierTable997=" + jointCarrierTable997
-				+ ", effectiveDateObject=" + effectiveDateObject + ", discontinueDateObject=" + discontinueDateObject
-				+ ", batchCi=" + batchCi + ", batchNo=" + batchNo + ", categoryNotApplicable=" + categoryNotApplicable
+		return "AtpcoRecord2 [id=" + id + ", ruleType=" + ruleType + ", recordIdMap=" + recordIdMap + ", recordId="
+				+ recordId + ", recordBatch=" + recordBatch + ", recordSequence=" + recordSequence + ", recordType="
+				+ recordType + ", action=" + action + ", ruleTariffNo=" + ruleTariffNo + ", carrierCode=" + carrierCode
+				+ ", ruleNo=" + ruleNo + ", catNo=" + catNo + ", mcn=" + mcn + ", sequenceNo=" + sequenceNo
+				+ ", geoType1=" + geoType1 + ", geoLoc1=" + geoLoc1 + ", geoType2=" + geoType2 + ", geoLoc2=" + geoLoc2
+				+ ", fareClass=" + fareClass + ", fareType=" + fareType + ", seasonType=" + seasonType
+				+ ", dayOfWeekType=" + dayOfWeekType + ", owrt=" + owrt + ", routingNo=" + routingNo + ", footnote="
+				+ footnote + ", jointCarrierTable997=" + jointCarrierTable997 + ", effectiveDateObject="
+				+ effectiveDateObject + ", discontinueDateObject=" + discontinueDateObject + ", batchCi=" + batchCi
+				+ ", batchNo=" + batchNo + ", categoryNotApplicable=" + categoryNotApplicable
 				+ ", generalRuleSourceTariff=" + generalRuleSourceTariff + ", generalRuleNo=" + generalRuleNo
 				+ ", generalRuleApplication=" + generalRuleApplication + ", dataTables=" + dataTables + "]";
 	}

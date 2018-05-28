@@ -1450,9 +1450,7 @@ public class WorkPackageResource {
     	}
     	
     	if(workPackage.getFilingInstructionData() != null) {
-    		for(FilingInstruction filingInstruction : workPackage.getFilingInstructionData()) {
-    			log.debug("LOGIN BY : "+ filingInstruction.getUsername() + " " + filingInstruction.getCreatedTime());
-    			
+    		for(FilingInstruction filingInstruction : workPackage.getFilingInstructionData()) {    			
     			if(filingInstruction.getUsername() == null && filingInstruction.getCreatedTime() == null) {
     				filingInstruction.setUsername(SecurityUtils.getCurrentUserLogin().get());
     				filingInstruction.setCreatedTime(ZonedDateTime.now());
@@ -1494,9 +1492,37 @@ public class WorkPackageResource {
 		    	workPackage.setPriority(prioritiesDesc.get(0).getName());
 	    	}
     	}
+    	workPackage.setValidation(null);
     	workPackage = workPackageService.save(workPackage);
-	    	
-        return getWorkPackage(workPackage.getId());    	
+	    
+    	if(workPackage.isValidate()) {
+    		WorkPackage.Validation validation = new WorkPackage.Validation();
+    		
+    		List<WorkPackage.Validation.Tab> tabs = new ArrayList<WorkPackage.Validation.Tab>();
+	    		WorkPackage.Validation.Tab tab1 = new WorkPackage.Validation.Tab();
+		    		tab1.setName("Fare");
+		    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
+		    		
+		    			//List Error
+			    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+			    		err1.setMessage("ERROR 1");
+			    		errors.add(err1);
+			    		
+		    		tab1.setError(errors);
+		    		
+		    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
+		    		
+			    		//List Warning
+			    		WorkPackage.Validation.Tab.Error warn1 = new WorkPackage.Validation.Tab.Error();
+			    		warn1.setMessage("WARNING 1");
+			    		warnings.add(err1);
+			    		
+		    		tab1.setWarning(warnings);
+	    		tabs.add(tab1);
+    		validation.setTab(tabs);
+    		workPackage.setValidation(validation);
+    	}
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(workPackage));    	
     }
     
     static long zonedDateTimeDifference(ZonedDateTime d1, ZonedDateTime d2, ChronoUnit unit){
