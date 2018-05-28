@@ -32,8 +32,8 @@ spring:
         serialization.indent_output: true
     data:
         mongodb:
-            uri: mongodb://localhost:27017
-            database: fmp
+            uri: mongodb://10.90.29.104:27001
+            database: fmp_db
     mail:
         host: mail.atibusinessgroup.com
         port: 25
@@ -90,7 +90,7 @@ jhipster:
                 token-validity-in-seconds-for-remember-me: 2592000
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: fmp@localhost
-        base-url: http://127.0.0.1:8081
+        base-url: http://fmp-ga.atibusinessgroup.com
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         graphite: # Use the "graphite" Maven profile to have the Graphite dependencies

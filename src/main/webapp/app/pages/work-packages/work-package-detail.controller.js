@@ -20,10 +20,15 @@
      * @param Clipboard
      * @returns
      */
-    WorkPackageDetailController.$inject = ['$sce', 'currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities'];
-    function WorkPackageDetailController($sce, currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities) {
+    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities'];
+    function WorkPackageDetailController($window, $sce, currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities) {
     	var vm = this;
-       
+
+    	window.onbeforeunload = function () {
+    		   // handle the exit event
+    		return false;
+    	};
+
     	vm.editorConfig = {
 		    sanitize: false,
 		    toolbar: [
@@ -3676,7 +3681,7 @@
       
       $scope.trustAsHtml = function(string) {
     	    return $sce.trustAsHtml(string);
-    	};
+     };
       
       
       vm.addCommentFillingInstruction = function() {
@@ -3913,5 +3918,16 @@
     		  
     	  }
       }
+      
+      vm.isAllSelected = {};
+      vm.toggleAll = function(fares, idx) {
+	     var toggleStatus = vm.isAllSelected[idx];
+	     angular.forEach(fares, function(itm){ itm.selected = toggleStatus; });
+	   
+	  }
+      
+      $scope.optionToggled = function(fares){
+	    $scope.isAllSelected = fares.every(function(itm){ return itm.selected; })
+	  }
     }
 })();
