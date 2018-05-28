@@ -11,54 +11,53 @@
 			</div>							
 			<div class="filter-area">
 				<div class="clearfix">
-					<div class="col-md-3">	
-				     	<div class="form-group row">
-							<label class="col-md-4 custom-label semibold" for="agentType">Agent Type</label>
-					        <select class="col-md-8" name="agentType" id="agentType" ng-model="vm.agentType" ng-options="x for x in vm.optionAgentType"></select>
+					<div class="pull-left w25 ph5px">	
+				     	<div class="form-group">
+							<label class="custom-label semibold" for="agentType">Agent Type</label>
+					        <select class="form-control" name="agentType" id="agentType" ng-model="vm.agentType" ng-options="x for x in vm.optionAgentType"></select>
 				        </div>
-				     	<div class="form-group row">
-							<label class="col-md-4 custom-label semibold" for="agentCategory">Agent Category</label>
-							<input type="text" class="col-md-8" name="agentCategory" ng-model="vm.agentCategory" id="agentCategory">
+				     	<div class="form-group">
+							<label class="custom-label semibold" for="agentCategory">Agent Category</label>
+							<input type="text" class="form-control" name="agentCategory" ng-model="vm.agentCategory" id="agentCategory">
 				        </div>
 					</div>
-					<div class="col-md-3">	
-				   		<div class="form-group row">
-							<label class="col-md-4 custom-label semibold" for="posCountry">Pos Country</label>
-					        <input type="text" class="col-md-8" name="posCountry" ng-model="vm.posCountry" id="posCountry">
+					<div class="pull-left w25 ph5px">	
+				   		<div class="form-group">
+							<label class="custom-label semibold" for="posCountry">Pos Country</label>
+					        <input type="text" class="form-control" name="posCountry" ng-model="vm.posCountry" id="posCountry">
 				        </div>
-				        <div class="form-group row">
-							<label class="col-md-4 custom-label semibold" for="agentName">Agent Name</label>
-					        <input type="text" class="col-md-8" name="agentName" ng-model="vm.agentName" id="agentName">
-				        </div>
-			 		</div>
-			 		<div class="col-md-3">	
-				   		<div class="form-group row">
-							<label class="col-md-4 custom-label semibold" for="posCity">Pos City</label>
-					        <input type="text" class="col-md-8" name="posCity" ng-model="vm.posCity" id="posCity">
-				        </div>
-				        <div class="form-group row">
-							<label class="col-md-4 custom-label semibold" for="iataCode">IATA Code</label>
-					        <input type="text" class="col-md-8" name="iataCode" ng-model="vm.iataCode" id="iataCode">
+				        <div class="form-group">
+							<label class="custom-label semibold" for="agentName">Agent Name</label>
+					        <input type="text" class="form-control" name="agentName" ng-model="vm.agentName" id="agentName">
 				        </div>
 			 		</div>
-			 		<div class="col-md-3">
-				 		<div class="form-group row">
-				            <label class="col-md-4 custom-label semibold" for="isDeleted">Is Deleted</label>
-				            <select class="col-md-8" id="vm.isDeleted" ng-model="vm.isDeleted" ng-options="x for x in vm.optionDelete"></select>
+			 		<div class="pull-left w25 ph5px">	
+				   		<div class="form-group">
+							<label class="custom-label semibold" for="posCity">Pos City</label>
+					        <input type="text" class="form-control" name="posCity" ng-model="vm.posCity" id="posCity">
 				        </div>
+				        <div class="form-group">
+							<label class="custom-label semibold" for="iataCode">IATA Code</label>
+					        <input type="text" class="form-control" name="iataCode" ng-model="vm.iataCode" id="iataCode">
+				        </div>
+			 		</div>
+			 		<div class="pull-left w25 ph5px">
+				 		<div class="form-group">
+				            <label class="custom-label semibold" for="isDeleted">Is Deleted</label>
+				            <select class="form-control" id="vm.isDeleted" ng-model="vm.isDeleted" ng-options="x for x in vm.optionDelete"></select>
+				        </div>
+				        <div class="clearfix">
+				        	<div class="pull-right">
+					        	<button type="submit" ng-click="vm.searchQuery()"  class="btn btn-primary btn-sm" style="margin-top: 35px">
+						         	Query
+							     </button>
+							     <button type="submit" ng-click="vm.reset()"  class="btn btn-primary btn-sm" style="margin-top: 35px">
+							         Reset
+							     </button>
+				        	</div>
+				        </div>
+				        
 			        </div>
-			 		<div class="col-md-3">	
-				         <div class="col-md-4 no-pad text-right">
-							<button type="submit" ng-click="vm.searchQuery()"  class="btn btn-primary btn-sm">
-						         Query
-						     </button>
-						</div>
-						<div class="col-md-4 no-pad text-right">
-							<button type="submit" ng-click="vm.reset()"  class="btn btn-primary btn-sm">
-						         Reset
-						     </button>
-						</div>
-				 	</div>
 				</div>
 			</div>
 		</div>

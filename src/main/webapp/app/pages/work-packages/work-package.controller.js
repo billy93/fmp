@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('WorkPackageController', WorkPackageController);
 
-    WorkPackageController.$inject = ['$uibModal', '$state', '$stateParams', 'WorkPackage', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', 'GlobalService'];
+    WorkPackageController.$inject = ['$uibModal', '$state', '$stateParams', 'WorkPackage', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams'];
 
-    function WorkPackageController($uibModal, $state, $stateParams, WorkPackage, ParseLinks, AlertService, paginationConstants, pagingParams, GlobalService) {
+    function WorkPackageController($uibModal, $state, $stateParams, WorkPackage, ParseLinks, AlertService, paginationConstants, pagingParams) {
         var vm = this;
         vm.reviewLevel = true;
         vm.woStatus = true;
@@ -255,8 +255,9 @@
         	console.log(vm.workPackageFilter);
         }
        
+//        $(document).ready(function(){
+//        	$("#table-workpackage").jsdragtable();
+//        });
         
-        GlobalService.sayHello();
-        GlobalService.mustFill();
     }
 })();

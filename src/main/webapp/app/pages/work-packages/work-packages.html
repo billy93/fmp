@@ -145,9 +145,9 @@
 								<div class="pull-right w50">
 									<div class="clearfix">
 										<div class="pull-right datatable-button">
-											<div class="button-group dropdown">
+											<div class="button-group dropdown custom">
 												<button class="btn btn-default small">New <i class="fa fa-caret-down"></i></button>
-												<ul class="dropdown-menu" role="menu">
+												<ul class="dropdown-menu custom" role="menu">
 												    <li>
 												    	<a ui-sref="work-package.new({type:'reguler'})">Regular Work Order</a>
 												    </li>
@@ -165,7 +165,7 @@
 								</div>
 							</div>
 							<div class="table-responsive">
-								<table class="table table-stripped table-bordered datatable">
+								<table class="table table-stripped table-bordered datatable" jq-slider>
 									<thead>
 										<tr role="row" jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
 											<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Action</th>

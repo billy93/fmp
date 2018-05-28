@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('NavbarController', NavbarController);
 
-    NavbarController.$inject = ['$state', 'Auth', 'Principal', 'ProfileService', 'LoginService', '$window', 'GlobalService'];
+    NavbarController.$inject = ['$state', 'Auth', 'Principal', 'ProfileService', 'LoginService', '$window'];
 
-    function NavbarController ($state, Auth, Principal, ProfileService, LoginService, $window, GlobalService) {
+    function NavbarController ($state, Auth, Principal, ProfileService, LoginService, $window) {
         var vm = this;
 
         vm.isNavbarCollapsed = true;
@@ -24,33 +24,6 @@
         vm.collapseNavbar = collapseNavbar;
         vm.$state = $state;
 
-//        vm.toggle = function(){
-//        	$('.showLeftPush').toggleClass('active')
-//    		$('#sideBar-s1').toggleClass('sideBar-open');
-//    		$('.search-wrap').find('i').toggleClass('shrink');
-//    		$('.sideBar').find('.menu-list').toggleClass('open');
-//    		$('.menu-list').removeClass('sub');
-//    		$('.sub-menu').slideUp(200);
-//    		$('.sidebar-toggle').toggleClass('pushed');
-//    		$('.fa-home').toggleClass('hidden');
-//        }
-//        
-//        vm.toggleMenu = function(e){
-//        	e.preventDefault();
-//        	var element = angular.element(e.currentTarget);
-//        	if(element.hasClass('open')){
-//    			$('.menu-list').not(element).removeClass('sub');
-//    			$('.menu-list').not(element).find('.sub-menu').slideUp(200);
-//    			element.toggleClass('sub');
-//    			element.find('.sub-menu').slideToggle(200);
-//    		}
-//    		else{
-//    			if (element.hasClass('has-sub')){
-//    				element.toggleClass('sub');
-//    				element.find('.sub-menu').slideToggle(200);
-//    			}
-//    		}	
-//        };
         
         vm.test = function(){
         	 
@@ -75,7 +48,13 @@
             vm.isNavbarCollapsed = true;
         }
         
+        $(document).ready(function(){
+    		$(".sub-menu").mCustomScrollbar({
+    			theme:"light",
+    			axis:"y"
+    	    });
+    	});
         
-        GlobalService.navbar();
+      
     }
 })();

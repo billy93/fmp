@@ -21,8 +21,8 @@
      * @param Clipboard
      * @returns
      */
-    WorkPackageDetailController.$inject = ['currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'GlobalService', 'businessAreas'];
-    function WorkPackageDetailController(currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, GlobalService, businessAreas) {
+    WorkPackageDetailController.$inject = ['currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas'];
+    function WorkPackageDetailController(currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas) {
     	var vm = this;
        
         vm.currentTab = [];
@@ -3276,6 +3276,11 @@
     	  	vm.save();
     	  	vm.commentString = null;
     	 }
+	  	
+	  	$(document).ready(function(){
+	  		var _width = $('.comment-wrapper').outerWidth();
+			$('.comment-list').css({ 'width': 'calc(100% + ' + _width+ 'px)' });
+	  	});
       }
       
       vm.addInterOffice = function(ioString){
@@ -3450,6 +3455,7 @@
       			
           });
       }
-      GlobalService.sayHello();
+      
+      
     }
 })();
