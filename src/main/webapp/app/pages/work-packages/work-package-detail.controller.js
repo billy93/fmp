@@ -1,7 +1,6 @@
 (function() {
-    'use strict';
 
-    angular
+	angular
         .module('fmpApp')
         .controller('WorkPackageDetailController', WorkPackageDetailController);
     
@@ -21,10 +20,21 @@
      * @param Clipboard
      * @returns
      */
-    WorkPackageDetailController.$inject = ['currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'GlobalService', 'businessAreas', 'priorities', 'passengers'];
-    function WorkPackageDetailController(currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, GlobalService, businessAreas, priorities, passengers) {
+    WorkPackageDetailController.$inject = ['$sce','currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'GlobalService', 'businessAreas', 'priorities', 'passengers'];
+    function WorkPackageDetailController($sce,currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, GlobalService, businessAreas, priorities, passengers) {
     	var vm = this;
        
+    	vm.editorConfig = {
+		    sanitize: false,
+		    toolbar: [
+			{ name: 'basicStyling', items: ['bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', '-', 'leftAlign', 'centerAlign', 'rightAlign', 'blockJustify', '-'] },
+			{ name: 'doers', items: ['removeFormatting', 'undo', 'redo', '-'] },
+			{ name: 'colors', items: ['fontColor', 'backgroundColor', '-'] },
+			{ name: 'styling', items: ['font', 'size', 'format'] },
+		    ]
+		};
+    	
+    	
         vm.currentTab = [];
         vm.currentAddonTab = [];
         vm.currentDiscountTab = [];
@@ -1185,11 +1195,6 @@
         }
         //END FARES TAB
         
-        
-        vm.stripFormat = function ($html) {
-        	console.log("called");
-            return $html.replace(/<img[^>]*>/g/n,"");
-          };
         
         //ADDON TAB
         vm.selectedAddonTab = 0;     
@@ -3646,19 +3651,27 @@
           }
       };
       
-      vm.addComment = function(commentString){
-	  	 if(commentString != null){
+      vm.addComment = function(){
+	  	 if(vm.commentString != null){
 	    	  if(vm.workPackage.comment == null){
 	      		vm.workPackage.comment = [];
 	      }
 	    	  
     	  	vm.workPackage.comment.push({
-    	  		comment:commentString
+    	  		comment:vm.commentString
     	  	});
     	  	vm.save();
     	  	vm.commentString = null;
+    	  	$(document).ready(function(){
+                var _width = $('.comment-wrapper').outerWidth();
+	              $('.comment-list').css({ 'width': 'calc(100% + ' + _width+ 'px)' });
+	        });
     	 }
       }
+      
+      $scope.trustAsHtml = function(string) {
+    	    return $sce.trustAsHtml(string);
+    	};
       
       
       vm.addCommentFillingInstruction = function() {
@@ -3673,6 +3686,10 @@
 	 	  		 
 	 	  		 vm.save();
 	 	  		 vm.commentStringFillingInstruction = null;
+	 	  		$(document).ready(function(){
+	                var _width = $('.comment-wrapper').outerWidth();
+		              $('.comment-list').css({ 'width': 'calc(100% + ' + _width+ 'px)' });
+		        });
  	  	 	}
        }
       
@@ -3692,10 +3709,13 @@
      	  	});
      	  	vm.save();
      	  	vm.ioString = null;
+     	  	$(document).ready(function(){
+                var _width = $('.comment-wrapper').outerWidth();
+	              $('.comment-list').css({ 'width': 'calc(100% + ' + _width+ 'px)' });
+	        });
      	 }
        }
-      
-      
+                
       vm.export = function(){
     	  	alert('EXPORT');
       }

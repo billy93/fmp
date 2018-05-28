@@ -41,11 +41,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.atibusinessgroup.fmp.config.Constants;
+import com.atibusinessgroup.fmp.domain.SystemParameter;
 import com.atibusinessgroup.fmp.domain.User;
 import com.atibusinessgroup.fmp.repository.UserRepository;
 import com.atibusinessgroup.fmp.security.AuthoritiesConstants;
 import com.atibusinessgroup.fmp.security.SecurityUtils;
 import com.atibusinessgroup.fmp.service.MailService;
+import com.atibusinessgroup.fmp.service.SystemParameterService;
 import com.atibusinessgroup.fmp.service.UserService;
 import com.atibusinessgroup.fmp.service.dto.UserDTO;
 import com.atibusinessgroup.fmp.web.rest.errors.BadRequestAlertException;
@@ -98,12 +100,15 @@ public class UserResource {
 	private final UserService userService;
 
 	private final MailService mailService;
+	
+	private final SystemParameterService systemParameterService;
 
-	public UserResource(UserRepository userRepository, UserService userService, MailService mailService) {
+	public UserResource(UserRepository userRepository, UserService userService, MailService mailService, SystemParameterService systemParameterService) {
 
 		this.userRepository = userRepository;
 		this.userService = userService;
 		this.mailService = mailService;
+		this.systemParameterService = systemParameterService;
 	}
 
 	/**
@@ -137,7 +142,8 @@ public class UserResource {
 			throw new EmailAlreadyUsedException();
 		} else {
 			User newUser = userService.createUser(userDTO);
-			mailService.sendCreationEmail(newUser);
+			String sender =  systemParameterService.getParameterNameValueString(SystemParameter.EMAIL_SENDER_CREATE_USER);
+			mailService.sendCreationEmail(sender,newUser);
 			return ResponseEntity
 					.created(new URI("/api/users/" + newUser.getLogin())).headers(HeaderUtil
 							.createAlert("A user is created with identifier " + newUser.getLogin(), newUser.getLogin()))
@@ -188,12 +194,13 @@ public class UserResource {
 		}
 		
 		log.debug("LIST CHANGE FIELD : " + result);
-
+		String sender =  systemParameterService.getParameterNameValueString(SystemParameter.EMAIL_SENDER_CHANGE_USER);
+		log.debug("sender : " + sender);
 		if(!userHistory.getEmail().equals(checkHistory.getEmail())) {
-			mailService.sendChangedFieldMail(userHistory, result);
-			mailService.sendChangedFieldMail(checkHistory, result);
+			mailService.sendChangedFieldMail(sender,userHistory, result);
+			mailService.sendChangedFieldMail(sender,checkHistory, result);
 		}else {
-			mailService.sendChangedFieldMail(checkHistory, result);
+			mailService.sendChangedFieldMail(sender,checkHistory, result);
 		}
 		
 		return ResponseUtil.wrapOrNotFound(updatedUser,
