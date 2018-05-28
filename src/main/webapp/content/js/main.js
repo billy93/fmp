@@ -101,9 +101,9 @@ $(function(){
 		$(this).find('.tab-content').slideToggle(200);
 	});
 	
-	$(document).on('change','.select-all-wpdetail',function(){
-		var _checkbox = $('.checkbox-table-wpdetail');
-		_checkbox.prop('checked', !_checkbox.prop('checked'));
-	});
+//	$(document).on('change','.select-all-wpdetail',function(){
+//		var _checkbox = $('.checkbox-table-wpdetail');
+//		_checkbox.prop('checked', !_checkbox.prop('checked'));
+//	});
 	
 });
