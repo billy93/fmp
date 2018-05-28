@@ -56,6 +56,7 @@ module.exports = function (config) {
             'src/main/webapp/bower_components/textAngular/dist/textAngularSetup.js',
             'src/main/webapp/bower_components/oclazyload/dist/ocLazyLoad.js',
             'src/main/webapp/bower_components/ng-idle/angular-idle.js',
+            'src/main/webapp/bower_components/ngWYSIWYG/dist/wysiwyg.min.js',
             'src/main/webapp/bower_components/angular-mocks/angular-mocks.js',
             // endbower
             'src/main/webapp/app/app.module.js',
