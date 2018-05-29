@@ -143,6 +143,7 @@
 	        'exportDerivedFares': { method: 'POST',  url:'api/work-packages/derived/exportDerivedFares'},
 	        'publish' : { method: 'POST',  url:'api/work-packages/market/publish'},
 	        'exportRateSheet': { method: 'POST',  url:'api/work-packages/export-ratesheet'},
+	        'exportRateSheetExcel': { method: 'POST',  url:'api/work-packages/export-ratesheet-excel'},
 	        'downloadMarketRules': { method: 'POST',  url:'api/work-packages/download-market-rules'}
         });
     }
