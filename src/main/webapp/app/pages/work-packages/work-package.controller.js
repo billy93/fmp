@@ -216,7 +216,7 @@
         	
         	function onWithdrawSuccess(result){
         		alert('Withdraw Success '+result.id);
-        		$state.go('work-package-detail', {id:result.id});
+//        		$state.go('work-package-detail', {id:result.id});
 
         	}
         	
