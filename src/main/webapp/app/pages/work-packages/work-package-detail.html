@@ -1,6 +1,6 @@
 <style>
 .ui-select-dropdown{
-	min-width:300px;
+	min-width:30px;
 }
 .highlighted{
 	background-color:yellow;
@@ -381,7 +381,10 @@
 															<button class="btn btn-default small btn-secondary">Edit <i class="fa fa-caret-down"></i></button>
 															<ul class="dropdown-menu custom" role="menu">
 															    <li>
-															    	<a ng-click="vm.clearSelection()">Clear Selection</a>
+															    	<a ng-click="vm.clearSelection(workPackageSheet)">Clear Selection</a>
+															    </li>	
+															    <li>
+															    	<a ng-click="vm.fillDown(workPackageSheet)">Fill Down</a>
 															    </li>	
 															    <li>
 															    	<a ng-click="vm.addFares(workPackageSheet)">Add Rows</a>
@@ -392,9 +395,7 @@
 															    <li>
 															    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)">Delete Selected Rows</a>
 															    </li>
-															     <li>
-															    	<a ng-click="vm.fillDown(workPackageSheet)">Fill Down</a>
-															    </li>															   
+															     														   
 															    
 															    <li>
 															    	<a href="#">Paste</a>
@@ -457,14 +458,14 @@
 														<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Ratesheet Comment</th>
 													</tr>
 												</thead>
-												<tbody ng-repeat="fare in workPackageSheet.fares track by $index" >
+												<tbody ng-repeat="fare in workPackageSheet.fares track by $index" ng-click="vm.tbodyClick(workPackageShee)">
 													<!-- ng-click="vm.rowTableClick($event, $parent.$index+''+$index, 'fares')" -->
 													<tr role="row" class="datatable-row">
 														<!-- <td>
 															<input type="checkbox" ng-model="fare.selected" ng-change="optionToggled(workPackageSheet.fares)">
 														</td> -->
-														<td>{{$index+1}}</td>
-														<td ng-click="fare.field['status'] = !fare.field['status']" ng-class="{highlighted:fare.field['status']}">
+														<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no']}">{{$index+1}}</td>
+														<td ng-click="vm.tdClick(workPackageSheet, fare, 'status', $event)" ng-class="{highlighted:fare.field['status']}">
 															<select class="form-control inside-table" name="status{{$parent.$index}}{{$index}}" ng-model="fare.status" id="field_status" 
 																ng-class="{'must-fill': !editForm.editFormATPCO.status{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"												         		
 							           							ng-disabled="!vm.isEditable('status')"
@@ -472,17 +473,17 @@
 												             	ng-options="key as value for (key , value) in vm.status">
 															</select>	
 														</td>
-														<td ng-click="fare.field['carrier'] = !fare.field['carrier']" ng-class="{highlighted:fare.field['carrier']}">
+														<td ng-click="vm.tdClick(workPackageSheet, fare, 'carrier', $event)" ng-class="{highlighted:fare.field['carrier']}">
 															<input type="text" class="form-control" name="carrier{{$parent.$index}}{{$index}}" id="field_carrier"
 										                    		ng-model="fare.carrier"
 										                    		ng-disabled="!vm.isEditable('carrier')"
 										                    		ng-class="{'must-fill': editForm.editFormATPCO.carrier{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 														            ng-required="vm.isRequired('carrier')"/>
 														</td>																
-														<td ng-click="fare.field['action'] = !fare.field['action']" ng-class="{highlighted:fare.field['action']}">{{fare.action}}</td>
-														<td ng-click="fare.field['tarno'] = !fare.field['tarno']" ng-class="{highlighted:fare.field['tarno']}">
+														<td ng-click="vm.tdClick(workPackageSheet, fare, 'action', $event)" ng-class="{highlighted:fare.field['action']}">{{fare.action}}</td>
+														<td ng-click="vm.tdClick(workPackageSheet, fare, 'tarno', $event)" ng-class="{highlighted:fare.field['tarno']}">
 															<ui-select ng-model="fare.tariffNumber" name="tarno{{$parent.$index}}{{$index}}" theme="select2" title="Choose a Tariff"  class="form-control"
-															 ng-click="$event.stopPropagation()"
+															 
 															ng-required="vm.isRequired('tarno') && fare.action != 'Canceled'"  
 															ng-disabled="!vm.isEditable('tarno')"
 															ng-class="{'must-fill': editForm.editFormATPCO.tarno{{$parent.$index}}{{$index}}.$error.required }"	
@@ -498,9 +499,9 @@
 															    </ui-select-choices>
 															  </ui-select>
 														</td>
-														<td ng-click="fare.field['tarcd'] = !fare.field['tarcd']" ng-class="{highlighted:fare.field['tarcd']}">
+														<td ng-click="vm.tdClick(workPackageSheet, fare, 'tarcd', $event)" ng-class="{highlighted:fare.field['tarcd']}">
 															<ui-select ng-model="fare.tariffNumber" theme="select2" class="form-control"
-															 ng-click="$event.stopPropagation()"
+															 
 															name="tarcd{{$parent.$index}}{{$index}}"
 															ng-required="vm.isRequired('tarcd') && fare.action != 'Canceled'"  
 															ng-disabled="!vm.isEditable('tarcd')"
@@ -528,15 +529,15 @@
 										           				{{fare.tarcd}}
 									           				</span> -->
 														</td>
-														<td ng-click="fare.field['global'] = !fare.field['global']" ng-class="{highlighted:fare.field['global']}">{{fare.tariffNumber.global}}</td>
-														<td>
+														<td ng-click="vm.tdClick(workPackageSheet, fare, 'global', $event)" ng-class="{highlighted:fare.field['global']}">{{fare.tariffNumber.global}}</td>
+														<td ng-click="vm.tdClick(workPackageSheet, fare, 'origin', $event)" ng-class="{highlighted:fare.field['origin']}">
 															<ui-select ng-model="fare.origin" theme="select2" class="form-control"
-															 ng-click="$event.stopPropagation()"
+															
 															name="origin{{$parent.$index}}{{$index}}"
 															ng-required="vm.isRequired('origin') && fare.action != 'Canceled'"  
 															ng-disabled="!vm.isEditable('origin')"
 															
-															ng-class="{'must-fill': fare.origin == null && fare.action != 'Canceled'}"	
+															ng-class="{'must-fill': editForm.editFormATPCO.origin{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
 										                    	>
 															    <ui-select-match placeholder="Origin">{{$select.selected.value.cityCode}}</ui-select-match>
 																 <ui-select-choices style="min-width:300px" repeat="value.value.cityCode as (key, value) in vm.cities | filter: { value: { cityCode: $select.search }}">
@@ -551,14 +552,14 @@
 															    </ui-select-choices>
 															  </ui-select>
 														</td>
-														<td>
+														<td ng-click="vm.tdClick(workPackageSheet, fare, 'destination', $event)" ng-class="{highlighted:fare.field['destination']}">
 														<ui-select ng-model="fare.destination" theme="select2" class="form-control"
-															 ng-click="$event.stopPropagation()"
+															
 															name="destination{{$parent.$index}}{{$index}}"
 															ng-required="vm.isRequired('destination') && fare.action != 'Canceled'"  
 															ng-disabled="!vm.isEditable('destination')"
 															
-															ng-class="{'must-fill': fare.destination == null && fare.action != 'Canceled'}"	
+															ng-class="{'must-fill': editForm.editFormATPCO.destination{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
 										                    	>
 															    <ui-select-match placeholder="Destination">{{$select.selected.value.cityCode}}</ui-select-match>
 																 <ui-select-choices style="min-width:300px" repeat="value.value.cityCode as (key, value) in vm.cities | filter: { value: { cityCode: $select.search }}">
@@ -576,13 +577,11 @@
 														<td>
 															<input type="text" class="form-control" name="farebasis{{$parent.$index}}{{$index}}" id="field_farebasis"
 								                				ng-disabled="!vm.isEditable('farebasis')"
-								                				ng-click="$event.stopPropagation()"
 								                				ng-required="vm.isRequired('farebasis') && fare.action != 'Canceled'" 
 								                				ng-model="fare.fareBasis"/>				
 														</td>	
 														<td>
 															<input type="text" class="form-control" name="bookingClass{{$parent.$index}}{{$index}}" id="field_bookingClass"
-								                				ng-click="$event.stopPropagation()"
 								                				ng-maxlength="2"
 								                				maxlength="2"
 								                				ng-pattern="/^[a-zA-Z]{1,2}$/"
@@ -597,7 +596,6 @@
 									           				<select class="form-control" 
 													             name="cabin{{$parent.$index}}{{$index}}"
 													             ng-required="vm.isRequired('cabin')"
-													             ng-click="$event.stopPropagation()"
 													             ng-class="{'must-fill': !editForm.editFormATPCO.cabin{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"	
 													             ng-model="fare.cabin" id="field_cabin" 
 													             ng-disabled="!vm.isEditable('cabin')"
@@ -607,7 +605,6 @@
 									           			<td>
 									           				<select class="form-control" 
 													             name="typeOfJourney{{$parent.$index}}{{$index}}"
-													             ng-click="$event.stopPropagation()"
 													             ng-required="vm.isRequired('typeOfJourney')"
 													             ng-class="{'must-fill': !editForm.editFormATPCO.typeOfJourney{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"																			            
 													             ng-model="fare.typeOfJourney" id="field_typeOfJourney"
