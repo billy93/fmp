@@ -574,13 +574,13 @@
 															    </ui-select-choices>
 															  </ui-select>
 														</td>
-														<td>
+														<td ng-click="vm.tdClick(workPackageSheet, fare, 'fareBasis', $event)" ng-class="{highlighted:fare.field['fareBasis']}">
 															<input type="text" class="form-control" name="farebasis{{$parent.$index}}{{$index}}" id="field_farebasis"
 								                				ng-disabled="!vm.isEditable('farebasis')"
 								                				ng-required="vm.isRequired('farebasis') && fare.action != 'Canceled'" 
 								                				ng-model="fare.fareBasis"/>				
 														</td>	
-														<td>
+														<td ng-click="vm.tdClick(workPackageSheet, fare, 'bookingClass', $event)" ng-class="{highlighted:fare.field['bookingClass']}">
 															<input type="text" class="form-control" name="bookingClass{{$parent.$index}}{{$index}}" id="field_bookingClass"
 								                				ng-maxlength="2"
 								                				maxlength="2"
@@ -592,7 +592,7 @@
 									                				editForm.editFormATPCO.bookingClass{{$parent.$index}}{{$index}}.$error.pattern}"
 									                    		ng-model="fare.bookingClass"/>	
 														</td>
-														<td>
+														<td ng-click="vm.tdClick(workPackageSheet, fare, 'cabin', $event)" ng-class="{highlighted:fare.field['cabin']}">
 									           				<select class="form-control" 
 													             name="cabin{{$parent.$index}}{{$index}}"
 													             ng-required="vm.isRequired('cabin')"
@@ -602,7 +602,7 @@
 													             ng-options="key as value for (key , value) in vm.cabin"></select>
 									                			
 									           			</td>
-									           			<td>
+									           			<td ng-click="vm.tdClick(workPackageSheet, fare, 'typeOfJourney', $event)" ng-class="{highlighted:fare.field['typeOfJourney']}">
 									           				<select class="form-control" 
 													             name="typeOfJourney{{$parent.$index}}{{$index}}"
 													             ng-required="vm.isRequired('typeOfJourney')"
@@ -611,39 +611,29 @@
 													             ng-disabled="!vm.isEditable('typeOfJourney')"
 													             ng-options="key as value for (key , value) in vm.typeOfJourney"></select>
 									           			</td>
-								               			<td>
+								               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'footnote', $event)" ng-class="{highlighted:fare.field['footnote']}">
 								               				<input type="text" class="form-control" name="footnote{{$parent.$index}}{{$index}}" id="field_footnote"
-									                				ng-click="$event.stopPropagation()"
-														            ng-class="{'must-fill': editForm.editFormATPCO.footnote{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+									                				ng-class="{'must-fill': editForm.editFormATPCO.footnote{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 														            ng-disabled="!vm.isEditable('footnote')"
 														            ng-required="vm.isRequired('footnote')"
 										                    		ng-model="fare.footnote"/>
 								               			</td>
-								               			<td>
-								               				<span ng-if="vm.isEditable( 'rtgno')">
-									                				<input type="text" class="form-control" name="rtgno{{$parent.$index}}{{$index}}" id="field_bookingClass"
-									                				ng-click="$event.stopPropagation()"
+								               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'rtgno', $event)" ng-class="{highlighted:fare.field['rtgno']}">
+								               				<input type="text" class="form-control" name="rtgno{{$parent.$index}}{{$index}}" id="field_bookingClass"
 									                				ng-disabled="!vm.isEditable('rtgno')"
 									                				ng-required="vm.isRequired('rtgno')" 
 									                				ng-class="{'must-fill': editForm.editFormATPCO.rtgno{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 														            ng-model="fare.rtgno"/>
-									                			
-									                			</span>
-									                			<span ng-if="!vm.isEditable( 'rtgno')">
-									                				{{fare.rtgno}}
-									                			</span>
 								               			</td>
-								               			<td>
+								               			<td  ng-click="vm.tdClick(workPackageSheet, fare, 'ruleno', $event)" ng-class="{highlighted:fare.field['ruleno']}">
 						               						<input type="text" class="form-control" name="ruleno{{$parent.$index}}{{$index}}" id="field_bookingClass"
 							                				ng-disabled="!vm.isEditable('ruleno')"
-							                				ng-click="$event.stopPropagation()"
 							                				ng-required="vm.isRequired('ruleno')" 
 							                				ng-class="{'must-fill': editForm.editFormATPCO.ruleno{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 												            ng-model="fare.ruleno"/>
 								               			</td>
-								               			<td>
+								               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'currency', $event)" ng-class="{highlighted:fare.field['currency']}">
 									               			<ui-select ng-model="fare.currency" theme="select2" class="form-control"
-																 ng-click="$event.stopPropagation()"
 																name="currency{{$parent.$index}}{{$index}}"
 																ng-required="vm.isRequired('currency') && fare.action != 'Canceled'"  
 																ng-disabled="!vm.isEditable('currency')"
@@ -660,10 +650,9 @@
 																    </ui-select-choices>
 																  </ui-select>
 								               			</td>
-								               			<td>
+								               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'amount', $event)" ng-class="{highlighted:fare.field['amount']}">
 						               						<input type="text" class="form-control" name="amount{{$parent.$index}}{{$index}}" id="field_bookingClass"
 							                				ng-disabled="!vm.isEditable('amount')"
-							                				ng-click="$event.stopPropagation()"
 							                				ng-required="vm.isRequired('amount', fare)" 
 							                				ng-class="{'must-fill': editForm.editFormATPCO.amount{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 												            ng-model="fare.amount"/>									                												                			
@@ -693,15 +682,14 @@
 								               			<td></td>
 								               			-->
 								               			
-								               			<td>
+								               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'aif', $event)" ng-class="{highlighted:fare.field['aif']}">
 									               			<input type="text" class="form-control" name="aif{{$parent.$index}}{{$index}}" id="field_bookingClass"
 									                				ng-disabled="!vm.isEditable('aif')"
-									                				ng-click="$event.stopPropagation()"
 									                				ng-required="vm.isRequired('aif', fare)" 
 									                				ng-class="{'must-fill': editForm.editFormATPCO.aif{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 														            ng-model="fare.aif"/>
 									               		</td> 
-								               			<td ng-click="vm.openCalendar('travelStartDate'+$parent.$index+''+$index)">
+								               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelStart', $event);" ng-class="{highlighted:fare.field['travelStart']}">
 								               				<span class="input-group">
 																<input id="field_travelStartDate" 
 																	type="text"
@@ -719,7 +707,7 @@
 																</span>
 															</span>
 								               			</td>
-								               			<td ng-click="vm.openCalendar('travelEndDate'+$parent.$index+''+$index)">
+								               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelEnd', $event);" ng-class="{highlighted:fare.field['travelEnd']}">
 								               				<span class="input-group">
 																<input id="field_travelEndDate" 
 																	type="text"
@@ -744,7 +732,7 @@
 							                				ng-class="{'must-fill': editForm.editFormATPCO.travelEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 												            ng-model="fare.travelEnd"/>	 -->								                			
 								               			</td>
-								               			<td ng-click="vm.openCalendar('saleStartDate'+$parent.$index+''+$index)">
+								               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'saleStart', $event);" ng-class="{highlighted:fare.field['saleStart']}">
 								               				<span class="input-group">
 																<input id="field_startDate" 
 																	type="text"
@@ -762,7 +750,7 @@
 																</span>
 															</span>
 								               			</td>
-								               			<td  ng-click="vm.openCalendar('saleEndDate'+$parent.$index+''+$index)">
+								               			<td  ng-click="vm.tdClick(workPackageSheet, fare, 'saleEnd', $event);" ng-class="{highlighted:fare.field['saleEnd']}">
 						               						<span class="input-group">
 																<input id="field_startDate" 
 																	type="text"
@@ -780,11 +768,11 @@
 																</span>
 															</span>							                			
 								               			</td>
-								               			<td>
+								               			<td  ng-click="vm.tdClick(workPackageSheet, fare, 'comment', $event);" ng-class="{highlighted:fare.field['comment']}">
 								               				<input type="text" class="form-control" name="comment{{$parent.$index}}{{$index}}" id="field_comment"
 										                    		ng-model="fare.comment"/>
 								               			</td>
-								               			<td  ng-click="vm.openCalendar('travelComplete'+$parent.$index+''+$index)">
+								               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelComplete', $event);" ng-class="{highlighted:fare.field['travelComplete']}">
 								               				<span class="input-group">
 																<input id="field_travelComplete" 
 																	type="text"
@@ -808,19 +796,17 @@
 								                    		ng-class="{'must-fill': editForm.editFormATPCO.travelComplete{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            														                    		
 							                				ng-model="fare.travelComplete"/> -->
 								               			</td>
-								               			<td>
+								               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelCompleteIndicator', $event);" ng-class="{highlighted:fare.field['travelCompleteIndicator']}">
 						               						<select class="form-control" name="travelIndicator{{$parent.$index}}{{$index}}" id="field_travelIndicator"
 							                				ng-disabled="!vm.isEditable('travelIndicator')"
-							                				ng-click="$event.stopPropagation()"
 							                				ng-required="vm.isRequired('travelIndicator')"
 								                    		ng-class="{'must-fill': !editForm.editFormATPCO.travelIndicator{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"									                    		
 								                    		ng-options="key as value for (key , value) in vm.travelCompleteIndicator"											             																		            														                    		
 							                				ng-model="fare.travelCompleteIndicator"></select>
 								               			</td>
-								               			<td>
+								               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'ratesheetComment', $event);" ng-class="{highlighted:fare.field['ratesheetComment']}">
 							                				<input type="text" class="form-control" name="ratesheetComment{{$parent.$index}}{{$index}}" id="field_ratesheetComment"
 							                				ng-disabled="!vm.isEditable('ratesheetComment')"
-							                				ng-click="$event.stopPropagation()"
 							                				ng-required="vm.isRequired('ratesheetComment')"
 								                    		ng-class="{'must-fill': editForm.editFormATPCO.ratesheetComment{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            														                    		
 								                    		ng-model="fare.ratesheetComment"/>
