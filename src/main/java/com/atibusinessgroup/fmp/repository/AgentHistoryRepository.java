@@ -1,6 +1,7 @@
 package com.atibusinessgroup.fmp.repository;
 
-import com.atibusinessgroup.fmp.domain.Agent;
+import com.atibusinessgroup.fmp.domain.AgentHistory;
+
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -14,9 +15,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface AgentRepository extends MongoRepository<Agent, String>, AgentRepositoryCustomAnyName {
+public interface AgentHistoryRepository extends MongoRepository<AgentHistory, String> {
 	
-	Optional<Agent> findOneByIataCode(String iata_code);
-	
-	Optional<Agent> findOneById(String id);
+	Optional<AgentHistory> findOneById(String id);
 }

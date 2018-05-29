@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Objects;
 
 /**
@@ -58,6 +59,12 @@ public class Agent implements Serializable {
 
     @Field("is_deleted")
     private Boolean isDeleted;
+    
+    @Field("effective_date_time")
+    private Instant effectiveDateTime;
+    
+    @Field("discontinue_date_time")
+    private Instant discontinueDateTime;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public String getId() {
@@ -214,7 +221,23 @@ public class Agent implements Serializable {
     
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
-    public String getPosCountry() {
+    public Instant getEffectiveDateTime() {
+		return effectiveDateTime;
+	}
+
+	public void setEffectiveDateTime(Instant effectiveDateTime) {
+		this.effectiveDateTime = effectiveDateTime;
+	}
+
+	public Instant getDiscontinueDateTime() {
+		return discontinueDateTime;
+	}
+
+	public void setDiscontinueDateTime(Instant discontinueDateTime) {
+		this.discontinueDateTime = discontinueDateTime;
+	}
+
+	public String getPosCountry() {
 		return posCountry;
 	}
 

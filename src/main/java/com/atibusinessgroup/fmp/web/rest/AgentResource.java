@@ -2,8 +2,10 @@ package com.atibusinessgroup.fmp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.atibusinessgroup.fmp.domain.Agent;
+import com.atibusinessgroup.fmp.domain.AgentHistory;
 import com.atibusinessgroup.fmp.domain.WorkPackage.Attachment;
 import com.atibusinessgroup.fmp.domain.WorkPackage.ImportFares;
+import com.atibusinessgroup.fmp.repository.AgentHistoryRepository;
 import com.atibusinessgroup.fmp.repository.AgentRepository;
 import com.atibusinessgroup.fmp.web.rest.errors.BadRequestAlertException;
 import com.atibusinessgroup.fmp.web.rest.util.HeaderUtil;
@@ -36,6 +38,8 @@ import java.lang.reflect.Field;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -53,9 +57,12 @@ public class AgentResource {
     private static final String ENTITY_NAME = "agent";
 
     private final AgentRepository agentRepository;
+    
+    private final AgentHistoryRepository agentHistoryRepository;
 
-    public AgentResource(AgentRepository agentRepository) {
+    public AgentResource(AgentRepository agentRepository,AgentHistoryRepository agentHistoryRepository) {
         this.agentRepository = agentRepository;
+        this.agentHistoryRepository = agentHistoryRepository;
     }
 
     /**
@@ -92,10 +99,39 @@ public class AgentResource {
     @Timed
     public ResponseEntity<Agent> updateAgent(@RequestBody Agent agent) throws URISyntaxException {
         log.debug("REST request to update Agent : {}", agent);
+        
+        Optional<Agent> initAgent = agentRepository.findOneById(agent.getId());
+        Agent agentHistory = initAgent.get();
+        
+        AgentHistory history = new AgentHistory();
+        history.setIdHistory(agentHistory.getId());
+        history.setAddress(agentHistory.getAddress());
+        history.setAgentCategory(agentHistory.getAgentCategory());
+        history.setAgentName(agentHistory.getAgentName());
+        history.setContact(agentHistory.getContact());
+        history.setCrs(agentHistory.getCrs());
+        history.setEffectiveDateTime(agentHistory.getEffectiveDateTime());
+        history.setEmail(agentHistory.getEmail());
+        history.setFax(agentHistory.getFax());
+        history.setIataCode(agentHistory.getIataCode());
+        history.setIsDeleted(agentHistory.getIsDeleted());
+        history.setPdeudoCity(agentHistory.getPdeudoCity());
+        history.setPosCity(agentHistory.getPosCity());
+        history.setPosCountry(agentHistory.getPosCountry());
+        history.setTelephone(agentHistory.getTelephone());
+        history.setDiscontinueDateTime(Instant.now().minus(1,ChronoUnit.DAYS));
+        agentHistoryRepository.save(history);
+     
+        log.debug("AGENT HISTORY : "+ history+" id hsitory"+ history.getIdHistory());
+        log.debug("AGENT LAMA : "+ agentHistory);
+                
         if (agent.getId() == null) {
             return createAgent(agent);
         }
+        agent.setEffectiveDateTime(Instant.now());
+        agent.setDiscontinueDateTime(null);
         Agent result = agentRepository.save(agent);
+        log.debug("AGENT Baru : "+ result);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, agent.getId().toString()))
             .body(result);
