@@ -134,13 +134,13 @@
 					<div class="table-wrapper">
 						<div class="datatable-wrapper form-inline">
 							<div class="clearfix">
-								<div class="pull-left w50 data-on">
+								<div class="pull-left w50">
 									<div class="datatable-length">
 										<label>
-											<select class="form-control">
-												<option>10</option>
-												<option>20</option>
-												<option>30</option>
+											<select class="form-control" ng-model="vm.itemsPerPage" ng-change="vm.changeItemsPerPage()">
+												<option value="10">10</option>
+												<option value="15">15</option>
+												<option value="20">20</option>
 											</select>
 											 records per page
 										</label>

@@ -937,33 +937,6 @@
 	  		return result;
 	    }
         
-        vm.checkFieldOnly = function(field, type){
-        	var result = false;
-        	if(type == 'mandatory'){
-        		for(var x=0;x<vm.fields.length;x++){
-        			if(vm.fields[x].name == field){
-        				var reviewLevels = vm.fields[x].mandatory;
-        				if(reviewLevels.indexOf(vm.workPackage.reviewLevel) > -1){
-        					result = true;
-        					break;
-        				}
-        			}
-        		}
-        	}
-        	else if(type == 'editable'){
-        		for(var x=0;x<vm.fields.length;x++){
-        			if(vm.fields[x].name == field){
-        				var reviewLevels = vm.fields[x].editable;
-        				if(reviewLevels.indexOf(vm.workPackage.reviewLevel) > -1){
-        					result = true;
-        					break;
-        				}
-        			}
-        		}
-        	}
-	  		return result;
-	    }
-        
         //GENERATE TOUR CODE
         vm.generateTourCode = function(){
         	$uibModal.open({
@@ -1025,7 +998,6 @@
 		        	}
 	        	}
 	        	
-	        	
 	        	if(!findTab){
 		        	for(var x=0;x<vm.currentWaiverTab.length;x++){
 		        		if(vm.currentWaiverTab[x]){
@@ -1065,7 +1037,9 @@
         //END COMMENT TAB
         
         //FARES TAB
-        vm.currentTab[0] = true;
+        if(vm.workPackage.specifiedFares){
+        	vm.currentTab[0] = true;
+        }
         vm.selectedTab = 0;
         vm.selectTab = function(index){
         	vm.resetTab(); 
@@ -1203,8 +1177,9 @@
         
         //ADDON TAB
         vm.selectedAddonTab = 0;     
-//        vm.currentAddonTab[0] = true;
-        
+        if(vm.workPackage.addon){
+        	vm.currentAddonTab[0] = true;
+        }
         vm.selectAddonTab = function(index){
         	vm.resetTab(); 
         	if(vm.workPackage.addonFareSheet.length > 0){
@@ -1238,8 +1213,9 @@
         
         //DISCOUNT TAB
         vm.selectedDiscountTab = 0; 
-        vm.currentDiscountTab[0] = true;
-        
+        if(vm.workPackage.discount){
+        	vm.currentDiscountTab[0] = true;
+        }
         vm.selectDiscountTab = function(index){
         	vm.resetTab();        	
         	vm.currentDiscountTab[index] = true;
@@ -1270,6 +1246,9 @@
         //END DISCOUNT TAB
 
         //MARKET TAB
+        if(vm.workPackage.marketFares){
+        	vm.currentMarketTab[0] = true;
+        }
         vm.selectedMarketTab = 0;       
         vm.selectMarketTab = function(index){
         	vm.resetTab();        	
@@ -1301,6 +1280,9 @@
         //END MARKET TAB
         
         //WAIVER TAB
+        if(vm.workPackage.waiverFares){
+        	vm.currentWaiverTab[0] = true;
+        }
         vm.selectedWaiverTab = 0;       
         vm.selectWaiverTab = function(index){
         	vm.resetTab();        	
@@ -1670,32 +1652,19 @@
         		console.log(workPackageSheet.fares[x].field);
         		if(workPackageSheet.fares[x].field != undefined){
        			  Object.keys(workPackageSheet.fares[x].field).forEach(function(key,index) {
+       				  
        				  if(workPackageSheet.fares[x].field[key]){
-       					workPackageSheet.fares[x][key] = null;       					  
-//       					  console.log(workPackageSheet.fares[x]);
+       					  if(key == 'tarno' || key == 'tarcd' || key == 'global'){
+       						 workPackageSheet.fares[x].tariffNumber = null;
+	   					  }
+	   					  else{
+	   						  workPackageSheet.fares[x][key] = null;       		
+	   					  }
        				  }
        			  });
-//       			  if(selected){
-//       				  fares.push(workPackageSheet.fares[x]);
-//       			  }
        		  }
         	}
         	
-//        	for(var x=0;x<vm.faresActionButton.length;x++){
-//        		vm.faresActionButton[x] = false;
-//        	}
-//        	for(var x=0;x<vm.addonFaresActionButton.length;x++){
-//        		vm.addonFaresActionButton[x] = false;
-//        	}
-//        	for(var x=0;x<vm.discountFaresActionButton.length;x++){
-//        		vm.discountFaresActionButton[x] = false;
-//        	}
-//        	for(var x=0;x<vm.marketFaresActionButton.length;x++){
-//        		vm.marketFaresActionButton[x] = false;
-//        	}
-//        	for(var x=0;x<vm.waiverFaresActionButton.length;x++){
-//        		vm.waiverFaresActionButton[x] = false;
-//        	}
         };
         //End Specific Fares Function
         

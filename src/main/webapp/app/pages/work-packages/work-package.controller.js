@@ -17,7 +17,14 @@
         vm.predicate = pagingParams.predicate;
         vm.reverse = pagingParams.ascending;
         vm.transition = transition;
-        vm.itemsPerPage = paginationConstants.itemsPerPage;
+        
+        if($stateParams.size != null || $stateParams.size != undefined){
+        	vm.itemsPerPage = $stateParams.size;
+        }
+        else{
+        	vm.itemsPerPage = "10";
+        }
+        vm.loadAll = loadAll;
         
         if($stateParams.workPackageFilter != null){
         	vm.workPackageFilter = $stateParams.workPackageFilter;
@@ -53,9 +60,10 @@
 	    		},
 	        };
         }
-        loadAll();
+        vm.loadAll();
 
         function loadAll () {
+        	console.log("LOAD ALL");
             WorkPackage.query({
             	"reviewLevel.ho": vm.workPackageFilter.reviewLevel.ho,
             	"reviewLevel.lso": vm.workPackageFilter.reviewLevel.lso,
@@ -95,7 +103,6 @@
                 vm.totalItems = headers('X-Total-Count');
                 vm.queryCount = vm.totalItems;
                 vm.workPackages = data;
-                console.log(vm.workPackages);
                 vm.page = pagingParams.page;
             }
             function onError(error) {
@@ -108,12 +115,11 @@
             vm.transition();
         }
 
-        function transition() {
+        function transition() {        	
             $state.transitionTo($state.$current, {
-            	workPackageFilter: vm.workPackageFilter,
-                page: vm.page,
+            	page: vm.page,
+                size: vm.itemsPerPage,
                 sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
-                search: vm.currentSearch
             });
         }
         
@@ -266,5 +272,10 @@
 	      		  
 	      	  }
         };
+        
+        vm.changeItemsPerPage = function(){
+        	vm.loadAll();
+//        	loadPage(1);
+        }
     }
 })();
