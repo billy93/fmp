@@ -88,7 +88,7 @@ public class AgentResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final AgentResource agentResource = new AgentResource(agentRepository);
+        final AgentResource agentResource = new AgentResource(agentRepository, null);
         this.restAgentMockMvc = MockMvcBuilders.standaloneSetup(agentResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
