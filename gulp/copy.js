@@ -88,10 +88,7 @@ function images() {
 
 function js(){
 	return gulp.src([
-        config.app + 'content/js/*.{js}',
-        config.app + 'favicon.ico',
-        config.app + '.htaccess',
-        config.app + 'manifest.webapp'
+        config.app + 'content/js/**',
     ], { dot: true })
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist + 'content/js/'))
