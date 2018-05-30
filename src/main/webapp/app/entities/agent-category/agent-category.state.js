@@ -9,17 +9,17 @@
 
     function stateConfig($stateProvider) {
         $stateProvider
-        .state('agent', {
+        .state('agent-category', {
             parent: 'entity',
-            url: '/agent?page&sort&search',
+            url: '/agent-category?page&sort&search',
             data: {
                 authorities: ['ROLE_USER'],
-                pageTitle: 'Agents'
+                pageTitle: 'AgentCategories'
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/entities/agent/agents.html',
-                    controller: 'AgentController',
+                    templateUrl: 'app/entities/agent-category/agent-categories.html',
+                    controller: 'AgentCategoryController',
                     controllerAs: 'vm'
                 }
             },
@@ -46,27 +46,27 @@
                 }],
             }
         })
-        .state('agent-detail', {
-            parent: 'agent',
-            url: '/agent/{id}',
+        .state('agent-category-detail', {
+            parent: 'agent-category',
+            url: '/agent-category/{id}',
             data: {
                 authorities: ['ROLE_USER'],
-                pageTitle: 'Agent'
+                pageTitle: 'AgentCategory'
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/entities/agent/agent-detail.html',
-                    controller: 'AgentDetailController',
+                    templateUrl: 'app/entities/agent-category/agent-category-detail.html',
+                    controller: 'AgentCategoryDetailController',
                     controllerAs: 'vm'
                 }
             },
             resolve: {
-                entity: ['$stateParams', 'Agent', function($stateParams, Agent) {
-                    return Agent.get({id : $stateParams.id}).$promise;
+                entity: ['$stateParams', 'AgentCategory', function($stateParams, AgentCategory) {
+                    return AgentCategory.get({id : $stateParams.id}).$promise;
                 }],
                 previousState: ["$state", function ($state) {
                     var currentStateData = {
-                        name: $state.current.name || 'agent',
+                        name: $state.current.name || 'agent-category',
                         params: $state.params,
                         url: $state.href($state.current.name, $state.params)
                     };
@@ -74,26 +74,23 @@
                 }]
             }
         })
-        .state('agent-detail.edit', {
-            parent: 'agent-detail',
+        .state('agent-category-detail.edit', {
+            parent: 'agent-category-detail',
             url: '/detail/edit',
             data: {
                 authorities: ['ROLE_USER']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/agent/agent-dialog.html',
-                    controller: 'AgentDialogController',
+                    templateUrl: 'app/entities/agent-category/agent-category-dialog.html',
+                    controller: 'AgentCategoryDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
-                        entity: ['Agent', function(Agent) {
-                            return Agent.get({id : $stateParams.id}).$promise;
-                        }],
-                        agentCategory: ['AgentCategory', function(AgentCategory) {
-                            return AgentCategory.queryAll().$promise;
-                        }],
+                        entity: ['AgentCategory', function(AgentCategory) {
+                            return AgentCategory.get({id : $stateParams.id}).$promise;
+                        }]
                     }
                 }).result.then(function() {
                     $state.go('^', {}, { reload: false });
@@ -102,95 +99,79 @@
                 });
             }]
         })
-        .state('agent.new', {
-            parent: 'agent',
+        .state('agent-category.new', {
+            parent: 'agent-category',
             url: '/new',
             data: {
                 authorities: ['ROLE_USER']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/agent/agent-dialog.html',
-                    controller: 'AgentDialogController',
+                    templateUrl: 'app/entities/agent-category/agent-category-dialog.html',
+                    controller: 'AgentCategoryDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
                         entity: function () {
                             return {
-                                agentName: null,
-                                agentType: null,
-                                agentCategory: null,
-                                posCity: null,
-                                address: null,
-                                telephone: null,
-                                fax: null,
-                                email: null,
-                                contact: null,
-                                iataCode: null,
-                                isDeleted: null,
+                                name: null,
+                                description: null,
                                 id: null
                             };
-                        },
-
-                        agentCategory: ['AgentCategory', function(AgentCategory) {
-                            return AgentCategory.queryAll().$promise;
-                        }],
+                        }
                     }
                 }).result.then(function() {
-                    $state.go('agent', null, { reload: 'agent' });
+                    $state.go('agent-category', null, { reload: 'agent-category' });
                 }, function() {
-                    $state.go('agent');
+                    $state.go('agent-category');
                 });
             }]
         })
-        .state('agent.edit', {
-            parent: 'agent',
+        .state('agent-category.edit', {
+            parent: 'agent-category',
             url: '/{id}/edit',
             data: {
                 authorities: ['ROLE_USER']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/agent/agent-dialog.html',
-                    controller: 'AgentDialogController',
+                    templateUrl: 'app/entities/agent-category/agent-category-dialog.html',
+                    controller: 'AgentCategoryDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
-                        entity: ['Agent', function(Agent) {
-                            return Agent.get({id : $stateParams.id}).$promise;
-                        }],
-                        agentCategory: ['AgentCategory', function(AgentCategory) {
-                            return AgentCategory.queryAll().$promise;
-                        }],
+                        entity: ['AgentCategory', function(AgentCategory) {
+                            return AgentCategory.get({id : $stateParams.id}).$promise;
+                        }]
                     }
                 }).result.then(function() {
-                    $state.go('agent', null, { reload: 'agent' });
+                    $state.go('agent-category', null, { reload: 'agent-category' });
                 }, function() {
                     $state.go('^');
                 });
             }]
         })
-        .state('agent.delete', {
-            parent: 'agent',
+        .state('agent-category.delete', {
+            parent: 'agent-category',
             url: '/{id}/delete',
             data: {
                 authorities: ['ROLE_USER']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/entities/agent/agent-delete-dialog.html',
-                    controller: 'AgentDeleteController',
+                    templateUrl: 'app/entities/agent-category/agent-category-delete-dialog.html',
+                    controller: 'AgentCategoryDeleteController',
                     controllerAs: 'vm',
                     size: 'md',
                     resolve: {
-                        entity: ['Agent', function(Agent) {
-                            return Agent.get({id : $stateParams.id}).$promise;
+                        entity: ['AgentCategory', function(AgentCategory) {
+                            return AgentCategory.get({id : $stateParams.id}).$promise;
                         }]
                     }
                 }).result.then(function() {
-                    $state.go('agent', null, { reload: 'agent' });
+                    $state.go('agent-category', null, { reload: 'agent-category' });
                 }, function() {
                     $state.go('^');
                 });

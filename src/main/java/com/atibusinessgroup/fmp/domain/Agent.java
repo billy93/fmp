@@ -1,12 +1,13 @@
 package com.atibusinessgroup.fmp.domain;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 /**
  * A Agent.
@@ -33,12 +34,6 @@ public class Agent implements Serializable {
     @Field("pos_country")
     private String posCountry;
     
-    @Field("pdeudo_city")
-    private String pdeudoCity;
-
-    @Field("crs")
-    private String crs;
-
     @Field("address")
     private String address;
 
@@ -66,7 +61,43 @@ public class Agent implements Serializable {
     @Field("discontinue_date_time")
     private Instant discontinueDateTime;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    private List<AgentPcc> agentPcc;
+    
+    public static class AgentPcc{
+    	@Field("pdeudo_city")
+	    private String pdeudoCity;
+
+	    @Field("crs")
+	    private String crs;
+
+		public String getPdeudoCity() {
+			return pdeudoCity;
+		}
+
+		public void setPdeudoCity(String pdeudoCity) {
+			this.pdeudoCity = pdeudoCity;
+		}
+
+		public String getCrs() {
+			return crs;
+		}
+
+		public void setCrs(String crs) {
+			this.crs = crs;
+		}
+    }
+    
+    
+
+	public List<AgentPcc> getAgentPcc() {
+		return agentPcc;
+	}
+
+	public void setAgentPcc(List<AgentPcc> agentPcc) {
+		this.agentPcc = agentPcc;
+	}
+
+	// jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public String getId() {
         return id;
     }
@@ -244,24 +275,6 @@ public class Agent implements Serializable {
 	public void setPosCountry(String posCountry) {
 		this.posCountry = posCountry;
 	}
-	
-	
-
-	public String getPdeudoCity() {
-		return pdeudoCity;
-	}
-
-	public void setPdeudoCity(String pdeudoCity) {
-		this.pdeudoCity = pdeudoCity;
-	}
-
-	public String getCrs() {
-		return crs;
-	}
-
-	public void setCrs(String crs) {
-		this.crs = crs;
-	}
 
 	@Override
     public boolean equals(Object o) {
@@ -282,14 +295,6 @@ public class Agent implements Serializable {
     public int hashCode() {
         return Objects.hashCode(getId());
     }
-
-	@Override
-	public String toString() {
-		return "Agent [id=" + id + ", agentName=" + agentName + ", agentType=" + agentType + ", agentCategory="
-				+ agentCategory + ", posCity=" + posCity + ", posCountry=" + posCountry + ", pdeudoCity=" + pdeudoCity
-				+ ", crs=" + crs + ", address=" + address + ", telephone=" + telephone + ", fax=" + fax + ", email="
-				+ email + ", contact=" + contact + ", iataCode=" + iataCode + ", isDeleted=" + isDeleted + "]";
-	}
 
 	
 

@@ -3,6 +3,7 @@ package com.atibusinessgroup.fmp.repository;
 import com.atibusinessgroup.fmp.domain.Agent;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -19,4 +20,6 @@ public interface AgentRepository extends MongoRepository<Agent, String>, AgentRe
 	Optional<Agent> findOneByIataCode(String iata_code);
 	
 	Optional<Agent> findOneById(String id);
+
+	List<Agent> findCustom(Agent filter);
 }

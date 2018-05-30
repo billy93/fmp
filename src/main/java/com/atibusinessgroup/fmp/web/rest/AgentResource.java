@@ -109,13 +109,14 @@ public class AgentResource {
         history.setAgentCategory(agentHistory.getAgentCategory());
         history.setAgentName(agentHistory.getAgentName());
         history.setContact(agentHistory.getContact());
-        history.setCrs(agentHistory.getCrs());
+//        history.setCrs(agentHistory.getCrs());
+        history.setAgentPcc(agentHistory.getAgentPcc());
         history.setEffectiveDateTime(agentHistory.getEffectiveDateTime());
         history.setEmail(agentHistory.getEmail());
         history.setFax(agentHistory.getFax());
         history.setIataCode(agentHistory.getIataCode());
         history.setIsDeleted(agentHistory.getIsDeleted());
-        history.setPdeudoCity(agentHistory.getPdeudoCity());
+//        history.setPdeudoCity(agentHistory.getPdeudoCity());
         history.setPosCity(agentHistory.getPosCity());
         history.setPosCountry(agentHistory.getPosCountry());
         history.setTelephone(agentHistory.getTelephone());
@@ -209,121 +210,20 @@ public class AgentResource {
      * @param workPackage the workPackage to create
      * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
+     * @throws IllegalAccessException 
      */
     @PostMapping("/agencies/export-agencies")
     @Timed
-    public ResponseEntity<Attachment> exportAgencies(@RequestBody Agent Agencies) throws URISyntaxException {
-    	log.debug("REST request to save exportAgencies : {}", Agencies);
+    public ResponseEntity<Attachment> exportAgencies(@RequestBody Agent filter) throws URISyntaxException, IllegalAccessException {
+    	log.debug("REST request to save exportAgencies : {}", filter);
 
         XSSFWorkbook workbook = new XSSFWorkbook(); 
-        XSSFSheet spreadsheet = workbook.createSheet("Agencies");
-        
-        XSSFRow row = spreadsheet.createRow(1);
-        XSSFCell cell;
-
-        cell = row.createCell(1);
-        cell.setCellValue("AGENT NAME");
-        cell = row.createCell(2);
-        cell.setCellValue("IATA CODE");
-        cell = row.createCell(3);
-        cell.setCellValue("AGENT TYPE");
-        cell = row.createCell(4);
-        cell.setCellValue("AGENT CATEGORY");
-        cell = row.createCell(5);
-        cell.setCellValue("PDEUDO CITY");
-        cell = row.createCell(6);
-        cell.setCellValue("CRS");
-        cell = row.createCell(7);
-        cell.setCellValue("POS CITY");
-        cell = row.createCell(8);
-        cell.setCellValue("POS COUNTRY");
-        cell = row.createCell(9);
-        cell.setCellValue("ADDRESS");
-        cell = row.createCell(10);
-        cell.setCellValue("TELEPHONE");
-        cell = row.createCell(11);
-        cell.setCellValue("FAX");
-        cell = row.createCell(12);
-        cell.setCellValue("EMAIL");
-        cell = row.createCell(13);
-        cell.setCellValue("CONTACT");
-        cell = row.createCell(14);
-        cell.setCellValue("DELETED");
-        
-        List<Agent> agent = getAllAgencies();
-        for(int i=0; i<agent.size(); i++) {
-    		XSSFRow rows = spreadsheet.createRow(i+2);
-    		
-            cell = rows.createCell(1);
-            if (agent.get(i).getAgentName()!=null){
-                cell.setCellValue(agent.get(i).getAgentName());
-            }
-            
-            cell = rows.createCell(2);
-            if (agent.get(i).getIataCode()!=null) {
-				cell.setCellValue(agent.get(i).getIataCode());
-			}
-            
-			cell = rows.createCell(3);
-            if (agent.get(i).getAgentType()!=null) {
-				cell.setCellValue(agent.get(i).getAgentType());
-			}
-            
-			cell = rows.createCell(4);
-            if (agent.get(i).getAgentCategory()!=null) {
-				cell.setCellValue(agent.get(i).getAgentCategory());
-			}
-            
-			cell = rows.createCell(5);
-            if (agent.get(i).getPdeudoCity()!=null) {
-				cell.setCellValue(agent.get(i).getPdeudoCity());
-			}
-            
-			cell = rows.createCell(6);
-            if (agent.get(i).getCrs()!=null) {
-				cell.setCellValue(agent.get(i).getCrs());
-			}
-            
-			cell = rows.createCell(7);
-            if (agent.get(i).getPosCity()!=null) {
-				cell.setCellValue(agent.get(i).getPosCity());
-			}
-            
-			cell = rows.createCell(8);
-            if (agent.get(i).getPosCountry()!=null) {
-				cell.setCellValue(agent.get(i).getPosCountry());
-			}
-            
-			cell = rows.createCell(9);
-            if (agent.get(i).getAddress()!=null) {
-				cell.setCellValue(agent.get(i).getAddress());
-			}
-            
-			cell = rows.createCell(10);
-            if (agent.get(i).getTelephone()!=null) {
-				cell.setCellValue(agent.get(i).getTelephone());
-			}
-            
-			cell = rows.createCell(11);
-            if (agent.get(i).getFax()!=null) {
-				cell.setCellValue(agent.get(i).getFax());
-			}
-            
-			cell = rows.createCell(12);
-            if (agent.get(i).getEmail()!=null) {
-				cell.setCellValue(agent.get(i).getEmail());
-			}
-            
-			cell = rows.createCell(13);
-            if (agent.get(i).getContact()!=null) {
-				cell.setCellValue(agent.get(i).getContact());
-			}
-            
-			cell = rows.createCell(14);
-            if (agent.get(i).getIsDeleted()!=null) {
-				cell.setCellValue(agent.get(i).getIsDeleted());
-			}
-        	
+    	if(checkNull(filter)) {
+        	List<Agent> page = agentRepository.findAll();    
+        	workbook = exportAgent(page);
+        }else {
+        	List<Agent> page = agentRepository.findCustom(filter);   
+        	workbook = exportAgent(page);            
         }
         
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -341,7 +241,229 @@ public class AgentResource {
             .body(att);
     }
     
-    public static String getCellValueAsString(Cell cell) {
+    /**
+     * POST  /agents/export-all-agents : Export work agents fares
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/agencies/export-all-agencies")
+    @Timed
+    public ResponseEntity<Attachment> exportAllAgencies() throws URISyntaxException {
+    	log.debug("REST request to export All Agencies");
+
+        List<Agent> agent = getAllAgencies();
+        XSSFWorkbook workbook = exportAgent(agent);
+        
+
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        try {
+			workbook.write(output);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        Attachment att = new Attachment();
+        att.setFile(output.toByteArray());
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
+            .body(att);
+    }
+    
+    private XSSFWorkbook exportAgent(List<Agent> agent) {
+
+        XSSFWorkbook workbook = new XSSFWorkbook(); 
+        XSSFSheet spreadsheet = workbook.createSheet("Agencies");
+        
+        XSSFRow row = spreadsheet.createRow(0);
+        XSSFCell cell;
+
+        cell = row.createCell(0);
+        cell.setCellValue("AGENT NAME");
+        cell = row.createCell(1);
+        cell.setCellValue("IATA CODE");
+        cell = row.createCell(2);
+        cell.setCellValue("AGENT TYPE");
+        cell = row.createCell(3);
+        cell.setCellValue("AGENT CATEGORY");
+        cell = row.createCell(4);
+        cell.setCellValue("PSEUDO CITY");
+        cell = row.createCell(5);
+        cell.setCellValue("CRS");
+        cell = row.createCell(6);
+        cell.setCellValue("POS CITY");
+        cell = row.createCell(7);
+        cell.setCellValue("POS COUNTRY");
+        cell = row.createCell(8);
+        cell.setCellValue("ADDRESS");
+        cell = row.createCell(9);
+        cell.setCellValue("TELEPHONE");
+        cell = row.createCell(10);
+        cell.setCellValue("FAX");
+        cell = row.createCell(11);
+        cell.setCellValue("EMAIL");
+        cell = row.createCell(12);
+        cell.setCellValue("CONTACT");
+        cell = row.createCell(13);
+        cell.setCellValue("DELETED");
+        
+         
+        
+        int index=0;
+        for(int i=0; i<agent.size(); i++) {
+        	if(agent.get(i).getAgentPcc() != null && agent.get(i).getAgentPcc().size() > 0) {
+        		for(int j=0;j<agent.get(i).getAgentPcc().size();j++) {
+
+            		XSSFRow rows = spreadsheet.createRow(index+1);
+            		
+                    cell = rows.createCell(0);
+                    if (agent.get(i).getAgentName()!=null){
+                        cell.setCellValue(agent.get(i).getAgentName());
+                    }
+                    
+                    cell = rows.createCell(1);
+                    if (agent.get(i).getIataCode()!=null) {
+        				cell.setCellValue(agent.get(i).getIataCode());
+        			}
+                    
+        			cell = rows.createCell(2);
+                    if (agent.get(i).getAgentType()!=null) {
+        				cell.setCellValue(agent.get(i).getAgentType());
+        			}
+                    
+        			cell = rows.createCell(3);
+                    if (agent.get(i).getAgentCategory()!=null) {
+        				cell.setCellValue(agent.get(i).getAgentCategory());
+        			}
+                    
+        			cell = rows.createCell(4);
+                    if (agent.get(i).getAgentPcc().get(j).getPdeudoCity()!=null) {
+        				cell.setCellValue(agent.get(i).getAgentPcc().get(j).getPdeudoCity());
+        			}
+                    
+        			cell = rows.createCell(5);
+                    if (agent.get(i).getAgentPcc().get(j).getCrs()!=null) {
+        				cell.setCellValue(agent.get(i).getAgentPcc().get(j).getCrs());
+        			}
+                    
+        			cell = rows.createCell(6);
+                    if (agent.get(i).getPosCity()!=null) {
+        				cell.setCellValue(agent.get(i).getPosCity());
+        			}
+                    
+        			cell = rows.createCell(7);
+                    if (agent.get(i).getPosCountry()!=null) {
+        				cell.setCellValue(agent.get(i).getPosCountry());
+        			}
+                    
+        			cell = rows.createCell(8);
+                    if (agent.get(i).getAddress()!=null) {
+        				cell.setCellValue(agent.get(i).getAddress());
+        			}
+                    
+        			cell = rows.createCell(9);
+                    if (agent.get(i).getTelephone()!=null) {
+        				cell.setCellValue(agent.get(i).getTelephone());
+        			}
+                    
+        			cell = rows.createCell(10);
+                    if (agent.get(i).getFax()!=null) {
+        				cell.setCellValue(agent.get(i).getFax());
+        			}
+                    
+        			cell = rows.createCell(11);
+                    if (agent.get(i).getEmail()!=null) {
+        				cell.setCellValue(agent.get(i).getEmail());
+        			}
+                    
+        			cell = rows.createCell(12);
+                    if (agent.get(i).getContact()!=null) {
+        				cell.setCellValue(agent.get(i).getContact());
+        			}
+                    
+        			cell = rows.createCell(13);
+                    if (agent.get(i).getIsDeleted()!=null) {
+        				cell.setCellValue(agent.get(i).getIsDeleted());
+        			}
+                    
+                    index++;
+            	}
+        	}
+        	else {
+        		XSSFRow rows = spreadsheet.createRow(index+1);
+        		
+                cell = rows.createCell(0);
+                if (agent.get(i).getAgentName()!=null){
+                    cell.setCellValue(agent.get(i).getAgentName());
+                }
+                
+                cell = rows.createCell(1);
+                if (agent.get(i).getIataCode()!=null) {
+    				cell.setCellValue(agent.get(i).getIataCode());
+    			}
+                
+    			cell = rows.createCell(2);
+                if (agent.get(i).getAgentType()!=null) {
+    				cell.setCellValue(agent.get(i).getAgentType());
+    			}
+                
+    			cell = rows.createCell(3);
+                if (agent.get(i).getAgentCategory()!=null) {
+    				cell.setCellValue(agent.get(i).getAgentCategory());
+    			}
+                
+    			cell = rows.createCell(4);
+    			cell = rows.createCell(5);
+    		
+    			cell = rows.createCell(6);
+                if (agent.get(i).getPosCity()!=null) {
+    				cell.setCellValue(agent.get(i).getPosCity());
+    			}
+                
+    			cell = rows.createCell(7);
+                if (agent.get(i).getPosCountry()!=null) {
+    				cell.setCellValue(agent.get(i).getPosCountry());
+    			}
+                
+    			cell = rows.createCell(8);
+                if (agent.get(i).getAddress()!=null) {
+    				cell.setCellValue(agent.get(i).getAddress());
+    			}
+                
+    			cell = rows.createCell(9);
+                if (agent.get(i).getTelephone()!=null) {
+    				cell.setCellValue(agent.get(i).getTelephone());
+    			}
+                
+    			cell = rows.createCell(10);
+                if (agent.get(i).getFax()!=null) {
+    				cell.setCellValue(agent.get(i).getFax());
+    			}
+                
+    			cell = rows.createCell(11);
+                if (agent.get(i).getEmail()!=null) {
+    				cell.setCellValue(agent.get(i).getEmail());
+    			}
+                
+    			cell = rows.createCell(12);
+                if (agent.get(i).getContact()!=null) {
+    				cell.setCellValue(agent.get(i).getContact());
+    			}
+                
+    			cell = rows.createCell(13);
+                if (agent.get(i).getIsDeleted()!=null) {
+    				cell.setCellValue(agent.get(i).getIsDeleted());
+    			}
+                
+            	index++;
+        	}        	
+        }
+        return workbook;
+	}
+
+	public static String getCellValueAsString(Cell cell) {
         String strCellValue = null;
         if (cell != null) {
             switch (cell.getCellType()) {
@@ -422,9 +544,9 @@ public class AgentResource {
 						} else if (cell == 3) {
 							agent.setAgentCategory(value);
 						} else if (cell == 4) {
-							agent.setPdeudoCity(value);
+//							agent.setPdeudoCity(value);
 						} else if (cell == 5) {
-							agent.setCrs(value);
+//							agent.setCrs(value);
 						} else if (cell == 6) {
 							agent.setPosCity(value);
 						} else if (cell == 7) {
