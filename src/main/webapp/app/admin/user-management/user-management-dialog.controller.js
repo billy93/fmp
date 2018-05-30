@@ -10,7 +10,8 @@
     function UserManagementDialogController ($stateParams, $uibModalInstance, entity, User, reviewLevels, businessAreas) {
         var vm = this;
 
-        vm.authorities = ['ROLE_USER', 'ROLE_ADMIN','ROLE_GARUDA_HQ','ROLE_GARUDA_BRANCH','ROLE_ATI','ROLE_ADMIN_USER'];
+        vm.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
+        vm.optionDepartment = ['RZT', 'RZI', 'RZD', 'RZ'];
         vm.clear = clear;
         vm.languages = null;
         vm.save = save;
@@ -18,6 +19,9 @@
         vm.user.password="";
         vm.reviewLevels = reviewLevels;
         vm.businessAreas = businessAreas;
+                
+        console.log(vm.user.reviewLevels);
+        console.log(vm.user.reviewLevels == 'undefined');
 
         function clear () {
             $uibModalInstance.dismiss('cancel');
