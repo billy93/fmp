@@ -33,7 +33,7 @@ spring:
     data:
         mongodb:
             uri: mongodb://localhost:27017
-            database: fmp
+            database: fmp_db
     mail:
         host: mail.atibusinessgroup.com
         port: 25

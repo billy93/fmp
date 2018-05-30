@@ -23,7 +23,7 @@ import com.atibusinessgroup.fmp.domain.dto.AfdQuery;
 import com.atibusinessgroup.fmp.domain.dto.AfdQueryParam;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFareWithRecord1;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByCatNo;
-import com.atibusinessgroup.fmp.domain.dto.Categories;
+import com.atibusinessgroup.fmp.domain.dto.Category;
 import com.atibusinessgroup.fmp.resository.custom.AtpcoFareCustomRepository;
 import com.atibusinessgroup.fmp.service.AtpcoRecordService;
 import com.atibusinessgroup.fmp.service.mapper.AfdQueryMapper;
@@ -99,10 +99,10 @@ public class AfdQueryResource {
      */
     @GetMapping("/afd-queries/rules")
     @Timed
-    public ResponseEntity<Categories> getAfdQueryRules(AfdQuery afdQuery) {
+    public ResponseEntity<Category> getAfdQueryRules(AfdQuery afdQuery) {
         log.debug("REST request to get AfdQueries rules: {}", afdQuery);
         
-        Categories result = new Categories();
+        Category result = new Category();
         
         String recordId = afdQuery.getTariffNo() + afdQuery.getCarrierCode() + afdQuery.getRuleNo() + "";
         
