@@ -2623,7 +2623,8 @@ public class WorkPackageResource {
     	}
     	
     	PdfWriter.getInstance(document, output);
-    	String IMG = "logo_ga.png";
+//    	String IMG = "logo_ga.png";
+    	String IMG = "src\\main\\webapp\\content\\images\\logo_ga.png";
     	document.open();
     	Font font = FontFactory.getFont(FontFactory.TIMES_BOLD, 12, BaseColor.BLACK);
     	Image image = Image.getInstance(IMG);
