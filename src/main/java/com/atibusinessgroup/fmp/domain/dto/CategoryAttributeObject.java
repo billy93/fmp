@@ -2,7 +2,7 @@ package com.atibusinessgroup.fmp.domain.dto;
 
 public class CategoryAttributeObject {
 	private String key;
-	private String value;
+	private Object value;
 	
 	public String getKey() {
 		return key;
@@ -12,14 +12,14 @@ public class CategoryAttributeObject {
 		this.key = key;
 	}
 	
-	public String getValue() {
+	public Object getValue() {
 		return value;
 	}
 	
-	public void setValue(String value) {
+	public void setValue(Object value) {
 		this.value = value;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

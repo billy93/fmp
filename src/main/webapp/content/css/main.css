@@ -41,6 +41,20 @@ body {
 	margin-left: 15px;
 }
 
+.additional-info-wrapper {
+    margin: 10px 0;
+    display: inline-block;
+    width: 100%;
+}
+
+.additional-info-wrapper .additional-info {
+	margin: 5px 20px;
+    min-width: 10%;
+    float: left;
+    padding: 5px 8px;
+    border: 1px solid black;
+}
+
 /* ==========================================================================
 Hide ng-cloak on page load, https://docs.angularjs.org/api/ng/directive/ngCloak
 ========================================================================== */
