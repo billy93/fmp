@@ -193,8 +193,8 @@
 									</thead>
 									<tbody ng-repeat="workPackage in vm.workPackages track by $index" >
 										<tr role="row" class="datatable-row" 
-											ng-click="vm.rowSelected($index, workPackage)" ng-class="{selected: workPackage === vm.selectedRow, locked: workPackage.locked}">
-											<td class="text-right">
+											ng-click="vm.rowSelected($index, workPackage)">
+											<td class="text-right" ng-class="{selected: workPackage === vm.selectedRow, locked: workPackage.locked}">
 						                        <div class="btn-group entities flex-btn-group-container">
 						                            <button type="submit" title="Edit" ng-disabled="workPackage.locked"
 						                                    ui-sref="work-package-detail({id:workPackage.id})"
@@ -315,7 +315,7 @@
 						                    <td>{{workPackage.lastModifiedBy}}</td>
 										</tr>
 										<tr ng-show="vm.workPackageActionButton[$index]">
-											<td colspan="18" class="">
+											<td colspan="18" style="text-align: left !important; padding-left: 40px">
 												<div class="btn btn-app" ng-click="vm.unlock($index)" ng-if="workPackage.locked">
 													<i class="fa fa-unlock"></i>Unlock
 												</div>

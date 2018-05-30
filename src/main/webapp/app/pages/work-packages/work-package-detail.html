@@ -167,43 +167,39 @@
 				</div>
 				<div class="pull-left w50 two-column">
 					<div class="box-detail box-comment">
-						<div class="clearfix tab-body">
-							<ul class="clearfix nav-responsive nav nav-tabs">
-							    <li ng-class="{active:vm.currentTabComment}"><a ng-click="vm.selectCommentTab('comment')">Comment</a></li>
-							    <li ng-class="{active:vm.currentTabInterofficeComment}"><a ng-click="vm.selectCommentTab('interofficeComment')">Inter Office</a></li>
-							    <li ng-class="{active:vm.currentTabRatesheetComment}"><a ng-click="vm.selectCommentTab('ratesheetComment')">Rate Sheet Comment</a></li>
-							</ul>
-							<div class="tab-content">
-								<div ng-class="{active:vm.currentTabComment}" class="tab-pane" id="comment">
-									<div class="box-header"></div>
-									<div class="box-body bbgrey">
-										<div class="form-group">
-											<label>Comment</label>
-											<wysiwyg-edit content="vm.commentString" config="vm.editorConfig"></wysiwyg-edit>
-										</div>
-										<div class="clearfix">
-											<div class="pull-right">
-												<button class="btn btn-default small btn-secondary" ng-click="vm.addComment()"></i>Send</button>
+						<div class="box-header">Comment</div>
+						<div class="box-body bbgrey">
+							<div class="clearfix tab-body">
+								<ul class="clearfix nav-responsive nav nav-tabs">
+								    <li ng-class="{active:vm.currentTabComment}"><a ng-click="vm.selectCommentTab('comment')">Comment</a></li>
+								    <li ng-class="{active:vm.currentTabInterofficeComment}"><a ng-click="vm.selectCommentTab('interofficeComment')">Inter Office</a></li>
+								    <li ng-class="{active:vm.currentTabRatesheetComment}"><a ng-click="vm.selectCommentTab('ratesheetComment')">Rate Sheet Comment</a></li>
+								</ul>
+								<div class="tab-content">
+									<div ng-class="{active:vm.currentTabComment}" class="tab-pane" id="comment">																		
+											<div class="form-group">
+												<wysiwyg-edit content="vm.commentString" config="vm.editorConfig"></wysiwyg-edit>
 											</div>
-										</div>										
+											<div class="clearfix">
+												<div class="pull-right">
+													<button class="btn btn-default small btn-secondary" ng-click="vm.addComment()"></i>Send</button>
+												</div>
+											</div>										
+										
+							        	 <div class="box-body">
+							        		<div class="comment-wrapper">
+								    			<div class="comment-list" ng-repeat="comment in vm.workPackage.comment.slice().reverse() track by $index">
+											    	<div class="clearfix">
+											    		<div class="pull-left comment-detail">{{comment.username}}</div>
+											    		<div class="pull-right comment-detail">{{comment.createdTime | date: 'short'}}</div>
+											    	</div>
+											    	<div class="comment-message" data-ng-bind-html="trustAsHtml(comment.comment)"/>
+											    </div>
+								    		</div>
+							        	</div>
 									</div>
-						        	 <div class="box-body">
-						        		<div class="comment-wrapper">
-							    			<div class="comment-list" ng-repeat="comment in vm.workPackage.comment.slice().reverse() track by $index">
-										    	<div class="clearfix">
-										    		<div class="pull-left comment-detail">{{comment.username}}</div>
-										    		<div class="pull-right comment-detail">{{comment.createdTime | date: 'short'}}</div>
-										    	</div>
-										    	<div class="comment-message" data-ng-bind-html="trustAsHtml(comment.comment)"/>
-										    </div>
-							    		</div>
-						        	</div>
-								</div>
-								<div ng-class="{active:vm.currentTabInterofficeComment}" class="tab-pane" id="inter-office">
-									<div class="box-header"></div>
-									<div class="box-body bbgrey">
+									<div ng-class="{active:vm.currentTabInterofficeComment}" class="tab-pane" id="inter-office">
 										<div class="form-group">
-											<label>Inter Office</label>
 											<wysiwyg-edit content="vm.ioString" config="vm.editorConfig"></wysiwyg-edit>
 										</div> 
 										<div class="clearfix">
@@ -211,30 +207,29 @@
 												<button class="btn btn-default small btn-secondary" id="btn-inter-office" ng-click="vm.addInterOffice()" ng-disabled="!vm.isEditable('ioComment')"></i>Send</button>
 											</div>
 										</div>										
+										<div class="box-body">
+							        		<div class="comment-wrapper">
+								    			<div class="comment-list" ng-repeat="comment in vm.workPackage.interofficeComment.slice().reverse() track by $index">
+											    	<div class="clearfix">
+											    		<div class="pull-left comment-detail">{{comment.username}}</div>
+											    		<div class="pull-right comment-detail">{{comment.createdTime | date: 'short'}}</div>
+											    	</div>
+											    	<div class="comment-message" data-ng-bind-html="trustAsHtml(comment.comment)"/>
+											    </div>
+								    		</div>
+							        	</div>
 									</div>
-									<div class="box-body">
-						        		<div class="comment-wrapper">
-							    			<div class="comment-list" ng-repeat="comment in vm.workPackage.interofficeComment.slice().reverse() track by $index">
-										    	<div class="clearfix">
-										    		<div class="pull-left comment-detail">{{comment.username}}</div>
-										    		<div class="pull-right comment-detail">{{comment.createdTime | date: 'short'}}</div>
-										    	</div>
-										    	<div class="comment-message" data-ng-bind-html="trustAsHtml(comment.comment)"/>
-										    </div>
-							    		</div>
-						        	</div>
-								</div>
-								<div ng-class="{active:vm.currentTabRatesheetComment}" class="tab-pane" id="rate-sheet-comment">
-									<div class="box-header"></div>
-									<div class="box-body bbgrey">
-										<div class="form-group">
-											<label>Rate Sheet Comment</label>
-											<textarea class="form-control" rows="3" id="ratesheetComment" ng-model="vm.workPackage.ratesheetComment" name="ratesheetComment"
-						                    ng-disabled="vm.isFieldDisable('ratesheetComment')" 
-						                    ng-style="editForm.ratesheetComment{{$index}}.$error.required && vm.errorStyle"
-						                    ng-required="vm.checkRequiredField('ratesheetComment')"></textarea>
-										</div>								
-									</div>	 
+									<div ng-class="{active:vm.currentTabRatesheetComment}" class="tab-pane" id="rate-sheet-comment">
+										<div class="box-body">
+											<div class="form-group">
+												<label>Rate Sheet Comment</label>
+												<textarea class="form-control" rows="3" id="ratesheetComment" ng-model="vm.workPackage.ratesheetComment" name="ratesheetComment"
+							                    ng-disabled="vm.isFieldDisable('ratesheetComment')" 
+							                    ng-style="editForm.ratesheetComment{{$index}}.$error.required && vm.errorStyle"
+							                    ng-required="vm.checkRequiredField('ratesheetComment')"></textarea>
+											</div>								
+										</div>	 
+									</div>
 								</div>
 							</div>
 						</div>
@@ -380,7 +375,10 @@
 															<ul class="dropdown-menu custom" role="menu">
 															    <li>
 															    	<a ng-click="vm.clearSelection()">Clear Selection</a>
-															    </li>															   
+															    </li>	
+															    <li>
+															    	<a ng-click="vm.searchReplace(workPackageSheet)">Search/Replace</a>
+															    </li>														   
 															    <li>
 															    	<a ng-click="vm.addFares(workPackageSheet)">Add Rows</a>
 															    </li>

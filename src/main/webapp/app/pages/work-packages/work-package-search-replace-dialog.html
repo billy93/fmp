@@ -1,0 +1,359 @@
+<form name="editForm" role="form" novalidate ng-submit="vm.save()">
+    <div class="modal-header">
+    	<h5 class="modal-title" id="myWorkPackageLabel">Search/Replace</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+    </div>
+    <div class="modal-body">    		
+   		<div class="clearfix">
+			<div class="pull-left w80 ph5px">
+				<div class="box-detail">
+	 				<div class="box-header">
+					Search and Replace
+					</div>
+	 				<div class="box-body">
+	 					<div class="clearfix">
+	 						<div class="pull-left w30">
+	 							<div class="clearfix">
+	 								<div class="pull-left">
+	 									<div class="form-group">
+											<div class="checkbox-wrapper">
+												<label class="black">
+													<input type="radio" name="radio2" checked>
+													And
+												</label>
+											</div>
+										</div>
+	 								</div>
+	 								<div class="pull-left">
+	 									<div class="form-group">
+											<div class="checkbox-wrapper">	
+												<label class="black">
+													<input type="radio" name="radio2">
+													Or
+												</label>
+											</div>
+										</div>
+	 								</div>
+	 							</div>		      																	
+	 						</div>
+	 						<div class="pull-left w35">
+	 							<div class="text-left mt5px semibold">Search For</div>
+	 						</div>
+	 						<div class="pull-left w35">
+	 							<div class="text-left mt5px semibold">Replace With</div>
+	 						</div>
+	 					</div>
+	 					<div class="clearfix">
+	 						<div class="pull-left ph5px w30 mt5px">No
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" name="">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" disabled="">
+					 						</div>
+					 						<div class="pull-left ph5px w5">
+					 						</div>
+					 						<div class="pull-left ph5px w30">
+					 						</div>
+					 					</div>
+					 					<div class="clearfix">
+					 						<div class="pull-left ph5px w30 mt5px">Status
+					 						</div>
+					 						<div class="pull-left ph5px w5">
+					 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" name="">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<select class="form-control" disabled="">
+									<option>A</option>
+									<option>B</option>
+									<option>C</option>
+								</select>
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+								<div class="checkbox-wrapper inline">
+									<label>
+										<input type="checkbox" name="">													
+									</label>
+								</div>
+							</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<select class="form-control" disabled="">
+									<option>A</option>
+									<option>B</option>
+									<option>C</option>
+								</select>
+	 						</div>
+	 					</div>
+	 					<div class="clearfix">
+	 						<div class="pull-left ph5px w30 mt5px">Cxr
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" name="">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+							<select class="form-control" disabled="">
+								<option>A</option>
+								<option>B</option>
+								<option>C</option>
+							</select>
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+								<div class="checkbox-wrapper inline">
+									<label>
+										<input type="checkbox" name="">													
+									</label>
+								</div>
+							</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<select class="form-control" disabled="">
+									<option>A</option>
+									<option>B</option>
+									<option>C</option>
+								</select>
+	 						</div>
+	 					</div>
+	 					<div class="clearfix">
+	 						<div class="pull-left ph5px w30 mt5px">Action
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" name="">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" disabled="">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 						</div>
+	 					</div>
+	 					<div class="clearfix">
+	 						<div class="pull-left ph5px w30 mt5px">Tar No
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" name="">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<select class="form-control" disabled="">
+									<option>A</option>
+									<option>B</option>
+									<option>C</option>
+								</select>
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 						</div>
+	 					</div>
+	 					<div class="clearfix">
+	 						<div class="pull-left ph5px w30 mt5px">Tar Cd
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" name="">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<select class="form-control" disabled="">
+									<option>A</option>
+									<option>B</option>
+									<option>C</option>
+								</select>
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 						</div>
+	 					</div>
+	 					<div class="clearfix">
+	 						<div class="pull-left ph5px w30 mt5px">Origin
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" name="">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" disabled="">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" name="">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" name="" class="form-control inline" disabled="">
+	 						</div>
+	 					</div>
+	 					<div class="clearfix">
+	 						<div class="pull-left ph5px w30 mt5px">Base Amt
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" name="">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" disabled="">
+	 						</div>
+	 						<div class="pull-left ph5px w15">
+	 							<select class="form-control" disabled="">
+									<option>A</option>
+									<option>B</option>
+									<option>C</option>
+								</select>
+	 						</div>
+	 						<div class="pull-left ph5px w20">
+	 							<input type="text" name="" class="form-control inline" disabled="">
+	 						</div>
+	 					</div>
+	 					<div class="clearfix">
+	 						<div class="pull-left ph5px w30 mt5px">Travel Start
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" name="">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<div class="input-group">
+									<input type="text" name="" class="form-control" disabled value="2018-05-07 18:03">
+									<span class="input-group-addon disabled">
+										<i class="fa fa-calendar"></i>
+									</span>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" name="">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<div class="input-group">
+									<input type="text" name="" class="form-control" disabled value="">
+									<span class="input-group-addon disabled">
+										<i class="fa fa-calendar"></i>
+									</span>
+								</div>
+	 						</div>
+	 					</div>
+	 					<div class="clearfix">
+	 						<div class="pull-left ph5px w30 mt5px">Travel End
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" name="">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<div class="input-group">
+									<input type="text" name="" class="form-control" disabled value="2018-05-07 18:03">
+									<span class="input-group-addon disabled">
+										<i class="fa fa-calendar"></i>
+									</span>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" name="">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<div class="input-group">
+									<input type="text" name="" class="form-control" disabled value="">
+									<span class="input-group-addon disabled">
+										<i class="fa fa-calendar"></i>
+									</span>
+								</div>
+	 						</div>
+	 					</div>
+	 				</div>
+	 			</div>
+				</div>
+			<div class="pull-right w20 ph5px text-center" style="margin-top: 20px;">
+				<button class="btn btn-default small btn-secondary btn-third mb5px">Find</button>
+				<button class="btn btn-default small btn-secondary btn-third mb5px">Replace</button>
+				<button class="btn btn-default small btn-secondary btn-third mb1" style="margin-right: 5px;">Replace All</button>
+				<div class="form-group">
+					<div class="checkbox-wrapper">
+						<label class="black fz10">
+							<input type="checkbox" name="" checked="">
+							Apply to Selected
+						</label>
+					</div>
+				</div>
+			</div>
+    	</div>
+    </div>
+    <div class="modal-footer">
+    	<button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-secondary" data-translate="entity.action.save">Reset</button>
+        <button type="button" ng-click="vm.clear()" class="btn btn-back" data-dismiss="modal">Close</button>
+    </div>
+</form>

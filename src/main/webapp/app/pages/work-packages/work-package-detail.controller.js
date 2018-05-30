@@ -1603,6 +1603,24 @@
     		});
  	    }
  	    
+ 	    vm.searchReplace = function(fareSheet){
+ 	    	$uibModal.open({
+	            templateUrl: 'app/pages/work-packages/work-package-search-replace-dialog.html',
+	            controller: 'WorkPackageSearchReplaceDialogController',
+	            controllerAs: 'vm',
+	            backdrop: 'static',
+	            size: 'lg',
+	            windowClass: 'full-page-modal',
+	            resolve: {
+//	                entity: result.$promise,
+//	                fareSelected: vm.selectedFareDiscount
+	            }
+ 	    	}).result.then(function(workPackage) {
+        	    
+            }, function() {
+        			
+            });
+ 	    };
         vm.rowFaresSelected = function(workPackageFare){
         	vm.selectedFare = workPackageFare;
 	    }
