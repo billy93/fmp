@@ -97,10 +97,12 @@ function js(){
 }
 
 function other(){
-	return gulp.src([
-        config.app + 'content/**',
-    ], { dot: true })
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(changed(config.dist + 'content/'))
-        .pipe(gulp.dest(config.dist + 'content/'));	
+	return es.merge(
+			gulp.src([
+		        config.app + 'content/css/images/**',
+		    ], { dot: true })
+		        .pipe(plumber({errorHandler: handleErrors}))
+		        .pipe(changed(config.dist + 'content/css/images/'))
+		        .pipe(gulp.dest(config.dist + 'content/css/images/'))
+    );	
 }
