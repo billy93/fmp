@@ -1,6 +1,7 @@
 package com.atibusinessgroup.fmp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.atibusinessgroup.fmp.domain.City;
 import com.atibusinessgroup.fmp.domain.State;
 
 import com.atibusinessgroup.fmp.repository.StateRepository;
@@ -96,6 +97,23 @@ public class StateResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/states");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+    
+    /**
+     * GET  /states : get all the states.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of cities in body
+     */
+    @GetMapping("/states/getAll")
+    @Timed
+    public ResponseEntity<List<State>> getAllState() {
+        log.debug("REST request to get a page of Cities");
+        List<State> page = stateRepository.findAll();
+//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/cities");
+        return new ResponseEntity<>(page, null, HttpStatus.OK);
+    }
+    
+    
 
     /**
      * GET  /states/:id : get the "id" state.
