@@ -102,6 +102,9 @@
                 states: ['State', function(State) {
                     return State.getAll().$promise;
                 }],
+                cityGroups: ['CityGroup', function(CityGroup) {
+                    return CityGroup.getAll().$promise;
+                }],
                 previousState: ["$state", function ($state) {
                     var currentStateData = {
                         name: $state.current.name || 'work-package',
