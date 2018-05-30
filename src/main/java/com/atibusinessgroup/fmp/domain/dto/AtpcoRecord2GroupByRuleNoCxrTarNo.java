@@ -12,7 +12,10 @@ public class AtpcoRecord2GroupByRuleNoCxrTarNo {
 	
 	@Field("rule_no")
     private String ruleNo;
-    
+	
+	@Field("cat_no")
+    private String catNo;
+	
 	public String getRuleTariffNo() {
 		return ruleTariffNo;
 	}
@@ -30,6 +33,12 @@ public class AtpcoRecord2GroupByRuleNoCxrTarNo {
 	}
 	public void setRuleNo(String ruleNo) {
 		this.ruleNo = ruleNo;
+	}
+	public String getCatNo() {
+		return catNo;
+	}
+	public void setCatNo(String catNo) {
+		this.catNo = catNo;
 	}
 	
     

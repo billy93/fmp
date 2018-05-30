@@ -17,6 +17,8 @@
         vm.queryParams = queryParams;
         vm.loadAll = loadAll;
         vm.getRules = getRules;
+        vm.showDetail = showDetail;
+        vm.hideDetail = hideDetail;
         vm.reset = reset;
         vm.page = 1;
         
@@ -50,10 +52,18 @@
 
         function getRules(ruleQuery) {
         	RuleQuery.getRules(ruleQuery, function(data) {
-        		console.log(data);
+        		vm.ruleQueryCategories = data;
         	}, function(error) {
         		console.log(error);
         	});
+        }
+        
+        function showDetail() {
+        	$("#tblDetail").show();
+        }
+        
+        function hideDetail() {
+        	$("#tblDetail").hide();
         }
         
         function openCalendar (e, date) {
@@ -70,10 +80,12 @@
             		ruleNo: null,
             		type: null,
             		src: null,
-            		cat: null
+            		cat: null,
+            		catNo: null
         	}
         	
         	vm.loadAll();
         }
+        
     }
 })();

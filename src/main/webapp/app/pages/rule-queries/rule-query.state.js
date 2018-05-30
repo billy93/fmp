@@ -31,7 +31,8 @@
                 		ruleNo: null,
                 		type: null,
                 		src: null,
-                		cat: null
+                		cat: null,
+                		catNo: null
                 	}
             	}]
             }
