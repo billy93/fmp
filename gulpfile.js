@@ -78,7 +78,7 @@ gulp.task('inject:test', inject.test);
 
 gulp.task('inject:troubleshoot', inject.troubleshoot);
 
-gulp.task('assets:prod', ['images', 'styles', 'html', 'copy:swagger', 'copy:images', 'copy:js'], build);
+gulp.task('assets:prod', ['images', 'styles', 'html'], build);
 
 gulp.task('html', function () {
     return gulp.src(config.app + 'app/**/*.html')

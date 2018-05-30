@@ -20,10 +20,6 @@ module.exports = {
     js: js
 }
 
-function js(){
-	return gulp.src([config.app + 'content/**/*.{js}']).pipe(gulp.dest(config.dist + 'content/js/'));
-}
-
 function fonts() {
     return es.merge(gulp.src(config.bower + 'bootstrap/fonts/*.*')
         .pipe(plumber({errorHandler: handleErrors}))
@@ -88,4 +84,8 @@ function images() {
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist +  'bower_components'))
         .pipe(gulp.dest(config.dist +  'bower_components'));
+}
+
+function js(){
+	return gulp.src(config.app + 'content/js/*.{js}').pipe(gulp.dest(config.dist + 'content/js/'));
 }
