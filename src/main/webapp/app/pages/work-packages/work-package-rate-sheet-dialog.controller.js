@@ -106,40 +106,66 @@
 //            }else{
 //            	vm.isNull = true;
 //            }
-//    	
-//        	for (var i = 0; i < vm.workPackage.fareSheet.length; i++) {
-//        		vm.fares = [];
-//        		vm.allFares = vm.workPackage.fareSheet[i].fares[i];
+//        	        	
+//        	vm.allFares =[]
+//    		for(var x= 0; x<vm.workPackage.fareSheet[vm.index].fares.length; x++){
+//    			vm.allFares.push(vm.workPackage.fareSheet[vm.index].fares[x]);
+//    		}
 //
-//            	for (var j = 0; j < vm.selectedHeader.length; j++) {
-//                	getFares(vm.selectedHeader[j]);
+//    		for(var y=0; y<vm.allFares.length;y++){
+//    			vm.fares = [];
+//    			for (var j = 0; j < vm.selectedHeader.length; j++) {
+//                	getFares(vm.selectedHeader[j],y);
 //    			}
-//            	vm.faresData.push(vm.fares);
-//			}
+//    			vm.faresData.push(vm.fares);
+//    		}
+//        	
 //        }
         
         vm.submit = function(){
-        	vm.selectHeader = false;
+        	if(vm.workPackage.targetDistribution == "ATPCO"){
+        		vm.selectHeader = false;
 
-        	if (vm.title.length > 0){
-            	vm.isNull = false;
-            }else{
-            	vm.isNull = true;
-            }
-        	
-        	
-        	vm.allFares =[]
-    		for(var x= 0; x<vm.workPackage.fareSheet[vm.index].fares.length; x++){
-    			vm.allFares.push(vm.workPackage.fareSheet[vm.index].fares[x]);
-    		}
+            	if (vm.title.length > 0){
+                	vm.isNull = false;
+                }else{
+                	vm.isNull = true;
+                }
+            	        	
+            	vm.allFares =[]
+        		for(var x= 0; x<vm.workPackage.fareSheet[vm.index].fares.length; x++){
+        			vm.allFares.push(vm.workPackage.fareSheet[vm.index].fares[x]);
+        		}
 
-    		for(var y=0; y<vm.allFares.length;y++){
-    			vm.fares = [];
-    			for (var j = 0; j < vm.selectedHeader.length; j++) {
-                	getFares(vm.selectedHeader[j],y);
-    			}
-    			vm.faresData.push(vm.fares);
-    		}
+        		for(var y=0; y<vm.allFares.length;y++){
+        			vm.fares = [];
+        			for (var j = 0; j < vm.selectedHeader.length; j++) {
+                    	getFares(vm.selectedHeader[j],y);
+        			}
+        			vm.faresData.push(vm.fares);
+        		}
+        	}else if(vm.workPackage.targetDistribution == "MARKET"){
+        		vm.selectHeader = false;
+
+            	if (vm.title.length > 0){
+                	vm.isNull = false;
+                }else{
+                	vm.isNull = true;
+                }
+            	console.log(vm.title.length); 	
+            	vm.allFares =[]
+        		for(var x= 0; x<vm.workPackage.marketFareSheet[vm.index].fares.length; x++){
+        			vm.allFares.push(vm.workPackage.marketFareSheet[vm.index].fares[x]);
+        		}
+
+        		for(var y=0; y<vm.allFares.length;y++){
+        			vm.fares = [];
+        			for (var j = 0; j < vm.selectedHeader.length; j++) {
+                    	getFares(vm.selectedHeader[j],y);
+        			}
+        			vm.faresData.push(vm.fares);
+        		}
+        	}        	
         	
         }
         
@@ -223,14 +249,29 @@
         		vm.fares.push(vm.allFares[y].action);
         	    break;
         	case "tarno" :
-        		vm.fares.push(vm.allFares[y].tariffNumber.tarNo);
-        	    break;
+        		if(vm.allFares[y].tariffNumber != null){
+            		vm.fares.push(vm.allFares[y].tariffNumber.tarNo);
+            	    break;        			
+        		}else{
+        			vm.fares.push(null);
+        			break;
+        		}
         	case "tarcd" :
-        		vm.fares.push(vm.allFares[y].tariffNumber.tarCd);
-        	    break;
+        		if(vm.allFares[y].tariffNumber != null){
+            		vm.fares.push(vm.allFares[y].tariffNumber.tarCd);
+            	    break;        			
+        		}else{
+        			vm.fares.push(null);
+        			break;
+        		}
         	case "global" :
-        		vm.fares.push(vm.allFares[y].tariffNumber.global);
-        	    break;
+        		if(vm.allFares[y].tariffNumber != null){
+            		vm.fares.push(vm.allFares[y].tariffNumber.global);
+            	    break;        			
+        		}else{
+        			vm.fares.push(null);
+        			break;
+        		}
         	case "origin" :
         		vm.fares.push(vm.allFares[y].origin);
         	    break;
