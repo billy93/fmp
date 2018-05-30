@@ -78,9 +78,10 @@
    			<div ng-model="vm.workPackage ">
 				<span>WORK ID : {{vm.workPackage.wpid}}</span><br>
 				<span>TITLE FARE SHEET : {{vm.workPackage.name}}</span><br>
-				<span>DESCRIPTION OF GA FARES : {{vm.workPackage.specifiedFaresName}}</span><br>
+				<span ng-if="!vm.workPackage.marketFares">DESCRIPTION OF GA FARES : {{vm.workPackage.fareSheet[vm.index].specifiedFaresName}}</span><br>
+				<span ng-if="vm.workPackage.marketFares">FARE NAME : {{vm.workPackage.marketFareSheet[vm.index].marketFaresName}}</span><br>
 				<span>NOTES RATESHEET : {{vm.workPackage.ratesheetComment}}</span><br>
-				<span>FARES :</span><br>
+				<span>FARES </span><br>
 			</div>
 			<div class="row table-wrapper no-mar">
 	    		<div class="table-wrapper no-top-mar no-pad ">

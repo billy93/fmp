@@ -23,7 +23,7 @@ node {
     }
 
     stage('package and deploy') {
-        sh "./mvnw -Pprod tomcat7:redeploy -DskipTests"
+        sh "./mvnw tomcat7:redeploy -DskipTests"
     }
 
 }
