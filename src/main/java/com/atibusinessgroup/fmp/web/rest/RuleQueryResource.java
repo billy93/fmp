@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
+import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByRuleNoCxrTarNo;
 import com.atibusinessgroup.fmp.domain.dto.RuleQuery;
 import com.atibusinessgroup.fmp.domain.dto.RuleQueryParam;
 import com.atibusinessgroup.fmp.repository.AtpcoRecord2Repository;
@@ -52,21 +53,21 @@ public class RuleQueryResource {
 	@Timed
 	public ResponseEntity<List<RuleQuery>> getAllRuleQueries(@RequestBody RuleQueryParam param) {
 		log.debug("REST request to get a page of RuleQueries: {}", param);
+		log.debug("---------::: "+param.toString());
 
 		Pageable pageable = new PageRequest(param.getPage(), param.getSize());
 		
-		Page<AtpcoRecord2> page = atpcoRuleQueryCustomRepository.findByRuleQueryParam(param, pageable);
+		Page<AtpcoRecord2GroupByRuleNoCxrTarNo> page = atpcoRuleQueryCustomRepository.groupingRuleQuery(param, pageable);
 		
 		List<RuleQuery> result = new ArrayList<>();
 		
 		if(page != null) {
-			for (AtpcoRecord2 atpcoRecord2 : page) {
-				if (atpcoRecord2 != null) {
-					RuleQuery rq = ruleQueryMapper.convertAtpcoRecord2(atpcoRecord2);
-					result.add(rq);
-				}
+			for (AtpcoRecord2GroupByRuleNoCxrTarNo record2Group : page) {
+				RuleQuery rq = ruleQueryMapper.convertAtpcoRecord2GroupByRuleNoCxrTarNo(record2Group);
+				result.add(rq);
 			}
 		}
+		
 		
 		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/rule-queries");
 

@@ -1,0 +1,106 @@
+<script>
+	$(document).ready(function() {
+		$("th").css({
+			"text-align" : "center"
+		});
+	});
+</script>
+
+
+<div class="panel">
+	<div class="panel-body">
+
+		<div class="filter-hero">
+			<div class="filter-label semibold show">Hide Filter</div>
+			<div class="filter-area">
+				<div class="clearfix">
+					<form name="queryForm" role="form" novalidate>
+						<div class="pull-left col-md-5 no-pad">
+							<div class="pull-left col-md-6 no-lpad">
+								<div class="form-group">
+									<div class="custom-label semibold">Carrier</div>
+									<input type="text" class="form-control" name="carrier" id="cxr"
+										ng-model="vm.queryParams.cxr" uppercase />
+									<div class="custom-label semibold">Rule Number</div>
+									<input type="text" class="form-control" name="ruleNumber"
+										id="ruleNo" ng-model="vm.queryParams.ruleNo" uppercase />
+									<div class="custom-label semibold">Rule Type</div>
+									<input type="text" class="form-control" name="ruleType"
+										id="type" ng-model="vm.queryParams.type" uppercase />
+								</div>
+							</div>
+							<div class="pull-right col-md-6 no-rpad">
+								<div class="form-group">
+									<div class="custom-label semibold">Source</div>
+									<input type="text" class="form-control" name="source" id="src"
+										ng-model="vm.queryParams.src" uppercase />
+									<div class="custom-label semibold">Tariff</div>
+									<input type="text" class="form-control" name="tariff"
+										id="ruleTarNo" ng-model="vm.queryParams.ruleTarNo" uppercase />
+									<div class="custom-label semibold">Category</div>
+									<select class="form-control" name="category" id="source" ng-model="vm.queryParams.source">
+										<option value="{{value.key}}" ng-repeat="value in vm.sources track by $index">{{value.value}}</option>
+									</select>
+									<input type="text" class="form-control" name="category"
+										id="cat" ng-model="vm.queryParams.cat" uppercase />
+								</div>
+							</div>
+							<div class="pull-right col-md-6 no-pad">
+								<div class="form-group">
+									<div class="pull-right query-button-wrapper">
+										<button type="button" class="btn btn-default small pull-left"
+											ng-click="vm.loadAll()">Query</button>
+										<button type="button" class="btn btn-default small pull-left"
+											ng-click="vm.loadAll()">Clear</button>
+										<button type="reset" ng-click="vm.reset()"
+											class="btn btn-default small pull-left">Reset</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div class="table-wrapper">
+			<div class="datatable-wrapper form-inline">
+				<div class="table-responsive">
+					<table class="table table-striped table-bordered datatable">
+						<thead>
+							<tr>
+								<th>No</th>
+								<th>CXR</th>
+								<th>TAR NO</th>
+								<th>RULE NO</th>
+								<th>TYPE</th>
+								<th>SRC</th>
+							</tr>
+						</thead>
+						<tbody ng-repeat="ruleQuery in vm.ruleQueries">
+							<tr>
+								<td>{{$index + 1}}</td>
+								<td>{{ruleQuery.cxr}}</td>
+								<td>{{ruleQuery.tarNo}}</td>
+								<td>{{ruleQuery.ruleNo}}</td>
+								<td>{{ruleQuery.type}}</td>
+								<td>{{ruleQuery.src}}</td>
+							</tr>
+							<!-- 							<tr ng-if="vm.selectedRow == afdQuery.atpcoFareId"> -->
+							<!-- 								<div></div> -->
+							<!-- 							</tr> -->
+						</tbody>
+					</table>
+				</div>
+				<div class="text-center">
+					<jhi-item-count page="vm.page" total="vm.queryCount"
+						items-per-page="vm.itemsPerPage"></jhi-item-count>
+					<uib-pagination class="pagination-sm" total-items="vm.totalItems"
+						items-per-page="vm.itemsPerPage" ng-model="vm.page"
+						ng-change="vm.loadAll()"></uib-pagination>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
