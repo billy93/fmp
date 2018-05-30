@@ -17,7 +17,7 @@ module.exports = {
     common: common,
     swagger: swagger,
     images: images,
-    js: js,
+//    js: js,
     other: other
 }
 
@@ -87,14 +87,14 @@ function images() {
         .pipe(gulp.dest(config.dist +  'bower_components'));
 }
 
-function js(){
-	return gulp.src([
-        config.app + 'content/js/**',
-    ], { dot: true })
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(changed(config.dist + 'content/js/'))
-        .pipe(gulp.dest(config.dist + 'content/js/'));	
-}
+//function js(){
+//	return gulp.src([
+//        config.app + 'content/js/**',
+//    ], { dot: true })
+//        .pipe(plumber({errorHandler: handleErrors}))
+//        .pipe(changed(config.dist + 'content/js/'))
+//        .pipe(gulp.dest(config.dist + 'content/js/'));	
+//}
 
 function other(){
 	return es.merge(
