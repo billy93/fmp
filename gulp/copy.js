@@ -21,17 +21,7 @@ module.exports = {
 }
 
 function js(){
-	return gulp.src(config.app + 'content/**/*.{js}')
-	    .pipe(plumber({errorHandler: handleErrors}))
-	    .pipe(changed(config.dist + 'content/js/'))
-	    .pipe(flatten())
-	    .pipe(rev())
-	    .pipe(gulp.dest(config.dist + 'content/js/'))
-	    .pipe(rev.manifest(config.revManifest, {
-	        base: config.dist,
-	        merge: true
-	     }))
-	    .pipe(gulp.dest(config.dist));
+	return gulp.src([config.app + 'content/**/*.{js}']).pipe(gulp.dest(config.dist + 'content/js/'));
 }
 
 function fonts() {
