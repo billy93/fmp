@@ -8,6 +8,7 @@ public class RuleQueryParam {
 	private String type;
 	private String src;
 	private String category;
+	private String catNo;
 	
 	private int page;
 	private int size;
@@ -15,6 +16,20 @@ public class RuleQueryParam {
 	public RuleQueryParam() {
 		
 	}
+	
+	
+
+	public String getCatNo() {
+		return catNo;
+	}
+
+
+
+	public void setCatNo(String catNo) {
+		this.catNo = catNo;
+	}
+
+
 
 	public String getCxr() {
 		return cxr;
