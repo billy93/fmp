@@ -24,6 +24,7 @@ import org.springframework.data.mongodb.core.aggregation.SortOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
+import com.atibusinessgroup.fmp.constant.CollectionName;
 import com.atibusinessgroup.fmp.domain.dto.AfdQueryParam;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFareWithRecord1;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByCatNo;
@@ -98,6 +99,7 @@ public class AtpcoFareCustomRepository {
 				}
 				
 				match.append("$match", and);
+				
 				return match;
 			}
 		});
@@ -110,7 +112,7 @@ public class AtpcoFareCustomRepository {
 			public DBObject toDBObject(AggregationOperationContext context) {
 				BasicDBObject lookup = new BasicDBObject();
 				BasicDBObject query = new BasicDBObject();
-				query.append("from", "atpco_record_1");
+				query.append("from", CollectionName.ATPCO_RECORD_1);
 				query.append("let", new BasicDBObject("recordId", new BasicDBObject("$concat", Arrays.asList("$atpco_fare.tar_no", "$atpco_fare.cxr_cd", "$atpco_fare.rules_no", "$atpco_fare.fare_class_cd"))));
 				BasicDBObject match = new BasicDBObject();
 				match.append("$match", new BasicDBObject("$expr", new BasicDBObject("$eq", Arrays.asList("$record_id", "$$recordId"))));
@@ -144,9 +146,9 @@ public class AtpcoFareCustomRepository {
 	
 		Aggregation aggregationPagination = newAggregation(aggregationOperations);
 				
-		List<AtpcoFareWithRecord1> result = mongoTemplate.aggregate(aggregationPagination, "atpco_fare", AtpcoFareWithRecord1.class).getMappedResults();
+		List<AtpcoFareWithRecord1> result = mongoTemplate.aggregate(aggregationPagination, CollectionName.ATPCO_FARE, AtpcoFareWithRecord1.class).getMappedResults();
 		
-		return new PageImpl<>(result, pageable, mongoTemplate.aggregate(aggregation, "atpco_fare", AtpcoFareWithRecord1.class).getMappedResults().size());
+		return new PageImpl<>(result, pageable, mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_FARE, AtpcoFareWithRecord1.class).getMappedResults().size());
 	}
 
 	public List<AtpcoRecord2GroupByCatNo> findAtpcoRecord2ByRecordId(String recordId) {
@@ -160,8 +162,10 @@ public class AtpcoFareCustomRepository {
 			@Override
 			public DBObject toDBObject(AggregationOperationContext context) {
 				BasicDBObject group = new BasicDBObject();
-				group.append("_id", "cat_no");
-				group.append("record_2", new BasicDBObject("$push", "$$ROOT"));
+				BasicDBObject query = new BasicDBObject();
+				query.append("_id", "$cat_no");
+				query.append("record_2", new BasicDBObject("$push", "$$ROOT"));
+				group.append("$group", query);
 				return group;
 			}
 		});
@@ -171,7 +175,7 @@ public class AtpcoFareCustomRepository {
 		
 		Aggregation aggregation = newAggregation(aggregationOperations);
 		
-		List<AtpcoRecord2GroupByCatNo> result = mongoTemplate.aggregate(aggregation, "atpco_record_2", AtpcoRecord2GroupByCatNo.class).getMappedResults();
+		List<AtpcoRecord2GroupByCatNo> result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_RECORD_2, AtpcoRecord2GroupByCatNo.class).getMappedResults();
 		
 		return result;
 	}

@@ -21,7 +21,7 @@
                 }
             },
             'update': { method:'PUT' },
-            'getRules': { method: 'GET', url:'api/afd-queries/rules' }
+            'getRules': { method: 'GET', url:'api/afd-queries/rules', isArray: true }
         });
     }
 })();
