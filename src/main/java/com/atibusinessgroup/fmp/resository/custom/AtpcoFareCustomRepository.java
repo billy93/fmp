@@ -1,4 +1,4 @@
- 	package com.atibusinessgroup.fmp.repository.custom.impl;
+package com.atibusinessgroup.fmp.resository.custom;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 
@@ -27,17 +27,15 @@ import org.springframework.stereotype.Service;
 import com.atibusinessgroup.fmp.domain.dto.AfdQueryParam;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFareWithRecord1;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByCatNo;
-import com.atibusinessgroup.fmp.resository.custom.AtpcoFareCustomRepository;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
 @Service
-public class AtpcoFareCustomRepositoryImpl implements AtpcoFareCustomRepository {	
+public class AtpcoFareCustomRepository {	
 	
 	@Autowired
     MongoTemplate mongoTemplate;
 
-	@Override
 	public Page<AtpcoFareWithRecord1> findAtpcoFareWithRecord1(AfdQueryParam param, Pageable pageable) {
 		
 		List<AggregationOperation> aggregationOperations = new ArrayList<>();
@@ -151,7 +149,6 @@ public class AtpcoFareCustomRepositoryImpl implements AtpcoFareCustomRepository 
 		return new PageImpl<>(result, pageable, mongoTemplate.aggregate(aggregation, "atpco_fare", AtpcoFareWithRecord1.class).getMappedResults().size());
 	}
 
-	@Override
 	public List<AtpcoRecord2GroupByCatNo> findAtpcoRecord2ByRecordId(String recordId) {
 		
 		List<AggregationOperation> aggregationOperations = new ArrayList<>();
