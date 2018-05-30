@@ -81,6 +81,9 @@ public class WorkPackageFare implements Serializable {
     @Field("base_fare_basis")
     private String baseFareBasis;
     
+    @Field("base_tarcd")
+    private String baseTarcd;
+    
     @Field("calc_type")
     private String calcType;
     
@@ -319,6 +322,14 @@ public class WorkPackageFare implements Serializable {
 
 	
 	
+	public String getBaseTarcd() {
+		return baseTarcd;
+	}
+
+	public void setBaseTarcd(String baseTarcd) {
+		this.baseTarcd = baseTarcd;
+	}
+
 	public String getWaiverType() {
 		return waiverType;
 	}
