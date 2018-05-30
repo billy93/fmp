@@ -85,7 +85,7 @@
                 </span>
             </div>
            	<div class="multi-values">
-           		<label ng-repeat="reviewLevel in vm.user.reviewLevels" ng-click="vm.removeReviewLevel()">{{reviewLevel}}<span class="delete"><i class="glyphicon glyphicon-remove-sign"></i></span></label>
+           		<label ng-repeat="reviewLevel in vm.user.reviewLevels  track by $index" ng-click="vm.removeReviewLevel($index)">{{reviewLevel}}<span class="delete"><i class="glyphicon glyphicon-remove-sign"></i></span></label>
            	</div>
            	
            	<div ng-show="editForm.review_level.$invalid">
@@ -105,7 +105,7 @@
                 </span>
             </div>
            	<div class="multi-values">
-           		<label ng-repeat="businessArea in vm.user.businessAreas" ng-click="vm.removeBusinessArea()">{{businessArea}}<span class="delete"><i class="glyphicon glyphicon-remove-sign"></i></span></label>
+           		<label ng-repeat="businessArea in vm.user.businessAreas track by $index" ng-click="vm.removeBusinessArea($index)">{{businessArea}}<span class="delete"><i class="glyphicon glyphicon-remove-sign"></i></span></label>
            	</div>
            	<div ng-show="editForm.business_area.$invalid">
 				<p class="help-block" ng-show="editForm.business_area.$error.required">
