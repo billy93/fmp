@@ -2,12 +2,12 @@
     'use strict';
     angular
         .module('fmpApp')
-        .factory('Agent', Agent);
+        .factory('AgentCategory', AgentCategory);
 
-    Agent.$inject = ['$resource'];
+    AgentCategory.$inject = ['$resource'];
 
-    function Agent ($resource) {
-        var resourceUrl =  'api/agents/:id';
+    function AgentCategory ($resource) {
+        var resourceUrl =  'api/agent-categories/:id';
 
         return $resource(resourceUrl, {}, {
             'query': { method: 'GET', isArray: true},
@@ -21,10 +21,7 @@
                 }
             },
             'update': { method:'PUT' },
-            'queryAll': { method: 'GET', isArray: true, url:'api/agencies/all' },
-	        'exportAgent': { method: 'POST',  url:'api/agencies/export-agencies'},
-	        'exportAllAgent': { method: 'POST',  url:'api/agencies/export-all-agencies'},
-	        'importAgent': { method: 'POST',  url:'api/agencies/import-agencies'}
+            'queryAll': { method: 'GET', isArray: true, url:'api/agent-categories/all' },
         });
     }
 })();

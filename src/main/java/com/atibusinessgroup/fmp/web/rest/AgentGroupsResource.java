@@ -1,6 +1,7 @@
 package com.atibusinessgroup.fmp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.atibusinessgroup.fmp.domain.Agent;
 import com.atibusinessgroup.fmp.domain.AgentGroups;
 
 import com.atibusinessgroup.fmp.repository.AgentGroupsRepository;
@@ -111,6 +112,7 @@ public class AgentGroupsResource {
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(agentGroups));
     }
 
+   
     /**
      * DELETE  /agent-groups/:id : delete the "id" agentGroups.
      *
