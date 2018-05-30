@@ -18,7 +18,7 @@ module.exports = {
     swagger: swagger,
     images: images,
 //    js: js,
-    other: other
+//    other: other
 }
 
 function fonts() {
@@ -96,13 +96,13 @@ function images() {
 //        .pipe(gulp.dest(config.dist + 'content/js/'));	
 //}
 
-function other(){
-	return es.merge(
-			gulp.src([
-		        config.app + 'content/css/images/**',
-		    ], { dot: true })
-		        .pipe(plumber({errorHandler: handleErrors}))
-		        .pipe(changed(config.dist + 'content/css/images/'))
-		        .pipe(gulp.dest(config.dist + 'content/css/images/'))
-    );	
-}
+//function other(){
+//	return es.merge(
+//			gulp.src([
+//		        config.app + 'content/css/images/**',
+//		    ], { dot: true })
+//		        .pipe(plumber({errorHandler: handleErrors}))
+//		        .pipe(changed(config.dist + 'content/css/images/'))
+//		        .pipe(gulp.dest(config.dist + 'content/css/images/'))
+//    );	
+//}
