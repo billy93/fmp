@@ -3,7 +3,7 @@
 	min-width:30px;
 }
 .highlighted{
-	background-color:#effbff;
+	background-color:yellow;
 }
 </style>
 
@@ -1771,7 +1771,7 @@
 						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'calcType', $event)" ng-class="{highlighted:fare.field['calcType']}">
 						                         <select class="form-control" 
 						                                 name="discountCalcType{{$parent.$index}}{{$index}}"
-						                                 ng-required="vm.isRequired('discountCalcType')"
+						                                 ng-required="vm.isRequired('discountCalcType', fare)"
 						                                 ng-class="{'must-fill': !editForm.editFormDiscount.discountCalcType{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"																			            
 						                                 ng-model="fare.calcType" id="discountCalcType"
 						                                 ng-disabled="!vm.isEditable('discountCalcType')"
@@ -1780,14 +1780,14 @@
 						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'percentBaseFare', $event)" ng-class="{highlighted:fare.field['percentBaseFare']}">
 						                           <input type="number" class="form-control" name="discountPercentageOfBaseFare{{$parent.$index}}{{$index}}"
 						                                    ng-disabled="!vm.isEditable('discountPercentageOfBaseFare')"
-						                                    ng-required="vm.isRequired('discountPercentageOfBaseFare') && fare.action != 'Canceled'" 
+						                                    ng-required="vm.isRequired('discountPercentageOfBaseFare', fare) && fare.action != 'Canceled'" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountPercentageOfBaseFare{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
 						                                      ng-model="fare.percentBaseFare"/>	
 				                            	</td>
 						                            <td ng-click="vm.tdClick(workPackageSheet, fare, 'currency', $event)" ng-class="{highlighted:fare.field['currency']}">
 						                         		<ui-select ng-model="fare.currency" theme="select2" class="form-control"
 								                            name="discountFareCurrency{{$parent.$index}}{{$index}}"
-								                            ng-required="vm.isRequired('discountFareCurrency') && fare.action != 'Canceled'"  
+								                            ng-required="vm.isRequired('discountFareCurrency', fare) && fare.action != 'Canceled'"  
 								                            ng-disabled="!vm.isEditable('discountFareCurrency')"
 								                            ng-class="{'must-fill': editForm.editFormDiscount.discountFareCurrency{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}">
 								                                <ui-select-match placeholder="Currency">{{$select.selected.value.currencyCode}}</ui-select-match>
@@ -1803,7 +1803,7 @@
 						                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'discountSpecifiedAmount', $event)" ng-class="{highlighted:fare.field['discountSpecifiedAmount']}">
 						                                <input type="number" class="form-control" name="discountSpecifiedAmount{{$parent.$index}}{{$index}}"
 						                                    ng-disabled="!vm.isEditable('discountSpecifiedAmount')"
-						                                    ng-required="vm.checkRequiredField('discountSpecifiedAmount') && fare.action != 'Canceled'" 
+						                                    ng-required="vm.isRequired('discountSpecifiedAmount', fare)" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountSpecifiedAmount{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
 						                                      ng-model="fare.discountSpecifiedAmount"/>	
 						                              </td>

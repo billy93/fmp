@@ -48,6 +48,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.atibusinessgroup.fmp.domain.Counter;
 import com.atibusinessgroup.fmp.domain.Priority;
+import com.atibusinessgroup.fmp.domain.TariffNumber;
 import com.atibusinessgroup.fmp.domain.User;
 import com.atibusinessgroup.fmp.domain.WorkPackage;
 import com.atibusinessgroup.fmp.domain.WorkPackage.Attachment;
@@ -326,7 +327,7 @@ public class WorkPackageResource {
 			Workbook workbook = new XSSFWorkbook(input);
 			Sheet datatypeSheet = workbook.getSheetAt(0);	
 			
-			String status = datatypeSheet.getRow(1).getCell(0).getStringCellValue();
+			datatypeSheet.getRow(1).getCell(1).getStringCellValue();
 			
 			Iterator<Row> iterator = datatypeSheet.iterator();
 			iterator.next();
@@ -339,7 +340,9 @@ public class WorkPackageResource {
                 Iterator<Cell> cellIterator = currentRow.iterator();
 
                 WorkPackageFare wpFare = new WorkPackageFare();
-                for(int cell=0;cell<30;cell++) {
+                TariffNumber tariffNumber = new TariffNumber();
+                wpFare.setTariffNumber(tariffNumber);
+                for(int cell=1;cell<=30;cell++) {
                     Cell currentCell = currentRow.getCell(cell);
 
                     String value = "";
@@ -348,102 +351,90 @@ public class WorkPackageResource {
                     }catch(Exception e) {
                     	
                     }
-                    System.out.println("CELL "+cell+" : "+value);
-                    if(cell == 0) {
+//                    System.out.println("CELL "+cell+" : "+value);
+                    if(cell == 1) {
                     		wpFare.setStatus(value);
                     }
-                    else if(cell == 1) {
+                    else if(cell == 2) {
 	                		wpFare.setCarrier(value);
 	                }
-                    else if(cell == 2) {
+                    else if(cell == 3) {
 	                		wpFare.setAction(value);
 	                }
-                    else if(cell == 3) {
-	                		wpFare.setTarno(value);
-	                }
                     else if(cell == 4) {
-	                		wpFare.setTarcd(value);
+                    	tariffNumber.setTarNo(value);
 	                }
                     else if(cell == 5) {
-	                		wpFare.setGlobal(value);
+                    	tariffNumber.setTarCd(value);
 	                }
                     else if(cell == 6) {
-	                		wpFare.setOrigin(value);
+                    	tariffNumber.setGlobal(value);
 	                }
                     else if(cell == 7) {
-	                		wpFare.setDestination(value);
+	                		wpFare.setOrigin(value);
 	                }
                     else if(cell == 8) {
+	                		wpFare.setDestination(value);
+	                }
+                    else if(cell == 9) {
                 			wpFare.setFareBasis(value);
                     }
-                    else if(cell == 9) {
+                    else if(cell == 10) {
 	            			wpFare.setBookingClass(value);
 	                }
-                    else if(cell == 10) {
+                    else if(cell == 11) {
 	            			wpFare.setCabin(value);
 	                }
-                    else if(cell == 11) {
+                    else if(cell == 12) {
             				wpFare.setTypeOfJourney(value);	
                     }
-                    else if(cell == 12) {
+                    else if(cell == 13) {
 	        				wpFare.setFootnote1(value);	
 	                }
-                    else if(cell == 13) {
+                    else if(cell == 14) {
 	        				wpFare.setRtgno(value);	
 	                }
-                    else if(cell == 14) {
+                    else if(cell == 15) {
 	        				wpFare.setRuleno(value);	
 	                }
-                    else if(cell == 15) {
+                    else if(cell == 16) {
 	        				wpFare.setCurrency(value);	
 	                }
-                    else if(cell == 16) {
+                    else if(cell == 17) {
 	        				wpFare.setAmount(value);	
 	                }
-                    else if(cell == 17) {
+                    else if(cell == 18) {
 	        				wpFare.setAif(value);	
 	                }
-                    else if(cell == 18) {
-	        				wpFare.setItinerary(value);	
-	                }
                     else if(cell == 19) {
-	        				wpFare.setOverrideIndicator(value);	
-	                }
-                    else if(cell == 20) {
 	                    	wpFare.setTravelStart(ZonedDateTime.now());
 	                }
-                    else if(cell == 21) {
+                    else if(cell == 20) {
                     		wpFare.setTravelEnd(ZonedDateTime.now());
 	                }
-                    else if(cell == 22) {
+                    else if(cell == 21) {
                     		wpFare.setSaleStart(ZonedDateTime.now());
 	                }
-                    else if(cell == 23) {
+                    else if(cell == 22) {
                     		wpFare.setSaleEnd(ZonedDateTime.now());
 	                }
-                    else if(cell == 24) {
-                    		wpFare.setEffDt(value);
-	                }
-                    else if(cell == 25) {
+                    else if(cell == 23) {
                     		wpFare.setComment(value);
 	                }
-                    else if(cell == 26) {
+                    else if(cell == 24) {
                     		wpFare.setTravelComplete(ZonedDateTime.now());
 	                }
-                    else if(cell == 27) {
+                    else if(cell == 25) {
                     		wpFare.setTravelCompleteIndicator(value);
 	                }
-                    else if(cell == 28) {
+                    else if(cell == 26) {
                     		wpFare.setRatesheetComment(value);
-	                }
-                    else if(cell == 29) {
-                    		wpFare.setDealCode(value);
 	                }
                 }
                 workPackageFares.add(wpFare);
             }			
             
-            workPackage = workPackageService.findOne(workPackage.getId());
+//            workPackage = workPackageService.findOne(workPackage.getId());
 //            workPackage.getFareSheet().get(0).getFares().addAll(workPackageFares);
             workPackage.getFareSheet().get(0).getFares().addAll(workPackageFares);
             workPackage = workPackageService.save(workPackage);
@@ -807,30 +798,23 @@ public class WorkPackageResource {
         cell = row.createCell(17);
         cell.setCellValue("Base Amt");
         cell = row.createCell(18);
-        cell.setCellValue("Target AIF");
+        cell.setCellValue("Target AIF");        
         cell = row.createCell(19);
-        cell.setCellValue("Itinerary");
-        cell = row.createCell(20);
-        cell.setCellValue("Override Indicator");
-        cell = row.createCell(21);
         cell.setCellValue("Travel Start");
-        cell = row.createCell(22);
+        cell = row.createCell(20);
         cell.setCellValue("Travel End");
-        cell = row.createCell(23);
+        cell = row.createCell(21);
         cell.setCellValue("Sales Start");
-        cell = row.createCell(24);
-        cell.setCellValue("Sales End");
-        cell = row.createCell(25);
-        cell.setCellValue("EffDt");
-        cell = row.createCell(26);
+        cell = row.createCell(22);
+        cell.setCellValue("Sales End");        
+        cell = row.createCell(23);
         cell.setCellValue("Comment");
-        cell = row.createCell(27);
+        cell = row.createCell(24);
         cell.setCellValue("Travel Complete");
-        cell = row.createCell(28);
+        cell = row.createCell(25);
         cell.setCellValue("Travel Complete Indicator");
-        cell = row.createCell(29);
+        cell = row.createCell(26);
         cell.setCellValue("Ratesheet Comment");
-        cell = row.createCell(30);
 //        cell.setCellValue("Deal Code");
 //        cell = row.createCell(31);
         
@@ -882,29 +866,21 @@ public class WorkPackageResource {
             cell = rows.createCell(18);
             cell.setCellValue(fares.get(i).getAif());
             cell = rows.createCell(19);
-            cell.setCellValue(fares.get(i).getItinerary());
-            cell = rows.createCell(20);
-            cell.setCellValue(fares.get(i).getOverrideIndicator());
-            cell = rows.createCell(21);
             cell.setCellValue(fares.get(i).getTravelStart().toString());
-            cell = rows.createCell(22);
+            cell = rows.createCell(20);
             cell.setCellValue(fares.get(i).getTravelEnd().toString());
-            cell = rows.createCell(23);
+            cell = rows.createCell(21);
             cell.setCellValue(fares.get(i).getSaleStart().toString());
-            cell = rows.createCell(24);
+            cell = rows.createCell(22);
             cell.setCellValue(fares.get(i).getSaleEnd().toString());
-            cell = rows.createCell(25);
-            cell.setCellValue(fares.get(i).getEffDate());
-            cell = rows.createCell(26);
+            cell = rows.createCell(23);
             cell.setCellValue(fares.get(i).getComment());
-            cell = rows.createCell(27);
+            cell = rows.createCell(24);
             cell.setCellValue(fares.get(i).getTravelComplete().toString());
-            cell = rows.createCell(28);
+            cell = rows.createCell(25);
             cell.setCellValue(fares.get(i).getTravelCompleteIndicator());
-            cell = rows.createCell(29);
+            cell = rows.createCell(26);
             cell.setCellValue(fares.get(i).getRatesheetComment());
-//            cell = rows.createCell(30);
-//            cell.setCellValue(fares.get(i).getDealCode());
         }
         
         ByteArrayOutputStream output = new ByteArrayOutputStream();
