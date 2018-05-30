@@ -43,6 +43,8 @@ gulp.task('copy:images', copy.images);
 
 gulp.task('copy:js', copy.js);
 
+gulp.task('copy:other', copy.other);
+
 gulp.task('images', function () {
     return gulp.src(config.app + 'content/images/**')
         .pipe(plumber({errorHandler: handleErrors}))
