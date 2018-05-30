@@ -31,7 +31,7 @@ gulp.task('clean', function () {
     return del([config.dist], { dot: true });
 });
 
-gulp.task('copy', ['copy:fonts', 'copy:common', 'copy:js']);
+gulp.task('copy', ['copy:fonts', 'copy:common', 'copy:js', 'copy:other']);
 
 gulp.task('copy:fonts', copy.fonts);
 
