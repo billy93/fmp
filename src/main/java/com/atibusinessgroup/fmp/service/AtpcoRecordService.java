@@ -1,27 +1,34 @@
 package com.atibusinessgroup.fmp.service;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
-import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord3Cat004WithDataTable;
+import com.atibusinessgroup.fmp.constant.CollectionName;
+import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord3CategoryWithDataTable;
 import com.atibusinessgroup.fmp.domain.dto.CategoryAttribute;
 import com.atibusinessgroup.fmp.domain.dto.CategoryAttributeObject;
 import com.atibusinessgroup.fmp.domain.dto.DataTable;
-import com.atibusinessgroup.fmp.resository.custom.AtpcoRecord3Cat004CustomRepository;
+import com.atibusinessgroup.fmp.resository.custom.AtpcoRecord3CategoryCustomRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.DBObject;
 
 @Service
 public class AtpcoRecordService {
 
-	private final AtpcoRecord3Cat004CustomRepository atpcoRecord3CategoryCustomRepository;
+	private final AtpcoRecord3CategoryCustomRepository atpcoRecord3CategoryCustomRepository;
+	private final MongoTemplate mongoTemplate;
 	
-	public AtpcoRecordService(AtpcoRecord3Cat004CustomRepository atpcoRecord3CategoryCustomRepository) {
+	public AtpcoRecordService(AtpcoRecord3CategoryCustomRepository atpcoRecord3CategoryCustomRepository, MongoTemplate mongoTemplate) {
 		this.atpcoRecord3CategoryCustomRepository = atpcoRecord3CategoryCustomRepository;
+		this.mongoTemplate = mongoTemplate;
 	}
 	
 	public boolean compareMatchingFareAndRecord(String fGeoType1, String fGeoLoc1, String fGeoType2, String fGeoLoc2, String fOwrt, String fRoutingNo, String fFootnote, Object fEffectiveDate, Object fDiscontinueDate, 
@@ -99,13 +106,8 @@ public class AtpcoRecordService {
 	public List<CategoryAttribute> getAndConvertCategoryDataTable(String category, List<DataTable> dataTables) {
 		List<CategoryAttribute> result = new ArrayList<>();
 		
-		List<String> tableNos = new ArrayList<>();
-		
-		for (DataTable dt:dataTables) {
-			tableNos.add(dt.getTableNo());
-		}
-		
-		String relationship = null;
+		String baseClassPath = "com.atibusinessgroup.fmp.domain.atpco.";
+		String collectionName = null, className = null, methodName = null;
 		
 		switch (category) {
 			case "001": 
@@ -114,18 +116,13 @@ public class AtpcoRecordService {
 						break;
 			case "003": 
 						break;
-			case "004": List<AtpcoRecord3Cat004WithDataTable> cat04dts = atpcoRecord3CategoryCustomRepository.findAllRecord3ByDataTable(tableNos);
-						for (AtpcoRecord3Cat004WithDataTable cat04dt:cat04dts) {
-							for (DataTable dt:dataTables) {
-								if (dt.getTableNo().contentEquals(cat04dt.getCat04().getTableNo())) {
-									relationship = dt.getRelationalIndicator();
-									break;
-								}
-							}
-							result.add(convertObjectToCategoryAttribute(relationship, cat04dt.getCat04()));
-						}
+			case "004": className = baseClassPath.concat("AtpcoRecord3Cat04");
+						methodName = "getTableNo";
+						collectionName = CollectionName.ATPCO_RECORD_3_CAT_004;
 						break;
-			case "005": 
+			case "005": className = baseClassPath.concat("AtpcoRecord3Cat05");
+						methodName = "getTableNumber";
+						collectionName = CollectionName.ATPCO_RECORD_3_CAT_005;
 						break;
 			case "006": 
 						break;
@@ -181,9 +178,48 @@ public class AtpcoRecordService {
 						break;
 		}
 		
+		String relationship = null;
+		
+		if (collectionName != null) {
+			List<AtpcoRecord3CategoryWithDataTable> catdts = atpcoRecord3CategoryCustomRepository.findAllRecord3ByDataTable(collectionName, dataTables.stream().map(DataTable::getTableNo).collect(Collectors.toList()));
+			
+			for (AtpcoRecord3CategoryWithDataTable catdt:catdts) {
+				try {
+					Class<?> c = Class.forName(className);
+					Object cat = convertDBObjectToPOJO(c, catdt.getCategory());
+					
+					Method method = c.getMethod(methodName, null);
+					String tableNo = (String) method.invoke(cat);
+					
+					for (DataTable dt:dataTables) {
+						if (dt.getTableNo().contentEquals(tableNo)) {
+							relationship = dt.getRelationalIndicator();
+							break;
+						}
+					}
+					
+					result.add(convertObjectToCategoryAttribute(relationship, cat));
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
 		return result;
 	}
 	
+	private Object convertDBObjectToPOJO(Class<?> c, DBObject category) {
+		Object result = null;
+		
+		try {
+			result = mongoTemplate.getConverter().read(c, category);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
 	public CategoryAttribute convertObjectToCategoryAttribute(String relationship, Object obj) {
 		CategoryAttribute result = new CategoryAttribute();
 		result.setRelationship(relationship);
