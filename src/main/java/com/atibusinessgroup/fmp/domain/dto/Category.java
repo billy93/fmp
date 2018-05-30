@@ -1,5 +1,5 @@
 package com.atibusinessgroup.fmp.domain.dto;
 
-public class Cat29 {
+public class Category {
 
 }

@@ -1177,9 +1177,9 @@
         
         //ADDON TAB
         vm.selectedAddonTab = 0;     
-        if(vm.workPackage.addon){
-        	vm.currentAddonTab[0] = true;
-        }
+//        if(vm.workPackage.addon){
+//        	vm.currentAddonTab[0] = true;
+//        }
         vm.selectAddonTab = function(index){
         	vm.resetTab(); 
         	if(vm.workPackage.addonFareSheet.length > 0){
@@ -2016,32 +2016,118 @@
 	  
 	  
 	  vm.approve = function(){
-		  $uibModal.open({
-              templateUrl: 'app/pages/work-packages/work-package-approve-email-dialog.html',
-              controller: 'WorkPackageApproveEmailDialogController',
-              controllerAs: 'vm',
-              backdrop: 'static',
-              size: 'lg',
-              resolve: {
-                  workPackage: vm.workPackage,              	  
-	              email: ['SystemParameter', function(SystemParameter) {
-	                   return SystemParameter.getSystemParameterByName({name : 'APPROVE_EMAIL'}).$promise;
-	              }],
-	              ccEmail: ['SystemParameter', function(SystemParameter) {
-	                   return SystemParameter.getSystemParameterByName({name : 'APPROVE_CC_EMAIL'}).$promise;
-	              }],
-              }
-          }).result.then(function(config) {
-        	  vm.workPackage.approveConfig = config;
-        	  WorkPackage.approve(vm.workPackage, function(){
-	    			alert('Approve Success');
-	    			$state.go('work-package');
-    		}, function(){
-    			alert('Approve Failed');
-    		});
-          }, function() {
-      			
-          });
+		  var validated = true;
+		  
+//		  console.log("REGULAR");
+		  if(vm.workPackage.fareSheet != null && vm.workPackage.fareSheet.length > 0){
+			  for(var x=0;x<vm.workPackage.fareSheet.length;x++){
+				  if(vm.workPackage.fareSheet[x].fares != null && vm.workPackage.fareSheet[x].fares.length > 0){
+					  for(var y=0;y<vm.workPackage.fareSheet[x].fares.length;y++){
+						  if(vm.workPackage.fareSheet[x].fares[y].status != "APPROVED"){
+							  validated = false;
+//							  console.log("X : "+x+" | Y : "+y);
+//							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
+							  break;
+						  }
+					  }
+				  }
+			  }
+		  }
+		  
+//		  console.log("DISCOUNT");
+		  if(vm.workPackage.discountFareSheet != null && vm.workPackage.discountFareSheet.length > 0){
+			  for(var x=0;x<vm.workPackage.discountFareSheet.length;x++){
+				  if(vm.workPackage.discountFareSheet[x].fares != null && vm.workPackage.discountFareSheet[x].fares.length > 0){
+					  for(var y=0;y<vm.workPackage.discountFareSheet[x].fares.length;y++){
+						  if(vm.workPackage.discountFareSheet[x].fares[y].status != "APPROVED"){
+							  validated = false;
+//							  console.log("X : "+x+" | Y : "+y);
+//							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
+							  break;
+						  }
+					  }
+				  }
+			  }
+		  }	
+		  
+//		  console.log("ADDON");
+		  if(vm.workPackage.addonFareSheet != null && vm.workPackage.addonFareSheet.length > 0){
+			  for(var x=0;x<vm.workPackage.addonFareSheet.length;x++){
+				  if(vm.workPackage.addonFareSheet[x].fares != null && vm.workPackage.addonFareSheet[x].fares.length > 0){
+					  for(var y=0;y<vm.workPackage.addonFareSheet[x].fares.length;y++){
+						  if(vm.workPackage.addonFareSheet[x].fares[y].status != "APPROVED"){
+							  validated = false;
+//							  console.log("X : "+x+" | Y : "+y);
+//							  console.log(vm.workPackage.addonFareSheet[x].fares[y].status);
+							  break;
+						  }
+					  }
+				  }
+			  } 
+		  }	
+		  
+//		  console.log("MARKET");
+		  if(vm.workPackage.marketFareSheet != null && vm.workPackage.marketFareSheet.length > 0){
+			  for(var x=0;x<vm.workPackage.marketFareSheet.length;x++){
+				  if(vm.workPackage.marketFareSheet[x].fares != null && vm.workPackage.marketFareSheet[x].fares.length > 0){
+					  for(var y=0;y<vm.workPackage.marketFareSheet[x].fares.length;y++){
+						  if(vm.workPackage.marketFareSheet[x].fares[y].status != "APPROVED"){
+							  validated = false;
+//							  console.log("X : "+x+" | Y : "+y);
+//							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
+							  break;
+						  }
+					  }
+				  }
+			  }
+		  }	
+		  
+//		  console.log("WAIVER");
+		  if(vm.workPackage.waiverFareSheet != null && vm.workPackage.waiverFareSheet.length > 0){
+			  for(var x=0;x<vm.workPackage.waiverFareSheet.length;x++){
+				  if(vm.workPackage.waiverFareSheet[x].fares != null && vm.workPackage.waiverFareSheet[x].fares.length > 0){
+					  for(var y=0;y<vm.workPackage.waiverFareSheet[x].fares.length;y++){
+						  if(vm.workPackage.waiverFareSheet[x].fares[y].status != "APPROVED"){
+							  validated = false;
+//							  console.log("X : "+x+" | Y : "+y);
+//							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
+							  break;
+						  }
+					  }
+				  }
+			  }
+		  }	
+		  
+		  if(validated){
+			  $uibModal.open({
+	              templateUrl: 'app/pages/work-packages/work-package-approve-email-dialog.html',
+	              controller: 'WorkPackageApproveEmailDialogController',
+	              controllerAs: 'vm',
+	              backdrop: 'static',
+	              size: 'lg',
+	              resolve: {
+	                  workPackage: vm.workPackage,              	  
+		              email: ['SystemParameter', function(SystemParameter) {
+		                   return SystemParameter.getSystemParameterByName({name : 'APPROVE_EMAIL'}).$promise;
+		              }],
+		              ccEmail: ['SystemParameter', function(SystemParameter) {
+		                   return SystemParameter.getSystemParameterByName({name : 'APPROVE_CC_EMAIL'}).$promise;
+		              }],
+	              }
+	          }).result.then(function(config) {
+	        	  vm.workPackage.approveConfig = config;
+	        	  WorkPackage.approve(vm.workPackage, function(){
+		    			alert('Approve Success');
+		    			$state.go('work-package');
+	    		}, function(){
+	    			alert('Approve Failed');
+	    		});
+	          }, function() {
+	      			
+	          });
+		  } else{
+			  alert('Work Package cannot be approved, please check the workorder');
+		  }
 	  };
 	  
 	  vm.referback = function(){
