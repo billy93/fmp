@@ -177,6 +177,7 @@
 							    <li ng-class="{active:vm.currentTabRatesheetComment}"><a ng-click="vm.selectCommentTab('ratesheetComment')">Rate Sheet Comment</a></li>
 							</ul>
 							<div class="tab-content">
+							
 								<div ng-class="{active:vm.currentTabComment}" class="tab-pane" id="comment">
 									<div class="box-header"></div>
 									<div class="box-body bbgrey">
@@ -186,7 +187,7 @@
 										</div>
 										<div class="clearfix">
 											<div class="pull-right">
-												<button class="btn btn-default small btn-secondary" ng-click="vm.addComment()"></i>Send</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.addComment()">Send</button>
 											</div>
 										</div>										
 									</div>
@@ -197,7 +198,7 @@
 										    		<div class="pull-left comment-detail">{{comment.username}}</div>
 										    		<div class="pull-right comment-detail">{{comment.createdTime | date: 'short'}}</div>
 										    	</div>
-										    	<div class="comment-message" data-ng-bind-html="trustAsHtml(comment.comment)"/>
+										    	<div class="comment-message" data-ng-bind-html="trustAsHtml(comment.comment)"></div>
 										    </div>
 							    		</div>
 						        	</div>
@@ -212,7 +213,7 @@
 										</div> 
 										<div class="clearfix">
 											<div class="pull-right">
-												<button class="btn btn-default small btn-secondary" id="btn-inter-office" ng-click="vm.addInterOffice()" ng-disabled="!vm.isEditable('ioComment')"></i>Send</button>
+												<button class="btn btn-default small btn-secondary" id="btn-inter-office" ng-click="vm.addInterOffice()" ng-disabled="!vm.isEditable('ioComment')">Send</button>
 											</div>
 										</div>										
 									</div>
@@ -223,7 +224,7 @@
 										    		<div class="pull-left comment-detail">{{comment.username}}</div>
 										    		<div class="pull-right comment-detail">{{comment.createdTime | date: 'short'}}</div>
 										    	</div>
-										    	<div class="comment-message" data-ng-bind-html="trustAsHtml(comment.comment)"/>
+										    	<div class="comment-message" data-ng-bind-html="trustAsHtml(comment.comment)"></div>
 										    </div>
 							    		</div>
 						        	</div>
@@ -241,6 +242,7 @@
 										</div>								
 									</div>	 
 								</div>
+							
 							</div>
 						</div>
 					</div>
