@@ -1,5 +1,6 @@
 package com.atibusinessgroup.fmp.web.rest;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -18,6 +19,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+import javax.imageio.ImageIO;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
@@ -2598,12 +2602,13 @@ public class WorkPackageResource {
     		document.setMargins(60, 30, 30, 30);
     	}
     	
-    	PdfWriter.getInstance(document, output);
-    	String IMG = "logo_ga.png";
-//    	String IMG = "src\\main\\webapp\\content\\images\\logo_ga.png";
+    	PdfWriter.getInstance(document, output);    	
+    	InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("images/logo_ga.png");
+    	byte[] imageByte = IOUtils.toByteArray(inputStream);    	
     	document.open();
     	Font font = FontFactory.getFont(FontFactory.TIMES_BOLD, 12, BaseColor.BLACK);
-    	Image image = Image.getInstance(IMG);
+    	Image image = Image.getInstance(imageByte); 
+    	
     	image.scaleToFit(PageSize.A4.getWidth()/4, PageSize.A4.getHeight()/4);
     	image.setAlignment(Image.MIDDLE);
     	String[] content = {"WORK ID : ","TITLE FARE SHEET : ","DESCRIPTION OF GA FARES : ","NOTES RATESHEET : ", "FARES : ", "RULE TEXT : "};
@@ -3302,11 +3307,11 @@ public class WorkPackageResource {
     	}
     	
     	PdfWriter.getInstance(document, output);
-//    	String IMG = "src\\main\\webapp\\content\\images\\logo_ga.png";
-    	String IMG = "logo_ga.png";
+    	InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("images/logo_ga.png");
+    	byte[] imageByte = IOUtils.toByteArray(inputStream);    	
     	document.open();
     	Font font = FontFactory.getFont(FontFactory.TIMES_BOLD, 12, BaseColor.BLACK);
-    	Image image = Image.getInstance(IMG);
+    	Image image = Image.getInstance(imageByte); 
     	image.scaleToFit(PageSize.A4.getWidth()/4, PageSize.A4.getHeight()/4);
     	image.setAlignment(Image.MIDDLE);
     	String[] content = {"WORK ID : ","TITLE FARE SHEET : ", "FARE NAME : ","NOTES RATESHEET : ", "FARES : ", "RULE TEXT : "};
@@ -3692,12 +3697,12 @@ public class WorkPackageResource {
     		document.setMargins(60, 30, 30, 30);
     	}
              
-    	PdfWriter.getInstance(document, output);
-//    	String IMG = "src\\main\\webapp\\content\\images\\logo_ga.png";
-    	String IMG = "logo_ga.png";
+    	PdfWriter.getInstance(document, output);    	
+    	InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("images/logo_ga.png");
+    	byte[] imageByte = IOUtils.toByteArray(inputStream);    	
     	document.open();
     	Font font = FontFactory.getFont(FontFactory.TIMES_BOLD, 12, BaseColor.BLACK);
-    	Image image = Image.getInstance(IMG);
+    	Image image = Image.getInstance(imageByte); 
     	image.scaleToFit(PageSize.A4.getWidth()/4, PageSize.A4.getHeight()/4);
     	image.setAlignment(Image.MIDDLE);
     	String[] content = {"WORK ID : ","TITLE FARE SHEET : ", "FARE NAME : ","NOTES RATESHEET : ", "FARES : ", "RULE TEXT : "};
