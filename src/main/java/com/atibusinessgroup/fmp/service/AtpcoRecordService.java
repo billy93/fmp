@@ -181,49 +181,97 @@ public class AtpcoRecordService {
 						result.setMethodName("getTbl_no");
 						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_009);
 						break;
-			case "010": 
+			case "010": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat101"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_010);
 						break;
-			case "011": 
+			case "011": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat11"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_011);
 						break;
-			case "012": 
+			case "012": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat12"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_012);
 						break;
-			case "013": 
+			case "013": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat13"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_013);
 						break;
-			case "014": 
+			case "014": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat14"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_014);
 						break;
-			case "015": 
+			case "015": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat15"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_015);
 						break;
-			case "016": 
+			case "016": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat16"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_016);
 						break;
-			case "017": 
+			case "017": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat17"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_017);
 						break;
-			case "018": 
+			case "018": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat18"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_018);
 						break;
-			case "019": 
+			case "019": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat19"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_019);
 						break;
-			case "020": 
+			case "020": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat20"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_020);
 						break;
-			case "021": 
+			case "021": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat21"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_021);
 						break;
-			case "022": 
+			case "022": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat22"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_022);
 						break;
-			case "023": 
+			case "023": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat23"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_023);
 						break;
-			case "026": 
+			case "025": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat25"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_025);
 						break;
-			case "027": 
+			case "026": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat26"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_026);
 						break;
-			case "028": 
+			case "027": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat27"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_027);
 						break;
-			case "029": 
+			case "028": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat28"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_028);
 						break;
-			case "031": 
+			case "029": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat29"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_029);
 						break;
-			case "033": 
+			case "031": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat31"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_031);
 						break;
-			case "035": 
+			case "033": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat33"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_033);
 						break;
-			case "050": 
+			case "035": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat35"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_035);
+						break;
+			case "050": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat50"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_050);
 						break;
 		}
 		
