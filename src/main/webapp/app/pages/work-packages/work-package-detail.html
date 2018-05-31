@@ -841,26 +841,6 @@
 								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+$index}}" ng-class="{active:vm.currentAddonTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.addonFareSheet track by $index">
 									<div class="pb1 mb1 bbgrey">
 										<div class="clearfix">
-<<<<<<< HEAD
-											<div class="pull-left w50 two-column">
-												<div class="form-group">
-													<label>Description</label>
-													
-													<textarea class="form-control" 
-									         		name="addonFaresName{{$index}}"
-									         		ng-model="workPackageSheet.addonFaresName" 
-									         		style="min-width: 100%; min-height:100%"
-									         		ng-class="{'must-fill': editForm.editFormATPCO.addonFaresName{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
-									         		ng-required="vm.isRequired('addonFaresName')"  
-									         		ng-disabled="!vm.isEditable('addonFaresName')">
-							          				</textarea>
-												</div>
-											</div>
-											<div class="pull-left w50 two-column">
-												<div class="form-group">
-													
-												</div>
-=======
 											<div class="pull-left">
 												<div class="clearfix">
 													<div class="pull-right datatable-button">
@@ -891,8 +871,7 @@
 														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()">Rate Sheet</button> 
 														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.routemap()">Route Map</button> 
 													</div>
-												</div>																						
->>>>>>> 61decb443d1f62aa912cee7a407dbf6975f456c7
+												</div>		
 											</div>
 										</div>
 									</div>
