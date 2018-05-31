@@ -1,7 +1,6 @@
 package com.atibusinessgroup.fmp.domain.atpco;
 
-import java.math.BigDecimal;
-
+import org.bson.types.Decimal128;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -145,10 +144,10 @@ public class AtpcoRecord3Cat29 {
     private String rec_type;
 
 	@Field("refunds_first_amt_1")
-    private BigDecimal refunds_first_amt_1;
+    private Decimal128 refunds_first_amt_1;
 
 	@Field("refunds_first_amt_2")
-    private BigDecimal refunds_first_amt_2;
+    private Decimal128 refunds_first_amt_2;
 
 	@Field("refunds_first_filler_10")
     private String refunds_first_filler_10;
@@ -163,10 +162,10 @@ public class AtpcoRecord3Cat29 {
     private String refunds_first_filler_12;
 
 	@Field("deposit_first_min_amt_2")
-    private BigDecimal deposit_first_min_amt_2;
+    private Decimal128 deposit_first_min_amt_2;
 
 	@Field("deposit_first_min_amt_1")
-    private BigDecimal deposit_first_min_amt_1;
+    private Decimal128 deposit_first_min_amt_1;
 
 	@Field("refunds_first_geo_tbl_no_995")
     private String refunds_first_geo_tbl_no_995;
@@ -648,19 +647,19 @@ public class AtpcoRecord3Cat29 {
 		this.rec_type = rec_type;
 	}
 
-	public BigDecimal getRefunds_first_amt_1() {
+	public Decimal128 getRefunds_first_amt_1() {
 		return refunds_first_amt_1;
 	}
 
-	public void setRefunds_first_amt_1(BigDecimal refunds_first_amt_1) {
+	public void setRefunds_first_amt_1(Decimal128 refunds_first_amt_1) {
 		this.refunds_first_amt_1 = refunds_first_amt_1;
 	}
 
-	public BigDecimal getRefunds_first_amt_2() {
+	public Decimal128 getRefunds_first_amt_2() {
 		return refunds_first_amt_2;
 	}
 
-	public void setRefunds_first_amt_2(BigDecimal refunds_first_amt_2) {
+	public void setRefunds_first_amt_2(Decimal128 refunds_first_amt_2) {
 		this.refunds_first_amt_2 = refunds_first_amt_2;
 	}
 
@@ -696,19 +695,19 @@ public class AtpcoRecord3Cat29 {
 		this.refunds_first_filler_12 = refunds_first_filler_12;
 	}
 
-	public BigDecimal getDeposit_first_min_amt_2() {
+	public Decimal128 getDeposit_first_min_amt_2() {
 		return deposit_first_min_amt_2;
 	}
 
-	public void setDeposit_first_min_amt_2(BigDecimal deposit_first_min_amt_2) {
+	public void setDeposit_first_min_amt_2(Decimal128 deposit_first_min_amt_2) {
 		this.deposit_first_min_amt_2 = deposit_first_min_amt_2;
 	}
 
-	public BigDecimal getDeposit_first_min_amt_1() {
+	public Decimal128 getDeposit_first_min_amt_1() {
 		return deposit_first_min_amt_1;
 	}
 
-	public void setDeposit_first_min_amt_1(BigDecimal deposit_first_min_amt_1) {
+	public void setDeposit_first_min_amt_1(Decimal128 deposit_first_min_amt_1) {
 		this.deposit_first_min_amt_1 = deposit_first_min_amt_1;
 	}
 
@@ -1660,5 +1659,6 @@ public class AtpcoRecord3Cat29 {
 	}
 	
 	
+
 }
 

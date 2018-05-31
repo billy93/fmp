@@ -178,7 +178,7 @@ public class AfdQueryResource {
         	}
         	
         	if (matchedRecord2 != null && matchedRecord2.getDataTables() != null && matchedRecord2.getDataTables().size() > 0) {
-        		cat.setAttributes(atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), matchedRecord2.getDataTables()));
+        		cat.setCatAttributes(atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), matchedRecord2.getDataTables()));
         	}
         	
         	result.add(cat);

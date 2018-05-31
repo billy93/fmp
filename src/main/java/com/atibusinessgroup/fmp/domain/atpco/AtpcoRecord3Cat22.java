@@ -1,9 +1,9 @@
 package com.atibusinessgroup.fmp.domain.atpco;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bson.types.Decimal128;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -66,10 +66,10 @@ public class AtpcoRecord3Cat22 {
     private String fbr_fare_amount_2;
 
     @Field("fbr_fare_number_of_decimals_2")
-    private BigDecimal fbr_fare_number_of_decimals_2;
+    private Decimal128 fbr_fare_number_of_decimals_2;
 
     @Field("fbr_fare_number_of_decimals_1")
-    private BigDecimal fbr_fare_number_of_decimals_1;
+    private Decimal128 fbr_fare_number_of_decimals_1;
 
     @Field("fbr_ticket_designator")
     private String fbr_ticket_designator;
@@ -305,19 +305,19 @@ public class AtpcoRecord3Cat22 {
 		this.fbr_fare_amount_2 = fbr_fare_amount_2;
 	}
 
-	public BigDecimal getFbr_fare_number_of_decimals_2() {
+	public Decimal128 getFbr_fare_number_of_decimals_2() {
 		return fbr_fare_number_of_decimals_2;
 	}
 
-	public void setFbr_fare_number_of_decimals_2(BigDecimal fbr_fare_number_of_decimals_2) {
+	public void setFbr_fare_number_of_decimals_2(Decimal128 fbr_fare_number_of_decimals_2) {
 		this.fbr_fare_number_of_decimals_2 = fbr_fare_number_of_decimals_2;
 	}
 
-	public BigDecimal getFbr_fare_number_of_decimals_1() {
+	public Decimal128 getFbr_fare_number_of_decimals_1() {
 		return fbr_fare_number_of_decimals_1;
 	}
 
-	public void setFbr_fare_number_of_decimals_1(BigDecimal fbr_fare_number_of_decimals_1) {
+	public void setFbr_fare_number_of_decimals_1(Decimal128 fbr_fare_number_of_decimals_1) {
 		this.fbr_fare_number_of_decimals_1 = fbr_fare_number_of_decimals_1;
 	}
 

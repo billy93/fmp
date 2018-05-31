@@ -32,7 +32,11 @@ spring:
         serialization.indent_output: true
     data:
         mongodb:
-            uri: mongodb://localhost:27001
+<<<<<<< HEAD
+            uri: mongodb://localhost:27017
+=======
+            uri: mongodb://10.90.29.104:27001
+>>>>>>> 61decb443d1f62aa912cee7a407dbf6975f456c7
             database: fmp_db
     mail:
         host: mail.atibusinessgroup.com

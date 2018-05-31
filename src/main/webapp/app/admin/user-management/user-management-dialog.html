@@ -80,8 +80,8 @@
             <div class="input-group">
             	<input autocomplete="off" type="text" name="review_level" ng-model="vm.reviewLevel" class="form-control"
             		uib-typeahead="o as o.name for o in vm.reviewLevels | filter:{name:$viewValue} | limitTo:5" ng-required="vm.user.reviewLevels== undefined">
-            	<span class="input-group-btn">
-                    <button type="button" class="btn btn-default" ng-click="vm.addReviewLevel()"><i class="glyphicon glyphicon-plus"></i></button>
+            	<span class="input-group-addon add-agent">
+            		<i class="fa fa-plus" ng-click="vm.addReviewLevel()"></i>
                 </span>
             </div>
            	<div class="multi-values">
@@ -92,21 +92,32 @@
 				<p class="help-block" ng-show="editForm.review_level.$error.required">
 					This field is required.</p>
 			</div>
-			
-			
         </div>
-        <div class="form-group">
+        <div class="agent-list-wrapper mb1">
+           	<div class="agent-list" ng-repeat="reviewLevel in vm.user.reviewLevels">
+           		<span>{{reviewLevel}}</span>
+           		<div class='remove-agent' ng-click="vm.removeReviewLevel()">
+           			<i class='fa fa-close'></i>
+           		</div>
+           	</div>
+		</div>
+		<div class="form-group">
             <label class="control-label" for="field_businessArea">Business Area</label>
             <div class="input-group">
             	<input autocomplete="off" type="text" name="business_area" ng-model="vm.businessArea" class="form-control"
-            		uib-typeahead="o as o.name for o in vm.businessAreas | filter:{name:$viewValue} | limitTo:5" ng-required="vm.user.businessAreas == undefined">
-            	<span class="input-group-btn">
-                    <button type="button" class="btn btn-default" ng-click="vm.addBusinessArea()"><i class="glyphicon glyphicon-plus"></i></button>
+           			uib-typeahead="o as o.name for o in vm.businessAreas | filter:{name:$viewValue} | limitTo:5" ng-required="vm.user.businessAreas == undefined">
+            	<span class="input-group-addon add-agent">
+	            	<i class="fa fa-plus" ng-click="vm.addBusinessArea()"></i>
                 </span>
             </div>
-           	<div class="multi-values">
-           		<label ng-repeat="businessArea in vm.user.businessAreas track by $index" ng-click="vm.removeBusinessArea($index)">{{businessArea}}<span class="delete"><i class="glyphicon glyphicon-remove-sign"></i></span></label>
-           	</div>
+           	<div class="agent-list-wrapper mb1">
+	           	<div class="agent-list" ng-repeat="businessArea in vm.user.businessAreas track bi $index">
+	           		<span>{{businessArea}}</span>
+	           		<div class='remove-agent' ng-click="vm.removeBusinessArea($index)">
+	           			<i class='fa fa-close'></i>
+	           		</div>
+	           	</div>
+			</div> 
            	<div ng-show="editForm.business_area.$invalid">
 				<p class="help-block" ng-show="editForm.business_area.$error.required">
 					This field is required.</p>
@@ -121,23 +132,32 @@
 					This field is required.</p>
 			</div>         
         </div>
-		<div class="form-group">
-			<label for="suspended"> <input
-				ng-disabled="vm.user.id === null" type="checkbox" id="suspended"
-				name="suspended" ng-model="vm.user.suspended"> <span>Suspended</span>
-			</label>
+        <div class="form-group">
+			<div class="checkbox-wrapper">
+				<label class="black" for="suspended">
+					<input ng-disabled="vm.user.id === null" type="checkbox" id="suspended"
+					name="suspended" ng-model="vm.user.suspended">
+					Suspended
+				</label>
+			</div>
 		</div>
 		<div class="form-group">
-			<label for="locked"> <input ng-disabled="vm.user.id === null"
-				type="checkbox" id="locked" name="locked" ng-model="vm.user.locked">
-				<span>Locked</span>
-			</label>
+			<div class="checkbox-wrapper">
+				<label class="black" for="locked">
+					<input ng-disabled="vm.user.id === null"
+					type="checkbox" id="locked" name="locked" ng-model="vm.user.locked">
+					Locked
+				</label>
+			</div>
 		</div>
 		<div class="form-group">
-			<label for="activated"> <input
-				ng-disabled="vm.user.id === null" type="checkbox" id="activated"
-				name="activated" ng-model="vm.user.activated"> <span>Activated</span>
-			</label>
+			<div class="checkbox-wrapper">
+				<label class="black" for="activated">
+					<input ng-disabled="vm.user.id === null" type="checkbox" id="activated"
+					name="activated" ng-model="vm.user.activated">
+					Activated
+				</label>
+			</div>
 		</div>
 
 		<div class="form-group">

@@ -56,7 +56,6 @@ gulp.task('images', function () {
         .pipe(browserSync.reload({stream: true}));
 });
 
-
 gulp.task('styles', [], function () {
     return gulp.src(config.app + 'content/css')
         .pipe(browserSync.reload({stream: true}));

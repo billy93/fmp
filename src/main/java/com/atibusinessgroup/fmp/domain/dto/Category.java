@@ -8,7 +8,7 @@ public class Category {
 	private int catNo;
 	private String catName;
 	private String type;
-	private List<CategoryAttribute> attributes = new ArrayList<>();
+	private List<CategoryAttribute> catAttributes = new ArrayList<>();
 	
 	public int getCatNo() {
 		return catNo;
@@ -34,19 +34,19 @@ public class Category {
 		this.type = type;
 	}
 	
-	public List<CategoryAttribute> getAttributes() {
-		return attributes;
+	public List<CategoryAttribute> getCatAttributes() {
+		return catAttributes;
 	}
-	
-	public void setAttributes(List<CategoryAttribute> attributes) {
-		this.attributes = attributes;
+
+	public void setCatAttributes(List<CategoryAttribute> catAttributes) {
+		this.catAttributes = catAttributes;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((attributes == null) ? 0 : attributes.hashCode());
+		result = prime * result + ((catAttributes == null) ? 0 : catAttributes.hashCode());
 		result = prime * result + ((catName == null) ? 0 : catName.hashCode());
 		result = prime * result + catNo;
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
@@ -65,11 +65,11 @@ public class Category {
 			return false;
 		}
 		Category other = (Category) obj;
-		if (attributes == null) {
-			if (other.attributes != null) {
+		if (catAttributes == null) {
+			if (other.catAttributes != null) {
 				return false;
 			}
-		} else if (!attributes.equals(other.attributes)) {
+		} else if (!catAttributes.equals(other.catAttributes)) {
 			return false;
 		}
 		if (catName == null) {
@@ -94,8 +94,8 @@ public class Category {
 
 	@Override
 	public String toString() {
-		return "Category [catNo=" + catNo + ", catName=" + catName + ", type=" + type + ", attributes=" + attributes
-				+ "]";
+		return "Category [catNo=" + catNo + ", catName=" + catName + ", type=" + type + ", catAttributes="
+				+ catAttributes + "]";
 	}
 
 	public static final Comparator<Category> ASCENDING_COMPARATOR = Comparator.comparing(Category::getCatNo);

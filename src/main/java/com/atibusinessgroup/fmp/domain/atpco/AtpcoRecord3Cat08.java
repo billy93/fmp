@@ -1,9 +1,9 @@
  package com.atibusinessgroup.fmp.domain.atpco;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bson.types.Decimal128;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -99,13 +99,13 @@ public class AtpcoRecord3Cat08 {
     private String charges_1_first_no;
 
 	@Field("charges_1_first_amt")
-    private BigDecimal charges_1_first_amt;
+    private Decimal128 charges_1_first_amt;
 
 	@Field("charges_1_addl_no")
     private String charges_1_addl_no;
 
 	@Field("charges_1_addl_amt")
-    private BigDecimal charges_1_addl_amt;
+    private Decimal128 charges_1_addl_amt;
     
 	@Field("charges_1_cur")
     private String charges_1_cur;
@@ -117,13 +117,13 @@ public class AtpcoRecord3Cat08 {
     private String charges_2_first_filler_1;
 
 	@Field("charges_2_first_amt")
-    private BigDecimal charges_2_first_amt;
+    private Decimal128 charges_2_first_amt;
 
 	@Field("charges_2_addl_filler_1")
     private String charges_2_addl_filler_1;
 
 	@Field("charges_2_addl_amt")
-    private BigDecimal charges_2_addl_amt;
+    private Decimal128 charges_2_addl_amt;
 
 	@Field("charges_2_addl_cur")
     private String charges_2_addl_cur;
@@ -375,11 +375,11 @@ public class AtpcoRecord3Cat08 {
 		this.charges_1_first_no = charges_1_first_no;
 	}
 
-	public BigDecimal getCharges_1_first_amt() {
+	public Decimal128 getCharges_1_first_amt() {
 		return charges_1_first_amt;
 	}
 
-	public void setCharges_1_first_amt(BigDecimal charges_1_first_amt) {
+	public void setCharges_1_first_amt(Decimal128 charges_1_first_amt) {
 		this.charges_1_first_amt = charges_1_first_amt;
 	}
 
@@ -391,11 +391,11 @@ public class AtpcoRecord3Cat08 {
 		this.charges_1_addl_no = charges_1_addl_no;
 	}
 
-	public BigDecimal getCharges_1_addl_amt() {
+	public Decimal128 getCharges_1_addl_amt() {
 		return charges_1_addl_amt;
 	}
 
-	public void setCharges_1_addl_amt(BigDecimal charges_1_addl_amt) {
+	public void setCharges_1_addl_amt(Decimal128 charges_1_addl_amt) {
 		this.charges_1_addl_amt = charges_1_addl_amt;
 	}
 
@@ -423,11 +423,11 @@ public class AtpcoRecord3Cat08 {
 		this.charges_2_first_filler_1 = charges_2_first_filler_1;
 	}
 
-	public BigDecimal getCharges_2_first_amt() {
+	public Decimal128 getCharges_2_first_amt() {
 		return charges_2_first_amt;
 	}
 
-	public void setCharges_2_first_amt(BigDecimal charges_2_first_amt) {
+	public void setCharges_2_first_amt(Decimal128 charges_2_first_amt) {
 		this.charges_2_first_amt = charges_2_first_amt;
 	}
 
@@ -439,11 +439,11 @@ public class AtpcoRecord3Cat08 {
 		this.charges_2_addl_filler_1 = charges_2_addl_filler_1;
 	}
 
-	public BigDecimal getCharges_2_addl_amt() {
+	public Decimal128 getCharges_2_addl_amt() {
 		return charges_2_addl_amt;
 	}
 
-	public void setCharges_2_addl_amt(BigDecimal charges_2_addl_amt) {
+	public void setCharges_2_addl_amt(Decimal128 charges_2_addl_amt) {
 		this.charges_2_addl_amt = charges_2_addl_amt;
 	}
 
@@ -799,6 +799,6 @@ public class AtpcoRecord3Cat08 {
 				+ ", date_tbl_no_994=" + date_tbl_no_994 + ", text_tbl_no_996=" + text_tbl_no_996 + ", unavail="
 				+ unavail + ", stopovers=" + stopovers + "]";
 	}
-	
+
 	
 }

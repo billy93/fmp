@@ -3,7 +3,7 @@
 	min-width:30px;
 }
 .highlighted{
-	background-color:yellow;
+	background-color:rgb(222, 255, 94, .7) !important;
 }
 </style>
 
@@ -170,77 +170,73 @@
 				</div>
 				<div class="pull-left w50 two-column">
 					<div class="box-detail box-comment">
-						<div class="clearfix tab-body">
-							<ul class="clearfix nav-responsive nav nav-tabs">
-							    <li ng-class="{active:vm.currentTabComment}"><a ng-click="vm.selectCommentTab('comment')">Comment</a></li>
-							    <li ng-class="{active:vm.currentTabInterofficeComment}"><a ng-click="vm.selectCommentTab('interofficeComment')">Inter Office</a></li>
-							    <li ng-class="{active:vm.currentTabRatesheetComment}"><a ng-click="vm.selectCommentTab('ratesheetComment')">Rate Sheet Comment</a></li>
-							</ul>
-							<div class="tab-content">
-								<div ng-class="{active:vm.currentTabComment}" class="tab-pane" id="comment">
-									<div class="box-header"></div>
-									<div class="box-body bbgrey">
+						<div class="box-header">Comment</div>
+						<div class="box-body bbgrey">
+							<div class="clearfix tab-body">
+								<ul class="clearfix nav-responsive nav nav-tabs">
+								    <li ng-class="{active:vm.currentTabComment}"><a ng-click="vm.selectCommentTab('comment')">Comment</a></li>
+								    <li ng-class="{active:vm.currentTabInterofficeComment}"><a ng-click="vm.selectCommentTab('interofficeComment')">Inter Office</a></li>
+								    <li ng-class="{active:vm.currentTabRatesheetComment}"><a ng-click="vm.selectCommentTab('ratesheetComment')">Rate Sheet Comment</a></li>
+								</ul>
+								<div class="tab-content">
+									<div ng-class="{active:vm.currentTabComment}" class="tab-pane" id="comment">																		
 										<div class="form-group">
-											<label>Comment</label>
 											<wysiwyg-edit content="vm.commentString" config="vm.editorConfig"></wysiwyg-edit>
 										</div>
 										<div class="clearfix">
 											<div class="pull-right">
-												<button class="btn btn-default small btn-secondary" ng-click="vm.addComment()"></i>Send</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.addComment()">Send</button>
 											</div>
 										</div>										
+										
+							        	 <div class="box-body">
+							        		<div class="comment-wrapper">
+								    			<div class="comment-list" ng-repeat="comment in vm.workPackage.comment.slice().reverse() track by $index">
+											    	<div class="clearfix">
+											    		<div class="pull-left comment-detail">{{comment.username}}</div>
+											    		<div class="pull-right comment-detail">{{comment.createdTime | date: 'short'}}</div>
+											    	</div>
+											    	<div class="comment-message" data-ng-bind-html="trustAsHtml(comment.comment)"></div>
+											    </div>
+								    		</div>
+							        	</div>
 									</div>
-						        	<div class="box-body">
-						        		<div class="comment-wrapper">
-							    			<div class="comment-list" ng-repeat="comment in vm.workPackage.comment.slice().reverse() track by $index">
-										    	<div class="clearfix">
-										    		<div class="pull-left comment-detail">{{comment.username}}</div>
-										    		<div class="pull-right comment-detail">{{comment.createdTime | date: 'short'}}</div>
-										    	</div>
-										    	<div class="comment-message" data-ng-bind-html="trustAsHtml(comment.comment)"/>
-										    </div>
-							    		</div>
-						        	</div>
-								</div>
-								
-								<div ng-class="{active:vm.currentTabInterofficeComment}" class="tab-pane" id="inter-office">
-									<div class="box-header"></div>
-									<div class="box-body bbgrey">
+
+									<div ng-class="{active:vm.currentTabInterofficeComment}" class="tab-pane" id="inter-office">
 										<div class="form-group">
-											<label>Inter Office</label>
 											<wysiwyg-edit content="vm.ioString" config="vm.editorConfig"></wysiwyg-edit>
 										</div> 
 										<div class="clearfix">
 											<div class="pull-right">
-												<button class="btn btn-default small btn-secondary" id="btn-inter-office" ng-click="vm.addInterOffice()" ng-disabled="!vm.isEditable('ioComment')"></i>Send</button>
+												<button class="btn btn-default small btn-secondary" id="btn-inter-office" ng-click="vm.addInterOffice()" ng-disabled="!vm.isEditable('ioComment')">Send</button>
 											</div>
 										</div>										
+										<div class="box-body">
+							        		<div class="comment-wrapper">
+								    			<div class="comment-list" ng-repeat="comment in vm.workPackage.interofficeComment.slice().reverse() track by $index">
+											    	<div class="clearfix">
+											    		<div class="pull-left comment-detail">{{comment.username}}</div>
+											    		<div class="pull-right comment-detail">{{comment.createdTime | date: 'short'}}</div>
+											    	</div>
+											    	<div class="comment-message" data-ng-bind-html="trustAsHtml(comment.comment)"></div>
+											    </div>
+								    		</div>
+							        	</div>
 									</div>
-									<div class="box-body">
-						        		<div class="comment-wrapper">
-							    			<div class="comment-list" ng-repeat="comment in vm.workPackage.interofficeComment.slice().reverse() track by $index">
-										    	<div class="clearfix">
-										    		<div class="pull-left comment-detail">{{comment.username}}</div>
-										    		<div class="pull-right comment-detail">{{comment.createdTime | date: 'short'}}</div>
-										    	</div>
-										    	<div class="comment-message" data-ng-bind-html="trustAsHtml(comment.comment)"/>
-										    </div>
-							    		</div>
-						        	</div>
+									
+									<div ng-class="{active:vm.currentTabRatesheetComment}" class="tab-pane" id="rate-sheet-comment">
+										<div class="box-body">
+											<div class="form-group">
+												<label>Rate Sheet Comment</label>
+												<textarea class="form-control" rows="3" id="ratesheetComment" ng-model="vm.workPackage.ratesheetComment" name="ratesheetComment"
+							                    ng-disabled="!vm.isFieldDisable('ratesheetComment')" 
+							                    ng-class="{'must-fill': editForm.ratesheetComment.$error.required}"
+							                    ng-required="vm.isRequired('ratesheetComment')"></textarea>
+											</div>								
+										</div>	 
+									</div>
 								</div>
-								
-								<div ng-class="{active:vm.currentTabRatesheetComment}" class="tab-pane" id="rate-sheet-comment">
-									<div class="box-header"></div>
-									<div class="box-body bbgrey">
-										<div class="form-group">
-											<label>Rate Sheet Comment</label>
-											<textarea class="form-control" rows="3" id="ratesheetComment" ng-model="vm.workPackage.ratesheetComment" name="ratesheetComment"
-						                    ng-disabled="vm.isFieldDisable('ratesheetComment')" 
-						                    ng-style="editForm.ratesheetComment{{$index}}.$error.required && vm.errorStyle"
-						                    ng-required="vm.checkRequiredField('ratesheetComment')"></textarea>
-										</div>								
-									</div>	 
-								</div>
+							
 							</div>
 						</div>
 					</div>
@@ -419,7 +415,7 @@
 												</div>
 											</div>
 											<div class="table-responsive">
-												<table class="table table-stripped table-bordered datatable">
+												<table class="table table-stripped table-bordered datatable" jq-slider>
 													<thead>
 														<tr role="row">
 															<!-- <th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">
@@ -461,13 +457,12 @@
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Ratesheet Comment</th>
 														</tr>
 													</thead>
-													<tbody ng-repeat="fare in workPackageSheet.fares track by $index" ng-click="vm.tbodyClick(workPackageShee)">
-														<!-- ng-click="vm.rowTableClick($event, $parent.$index+''+$index, 'fares')" -->
-														<tr role="row" class="datatable-row">
+													<tbody ng-repeat="(key, fare) in workPackageSheet.fares track by $index" ng-click="vm.tbodyClick(workPackageSheet)">
+														<tr role="row" class="datatable-row" ng-class="{'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
 															<!-- <td>
 																<input type="checkbox" ng-model="fare.selected" ng-change="optionToggled(workPackageSheet.fares)">
 															</td> -->
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no']}">{{$index+1}}</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['no']}" >{{$index+1}}</td>
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'status', $event)" ng-class="{highlighted:fare.field['status']}">
 																<select class="form-control inside-table" name="status{{$parent.$index}}{{$index}}" ng-model="fare.status" id="field_status" 
 																	ng-class="{'must-fill': !editForm.editFormATPCO.status{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"												         		
@@ -476,15 +471,15 @@
 													             	ng-options="key as value for (key , value) in vm.status">
 																</select>	
 															</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'carrier', $event)" ng-class="{highlighted:fare.field['carrier']}">
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'carrier', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['carrier']}">
 																<input type="text" class="form-control" name="carrier{{$parent.$index}}{{$index}}" id="field_carrier"
 											                    		ng-model="fare.carrier"
 											                    		ng-disabled="!vm.isEditable('carrier')"
 											                    		ng-class="{'must-fill': editForm.editFormATPCO.carrier{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('carrier')"/>
 															</td>																
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'action', $event)" ng-class="{highlighted:fare.field['action']}">{{fare.action}}</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'tarno', $event)" ng-class="{highlighted:fare.field['tarno']}">
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'action', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['action']}">{{fare.action}}</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'tarno', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['tarno']}">
 																<ui-select ng-model="fare.tariffNumber" name="tarno{{$parent.$index}}{{$index}}" theme="select2" title="Choose a Tariff"  class="form-control"
 																 
 																ng-required="vm.isRequired('tarno') && fare.action != 'Canceled'"  
@@ -502,7 +497,7 @@
 																    </ui-select-choices>
 																  </ui-select>
 															</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'tarcd', $event)" ng-class="{highlighted:fare.field['tarcd']}">
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'tarcd', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['tarcd']}">
 																<ui-select ng-model="fare.tariffNumber" theme="select2" class="form-control"
 																 
 																name="tarcd{{$parent.$index}}{{$index}}"
@@ -532,8 +527,8 @@
 											           				{{fare.tarcd}}
 										           				</span> -->
 															</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'global', $event)" ng-class="{highlighted:fare.field['global']}">{{fare.tariffNumber.global}}</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'origin', $event)" ng-class="{highlighted:fare.field['origin']}">
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'global', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['global']}">{{fare.tariffNumber.global}}</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'origin', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['origin']}">
 																<ui-select ng-model="fare.origin" theme="select2" class="form-control"
 																
 																name="origin{{$parent.$index}}{{$index}}"
@@ -555,7 +550,7 @@
 																    </ui-select-choices>
 																  </ui-select>
 															</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'destination', $event)" ng-class="{highlighted:fare.field['destination']}">
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'destination', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['destination']}">
 															<ui-select ng-model="fare.destination" theme="select2" class="form-control"
 																
 																name="destination{{$parent.$index}}{{$index}}"
@@ -577,13 +572,13 @@
 																    </ui-select-choices>
 																  </ui-select>
 															</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'fareBasis', $event)" ng-class="{highlighted:fare.field['fareBasis']}">
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'fareBasis', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['fareBasis']}">
 																<input type="text" class="form-control" name="farebasis{{$parent.$index}}{{$index}}" id="field_farebasis"
 									                				ng-disabled="!vm.isEditable('farebasis')"
 									                				ng-required="vm.isRequired('farebasis') && fare.action != 'Canceled'" 
 									                				ng-model="fare.fareBasis"/>				
 															</td>	
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'bookingClass', $event)" ng-class="{highlighted:fare.field['bookingClass']}">
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'bookingClass', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['bookingClass']}">
 																<input type="text" class="form-control" name="bookingClass{{$parent.$index}}{{$index}}" id="field_bookingClass"
 									                				ng-maxlength="2"
 									                				maxlength="2"
@@ -595,7 +590,7 @@
 										                				editForm.editFormATPCO.bookingClass{{$parent.$index}}{{$index}}.$error.pattern}"
 										                    		ng-model="fare.bookingClass"/>	
 															</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'cabin', $event)" ng-class="{highlighted:fare.field['cabin']}">
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'cabin', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['cabin']}">
 										           				<select class="form-control" 
 														             name="cabin{{$parent.$index}}{{$index}}"
 														             ng-required="vm.isRequired('cabin')"
@@ -605,7 +600,7 @@
 														             ng-options="key as value for (key , value) in vm.cabin"></select>
 										                			
 										           			</td>
-										           			<td ng-click="vm.tdClick(workPackageSheet, fare, 'typeOfJourney', $event)" ng-class="{highlighted:fare.field['typeOfJourney']}">
+										           			<td ng-click="vm.tdClick(workPackageSheet, fare, 'typeOfJourney', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['typeOfJourney']}">
 										           				<select class="form-control" 
 														             name="typeOfJourney{{$parent.$index}}{{$index}}"
 														             ng-required="vm.isRequired('typeOfJourney')"
@@ -614,28 +609,28 @@
 														             ng-disabled="!vm.isEditable('typeOfJourney')"
 														             ng-options="key as value for (key , value) in vm.typeOfJourney"></select>
 										           			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'footnote', $event)" ng-class="{highlighted:fare.field['footnote']}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'footnote', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['footnote']}">
 									               				<input type="text" class="form-control" name="footnote{{$parent.$index}}{{$index}}" id="field_footnote"
 										                				ng-class="{'must-fill': editForm.editFormATPCO.footnote{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 															            ng-disabled="!vm.isEditable('footnote')"
 															            ng-required="vm.isRequired('footnote')"
 											                    		ng-model="fare.footnote"/>
 									               			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'rtgno', $event)" ng-class="{highlighted:fare.field['rtgno']}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'rtgno', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['rtgno']}">
 									               				<input type="text" class="form-control" name="rtgno{{$parent.$index}}{{$index}}" id="field_bookingClass"
 										                				ng-disabled="!vm.isEditable('rtgno')"
 										                				ng-required="vm.isRequired('rtgno')" 
 										                				ng-class="{'must-fill': editForm.editFormATPCO.rtgno{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 															            ng-model="fare.rtgno"/>
 									               			</td>
-									               			<td  ng-click="vm.tdClick(workPackageSheet, fare, 'ruleno', $event)" ng-class="{highlighted:fare.field['ruleno']}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'ruleno', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['ruleno']}">
 							               						<input type="text" class="form-control" name="ruleno{{$parent.$index}}{{$index}}" id="field_bookingClass"
 								                				ng-disabled="!vm.isEditable('ruleno')"
 								                				ng-required="vm.isRequired('ruleno')" 
 								                				ng-class="{'must-fill': editForm.editFormATPCO.ruleno{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 													            ng-model="fare.ruleno"/>
 									               			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'currency', $event)" ng-class="{highlighted:fare.field['currency']}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'currency', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['currency']}">
 										               			<ui-select ng-model="fare.currency" theme="select2" class="form-control"
 																	name="currency{{$parent.$index}}{{$index}}"
 																	ng-required="vm.isRequired('currency') && fare.action != 'Canceled'"  
@@ -653,7 +648,7 @@
 																	    </ui-select-choices>
 																	  </ui-select>
 									               			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'amount', $event)" ng-class="{highlighted:fare.field['amount']}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'amount', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['amount']}">
 							               						<input type="text" class="form-control" name="amount{{$parent.$index}}{{$index}}" id="field_bookingClass"
 								                				ng-disabled="!vm.isEditable('amount')"
 								                				ng-required="vm.isRequired('amount', fare)" 
@@ -685,14 +680,14 @@
 									               			<td></td>
 									               			-->
 									               			
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'aif', $event)" ng-class="{highlighted:fare.field['aif']}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'aif', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['aif']}">
 										               			<input type="text" class="form-control" name="aif{{$parent.$index}}{{$index}}" id="field_bookingClass"
 										                				ng-disabled="!vm.isEditable('aif')"
 										                				ng-required="vm.isRequired('aif', fare)" 
 										                				ng-class="{'must-fill': editForm.editFormATPCO.aif{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 															            ng-model="fare.aif"/>
 										               		</td> 
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelStart', $event);" ng-class="{highlighted:fare.field['travelStart']}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelStart', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['travelStart']}">
 									               				<span class="input-group">
 																	<input id="field_travelStartDate" 
 																		type="text"
@@ -710,7 +705,7 @@
 																	</span>
 																</span>
 									               			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelEnd', $event);" ng-class="{highlighted:fare.field['travelEnd']}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelEnd', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['travelEnd']}">
 									               				<span class="input-group">
 																	<input id="field_travelEndDate" 
 																		type="text"
@@ -735,7 +730,7 @@
 								                				ng-class="{'must-fill': editForm.editFormATPCO.travelEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 													            ng-model="fare.travelEnd"/>	 -->								                			
 									               			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'saleStart', $event);" ng-class="{highlighted:fare.field['saleStart']}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'saleStart', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['saleStart']}">
 									               				<span class="input-group">
 																	<input id="field_startDate" 
 																		type="text"
@@ -753,7 +748,7 @@
 																	</span>
 																</span>
 									               			</td>
-									               			<td  ng-click="vm.tdClick(workPackageSheet, fare, 'saleEnd', $event);" ng-class="{highlighted:fare.field['saleEnd']}">
+									               			<td  ng-click="vm.tdClick(workPackageSheet, fare, 'saleEnd', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['saleEnd']}">
 							               						<span class="input-group">
 																	<input id="field_startDate" 
 																		type="text"
@@ -771,11 +766,11 @@
 																	</span>
 																</span>							                			
 									               			</td>
-									               			<td  ng-click="vm.tdClick(workPackageSheet, fare, 'comment', $event);" ng-class="{highlighted:fare.field['comment']}">
+									               			<td  ng-click="vm.tdClick(workPackageSheet, fare, 'comment', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['comment']}">
 									               				<input type="text" class="form-control" name="comment{{$parent.$index}}{{$index}}" id="field_comment"
 											                    		ng-model="fare.comment"/>
 									               			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelComplete', $event);" ng-class="{highlighted:fare.field['travelComplete']}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelComplete', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['travelComplete']}">
 									               				<span class="input-group">
 																	<input id="field_travelComplete" 
 																		type="text"
@@ -799,7 +794,7 @@
 									                    		ng-class="{'must-fill': editForm.editFormATPCO.travelComplete{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            														                    		
 								                				ng-model="fare.travelComplete"/> -->
 									               			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelCompleteIndicator', $event);" ng-class="{highlighted:fare.field['travelCompleteIndicator']}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelCompleteIndicator', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['travelCompleteIndicator']}">
 							               						<select class="form-control" name="travelIndicator{{$parent.$index}}{{$index}}" id="field_travelIndicator"
 								                				ng-disabled="!vm.isEditable('travelIndicator')"
 								                				ng-required="vm.isRequired('travelIndicator')"
@@ -807,7 +802,7 @@
 									                    		ng-options="key as value for (key , value) in vm.travelCompleteIndicator"											             																		            														                    		
 								                				ng-model="fare.travelCompleteIndicator"></select>
 									               			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'ratesheetComment', $event);" ng-class="{highlighted:fare.field['ratesheetComment']}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'ratesheetComment', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['ratesheetComment']}">
 								                				<input type="text" class="form-control" name="ratesheetComment{{$parent.$index}}{{$index}}" id="field_ratesheetComment"
 								                				ng-disabled="!vm.isEditable('ratesheetComment')"
 								                				ng-required="vm.isRequired('ratesheetComment')"
@@ -845,24 +840,37 @@
 								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+$index}}" ng-class="{active:vm.currentAddonTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.addonFareSheet track by $index">
 									<div class="pb1 mb1 bbgrey">
 										<div class="clearfix">
-											<div class="pull-left w50 two-column">
-												<div class="form-group">
-													<label>Description</label>
-													
-													<textarea class="form-control" 
-									         		name="addonFaresName{{$index}}"
-									         		ng-model="workPackageSheet.addonFaresName" 
-									         		style="min-width: 100%; min-height:100%"
-									         		ng-class="{'must-fill': editForm.editFormATPCO.addonFaresName{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
-									         		ng-required="vm.isRequired('addonFaresName')"  
-									         		ng-disabled="!vm.isEditable('addonFaresName')">
-							          				</textarea>
-												</div>
-											</div>
-											<div class="pull-left w50 two-column">
-												<div class="form-group">
-													
-												</div>
+											<div class="pull-left">
+												<div class="clearfix">
+													<div class="pull-right datatable-button">
+														<div class="button-group dropdown custom">
+															<button class="btn btn-default small btn-secondary">Edit <i class="fa fa-caret-down"></i></button>
+															<ul class="dropdown-menu custom" role="menu">
+															    <li>
+															    	<a ng-click="vm.clearSelection()">Clear Selection</a>
+															    </li>	
+															    <li>
+															    	<a ng-click="vm.searchReplace(workPackageSheet)">Search/Replace</a>
+															    </li>														   
+															    <li>
+															    	<a ng-click="vm.addFares(workPackageSheet)">Add Rows</a>
+															    </li>
+															    <li>
+															    	<a href="#">Paste</a>
+															    </li>
+															    <li>
+															    	<a href="#">Paste As Cancel</a>
+															    </li>
+															</ul>
+														</div>													
+														<button class="btn btn-default small btn-secondary" ngf-select  ngf-change="vm.importFare($file)">Import</button>
+														<button class="btn btn-default small btn-secondary" ng-click="vm.exportFares()">Export</button>
+														<!-- <button class="btn btn-default small btn-secondary">Publish</button> -->
+														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.agent()">Agents</button>
+														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()">Rate Sheet</button> 
+														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.routemap()">Route Map</button> 
+													</div>
+												</div>		
 											</div>
 										</div>
 									</div>
@@ -911,7 +919,7 @@
 												</div>
 											</div>
 											<div class="table-responsive">
-												<table class="table table-stripped table-bordered datatable">
+												<table class="table table-stripped table-bordered datatable" jq-slider>
 													<thead>
 														<tr role="row">																	
 															<th>No</th>
@@ -1459,7 +1467,7 @@
 									      					<div class="table-wrapper">
 																<div class="datatable-wrapper form-inline">
 																	<div class="table-responsive">
-																		<table class="table table-stripped table-bordered datatable">
+																		<table class="table table-stripped table-bordered datatable" jq-slider>
 																			<thead>
 																				<tr role="row">
 																					<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tar Type</th>
@@ -1493,7 +1501,7 @@
 									      					<div class="table-wrapper">
 																<div class="datatable-wrapper form-inline">
 																	<div class="table-responsive">
-																		<table class="table table-stripped table-bordered datatable">
+																		<table class="table table-stripped table-bordered datatable" jq-slider>
 																			<thead>
 																				<tr role="row">
 																					<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Batch No</th>
@@ -1649,7 +1657,7 @@
 						                </div>
 						              </div>
 						              <div class="table-responsive">
-						                <table class="table table-stripped table-bordered datatable">
+						                <table class="table table-stripped table-bordered datatable" jq-slider>
 						                  <thead>
 						                    <tr role="row">
 				                     		 <th>No</th>
@@ -2394,7 +2402,7 @@
 											</div>
 										</div>
 										<div class="table-responsive">
-											<table class="table table-stripped table-bordered datatable">
+											<table class="table table-stripped table-bordered datatable" jq-slider>
 												<thead>
 													<tr>
 								                		<th>No</th>
@@ -2979,7 +2987,7 @@
 										</div>
 									</div>
 									<div class="table-responsive">
-										<table class="table table-stripped table-bordered datatable">
+										<table class="table table-stripped table-bordered datatable" jq-slider>
 											<thead>
 												<tr>
 							                		<th>No</th>

@@ -74,6 +74,9 @@ body {
     pointer-events: initial;
 }
 
+.full .modal-dialog {
+	width: 75%;
+}
 /* ==========================================================================
 Hide ng-cloak on page load, https://docs.angularjs.org/api/ng/directive/ngCloak
 ========================================================================== */

@@ -21,7 +21,8 @@
                 }
             },
             'update': { method:'PUT' },
-            'getRules': { method: 'GET', url:'api/rule-queries/rules', isArray: true }
+            'getRules': { method: 'GET', url:'api/rule-queries/rules', isArray: true },
+            'getRules2': { method: 'GET', url:'api/rule-queries/rules2', isArray: true }
         });
     }
 })();

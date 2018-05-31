@@ -1,14 +1,4 @@
 
-</style>
-<script>
-	$(document).ready(function() {
-		$("th").css({
-			"text-align" : "center"
-		});
-	});
-</script>
-
-
 <div class="panel">
 	<div class="panel-body">
 
@@ -41,8 +31,38 @@
 										id="ruleTarNo" ng-model="vm.queryParams.ruleTarNo" uppercase />
 									<div class="custom-label semibold">Category</div>
 									<select class="form-control" name="category" id="catNo" ng-model="vm.queryParams.catNo">
-										<option value="001">001</option>
-										<option value="002">002</option>
+										<option value="">All</option>
+										<option value="001">01 - Eligibility</option>
+										<option value="002">02 - Day/Time</option>
+										<option value="003">03 - Season App</option>
+										<option value="004">04 - Flight App</option>
+										<option value="005">05 - Adv Bkg</option>
+										<option value="006">06 - Min Stay</option>
+										<option value="007">07 - Max Stay</option>
+										<option value="008">08 - Stopovers</option>
+										<option value="009">09 - Transfers</option>
+										<option value="010">10 - Comb'ty</option>
+										<option value="011">11 - Blackouts</option>
+										<option value="012">12 - Surcharges</option>
+										<option value="013">13 - Accmp Tvl</option>
+										<option value="014">14 - Tvl Rest</option>
+										<option value="015">15 - Sale Rest</option>
+										<option value="016">16 - Penalties</option>
+										<option value="017">17 - Hi Int Pt</option>
+										<option value="018">18 - Tkt Endorse</option>
+										<option value="019">19 - Child Disc</option>
+										<option value="020">20 - Tour Disc</option>
+										<option value="021">21 - Agents Disc</option>
+										<option value="022">22 - Other Disc</option>
+										<option value="023">23 - Misc Tags</option>
+										<option value="026">26 - Groups</option>
+										<option value="027">27 - Tours</option>
+										<option value="028">28 - Visit Cntry</option>
+										<option value="029">29 - Deposits</option>
+										<option value="031">31 - Vol Chgs</option>
+										<option value="033">33 - Vol Refunds</option>
+										<option value="035">35 - Neg Fares</option>
+										<option value="050">50 - Rule App</option>
 									</select>
 								</div>
 							</div>
@@ -52,7 +72,7 @@
 										<button type="button" class="btn btn-default small pull-left"
 											ng-click="vm.loadAll(); vm.hideDetail()">Query</button>
 										<button type="button" class="btn btn-default small pull-left"
-											ng-click="vm.loadAll(); vm.hideDetail()">Clear</button>
+											ng-click="vm.hideDetail(); vm.clearFilter();">Clear</button>
 										<button type="reset" ng-click="vm.reset(); vm.hideDetail()"
 											class="btn btn-default small pull-left">Reset</button>
 									</div>
@@ -79,7 +99,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="ruleQuery in vm.ruleQueries" ng-click="vm.selectedRow = ruleQuery; vm.getRules(ruleQuery); vm.showDetail()" ng-class="{'selected': vm.selectedRow == ruleQuery}">
+							<tr ng-repeat="ruleQuery in vm.ruleQueries" ng-click="vm.selectedRow = ruleQuery; vm.getRules(ruleQuery); vm.getRules2(ruleQuery); vm.showDetail()" ng-class="{'selected': vm.selectedRow == ruleQuery}">
 								<td>{{$index + 1}}</td>
 								<td>{{ruleQuery.cxr}}</td>
 								<td>{{ruleQuery.tarNo}}</td>
@@ -144,7 +164,7 @@
 								<td>{{rq.routingNo}}</td>
 								<td>{{rq.footnote}}</td>
 								<td>{{rq.effectiveDateObject | date:'medium'}}</td>
-								<td><span ng-if="rq.discontinueDateObject!='indef'">{{rq.discontinueDateObject  | date:'medium'}}</span></td>
+								<td><span ng-if="rq.discontinueDateObject=='indef'"></span><span ng-if="rq.discontinueDateObject!='indef'">{{rq.discontinueDateObject  | date:'medium'}}</span></td>
 								
 							</tr>
 							<!-- 							<tr ng-if="vm.selectedRow == afdQuery.atpcoFareId"> -->
@@ -153,6 +173,12 @@
 						</tbody>
 					</table>
 				</div>
+				
+				<div class="additional-info-wrapper" id="ruleCategories" hidden="hidden"> 
+           			<div class="additional-info" ng-click="vm.showCategoryDetail(cat)" ng-class="{'yellow': cat.catAttributes.length > 0 && cat.type != 'G', 'blue': cat.catAttributes.length > 0 && cat.type == 'G'}" ng-repeat="cat in vm.ruleQueryCategories2 track by cat.catNo">
+           				{{cat.catNo}} {{cat.catName}} <span ng-if="cat.catAttributes.length > 0">({{cat.type}})</span>
+           			</div>
+           		</div>
 <!-- 				<div class="text-center"> -->
 <!-- 					<jhi-item-count page="vm.page" total="vm.queryCount" -->
 <!-- 						items-per-page="vm.itemsPerPage"></jhi-item-count> -->

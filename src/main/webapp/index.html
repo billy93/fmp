@@ -7,25 +7,29 @@
     <meta name="description" content="">
     <meta name="theme-color" content="#000000">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css content/css/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css">
-    <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css">
-    <link rel="stylesheet" href="bower_components/ngWYSIWYG/dist/editor.min.css">
+    <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css">    
+    <link rel="stylesheet" href="bower_components/ngWYSIWYG/dist/editor.min.css">    
     <!-- endinject -->
     <!-- endbuild -->
+    
     <!-- build:css content/css/main.css -->
     <link rel="stylesheet" href="content/css/main.css">
     <!-- endbuild -->
+    
     <!-- build:css content/css/fmp-ext.css -->
     <link rel="stylesheet" href="content/css/animate.css">
     <link rel="stylesheet" href="content/css/font-awesome.min.css">
     <link rel="stylesheet" href="content/css/select2.css">    
     <link rel="stylesheet" href="content/css/selectize.default.css">
     <!-- endbuild -->
-     <!-- build:css content/css/fmp.css -->
+    
+    <!-- build:css content/css/fmp.css -->
     <link rel="stylesheet" href="content/css/fmp.css">
     <!-- endbuild -->
     
@@ -41,6 +45,33 @@
 	<div ui-view="login" ng-if="!isAuthenticated()" ng-cloak></div>
     
     <div ui-view="navbar" ng-if="isAuthenticated()" ng-cloak></div>
+    
+    <div class="loading" style="display: none">
+        <div class="svg-loader">
+            <svg xmlns="http://www.w3.org/2000/svg" width="135" height="140" viewBox="0 0 135 140" fill="#dc1156">
+                <rect y="20.8601" width="15" height="98.2798" rx="6">
+                    <animate attributeName="height" begin="0.5s" dur="1s" values="120;110;100;90;80;70;60;50;40;140;120" calcMode="linear" repeatCount="indefinite"/>
+                    <animate attributeName="y" begin="0.5s" dur="1s" values="10;15;20;25;30;35;40;45;50;0;10" calcMode="linear" repeatCount="indefinite"/>
+                </rect>
+                <rect x="30" y="33.3601" width="15" height="73.2798" rx="6">
+                    <animate attributeName="height" begin="0.25s" dur="1s" values="120;110;100;90;80;70;60;50;40;140;120" calcMode="linear" repeatCount="indefinite"/>
+                    <animate attributeName="y" begin="0.25s" dur="1s" values="10;15;20;25;30;35;40;45;50;0;10" calcMode="linear" repeatCount="indefinite"/>
+                </rect>
+                <rect x="60" width="15" height="48.2798" rx="6" y="45.8601">
+                    <animate attributeName="height" begin="0s" dur="1s" values="120;110;100;90;80;70;60;50;40;140;120" calcMode="linear" repeatCount="indefinite"/>
+                    <animate attributeName="y" begin="0s" dur="1s" values="10;15;20;25;30;35;40;45;50;0;10" calcMode="linear" repeatCount="indefinite"/>
+                </rect>
+                <rect x="90" y="33.3601" width="15" height="73.2798" rx="6">
+                    <animate attributeName="height" begin="0.25s" dur="1s" values="120;110;100;90;80;70;60;50;40;140;120" calcMode="linear" repeatCount="indefinite"/>
+                    <animate attributeName="y" begin="0.25s" dur="1s" values="10;15;20;25;30;35;40;45;50;0;10" calcMode="linear" repeatCount="indefinite"/>
+                </rect>
+                <rect x="120" y="20.8601" width="15" height="98.2798" rx="6">
+                    <animate attributeName="height" begin="0.5s" dur="1s" values="120;110;100;90;80;70;60;50;40;140;120" calcMode="linear" repeatCount="indefinite"/>
+                    <animate attributeName="y" begin="0.5s" dur="1s" values="10;15;20;25;30;35;40;45;50;0;10" calcMode="linear" repeatCount="indefinite"/>
+                </rect>
+            </svg>
+        </div>                    
+    </div>
     
     <div ng-if="isAuthenticated() || exceptionalState">
 		<div class="main-container clearfix">
@@ -102,7 +133,6 @@
     <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
     <script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
     <script src="bower_components/angular-ui-select/dist/select.js"></script>
-    <script src="bower_components/oclazyload/dist/ocLazyLoad.js"></script>
     <script src="bower_components/ng-idle/angular-idle.js"></script>
     <script src="bower_components/ngWYSIWYG/dist/wysiwyg.min.js"></script>
     <!-- endinject -->
@@ -142,12 +172,14 @@
     <script src="app/pages/work-packages/work-package-approve-email-dialog.controller.js"></script>
     <script src="app/pages/work-packages/work-package-agent-dialog.controller.js"></script>
     <script src="app/pages/work-packages/work-package-add-sheet-dialog.controller.js"></script>
+    <script src="app/pages/work-packages/work-package-search-replace-dialog.controller.js"></script>
     <script src="app/pages/work-packages/work-package.state.js"></script>
     <script src="app/pages/work-packages/work-package.service.js"></script>
     <script src="app/pages/work-packages/work-package.controller.js"></script>
     <script src="app/pages/rule-queries/rule-query.state.js"></script>
     <script src="app/pages/rule-queries/rule-query.service.js"></script>
     <script src="app/pages/rule-queries/rule-query.controller.js"></script>
+    <script src="app/pages/category-modals/category-modal.controller.js"></script>
     <script src="app/pages/afd-queries/afd-query.state.js"></script>
     <script src="app/pages/afd-queries/afd-query.service.js"></script>
     <script src="app/pages/afd-queries/afd-query.controller.js"></script>
@@ -254,6 +286,7 @@
     <script src="app/components/util/sort.directive.js"></script>
     <script src="app/components/util/parse-links.service.js"></script>
     <script src="app/components/util/pagination-util.service.js"></script>
+    <script src="app/components/util/object-name.filter.js"></script>
     <script src="app/components/util/jhi-item-count.directive.js"></script>
     <script src="app/components/util/error.constants.js"></script>
     <script src="app/components/util/date-util.service.js"></script>
