@@ -1,7 +1,6 @@
 package com.atibusinessgroup.fmp.domain.atpco;
 
-import java.math.BigDecimal;
-
+import org.bson.types.Decimal128;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -106,10 +105,10 @@ public class AtpcoRecord3Cat16 {
     private String penalties_canx;
 
 	@Field("charges_amt_1")
-    private BigDecimal charges_amt_1;
+    private Decimal128 charges_amt_1;
 
 	@Field("charges_amt_2")
-    private BigDecimal charges_amt_2;
+    private Decimal128 charges_amt_2;
 
 	@Field("cat_no")
     private String cat_no;
@@ -379,19 +378,19 @@ public class AtpcoRecord3Cat16 {
 		this.penalties_canx = penalties_canx;
 	}
 
-	public BigDecimal getCharges_amt_1() {
+	public Decimal128 getCharges_amt_1() {
 		return charges_amt_1;
 	}
 
-	public void setCharges_amt_1(BigDecimal charges_amt_1) {
+	public void setCharges_amt_1(Decimal128 charges_amt_1) {
 		this.charges_amt_1 = charges_amt_1;
 	}
 
-	public BigDecimal getCharges_amt_2() {
+	public Decimal128 getCharges_amt_2() {
 		return charges_amt_2;
 	}
 
-	public void setCharges_amt_2(BigDecimal charges_amt_2) {
+	public void setCharges_amt_2(Decimal128 charges_amt_2) {
 		this.charges_amt_2 = charges_amt_2;
 	}
 
@@ -696,4 +695,5 @@ public class AtpcoRecord3Cat16 {
 	}
 	
 	
+
 }

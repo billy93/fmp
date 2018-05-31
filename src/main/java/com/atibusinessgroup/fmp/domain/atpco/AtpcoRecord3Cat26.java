@@ -1,7 +1,7 @@
 package com.atibusinessgroup.fmp.domain.atpco;
 
-import java.math.BigDecimal;
 
+import org.bson.types.Decimal128;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -190,7 +190,7 @@ public class AtpcoRecord3Cat26 {
     private String names_times_of_day;
 
 	@Field("trvl_cond_amt_1")
-    private BigDecimal trvl_cond_amt_1;
+    private Decimal128 trvl_cond_amt_1;
 
 	@Field("trvl_cond_filler_3")
     private String trvl_cond_filler_3;
@@ -199,7 +199,7 @@ public class AtpcoRecord3Cat26 {
     private String trvl_cond_filler_4;
 
 	@Field("trvl_cond_amt_2")
-    private BigDecimal trvl_cond_amt_2;
+    private Decimal128 trvl_cond_amt_2;
 
 	@Field("tour_cond_max")
     private String tour_cond_max;
@@ -753,11 +753,11 @@ public class AtpcoRecord3Cat26 {
 		this.names_times_of_day = names_times_of_day;
 	}
 
-	public BigDecimal getTrvl_cond_amt_1() {
+	public Decimal128 getTrvl_cond_amt_1() {
 		return trvl_cond_amt_1;
 	}
 
-	public void setTrvl_cond_amt_1(BigDecimal trvl_cond_amt_1) {
+	public void setTrvl_cond_amt_1(Decimal128 trvl_cond_amt_1) {
 		this.trvl_cond_amt_1 = trvl_cond_amt_1;
 	}
 
@@ -777,11 +777,11 @@ public class AtpcoRecord3Cat26 {
 		this.trvl_cond_filler_4 = trvl_cond_filler_4;
 	}
 
-	public BigDecimal getTrvl_cond_amt_2() {
+	public Decimal128 getTrvl_cond_amt_2() {
 		return trvl_cond_amt_2;
 	}
 
-	public void setTrvl_cond_amt_2(BigDecimal trvl_cond_amt_2) {
+	public void setTrvl_cond_amt_2(Decimal128 trvl_cond_amt_2) {
 		this.trvl_cond_amt_2 = trvl_cond_amt_2;
 	}
 
@@ -1566,4 +1566,5 @@ public class AtpcoRecord3Cat26 {
 	}
 	
 	
+
 }
