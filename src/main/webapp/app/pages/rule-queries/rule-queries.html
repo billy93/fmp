@@ -1,14 +1,4 @@
 
-</style>
-<script>
-	$(document).ready(function() {
-		$("th").css({
-			"text-align" : "center"
-		});
-	});
-</script>
-
-
 <div class="panel">
 	<div class="panel-body">
 
@@ -144,7 +134,7 @@
 								<td>{{rq.routingNo}}</td>
 								<td>{{rq.footnote}}</td>
 								<td>{{rq.effectiveDateObject | date:'medium'}}</td>
-								<td><span ng-if="rq.discontinueDateObject!='indef'">{{rq.discontinueDateObject  | date:'medium'}}</span></td>
+								<td><span ng-if="rq.discontinueDateObject=='indef'"></span><span ng-if="rq.discontinueDateObject!='indef'">{{rq.discontinueDateObject  | date:'medium'}}</span></td>
 								
 							</tr>
 							<!-- 							<tr ng-if="vm.selectedRow == afdQuery.atpcoFareId"> -->
