@@ -3949,8 +3949,26 @@
       	  
       }, function() {
   			
-      });
-  }
+	      });
+	  }
+      
+      vm.ratesheetWaiver = function(){
+	  	  $uibModal.open({
+          templateUrl: 'app/pages/work-packages/work-package-waiver-rate-sheet-dialog.html',
+          controller: 'WorkPackageWaiverRateSheetDialogController',
+          controllerAs: 'vm',
+          backdrop: 'static',
+          size: 'lg',
+          resolve: {
+              entity: vm.workPackage,
+              index : vm.indexSelectedTab
+          }
+      }).result.then(function(ratesheet) {
+      	  
+      }, function() {
+	  			
+	      });
+	  }
       
       vm.agent = function(){
 	    	  	var object = {
@@ -4228,6 +4246,7 @@
 //    		  
 //    	  }
       }
+      
       
       vm.tdClick = function(workPackageSheet, fare, f, event){
     	  if (event.shiftKey){
