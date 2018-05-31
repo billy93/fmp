@@ -15,6 +15,7 @@ import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord3CategoryWithDataTable;
 import com.atibusinessgroup.fmp.domain.dto.CategoryAttribute;
 import com.atibusinessgroup.fmp.domain.dto.CategoryAttributeObject;
 import com.atibusinessgroup.fmp.domain.dto.DataTable;
+import com.atibusinessgroup.fmp.domain.dto.ReflectionObject;
 import com.atibusinessgroup.fmp.resository.custom.AtpcoRecord3CategoryCustomRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -106,8 +107,42 @@ public class AtpcoRecordService {
 	public List<CategoryAttribute> getAndConvertCategoryDataTable(String category, List<DataTable> dataTables) {
 		List<CategoryAttribute> result = new ArrayList<>();
 		
-		String baseClassPath = "com.atibusinessgroup.fmp.domain.atpco.";
-		String collectionName = null, className = null, methodName = null;
+		String classBasePackage = "com.atibusinessgroup.fmp.domain.atpco.";
+		
+		ReflectionObject ro = getCategorySettingInfo(classBasePackage, category);
+		
+		String relationship = null;
+		
+		if (ro.getCollectionName() != null) {
+			List<AtpcoRecord3CategoryWithDataTable> catdts = atpcoRecord3CategoryCustomRepository.findAllRecord3ByDataTable(ro.getCollectionName(), dataTables.stream().map(DataTable::getTableNo).collect(Collectors.toList()));
+			
+			for (AtpcoRecord3CategoryWithDataTable catdt:catdts) {
+				try {
+					Class<?> c = Class.forName(ro.getClassName());
+					Object cat = convertDBObjectToPOJO(c, catdt.getCategory());
+					
+					Method method = c.getMethod(ro.getMethodName(), null);
+					String tableNo = (String) method.invoke(cat);
+					
+					for (DataTable dt:dataTables) {
+						if (dt.getTableNo().contentEquals(tableNo)) {
+							relationship = dt.getRelationalIndicator();
+							break;
+						}
+					}
+					
+					result.add(convertObjectToCategoryAttribute(relationship, cat));
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	public ReflectionObject getCategorySettingInfo(String classBasePackage, String category) {
+		ReflectionObject result = new ReflectionObject();
 		
 		switch (category) {
 			case "001": 
@@ -116,15 +151,16 @@ public class AtpcoRecordService {
 						break;
 			case "003": 
 						break;
-			case "004": className = baseClassPath.concat("AtpcoRecord3Cat04");
-						methodName = "getTableNo";
-						collectionName = CollectionName.ATPCO_RECORD_3_CAT_004;
+			case "004": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat04"));
+						result.setMethodName("getTableNo");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_004);
 						break;
-			case "005": className = baseClassPath.concat("AtpcoRecord3Cat05");
-						methodName = "getTableNumber";
-						collectionName = CollectionName.ATPCO_RECORD_3_CAT_005;
+			case "005": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat05"));
+						result.setMethodName("getTableNumber");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_005);
 						break;
 			case "006": 
+				
 						break;
 			case "007": 
 						break;
@@ -178,37 +214,10 @@ public class AtpcoRecordService {
 						break;
 		}
 		
-		String relationship = null;
-		
-		if (collectionName != null) {
-			List<AtpcoRecord3CategoryWithDataTable> catdts = atpcoRecord3CategoryCustomRepository.findAllRecord3ByDataTable(collectionName, dataTables.stream().map(DataTable::getTableNo).collect(Collectors.toList()));
-			
-			for (AtpcoRecord3CategoryWithDataTable catdt:catdts) {
-				try {
-					Class<?> c = Class.forName(className);
-					Object cat = convertDBObjectToPOJO(c, catdt.getCategory());
-					
-					Method method = c.getMethod(methodName, null);
-					String tableNo = (String) method.invoke(cat);
-					
-					for (DataTable dt:dataTables) {
-						if (dt.getTableNo().contentEquals(tableNo)) {
-							relationship = dt.getRelationalIndicator();
-							break;
-						}
-					}
-					
-					result.add(convertObjectToCategoryAttribute(relationship, cat));
-				} catch(Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		
 		return result;
 	}
-	
-	private Object convertDBObjectToPOJO(Class<?> c, DBObject category) {
+
+	public Object convertDBObjectToPOJO(Class<?> c, DBObject category) {
 		Object result = null;
 		
 		try {
