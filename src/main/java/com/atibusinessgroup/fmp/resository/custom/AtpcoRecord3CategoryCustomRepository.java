@@ -12,18 +12,17 @@ import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperationContext;
 import org.springframework.stereotype.Service;
 
-import com.atibusinessgroup.fmp.constant.CollectionName;
-import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord3Cat004WithDataTable;
+import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord3CategoryWithDataTable;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
 @Service
-public class AtpcoRecord3Cat004CustomRepository {	
+public class AtpcoRecord3CategoryCustomRepository {	
 	
 	@Autowired
     MongoTemplate mongoTemplate;
 
-	public List<AtpcoRecord3Cat004WithDataTable> findAllRecord3ByDataTable(List<String> tableNos) {
+	public List<AtpcoRecord3CategoryWithDataTable> findAllRecord3ByDataTable(String collectionName, List<String> tableNos) {
 		
 		List<AggregationOperation> aggregationOperations = new ArrayList<>();
 		
@@ -44,7 +43,7 @@ public class AtpcoRecord3Cat004CustomRepository {
 				BasicDBObject projectResult = new BasicDBObject();
 				BasicDBObject query = new BasicDBObject();
 				query.append("_id", 0);
-				query.append("cat_04", "$$ROOT");
+				query.append("category", "$$ROOT");
 				projectResult.append("$project", query);
 				return projectResult;
 			}
@@ -52,7 +51,7 @@ public class AtpcoRecord3Cat004CustomRepository {
 		
 		Aggregation aggregation = newAggregation(aggregationOperations);
 		
-		List<AtpcoRecord3Cat004WithDataTable> result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_RECORD_3_CAT_004, AtpcoRecord3Cat004WithDataTable.class).getMappedResults();
+		List<AtpcoRecord3CategoryWithDataTable> result = mongoTemplate.aggregate(aggregation, collectionName, AtpcoRecord3CategoryWithDataTable.class).getMappedResults();
 		
 		return result;
 	}

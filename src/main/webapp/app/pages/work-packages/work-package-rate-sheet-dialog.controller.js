@@ -179,6 +179,7 @@
 			}
         }
         vm.addAllOriginalAuthorities = function (){
+        	vm.title=[];
         	vm.selectedHeader = [];
         	vm.selectedHeader = ["status",
         		"carrier",

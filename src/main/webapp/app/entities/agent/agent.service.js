@@ -23,6 +23,7 @@
             'update': { method:'PUT' },
             'queryAll': { method: 'GET', isArray: true, url:'api/agencies/all' },
 	        'exportAgent': { method: 'POST',  url:'api/agencies/export-agencies'},
+	        'exportAllAgent': { method: 'POST',  url:'api/agencies/export-all-agencies'},
 	        'importAgent': { method: 'POST',  url:'api/agencies/import-agencies'}
         });
     }

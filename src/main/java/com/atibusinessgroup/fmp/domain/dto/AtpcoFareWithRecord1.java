@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord1;
+import com.google.gson.annotations.SerializedName;
 
 public class AtpcoFareWithRecord1 {
 

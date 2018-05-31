@@ -52,7 +52,26 @@ body {
     min-width: 10%;
     float: left;
     padding: 5px 8px;
-    border: 1px solid black;
+    border: 1px solid #ababab;
+    background: #e4e4e4;
+    color: #9e9e9e;
+    pointer-events: none;
+}
+
+.additional-info-wrapper .additional-info.yellow {
+    background: #ffdb76;
+    color: #000;
+    border-color: #000;
+    cursor: pointer;
+    pointer-events: initial;
+}
+
+.additional-info-wrapper .additional-info.blue {
+	background: #a7e7ff;
+	color: #000;
+	border-color: #000;
+	cursor: pointer;
+    pointer-events: initial;
 }
 
 /* ==========================================================================

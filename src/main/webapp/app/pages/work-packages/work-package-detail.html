@@ -3,7 +3,7 @@
 	min-width:30px;
 }
 .highlighted{
-	background-color:#effbff;
+	background-color:yellow;
 }
 </style>
 
@@ -1643,6 +1643,7 @@
 						                      <button class="btn btn-default small btn-secondary" ngf-select ngf-change="vm.importFareDiscount($file)">Import</button>
 						                      <button class="btn btn-default small btn-secondary" ng-click="vm.exportFaresDiscount()">Export</button>
 						                      <button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.agent()">Agents</button>
+						                      <button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheetDiscount()">Rate Sheet</button>
 						                    </div>
 						                  </div>
 						                </div>
@@ -1698,7 +1699,14 @@
 						                          </select>		
 						                      </td>
 						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'tarcd', $event)" ng-class="{highlighted:fare.field['tarcd']}">
-						                        <ui-select ng-model="fare.tarcd" theme="select2" class="form-control"
+						                      
+						                       <input type="text" class="form-control" name="discountTariffCode{{$parent.$index}}{{$index}}" id="field_farebasis"
+						                                    ng-disabled="!vm.isEditable('discountTariffCode')"
+						                                    ng-required="vm.isRequired('discountTariffCode') && fare.action != 'Canceled'" 
+						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountTariffCode{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+						                                      ng-model="fare.tarcd"/>	
+						                                      
+						                       <!--  <ui-select ng-model="fare.tarcd" theme="select2" class="form-control"
 						                            name="tarcd{{$parent.$index}}{{$index}}"
 						                            ng-required="vm.isRequired('discountTariffCode') && fare.action != 'Canceled'"  
 						                            ng-disabled="!vm.isEditable('discountTariffCode')"
@@ -1706,13 +1714,13 @@
 						                            <ui-select-match placeholder="TarCd">{{$select.selected.tarCd == null ? $select.selected.value.tarCd : $select.selected.tarCd}}</ui-select-match>
 						                            <ui-select-choices style="min-width:300px" repeat="value.value as (key, value) in vm.tariffNumber | filter: { value: { tarCd: $select.search }}">
 						                                  <div ng-bind-html="value.value.tarCd | highlight: $select.search"></div>
-						                                  <!-- <small>
+						                                  <small>
 						                                    TarNo : {{value.value.tarNo}}
 						                                    TarCd : {{value.value.tarCd}}
 						                                    Global : {{value.value.global}}
-						                                  </small> -->
+						                                  </small>
 						                              </ui-select-choices>
-						                          </ui-select>
+						                          </ui-select> -->
 						                      </td>																
 						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'loc1Type', $event)" ng-class="{highlighted:fare.field['loc1Type']}">
 						                       	 <select class="form-control" 
@@ -1724,11 +1732,113 @@
 						                                   ng-options="key as value for (key , value) in vm.locationType"></select>
 						                      </td>
 						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'loc1', $event)" ng-class="{highlighted:fare.field['loc1']}">
-						                       		<input type="text" class="form-control" name="discountLoc1{{$parent.$index}}{{$index}}" id="field_origin" 
-						                                    ng-disabled="!vm.isEditable('discountLoc1')"
-						                                    ng-required="vm.isRequired('discountLoc1') && fare.action != 'Canceled'"  
-						                                    ng-class="{'must-fill': !editForm.editFormDiscount.discountLoc1{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"		
-						                                      ng-model="fare.loc1"/>
+						                       			<ui-select ng-if="fare.loc1Type == 'C'" ng-model="fare.loc1" theme="select2" class="form-control"
+																
+														name="discountLoc1{{$parent.$index}}{{$index}}"
+														ng-required="vm.isRequired('discountLoc1') && fare.action != 'Canceled'"  
+														ng-disabled="!vm.isEditable('discountLoc1')"
+														
+														ng-class="{'must-fill': editForm.editFormDiscount.discountLoc1{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+									                    	>
+														    <ui-select-match placeholder="Loc 1">{{$select.selected.value.cityCode}}</ui-select-match>
+															 <ui-select-choices style="min-width:300px;" repeat="value.value.cityCode as (key, value) in vm.cities | filter: { value: { cityCode: $select.search }}">
+														      <div ng-bind-html="value.value.cityCode | highlight: $select.search"></div>
+														      <!-- <small>
+														        City Code : {{value.value.cityCode}}
+														        City Name : {{value.value.cityName}}
+														        Country Code : {{value.value.countryCode}}
+														        Country Name : {{value.value.countryName}}
+														        
+														      </small> -->
+														    </ui-select-choices>
+														  </ui-select>
+
+						                       			<ui-select ng-if="fare.loc1Type == 'N'" ng-model="fare.loc1" theme="select2" class="form-control"
+																
+														name="discountLoc1{{$parent.$index}}{{$index}}"
+														ng-required="vm.isRequired('discountLoc1') && fare.action != 'Canceled'"  
+														ng-disabled="!vm.isEditable('discountLoc1')"
+														
+														ng-class="{'must-fill': editForm.editFormDiscount.discountLoc1{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+									                    	>
+														    <ui-select-match placeholder="Loc 1">{{$select.selected.value.countryCode}}</ui-select-match>
+															 <ui-select-choices style="min-width:300px; min-height:17px" repeat="value.value.countryCode as (key, value) in vm.cities | filter: { value: { countryCode: $select.search }}">
+														      <div ng-bind-html="value.value.countryCode | highlight: $select.search"></div>
+														      <!-- <small>
+														        City Code : {{value.value.cityCode}}
+														        City Name : {{value.value.cityName}}
+														        Country Code : {{value.value.countryCode}}
+														        Country Name : {{value.value.countryName}}
+														        
+														      </small> -->
+														    </ui-select-choices>
+														  </ui-select>
+														  
+														  
+														  <ui-select ng-if="fare.loc1Type == 'S'" ng-model="fare.loc1" theme="select2" class="form-control"
+																
+														name="discountLoc1{{$parent.$index}}{{$index}}"
+														ng-required="vm.isRequired('discountLoc1') && fare.action != 'Canceled'"  
+														ng-disabled="!vm.isEditable('discountLoc1')"
+														
+														ng-class="{'must-fill': editForm.editFormDiscount.discountLoc1{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+									                    	>
+														    <ui-select-match placeholder="Loc 1">{{$select.selected.value.code}}</ui-select-match>
+															 <ui-select-choices style="min-width:300px;" repeat="value.value.code as (key, value) in vm.states | filter: { value: { code: $select.search }}">
+														      <div ng-bind-html="value.value.code | highlight: $select.search"></div>
+														      <!-- <small>
+														        City Code : {{value.value.cityCode}}
+														        City Name : {{value.value.cityName}}
+														        Country Code : {{value.value.countryCode}}
+														        Country Name : {{value.value.countryName}}
+														        
+														      </small> -->
+														    </ui-select-choices>
+														  </ui-select>
+														  
+														  
+														  <ui-select ng-if="fare.loc1Type == 'A'" ng-model="fare.loc1" theme="select2" class="form-control"
+																
+														name="discountLoc1{{$parent.$index}}{{$index}}"
+														ng-required="vm.isRequired('discountLoc1') && fare.action != 'Canceled'"  
+														ng-disabled="!vm.isEditable('discountLoc1')"
+														
+														ng-class="{'must-fill': editForm.editFormDiscount.discountLoc1{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+									                    	>
+														    <ui-select-match placeholder="Loc 1">{{$select.selected.value.code}}</ui-select-match>
+															 <ui-select-choices style="min-width:300px;" repeat="value.value.code as (key, value) in vm.areas | filter: { value: { code: $select.search }}">
+														      <div ng-bind-html="value.value.code | highlight: $select.search"></div>
+														      <!-- <small>
+														        City Code : {{value.value.cityCode}}
+														        City Name : {{value.value.cityName}}
+														        Country Code : {{value.value.countryCode}}
+														        Country Name : {{value.value.countryName}}
+														        
+														      </small> -->
+														    </ui-select-choices>
+														  </ui-select>
+														  
+														  
+														  <ui-select ng-if="fare.loc1Type == 'G'" ng-model="fare.loc1" theme="select2" class="form-control"
+																
+														name="discountLoc1{{$parent.$index}}{{$index}}"
+														ng-required="vm.isRequired('discountLoc1') && fare.action != 'Canceled'"  
+														ng-disabled="!vm.isEditable('discountLoc1')"
+														
+														ng-class="{'must-fill': editForm.editFormDiscount.discountLoc1{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+									                    	>
+														    <ui-select-match placeholder="Loc 1">{{$select.selected.value.code}}</ui-select-match>
+															 <ui-select-choices style="min-width:300px;" repeat="value.value.code as (key, value) in vm.cityGroups | filter: { value: { code: $select.search }}">
+														      <div ng-bind-html="value.value.code | highlight: $select.search"></div>
+														      <!-- <small>
+														        City Code : {{value.value.cityCode}}
+														        City Name : {{value.value.cityName}}
+														        Country Code : {{value.value.countryCode}}
+														        Country Name : {{value.value.countryName}}
+														        
+														      </small> -->
+														    </ui-select-choices>
+														  </ui-select>
 						                      </td>
 						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'loc2Type', $event)" ng-class="{highlighted:fare.field['loc2Type']}">
 						                         <select class="form-control" 
@@ -1741,11 +1851,113 @@
 						                                   ng-options="key as value for (key , value) in vm.locationType"></select>
 						                      </td>
 						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'loc2', $event)" ng-class="{highlighted:fare.field['loc2']}">
-						                         <input type="text" class="form-control" name="discountLoc2{{$parent.$index}}{{$index}}" id="field_origin" 
-						                                    ng-disabled="!vm.isEditable('discountLoc2')"
-						                                    ng-required="vm.isRequired('discountLoc2') && fare.action != 'Canceled'"  
-						                                    ng-class="{'must-fill': !editForm.editFormDiscount.discountLoc2{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"		
-						                                      ng-model="fare.loc2"/>
+						                         	<ui-select ng-if="fare.loc2Type == 'C'" ng-model="fare.loc2" theme="select2" class="form-control"
+																
+														name="discountLoc1{{$parent.$index}}{{$index}}"
+														ng-required="vm.isRequired('discountLoc1') && fare.action != 'Canceled'"  
+														ng-disabled="!vm.isEditable('discountLoc1')"
+														
+														ng-class="{'must-fill': editForm.editFormDiscount.discountLoc1{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+									                    	>
+														    <ui-select-match placeholder="Loc 2">{{$select.selected.value.cityCode}}</ui-select-match>
+															 <ui-select-choices style="min-width:300px;" repeat="value.value.cityCode as (key, value) in vm.cities | filter: { value: { cityCode: $select.search }}">
+														      <div ng-bind-html="value.value.cityCode | highlight: $select.search"></div>
+														      <!-- <small>
+														        City Code : {{value.value.cityCode}}
+														        City Name : {{value.value.cityName}}
+														        Country Code : {{value.value.countryCode}}
+														        Country Name : {{value.value.countryName}}
+														        
+														      </small> -->
+														    </ui-select-choices>
+														  </ui-select>
+
+						                       			<ui-select ng-if="fare.loc2Type == 'N'" ng-model="fare.loc2" theme="select2" class="form-control"
+																
+														name="discountLoc1{{$parent.$index}}{{$index}}"
+														ng-required="vm.isRequired('discountLoc1') && fare.action != 'Canceled'"  
+														ng-disabled="!vm.isEditable('discountLoc1')"
+														
+														ng-class="{'must-fill': editForm.editFormDiscount.discountLoc1{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+									                    	>
+														    <ui-select-match placeholder="Loc 2">{{$select.selected.value.countryCode}}</ui-select-match>
+															 <ui-select-choices style="min-width:300px; min-height:17px" repeat="value.value.countryCode as (key, value) in vm.cities | filter: { value: { countryCode: $select.search }}">
+														      <div ng-bind-html="value.value.countryCode | highlight: $select.search"></div>
+														      <!-- <small>
+														        City Code : {{value.value.cityCode}}
+														        City Name : {{value.value.cityName}}
+														        Country Code : {{value.value.countryCode}}
+														        Country Name : {{value.value.countryName}}
+														        
+														      </small> -->
+														    </ui-select-choices>
+														  </ui-select>
+														  
+														  
+														  <ui-select ng-if="fare.loc2Type == 'S'" ng-model="fare.loc2" theme="select2" class="form-control"
+																
+														name="discountLoc1{{$parent.$index}}{{$index}}"
+														ng-required="vm.isRequired('discountLoc1') && fare.action != 'Canceled'"  
+														ng-disabled="!vm.isEditable('discountLoc1')"
+														
+														ng-class="{'must-fill': editForm.editFormDiscount.discountLoc1{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+									                    	>
+														    <ui-select-match placeholder="Loc 2">{{$select.selected.value.code}}</ui-select-match>
+															 <ui-select-choices style="min-width:300px;" repeat="value.value.code as (key, value) in vm.states | filter: { value: { code: $select.search }}">
+														      <div ng-bind-html="value.value.code | highlight: $select.search"></div>
+														      <!-- <small>
+														        City Code : {{value.value.cityCode}}
+														        City Name : {{value.value.cityName}}
+														        Country Code : {{value.value.countryCode}}
+														        Country Name : {{value.value.countryName}}
+														        
+														      </small> -->
+														    </ui-select-choices>
+														  </ui-select>
+														  
+														  
+														  <ui-select ng-if="fare.loc2Type == 'A'" ng-model="fare.loc2" theme="select2" class="form-control"
+																
+														name="discountLoc1{{$parent.$index}}{{$index}}"
+														ng-required="vm.isRequired('discountLoc1') && fare.action != 'Canceled'"  
+														ng-disabled="!vm.isEditable('discountLoc1')"
+														
+														ng-class="{'must-fill': editForm.editFormDiscount.discountLoc1{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+									                    	>
+														    <ui-select-match placeholder="Loc 2">{{$select.selected.value.code}}</ui-select-match>
+															 <ui-select-choices style="min-width:300px;" repeat="value.value.code as (key, value) in vm.areas | filter: { value: { code: $select.search }}">
+														      <div ng-bind-html="value.value.code | highlight: $select.search"></div>
+														      <!-- <small>
+														        City Code : {{value.value.cityCode}}
+														        City Name : {{value.value.cityName}}
+														        Country Code : {{value.value.countryCode}}
+														        Country Name : {{value.value.countryName}}
+														        
+														      </small> -->
+														    </ui-select-choices>
+														  </ui-select>
+														  
+														  
+														  <ui-select ng-if="fare.loc2Type == 'G'" ng-model="fare.loc2" theme="select2" class="form-control"
+																
+														name="discountLoc1{{$parent.$index}}{{$index}}"
+														ng-required="vm.isRequired('discountLoc1') && fare.action != 'Canceled'"  
+														ng-disabled="!vm.isEditable('discountLoc1')"
+														
+														ng-class="{'must-fill': editForm.editFormDiscount.discountLoc1{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+									                    	>
+														    <ui-select-match placeholder="Loc 2">{{$select.selected.value.code}}</ui-select-match>
+															 <ui-select-choices style="min-width:300px;" repeat="value.value.code as (key, value) in vm.cityGroups | filter: { value: { code: $select.search }}">
+														      <div ng-bind-html="value.value.code | highlight: $select.search"></div>
+														      <!-- <small>
+														        City Code : {{value.value.cityCode}}
+														        City Name : {{value.value.cityName}}
+														        Country Code : {{value.value.countryCode}}
+														        Country Name : {{value.value.countryName}}
+														        
+														      </small> -->
+														    </ui-select-choices>
+														  </ui-select>
 						                      </td>
 						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'baseFareBasis', $event)" ng-class="{highlighted:fare.field['baseFareBasis']}">
 						                         <input type="text" class="form-control" name="discountBaseFareBasis{{$parent.$index}}{{$index}}" id="field_baseFareBasis" 
@@ -1761,17 +1973,35 @@
 						                                    ng-class="{'must-fill': !editForm.editFormDiscount.discountBaseRuleno{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"		
 						                                      ng-model="fare.baseRuleNo"/>
 						                      </td>
-						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'tarcd', $event)" ng-class="{highlighted:fare.field['tarcd']}">
-						                         <input type="text" class="form-control" name="discountBaseTariffCode{{$parent.$index}}{{$index}}" id="field_farebasis"
+						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'baseTarcd', $event)" ng-class="{highlighted:fare.field['baseTarcd']}">
+						                        
+						                        
+						                       <!--  <ui-select ng-model="fare.baseTarcd" theme="select2" class="form-control"
+						                            name="tarcd{{$parent.$index}}{{$index}}"
+						                            ng-required="vm.isRequired('discountTariffCode') && fare.action != 'Canceled'"  
+						                            ng-disabled="!vm.isEditable('discountTariffCode')"
+						                            ng-class="{'must-fill': editForm.editFormDiscount.tarcd{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}">
+						                            <ui-select-match placeholder="TarCd">{{$select.selected.tarCd == null ? $select.selected.value.tarCd : $select.selected.tarCd}}</ui-select-match>
+						                            <ui-select-choices style="min-width:300px" repeat="value.value as (key, value) in vm.tariffNumber | filter: { value: { tarCd: $select.search }}">
+						                                  <div ng-bind-html="value.value.tarCd | highlight: $select.search"></div>
+						                                  <small>
+						                                    TarNo : {{value.value.tarNo}}
+						                                    TarCd : {{value.value.tarCd}}
+						                                    Global : {{value.value.global}}
+						                                  </small>
+						                              </ui-select-choices>
+						                          </ui-select> -->
+						                          
+						                        <input type="text" class="form-control" name="discountBaseTariffCode{{$parent.$index}}{{$index}}" id="field_farebasis"
 						                                    ng-disabled="!vm.isEditable('discountBaseTariffCode')"
 						                                    ng-required="vm.isRequired('discountBaseTariffCode') && fare.action != 'Canceled'" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountBaseTariffCode{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-						                                      ng-model="fare.tarcd"/>	
+						                                      ng-model="fare.baseTarcd"/>	
 						                      </td>	
 						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'calcType', $event)" ng-class="{highlighted:fare.field['calcType']}">
 						                         <select class="form-control" 
 						                                 name="discountCalcType{{$parent.$index}}{{$index}}"
-						                                 ng-required="vm.isRequired('discountCalcType')"
+						                                 ng-required="vm.isRequired('discountCalcType', fare)"
 						                                 ng-class="{'must-fill': !editForm.editFormDiscount.discountCalcType{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"																			            
 						                                 ng-model="fare.calcType" id="discountCalcType"
 						                                 ng-disabled="!vm.isEditable('discountCalcType')"
@@ -1780,14 +2010,14 @@
 						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'percentBaseFare', $event)" ng-class="{highlighted:fare.field['percentBaseFare']}">
 						                           <input type="number" class="form-control" name="discountPercentageOfBaseFare{{$parent.$index}}{{$index}}"
 						                                    ng-disabled="!vm.isEditable('discountPercentageOfBaseFare')"
-						                                    ng-required="vm.isRequired('discountPercentageOfBaseFare') && fare.action != 'Canceled'" 
+						                                    ng-required="vm.isRequired('discountPercentageOfBaseFare', fare) && fare.action != 'Canceled'" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountPercentageOfBaseFare{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
 						                                      ng-model="fare.percentBaseFare"/>	
 				                            	</td>
 						                            <td ng-click="vm.tdClick(workPackageSheet, fare, 'currency', $event)" ng-class="{highlighted:fare.field['currency']}">
 						                         		<ui-select ng-model="fare.currency" theme="select2" class="form-control"
 								                            name="discountFareCurrency{{$parent.$index}}{{$index}}"
-								                            ng-required="vm.isRequired('discountFareCurrency') && fare.action != 'Canceled'"  
+								                            ng-required="vm.isRequired('discountFareCurrency', fare) && fare.action != 'Canceled'"  
 								                            ng-disabled="!vm.isEditable('discountFareCurrency')"
 								                            ng-class="{'must-fill': editForm.editFormDiscount.discountFareCurrency{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}">
 								                                <ui-select-match placeholder="Currency">{{$select.selected.value.currencyCode}}</ui-select-match>
@@ -1803,7 +2033,7 @@
 						                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'discountSpecifiedAmount', $event)" ng-class="{highlighted:fare.field['discountSpecifiedAmount']}">
 						                                <input type="number" class="form-control" name="discountSpecifiedAmount{{$parent.$index}}{{$index}}"
 						                                    ng-disabled="!vm.isEditable('discountSpecifiedAmount')"
-						                                    ng-required="vm.checkRequiredField('discountSpecifiedAmount') && fare.action != 'Canceled'" 
+						                                    ng-required="vm.isRequired('discountSpecifiedAmount', fare)" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountSpecifiedAmount{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
 						                                      ng-model="fare.discountSpecifiedAmount"/>	
 						                              </td>
@@ -3094,8 +3324,8 @@
 			<div class="tab-wrapper tab-validation">
 				<div class="clearfix tab-body">
 					<ul class="clearfix nav-responsive nav nav-tabs">
-					    <li class="active"><a href="#validation">Validations</a></li>
-					    <li><a href="#release-errors">Release Errors</a></li>
+					    <li class="active"><a >Validations</a></li>
+					    <li><a >Release Errors</a></li>
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane active" id="validation">

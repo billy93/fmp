@@ -87,6 +87,7 @@
         function getRules(afdQuery) {
         	AfdQuery.getRules(afdQuery, function(data) {
         		vm.categoryRules = data;
+        		console.log(vm.categoryRules);
         	}, function(error) {
         		console.log(error);
         	});

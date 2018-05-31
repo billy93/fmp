@@ -16,8 +16,8 @@
         vm.reverse = pagingParams.ascending;
         vm.transition = transition;
         vm.itemsPerPage = paginationConstants.itemsPerPage;
-        vm.optionDelete= [null,true,false];
-        vm.optionAgentType=[null,'Bulk','Consolidator','Corporate/TMC','Ethnic Market','Retailers','Seamen','Student','Tour operator','VFR','Web/E-Channel','Worker'];
+        vm.optionDelete= [null, true,false];
+        vm.optionAgentType=[null, 'Bulk','Consolidator','Corporate/TMC','Ethnic Market','Retailers','Seamen','Student','Tour operator','VFR','Web/E-Channel','Worker'];
 
         loadAll();
 
@@ -140,8 +140,18 @@
         };
         
         vm.exportAgencies = function(){
-  	  	  	console.log(vm.agents)
-        	Agent.exportAgent(vm.agents[0], onExportSuccess, onExportFailure);
+        	
+        	
+        	var agent = {
+        			"agentType" : vm.agentType,
+                	"agentCategory" : vm.agentCategory,
+                	"posCountry" : vm.posCountry,
+                	"agentName" : vm.agentName,
+                	"posCity" : vm.posCity,
+                	"iataCode"  : vm.iataCode,
+                	"isDeleted" : vm.isDeleted,
+        	};
+        	Agent.exportAgent(agent, onExportSuccess, onExportFailure);
 	    	  function onExportSuccess(result){
   	  	  		var fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     			var templateFilename = "Agencies.xlsx";
@@ -153,5 +163,17 @@
 	    	  }    	  
         }
         
+        vm.exportAllAgencies = function(){
+        	Agent.exportAllAgent({}, onExportSuccess, onExportFailure);
+	    	  function onExportSuccess(result){
+  	  	  		var fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    			var templateFilename = "Agencies.xlsx";
+    			var blob = b64toBlob(result.file, fileType);
+    			FileSaver.saveAs(blob, templateFilename);
+	    	  }
+	    	  function onExportFailure(){
+	    		  alert('Export Failed');
+	    	  }    	  
+        }
     }
 })();

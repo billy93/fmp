@@ -19,7 +19,7 @@
 			<!-- left menu -->
 		<ul>
 		    <li class="menu-list has-sub">
-		    	<a href="#">
+		    	<a>
 		    		<i class="fa fa-file-text"></i><span>Work Queue</span>
 		    	</a>
 		    	<div class="sub-menu">
@@ -32,7 +32,7 @@
 		    	<div class="tooltip">Work Order</div>
 		    </li>
 		    <li class="menu-list has-sub">
-		    	<a href="#">
+		    	<a>
 		    		<i class="fa fa-list-alt"></i><span>AFD Query</span>
 		    	</a>
 		    	<div class="sub-menu">
@@ -57,13 +57,16 @@
 		    	<div class="tooltip">Fare Recommendation</div>
 		    </li>
 		    <li class="menu-list has-sub" ng-click="vm.toggleMenu($event)">
-		    	<a href="#">
+		    	<a>
 		    		<i class="fa fa-list"></i><span>Entities</span>
 		    	</a>
 		    	<div class="sub-menu">
 		    		<ul>
 		    			<li>
 		    		    	<a ui-sref="agent" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Agent </a>
+		    		    </li>
+		    			<li>
+		    		    	<a ui-sref="agent-category" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Agent Category</a>
 		    		    </li>
 		    			<li>
 		    		    	<a ui-sref="agent-groups" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Agent Group</a>
@@ -73,6 +76,9 @@
 		    		    </li>
 		    		    <li>
 		    		    	<a ui-sref="city" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> City </a>
+		    		    </li>
+		    		    <li>
+		    		    	<a ui-sref="city-group" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> City Group</a>
 		    		    </li>
 		    		    <li>
 		    		    	<a ui-sref="currency" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Currency </a>
@@ -88,6 +94,9 @@
 		    		    </li>
 		    		    <li>
 		    		    	<a ui-sref="review-level" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Review Level </a>
+		    		    </li>
+		    		    <li>
+		    		    	<a ui-sref="state" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> State </a>
 		    		    </li>
 		    		    <li>
 		    		    	<a ui-sref="system-parameter" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> System Parameter </a>

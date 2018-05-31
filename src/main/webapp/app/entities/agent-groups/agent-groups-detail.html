@@ -1,6 +1,6 @@
 
 <div>
-    <h2><span>Agent Groups</span> {{vm.agentGroups.id}}</h2>
+    <h2><span>Agent Groups</span> {{vm.agentGroups.agencyGroupName}}</h2>
     <hr>
     <jhi-alert-error></jhi-alert-error>
     <dl class="dl-horizontal jh-entity-details">
@@ -10,7 +10,11 @@
         </dd>
         <dt><span>Agent Name</span></dt>
         <dd>
-            <span>{{vm.agentGroups.agentName}}</span>
+     <!--        <span>{{vm.agentGroups.agentName}}</span> -->
+            <div ng-repeat="agent in vm.agentGroups.agentName track by $index">
+		    		<div>{{agent}}</div>
+		    </div>
+		    	
         </dd>
     </dl>
 

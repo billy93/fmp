@@ -90,7 +90,10 @@
                     resolve: {
                         entity: ['Agent', function(Agent) {
                             return Agent.get({id : $stateParams.id}).$promise;
-                        }]
+                        }],
+                        agentCategory: ['AgentCategory', function(AgentCategory) {
+                            return AgentCategory.queryAll().$promise;
+                        }],
                     }
                 }).result.then(function() {
                     $state.go('^', {}, { reload: false });
@@ -128,7 +131,11 @@
                                 isDeleted: null,
                                 id: null
                             };
-                        }
+                        },
+
+                        agentCategory: ['AgentCategory', function(AgentCategory) {
+                            return AgentCategory.queryAll().$promise;
+                        }],
                     }
                 }).result.then(function() {
                     $state.go('agent', null, { reload: 'agent' });
@@ -153,7 +160,10 @@
                     resolve: {
                         entity: ['Agent', function(Agent) {
                             return Agent.get({id : $stateParams.id}).$promise;
-                        }]
+                        }],
+                        agentCategory: ['AgentCategory', function(AgentCategory) {
+                            return AgentCategory.queryAll().$promise;
+                        }],
                     }
                 }).result.then(function() {
                     $state.go('agent', null, { reload: 'agent' });

@@ -2,7 +2,7 @@ package com.atibusinessgroup.fmp.web.rest;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +40,7 @@ import com.codahale.metrics.annotation.Timed;
 @RequestMapping("/api")
 public class AfdQueryResource {
 
-	private final Map<String, String> categories = new HashMap<>();
+	private final LinkedHashMap<String, String> categories = new LinkedHashMap<>();
 	
 	private final Logger log = LoggerFactory.getLogger(AfdQueryResource.class);
 
@@ -178,7 +178,7 @@ public class AfdQueryResource {
         	}
         	
         	if (matchedRecord2 != null && matchedRecord2.getDataTables() != null && matchedRecord2.getDataTables().size() > 0) {
-        		cat.setAttributes(atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), matchedRecord2.getDataTables()));
+        		cat.setCatAttributes(atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), matchedRecord2.getDataTables()));
         	}
         	
         	result.add(cat);

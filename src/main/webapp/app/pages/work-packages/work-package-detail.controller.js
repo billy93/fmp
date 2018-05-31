@@ -20,8 +20,8 @@
      * @param Clipboard
      * @returns
      */
-    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities'];
-    function WorkPackageDetailController($window, $sce, currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities) {
+    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities', 'states', 'cityGroups'];
+    function WorkPackageDetailController($window, $sce, currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups) {
     	var vm = this;
 
     	window.onbeforeunload = function () {
@@ -60,6 +60,9 @@
         vm.workPackage = entity;
         vm.tariffNumber = tariffNumber;
         vm.cities = cities;
+        vm.states = states;
+        vm.cityGroups = cityGroups;
+        vm.areas = [{"code":"1"}, {"code":"2"}, {"code":"3"}];
         vm.passengers = passengers;
         vm.currencies = currencies;
         vm.indexSelectedTab = 0;
@@ -515,12 +518,22 @@
         	{
         		name:"discountCalcType",
         		editable:["LSO", "HO"],
-        		mandatory:["LSO", "HO"]
+        		mandatory:["LSO", "HO"]        		
         	},
         	{
         		name:"discountPercentageOfBaseFare",
         		editable:["LSO", "HO",  "Distribution"],
-        		mandatory:[]
+        		mandatory:[],
+        		mandatoryExtraCondition:[
+        			{
+        				field:"calcType",
+        				isEqual:"M"
+        			},
+        			{
+        				field:"calcType",
+        				isEqual:"C"
+        			}
+        		]
         	},
         	{
         		name:"discountFareCurrency",
@@ -530,7 +543,13 @@
         	{
         		name:"discountSpecifiedAmount",
         		editable:["LSO", "HO",  "Distribution"],
-        		mandatory:[]
+        		mandatory:[],
+        		mandatoryExtraCondition:[
+        			{
+        				field:"calcType",
+        				isEqual:"S"
+        			}
+        		]
         	},
         	{
         		name:"discountPaxType",
@@ -894,6 +913,7 @@
         				var extraCondition = vm.fields[x].mandatoryExtraCondition;
         				
         				if(extraCondition != null && extraCondition.length > 0){
+//        					console.log("EXTRA CONDITION")
         					if(reviewLevels.indexOf(vm.workPackage.reviewLevel) > -1){
 	        					for(var y=0;y<extraCondition.length;y++){
 	        						if(fare != null){
@@ -909,9 +929,36 @@
 	        								}
 	        							} 
 	        							//End check other field empty condition
+	        							
+	        							//Check other field value condition
+	        							var otherField = extraCondition[y].field;
+	        							if(fare != null){
+	        								if(fare[otherField] == extraCondition[y].isEqual){
+	        									result = true;
+	        									break;
+	        								}
+	        							}
+	        							else{
+	        								
+	        							}    
+	        							//End check other field value condition
 	        						}
 	        					}
 	        					break;
+        					}
+        					else{
+        						for(var y=0;y<extraCondition.length;y++){
+        							var otherField = extraCondition[y].field;
+        							if(fare != null){
+        								if(fare[otherField] == extraCondition[y].isEqual){
+        									result = true;
+        									break;
+        								}
+        							}
+        							else{
+        								
+        							}        							
+        						}
         					}
         				}
         				else{
@@ -3561,9 +3608,78 @@
                       
                       function onImportSuccess(result){
                     	  	alert('Import Success');
-                    	  	vm.workPackage = result;
-                    	  	vm.workPackage.filingDate = DateUtils.convertDateTimeFromServer(vm.workPackage.filingDate);
-                    	  	vm.workPackage.createdDate = DateUtils.convertDateTimeFromServer(vm.workPackage.createdDate);
+                    	  	data = result;
+                    	  	data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
+                            data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+                            data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
+                            data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
+                            data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
+                            data.lockedSince = DateUtils.convertDateTimeFromServer(data.lockedSince);
+                            data.saleDate = DateUtils.convertDateTimeFromServer(data.saleDate);
+                            
+                            if(data.fareSheet.length > 0){
+                            	for(var x=0;x<data.fareSheet.length;x++){
+                            		var fares = data.fareSheet[x].fares;
+                            		for(var y=0;y<fares.length;y++){
+    	                        		if(fares[y] != null){
+    	                        			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
+    	                        			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
+    	                        			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
+    	                        			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
+    	                        			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+    	                        		}
+                            		}
+                            	}
+                            }
+                            
+                            if(data.addonFareSheet.length > 0){
+                            	for(var x=0;x<data.addonFareSheet.length;x++){
+                            		var fares = data.addonFareSheet[x].fares;
+                            		for(var y=0;y<fares.length;y++){
+    	                        		if(fares[y] != null){
+    	                        			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
+    	                        			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
+    	                        			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
+    	                        			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
+    	                        			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+    	                        		}
+                            		}
+                            	}
+                            }
+                            
+                            if(data.marketFareSheet.length > 0){
+                            	for(var x=0;x<data.marketFareSheet.length;x++){
+                            		var fares = data.marketFareSheet[x].fares;
+                            		for(var y=0;y<fares.length;y++){
+    	                        		if(fares[y] != null){
+    	                        			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
+    	                        			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
+    	                        			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
+    	                        			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
+    	                        			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+    	                        		}
+                            		}
+                            	}
+                            }
+                            
+                            
+                            if(data.discountFareSheet.length > 0){
+                            	for(var x=0;x<data.discountFareSheet.length;x++){
+                            		var fares = data.discountFareSheet[x].fares;
+                            		for(var y=0;y<fares.length;y++){
+    	                        		if(fares[y] != null){
+    	                        			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
+    	                        			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
+    	                        			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
+    	                        			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
+    	                        			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+    	                        		}
+                            		}
+                            	}
+                            }
+                            vm.workPackage = data;
+//                    	  	vm.workPackage.filingDate = DateUtils.convertDateTimeFromServer(vm.workPackage.filingDate);
+//                    	  	vm.workPackage.createdDate = DateUtils.convertDateTimeFromServer(vm.workPackage.createdDate);
                     	 // 	vm.workPackage.distributionDate = DateUtils.convertDateTimeFromServer(vm.workPackage.distributionDate);
                          //vm.workPackage.discExpiryDate = DateUtils.convertDateTimeFromServer(vm.workPackage.discExpiryDate);
                          //vm.workPackage.queuedDate = DateUtils.convertDateTimeFromServer(vm.workPackage.queuedDate);
@@ -3818,6 +3934,24 @@
           });
       }
       
+      vm.ratesheetDiscount = function(){
+	  	  $uibModal.open({
+          templateUrl: 'app/pages/work-packages/work-package-discount-rate-sheet-dialog.html',
+          controller: 'WorkPackageDiscountRateSheetDialogController',
+          controllerAs: 'vm',
+          backdrop: 'static',
+          size: 'lg',
+          resolve: {
+              entity: vm.workPackage,
+              index : vm.indexSelectedTab
+          }
+      }).result.then(function(ratesheet) {
+      	  
+      }, function() {
+  			
+      });
+  }
+      
       vm.agent = function(){
 	    	  	var object = {
 	    			agents: vm.workPackage.agent
@@ -4014,32 +4148,21 @@
     	  
     	  for(var x=0;x<workPackageSheet.fares.length;x++){
     		  if(fares[0].index != x){
-    			  Object.keys(fares[0].fare.field).forEach(function(key,index) {
-    				  if(fares[0].fare.field[key]){
-    					  if(key == 'tarno' || key == 'tarcd' || key == 'global'){
-    						  workPackageSheet.fares[x].tariffNumber = fares[0].fare.tariffNumber;
-    					  }
-    					  else{
-    						  console.log('KEY : '+key+ " | VALUE : "+fares[0].fare[key]);
-//    						  console.log(fares[0].fare);
-    						  workPackageSheet.fares[x][key] = fares[0].fare[key];
-    					  }
-    				  }
-    			  });
-    			  
-//    			  for(var y=0;y<fares[0].fare.field.length;y++){
-//    				  console.log(fares[0].fare.field[y]);
-//    			  }
-//	    		  if(workPackageSheet.fares[0].field['tarno'] || workPackageSheet.fares[0].field['tarcd'] || workPackageSheet.fares[0].field['global']){
-//	    			  workPackageSheet.fares[x].tariffNumber = fares[0].fare.tariffNumber;
-//	    		  }
-//	    		  else{
-//	    			  
-////	    			  workPackageSheet.fares[x].
-//	    		  }
+    			  if(x > fares[0].index){
+	    			  Object.keys(fares[0].fare.field).forEach(function(key,index) {
+	    				  if(fares[0].fare.field[key]){
+	    					  if(key == 'tarno' || key == 'tarcd' || key == 'global'){
+	    						  workPackageSheet.fares[x].tariffNumber = fares[0].fare.tariffNumber;
+	    					  }
+	    					  else{
+	    						  workPackageSheet.fares[x][key] = fares[0].fare[key];
+	    					  }
+	    				  }
+	    			  });
+    			  }
     		  }
     		  else{
-    			  console.log("Fare equal");
+    			  //console.log("Fare equal");
     		  }
     		  
     	  }
