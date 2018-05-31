@@ -458,7 +458,6 @@
 														</tr>
 													</thead>
 													<tbody ng-repeat="(key, fare) in workPackageSheet.fares track by $index" ng-click="vm.tbodyClick(workPackageSheet)">
-														<!-- ng-click="vm.rowTableClick($event, $parent.$index+''+$index, 'fares')" -->
 														<tr role="row" class="datatable-row" ng-class="{'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
 															<!-- <td>
 																<input type="checkbox" ng-model="fare.selected" ng-change="optionToggled(workPackageSheet.fares)">
