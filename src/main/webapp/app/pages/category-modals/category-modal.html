@@ -1,0 +1,40 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+            ng-click="vm.clear()">&times;</button>
+    <h4 class="modal-title">Category {{vm.category.catNo}} - {{vm.category.catName}}</h4>
+</div>
+<div class="modal-body">
+	<div class="panel">
+		<div class="panel-body">
+			<div class="table-wrapper">
+				<div class="datatable-wrapper form-inline">
+					<div class="table-responsive">
+				        <table class="table table-striped table-bordered datatable">
+				        	<thead>
+				                <tr>
+				                    <th ng-repeat="att in vm.category.catAttributes[0].attributes track by $index">
+				                    	<span ng-if="att.key == 'id'">No</span>
+				                    	<span ng-if="att.key != 'id'">{{att.key | objectname }}</span>
+				                    </th>
+			                    </tr>
+				        	</thead>
+				        	<tbody>
+				                <tr ng-repeat="catAtts in vm.category.catAttributes track by $index">
+				                    <td ng-repeat="att in catAtts.attributes track by $index">
+				                    	<span ng-if="att.key == 'id'">{{$index + 1}}</span>
+				                    	<span ng-if="att.key != 'id'">{{att.value}}</span>	
+				                    </td>
+			                    </tr>
+				        	</tbody>
+				        </table>
+					</div>
+				</div>
+			</div>
+			<button type="submit" class="btn btn-primary" ng-click="vm.clear()">
+		        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Close</span>
+		    </button>
+		</div>
+	</div>
+</div>
+   	
+    

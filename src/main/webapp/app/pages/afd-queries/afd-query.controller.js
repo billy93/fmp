@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('AfdQueryController', AfdQueryController);
 
-    AfdQueryController.$inject = ['$state', 'AfdQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams'];
+    AfdQueryController.$inject = ['$state', 'AfdQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', '$uibModal'];
 
-    function AfdQueryController($state, AfdQuery, ParseLinks, AlertService, paginationConstants, queryParams) {
+    function AfdQueryController($state, AfdQuery, ParseLinks, AlertService, paginationConstants, queryParams, $uibModal) {
 
         var vm = this;
         vm.loadPage = loadPage;
@@ -15,6 +15,8 @@
         vm.queryParams = queryParams;
         vm.loadAll = loadAll;
         vm.getRules = getRules;
+        vm.showCategoryDetail = showCategoryDetail;
+        
         vm.reset = reset;
         vm.page = 1;
         
@@ -144,6 +146,24 @@
         	}
         	
         	vm.loadAll();
+        }
+        
+        function showCategoryDetail(category) {
+        	$uibModal.open({
+                templateUrl: 'app/pages/category-modals/category-modal.html',
+                controller: 'CategoryModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full',
+                resolve: {
+                    entity: category
+                }
+            }).result.then(function() {
+                $state.go('afd-query', {}, { reload: false });
+            }, function() {
+                $state.go('afd-query');
+            });
         }
     }
 })();

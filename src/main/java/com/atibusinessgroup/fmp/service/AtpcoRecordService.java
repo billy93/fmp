@@ -309,6 +309,7 @@ public class AtpcoRecordService {
 				attObj.setKey(entry.getKey());
 				attObj.setValue(entry.getValue());
 				
+				//Add Exclusion of attributes
 				catAttrObjs.add(attObj);
 			}
 		} catch (Exception e) {

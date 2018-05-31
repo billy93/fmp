@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('RuleQueryController', RuleQueryController);
 
-    RuleQueryController.$inject = ['$state', 'RuleQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams'];
+    RuleQueryController.$inject = ['$state', 'RuleQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', '$uibModal'];
 
-    function RuleQueryController($state, RuleQuery, ParseLinks, AlertService, paginationConstants, queryParams) {
+    function RuleQueryController($state, RuleQuery, ParseLinks, AlertService, paginationConstants, queryParams, $uibModal) {
     	
     	console.log("queryParams :: ",queryParams);
 
@@ -96,5 +96,22 @@
         	vm.loadAll();
         }
         
+        function showCategoryDetail(category) {
+        	$uibModal.open({
+                templateUrl: 'app/pages/category-modals/category-modal.html',
+                controller: 'CategoryModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full',
+                resolve: {
+                    entity: category
+                }
+            }).result.then(function() {
+                $state.go('afd-query', {}, { reload: false });
+            }, function() {
+                $state.go('afd-query');
+            });
+        }
     }
 })();
