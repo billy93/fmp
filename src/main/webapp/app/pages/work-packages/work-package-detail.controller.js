@@ -4198,6 +4198,7 @@
     			  if(selected){
 //    				  console.log("SELECTED : "+selected);
     				  var copiedFare = angular.copy(workPackageSheet.fares[x]);
+    				  copiedFare.status = "PENDING";
     				  copiedFare.field = null;
     				  workPackageSheet.fares.push(copiedFare);
     			  }
@@ -4217,8 +4218,10 @@
     					  selected = true;
     				  }
     			 });
-    			  if(selected){
-    				  fares.push(workPackageSheet.fares[x]);
+    			 if(selected){
+    				  if(workPackageSheet.fares[x].status != "APPROVED"){
+    					  fares.push(workPackageSheet.fares[x]);
+    				  }
 //    				  var index = workPackageSheet.fares.indexOf(workPackageSheet.fares[x]);
 //    				  workPackageSheet.fares.splice(index, 1); 
     				  
@@ -4266,6 +4269,8 @@
 	    $scope.isAllSelected = fares.every(function(itm){ return itm.selected; })
 	  }
       
-      
+      vm.getKey = function(obj, index){
+    	  return Object.keys(obj)[index];
+      }
     }
 })();
