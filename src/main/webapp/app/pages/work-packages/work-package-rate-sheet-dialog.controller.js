@@ -169,13 +169,17 @@
         	
         }
         
-        vm.addOriginalAuthorities = function () {       	
+        vm.addOriginalAuthorities = function () { 
         	if (vm.header[0] != undefined) {
-        		if (!vm.selectedHeader.includes(vm.header[0])) {
-                	vm.selectedHeader.push(vm.header[0]);
-                	setTitle(vm.header[0]);
-
-                } 
+        		if(vm.header.length>1){
+        			for(var l=0; l<vm.header.length;l++){
+        				vm.selectedHeader.push(vm.header[l]);
+        				setTitle(vm.header[l]);
+        			}
+        		}else{
+        			vm.selectedHeader.push(vm.header[0]);
+    				setTitle(vm.header[0]);
+        		}
 			}
         }
         vm.addAllOriginalAuthorities = function (){
