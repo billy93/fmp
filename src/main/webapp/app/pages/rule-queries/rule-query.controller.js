@@ -33,6 +33,10 @@
         	vm.queryParams.size = vm.itemsPerPage;
         	RuleQuery.query(vm.queryParams, onSuccess, onError);
         	
+        	$("th").css({
+    			"text-align" : "center"
+    		});
+        	
             function onSuccess(data, headers) {
                 vm.links = ParseLinks.parse(headers('link'));
                 vm.totalItems = headers('X-Total-Count');
@@ -60,9 +64,14 @@
         
         function showDetail() {
         	$("#tblDetail").show();
+        	$("#tblDetail").focus();
+        	$("#tblDetail").css("display","block");
+        	$("#tblDetail").css("height","440px");
+        	$("#tblDetail").css("overflow-y","scroll");
         }
         
         function hideDetail() {
+        	$("#tblDetail").css("display","none");
         	$("#tblDetail").hide();
         }
         
