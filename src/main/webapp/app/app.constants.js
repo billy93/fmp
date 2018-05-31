@@ -4,7 +4,12 @@
     angular
         .module('fmpApp')
         .constant('VERSION', "0.0.1-SNAPSHOT")
+<<<<<<< HEAD
         .constant('DEBUG_INFO_ENABLED', true)
         .constant('BUILD_TIMESTAMP', "")
+=======
+        .constant('DEBUG_INFO_ENABLED', false)
+        .constant('BUILD_TIMESTAMP', 1527744724284)
+>>>>>>> 04fb05544383b2ac765d42a007eb0af19c964b4d
 ;
 })();

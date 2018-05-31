@@ -17,10 +17,13 @@
         vm.queryParams = queryParams;
         vm.loadAll = loadAll;
         vm.getRules = getRules;
+        vm.getRules2 = getRules2;
         vm.showDetail = showDetail;
         vm.hideDetail = hideDetail;
         vm.reset = reset;
         vm.page = 1;
+        vm.clearFilter = clearFilter;
+        
         
         vm.datePickerOpenStatus = {};
         vm.dateFormat = "yyyy-MM-dd";
@@ -42,7 +45,6 @@
                 vm.totalItems = headers('X-Total-Count');
                 vm.queryCount = vm.totalItems;
                 vm.ruleQueries = data;
-                console.log("data",data);
             }
             
             function onError(error) {
@@ -62,17 +64,38 @@
         	});
         }
         
+        function getRules2(ruleQuery) {
+        	RuleQuery.getRules2(ruleQuery, function(data) {
+        		vm.ruleQueryCategories2 = data;
+        		console.log(data);
+        	}, function(error) {
+        		console.log(error);
+        	});
+        }
+        
         function showDetail() {
         	$("#tblDetail").show();
         	$("#tblDetail").focus();
         	$("#tblDetail").css("display","block");
         	$("#tblDetail").css("height","440px");
         	$("#tblDetail").css("overflow-y","scroll");
+        	$("#ruleCategories").show();
+        	
         }
         
         function hideDetail() {
         	$("#tblDetail").css("display","none");
         	$("#tblDetail").hide();
+        	$("#ruleCategories").hide();
+        }
+        
+        function clearFilter() {
+        	$("#cxr").val("");
+        	$("#ruleNo").val("");
+        	$("#type").val("");
+        	$("#src").val("");
+        	$("#ruleTarNo").val("");
+        	$("#catNo").val("");
         }
         
         function openCalendar (e, date) {
