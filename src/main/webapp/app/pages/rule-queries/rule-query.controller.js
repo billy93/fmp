@@ -23,7 +23,7 @@
         vm.reset = reset;
         vm.page = 1;
         vm.clearFilter = clearFilter;
-        
+        vm.showCategoryDetail = showCategoryDetail;
         
         vm.datePickerOpenStatus = {};
         vm.dateFormat = "yyyy-MM-dd";
@@ -131,9 +131,9 @@
                     entity: category
                 }
             }).result.then(function() {
-                $state.go('afd-query', {}, { reload: false });
+                $state.go('rule-query', {}, { reload: false });
             }, function() {
-                $state.go('afd-query');
+                $state.go('rule-query');
             });
         }
     }

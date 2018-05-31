@@ -19,9 +19,9 @@
 			                    </tr>
 				        	</thead>
 				        	<tbody>
-				                <tr ng-repeat="catAtts in vm.category.catAttributes track by $index">
-				                    <td ng-repeat="att in catAtts.attributes track by $index">
-				                    	<span ng-if="att.key == 'id'">{{$index + 1}}</span>
+				                <tr ng-repeat="catAtts in vm.category.catAttributes" ng-init="parentIndex = $index">
+				                    <td ng-repeat="att in catAtts.attributes">
+				                    	<span ng-if="att.key == 'id'">{{parentIndex + 1}}</span>
 				                    	<span ng-if="att.key != 'id'">{{att.value}}</span>	
 				                    </td>
 			                    </tr>
