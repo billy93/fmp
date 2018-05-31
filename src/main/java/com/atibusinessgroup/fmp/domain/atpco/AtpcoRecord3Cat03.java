@@ -8,64 +8,64 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class AtpcoRecord3Cat03 {
 
 	@Id
-    private String id;
-	
+	private String id;
+
 	@Field("record_sequence")
 	private String record_sequence;
 
 	@Field("date_start_dd")
-    private String date_start_dd;
+	private String date_start_dd;
 
 	@Field("date_tbl_no_994")
-    private String date_tbl_no_994;
+	private String date_tbl_no_994;
 
 	@Field("text_tbl_no_996")
-    private String text_tbl_no_996;
+	private String text_tbl_no_996;
 
 	@Field("date_start_yy")
-    private String date_start_yy;
+	private String date_start_yy;
 
 	@Field("travel")
-    private String travel;
+	private String travel;
 
 	@Field("record_batch")
-    private String record_batch;
+	private String record_batch;
 
 	@Field("type")
-    private String type;
+	private String type;
 
 	@Field("date_stop_mm")
-    private String date_stop_mm;
+	private String date_stop_mm;
 
 	@Field("cat_no")
-    private String cat_no;
+	private String cat_no;
 
 	@Field("date_start_mm")
-    private String date_start_mm;
+	private String date_start_mm;
 
 	@Field("rec_type")
-    private String rec_type;
+	private String rec_type;
 
 	@Field("tbl_no")
-    private String tbl_no;
+	private String tbl_no;
 
 	@Field("unavail")
-    private String unavail;
+	private String unavail;
 
 	@Field("geo_tbl_no_995")
-    private String geo_tbl_no_995;
+	private String geo_tbl_no_995;
 
 	@Field("rules_type")
-    private String rules_type;
+	private String rules_type;
 
 	@Field("action")
-    private String action;
+	private String action;
 
 	@Field("date_stop_yy")
-    private String date_stop_yy;
+	private String date_stop_yy;
 
 	@Field("date_stop_dd")
-    private String date_stop_dd;
+	private String date_stop_dd;
 
 	public String getId() {
 		return id;
@@ -376,6 +376,5 @@ public class AtpcoRecord3Cat03 {
 				+ ", geo_tbl_no_995=" + geo_tbl_no_995 + ", rules_type=" + rules_type + ", action=" + action
 				+ ", date_stop_yy=" + date_stop_yy + ", date_stop_dd=" + date_stop_dd + "]";
 	}
-	
-	
+
 }

@@ -145,11 +145,17 @@ public class AtpcoRecordService {
 		ReflectionObject result = new ReflectionObject();
 		
 		switch (category) {
-			case "001": 
+			case "001": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat01"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_001);
 						break;
-			case "002": 
+			case "002": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat02"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_002);
 						break;
-			case "003": 
+			case "003": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat03"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_003);
 						break;
 			case "004": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat04"));
 						result.setMethodName("getTableNo");
@@ -159,14 +165,21 @@ public class AtpcoRecordService {
 						result.setMethodName("getTableNumber");
 						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_005);
 						break;
-			case "006": 
-				
+			case "006": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat06"));
+						result.setMethodName("getTblNo");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_006);
 						break;
-			case "007": 
+			case "007": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat07"));
+						result.setMethodName("getTblNo");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_007);
 						break;
-			case "008": 
+			case "008": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat08"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_008);
 						break;
-			case "009": 
+			case "009": result.setClassName(classBasePackage.concat("AtpcoRecord3Cat09"));
+						result.setMethodName("getTbl_no");
+						result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_009);
 						break;
 			case "010": 
 						break;
