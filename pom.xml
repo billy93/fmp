@@ -512,9 +512,9 @@
                 <artifactId>tomcat7-maven-plugin</artifactId>
                 <version>2.2</version>
                 <configuration>
-                    <path>/FMP</path>
+                    <path>/</path>
                     <update>true</update>
-                    <url>http://localhost:8082/manager/text</url>
+                    <url>http://localhost/manager/text</url>
                     <username>admin</username>
                     <password>$3ter@hGwD0n9</password>
                 </configuration>
