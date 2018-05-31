@@ -144,6 +144,8 @@
 	        'publish' : { method: 'POST',  url:'api/work-packages/market/publish'},
 	        'exportRateSheet': { method: 'POST',  url:'api/work-packages/export-ratesheet'},
 	        'exportRateSheetExcel': { method: 'POST',  url:'api/work-packages/export-ratesheet-excel'},
+	        'exportRateSheetDiscount': { method: 'POST',  url:'api/work-packages/export-ratesheet-discount'},
+	        'exportRateSheetExcelDiscount': { method: 'POST',  url:'api/work-packages/export-ratesheet-excel-discount'},
 	        'downloadMarketRules': { method: 'POST',  url:'api/work-packages/download-market-rules'}
         });
     }

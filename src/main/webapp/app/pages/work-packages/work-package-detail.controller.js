@@ -3934,6 +3934,24 @@
           });
       }
       
+      vm.ratesheetDiscount = function(){
+	  	  $uibModal.open({
+          templateUrl: 'app/pages/work-packages/work-package-discount-rate-sheet-dialog.html',
+          controller: 'WorkPackageDiscountRateSheetDialogController',
+          controllerAs: 'vm',
+          backdrop: 'static',
+          size: 'lg',
+          resolve: {
+              entity: vm.workPackage,
+              index : vm.indexSelectedTab
+          }
+      }).result.then(function(ratesheet) {
+      	  
+      }, function() {
+  			
+      });
+  }
+      
       vm.agent = function(){
 	    	  	var object = {
 	    			agents: vm.workPackage.agent
