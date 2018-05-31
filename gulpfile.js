@@ -56,21 +56,6 @@ gulp.task('images', function () {
         .pipe(browserSync.reload({stream: true}));
 });
 
-gulp.task('css-images', function () {
-    return gulp.src(config.app + 'content/css/images/**')
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(changed(config.dist + 'content/css/images'))
-        .pipe(imagemin({optimizationLevel: 5, progressive: true, interlaced: true}))
-        .pipe(rev())
-        .pipe(gulp.dest(config.dist + 'content/css/images'))
-        .pipe(rev.manifest(config.revManifest, {
-            base: config.dist,
-            merge: true
-        }))
-        .pipe(gulp.dest(config.dist))
-        .pipe(browserSync.reload({stream: true}));
-});
-
 gulp.task('styles', [], function () {
     return gulp.src(config.app + 'content/css')
         .pipe(browserSync.reload({stream: true}));
@@ -90,7 +75,7 @@ gulp.task('inject:test', inject.test);
 
 gulp.task('inject:troubleshoot', inject.troubleshoot);
 
-gulp.task('assets:prod', ['images', 'css-images', 'styles', 'html', 'copy:swagger', 'copy:images'], build);
+gulp.task('assets:prod', ['images', 'styles', 'html', 'copy:swagger', 'copy:images'], build);
 
 gulp.task('html', function () {
     return gulp.src(config.app + 'app/**/*.html')
