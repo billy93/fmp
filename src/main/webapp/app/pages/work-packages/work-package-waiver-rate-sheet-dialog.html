@@ -13,38 +13,30 @@
 	            <div class="clearfix mb1">
 					<div class="pull-left w35">
 						<select class="form-control left-select" multiple name="header" ng-model="vm.header" id="field_carrier" style="height: auto !important; width: 100% !important;">
-							<option value="status">Status</option>
-							<option value="fbrTariffCode">FBR Tariff Code</option>
-							<option value="loc1Type">Loc 1 Type</option>
-							<option value="loc1">Loc 1</option>
-							<option value="loc2Type">Loc 2 Type</option>
-							<option value="loc2">Loc 2</option>
-							<option value="baseFareCls">Base FareCls</option>
-							<option value="baseRuleNo">Base Rule No</option>
-							<option value="baseTariffCode">Base Tariff Code</option>
-							<option value="calcType">Calc Type</option>
-							<option value="percentOfBaseFare">% of Base Fare</option>
+							<option value="type">Type</option>
+							<option value="fullPartial">Full/Partial</option>
+							<option value="pnr">PNR</option>
+							<option value="tktFrom">Tkt From</option>
+							<option value="tktTo">Tkt To</option>
+							<option value="ori">Ori</option>
+							<option value="dest">Dest</option>
+							<option value="originalItinerary">Original Itinerary</option>
+							<option value="newItinerary">New Itinerary</option>
+							<option value="originalBasicFare">Original Basic Fare</option>
+							<option value="newBasicFare">New Basic Fare</option>
+							<option value="approvedFares">Approved Fares</option>
+							<option value="fareLost">Fare Lost</option>
+							<option value="calculatedPN">Calculated PN</option>
+							<option value="originalPN">Original PN</option>
+							<option value="approvedPN">Approved PN</option>
+							<option value="penaltyLostPercent">Penalty Lost %</option>
+							<option value="penaltyLostAmount">Penalty Lost Amount</option>
 							<option value="currency">Currency</option>
-							<option value="specifiedAmount">Specified Amount</option>
-							<option value="pAXType">PAX Type</option>
-							<option value="fareType">Fare Type</option>
-							<option value="tktCode">Tkt Code</option>
-							<option value="tktDes">Tkt Des</option>
-							<option value="baseFareOWRT">Base Fare OW/RT</option>
-							<option value="global">Global</option>
-							<option value="rtgNo">Rtg No</option>
-							<option value="rtgNoTarno">Rtg No Tarno</option>
-							<option value="newFareCls">New FareCls</option>
-							<option value="newOWRT">New OW/RT </option>
-							<option value="newBkgCd">New BkgCd</option>
-							<option value="travelStart">Travel Start </option>
-							<option value="travelEnd">Travel End </option>
-							<option value="saleStart">Sales Start </option>
-							<option value="saleEnd">Sales End </option>
-							<option value="comment">Comment </option>
-							<option value="travelComplete">Travel Complete </option>
-							<option value="travelCompleteIndicator">Travel Complete Indicator </option>
-			            </select>
+							<option value="totalPax">Total Pax</option>
+							<option value="totalLost">Total Lost</option>
+							<option value="approver">Approver</option>
+							<option value="remark">Remark</option>
+						 </select>
 					</div>
 					<div class="pull-left w30">
 						<div class="ph5px">
@@ -73,7 +65,7 @@
    			<div ng-model="vm.workPackage ">
 				<span>WORK ID : {{vm.workPackage.wpid}}</span><br>
 				<span>TITLE FARE SHEET : {{vm.workPackage.name}}</span><br>
-				<span>FARE NAME : {{vm.workPackage.discountFareSheet[vm.index].discountFaresName}}</span><br>
+				<span>FARE NAME : {{vm.workPackage.waiverFareSheet[vm.index].discountFaresName}}</span><br>
 				<span>NOTES RATESHEET : {{vm.workPackage.ratesheetComment}}</span><br>
 				<span>FARES </span><br>
 			</div>
