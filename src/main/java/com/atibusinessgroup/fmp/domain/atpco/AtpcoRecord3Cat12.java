@@ -1,7 +1,7 @@
 package com.atibusinessgroup.fmp.domain.atpco;
 
-import java.math.BigDecimal;
 
+import org.bson.types.Decimal128;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -73,7 +73,7 @@ public class AtpcoRecord3Cat12 {
     private String date_stop_dd;
 
 	@Field("charges_second_amt")
-    private BigDecimal charges_second_amt;
+    private Decimal128 charges_second_amt;
 
 	@Field("charges_base")
     private String charges_base;
@@ -121,7 +121,7 @@ public class AtpcoRecord3Cat12 {
     private String charges_first_dec;
 
 	@Field("charges_first_amt")
-    private BigDecimal charges_first_amt;
+    private Decimal128 charges_first_amt;
 
 	@Field("time_of_day_start")
     private String time_of_day_start;
@@ -294,11 +294,11 @@ public class AtpcoRecord3Cat12 {
 		this.date_stop_dd = date_stop_dd;
 	}
 
-	public BigDecimal getCharges_second_amt() {
+	public Decimal128 getCharges_second_amt() {
 		return charges_second_amt;
 	}
 
-	public void setCharges_second_amt(BigDecimal charges_second_amt) {
+	public void setCharges_second_amt(Decimal128 charges_second_amt) {
 		this.charges_second_amt = charges_second_amt;
 	}
 
@@ -422,11 +422,11 @@ public class AtpcoRecord3Cat12 {
 		this.charges_first_dec = charges_first_dec;
 	}
 
-	public BigDecimal getCharges_first_amt() {
+	public Decimal128 getCharges_first_amt() {
 		return charges_first_amt;
 	}
 
-	public void setCharges_first_amt(BigDecimal charges_first_amt) {
+	public void setCharges_first_amt(Decimal128 charges_first_amt) {
 		this.charges_first_amt = charges_first_amt;
 	}
 
@@ -709,8 +709,6 @@ public class AtpcoRecord3Cat12 {
 				+ charges_first_dec + ", charges_first_amt=" + charges_first_amt + ", time_of_day_start="
 				+ time_of_day_start + "]";
 	}
-	
-	
-	
+
 	
 }

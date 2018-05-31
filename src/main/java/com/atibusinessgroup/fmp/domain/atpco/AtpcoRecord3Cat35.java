@@ -1,9 +1,9 @@
 package com.atibusinessgroup.fmp.domain.atpco;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bson.types.Decimal128;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -36,10 +36,10 @@ public class AtpcoRecord3Cat35 {
     private List<AtpcoRecord3Cat35Ticketing> ticketing = new ArrayList<>();
 
 	@Field("commission_amt_1")
-    private BigDecimal commission_amt_1;
+    private Decimal128 commission_amt_1;
 
 	@Field("commission_amt_2")
-    private BigDecimal commission_amt_2;
+    private Decimal128 commission_amt_2;
 
 	@Field("tbl_no")
     private String tbl_no;
@@ -171,19 +171,19 @@ public class AtpcoRecord3Cat35 {
 		this.ticketing = ticketing;
 	}
 
-	public BigDecimal getCommission_amt_1() {
+	public Decimal128 getCommission_amt_1() {
 		return commission_amt_1;
 	}
 
-	public void setCommission_amt_1(BigDecimal commission_amt_1) {
+	public void setCommission_amt_1(Decimal128 commission_amt_1) {
 		this.commission_amt_1 = commission_amt_1;
 	}
 
-	public BigDecimal getCommission_amt_2() {
+	public Decimal128 getCommission_amt_2() {
 		return commission_amt_2;
 	}
 
-	public void setCommission_amt_2(BigDecimal commission_amt_2) {
+	public void setCommission_amt_2(Decimal128 commission_amt_2) {
 		this.commission_amt_2 = commission_amt_2;
 	}
 
@@ -591,4 +591,5 @@ public class AtpcoRecord3Cat35 {
 	}
 	
 	
+
 }

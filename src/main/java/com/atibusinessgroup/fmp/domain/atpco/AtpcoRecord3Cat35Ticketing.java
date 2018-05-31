@@ -1,7 +1,7 @@
 package com.atibusinessgroup.fmp.domain.atpco;
 
-import java.math.BigDecimal;
 
+import org.bson.types.Decimal128;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 public class AtpcoRecord3Cat35Ticketing {
@@ -61,7 +61,7 @@ public class AtpcoRecord3Cat35Ticketing {
     private String auditor_passenger_coupon;
 
 	@Field("ticketed_fare_data_fare_box_amt")
-    private BigDecimal ticketed_fare_data_fare_box_amt;
+    private Decimal128 ticketed_fare_data_fare_box_amt;
 
 	@Field("ticketed_fare_data_owrt")
     private String ticketed_fare_data_owrt;
@@ -213,11 +213,11 @@ public class AtpcoRecord3Cat35Ticketing {
 		this.auditor_passenger_coupon = auditor_passenger_coupon;
 	}
 
-	public BigDecimal getTicketed_fare_data_fare_box_amt() {
+	public Decimal128 getTicketed_fare_data_fare_box_amt() {
 		return ticketed_fare_data_fare_box_amt;
 	}
 
-	public void setTicketed_fare_data_fare_box_amt(BigDecimal ticketed_fare_data_fare_box_amt) {
+	public void setTicketed_fare_data_fare_box_amt(Decimal128 ticketed_fare_data_fare_box_amt) {
 		this.ticketed_fare_data_fare_box_amt = ticketed_fare_data_fare_box_amt;
 	}
 
@@ -411,4 +411,5 @@ public class AtpcoRecord3Cat35Ticketing {
 	}
 	
 	
+
 }

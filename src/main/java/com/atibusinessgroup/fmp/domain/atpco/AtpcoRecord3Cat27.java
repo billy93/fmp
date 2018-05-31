@@ -1,9 +1,9 @@
 package com.atibusinessgroup.fmp.domain.atpco;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bson.types.Decimal128;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -96,7 +96,7 @@ public class AtpcoRecord3Cat27 {
     private String price_min_tour_2;
 
 	@Field("package_addl_amt_2")
-    private BigDecimal package_addl_amt_2;
+    private Decimal128 package_addl_amt_2;
 
 	@Field("refunds_filler_20")
     private String refunds_filler_20;
@@ -201,13 +201,13 @@ public class AtpcoRecord3Cat27 {
     private String package_min_appl_2;
 
     @Field("package_min_amt_2")
-    private BigDecimal package_min_amt_2;
+    private Decimal128 package_min_amt_2;
 
     @Field("package_min_amt_1")
-    private BigDecimal package_min_amt_1;
+    private Decimal128 package_min_amt_1;
 
     @Field("package_addl_amt_1")
-    private BigDecimal package_addl_amt_1;
+    private Decimal128 package_addl_amt_1;
 
     @Field("price_age_min")
     private String price_age_min;
@@ -487,11 +487,11 @@ public class AtpcoRecord3Cat27 {
 		this.price_min_tour_2 = price_min_tour_2;
 	}
 
-	public BigDecimal getPackage_addl_amt_2() {
+	public Decimal128 getPackage_addl_amt_2() {
 		return package_addl_amt_2;
 	}
 
-	public void setPackage_addl_amt_2(BigDecimal package_addl_amt_2) {
+	public void setPackage_addl_amt_2(Decimal128 package_addl_amt_2) {
 		this.package_addl_amt_2 = package_addl_amt_2;
 	}
 
@@ -767,27 +767,27 @@ public class AtpcoRecord3Cat27 {
 		this.package_min_appl_2 = package_min_appl_2;
 	}
 
-	public BigDecimal getPackage_min_amt_2() {
+	public Decimal128 getPackage_min_amt_2() {
 		return package_min_amt_2;
 	}
 
-	public void setPackage_min_amt_2(BigDecimal package_min_amt_2) {
+	public void setPackage_min_amt_2(Decimal128 package_min_amt_2) {
 		this.package_min_amt_2 = package_min_amt_2;
 	}
 
-	public BigDecimal getPackage_min_amt_1() {
+	public Decimal128 getPackage_min_amt_1() {
 		return package_min_amt_1;
 	}
 
-	public void setPackage_min_amt_1(BigDecimal package_min_amt_1) {
+	public void setPackage_min_amt_1(Decimal128 package_min_amt_1) {
 		this.package_min_amt_1 = package_min_amt_1;
 	}
 
-	public BigDecimal getPackage_addl_amt_1() {
+	public Decimal128 getPackage_addl_amt_1() {
 		return package_addl_amt_1;
 	}
 
-	public void setPackage_addl_amt_1(BigDecimal package_addl_amt_1) {
+	public void setPackage_addl_amt_1(Decimal128 package_addl_amt_1) {
 		this.package_addl_amt_1 = package_addl_amt_1;
 	}
 
@@ -1497,4 +1497,5 @@ public class AtpcoRecord3Cat27 {
 	}
     
     
+
 }

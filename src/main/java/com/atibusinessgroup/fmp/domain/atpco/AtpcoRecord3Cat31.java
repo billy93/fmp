@@ -1,7 +1,7 @@
 package com.atibusinessgroup.fmp.domain.atpco;
 
-import java.math.BigDecimal;
 
+import org.bson.types.Decimal128;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -103,10 +103,10 @@ public class AtpcoRecord3Cat31 {
     private String record_batch;
 
 	@Field("amt_1")
-    private BigDecimal amt_1;
+    private Decimal128 amt_1;
 
 	@Field("amt_2")
-    private BigDecimal amt_2;
+    private Decimal128 amt_2;
 
 	@Field("psgr_occ_last")
     private String psgr_occ_last;
@@ -124,7 +124,7 @@ public class AtpcoRecord3Cat31 {
     private String cat_no;
 
 	@Field("min_amt")
-    private BigDecimal min_amt;
+    private Decimal128 min_amt;
 
 	@Field("reserved_5")
     private String reserved_5;
@@ -413,19 +413,19 @@ public class AtpcoRecord3Cat31 {
 		this.record_batch = record_batch;
 	}
 
-	public BigDecimal getAmt_1() {
+	public Decimal128 getAmt_1() {
 		return amt_1;
 	}
 
-	public void setAmt_1(BigDecimal amt_1) {
+	public void setAmt_1(Decimal128 amt_1) {
 		this.amt_1 = amt_1;
 	}
 
-	public BigDecimal getAmt_2() {
+	public Decimal128 getAmt_2() {
 		return amt_2;
 	}
 
-	public void setAmt_2(BigDecimal amt_2) {
+	public void setAmt_2(Decimal128 amt_2) {
 		this.amt_2 = amt_2;
 	}
 
@@ -469,11 +469,11 @@ public class AtpcoRecord3Cat31 {
 		this.cat_no = cat_no;
 	}
 
-	public BigDecimal getMin_amt() {
+	public Decimal128 getMin_amt() {
 		return min_amt;
 	}
 
-	public void setMin_amt(BigDecimal min_amt) {
+	public void setMin_amt(Decimal128 min_amt) {
 		this.min_amt = min_amt;
 	}
 
@@ -935,4 +935,5 @@ public class AtpcoRecord3Cat31 {
 	}
 	
 	
+
 }
