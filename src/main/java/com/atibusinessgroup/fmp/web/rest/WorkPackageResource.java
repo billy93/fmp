@@ -3269,4 +3269,395 @@ public class WorkPackageResource {
             .body(att);
     }
         
+    /**
+     * POST  /work-packages/export-fares-discount : Export work package fares-discount
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+	 * @throws IOException 
+	 * @throws MalformedURLException 
+	 * @throws DocumentException 
+     */
+    @PostMapping("/work-packages/export-ratesheet-discount")
+    @Timed
+    public ResponseEntity<Attachment> exportRateSheetWorkPackageDiscount(@RequestBody WorkPackageRateSheet wprs) throws URISyntaxException, MalformedURLException, IOException, DocumentException {
+    	log.debug("REST request to save exportFares-discount : {}{}", wprs.getWp(), wprs.getRuleText());
+        
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+        WorkPackage workPackage = wprs.getWp();
+        String ruleText = wprs.getRuleText();
+        int idx = Integer.parseInt(wprs.getIndex());
+        String[] header = wprs.getHeader();
+        
+        Integer count = header.length;
+        PdfPTable table;
+        Document document;
+        if(count < 25) {
+        	document = new Document(PageSize.A4,30,30,60,0);
+    	}else {
+    		document = new Document(PageSize.A4.rotate());
+    		document.setMargins(60, 30, 30, 30);
+    	}
+    	
+    	PdfWriter.getInstance(document, output);
+    	String IMG = "src\\main\\webapp\\content\\images\\logo_ga.png";
+    	document.open();
+    	Font font = FontFactory.getFont(FontFactory.TIMES_BOLD, 12, BaseColor.BLACK);
+    	Image image = Image.getInstance(IMG);
+    	image.scaleToFit(PageSize.A4.getWidth()/4, PageSize.A4.getHeight()/4);
+    	image.setAlignment(Image.MIDDLE);
+    	String[] content = {"WORK ID : ","TITLE FARE SHEET : ", "FARE NAME : ","NOTES RATESHEET : ", "FARES : ", "RULE TEXT : "};
+    	document.add(image); 
+    	document.add(new Chunk(" "));
+
+        Paragraph p1 = new Paragraph();
+        Paragraph p2 = new Paragraph();
+        Paragraph p3 = new Paragraph();
+        Paragraph p4 = new Paragraph();
+        Paragraph p5 = new Paragraph();
+        Paragraph p6 = new Paragraph();
+
+        p1.setFont(font);               
+        p1.add(content[0]+" "+ workPackage.getWpid());        
+    	document.add(p1);
+    	document.add(new Chunk(" "));
+        p2.setFont(font);               
+        p2.add(content[1]+" "+workPackage.getName());
+        document.add(p2);
+    	document.add(new Chunk(" "));
+
+        p3.setFont(font);               
+        p3.add(content[2]+" "+workPackage.getDiscountFareSheet().get(idx).getDiscountFaresName());
+    	document.add(p3);
+    	document.add(new Chunk(" "));
+
+        p4.setFont(font);               
+        p4.add(content[3]+" "+workPackage.getRatesheetComment());
+    	document.add(p4);
+    	document.add(new Chunk(" "));
+
+        p5.setFont(font);               
+        p5.add(content[4]);
+    	document.add(p5);
+    	document.add(new Chunk(" "));
+
+    	table = new PdfPTable(count);
+		table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
+		for(int l=0; l<header.length ;l++) {
+			table.addCell(header[l]);
+		}
+		table.setHeaderRows(1);
+        
+		
+		PdfPCell[] cells = table.getRow(0).getCells(); 
+    	for (int j=0;j<cells.length;j++){
+    			cells[j].setBackgroundColor(BaseColor.GRAY);
+    	}
+        	log.debug("cek discount : "+workPackage.getDiscountFareSheet().size());
+        	for(int l=0; l<workPackage.getDiscountFareSheet().get(idx).getFares().size();l++) {
+        		for (int i=0;i<header.length;i++){
+            		if(header[i].contentEquals("Status")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getStatus());
+            		}else if(header[i].contentEquals("FBR Tariff Code")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTarcd());
+            		}else if(header[i].contentEquals("Loc 1 Type")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getLoc1Type());       			
+            		}else if(header[i].contentEquals("Loc 1")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getLoc1());
+            		}else if(header[i].contentEquals("Loc 2 Type")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getLoc2Type());
+            		}else if(header[i].contentEquals("Loc 2")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getLoc2());
+            		}else if(header[i].contentEquals("Base FareCls")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getBaseFareBasis());
+            		}else if(header[i].contentEquals("Base Rule No")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getBaseRuleNo());
+            		}else if(header[i].contentEquals("Base Tariff Code")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getBaseTarcd());
+            		}else if(header[i].contentEquals("Calc Type")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getCalcType());
+            		}else if(header[i].contentEquals("% of Base Fare")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getPercentBaseFare());
+            		}else if(header[i].contentEquals("Currency")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getRuleno());
+            		}else if(header[i].contentEquals("Specified Amount")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getDiscountSpecifiedAmount());
+            		}else if(header[i].contentEquals("PAX Type")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getPassengerType());
+            		}else if(header[i].contentEquals("Fare Type")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getFareType());
+            		}else if(header[i].contentEquals("Tkt Code")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTicketCode());
+            		}else if(header[i].contentEquals("Tkt Des")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTicketDesignator());
+            		}else if(header[i].contentEquals("Base Fare OW/RT")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTypeOfJourney());
+            		}else if(header[i].contentEquals("Global")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getGlobal());
+            		}else if(header[i].contentEquals("Rtg No")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getRtgno());
+            		}else if(header[i].contentEquals("Rtg No Tarno")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getRtgnoTarno());
+            		}else if(header[i].contentEquals("New FareCls")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getNewFareBasis());
+            		}else if(header[i].contentEquals("New OW/RT")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getNewTypeOfJourney());
+            		}else if(header[i].contentEquals("New BkgCd")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getNewBookingCode());
+            		}else if(header[i].contentEquals("Travel Start")) {
+            			try {
+                			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTravelStart().toString());							
+						} catch (Exception e) {
+							// TODO: handle exception
+							table.addCell("-");
+						}
+            		}else if(header[i].contentEquals("Travel End")) {
+            			try {
+                			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTravelEnd().toString());
+							
+						} catch (Exception e) {
+							// TODO: handle exception
+							table.addCell("-");
+						}
+            		}else if(header[i].contentEquals("Sales Start")) {
+            			try {
+                			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getSaleStart().toString());
+							
+						} catch (Exception e) {
+							// TODO: handle exception
+							table.addCell("-");
+						}
+            		}else if(header[i].contentEquals("Sales End")) {
+            			try {
+                			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getSaleEnd().toString());							
+						} catch (Exception e) {
+							// TODO: handle exception
+							table.addCell("-");
+						}
+            		}else if(header[i].contentEquals("Comment")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getComment());
+            		}else if(header[i].contentEquals("Travel Complete")) {
+            			try {
+                			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTravelComplete().toString());							
+						} catch (Exception e) {
+							// TODO: handle exception
+							table.addCell("-");
+						}
+            		}else if(header[i].contentEquals("Travel Complete Indicator")) {
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTravelCompleteIndicator());
+            		}
+            		else {
+            			table.addCell("-");
+            		}
+            	}        		
+        	}
+        	
+          document.add(table);  
+        
+	
+        p6.setFont(font);               
+        p6.add(content[5]+" "+ruleText);
+    	document.add(p6);
+    	document.add(new Chunk(" "));
+
+    	document.close();
+        
+        Attachment att = new Attachment();
+        att.setFile(output.toByteArray());
+        
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
+            .body(att);
+    }
+    
+    /**
+     * POST  /work-packages/export-ratesheet-excel : Export work package fares
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+	 * @throws IOException 
+	 * @throws MalformedURLException 
+	 * @throws DocumentException 
+     */
+    @PostMapping("/work-packages/export-ratesheet-excel-discount")
+    @Timed
+    public ResponseEntity<Attachment> exportRateSheetWorkPackageExcelDiscount(@RequestBody WorkPackageRateSheet wprs) throws URISyntaxException, MalformedURLException, IOException, DocumentException {
+    	log.debug("REST request to save exportFaresExcel : {}{}", wprs.getWp(), wprs.getRuleText());
+    	
+    	WorkPackage workPackage = wprs.getWp();
+        String ruleText = wprs.getRuleText();
+        int idx = Integer.parseInt(wprs.getIndex());
+        String[] header = wprs.getHeader();
+    	
+    	XSSFWorkbook workbook = new XSSFWorkbook(); 
+        XSSFSheet spreadsheet = workbook.createSheet("Rate Sheet");
+        
+        XSSFRow row = spreadsheet.createRow(1);
+        XSSFCell cell;
+        
+        cell = row.createCell(0);
+        cell.setCellValue("WORK ID :");
+        cell = row.createCell(1);
+        cell.setCellValue(workPackage.getWpid());
+        
+        XSSFRow row2 = spreadsheet.createRow(2);
+        XSSFCell cell2;
+        cell2 = row2.createCell(0);
+        cell2.setCellValue("TITLE FARE SHEET :");
+        cell2 = row2.createCell(1);
+        cell2.setCellValue(workPackage.getName());
+        
+		 XSSFRow row3 = spreadsheet.createRow(3);
+	     XSSFCell cell3;
+	     cell3 = row3.createCell(0);
+	     cell3.setCellValue("FARE NAME :");
+	     cell3 = row3.createCell(1);
+	     cell3.setCellValue(workPackage.getDiscountFareSheet().get(idx).getDiscountFaresName());
+          
+        
+        XSSFRow row4 = spreadsheet.createRow(4);
+        XSSFCell cell4;
+        cell4 = row4.createCell(0);
+        cell4.setCellValue("NOTES RATESHEET : ");
+        cell4 = row4.createCell(1);
+        cell4.setCellValue(workPackage.getRatesheetComment());
+        
+        XSSFRow row5 = spreadsheet.createRow(5);
+        XSSFCell cell5;
+        for(int l=0; l<header.length ;l++) {
+        	cell5 = row5.createCell(l);
+			cell5.setCellValue(header[l]);
+		}
+        
+    
+    	for(int l=0; l<workPackage.getDiscountFareSheet().get(idx).getFares().size();l++) {
+        	XSSFRow rows = spreadsheet.createRow(l+6);
+    		for (int i=0;i<header.length;i++){
+    			cell = rows.createCell(i);
+    	
+    			if(header[i].contentEquals("Status")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getStatus());
+        		}else if(header[i].contentEquals("FBR Tariff Code")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTarcd());
+        		}else if(header[i].contentEquals("Loc 1 Type")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getLoc1Type());       			
+        		}else if(header[i].contentEquals("Loc 1")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getLoc1());
+        		}else if(header[i].contentEquals("Loc 2 Type")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getLoc2Type());
+        		}else if(header[i].contentEquals("Loc 2")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getLoc2());
+        		}else if(header[i].contentEquals("Base FareCls")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getBaseFareBasis());
+        		}else if(header[i].contentEquals("Base Rule No")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getBaseRuleNo());
+        		}else if(header[i].contentEquals("Base Tariff Code")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getBaseTarcd());
+        		}else if(header[i].contentEquals("Calc Type")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getCalcType());
+        		}else if(header[i].contentEquals("% of Base Fare")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getPercentBaseFare());
+        		}else if(header[i].contentEquals("Currency")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getRuleno());
+        		}else if(header[i].contentEquals("Specified Amount")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getDiscountSpecifiedAmount());
+        		}else if(header[i].contentEquals("PAX Type")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getPassengerType());
+        		}else if(header[i].contentEquals("Fare Type")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getFareType());
+        		}else if(header[i].contentEquals("Tkt Code")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTicketCode());
+        		}else if(header[i].contentEquals("Tkt Des")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTicketDesignator());
+        		}else if(header[i].contentEquals("Base Fare OW/RT")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTypeOfJourney());
+        		}else if(header[i].contentEquals("Global")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getGlobal());
+        		}else if(header[i].contentEquals("Rtg No")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getRtgno());
+        		}else if(header[i].contentEquals("Rtg No Tarno")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getRtgnoTarno());
+        		}else if(header[i].contentEquals("New FareCls")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getNewFareBasis());
+        		}else if(header[i].contentEquals("New OW/RT")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getNewTypeOfJourney());
+        		}else if(header[i].contentEquals("New BkgCd")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getNewBookingCode());
+        		}else if(header[i].contentEquals("Travel Start")) {
+        			try {
+            			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTravelStart().toString());							
+					} catch (Exception e) {
+						// TODO: handle exception
+						cell.setCellValue("-");
+					}
+        		}else if(header[i].contentEquals("Travel End")) {
+        			try {
+            			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTravelEnd().toString());
+						
+					} catch (Exception e) {
+						// TODO: handle exception
+						cell.setCellValue("-");
+					}
+        		}else if(header[i].contentEquals("Sales Start")) {
+        			try {
+            			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getSaleStart().toString());
+						
+					} catch (Exception e) {
+						// TODO: handle exception
+						cell.setCellValue("-");
+					}
+        		}else if(header[i].contentEquals("Sales End")) {
+        			try {
+            			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getSaleEnd().toString());							
+					} catch (Exception e) {
+						// TODO: handle exception
+						cell.setCellValue("-");
+					}
+        		}else if(header[i].contentEquals("Comment")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getComment());
+        		}else if(header[i].contentEquals("Travel Complete")) {
+        			try {
+            			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTravelComplete().toString());							
+					} catch (Exception e) {
+						// TODO: handle exception
+						cell.setCellValue("-");
+					}
+        		}else if(header[i].contentEquals("Travel Complete Indicator")) {
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTravelCompleteIndicator());
+        		}
+    			
+    			
+    			
+    		}
+        }
+        
+        
+        XSSFRow rowRuleText = spreadsheet.createRow(workPackage.getDiscountFareSheet().get(idx).getFares().size()+7);
+        XSSFCell cellRuleText;
+        cellRuleText = rowRuleText.createCell(0);
+        cellRuleText.setCellValue("RULE TEXT : ");
+        cellRuleText = rowRuleText.createCell(1);
+        cellRuleText.setCellValue(ruleText);
+        
+        
+        
+        
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        try {
+			workbook.write(output);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        Attachment att = new Attachment();
+        att.setFile(output.toByteArray());
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
+            .body(att);
+    }
+        
+    
 }
