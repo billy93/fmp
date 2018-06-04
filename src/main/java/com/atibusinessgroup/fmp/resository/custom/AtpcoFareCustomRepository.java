@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import com.atibusinessgroup.fmp.constant.CollectionName;
 import com.atibusinessgroup.fmp.domain.dto.AfdQueryParam;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFareAfdQueryWithRecords;
+import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByCatNo;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -244,6 +245,35 @@ public class AtpcoFareCustomRepository {
 		Aggregation aggregation = newAggregation(aggregationOperations);
 		
 		List<AtpcoRecord2GroupByCatNo> result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_RECORD_2, AtpcoRecord2GroupByCatNo.class).getMappedResults();
+		
+		return result;
+	}
+
+	public List<AtpcoFootnoteRecord2GroupByCatNo> findAtpcoFootnoteRecord2ByRecordId(String recordId) {
+		
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
+		MatchOperation match = new MatchOperation(new Criteria("record_id").is(recordId));
+		aggregationOperations.add(match);
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject group = new BasicDBObject();
+				BasicDBObject query = new BasicDBObject();
+				query.append("_id", "$cat_no");
+				query.append("record_2", new BasicDBObject("$push", "$$ROOT"));
+				group.append("$group", query);
+				return group;
+			}
+		});
+		
+		SortOperation sort = new SortOperation(new Sort(Direction.ASC, "_id"));
+		aggregationOperations.add(sort);
+		
+		Aggregation aggregation = newAggregation(aggregationOperations);
+		
+		List<AtpcoFootnoteRecord2GroupByCatNo> result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_FOOTNOTE_RECORD_2, AtpcoFootnoteRecord2GroupByCatNo.class).getMappedResults();
 		
 		return result;
 	}
