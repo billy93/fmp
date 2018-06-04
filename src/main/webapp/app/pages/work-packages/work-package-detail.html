@@ -840,9 +840,9 @@
 									</div>
 								
 								</div>
-							
-								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+$index}}" ng-class="{active:vm.currentAddonTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.addonFareSheet track by $index">
-									
+								
+								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+$index}}" 
+								ng-class="{active:vm.currentAddonTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.addonFareSheet track by $index">
 									<div class="pb1 mb1 bbgrey">
 										<div class="clearfix">
 											<div class="pull-left w50 two-column">
@@ -1259,39 +1259,36 @@
 								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+vm.workPackage.addonFareSheet.length}}" ng-class="{active:vm.currentTabFilingInstruction}" ng-if="vm.workPackage.filingInstruction">
 									
 									<div class="box-header"></div>
-									<div class="box-body bbgrey">
+									<div class="box-body mb1">
 										<div class="form-group">
 											<label>Comment</label>
 											<wysiwyg-edit content="vm.commentStringFillingInstruction" config="vm.editorConfig"></wysiwyg-edit>
 										</div>
 										<div class="clearfix">
 											<div class="pull-right">
-												<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()"></i>Add</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()">Add</button>
 											</div>
 										</div>		
 									</div>
-									<div class="clearfix">
-										<div class="pull-right">
-											<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()"></i>Add</button>
-										</div>
-									</div>										
-						        	<div class="box-body">
-						        		<div class="comment-container">
-						        			<div class="comment-wrapper">
-								    			<div class="comment-list" ng-repeat="filingInstructionData in vm.workPackage.filingInstructionData.slice().reverse() track by $index">
-											    	<div class="clearfix">
-											    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
-											    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'short'}}</div>
-											    	</div>
-											    	<label> 
-											    		<input type="checkbox" id="comment-message" name="comment-message" ng-model="filingInstructionData.isDeleted">
-											    		<span>{{filingInstructionData.isDeleted ? "Deleted" : "Delete"}}</span> 
-														<span ng-show="!filingInstructionData.isDeleted" data-ng-bind-html="trustAsHtml(filingInstructionData.comment)"></span>
-													</label>
-												</div>
-								    		</div>
-						        		</div>					        		
-							    	</div>									
+									<div class="box-detail box-comment">
+										<div class="box-body">
+							        		<div class="comment-container">
+							        			<div class="comment-wrapper">
+									    			<div class="comment-list" ng-repeat="filingInstructionData in vm.workPackage.filingInstructionData.slice().reverse() track by $index">
+												    	<div class="clearfix">
+												    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
+												    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'short'}}</div>
+												    	</div>
+												    	<label> 
+												    		<input type="checkbox" id="comment-message" name="comment-message" ng-model="filingInstructionData.isDeleted">
+												    		<span>{{filingInstructionData.isDeleted ? "Deleted" : "Delete"}}</span> 
+															<span ng-show="!filingInstructionData.isDeleted" data-ng-bind-html="trustAsHtml(filingInstructionData.comment)"></span>
+														</label>
+													</div>
+									    		</div>
+							        		</div>					        		
+								    	</div>
+									</div>							
 							    </div>		
 								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+vm.workPackage.addonFareSheet.length+1}}" ng-class="{active:vm.currentTabAttachment}" ng-if="vm.workPackage.attachment">
 									<div class="action-btn-wrapper">
