@@ -21,40 +21,40 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.atibusinessgroup.fmp.constant.CategoryName;
 import com.atibusinessgroup.fmp.constant.CategoryType;
-import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
-import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByCatNo;
-import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByRuleNoCxrTarNo;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoFootnoteRecord2;
+import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByCatNo;
+import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByFtntCxrTarNo;
 import com.atibusinessgroup.fmp.domain.dto.Category;
 import com.atibusinessgroup.fmp.domain.dto.DataTable;
-import com.atibusinessgroup.fmp.domain.dto.RuleQuery;
-import com.atibusinessgroup.fmp.domain.dto.RuleQueryParam;
+import com.atibusinessgroup.fmp.domain.dto.FootnoteQuery;
+import com.atibusinessgroup.fmp.domain.dto.FootnoteQueryParam;
 import com.atibusinessgroup.fmp.resository.custom.AtpcoFareCustomRepository;
-import com.atibusinessgroup.fmp.resository.custom.AtpcoRuleQueryCustomRepository;
+import com.atibusinessgroup.fmp.resository.custom.AtpcoFootnoteQueryCustomRepository;
 import com.atibusinessgroup.fmp.service.AtpcoRecordService;
-import com.atibusinessgroup.fmp.service.mapper.RuleQueryMapper;
+import com.atibusinessgroup.fmp.service.mapper.FootnoteQueryMapper;
 import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
 import com.codahale.metrics.annotation.Timed;
 
 @RestController
 @RequestMapping("/api")
-public class RuleQueryResource {
+public class FootnoteQueryResource {
 
 	private final LinkedHashMap<String, String> categories = new LinkedHashMap<>();
 
-	private final Logger log = LoggerFactory.getLogger(RuleQueryResource.class);
+	private final Logger log = LoggerFactory.getLogger(FootnoteQueryResource.class);
 
-	private final AtpcoRuleQueryCustomRepository atpcoRuleQueryCustomRepository;
+	private final AtpcoFootnoteQueryCustomRepository atpcoFootnoteQueryCustomRepository;
 
-	private final RuleQueryMapper ruleQueryMapper;
+	private final FootnoteQueryMapper footnoteQueryMapper;
 
 	private final AtpcoFareCustomRepository atpcoFareCustomRepository;
 
 	private final AtpcoRecordService atpcoRecordService;
 
-	public RuleQueryResource(AtpcoRuleQueryCustomRepository atpcoRuleQueryCustomRepository,
-			RuleQueryMapper ruleQueryMapper, AtpcoFareCustomRepository atpcoFareCustomRepository, AtpcoRecordService atpcoRecordService) {
-		this.atpcoRuleQueryCustomRepository = atpcoRuleQueryCustomRepository;
-		this.ruleQueryMapper = ruleQueryMapper;
+	public FootnoteQueryResource(AtpcoFootnoteQueryCustomRepository atpcoFootnoteQueryCustomRepository,
+			FootnoteQueryMapper footnoteQueryMapper, AtpcoFareCustomRepository atpcoFareCustomRepository, AtpcoRecordService atpcoRecordService) {
+		this.atpcoFootnoteQueryCustomRepository = atpcoFootnoteQueryCustomRepository;
+		this.footnoteQueryMapper = footnoteQueryMapper;
 
 		this.atpcoFareCustomRepository = atpcoFareCustomRepository;
 		this.atpcoRecordService = atpcoRecordService;
@@ -93,77 +93,74 @@ public class RuleQueryResource {
 	}
 
 	/**
-	 * POST /rule-queries : get all the rule queries.
+	 * POST /footnote-queries : get all the footnote queries.
 	 *
-	 * @param rule
+	 * @param footnote
 	 *            params, pageable the pagination information
-	 * @return the ResponseEntity with status 200 (OK) and the list of ruleQueries
+	 * @return the ResponseEntity with status 200 (OK) and the list of footnoteQueries
 	 *         in body
 	 */
-	@PostMapping("/rule-queries")
+	@PostMapping("/footnote-queries")
 	@Timed
-	public ResponseEntity<List<RuleQuery>> getAllRuleQueries(@RequestBody RuleQueryParam param) {
-		log.debug("REST request to get a page of RuleQueries: {}", param);
+	public ResponseEntity<List<FootnoteQuery>> getAllFootnoteQueries(@RequestBody FootnoteQueryParam param) {
+		log.debug("REST request to get a page of Footnote Queries: {}", param);
 
 		Pageable pageable = new PageRequest(param.getPage(), param.getSize());
 
-		Page<AtpcoRecord2GroupByRuleNoCxrTarNo> page = atpcoRuleQueryCustomRepository.groupingRuleQuery(param,
-				pageable);
-
-		List<RuleQuery> result = new ArrayList<>();
+		Page<AtpcoFootnoteRecord2GroupByFtntCxrTarNo> page = atpcoFootnoteQueryCustomRepository.groupingFootnoteQuery(param, pageable);
+		List<FootnoteQuery> result = new ArrayList<>();
 
 		if (page != null) {
-			for (AtpcoRecord2GroupByRuleNoCxrTarNo record2Group : page.getContent()) {
-				RuleQuery rq = ruleQueryMapper.convertAtpcoRecord2GroupByRuleNoCxrTarNo(record2Group);
+			for (AtpcoFootnoteRecord2GroupByFtntCxrTarNo record2Group : page.getContent()) {
+				FootnoteQuery rq = footnoteQueryMapper.convertAndGroupFootnote(record2Group);
 				result.add(rq);
 			}
 		}
 
-		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/rule-queries");
+		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/footnote-queries");
 
 		return new ResponseEntity<>(result, headers, HttpStatus.OK);
 	}
 
 	/**
-	 * GET /rule-queries/rules : get rule query rules.
+	 * GET /footnote-queries/rules : get footnote query rules.
 	 *
-	 * @return the ResponseEntity with status 200 (OK) and the list of rules in body
+	 * @return the ResponseEntity with status 200 (OK) and the list of footnotes in body
 	 */
-	@GetMapping("/rule-queries/rules")
+	@GetMapping("/footnote-queries/rules")
 	@Timed
-	public ResponseEntity<List<AtpcoRecord2>> getRuleQueryRules(RuleQuery ruleQuery) {
-		log.debug("REST request to get ruleQueries rules: {}", ruleQuery);
+	public ResponseEntity<List<AtpcoFootnoteRecord2>> getFootnoteQueryRules(FootnoteQuery footnoteQuery) {
+		log.debug("REST request to get footnoteQueries rules: {}", footnoteQuery);
 
-		String recordId = ruleQuery.getTarNo() + ruleQuery.getCxr() + ruleQuery.getRuleNo();
+		String recordId = footnoteQuery.getTarNo() + footnoteQuery.getCxr() + footnoteQuery.getFtnt();
 
-		List<AtpcoRecord2> arecords2 = atpcoRuleQueryCustomRepository.getListRecord2ById(recordId,
-				ruleQuery.getCatNo());
+		List<AtpcoFootnoteRecord2> arecords2 = atpcoFootnoteQueryCustomRepository.getListFtntRecord2(recordId);
 
 		return new ResponseEntity<>(arecords2, HttpStatus.OK);
 	}
 
 	/**
-	 * GET /rule-queries/rules : get rule query rules.
+	 * GET /footnote-queries/rules : get footnote query rules.
 	 *
-	 * @return the ResponseEntity with status 200 (OK) and the list of rules in body
+	 * @return the ResponseEntity with status 200 (OK) and the list of footnotes in body
 	 */
-	@GetMapping("/rule-queries/rules2")
+	@GetMapping("/footnote-queries/rules2")
 	@Timed
-	public ResponseEntity<List<Category>> getRuleQueryRules2(RuleQuery ruleQuery) {
-		log.debug("REST request to get ruleQueries rules: {}", ruleQuery);
+	public ResponseEntity<List<Category>> getFootnoteQueryRules2(FootnoteQuery footnoteQuery) {
+		log.debug("REST request to get footnoteQueries rules: {}", footnoteQuery);
 
 		List<Category> result = new ArrayList<>();
 
-		String recordId = ruleQuery.getTarNo() + ruleQuery.getCxr() + ruleQuery.getRuleNo() + "";
+		String recordId = footnoteQuery.getTarNo() + footnoteQuery.getCxr() + footnoteQuery.getFtnt() + "";
 
-		List<AtpcoRecord2GroupByCatNo> arecords2 = atpcoFareCustomRepository.findAtpcoRecord2ByRecordId(recordId);
+		List<AtpcoFootnoteRecord2GroupByCatNo> arecords2 = atpcoFootnoteQueryCustomRepository.groupFootnoteByRecordId(recordId);
 
 		for (Map.Entry<String, String> entry : categories.entrySet()) {
 			List<DataTable> dataTables = new ArrayList<>();
 			
-			for (AtpcoRecord2GroupByCatNo arecord2 : arecords2) {
+			for (AtpcoFootnoteRecord2GroupByCatNo arecord2 : arecords2) {
 				if (arecord2.getCatNo().contentEquals(entry.getKey())) {
-					for (AtpcoRecord2 record2 : arecord2.getRecords2()) {
+					for (AtpcoFootnoteRecord2 record2 : arecord2.getRecords2()) {
 						for (DataTable dt:record2.getDataTables()) {
 							if (!dataTables.contains(dt)) {
 								dataTables.add(dt);
@@ -176,7 +173,7 @@ public class RuleQueryResource {
 			
 			Category cat = new Category();
 			cat.setCatName(entry.getValue());
-			cat.setType(CategoryType.RULE);
+			cat.setType(CategoryType.FOOTNOTE);
 
 			try {
 				cat.setCatNo(Integer.parseInt(entry.getKey()));
@@ -185,7 +182,7 @@ public class RuleQueryResource {
 			}
 
 			if (dataTables.size() > 0) {
-				cat.setCatAttributes(atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), dataTables, CategoryType.RULE));
+				cat.setCatAttributes(atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), dataTables, CategoryType.FOOTNOTE));
 			}
 
 			result.add(cat);

@@ -57,6 +57,11 @@ $(function(){
 		sidebarClose()
 	 });
 	
+	$(document).on('click','.btn-group.edit-btn',function(e){
+		e.stopPropagation();
+		sidebarClose()
+	 });
+	
 	
 	// dropdown
 	$(document).mouseup(function (e){	
