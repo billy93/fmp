@@ -102,25 +102,25 @@ public class AtpcoRecordService {
 		} else {
 			match = true;
 		}
-
-		System.out.println("rtg no: " + frn + ", " + rrn + ", " + match);
-
+		
+//		System.out.println("rtg no: " + frn + ", " + rrn + ", " + match);
+		
 		return match;
 	}
 
 	public boolean compareFareClass(String fFareClass, String rFareClass) {
 		boolean match = true;
-
-		if (fFareClass != null && rFareClass != null) {
-			if (rFareClass.contentEquals("") || fFareClass.contentEquals(rFareClass)) {
-				match = true;
-			}
-		} else {
-			match = true;
-		}
-
-		System.out.println("fare class: " + fFareClass + ", " + rFareClass + ", " + match);
-
+		
+//		if (fFareClass != null && rFareClass != null) {
+//			if (rFareClass.contentEquals("") || fFareClass.contentEquals(rFareClass)) {
+//				match = true;
+//			}
+//		} else {
+//			match = true;
+//		}
+//
+//		System.out.println("fare class: " + fFareClass + ", " + rFareClass + ", " + match);
+		
 		return match;
 	}
 
@@ -136,23 +136,21 @@ public class AtpcoRecordService {
 		}
 
 		System.out.println("fare type: " + fFareType + ", " + rFareType + ", " + match);
-
+		
 		return match;
 	}
 
 	public boolean compareSeasonType(String fSeasonType, String rSeasonType) {
-		boolean match = true;
-
+		boolean match = false;
+		
 		if (fSeasonType != null && rSeasonType != null) {
 			if (rSeasonType.contentEquals("") || fSeasonType.contentEquals(rSeasonType)) {
 				match = true;
 			}
-		} else {
-			match = true;
-		}
-
-		System.out.println("season type: " + fSeasonType + ", " + rSeasonType + ", " + match);
-
+		} 
+		
+//		System.out.println("season type: " + fSeasonType + ", " + rSeasonType + ", " + match);
+		
 		return match;
 	}
 
@@ -166,9 +164,9 @@ public class AtpcoRecordService {
 		} else {
 			match = true;
 		}
-
-		System.out.println("day of week type: " + fDayOfWeekType + ", " + rDayOfWeekType + ", " + match);
-
+		
+//		System.out.println("day of week type: " + fDayOfWeekType + ", " + rDayOfWeekType + ", " + match);
+		
 		return match;
 	}
 
@@ -182,9 +180,9 @@ public class AtpcoRecordService {
 		} else {
 			match = true;
 		}
-
-		System.out.println("owrt: " + fowrt + ", " + rowrt + ", " + match);
-
+		
+//		System.out.println("owrt: " + fowrt + ", " + rowrt + ", " + match);
+		
 		return match;
 	}
 
@@ -198,19 +196,18 @@ public class AtpcoRecordService {
 		} else {
 			match = true;
 		}
-
-		System.out.println("footnote: " + ffnt + ", " + rfnt + ", " + match);
-
+		
+//		System.out.println("footnote: " + ffnt + ", " + rfnt + ", " + match);
+		
 		return match;
 	}
 
 	public boolean compareGeoSpec(String ft1, String fl1, String ft2, String fl2, String rt1, String rl1, String rt2,
 			String rl2) {
 		boolean match = true;
-
-		System.out.println("geospec: (" + ft1 + ", " + fl1 + ") (" + ft2 + ", " + fl2 + ") (" + rt1 + ", " + rl1 + ") ("
-				+ rt2 + ", " + rl2 + ")" + match);
-
+		
+//		System.out.println("geospec: (" + ft1 + ", " + fl1 + ") (" + ft2 + ", " + fl2 + ") (" + rt1 + ", " + rl1 + ") (" + rt2 + ", " + rl2 + ")" + match);
+		
 		return match;
 	}
 

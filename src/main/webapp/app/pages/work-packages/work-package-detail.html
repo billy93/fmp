@@ -840,9 +840,33 @@
 									</div>
 								
 								</div>
-							
+								
 								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+$index}}" 
 								ng-class="{active:vm.currentAddonTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.addonFareSheet track by $index">
+									<div class="pb1 mb1 bbgrey">
+										<div class="clearfix">
+											<div class="pull-left w50 two-column">
+												<div class="form-group">
+													<label>Description</label>
+													
+													<textarea class="form-control" 
+									         		name="addonFaresName{{$index}}"
+									         		ng-model="workPackageSheet.addonFaresName" 
+									         		style="min-width: 100%; min-height:100%"
+									         		ng-class="{'must-fill': editForm.editFormATPCO.addonFaresName{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
+									         		ng-required="vm.isRequired('addonFaresName')"  
+									         		ng-disabled="!vm.isEditable('addonFaresName')">
+							          				</textarea>
+												</div>
+											</div>
+											<div class="pull-left w50 two-column">
+												<div class="form-group">
+													
+												</div>
+											</div>		
+										</div>
+									</div>	
+											
 									<!-- table details-->
 									<div class="table-wrapper">
 										<div class="datatable-wrapper form-inline">

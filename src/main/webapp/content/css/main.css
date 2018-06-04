@@ -66,6 +66,14 @@ body {
     pointer-events: initial;
 }
 
+.additional-info-wrapper .additional-info.lightyellow {
+	background: lightyellow;
+    color: #000;
+    border-color: #000;
+    cursor: pointer;
+    pointer-events: initial;
+}
+
 .additional-info-wrapper .additional-info.blue {
 	background: #a7e7ff;
 	color: #000;
@@ -86,6 +94,10 @@ body {
 th .glyphicon {
 	font-size: 12px;
     margin: 0 5px;
+}
+
+.form-control[disabled] {
+	background: #d0d0d0;
 }
 
 /* ==========================================================================

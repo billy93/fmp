@@ -13,6 +13,8 @@
         
         vm.category = entity;
         
+        console.log(vm.category);
+        
         function clear () {
             $uibModalInstance.dismiss('cancel');
         }

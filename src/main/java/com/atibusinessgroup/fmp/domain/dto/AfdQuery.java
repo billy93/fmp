@@ -49,6 +49,7 @@ public class AfdQuery {
 	private String dowIn;
 	private String dowOut;
 	private String season;
+	private String dayOfWeekType;
 	private Object firstSeasonDate;
 	private Object lastSeasonDate;
 	private String travelDateRanges;
@@ -64,6 +65,14 @@ public class AfdQuery {
 	
 	public AfdQuery() {};
 	
+	public String getDayOfWeekType() {
+		return dayOfWeekType;
+	}
+
+	public void setDayOfWeekType(String dayOfWeekType) {
+		this.dayOfWeekType = dayOfWeekType;
+	}
+
 	public String getAtpcoFareId() {
 		return atpcoFareId;
 	}
@@ -559,6 +568,7 @@ public class AfdQuery {
 		result = prime * result + ((cabin == null) ? 0 : cabin.hashCode());
 		result = prime * result + ((carrierCode == null) ? 0 : carrierCode.hashCode());
 		result = prime * result + ((currencyCode == null) ? 0 : currencyCode.hashCode());
+		result = prime * result + ((dayOfWeekType == null) ? 0 : dayOfWeekType.hashCode());
 		result = prime * result + ((destinationCity == null) ? 0 : destinationCity.hashCode());
 		result = prime * result + ((destinationCountry == null) ? 0 : destinationCountry.hashCode());
 		result = prime * result + ((discontinueDate == null) ? 0 : discontinueDate.hashCode());
@@ -680,6 +690,13 @@ public class AfdQuery {
 				return false;
 			}
 		} else if (!currencyCode.equals(other.currencyCode)) {
+			return false;
+		}
+		if (dayOfWeekType == null) {
+			if (other.dayOfWeekType != null) {
+				return false;
+			}
+		} else if (!dayOfWeekType.equals(other.dayOfWeekType)) {
 			return false;
 		}
 		if (destinationCity == null) {
@@ -1026,9 +1043,10 @@ public class AfdQuery {
 				+ ", travelComplete=" + travelComplete + ", saleStartDate=" + saleStartDate + ", saleEndDate="
 				+ saleEndDate + ", resStartDate=" + resStartDate + ", resEndDate=" + resEndDate + ", minStay=" + minStay
 				+ ", maxStay=" + maxStay + ", advancePurchase=" + advancePurchase + ", dowIn=" + dowIn + ", dowOut="
-				+ dowOut + ", season=" + season + ", firstSeasonDate=" + firstSeasonDate + ", lastSeasonDate="
-				+ lastSeasonDate + ", travelDateRanges=" + travelDateRanges + ", fareType=" + fareType + ", paxType="
-				+ paxType + ", wpId=" + wpId + ", groupFare=" + groupFare + ", refAmount=" + refAmount + ", refYqyr="
-				+ refYqyr + ", refTaxes=" + refTaxes + ", refTfc=" + refTfc + ", refAif=" + refAif + "]";
+				+ dowOut + ", season=" + season + ", dayOfWeekType=" + dayOfWeekType + ", firstSeasonDate="
+				+ firstSeasonDate + ", lastSeasonDate=" + lastSeasonDate + ", travelDateRanges=" + travelDateRanges
+				+ ", fareType=" + fareType + ", paxType=" + paxType + ", wpId=" + wpId + ", groupFare=" + groupFare
+				+ ", refAmount=" + refAmount + ", refYqyr=" + refYqyr + ", refTaxes=" + refTaxes + ", refTfc=" + refTfc
+				+ ", refAif=" + refAif + "]";
 	}
 }

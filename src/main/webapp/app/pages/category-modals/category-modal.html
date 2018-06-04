@@ -24,7 +24,7 @@
 				                <tr ng-repeat="catAtts in vm.category.catAttributes" ng-init="parentIndex = $index">
 				                	<td>{{parentIndex + 1}}</td>
 				                	<td>{{catAtts.type}}</td>
-				                	<td>{{catAtts.relationship}}</td>
+				                	<td>{{catAtts.relationship}} <span ng-if="catAtts.relationship == '='">Then</span><span ng-if="catAtts.relationship == ':'">If</span><span ng-if="catAtts.relationship == '&'">And</span><span ng-if="catAtts.relationship == '/'">Or</span><span ng-if="catAtts.relationship == '*'">Else</span></td>
 				                    <td ng-repeat="att in catAtts.attributes">
 				                    	<span ng-if="att.key != 'id'">{{att.value}}</span>	
 				                    </td>

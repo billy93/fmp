@@ -160,9 +160,9 @@
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
-                    	    type: function(){
-                    	    	return null;
-                    	    },
+                	    type: function(){
+                	    	return null;
+                	    },
                         entity: function () {
                             return {
                                 status: null,
@@ -192,6 +192,64 @@
                         fareTypes: ['FareType', function(FareType) {
                             return FareType.getAll().$promise;
                         }],
+                    }
+                }).result.then(function(workPackage) {
+	                	var params = {
+	                			id: workPackage.id
+	                	};
+                  	$state.go('work-package-detail', params);
+                    //$state.go('work-package', null, { reload: 'work-package' });
+                }, function() {
+                    $state.go('work-package');
+                });
+            }]
+        })
+        .state('work-package.export', {
+            parent: 'work-package',
+            url: '/export',
+            data: {
+                authorities: ['ROLE_USER']
+            },
+            onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+                $uibModal.open({
+                    templateUrl: 'app/pages/work-packages/work-package-export-dialog.html',
+                    controller: 'WorkPackageExportDialogController',
+                    controllerAs: 'vm',
+                    backdrop: 'static',
+                    size: 'lg',
+                    resolve: {
+//                	    type: function(){
+//                	    	return null;
+//                	    },
+//                        entity: function () {
+//                            return {
+//                                status: null,
+//                                wpid: null,
+//                                name: null,
+//                                priority: null,
+//                                targetSub: null,
+//                                fillingDate: null,
+//                                distributionDate: null,
+//                                discExpiryDate: null,
+//                                fillingStatus: null,
+//                                fillingError: null,
+//                                qaStatus: null,
+//                                queuedDate: null,
+//                                lockedBy: null,
+//                                lockedSince: null,
+//                                type: null,
+//                                id: null
+//                            };
+//                        },
+//                        reviewLevels: ['ReviewLevel', function(ReviewLevel) {
+//                            return ReviewLevel.queryAll().$promise;
+//                        }],
+//                        businessAreas: ['User', function(User) {
+//                            return User.getBusinessArea().$promise;
+//                        }],
+//                        fareTypes: ['FareType', function(FareType) {
+//                            return FareType.getAll().$promise;
+//                        }],
                     }
                 }).result.then(function(workPackage) {
 	                	var params = {

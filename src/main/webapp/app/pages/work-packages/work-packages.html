@@ -14,14 +14,8 @@
 										<label>
 											My Business Area(s)
 										</label>
+										<p>{{vm.users.businessAreas.join(', ')}}</p>
 									</div>
-								</div>
-								<div class="pull-right w50">
-									<div class="clearfix">
-										<div class="pull-right datatable-button">
-											
-										</div>
-									</div>																						
 								</div>
 							</div>
 						</div>
@@ -185,6 +179,8 @@
 												</ul>
 											</div>													
 											<button class="btn btn-default small" ng-click="vm.refresh()">Refresh</button>
+											<button class="btn btn-default small" ui-sref="work-package.export">Print/Export</button>
+											<button class="btn btn-default small">Discontinue</button>
 										</div>
 									</div>																						
 								</div>

@@ -89,12 +89,14 @@
         }
 
         function getRules(afdQuery) {
-        	AfdQuery.getRules(afdQuery, function(data) {
-        		vm.categoryRules = data;
-        		console.log(vm.categoryRules);
-        	}, function(error) {
-        		console.log(error);
-        	});
+        	if (vm.currentAfdQuery == undefined || vm.currentAfdQuery == null || vm.currentAfdQuery != afdQuery) {
+        		AfdQuery.getRules(afdQuery, function(data) {
+            		vm.categoryRules = data;
+            		vm.currentAfdQuery = afdQuery;
+            	}, function(error) {
+            		console.log(error);
+            	});
+        	} 
         }
         
         function openCalendar (e, date) {
