@@ -108,6 +108,7 @@
 	                    <th jh-sort-by="email"><span>Email</span> <span class="glyphicon glyphicon-sort"></span></th>
 	                    <th jh-sort-by="contact"><span>Contact</span> <span class="glyphicon glyphicon-sort"></span></th>
 	                    <th jh-sort-by="iataCode"><span>Iata Code</span> <span class="glyphicon glyphicon-sort"></span></th>
+	                    <th jh-sort-by="effectiveDateTime"><span>Effective Date Time</span> <span class="glyphicon glyphicon-sort"></span></th>
 	                    <th jh-sort-by="discontinueDateTime"><span>Discontinue Date Time</span> <span class="glyphicon glyphicon-sort"></span></th>
 	                    <th jh-sort-by="isDeleted"><span>Is Deleted</span> <span class="glyphicon glyphicon-sort"></span></th>
 	                    <th jh-sort-by="isDeleted"><span>PCC</span> <span class="glyphicon glyphicon-sort"></span></th>
@@ -126,7 +127,8 @@
 	                    <td>{{agent.fax}}</td>
 	                    <td>{{agent.email}}</td>
 	                    <td>{{agent.contact}}</td>
-	                    <td>{{agent.iataCode}}</td>	                    
+	                    <td>{{agent.iataCode}}</td>	
+	                    <td>{{agent.effectiveDateTime}}</td>                    
 	                    <td>{{agent.discontinueDateTime}}</td>
 	                    <td>{{agent.isDeleted}}</td>
 	                    <td>
@@ -150,13 +152,13 @@
 	                    </td>
 	                    <td class="text-right">
 	                        <div class="btn-group flex-btn-group-container">
-	                            <button type="submit"
+	                           <!--  <button type="submit"
 	                                    ui-sref="agent-detail({id:agent.id})"
 	                                    class="btn btn-info btn-sm">
 	                                <span class="glyphicon glyphicon-eye-open"></span>
 	                                <span class="hidden-sm-down"></span>
-	                            </button>
-	                            <button type="submit"
+	                            </button> -->
+	                            <button ng-disabled=agent.isDeleted type="submit"
 	                                    ui-sref="agent.edit({id:agent.id})"
 	                                    class="btn btn-primary btn-sm">
 	                                <span class="glyphicon glyphicon-pencil"></span>

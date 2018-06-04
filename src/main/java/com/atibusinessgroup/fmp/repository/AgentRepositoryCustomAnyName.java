@@ -10,5 +10,6 @@ import com.atibusinessgroup.fmp.domain.Agent;
 public interface AgentRepositoryCustomAnyName {
 	
 	Page<Agent> findCustom(Agent filter, Pageable pageable);
+	Page<Agent> findCustomTrue(Agent filter, Pageable pageable);
 	List<Agent> findCustom(Agent filter);
 }
