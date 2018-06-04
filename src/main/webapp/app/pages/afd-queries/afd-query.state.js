@@ -66,7 +66,17 @@
                 		biDirectional: false,
                 		calculateTfc: false
                 	}
-            	}]
+            	}],
+            	tariffNumbers: ['TariffNumber', 'Principal', function(TariffNumber, Principal) {
+                	return Principal.identity().then(function(account) {
+                        return TariffNumber.getAll().$promise;
+                    });
+                }],
+                cities: ['City', 'Principal', function(City, Principal) {
+                	return Principal.identity().then(function(account) {
+                        return City.getAll().$promise;
+                    });
+                }],
             }
         })
     }

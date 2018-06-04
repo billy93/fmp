@@ -11,7 +11,7 @@
         function objectnameFilter (input) {
             if (input !== null) {
             	if (input.includes('_')) {
-            		return input.replace(/_/g, ' ').toUpperCase();
+            		return input.replace(/_/g, ' ').toLowerCase();
             	} else {
             		var positions = [];
             		var result = input;
@@ -26,10 +26,11 @@
             			result = insertCharacter(result, positions[index] + index, ' ');
             		}
             		
-            		return result.toUpperCase();
+            		return result.toLowerCase();
             	}
             }
-            return input;
+            
+            return input.toLowerCase();
         }
          
         function insertCharacter(originalString, index, string) {

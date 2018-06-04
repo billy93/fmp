@@ -7,9 +7,8 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord1;
-import com.google.gson.annotations.SerializedName;
 
-public class AtpcoFareWithRecord1 {
+public class AtpcoFareAfdQueryWithRecords {
 
 	@Field("atpco_fare")
 	private AtpcoFare atpcoFare;
@@ -17,6 +16,12 @@ public class AtpcoFareWithRecord1 {
 	@Field("atpco_record_1")
 	private List<AtpcoRecord1> atpcoRecord1 = new ArrayList<>();
 
+	@Field("atpco_record_2")
+	private List<AtpcoRecord2GroupByCatNo> atpcoRecord2 = new ArrayList<>();
+	
+	@Field("footnote_record")
+	private List<AtpcoFootnoteRecord2GroupByCatNo> footnoteRecord = new ArrayList<>();
+	
 	public AtpcoFare getAtpcoFare() {
 		return atpcoFare;
 	}
@@ -32,6 +37,22 @@ public class AtpcoFareWithRecord1 {
 	public void setAtpcoRecord1(List<AtpcoRecord1> atpcoRecord1) {
 		this.atpcoRecord1 = atpcoRecord1;
 	}
+	
+	public List<AtpcoFootnoteRecord2GroupByCatNo> getFootnoteRecord() {
+		return footnoteRecord;
+	}
+
+	public void setFootnoteRecord(List<AtpcoFootnoteRecord2GroupByCatNo> footnoteRecord) {
+		this.footnoteRecord = footnoteRecord;
+	}
+	
+	public List<AtpcoRecord2GroupByCatNo> getAtpcoRecord2() {
+		return atpcoRecord2;
+	}
+
+	public void setAtpcoRecord2(List<AtpcoRecord2GroupByCatNo> atpcoRecord2) {
+		this.atpcoRecord2 = atpcoRecord2;
+	}
 
 	@Override
 	public int hashCode() {
@@ -39,6 +60,8 @@ public class AtpcoFareWithRecord1 {
 		int result = 1;
 		result = prime * result + ((atpcoFare == null) ? 0 : atpcoFare.hashCode());
 		result = prime * result + ((atpcoRecord1 == null) ? 0 : atpcoRecord1.hashCode());
+		result = prime * result + ((atpcoRecord2 == null) ? 0 : atpcoRecord2.hashCode());
+		result = prime * result + ((footnoteRecord == null) ? 0 : footnoteRecord.hashCode());
 		return result;
 	}
 
@@ -53,7 +76,7 @@ public class AtpcoFareWithRecord1 {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		AtpcoFareWithRecord1 other = (AtpcoFareWithRecord1) obj;
+		AtpcoFareAfdQueryWithRecords other = (AtpcoFareAfdQueryWithRecords) obj;
 		if (atpcoFare == null) {
 			if (other.atpcoFare != null) {
 				return false;
@@ -68,11 +91,26 @@ public class AtpcoFareWithRecord1 {
 		} else if (!atpcoRecord1.equals(other.atpcoRecord1)) {
 			return false;
 		}
+		if (atpcoRecord2 == null) {
+			if (other.atpcoRecord2 != null) {
+				return false;
+			}
+		} else if (!atpcoRecord2.equals(other.atpcoRecord2)) {
+			return false;
+		}
+		if (footnoteRecord == null) {
+			if (other.footnoteRecord != null) {
+				return false;
+			}
+		} else if (!footnoteRecord.equals(other.footnoteRecord)) {
+			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "AtpcoFareWithRecord1 [atpcoFare=" + atpcoFare + ", atpcoRecord1=" + atpcoRecord1 + "]";
+		return "AtpcoFareAfdQueryWithRecords [atpcoFare=" + atpcoFare + ", atpcoRecord1=" + atpcoRecord1
+				+ ", atpcoRecord2=" + atpcoRecord2 + ", footnoteRecord=" + footnoteRecord + "]";
 	}
 }

@@ -175,11 +175,6 @@ public class RuleQueryResource {
 				}
 			}
 			
-			System.out.println(entry.getKey());
-			for (DataTable dt:dataTables) {
-				System.out.println(dt.getTableNo());
-			}
-
 			Category cat = new Category();
 			cat.setCatName(entry.getValue());
 			cat.setType(CategoryType.RULE);
@@ -196,8 +191,6 @@ public class RuleQueryResource {
 
 			result.add(cat);
 		}
-
-		Collections.sort(result, Category.ASCENDING_COMPARATOR);
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}

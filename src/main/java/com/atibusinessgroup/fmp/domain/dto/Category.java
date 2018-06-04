@@ -97,6 +97,4 @@ public class Category {
 		return "Category [catNo=" + catNo + ", catName=" + catName + ", type=" + type + ", catAttributes="
 				+ catAttributes + "]";
 	}
-
-	public static final Comparator<Category> ASCENDING_COMPARATOR = Comparator.comparing(Category::getCatNo);
 }
