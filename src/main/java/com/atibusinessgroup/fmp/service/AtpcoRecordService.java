@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
+import com.atibusinessgroup.fmp.constant.CategoryType;
 import com.atibusinessgroup.fmp.constant.CollectionName;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord3CategoryWithDataTable;
 import com.atibusinessgroup.fmp.domain.dto.CategoryAttribute;
@@ -37,16 +38,16 @@ public class AtpcoRecordService {
 			String rGeoType1, String rGeoLoc1, String rGeoType2, String rGeoLoc2, String rOwrt, String rRoutingNo, String rFootnote, Object rEffectiveDate, Object rDiscontinueDate) {
 		boolean match = false;
 		
-		System.out.println("");
-		System.out.println(fGeoType1 + " " + fGeoLoc1 + " " + fGeoType2 + " " + fGeoLoc2 + " " + fOwrt + " " + fRoutingNo + " " + fFootnote + " " + fEffectiveDate + " " + fDiscontinueDate);
-		System.out.println(rGeoType1 + " " + rGeoLoc1 + " " + rGeoType2 + " " + rGeoLoc2 + " " + rOwrt + " " + rRoutingNo + " " + rFootnote + " " + rEffectiveDate + " " + rDiscontinueDate);
+//		System.out.println("");
+//		System.out.println(fGeoType1 + " " + fGeoLoc1 + " " + fGeoType2 + " " + fGeoLoc2 + " " + fOwrt + " " + fRoutingNo + " " + fFootnote + " " + fEffectiveDate + " " + fDiscontinueDate);
+//		System.out.println(rGeoType1 + " " + rGeoLoc1 + " " + rGeoType2 + " " + rGeoLoc2 + " " + rOwrt + " " + rRoutingNo + " " + rFootnote + " " + rEffectiveDate + " " + rDiscontinueDate);
 		
 		if (compareRoutingNo(fRoutingNo, rRoutingNo) && compareOwrt(fOwrt, rOwrt) && compareFootnote(fFootnote, rFootnote)) {
 			match = true;
-			System.out.println("matched");
+//			System.out.println("matched");
 		}
 		
-		System.out.println("");
+//		System.out.println("");
 		
 		return match;
 	}
@@ -55,17 +56,17 @@ public class AtpcoRecordService {
 			String rGeoType1, String rGeoLoc1, String rGeoType2, String rGeoLoc2, String rFareClass, String rFareType, String rSeasonType, String rDayOfWeekType, String rOwrt, String rRoutingNo, String rFootnote, Object rEffectiveDate, Object rDiscontinueDate) {
 		boolean match = false;
 		
-		System.out.println("");
-		System.out.println(fGeoType1 + " " + fGeoLoc1 + " " + fGeoType2 + " " + fGeoLoc2 + " " + fFareClass + " " + fFareType + " " + fSeasonType + " " + fDayOfWeekType + " " + fOwrt + " " + fRoutingNo + " " + fFootnote + " " + fEffectiveDate + " " + fDiscontinueDate);
-		System.out.println(rGeoType1 + " " + rGeoLoc1 + " " + rGeoType2 + " " + rGeoLoc2 + " " + rFareClass + " " + rFareType + " " + rSeasonType + " " + rDayOfWeekType + " " + rOwrt + " " + rRoutingNo + " " + rFootnote + " " + rEffectiveDate + " " + rDiscontinueDate);
+//		System.out.println("");
+//		System.out.println(fGeoType1 + " " + fGeoLoc1 + " " + fGeoType2 + " " + fGeoLoc2 + " " + fFareClass + " " + fFareType + " " + fSeasonType + " " + fDayOfWeekType + " " + fOwrt + " " + fRoutingNo + " " + fFootnote + " " + fEffectiveDate + " " + fDiscontinueDate);
+//		System.out.println(rGeoType1 + " " + rGeoLoc1 + " " + rGeoType2 + " " + rGeoLoc2 + " " + rFareClass + " " + rFareType + " " + rSeasonType + " " + rDayOfWeekType + " " + rOwrt + " " + rRoutingNo + " " + rFootnote + " " + rEffectiveDate + " " + rDiscontinueDate);
 		
 		if (compareMatchingFareAndRecord(fGeoType1, fGeoLoc1, fGeoType2, fGeoLoc2, fOwrt, fRoutingNo, fFootnote, fEffectiveDate, fDiscontinueDate, rGeoType1, rGeoLoc1, rGeoType2, rGeoLoc2, rOwrt, rRoutingNo, rFootnote, rEffectiveDate, rDiscontinueDate)
 				&& compareFareClass(fFareClass, rFareClass) && compareFareType(fFareType, rFareType) && compareSeasonType(fSeasonType, rSeasonType) && compareDayOfWeekType(fDayOfWeekType, rDayOfWeekType)) {
 			match = true;
-			System.out.println("matched");
+//			System.out.println("matched");
 		}
 		
-		System.out.println("");
+//		System.out.println("");
 		
 		return match;
 	}
@@ -236,12 +237,18 @@ public class AtpcoRecordService {
 		return result;
 	}
 
-	public List<CategoryAttribute> getAndConvertCategoryDataTable(String category, List<DataTable> dataTables) {
+	public List<CategoryAttribute> getAndConvertCategoryDataTable(String category, List<DataTable> dataTables, String type) {
 		List<CategoryAttribute> result = new ArrayList<>();
 		
 		String classBasePackage = "com.atibusinessgroup.fmp.domain.atpco.";
 		
-		ReflectionObject ro = getCategorySettingInfo(classBasePackage, category);
+		ReflectionObject ro = null;
+	
+		if (type.contentEquals(CategoryType.RULE)) {
+			ro = getCategorySettingInfo(classBasePackage, category);
+		} else if (type.contentEquals(CategoryType.FOOTNOTE)) {
+			ro = getFootnoteCategorySettingInfo(classBasePackage, category);
+		}
 		
 		String relationship = null;
 		
@@ -263,7 +270,7 @@ public class AtpcoRecordService {
 						}
 					}
 					
-					result.add(convertObjectToCategoryAttribute(relationship, cat));
+					result.add(convertObjectToCategoryAttribute(getCategoryTypeName(type), relationship, cat));
 				} catch(Exception e) {
 					e.printStackTrace();
 				}
@@ -439,8 +446,9 @@ public class AtpcoRecordService {
 		return result;
 	}
 
-	public CategoryAttribute convertObjectToCategoryAttribute(String relationship, Object obj) {
+	public CategoryAttribute convertObjectToCategoryAttribute(String type, String relationship, Object obj) {
 		CategoryAttribute result = new CategoryAttribute();
+		result.setType(type);
 		result.setRelationship(relationship);
 		
 		List<CategoryAttributeObject> catAttrObjs = new ArrayList<>();
@@ -466,6 +474,18 @@ public class AtpcoRecordService {
 		}
 		
 		result.setAttributes(catAttrObjs);
+		
+		return result;
+	}
+	
+	public String getCategoryTypeName(String type) {
+		String result = null;
+		
+		if (type.contentEquals(CategoryType.RULE)) {
+			result = "Rule";
+		} else if (type.contentEquals(CategoryType.FOOTNOTE)) {
+			result = "Footnote";
+		}
 		
 		return result;
 	}

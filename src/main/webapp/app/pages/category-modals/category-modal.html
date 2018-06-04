@@ -12,16 +12,20 @@
 				        <table class="table table-striped table-bordered datatable category">
 				        	<thead>
 				                <tr>
+				                	<th>No</th>
+				                	<th>Type</th>
+				                	<th>Relationship</th>
 				                    <th ng-repeat="att in vm.category.catAttributes[0].attributes track by $index">
-				                    	<span ng-if="att.key == 'id'">No</span>
 				                    	<span ng-if="att.key != 'id'">{{att.key | objectname }}</span>
 				                    </th>
 			                    </tr>
 				        	</thead>
 				        	<tbody>
 				                <tr ng-repeat="catAtts in vm.category.catAttributes" ng-init="parentIndex = $index">
+				                	<td>{{parentIndex + 1}}</td>
+				                	<td>{{catAtts.type}}</td>
+				                	<td>{{catAtts.relationship}}</td>
 				                    <td ng-repeat="att in catAtts.attributes">
-				                    	<span ng-if="att.key == 'id'">{{parentIndex + 1}}</span>
 				                    	<span ng-if="att.key != 'id'">{{att.value}}</span>	
 				                    </td>
 			                    </tr>
