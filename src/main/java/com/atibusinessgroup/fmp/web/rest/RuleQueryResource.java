@@ -1,7 +1,6 @@
 package com.atibusinessgroup.fmp.web.rest;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -114,7 +113,7 @@ public class RuleQueryResource {
 		List<RuleQuery> result = new ArrayList<>();
 
 		if (page != null) {
-			for (AtpcoRecord2GroupByRuleNoCxrTarNo record2Group : page) {
+			for (AtpcoRecord2GroupByRuleNoCxrTarNo record2Group : page.getContent()) {
 				RuleQuery rq = ruleQueryMapper.convertAtpcoRecord2GroupByRuleNoCxrTarNo(record2Group);
 				result.add(rq);
 			}
@@ -175,11 +174,6 @@ public class RuleQueryResource {
 				}
 			}
 			
-			System.out.println(entry.getKey());
-			for (DataTable dt:dataTables) {
-				System.out.println(dt.getTableNo());
-			}
-
 			Category cat = new Category();
 			cat.setCatName(entry.getValue());
 			cat.setType(CategoryType.RULE);
@@ -191,13 +185,11 @@ public class RuleQueryResource {
 			}
 
 			if (dataTables.size() > 0) {
-				cat.setCatAttributes(atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), dataTables));
+				cat.setCatAttributes(atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), dataTables, CategoryType.RULE));
 			}
 
 			result.add(cat);
 		}
-
-		Collections.sort(result, Category.ASCENDING_COMPARATOR);
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}

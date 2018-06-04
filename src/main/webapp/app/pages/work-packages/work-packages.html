@@ -212,7 +212,7 @@
 										<tr role="row" class="datatable-row" 
 											ng-click="vm.rowSelected($index, workPackage)">
 											<td class="text-right" ng-class="{selected: workPackage === vm.selectedRow, locked: workPackage.locked}">
-						                        <div class="btn-group entities flex-btn-group-container">
+						                        <div class="btn-group edit-btn entities flex-btn-group-container">
 						                            <button type="submit" title="Edit" ng-disabled="workPackage.locked"
 						                                    ui-sref="work-package-detail({id:workPackage.id})"
 						                                    class="btn btn-primary btn-sm">

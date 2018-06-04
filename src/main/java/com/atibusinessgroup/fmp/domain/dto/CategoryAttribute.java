@@ -5,6 +5,7 @@ import java.util.List;
 
 public class CategoryAttribute {
 	private String relationship;
+	private String type;
 	private List<CategoryAttributeObject> attributes = new ArrayList<>();
 	
 	public String getRelationship() {
@@ -15,6 +16,14 @@ public class CategoryAttribute {
 		this.relationship = relationship;
 	}
 	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public List<CategoryAttributeObject> getAttributes() {
 		return attributes;
 	}
@@ -29,6 +38,7 @@ public class CategoryAttribute {
 		int result = 1;
 		result = prime * result + ((attributes == null) ? 0 : attributes.hashCode());
 		result = prime * result + ((relationship == null) ? 0 : relationship.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
 
@@ -58,11 +68,19 @@ public class CategoryAttribute {
 		} else if (!relationship.equals(other.relationship)) {
 			return false;
 		}
+		if (type == null) {
+			if (other.type != null) {
+				return false;
+			}
+		} else if (!type.equals(other.type)) {
+			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "CategoryAttribute [relationship=" + relationship + ", attributes=" + attributes + "]";
-	}	
+		return "CategoryAttribute [relationship=" + relationship + ", type=" + type + ", attributes=" + attributes
+				+ "]";
+	}
 }

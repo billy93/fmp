@@ -79,6 +79,7 @@ public class AgentResource {
         if (agent.getId() != null) {
             throw new BadRequestAlertException("A new agent cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        agent.setEffectiveDateTime(Instant.now());
         agent.setIsDeleted(false);
         Agent result = agentRepository.save(agent);
         return ResponseEntity.created(new URI("/api/agents/" + result.getId()))
@@ -163,7 +164,8 @@ public class AgentResource {
         log.debug("REST request to get a page of Agents {}", filter);
       
         if(checkNull(filter)) {
-        	Page<Agent> page = agentRepository.findAll(pageable);
+//        	Page<Agent> page = agentRepository.findAll(pageable);
+        	Page<Agent> page = agentRepository.findCustomTrue(filter, pageable);
             HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/agents");
             return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
         }else {
@@ -200,6 +202,7 @@ public class AgentResource {
 //        agentRepository.delete(id);
         Agent agent = agentRepository.findOne(id);
         agent.setIsDeleted(true);
+        agent.setDiscontinueDateTime(Instant.now().minus(1,ChronoUnit.DAYS));
         agentRepository.save(agent);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
     }

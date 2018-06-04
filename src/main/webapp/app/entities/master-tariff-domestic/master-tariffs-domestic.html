@@ -1,90 +1,95 @@
 <div>
-    <h2>Master Tariffs Domestic</h2>
-    <jhi-alert></jhi-alert>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-xs-4 no-padding-left">
-                <button class="btn btn-primary" ui-sref="master-tariff-domestic.new" >
-                    <span class="glyphicon glyphicon-plus"></span>
-                    <span >
-                        Create new Master Tariff Domestic
-                    </span>
-                </button>
-            </div>
-        </div>
-    </div>
-    <br/>
-    <div class="table-responsive">
-        <table class="jh-table table table-striped" border="2px">
-            <thead>
-                <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-                    <th jh-sort-by="id"><span>ID</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="fareTarrif" colspan="2"> <span>Fare</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="ruleTariff" colspan="2"> <span>Rules Tariff</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="generalRules" colspan="2"><span>General Rules</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="arbitaryTariff" colspan="2"><span>Arbitary Tariff</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="routingTariff" colspan="2"><span>Routing Tariff</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="gfsGlobalArea"><span>Gfs Global Area</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="area"><span>Area</span> <span class="glyphicon glyphicon-sort"></span></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="masterTariffDomestic in vm.masterTariffsDomestic track by masterTariffDomestic.id">
-                    <td><a ui-sref="master-tariff-domestic-detail({id:masterTariffDomestic.id})">{{masterTariffDomestic.id}}</a></td>
-                    <td>{{masterTariffDomestic.fareTariff.name}}</td>
-                    <td>{{masterTariffDomestic.fareTariff.code}}</td>
-                    <td>{{masterTariffDomestic.ruleTariff.name}}</td>
-                    <td>{{masterTariffDomestic.ruleTariff.code}}</td>
-                    <td style="padding:5px;">
-	                    <table>
-	                    <tr ng-repeat="generalRulesName in masterTariffDomestic.generalRules">
-	                   		<td>{{generalRulesName.name}}</td>
-	                   	</tr>
-	                   	</table>
-                   	</td>
-                   	<td style="padding:5px;">
-	                    <table>
-	                    <tr ng-repeat="generalRulesCode in masterTariffDomestic.generalRules">
-	                   		<td>{{generalRulesCode.code}}</td>
-	                   	</tr>
-	                   	</table>
-                   	</td>
-                   	<td>{{masterTariffDomestic.arbitaryTariff.name}}</td>
-                    <td>{{masterTariffDomestic.arbitaryTariff.code}}</td>
-                   	<td>{{masterTariffDomestic.routingTariff.name}}</td>
-                    <td>{{masterTariffDomestic.routingTariff.code}}</td>
-                    <td>{{masterTariffDomestic.gfsGlobalArea}}</td>
-                    <td>{{masterTariffDomestic.area}}</td>
-                    <td class="text-right">
-                        <div class="btn-group flex-btn-group-container" style="display:table; margin: 0 auto;">
-                            <button type="submit"
-                                    ui-sref="master-tariff-domestic-detail({id:masterTariffDomestic.id})"
-                                    class="btn btn-info btn-sm">
-                                <span class="glyphicon glyphicon-eye-open"></span>
-                                <span class="hidden-sm-down"></span>
-                            </button>
-                            <button type="submit"
-                                    ui-sref="master-tariff-domestic.edit({id:masterTariffDomestic.id})"
-                                    class="btn btn-primary btn-sm">
-                                <span class="glyphicon glyphicon-pencil"></span>
-                                <span class="hidden-sm-down"></span>
-                            </button>
-                            <button type="submit"
-                                    ui-sref="master-tariff-domestic.delete({id:masterTariffDomestic.id})"
-                                    class="btn btn-danger btn-sm">
-                                <span class="glyphicon glyphicon-remove-circle"></span>
-                                <span class="hidden-sm-down"></span>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="text-center">
-        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
-        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
-    </div>
+	<div class="content-title">
+		<h2>Master Tariffs Domestic</h2>
+    	<jhi-alert></jhi-alert>
+	</div>
+	<div class="panel">
+		<div class="panel-body">
+			<div class="container-fluid">
+		        <div class="row">
+		            <div class="col-md-12 no-pad text-right">
+		                <button class="btn btn-default" ui-sref="master-tariff-domestic.new" >
+		                    <span >
+		                        Create new Master Tariff Domestic
+		                    </span>
+		                </button>
+		            </div>
+		        </div>
+		    </div>
+		    <br/>
+		    <div class="table-responsive">
+		        <table class="jh-table table table-striped" border="2px">
+		            <thead>
+		                <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+		                    <th jh-sort-by="id"><span>ID</span> <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th jh-sort-by="fareTarrif" colspan="2"> <span>Fare</span> <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th jh-sort-by="ruleTariff" colspan="2"> <span>Rules Tariff</span> <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th jh-sort-by="generalRules" colspan="2"><span>General Rules</span> <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th jh-sort-by="arbitaryTariff" colspan="2"><span>Arbitary Tariff</span> <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th jh-sort-by="routingTariff" colspan="2"><span>Routing Tariff</span> <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th jh-sort-by="gfsGlobalArea"><span>Gfs Global Area</span> <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th jh-sort-by="area"><span>Area</span> <span class="glyphicon glyphicon-sort"></span></th>
+		                </tr>
+		            </thead>
+		            <tbody>
+		                <tr ng-repeat="masterTariffDomestic in vm.masterTariffsDomestic track by masterTariffDomestic.id">
+		                    <td><a ui-sref="master-tariff-domestic-detail({id:masterTariffDomestic.id})">{{masterTariffDomestic.id}}</a></td>
+		                    <td>{{masterTariffDomestic.fareTariff.name}}</td>
+		                    <td>{{masterTariffDomestic.fareTariff.code}}</td>
+		                    <td>{{masterTariffDomestic.ruleTariff.name}}</td>
+		                    <td>{{masterTariffDomestic.ruleTariff.code}}</td>
+		                    <td style="padding:5px;">
+			                    <table>
+			                    <tr ng-repeat="generalRulesName in masterTariffDomestic.generalRules">
+			                   		<td>{{generalRulesName.name}}</td>
+			                   	</tr>
+			                   	</table>
+		                   	</td>
+		                   	<td style="padding:5px;">
+			                    <table>
+			                    <tr ng-repeat="generalRulesCode in masterTariffDomestic.generalRules">
+			                   		<td>{{generalRulesCode.code}}</td>
+			                   	</tr>
+			                   	</table>
+		                   	</td>
+		                   	<td>{{masterTariffDomestic.arbitaryTariff.name}}</td>
+		                    <td>{{masterTariffDomestic.arbitaryTariff.code}}</td>
+		                   	<td>{{masterTariffDomestic.routingTariff.name}}</td>
+		                    <td>{{masterTariffDomestic.routingTariff.code}}</td>
+		                    <td>{{masterTariffDomestic.gfsGlobalArea}}</td>
+		                    <td>{{masterTariffDomestic.area}}</td>
+		                    <td class="text-right">
+		                        <div class="btn-group flex-btn-group-container" style="display:table; margin: 0 auto;">
+		                            <button type="submit"
+		                                    ui-sref="master-tariff-domestic-detail({id:masterTariffDomestic.id})"
+		                                    class="btn btn-info btn-sm">
+		                                <span class="glyphicon glyphicon-eye-open"></span>
+		                                <span class="hidden-sm-down"></span>
+		                            </button>
+		                            <button type="submit"
+		                                    ui-sref="master-tariff-domestic.edit({id:masterTariffDomestic.id})"
+		                                    class="btn btn-primary btn-sm">
+		                                <span class="glyphicon glyphicon-pencil"></span>
+		                                <span class="hidden-sm-down"></span>
+		                            </button>
+		                            <button type="submit"
+		                                    ui-sref="master-tariff-domestic.delete({id:masterTariffDomestic.id})"
+		                                    class="btn btn-danger btn-sm">
+		                                <span class="glyphicon glyphicon-remove-circle"></span>
+		                                <span class="hidden-sm-down"></span>
+		                            </button>
+		                        </div>
+		                    </td>
+		                </tr>
+		            </tbody>
+		        </table>
+		    </div>
+		    <div class="text-center">
+		        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+		        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
+		    </div>
+    	</div>
+   	</div>
 </div>
 
 <script>
