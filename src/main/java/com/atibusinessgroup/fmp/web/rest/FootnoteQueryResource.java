@@ -32,30 +32,31 @@ import com.atibusinessgroup.fmp.domain.dto.RuleQueryParam;
 import com.atibusinessgroup.fmp.resository.custom.AtpcoFareCustomRepository;
 import com.atibusinessgroup.fmp.resository.custom.AtpcoRuleQueryCustomRepository;
 import com.atibusinessgroup.fmp.service.AtpcoRecordService;
+import com.atibusinessgroup.fmp.service.mapper.FootnoteQueryMapper;
 import com.atibusinessgroup.fmp.service.mapper.RuleQueryMapper;
 import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
 import com.codahale.metrics.annotation.Timed;
 
 @RestController
 @RequestMapping("/api")
-public class RuleQueryResource {
+public class FootnoteQueryResource {
 
 	private final LinkedHashMap<String, String> categories = new LinkedHashMap<>();
 
-	private final Logger log = LoggerFactory.getLogger(RuleQueryResource.class);
+	private final Logger log = LoggerFactory.getLogger(FootnoteQueryResource.class);
 
 	private final AtpcoRuleQueryCustomRepository atpcoRuleQueryCustomRepository;
 
-	private final RuleQueryMapper ruleQueryMapper;
+	private final FootnoteQueryMapper footnoteQueryMapper;
 
 	private final AtpcoFareCustomRepository atpcoFareCustomRepository;
 
 	private final AtpcoRecordService atpcoRecordService;
 
-	public RuleQueryResource(AtpcoRuleQueryCustomRepository atpcoRuleQueryCustomRepository,
-			RuleQueryMapper ruleQueryMapper, AtpcoFareCustomRepository atpcoFareCustomRepository, AtpcoRecordService atpcoRecordService) {
+	public FootnoteQueryResource(AtpcoRuleQueryCustomRepository atpcoRuleQueryCustomRepository,
+			FootnoteQueryMapper ruleQueryMapper, AtpcoFareCustomRepository atpcoFareCustomRepository, AtpcoRecordService atpcoRecordService) {
 		this.atpcoRuleQueryCustomRepository = atpcoRuleQueryCustomRepository;
-		this.ruleQueryMapper = ruleQueryMapper;
+		this.footnoteQueryMapper = ruleQueryMapper;
 
 		this.atpcoFareCustomRepository = atpcoFareCustomRepository;
 		this.atpcoRecordService = atpcoRecordService;
@@ -115,8 +116,8 @@ public class RuleQueryResource {
 
 		if (page != null) {
 			for (AtpcoRecord2GroupByRuleNoCxrTarNo record2Group : page.getContent()) {
-				RuleQuery rq = ruleQueryMapper.convertAtpcoRecord2GroupByRuleNoCxrTarNo(record2Group);
-				result.add(rq);
+//				RuleQuery rq = footnoteQueryMapper.convertAndGroupFootnote(record2Group);
+//				result.add(rq);
 			}
 		}
 

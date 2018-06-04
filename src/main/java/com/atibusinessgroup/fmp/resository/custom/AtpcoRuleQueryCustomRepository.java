@@ -71,9 +71,6 @@ public class AtpcoRuleQueryCustomRepository {
 	}
 
 	public List<AggregationOperation> getAggregationRuleQuery(RuleQueryParam param) {
-		
-		System.out.println("CXR :: "+param.getCxr());
-
 		List<AggregationOperation> aggregationOperations = new ArrayList<>();
 
 		aggregationOperations.add(new AggregationOperation() {
@@ -133,8 +130,6 @@ public class AtpcoRuleQueryCustomRepository {
 		List<AtpcoRecord2GroupByRuleNoCxrTarNo> result = mongoTemplate.aggregate(aggregationPagination, "atpco_record_2", AtpcoRecord2GroupByRuleNoCxrTarNo.class).getMappedResults();
 		
 		return new PageImpl<>(result, pageable, mongoTemplate.aggregate(aggregation, "atpco_record_2", AtpcoRecord2GroupByRuleNoCxrTarNo.class).getMappedResults().size());
-
-//		return result;
 	}
 
 	public List<AggregationOperation> getAggregationGrouping(RuleQueryParam param) {
