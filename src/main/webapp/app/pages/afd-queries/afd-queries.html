@@ -25,9 +25,8 @@
 								</div>
 								<div class="form-group">
 									<div class="custom-label semibold">Tariff</div>
-									<select class="form-control" name="tariff" id="tariff" ng-model="vm.queryParams.tariff">
-										<option value="{{value}}" ng-repeat="value in vm.tariffs track by $index">{{value}}</option>
-									</select>
+									<input autocomplete="off" type="text" name="tariff" ng-model="vm.queryParams.tariff" class="form-control"
+            							uib-typeahead="o.tarNo as o.tarNo + ' - ' + o.tarCd for o in vm.tariffs | filter:{tarNo: $viewValue} | limitTo:5">
 								</div>
 								<div class="form-group">
 									<div class="custom-label semibold">GA Fare Type</div>
@@ -283,12 +282,12 @@
 			                    <th>MPM</th>
 			                    <th>Curr</th>
 			                    <th>Base Amt</th>
-			                    <th>Error</th>
-			                    <th>TFC Calc Date</th>
-			                    <th>TFC Focus Date</th>
-			                    <th>YQYR</th>
-			                    <th>Taxes</th>
-			                    <th>TFC</th>
+			                    <th ng-if="vm.showTFC">Error</th>
+			                    <th ng-if="vm.showTFC">TFC Calc Date</th>
+			                    <th ng-if="vm.showTFC">TFC Focus Date</th>
+			                    <th ng-if="vm.showTFC">YQYR</th>
+			                    <th ng-if="vm.showTFC">Taxes</th>
+			                    <th>TFC <span ng-click="vm.showTFC = !vm.showTFC"><i ng-if="vm.showTFC" class="glyphicon glyphicon-minus"></i><i ng-if="!vm.showTFC" class="glyphicon glyphicon-plus"></i></span></th>
 			                    <th>AIF</th>
 			                    <th>Itinerary</th>
 			                    <th>Override Ind</th>
@@ -338,54 +337,57 @@
 			                    <td>{{afdQuery.destinationCountry}}</td>
 			                    <td>{{afdQuery.fareClassCode}}</td>
 			                    <td>{{afdQuery.bookingClass}}</td>
-			                    <td><b>NM</b></td>
-			                    <td>{{afdQuery.owrt}}</td>
+			                    <td></td>
+			                    <td><span ng-if="afdQuery.owrt == '1'">OW</span><span ng-if="afdQuery.owrt == '2'">RT</span><span ng-if="afdQuery.owrt == '3'">OO</span></td>
 			                    <td>{{afdQuery.footnote}}</td>
 			                    <td>{{afdQuery.routingNo}}</td>
 			                    <td>{{afdQuery.ruleNo}}</td>
 			                    <td>{{afdQuery.maximumPermittedMileage}}</td>
 			                    <td>{{afdQuery.currencyCode}}</td>
 			                    <td>{{afdQuery.baseAmount}}</td>
+			                    <td ng-if="vm.showTFC"></td>
+			                    <td ng-if="vm.showTFC"></td>
+			                    <td ng-if="vm.showTFC"></td>
+			                    <td ng-if="vm.showTFC"></td>
+			                    <td ng-if="vm.showTFC"></td>
+			                    <td></td>
 			                    <td><b>NM</b></td>
 			                    <td><b>NM</b></td>
 			                    <td><b>NM</b></td>
-			                    <td><b>NM</b></td>
-			                    <td><b>NM</b></td>
-			                    <td><b>NM</b></td>
-			                    <td><b>NM</b></td>
-			                    <td><b>NM</b></td>
-			                    <td><b>NM</b></td>
-			                    <td><span ng-if="afdQuery.effectiveDate == 'indef'">NONE</span><span ng-if="afdQuery.effectiveDate != 'indef'">{{afdQuery.effectiveDate | date:'ddMMMyyyy'}}</span></td>
-			                	<td><span ng-if="afdQuery.discontinueDate == 'indef'">NONE</span><span ng-if="afdQuery.discontinueDate != 'indef'">{{afdQuery.discontinueDate | date:'ddMMMyyyy'}}</span></td>
-			                	<td><b>NM</b></td>
+			                    <td><span ng-if="afdQuery.effectiveDate != 'indef'">{{afdQuery.effectiveDate | date:'ddMMMyyyy'}}</span></td>
+			                	<td><span ng-if="afdQuery.discontinueDate != 'indef'">{{afdQuery.discontinueDate | date:'ddMMMyyyy'}}</span></td>
+			                	<td><span ng-if="afdQuery.gfsDate != undefined && afdQuery.gfsDate != null">{{afdQuery.gfsDate | date:'ddMMMyyyy'}} - {{afdQuery.gfsReference}}</span></td>
 			                	<td>{{afdQuery.globalIndicator}}</td>
-			                	<td><b>NM</b></td>
-			                	<td><b>NM</b></td>
-			                	<td><b>NM</b></td>
-			                	<td><b>NM</b></td>
-			                	<td><b>NM</b></td>
-			                	<td><span ng-if="afdQuery.saleStartDate == 'indef'">NONE</span><span ng-if="afdQuery.saleStartDate != 'indef'">{{afdQuery.saleStartDate | date:'ddMMMyyyy'}}</span></td>
-			                	<td><span ng-if="afdQuery.saleEndDate == 'indef'">NONE</span><span ng-if="afdQuery.saleEndDate != 'indef'">{{afdQuery.saleEndDate | date:'ddMMMyyyy'}}</span></td>
-			                	<td><b>NM</b></td>
-			                	<td><b>NM</b></td>
-			                	<td><b>NM</b></td>
-			                	<td><b>NM</b></td>
-			                	<td><b>NM</b></td>
-			                	<td><b>NM</b></td>
-			                	<td><b>NM</b></td>
-			                	<td><b>NM</b></td>
-			                	<td><b>NM</b></td>
-			                	<td><b>NM</b></td>
-			                	<td><b>NM</b></td>
+			                	<td></td>
+			                	<td></td>
+			                	<td><span ng-if="afdQuery.travelStartDate != 'indef'">{{afdQuery.travelStartDate | date:'ddMMMyyyy'}}</span></td>
+			                	<td><span ng-if="afdQuery.travelEndDate != 'indef'">{{afdQuery.travelEndDate | date:'ddMMMyyyy'}}</span></td>
+			                	<td><span ng-if="afdQuery.travelComplete != 'indef'">{{afdQuery.travelComplete | date:'ddMMMyyyy'}}</span></td>
+			                	<td><span ng-if="afdQuery.saleStartDate != 'indef'">{{afdQuery.saleStartDate | date:'ddMMMyyyy'}}</span></td>
+			                	<td><span ng-if="afdQuery.saleEndDate != 'indef'">{{afdQuery.saleEndDate | date:'ddMMMyyyy'}}</span></td>
+			                	<td><span ng-if="afdQuery.resStartDate != 'indef'">{{afdQuery.resStartDate | date:'ddMMMyyyy'}}</span></td>
+			                	<td><span ng-if="afdQuery.resEndDate != 'indef'">{{afdQuery.resEndDate | date:'ddMMMyyyy'}}</span></td>
+			                	<td>{{afdQuery.minStay}}</td>
+			                	<td>{{afdQuery.maxStay}}</td>
+			                	<td>{{afdQuery.advancePurchase}}</td>
+			                	<td></td>
+			                	<td></td>
+			                	<td>{{afdQuery.season}}</td>
+			                	<td>{{afdQuery.firstSeasonDate}}</td>
+			                	<td>{{afdQuery.lastSeasonDate}}</td>
+			                	<td>
+			                		<span ng-if="afdQuery.travelStartDate == 'indef'">XXXXXXXX</span><span ng-if="afdQuery.travelStartDate != 'indef'">{{afdQuery.travelStartDate | date:'ddMMMyyyy'}}</span>
+			                		<span ng-if="afdQuery.travelEndDate == 'indef'">-XXXXXXXX</span><span ng-if="afdQuery.travelEndDate != undefined && afdQuery.travelEndDate != null && afdQuery.travelEndDate != 'indef'">-{{afdQuery.travelEndDate | date:'ddMMMyyyy'}}</span>
+			                	</td>
 			               		<td>{{afdQuery.fareType}}</td>
 			                	<td>{{afdQuery.paxType}}</td>
-			                	<td><b>NM</b></td>
-			                	<td><b>NM</b></td>
-			                	<td><b>NM</b></td>
-			                	<td><b>NM</b></td>
-			                	<td><b>NM</b></td>
-			                	<td><b>NM</b></td>
-			                	<td><b>NM</b></td>
+			                	<td></td>
+			                	<td></td>
+			                	<td></td>
+			                	<td></td>
+			                	<td></td>
+			                	<td></td>
+			                	<td></td>
 			                </tr>
 			            </tbody>
 			        </table>

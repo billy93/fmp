@@ -77,6 +77,17 @@ body {
 .full .modal-dialog {
 	width: 75%;
 }
+
+.table.category thead th,
+.table.category thead td {
+	text-transform: capitalize;	
+}
+
+th .glyphicon {
+	font-size: 12px;
+    margin: 0 5px;
+}
+
 /* ==========================================================================
 Hide ng-cloak on page load, https://docs.angularjs.org/api/ng/directive/ngCloak
 ========================================================================== */

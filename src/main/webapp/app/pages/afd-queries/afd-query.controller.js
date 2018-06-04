@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('AfdQueryController', AfdQueryController);
 
-    AfdQueryController.$inject = ['$state', 'AfdQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', '$uibModal'];
+    AfdQueryController.$inject = ['$state', 'AfdQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', 'tariffNumbers', 'cities', '$uibModal'];
 
-    function AfdQueryController($state, AfdQuery, ParseLinks, AlertService, paginationConstants, queryParams, $uibModal) {
+    function AfdQueryController($state, AfdQuery, ParseLinks, AlertService, paginationConstants, queryParams, tariffNumbers, cities, $uibModal) {
 
         var vm = this;
         vm.loadPage = loadPage;
@@ -50,7 +50,9 @@
         	{key: "E", value: "Exact Match"}
         ]
         
-        vm.tariffs = "?";
+        vm.tariffs = tariffNumbers;
+        
+        vm.cities = cities;
         
         vm.globalIndicators = "?";
         
