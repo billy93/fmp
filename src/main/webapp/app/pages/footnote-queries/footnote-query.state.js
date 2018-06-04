@@ -26,15 +26,16 @@
             resolve: {
             	queryParams: [function() {
             		return {
-                		cxr: null,
+            			cxr: null,
                 		ftnt: null,
                 		tarNo: null,
-                		type: null,
-                		cat: null,
                 		catNo: null,
-                		fareAddon: null,
-                		trcd: null,
-                		fareAddonCount: null
+                		saleDateFrom: null,
+                		saleDateTo: null,
+                		travelDateFrom: null,
+                		travelDateTo: null,
+                		completedDateFrom: null,
+                		travelOpt: null
                 	}
             	}]
             }

@@ -16,8 +16,8 @@
         vm.itemsPerPage = paginationConstants.itemsPerPage;
         vm.queryParams = queryParams;
         vm.loadAll = loadAll;
-        vm.getRules = getRules;
-        vm.getRules2 = getRules2;
+        vm.getFtnt = getFtnt;
+        vm.getFtnt2 = getFtnt2;
         vm.showDetail = showDetail;
         vm.hideDetail = hideDetail;
         vm.reset = reset;
@@ -29,11 +29,11 @@
         vm.dateFormat = "yyyy-MM-dd";
         vm.openCalendar = openCalendar;
         
-        vm.loadAll();
 
         function loadAll () {
         	vm.queryParams.page = vm.page - 1;
         	vm.queryParams.size = vm.itemsPerPage;
+        	console.log(vm.queryParams);
         	FootnoteQuery.query(vm.queryParams, onSuccess, onError);
         	
         	$("th").css({
@@ -45,6 +45,7 @@
                 vm.totalItems = headers('X-Total-Count');
                 vm.queryCount = vm.totalItems;
                 vm.footnoteQueries = data;
+                console.log(data);
             }
             
             function onError(error) {
@@ -56,18 +57,17 @@
             vm.page = page;
         }
 
-        function getRules(footnoteQuery) {
-        	FootnoteQuery.getRules(footnoteQuery, function(data) {
+        function getFtnt(footnoteQuery) {
+        	FootnoteQuery.getFtnt(footnoteQuery, function(data) {
         		vm.footnoteQueryCategories = data;
         	}, function(error) {
         		console.log(error);
         	});
         }
         
-        function getRules2(footnoteQuery) {
-        	FootnoteQuery.getRules2(footnoteQuery, function(data) {
+        function getFtnt2(footnoteQuery) {
+        	FootnoteQuery.getFtnt2(footnoteQuery, function(data) {
         		vm.footnoteQueryCategories2 = data;
-        		console.log(data);
         	}, function(error) {
         		console.log(error);
         	});
@@ -77,7 +77,7 @@
         	$("#tblDetail").show();
         	$("#tblDetail").focus();
         	$("#tblDetail").css("display","block");
-        	$("#tblDetail").css("height","440px");
+        	$("#tblDetail").css("max-height","440px");
         	$("#tblDetail").css("overflow-y","scroll");
         	$("#ruleCategories").show();
         	
@@ -108,12 +108,15 @@
         function reset() {
         	vm.queryParams = {
         			cxr: null,
-            		ruleTarNo: null,
-            		ruleNo: null,
-            		type: null,
-            		src: null,
-            		cat: null,
-            		catNo: null
+            		ftnt: null,
+            		tarNo: null,
+            		catNo: null,
+            		saleDateFrom: null,
+            		saleDateTo: null,
+            		travelDateFrom: null,
+            		travelDateTo: null,
+            		completedDateFrom: null,
+            		travelOpt: null
         	}
         	
         	vm.loadAll();
@@ -131,9 +134,9 @@
                     entity: category
                 }
             }).result.then(function() {
-                $state.go('rule-query', {}, { reload: false });
+                $state.go('footnote-query', {}, { reload: false });
             }, function() {
-                $state.go('rule-query');
+                $state.go('footnote-query');
             });
         }
     }

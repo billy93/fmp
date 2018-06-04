@@ -21,8 +21,8 @@
                 }
             },
             'update': { method:'PUT' },
-            'getRules': { method: 'GET', url:'api/footnote-queries/rules', isArray: true },
-            'getRules2': { method: 'GET', url:'api/footnote-queries/rules2', isArray: true }
+            'getFtnt': { method: 'GET', url:'api/footnote-queries/rules', isArray: true },
+            'getFtnt2': { method: 'GET', url:'api/footnote-queries/rules2', isArray: true }
         });
     }
 })();

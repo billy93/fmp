@@ -7,146 +7,119 @@
 			<div class="filter-area">
 				<div class="clearfix">
 					<form name="queryForm" role="form" novalidate>
-						<div class="pull-left col-md-5 no-lpad">
-							<div class="pull-left col-md-5 no-lpad">
-								<div class="form-group">
-									<div class="custom-label semibold">Carrier</div>
-									<input type="text" class="form-control" name="carrier" id="cxr"
-										ng-model="vm.queryParams.cxr" uppercase />
-									<div class="custom-label semibold">Footnote</div>
-									<input type="text" class="form-control" name="footNote"
-										id="ftnt" ng-model="vm.queryParams.ftnt" uppercase />
-								</div>
-							</div>
-							<div class="pull-left col-md-5 no-lpad">
-								<div class="form-group">
-									<div class="custom-label semibold">Tariff</div>
-									<input type="text" class="form-control" name="tariff"
-										id="tarNo" ng-model="vm.queryParams.tarNo" uppercase />
-									<div class="custom-label semibold">Category</div>
-									<select class="form-control" name="category" id="catNo"
-										ng-model="vm.queryParams.catNo">
-										<option value="">All</option>
-										<option value="003">03 - Season App</option>
-										<option value="004">04 - Flight App</option>
-										<option value="005">05 - Adv Bkg</option>
-										<option value="006">06 - Min Stay</option>
-										<option value="007">07 - Max Stay</option>
-										<option value="008">08 - Stopovers</option>
-										<option value="009">09 - Transfers</option>
-										<option value="010">10 - Comb'ty</option>
-										<option value="011">11 - Blackouts</option>
-										<option value="012">12 - Surcharges</option>
-										<option value="013">13 - Accmp Tvl</option>
-										<option value="014">14 - Tvl Rest</option>
-										<option value="015">15 - Sale Rest</option>
-										<option value="016">16 - Penalties</option>
-										<option value="017">17 - Hi Int Pt</option>
-										<option value="018">18 - Tkt Endorse</option>
-										<option value="019">19 - Child Disc</option>
-										<option value="020">20 - Tour Disc</option>
-										<option value="021">21 - Agents Disc</option>
-										<option value="022">22 - Other Disc</option>
-										<option value="023">23 - Misc Tags</option>
-										<option value="026">26 - Groups</option>
-										<option value="027">27 - Tours</option>
-										<option value="028">28 - Visit Cntry</option>
-										<option value="029">29 - Deposits</option>
-										<option value="031">31 - Vol Chgs</option>
-										<option value="033">33 - Vol Refunds</option>
-										<option value="035">35 - Neg Fares</option>
-										<option value="050">50 - Rule App</option>
-									</select>
-								</div>
-							</div>
-						</div>
-						<div class="pull-left col-md-4 no-lpad">
-							<div class="form-group">
-								<div class="custom-label semibold">Sale Start/End</div>
-								<div class="col-md-4 no-lpad">
-									<input type="text" class="form-control"
-										ng-click="vm.openCalendar($event, 'saleDateFrom')"
-										is-open="vm.datePickerOpenStatus['saleDateFrom']"
-										datetime-picker="{{vm.dateFormat}}" enable-time="false"
-										name="saleDateFrom" id="dtpSaleStart"
-										ng-model="vm.queryParams.saleDateFrom" placeholder="From" />
-								</div>
-								<div class="col-md-4 no-lpad">
-									<input type="text" class="form-control"
-										ng-click="vm.openCalendar($event, 'saleDateTo')"
-										is-open="vm.datePickerOpenStatus['saleDateTo']"
-										datetime-picker="{{vm.dateFormat}}" enable-time="false"
-										name="saleDateTo" id="dtpSaleEnd"
-										ng-model="vm.queryParams.saleDateTo" placeholder="To" />
-								</div>
-								<div class="col-md-4 no-lpad">
-									<select class="form-control" name="saleOption" id="saleOpt"
-										ng-model="vm.queryParams.saleOpt">
-										<option value="1">Active In</option>
-										<option value="2">Exact Match</option>
-									</select>
-								</div>
 
+						<div>
+							<div class="form-group">
+								<div class="custom-label semibold">Carrier</div>
+								<input type="text" class="form-control" name="carrier" id="cxr"
+									ng-model="vm.queryParams.cxr" uppercase />
+								<div class="custom-label semibold">Footnote</div>
+								<input type="text" class="form-control" name="footNote"
+									id="ftnt" ng-model="vm.queryParams.ftnt" uppercase />
 							</div>
 						</div>
 
-						<div class="pull-left col-md-4 no-lpad">
-							<div class="form-group">
-								<div class="custom-label semibold">Travel Start/End</div>
-								<div class="col-md-4 no-lpad">
-									<input type="text" class="form-control"
-										ng-click="vm.openCalendar($event, 'travelDateFrom')"
-										is-open="vm.datePickerOpenStatus['travelDateFrom']"
-										datetime-picker="{{vm.dateFormat}}" enable-time="false"
-										name="travelDateFrom" id="dtpTravelStart"
-										ng-model="vm.queryParams.travelDateFrom" placeholder="From" />
-								</div>
-								<div class="col-md-4 no-lpad">
-									<input type="text" class="form-control"
-										ng-click="vm.openCalendar($event, 'travelDateTo')"
-										is-open="vm.datePickerOpenStatus['travelDateTo']"
-										datetime-picker="{{vm.dateFormat}}" enable-time="false"
-										name="travelDateTo" id="dtpTravelEnd"
-										ng-model="vm.queryParams.travelDateTo" placeholder="To" />
-								</div>
-								<div class="col-md-4 no-lpad">
-									<select class="form-control" name="travelOption" id="travelOpt"
-										ng-model="vm.queryParams.travelOpt">
-										<option value="1">Active In</option>
-										<option value="2">Exact Match</option>
-									</select>
-								</div>
+						<div>
 
+							<div class="form-group">
+								<div class="custom-label semibold">Tariff</div>
+								<input type="text" class="form-control" name="tariff" id="tarNo"
+									ng-model="vm.queryParams.tarNo" uppercase />
+								<div class="custom-label semibold">Category</div>
+								<select class="form-control" name="category" id="catNo"
+									ng-model="vm.queryParams.catNo">
+									<option value="">All</option>
+									<option value="003">03 - Season App</option>
+									<option value="004">04 - Flight App</option>
+									<option value="005">05 - Adv Bkg</option>
+									<option value="006">06 - Min Stay</option>
+									<option value="007">07 - Max Stay</option>
+									<option value="008">08 - Stopovers</option>
+									<option value="009">09 - Transfers</option>
+									<option value="010">10 - Comb'ty</option>
+									<option value="011">11 - Blackouts</option>
+									<option value="012">12 - Surcharges</option>
+									<option value="013">13 - Accmp Tvl</option>
+									<option value="014">14 - Tvl Rest</option>
+									<option value="015">15 - Sale Rest</option>
+									<option value="016">16 - Penalties</option>
+									<option value="017">17 - Hi Int Pt</option>
+									<option value="018">18 - Tkt Endorse</option>
+									<option value="019">19 - Child Disc</option>
+									<option value="020">20 - Tour Disc</option>
+									<option value="021">21 - Agents Disc</option>
+									<option value="022">22 - Other Disc</option>
+									<option value="023">23 - Misc Tags</option>
+									<option value="026">26 - Groups</option>
+									<option value="027">27 - Tours</option>
+									<option value="028">28 - Visit Cntry</option>
+									<option value="029">29 - Deposits</option>
+									<option value="031">31 - Vol Chgs</option>
+									<option value="033">33 - Vol Refunds</option>
+									<option value="035">35 - Neg Fares</option>
+									<option value="050">50 - Rule App</option>
+								</select>
 							</div>
+
 						</div>
-						
-						<div class="pull-left col-md-4 no-lpad">
-							<div class="form-group">
-								<div class="custom-label semibold">Completed By/Ind</div>
-								<div class="col-md-4 no-lpad">
-									<input type="text" class="form-control"
-										ng-click="vm.openCalendar($event, 'travelDateFrom')"
-										is-open="vm.datePickerOpenStatus['travelDateFrom']"
-										datetime-picker="{{vm.dateFormat}}" enable-time="false"
-										name="travelDateFrom" id="dtpTravelStart"
-										ng-model="vm.queryParams.travelDateFrom" placeholder="From" />
-								</div>
-								
-								<div class="col-md-4 no-lpad">
-									<select class="form-control" name="travelOption" id="travelOpt"
-										ng-model="vm.queryParams.travelOpt">
-										<option value="P"> P  -  Trip Completed</option>
-										<option value="C"> C  -  Trip Commence</option>
-									</select>
-								</div>
-								<div class="col-md-4 no-lpad">
-									<select class="form-control" name="travelOption" id="travelOpt"
-										ng-model="vm.queryParams.travelOpt">
-										<option value="2">Exact Match</option>
-									</select>
-								</div>
+						<div>
 
-							</div>
+							<div class="custom-label semibold">Sale Start/End</div>
+							<input type="text" class="form-control"
+								ng-click="vm.openCalendar($event, 'saleDateFrom')"
+								is-open="vm.datePickerOpenStatus['saleDateFrom']"
+								datetime-picker="{{vm.dateFormat}}" enable-time="false"
+								name="saleDateFrom" id="dtpSaleStart"
+								ng-model="vm.queryParams.saleDateFrom" placeholder="From" /> <input
+								type="text" class="form-control"
+								ng-click="vm.openCalendar($event, 'saleDateTo')"
+								is-open="vm.datePickerOpenStatus['saleDateTo']"
+								datetime-picker="{{vm.dateFormat}}" enable-time="false"
+								name="saleDateTo" id="dtpSaleEnd"
+								ng-model="vm.queryParams.saleDateTo" placeholder="To" /> <select
+								class="form-control" name="saleOption" id="saleOpt"
+								ng-model="vm.queryParams.saleOpt">
+								<option value="1">Active In</option>
+								<option value="2">Exact Match</option>
+							</select>
+
+
+
+							<div class="custom-label semibold">Travel Start/End</div>
+							<input type="text" class="form-control"
+								ng-click="vm.openCalendar($event, 'travelDateFrom')"
+								is-open="vm.datePickerOpenStatus['travelDateFrom']"
+								datetime-picker="{{vm.dateFormat}}" enable-time="false"
+								name="travelDateFrom" id="dtpTravelStart"
+								ng-model="vm.queryParams.travelDateFrom" placeholder="From" />
+							<input type="text" class="form-control"
+								ng-click="vm.openCalendar($event, 'travelDateTo')"
+								is-open="vm.datePickerOpenStatus['travelDateTo']"
+								datetime-picker="{{vm.dateFormat}}" enable-time="false"
+								name="travelDateTo" id="dtpTravelEnd"
+								ng-model="vm.queryParams.travelDateTo" placeholder="To" /> <select
+								class="form-control" name="travelOption" id="travelOpt"
+								ng-model="vm.queryParams.travelOpt">
+								<option value="1">Active In</option>
+								<option value="2">Exact Match</option>
+							</select>
+
+							<div class="custom-label semibold">Completed By/Ind</div>
+							<input type="text" class="form-control"
+								ng-click="vm.openCalendar($event, 'completedDateFrom')"
+								is-open="vm.datePickerOpenStatus['completedDateFrom']"
+								datetime-picker="{{vm.dateFormat}}" enable-time="false"
+								name="travelDateFrom" id="completedByStart"
+								ng-model="vm.queryParams.completedDateFrom" placeholder="From" />
+							<select class="form-control" name="travelOption" id="travelOpt"
+								ng-model="vm.queryParams.travelOpt">
+								<option value="P">P - Trip Completed</option>
+								<option value="C">C - Trip Commence</option>
+							</select> <select class="form-control" name="travelOption" id="travelOpt"
+								ng-model="vm.queryParams.travelOpt">
+								<option value="2">Exact Match</option>
+							</select>
+
 						</div>
 
 						<div class="pull-right col-md-6 no-lpad">
@@ -178,20 +151,19 @@
 								<th>TARIFF NO</th>
 								<th>TARIFF CODE</th>
 								<th>FOOTNOTE</th>
-								<th>TYPE</th>
 								<th>FARE / ADDON COUNT</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="ftntQuery in vm.ftntQueries"
+							<tr ng-repeat="ftntQuery in vm.footnoteQueries"
 								ng-click="vm.selectedRow = ftntQuery; vm.getFtnt(ftntQuery); vm.getFtnt2(ftntQuery); vm.showDetail()"
 								ng-class="{'selected': vm.selectedRow == ftntQuery}">
 								<td>{{$index + 1}}</td>
+								<td>{{ftntQuery.cxr}}</td>
 								<td>{{ftntQuery.fareAddon}}</td>
 								<td>{{ftntQuery.tarNo}}</td>
 								<td>{{ftntQuery.trcd}}</td>
 								<td>{{ftntQuery.ftnt}}</td>
-								<td>{{ftntQuery.type}}</td>
 								<td>{{ftntQuery.fareAddonCount}}</td>
 							</tr>
 							<!-- 							<tr ng-if="vm.selectedRow == afdQuery.atpcoFareId"> -->
@@ -214,7 +186,7 @@
 			<div class="datatable-wrapper form-inline">
 				<div class="table-responsive">
 					<table class="table table-striped table-bordered datatable"
-						id="tblDetail" hidden="hidden">
+						id="tblDetail" hidden="hidden" style="width:100%">
 						<thead>
 							<tr>
 								<th>NO</th>
@@ -236,7 +208,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="rq in vm.ruleQueryCategories">
+							<tr ng-repeat="rq in vm.footnoteQueryCategories">
 								<td>{{$index + 1}}</td>
 								<td>{{rq.catNo}}</td>
 								<td>{{rq.sequenceNo}}</td>
@@ -268,7 +240,7 @@
 					hidden="hidden">
 					<div class="additional-info" ng-click="vm.showCategoryDetail(cat)"
 						ng-class="{'yellow': cat.catAttributes.length > 0 && cat.type != 'G', 'blue': cat.catAttributes.length > 0 && cat.type == 'G'}"
-						ng-repeat="cat in vm.ruleQueryCategories2 track by cat.catNo">
+						ng-repeat="cat in vm.footnoteQueryCategories2 track by cat.catNo">
 						{{cat.catNo}} {{cat.catName}} <span
 							ng-if="cat.catAttributes.length > 0">({{cat.type}})</span>
 					</div>
