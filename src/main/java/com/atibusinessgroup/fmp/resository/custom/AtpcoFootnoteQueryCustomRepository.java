@@ -102,7 +102,16 @@ public class AtpcoFootnoteQueryCustomRepository {
 				}
 				
 				if (param.getCatNo() != null && !param.getCatNo().isEmpty()) {
-					and.add(new BasicDBObject("cat_no", param.getCatNo()));
+					if(param.getCatNo().equalsIgnoreCase("comb")) {
+						String[] comb = {"014","015"};
+								
+						and.add(new BasicDBObject("cat_no", new BasicDBObject("$in", comb)));
+						
+						System.out.println(and.toString());
+					} else {
+						and.add(new BasicDBObject("cat_no", param.getCatNo()));
+					}
+					
 				}
 
 				if (and.size() > 0) {
