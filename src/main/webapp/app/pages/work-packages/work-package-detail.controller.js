@@ -1637,6 +1637,24 @@
     		});
  	    }
  	    
+ 	    vm.searchReplace = function(fareSheet){
+ 	    	$uibModal.open({
+	            templateUrl: 'app/pages/work-packages/work-package-search-replace-dialog.html',
+	            controller: 'WorkPackageSearchReplaceDialogController',
+	            controllerAs: 'vm',
+	            backdrop: 'static',
+	            size: 'lg',
+	            windowClass: 'full-page-modal',
+	            resolve: {
+//	                entity: result.$promise,
+//	                fareSelected: vm.selectedFareDiscount
+	            }
+ 	    	}).result.then(function(workPackage) {
+        	    
+            }, function() {
+        			
+            });
+ 	    };
         vm.rowFaresSelected = function(workPackageFare){
         	vm.selectedFare = workPackageFare;
 	    }
@@ -3949,8 +3967,26 @@
       	  
       }, function() {
   			
-      });
-  }
+	      });
+	  }
+      
+      vm.ratesheetWaiver = function(){
+	  	  $uibModal.open({
+          templateUrl: 'app/pages/work-packages/work-package-waiver-rate-sheet-dialog.html',
+          controller: 'WorkPackageWaiverRateSheetDialogController',
+          controllerAs: 'vm',
+          backdrop: 'static',
+          size: 'lg',
+          resolve: {
+              entity: vm.workPackage,
+              index : vm.indexSelectedTab
+          }
+      }).result.then(function(ratesheet) {
+      	  
+      }, function() {
+	  			
+	      });
+	  }
       
       vm.agent = function(){
 	    	  	var object = {
@@ -4180,6 +4216,7 @@
     			  if(selected){
 //    				  console.log("SELECTED : "+selected);
     				  var copiedFare = angular.copy(workPackageSheet.fares[x]);
+    				  copiedFare.status = "PENDING";
     				  copiedFare.field = null;
     				  workPackageSheet.fares.push(copiedFare);
     			  }
@@ -4199,8 +4236,10 @@
     					  selected = true;
     				  }
     			 });
-    			  if(selected){
-    				  fares.push(workPackageSheet.fares[x]);
+    			 if(selected){
+    				  if(workPackageSheet.fares[x].status != "APPROVED"){
+    					  fares.push(workPackageSheet.fares[x]);
+    				  }
 //    				  var index = workPackageSheet.fares.indexOf(workPackageSheet.fares[x]);
 //    				  workPackageSheet.fares.splice(index, 1); 
     				  
@@ -4229,6 +4268,7 @@
 //    	  }
       }
       
+      
       vm.tdClick = function(workPackageSheet, fare, f, event){
     	  if (event.shiftKey){
 
@@ -4248,6 +4288,8 @@
 	    $scope.isAllSelected = fares.every(function(itm){ return itm.selected; })
 	  }
       
-      
+      vm.getKey = function(obj, index){
+    	  return Object.keys(obj)[index];
+      }
     }
 })();

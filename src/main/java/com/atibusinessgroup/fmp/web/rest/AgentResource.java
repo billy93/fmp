@@ -200,6 +200,7 @@ public class AgentResource {
 //        agentRepository.delete(id);
         Agent agent = agentRepository.findOne(id);
         agent.setIsDeleted(true);
+        agent.setDiscontinueDateTime(Instant.now().minus(1,ChronoUnit.DAYS));
         agentRepository.save(agent);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
     }

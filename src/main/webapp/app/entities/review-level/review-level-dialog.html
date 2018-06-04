@@ -26,10 +26,14 @@
                     />
         </div>
         <div class="form-group">
-            <label class="control-label" data-translate="fmpApp.reviewLevel.activeStatus" for="field_activeStatus">Active Status</label>
-                <input type="checkbox" name="activeStatus" id="field_activeStatus"
-                          ng-model="vm.reviewLevel.activeStatus"/>
-        </div>
+			<div class="checkbox-wrapper">
+				<label class="black" data-translate="fmpApp.reviewLevel.activeStatus" for="field_activeStatus">
+					<input type="checkbox" name="activeStatus" id="field_activeStatus"
+                          ng-model="vm.reviewLevel.activeStatus">
+					Active Status
+				</label>
+			</div>
+		</div>
 
     </div>
     <div class="modal-footer">

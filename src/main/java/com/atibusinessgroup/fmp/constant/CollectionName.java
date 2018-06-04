@@ -36,4 +36,8 @@ public class CollectionName {
 	public final static String ATPCO_RECORD_3_CAT_033 = "atpco_record_3_cat_033";
 	public final static String ATPCO_RECORD_3_CAT_035 = "atpco_record_3_cat_035";
 	public final static String ATPCO_RECORD_3_CAT_050 = "atpco_record_3_cat_050";
+	
+	public final static String ATPCO_FOOTNOTE_RECORD_2 = "atpco_footnote_record_2";
+	public final static String ATPCO_FOOTNOTE_RECORD_3_CAT_014 = "atpco_footnote_record_3_cat_014";
+	public final static String ATPCO_FOOTNOTE_RECORD_3_CAT_015 = "atpco_footnote_record_3_cat_015";
 }

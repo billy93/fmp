@@ -6,6 +6,27 @@
 			<!-- table panel -->
 			<div class="panel">
 				<div class="panel-body">
+					<div class="table-wrapper">
+						<div class="datatable-wrapper form-inline">
+							<div class="clearfix">
+								<div class="pull-left w50">
+									<div class="datatable-length">
+										<label>
+											My Business Area(s)
+										</label>
+									</div>
+								</div>
+								<div class="pull-right w50">
+									<div class="clearfix">
+										<div class="pull-right datatable-button">
+											
+										</div>
+									</div>																						
+								</div>
+							</div>
+						</div>
+					</div>
+					
 					<!-- filter -->
 					<div class="filter-hero">
 						<div class="filter-label semibold show">Hide Filter</div>							
@@ -168,7 +189,7 @@
 									</div>																						
 								</div>
 							</div>
-							<div class="table-responsive">
+							<div class="table-responsive main-table">
 								<table class="table table-stripped table-bordered datatable" jq-slider>
 									<thead>
 										<tr role="row" jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
@@ -193,8 +214,8 @@
 									</thead>
 									<tbody ng-repeat="workPackage in vm.workPackages track by $index" >
 										<tr role="row" class="datatable-row" 
-											ng-click="vm.rowSelected($index, workPackage)" ng-class="{selected: workPackage === vm.selectedRow, locked: workPackage.locked}">
-											<td class="text-right">
+											ng-click="vm.rowSelected($index, workPackage)">
+											<td class="text-right" ng-class="{selected: workPackage === vm.selectedRow, locked: workPackage.locked}">
 						                        <div class="btn-group entities flex-btn-group-container">
 						                            <button type="submit" title="Edit" ng-disabled="workPackage.locked"
 						                                    ui-sref="work-package-detail({id:workPackage.id})"
@@ -212,7 +233,7 @@
 						                    <td>{{workPackage.reviewLevel}}</td>
 						                    <td>
 						                    	<div>
-							                    	<table ng-if="workPackage.specifiedFares">
+							                    	<table ng-if="workPackage.specifiedFares" class="sub-table">
 							                    		<thead>
 							                    			<tr><th  colspan="2"><center>Fare</center></th></tr>
 							                    			<tr>
@@ -236,7 +257,7 @@
 						                    <td>{{workPackage.priority}}</td>
 						                    <td>
 						                    	<div>
-							                    	<table ng-if="workPackage.specifiedFares">
+							                    	<table ng-if="workPackage.specifiedFares" class="sub-table">
 							                    		<thead>
 							                    			<tr><th  colspan="2"><center>Fare</center></th></tr>
 							                    			<tr>
@@ -255,7 +276,7 @@
 							                    	</table>							                    	
 						                    	</div>
 						                    	
-						                    	<table ng-if="workPackage.discount">
+						                    	<table ng-if="workPackage.discount" class="sub-table">
 						                    		<thead>
 						                    			<tr><th  colspan="2"><center>Discount Fare</center></th></tr>
 						                    			<tr>
@@ -273,7 +294,7 @@
 						                    		</tbody>
 						                    	</table>
 						                    	
-						                    	<table ng-if="workPackage.marketFares">
+						                    	<table ng-if="workPackage.marketFares" class="sub-table">
 						                    		<thead>
 						                    			<tr><th  colspan="2"><center>Market Fare</center></th></tr>
 						                    			<tr>
@@ -291,7 +312,7 @@
 						                    		</tbody>
 						                    	</table>
 						                    	
-						                    	<table ng-if="workPackage.waiverFares">
+						                    	<table ng-if="workPackage.waiverFares" class="sub-table">
 						                    		<thead>
 						                    			<tr><th  colspan="2"><center>Waiver Fare</center></th></tr>
 						                    			<tr>
@@ -315,7 +336,7 @@
 						                    <td>{{workPackage.lastModifiedBy}}</td>
 										</tr>
 										<tr ng-show="vm.workPackageActionButton[$index]">
-											<td colspan="18" class="">
+											<td colspan="18" style="text-align: left !important; padding-left: 40px">
 												<div class="btn btn-app" ng-click="vm.unlock($index)" ng-if="workPackage.locked">
 													<i class="fa fa-unlock"></i>Unlock
 												</div>

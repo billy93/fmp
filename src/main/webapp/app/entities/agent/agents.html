@@ -108,13 +108,14 @@
 	                    <th jh-sort-by="email"><span>Email</span> <span class="glyphicon glyphicon-sort"></span></th>
 	                    <th jh-sort-by="contact"><span>Contact</span> <span class="glyphicon glyphicon-sort"></span></th>
 	                    <th jh-sort-by="iataCode"><span>Iata Code</span> <span class="glyphicon glyphicon-sort"></span></th>
+	                    <th jh-sort-by="discontinueDateTime"><span>Discontinue Date Time</span> <span class="glyphicon glyphicon-sort"></span></th>
 	                    <th jh-sort-by="isDeleted"><span>Is Deleted</span> <span class="glyphicon glyphicon-sort"></span></th>
 	                    <th jh-sort-by="isDeleted"><span>PCC</span> <span class="glyphicon glyphicon-sort"></span></th>
 	                    <th></th>
 	                </tr>
 	            </thead>
 	            <tbody>
-	                <tr ng-repeat="agent in vm.agents track by agent.id">
+	                <tr ng-if="vm.agents.length > 0" ng-repeat="agent in vm.agents track by agent.id">
 	                    <td>{{agent.agentName}}</td>
 	                    <td>{{agent.agentType}}</td>
 	                    <td>{{agent.agentCategory}}</td>
@@ -125,6 +126,7 @@
 	                    <td>{{agent.fax}}</td>
 	                    <td>{{agent.email}}</td>
 	                    <td>{{agent.contact}}</td>
+	                    <td>{{agent.discontinueDateTime}}</td>
 	                    <td>{{agent.iataCode}}</td>
 	                    <td>{{agent.isDeleted}}</td>
 	                    <td>
@@ -169,10 +171,13 @@
 	                        </div>
 	                    </td>
 	                </tr>
+	                <tr ng-if="vm.agents.length == 0" >
+	                	<td colspan="14">No Record Found</td>
+	                </tr>
 	            </tbody>
 	        </table>
     	</div>
-    	<div class="text-center">
+    	<div class="text-center" ng-if="vm.agents.length > 0">
 	        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
 	        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
 	    </div>
