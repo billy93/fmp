@@ -159,8 +159,6 @@ public class AfdQueryResource {
                         	
                     		if (matched) {
                     			matchedRecord2 = record2;
-                    			System.out.println(entry.getKey());
-                    			System.out.println(matchedRecord2.toString());
                     			break;
                     		} 
                 		}
@@ -170,6 +168,10 @@ public class AfdQueryResource {
                 }	
         		
         		if (matchedRecord2 != null && matchedRecord2.getDataTables() != null && matchedRecord2.getDataTables().size() > 0) {
+
+        			System.out.println(entry.getKey());
+        			System.out.println(matchedRecord2.toString());
+        			
             		List<CategoryObject> rules = atpcoRecordService.getAndConvertCategoryObjectDataTable(entry.getKey(), matchedRecord2.getDataTables(), "Rule");
             		
             		switch (entry.getKey()) {
@@ -256,8 +258,8 @@ public class AfdQueryResource {
         	for (AtpcoRecord2GroupByCatNo arecord2:arecords2) {
             	if (arecord2.getCatNo().contentEquals(entry.getKey())) {
             		for (AtpcoRecord2 record2:arecord2.getRecords2()) {
-            			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afdQuery.getOriginCity(), "C", afdQuery.getDestinationCity(), afdQuery.getOwrt(), afdQuery.getRoutingNo(), afdQuery.getFootnote(), afdQuery.getEffectiveDate(), afdQuery.getDiscontinueDate(),
-            					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
+            			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afdQuery.getOriginCity(), "C", afdQuery.getDestinationCity(), afdQuery.getFareClassCode(), afdQuery.getFareType(), afdQuery.getSeason(), afdQuery.getDayOfWeekType(), afdQuery.getOwrt(), afdQuery.getRoutingNo(), afdQuery.getFootnote(), afdQuery.getEffectiveDate(), afdQuery.getDiscontinueDate(),
+            					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getFareClass(), record2.getFareType(), record2.getSeasonType(), record2.getDayOfWeekType(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
                     	
                 		if (matched) {
                 			matchedRecord2 = record2;
@@ -302,6 +304,9 @@ public class AfdQueryResource {
         	}
         	
         	if (matchedRecord2 != null && matchedRecord2.getDataTables() != null && matchedRecord2.getDataTables().size() > 0) {
+
+    			System.out.println(entry.getKey());
+    			System.out.println(matchedRecord2.toString());
         		type += CategoryType.RULE;
         		cat.getCatAttributes().addAll(atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), matchedRecord2.getDataTables(), CategoryType.RULE));
         	}
