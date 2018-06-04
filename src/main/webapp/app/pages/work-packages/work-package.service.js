@@ -146,6 +146,8 @@
 	        'exportRateSheetExcel': { method: 'POST',  url:'api/work-packages/export-ratesheet-excel'},
 	        'exportRateSheetDiscount': { method: 'POST',  url:'api/work-packages/export-ratesheet-discount'},
 	        'exportRateSheetExcelDiscount': { method: 'POST',  url:'api/work-packages/export-ratesheet-excel-discount'},
+	        'exportRateSheetWaiver': { method: 'POST',  url:'api/work-packages/export-ratesheet-waiver'},
+	        'exportRateSheetExcelWaiver': { method: 'POST',  url:'api/work-packages/export-ratesheet-excel-waiver'},
 	        'downloadMarketRules': { method: 'POST',  url:'api/work-packages/download-market-rules'}
         });
     }

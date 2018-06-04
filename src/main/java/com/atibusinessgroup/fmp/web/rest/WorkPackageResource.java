@@ -1,5 +1,6 @@
 package com.atibusinessgroup.fmp.web.rest;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -18,6 +19,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+import javax.imageio.ImageIO;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
@@ -2598,12 +2602,13 @@ public class WorkPackageResource {
     		document.setMargins(60, 30, 30, 30);
     	}
     	
-    	PdfWriter.getInstance(document, output);
-//    	String IMG = "logo_ga.png";
-    	String IMG = "src\\main\\webapp\\content\\images\\logo_ga.png";
+    	PdfWriter.getInstance(document, output);    	
+    	InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("images/logo_ga.png");
+    	byte[] imageByte = IOUtils.toByteArray(inputStream);    	
     	document.open();
     	Font font = FontFactory.getFont(FontFactory.TIMES_BOLD, 12, BaseColor.BLACK);
-    	Image image = Image.getInstance(IMG);
+    	Image image = Image.getInstance(imageByte); 
+    	
     	image.scaleToFit(PageSize.A4.getWidth()/4, PageSize.A4.getHeight()/4);
     	image.setAlignment(Image.MIDDLE);
     	String[] content = {"WORK ID : ","TITLE FARE SHEET : ","DESCRIPTION OF GA FARES : ","NOTES RATESHEET : ", "FARES : ", "RULE TEXT : "};
@@ -3302,10 +3307,11 @@ public class WorkPackageResource {
     	}
     	
     	PdfWriter.getInstance(document, output);
-    	String IMG = "src\\main\\webapp\\content\\images\\logo_ga.png";
+    	InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("images/logo_ga.png");
+    	byte[] imageByte = IOUtils.toByteArray(inputStream);    	
     	document.open();
     	Font font = FontFactory.getFont(FontFactory.TIMES_BOLD, 12, BaseColor.BLACK);
-    	Image image = Image.getInstance(IMG);
+    	Image image = Image.getInstance(imageByte); 
     	image.scaleToFit(PageSize.A4.getWidth()/4, PageSize.A4.getHeight()/4);
     	image.setAlignment(Image.MIDDLE);
     	String[] content = {"WORK ID : ","TITLE FARE SHEET : ", "FARE NAME : ","NOTES RATESHEET : ", "FARES : ", "RULE TEXT : "};
@@ -3659,5 +3665,307 @@ public class WorkPackageResource {
             .body(att);
     }
         
+    /**
+     * POST  /work-packages/export-fares-discount : Export work package fares-discount
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+	 * @throws IOException 
+	 * @throws MalformedURLException 
+	 * @throws DocumentException 
+     */
+    @PostMapping("/work-packages/export-ratesheet-waiver")
+    @Timed
+    public ResponseEntity<Attachment> exportRateSheetWorkPackageWaiver(@RequestBody WorkPackageRateSheet wprs) throws URISyntaxException, MalformedURLException, IOException, DocumentException {
+    	log.debug("REST request to save exportFares-discount : {}{}", wprs.getWp(), wprs.getRuleText());
+        
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+
+        WorkPackage workPackage = wprs.getWp();
+        String ruleText = wprs.getRuleText();
+        int idx = Integer.parseInt(wprs.getIndex());
+        String[] header = wprs.getHeader();
+        
+        Integer count = header.length;
+        PdfPTable table;
+        Document document;
+        if(count < 25) {
+        	document = new Document(PageSize.A4,30,30,60,0);
+    	}else {
+    		document = new Document(PageSize.A4.rotate());
+    		document.setMargins(60, 30, 30, 30);
+    	}
+             
+    	PdfWriter.getInstance(document, output);    	
+    	InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("images/logo_ga.png");
+    	byte[] imageByte = IOUtils.toByteArray(inputStream);    	
+    	document.open();
+    	Font font = FontFactory.getFont(FontFactory.TIMES_BOLD, 12, BaseColor.BLACK);
+    	Image image = Image.getInstance(imageByte); 
+    	image.scaleToFit(PageSize.A4.getWidth()/4, PageSize.A4.getHeight()/4);
+    	image.setAlignment(Image.MIDDLE);
+    	String[] content = {"WORK ID : ","TITLE FARE SHEET : ", "FARE NAME : ","NOTES RATESHEET : ", "FARES : ", "RULE TEXT : "};
+    	document.add(image); 
+    	document.add(new Chunk(" "));
+
+        Paragraph p1 = new Paragraph();
+        Paragraph p2 = new Paragraph();
+        Paragraph p3 = new Paragraph();
+        Paragraph p4 = new Paragraph();
+        Paragraph p5 = new Paragraph();
+        Paragraph p6 = new Paragraph();
+
+        p1.setFont(font);               
+        p1.add(content[0]+" "+ workPackage.getWpid());        
+    	document.add(p1);
+    	document.add(new Chunk(" "));
+        p2.setFont(font);               
+        p2.add(content[1]+" "+workPackage.getName());
+        document.add(p2);
+    	document.add(new Chunk(" "));
+
+        p3.setFont(font);               
+        p3.add(content[2]+" "+workPackage.getWaiverFareSheet().get(idx).getWaiverFaresName());
+    	document.add(p3);
+    	document.add(new Chunk(" "));
+
+        p4.setFont(font);               
+        p4.add(content[3]+" "+workPackage.getRatesheetComment());
+    	document.add(p4);
+    	document.add(new Chunk(" "));
+
+        p5.setFont(font);               
+        p5.add(content[4]);
+    	document.add(p5);
+    	document.add(new Chunk(" "));
+
+    	table = new PdfPTable(count);
+		table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
+		for(int l=0; l<header.length ;l++) {
+			table.addCell(header[l]);
+		}
+		table.setHeaderRows(1);
+        
+		
+		PdfPCell[] cells = table.getRow(0).getCells(); 
+    	for (int j=0;j<cells.length;j++){
+    			cells[j].setBackgroundColor(BaseColor.GRAY);
+    	}
+        	log.debug("cek discount : "+workPackage.getDiscountFareSheet().size());
+        	for(int l=0; l<workPackage.getWaiverFareSheet().get(idx).getFares().size();l++) {
+        		for (int i=0;i<header.length;i++){
+            		if(header[i].contentEquals("Type")) {
+            			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverType());
+            		}else if(header[i].contentEquals("Full/Partial")) {
+            			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverFullPartial());
+            		}else if(header[i].contentEquals("PNR")) {
+            			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverPnr());       			
+            		}else if(header[i].contentEquals("Tkt From")) {
+            			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverTktFrom());
+            		}else if(header[i].contentEquals("Tkt To")) {
+            			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverTktTo());
+            		}else if(header[i].contentEquals("Ori")) {
+            			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverOri());
+            		}else if(header[i].contentEquals("Dest")) {
+            			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverDest());
+            		}else if(header[i].contentEquals("Original Itinerary")) {
+            			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverOriginalItinerary());
+            		}else if(header[i].contentEquals("New Itinerary")) {
+            			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverNewItinerary());
+            		}else if(header[i].contentEquals("Original Basic Fare")) {
+            			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverOriginalBasicFare());
+            		}else if(header[i].contentEquals("New Basic Fare")) {
+            			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverNewBasicFare());
+            		}else if(header[i].contentEquals("Approved Fares")) {
+            			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverApprovedFare());
+            		}else if(header[i].contentEquals("Fare Lost")) {
+            			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverFareLost());
+            		}else if(header[i].contentEquals("Calculated PN")) {
+            			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverCalculatedPn());
+            		}else if(header[i].contentEquals("Original PN")) {
+            			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverOriginalPn());
+            		}else if(header[i].contentEquals("Approved PN")) {
+            			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverApprovedPn());
+            		}else if(header[i].contentEquals("Penalty Lost %")) {
+            			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverPenaltyLostPercent());
+            		}else if(header[i].contentEquals("Penalty Lost Amount")) {
+            			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverPenaltyLostAmount());
+            		}else if(header[i].contentEquals("Currency")) {
+            			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverCurrency());
+            		}else if(header[i].contentEquals("Total Pax")) {
+            			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverTotalPax());
+            		}else if(header[i].contentEquals("Total Lost")) {
+            			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverTotalLost());
+            		}else if(header[i].contentEquals("Approver")) {
+            			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverApprover());
+            		}else if(header[i].contentEquals("Remark")) {
+            			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverRemark());
+            		}
+            		else {
+            			table.addCell("-");
+            		}
+            	}        		
+        	}
+        	
+          document.add(table);  
+        
+	
+        p6.setFont(font);               
+        p6.add(content[5]+" "+ruleText);
+    	document.add(p6);
+    	document.add(new Chunk(" "));
+
+    	document.close();
+        
+        Attachment att = new Attachment();
+        att.setFile(output.toByteArray());
+        
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
+            .body(att);
+    }
     
+    /**
+     * POST  /work-packages/export-ratesheet-excel : Export work package fares
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+	 * @throws IOException 
+	 * @throws MalformedURLException 
+	 * @throws DocumentException 
+     */
+    @PostMapping("/work-packages/export-ratesheet-excel-waiver")
+    @Timed
+    public ResponseEntity<Attachment> exportRateSheetWorkPackageExcelWaiver(@RequestBody WorkPackageRateSheet wprs) throws URISyntaxException, MalformedURLException, IOException, DocumentException {
+    	log.debug("REST request to save exportFaresExcel : {}{}", wprs.getWp(), wprs.getRuleText());
+    	
+    	WorkPackage workPackage = wprs.getWp();
+        String ruleText = wprs.getRuleText();
+        int idx = Integer.parseInt(wprs.getIndex());
+        String[] header = wprs.getHeader();
+    	
+    	XSSFWorkbook workbook = new XSSFWorkbook(); 
+        XSSFSheet spreadsheet = workbook.createSheet("Rate Sheet");
+        
+        XSSFRow row = spreadsheet.createRow(1);
+        XSSFCell cell;
+        
+        cell = row.createCell(0);
+        cell.setCellValue("WORK ID :");
+        cell = row.createCell(1);
+        cell.setCellValue(workPackage.getWpid());
+        
+        XSSFRow row2 = spreadsheet.createRow(2);
+        XSSFCell cell2;
+        cell2 = row2.createCell(0);
+        cell2.setCellValue("TITLE FARE SHEET :");
+        cell2 = row2.createCell(1);
+        cell2.setCellValue(workPackage.getName());
+        
+		 XSSFRow row3 = spreadsheet.createRow(3);
+	     XSSFCell cell3;
+	     cell3 = row3.createCell(0);
+	     cell3.setCellValue("FARE NAME :");
+	     cell3 = row3.createCell(1);
+	     cell3.setCellValue(workPackage.getWaiverFareSheet().get(idx).getDiscountFaresName());
+          
+        
+        XSSFRow row4 = spreadsheet.createRow(4);
+        XSSFCell cell4;
+        cell4 = row4.createCell(0);
+        cell4.setCellValue("NOTES RATESHEET : ");
+        cell4 = row4.createCell(1);
+        cell4.setCellValue(workPackage.getRatesheetComment());
+        
+        XSSFRow row5 = spreadsheet.createRow(5);
+        XSSFCell cell5;
+        for(int l=0; l<header.length ;l++) {
+        	cell5 = row5.createCell(l);
+			cell5.setCellValue(header[l]);
+		}
+        
+    
+    	for(int l=0; l<workPackage.getWaiverFareSheet().get(idx).getFares().size();l++) {
+        	XSSFRow rows = spreadsheet.createRow(l+6);
+    		for (int i=0;i<header.length;i++){
+    			cell = rows.createCell(i);
+    	
+    			if(header[i].contentEquals("Type")) {
+        			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverType());
+        		}else if(header[i].contentEquals("Full/Partial")) {
+        			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverFullPartial());
+        		}else if(header[i].contentEquals("PNR")) {
+        			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverPnr());       			
+        		}else if(header[i].contentEquals("Tkt From")) {
+        			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverTktFrom());
+        		}else if(header[i].contentEquals("Tkt To")) {
+        			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverTktTo());
+        		}else if(header[i].contentEquals("Ori")) {
+        			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverOri());
+        		}else if(header[i].contentEquals("Dest")) {
+        			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverDest());
+        		}else if(header[i].contentEquals("Original Itinerary")) {
+        			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverOriginalItinerary());
+        		}else if(header[i].contentEquals("New Itinerary")) {
+        			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverNewItinerary());
+        		}else if(header[i].contentEquals("Original Basic Fare")) {
+        			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverOriginalBasicFare());
+        		}else if(header[i].contentEquals("New Basic Fare")) {
+        			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverNewBasicFare());
+        		}else if(header[i].contentEquals("Approved Fares")) {
+        			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverApprovedFare());
+        		}else if(header[i].contentEquals("Fare Lost")) {
+        			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverFareLost());
+        		}else if(header[i].contentEquals("Calculated PN")) {
+        			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverCalculatedPn());
+        		}else if(header[i].contentEquals("Original PN")) {
+        			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverOriginalPn());
+        		}else if(header[i].contentEquals("Approved PN")) {
+        			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverApprovedPn());
+        		}else if(header[i].contentEquals("Penalty Lost %")) {
+        			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverPenaltyLostPercent());
+        		}else if(header[i].contentEquals("Penalty Lost Amount")) {
+        			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverPenaltyLostAmount());
+        		}else if(header[i].contentEquals("Currency")) {
+        			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverCurrency());
+        		}else if(header[i].contentEquals("Total Pax")) {
+        			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverTotalPax());
+        		}else if(header[i].contentEquals("Total Lost")) {
+        			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverTotalLost());
+        		}else if(header[i].contentEquals("Approver")) {
+        			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverApprover());
+        		}else if(header[i].contentEquals("Remark")) {
+        			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverRemark());
+        		}  			
+    			    			
+    		}
+        }
+        
+        
+        XSSFRow rowRuleText = spreadsheet.createRow(workPackage.getWaiverFareSheet().get(idx).getFares().size()+7);
+        XSSFCell cellRuleText;
+        cellRuleText = rowRuleText.createCell(0);
+        cellRuleText.setCellValue("RULE TEXT : ");
+        cellRuleText = rowRuleText.createCell(1);
+        cellRuleText.setCellValue(ruleText);
+        
+        
+        
+        
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        try {
+			workbook.write(output);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        Attachment att = new Attachment();
+        att.setFile(output.toByteArray());
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
+            .body(att);
+    }
+  
 }
