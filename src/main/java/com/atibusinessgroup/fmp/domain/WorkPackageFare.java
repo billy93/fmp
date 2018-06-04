@@ -2,6 +2,8 @@ package com.atibusinessgroup.fmp.domain;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,6 +18,29 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "work_package_fare")
 public class WorkPackageFare implements Serializable {
 
+	public static class WorkPackageFareComparator implements Comparator{  
+		public int compare(Object o1,Object o2){  
+			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+	    	
+			WorkPackageFare s1=(WorkPackageFare)o1;  
+			WorkPackageFare s2=(WorkPackageFare)o2;  
+		  
+			long val = zonedDateTimeDifference(today, s1.getSaleStart().truncatedTo(ChronoUnit.DAYS), ChronoUnit.DAYS);
+			long val2 = zonedDateTimeDifference(today, s2.getSaleStart().truncatedTo(ChronoUnit.DAYS), ChronoUnit.DAYS);
+    		
+			if(val==val2)  
+				return 0;  
+			else if(val>val2)  
+				return 1;  
+			else  
+				return -1;  
+		}  
+		
+		static long zonedDateTimeDifference(ZonedDateTime d1, ZonedDateTime d2, ChronoUnit unit){
+		    return unit.between(d1, d2);
+		}
+	}
+	
     private static final long serialVersionUID = 1L;
 
     @Id

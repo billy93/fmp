@@ -176,6 +176,11 @@
         		mandatory:["LSO", "HO"]
         	},
         	{
+        		name:"distributionDate",
+        		editable:["LSO", "HO"],
+        		mandatory:[]
+        	},
+        	{
         		name:"ioComment",
         		editable:["HO"],
         		mandatory:["HO"]

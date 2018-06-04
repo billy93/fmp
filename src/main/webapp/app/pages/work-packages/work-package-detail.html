@@ -144,6 +144,24 @@
 											</span>
 										</div>
 									</div>
+									<div class="form-group">
+										<label for="field_distributionDate">Distribution Date</label>
+										<div class="input-group">
+											<input id="field_distributionDate" type="text" 
+												ng-class="{'must-fill': editForm.distributionDate.$error.required}" 
+                   								ng-required="vm.isRequired('distributionDate')" 
+                   								name="distributionDate" 
+                   								ng-disabled="!vm.isEditable('distributionDate')" 
+                   								datetime-picker="{{dateformat}}" 
+                   								enable-time="false"
+                   								ng-model="vm.workPackage.distributionDate" 
+                   								is-open="vm.datePickerOpenStatus.distributionDate" class="form-control">
+                   								
+											<span class="input-group-addon">
+												<i class="fa fa-calendar" ng-click="vm.openCalendar('distributionDate')" ng-disabled="vm.isFieldDisable('distributionDate')"></i>
+											</span>
+										</div>
+									</div>
 									
 									<!-- <div class="form-group">
 										<label for="field_distributionDate">Distribution Date</label>
@@ -259,7 +277,7 @@
 						<button class="btn btn-default small">Workflow <i class="fa fa-caret-down"></i></button>
 						<ul class="dropdown-menu custom" role="menu">
 						    <li><a ng-click="vm.passUp()" 
-					        ng-class="{disabled : editForm.$invalid }" 
+					        ng-class="{'poiv-none' : (vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'REGULAR') ? editForm.editFormATPCO.$invalid : false }" 
 					        ng-show="vm.workPackage.reviewLevel != 'HO' && vm.workPackage.reviewLevel != 'DISTRIBUTION' && vm.workPackage.reviewLevel != 'ROUTE_MANAGEMENT'">Pass Up</a></li>
 					        <li><a ng-click="vm.passDown()" 
 					        ng-show="vm.workPackage.reviewLevel != 'LSO'  && vm.workPackage.reviewLevel != 'ROUTE_MANAGEMENT' && vm.workPackage.reviewLevel != 'DISTRIBUTION'">Pass Down</a></li>

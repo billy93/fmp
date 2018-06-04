@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -1607,7 +1608,7 @@ public class WorkPackageResource {
 	    	
 	    	for(Priority p : priorities) {
 	    		if(p.getType().contentEquals("DAYS")) {
-	    			long val = zonedDateTimeDifference(ZonedDateTime.now(), workPackage.getSaleDate(), ChronoUnit.DAYS);
+	    			long val = zonedDateTimeDifference(ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS), workPackage.getSaleDate().truncatedTo(ChronoUnit.DAYS), ChronoUnit.DAYS);
 	    			long value = p.getValue();
 
 	    			if(val <= value) {    				
@@ -1624,6 +1625,74 @@ public class WorkPackageResource {
 		    	workPackage.setPriority(prioritiesDesc.get(0).getName());
 	    	}
     	}
+    	
+    	List<WorkPackageFare> allFares = new ArrayList<>();
+    	if(workPackage.getFareSheet().size() > 0) {
+    		for(WorkPackageFareSheet sheet : workPackage.getFareSheet()) {
+    			if(sheet.getFares().size() > 0) {
+    				for(WorkPackageFare fares : sheet.getFares()) {
+    					if(fares.getSaleStart() != null) {
+    						allFares.add(fares);
+    						continue;
+    					}
+    				}
+    			}
+    		}
+    	}
+    	if(workPackage.getAddonFareSheet().size() > 0) {
+    		for(WorkPackageFareSheet sheet : workPackage.getAddonFareSheet()) {
+    			if(sheet.getFares().size() > 0) {
+    				for(WorkPackageFare fares : sheet.getFares()) {
+    					if(fares.getSaleStart() != null) {
+    						allFares.add(fares);
+    						continue;
+    					}
+    				}
+    			}
+    		}
+    	}
+    	if(workPackage.getDiscountFareSheet().size() > 0) {
+    		for(WorkPackageFareSheet sheet : workPackage.getDiscountFareSheet()) {
+    			if(sheet.getFares().size() > 0) {
+    				for(WorkPackageFare fares : sheet.getFares()) {
+    					if(fares.getSaleStart() != null) {
+    						allFares.add(fares);
+    						continue;
+    					}
+    				}
+    			}
+    		}
+    	}
+    	if(workPackage.getMarketFareSheet().size() > 0) {
+    		for(WorkPackageFareSheet sheet : workPackage.getMarketFareSheet()) {
+    			if(sheet.getFares().size() > 0) {
+    				for(WorkPackageFare fares : sheet.getFares()) {
+    					if(fares.getSaleStart() != null) {
+    						allFares.add(fares);
+    						continue;
+    					}
+    				}
+    			}
+    		}
+    	}
+    	if(workPackage.getWaiverFareSheet().size() > 0) {
+    		for(WorkPackageFareSheet sheet : workPackage.getWaiverFareSheet()) {
+    			if(sheet.getFares().size() > 0) {
+    				for(WorkPackageFare fares : sheet.getFares()) {
+    					if(fares.getSaleStart() != null) {
+    						allFares.add(fares);
+    						continue;
+    					}
+    				}
+    			}
+    		}
+    	}
+    	
+    	if(allFares.size() > 0) {
+	    	Collections.sort(allFares, new WorkPackageFare.WorkPackageFareComparator());  
+	    	workPackage.setSaleDate(allFares.get(0).getSaleStart());
+    	}
+    	
     	workPackage.setValidation(null);
     	workPackage = workPackageService.save(workPackage);
 	    

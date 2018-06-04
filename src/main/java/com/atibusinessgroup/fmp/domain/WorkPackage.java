@@ -248,6 +248,10 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 
 	public void setLocked(boolean locked) {
 		this.locked = locked;
+		if(!this.locked) {
+			this.lockedBy = null;
+			this.lockedSince = null;
+		}
 	}
 
 	public ReuseReplaceConfig getReuseReplaceConfig() {
