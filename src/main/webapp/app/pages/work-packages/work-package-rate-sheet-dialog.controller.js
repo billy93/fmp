@@ -73,6 +73,48 @@
     	  }    	  
         }
         
+        vm.exportRateSheetExcels  = function(){
+        	  console.log(vm.title);
+            var wprs = {
+          		  wp : vm.workPackage,
+          		  ruleText : vm.ruleText,
+          		  index : vm.index,
+                    header : vm.title
+            }
+    	  	  WorkPackage.exportRateSheetExcel(wprs, onExportSuccess, onExportFailure);
+      	  function onExportSuccess(result){
+      		var fileType = "application/vnd.ms-excel";
+    			var templateFilename = "RateSheet.xls";
+    			var blob = b64toBlob(result.file, fileType);
+    			FileSaver.saveAs(blob, templateFilename);
+      	  }
+      	  
+      	  function onExportFailure(){
+      		  alert('Export to Excel failed');
+      	  }    	  
+          }
+        
+        vm.exportRateSheetWord  = function(){
+        	  console.log(vm.title);
+            var wprs = {
+          		  wp : vm.workPackage,
+          		  ruleText : vm.ruleText,
+          		  index : vm.index,
+                  header : vm.title
+            }
+    	  	  WorkPackage.exportRateSheetWord(wprs, onExportSuccess, onExportFailure);
+      	  function onExportSuccess(result){
+      		var fileType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    			var templateFilename = "RateSheet.docx";
+    			var blob = b64toBlob(result.file, fileType);
+    			FileSaver.saveAs(blob, templateFilename);
+      	  }
+      	  
+      	  function onExportFailure(){
+      		  alert('Export to word failed');
+      	  }    	  
+          }
+        
         function b64toBlob(b64Data, contentType, sliceSize) {
         	contentType = contentType || '';
   		  	sliceSize = sliceSize || 512;
