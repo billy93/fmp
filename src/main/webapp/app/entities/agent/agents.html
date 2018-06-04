@@ -63,26 +63,26 @@
 		</div>
 		<div class="container-fluid">
 	        <div class="row">
-	            <div class="col-xs-4 no-padding-left">
-	                <button class="btn btn-primary" ui-sref="agent.new" >
+	            <div class="no-padding-left">
+	                <button class="btn btn-secondary" ui-sref="agent.new" >
 	                    <span class="glyphicon glyphicon-plus"></span>
 	                    <span >
 	                        Create new Agent
 	                    </span>
 	                </button>
-	                 <button class="btn btn-primary" ng-click="vm.exportAgencies()">
+	                 <button class="btn btn-secondary" ng-click="vm.exportAgencies()">
 	                    <span class="glyphicon glyphicon-upload" ></span>
 	                    <span >
 	                        Export
 	                    </span>
 	                </button>
-	                <button class="btn btn-primary" ng-click="vm.exportAllAgencies()">
+	                <button class="btn btn-secondary" ng-click="vm.exportAllAgencies()">
 	                    <span class="glyphicon glyphicon-upload" ></span>
 	                    <span >
 	                        Export All
 	                    </span>
 	                </button>
-	                <button class="btn btn-primary" ngf-select class="btn btn-default btn-block"
+	                <button class="btn btn-secondary" ngf-select class="btn btn-default btn-block"
 				               ngf-change="vm.importAgencies($file)" >
 	                    <span class="glyphicon glyphicon-download"></span>
 	                    <span >
@@ -93,6 +93,7 @@
 	        </div>
     	</div>
     	<br/>
+
     	<div class="table-responsive">
 	        <table class="table table-stripped table-bordered datatable">
 	            <thead>
