@@ -2016,36 +2016,49 @@
 	  
 	  vm.passUp = function(){
 		    if (confirm("Are you sure to Pass up this workorder?")) {
-		    		WorkPackage.passup(vm.workPackage, function(){
+		    	WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
+		    		WorkPackage.passup(result, function(){
 		    			alert('Pass Up Success');
 		    			$state.go('work-package');
 		    		}, function(){
 		    			alert('Pass Up Failed');
 		    		});
+		    	}, function onSaveError(){
+		    		alert('An error occured, please try again');
+		    	});
 		    } else {
 		    }
 	  };
 	  
 	  vm.passDown = function(){
 		    if (confirm("Are you sure to Pass down this workorder?")) {
-		    		WorkPackage.passdown(vm.workPackage, function(){
+		    	WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
+		    		WorkPackage.passdown(result, function(){
 		    			alert('Pass Down Success');
 		    			$state.go('work-package');
 		    		}, function(){
-		    			alert('Pass Down Failed');
+		    			alert('Pass Up Failed');
 		    		});
+		    	}, function onSaveError(){
+		    		alert('An error occured, please try again');
+		    	});
 		    } else {
 		    }
 	  };
 	  
 	  vm.passSideway = function(){
 		    if (confirm("Are you sure to Pass sideway this workorder?")) {
-		    		WorkPackage.passsideway(vm.workPackage, function(){
-		    			alert('Pass Sideway Success');
-		    			$state.go('work-package');
-		    		}, function(){
-		    			alert('Pass Sideway Failed');
-		    		});
+			    	WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
+			    		WorkPackage.passsideway(vm.workPackage, function(){
+			    			alert('Pass Sideway Success');
+			    			$state.go('work-package');
+			    		}, function(){
+			    			alert('Pass Sideway Failed');
+			    		});
+			    	}, function onSaveError(){
+			    		alert('An error occured, please try again');
+			    	});
+		    		
 		    } else {
 		    }
 	  };
@@ -2181,12 +2194,17 @@
 	              }
 	          }).result.then(function(config) {
 	        	  vm.workPackage.approveConfig = config;
-	        	  WorkPackage.approve(vm.workPackage, function(){
-		    			alert('Approve Success');
-		    			$state.go('work-package');
-	    		}, function(){
-	    			alert('Approve Failed');
-	    		});
+	        	  
+	        	  WorkPackage.update(vm.workPackage, function onSaveSuccess(result){		        	  
+		        	  WorkPackage.approve(vm.workPackage, function(){
+		        		  alert('Approve Success');
+		        		  $state.go('work-package');
+		    		  }, function(){
+		    			  alert('Approve Failed');
+		    		  });
+	        	  }, function onSaveError(){
+	        		  alert('An error occured, please try again');
+			      });
 	          }, function() {
 	      			
 	          });
@@ -2243,6 +2261,7 @@
 	    } else {
 	    }
 	  }
+	  
 	  function save () {
           vm.isSaving = true;
           if (vm.workPackage.id !== null) {

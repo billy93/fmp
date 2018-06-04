@@ -134,6 +134,7 @@
 	        },
 	        'history': { method: 'GET', isArray: true, url:'api/work-packages/history/:id'},	        
 	        'changeVersion': { method: 'POST', url:'api/work-packages/changeVersion'},	        
+	        'exportQueue': {method:'POST', url:'api/work-packages/exportQueue'},
 	        'importFares': { method: 'POST',  url:'api/work-packages/import-fares'},
 	        'importFaresMarket': { method: 'POST',  url:'api/work-packages/import-fares-market'},
 	        'importFaresDiscount': { method: 'POST',  url:'api/work-packages/import-fares-discount'},

@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('WorkPackageController', WorkPackageController);
 
-    WorkPackageController.$inject = ['$uibModal', '$state', '$stateParams', 'WorkPackage', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams'];
+    WorkPackageController.$inject = ['Principal', '$uibModal', '$state', '$stateParams', 'WorkPackage', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams'];
 
-    function WorkPackageController($uibModal, $state, $stateParams, WorkPackage, ParseLinks, AlertService, paginationConstants, pagingParams) {
+    function WorkPackageController(Principal, $uibModal, $state, $stateParams, WorkPackage, ParseLinks, AlertService, paginationConstants, pagingParams) {
         var vm = this;
         vm.reviewLevel = true;
         vm.woStatus = true;
@@ -17,6 +17,14 @@
         vm.predicate = pagingParams.predicate;
         vm.reverse = pagingParams.ascending;
         vm.transition = transition;
+        vm.users = {
+        		businessAreas:[]
+        };
+        Principal.identity().then(function(account) {
+//            vm.loginInfo = copyAccount(account);
+        	vm.users = account;
+        	console.log(vm.users);
+        });
         
         if($stateParams.size != null || $stateParams.size != undefined){
         	vm.itemsPerPage = $stateParams.size;
@@ -141,12 +149,13 @@
                     resolve: {
                     	workPackage: function(){
                     		return vm.workPackages[index];
-                    	}
+                    	},
+                    	 businessAreas: ['User', function(User) {
+                             return User.getBusinessArea().$promise;
+                         }],
                     }
-    			}).result.then(function(option) {
-    				vm.workPackages[index].reuseReplaceConfig.attachment = option.attachment;
-    				
-    				WorkPackage.reuse(vm.workPackages[index], onReuseSuccess, onReuseFailed);
+    			}).result.then(function(workPackage) {
+    				WorkPackage.reuse(workPackage, onReuseSuccess, onReuseFailed);
     	        	
     				function onReuseSuccess(result){
     	        		alert('Reuse Success');
@@ -154,8 +163,8 @@
     	        	}
     	        	
     	        	function onReuseFailed(error){
-    	        		
-    	        	}
+    	        		alert("An error occured, please try again");
+    	        	}				
     			});
         	}
         	else{
@@ -167,7 +176,7 @@
 	        	}
 	        	
 	        	function onReuseFailed(error){
-	        		
+	        		alert("An error occured, please try again");
 	        	}
         	}
         }
@@ -276,6 +285,10 @@
         vm.changeItemsPerPage = function(){
         	vm.loadAll();
 //        	loadPage(1);
+        }
+        
+        vm.printExport = function(){
+        	
         }
     }
 })();

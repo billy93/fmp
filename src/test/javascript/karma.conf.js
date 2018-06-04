@@ -45,7 +45,6 @@ module.exports = function (config) {
             'src/main/webapp/bower_components/ng-file-upload/ng-file-upload.js',
             'src/main/webapp/bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js',
             'src/main/webapp/bower_components/angular-ui-select/dist/select.js',
-            'src/main/webapp/bower_components/oclazyload/dist/ocLazyLoad.js',
             'src/main/webapp/bower_components/ng-idle/angular-idle.js',
             'src/main/webapp/bower_components/ngWYSIWYG/dist/wysiwyg.min.js',
             'src/main/webapp/bower_components/angular-mocks/angular-mocks.js',
