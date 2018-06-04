@@ -63,26 +63,26 @@
 		</div>
 		<div class="container-fluid">
 	        <div class="row">
-	            <div class="col-xs-4 no-padding-left">
-	                <button class="btn btn-primary" ui-sref="agent.new" >
+	            <div class="no-padding-left">
+	                <button class="btn btn-secondary" ui-sref="agent.new" >
 	                    <span class="glyphicon glyphicon-plus"></span>
 	                    <span >
 	                        Create new Agent
 	                    </span>
 	                </button>
-	                 <button class="btn btn-primary" ng-click="vm.exportAgencies()">
+	                 <button class="btn btn-secondary" ng-click="vm.exportAgencies()">
 	                    <span class="glyphicon glyphicon-upload" ></span>
 	                    <span >
 	                        Export
 	                    </span>
 	                </button>
-	                <button class="btn btn-primary" ng-click="vm.exportAllAgencies()">
+	                <button class="btn btn-secondary" ng-click="vm.exportAllAgencies()">
 	                    <span class="glyphicon glyphicon-upload" ></span>
 	                    <span >
 	                        Export All
 	                    </span>
 	                </button>
-	                <button class="btn btn-primary" ngf-select class="btn btn-default btn-block"
+	                <button class="btn btn-secondary" ngf-select class="btn btn-default btn-block"
 				               ngf-change="vm.importAgencies($file)" >
 	                    <span class="glyphicon glyphicon-download"></span>
 	                    <span >
@@ -93,85 +93,88 @@
 	        </div>
     	</div>
     	<br/>
-    	<div class="table-responsive">
-	        <table class="table table-stripped table-bordered datatable">
-	            <thead>
-	                <tr role="row" jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-	                    <th jh-sort-by="agentName"><span>Agent Name</span> <span class="glyphicon glyphicon-sort"></span></th>
-	                    <th jh-sort-by="agentType"><span>Agent Type</span> <span class="glyphicon glyphicon-sort"></span></th>
-	                    <th jh-sort-by="agentCategory"><span>Agent Category</span> <span class="glyphicon glyphicon-sort"></span></th>
-	                    <th jh-sort-by="posCity"><span>Pos City</span> <span class="glyphicon glyphicon-sort"></span></th>
-	                    <th jh-sort-by="posCountry"><span>Pos Country</span> <span class="glyphicon glyphicon-sort"></span></th>
-	                    <th jh-sort-by="address"><span>Address</span> <span class="glyphicon glyphicon-sort"></span></th>
-	                    <th jh-sort-by="telephone"><span>Telephone</span> <span class="glyphicon glyphicon-sort"></span></th>
-	                    <th jh-sort-by="fax"><span>Fax</span> <span class="glyphicon glyphicon-sort"></span></th>
-	                    <th jh-sort-by="email"><span>Email</span> <span class="glyphicon glyphicon-sort"></span></th>
-	                    <th jh-sort-by="contact"><span>Contact</span> <span class="glyphicon glyphicon-sort"></span></th>
-	                    <th jh-sort-by="iataCode"><span>Iata Code</span> <span class="glyphicon glyphicon-sort"></span></th>
-	                    <th jh-sort-by="isDeleted"><span>Is Deleted</span> <span class="glyphicon glyphicon-sort"></span></th>
-	                    <th jh-sort-by="isDeleted"><span>PCC</span> <span class="glyphicon glyphicon-sort"></span></th>
-	                    <th></th>
-	                </tr>
-	            </thead>
-	            <tbody>
-	                <tr ng-repeat="agent in vm.agents track by agent.id">
-	                    <td>{{agent.agentName}}</td>
-	                    <td>{{agent.agentType}}</td>
-	                    <td>{{agent.agentCategory}}</td>
-	                    <td>{{agent.posCity}}</td>
-	                    <td>{{agent.posCountry}}</td>
-	                    <td>{{agent.address}}</td>
-	                    <td>{{agent.telephone}}</td>
-	                    <td>{{agent.fax}}</td>
-	                    <td>{{agent.email}}</td>
-	                    <td>{{agent.contact}}</td>
-	                    <td>{{agent.iataCode}}</td>
-	                    <td>{{agent.isDeleted}}</td>
-	                    <td>
-	                    	<table class="table table-stripped table-bordered datatable"  ng-if="agent.agentPcc != null && agent.agentPcc.length > 0">
-	                    		<thead>
-	                    			<tr><th  colspan="2"><center>PCC</center></th></tr>
-	                    			<tr>
-	                    				<th>Pseudo City</th>
-	                    				<th>CRS</th>
-	                    			</tr>			                    			
-	                    		</thead>
-	                    		<tbody>
-	                    			<tr ng-repeat="agentPcc in agent.agentPcc track by $index">
-	                    				<td>{{agentPcc.pdeudoCity}}</td>
-	                    				<td>
-	                    					{{agentPcc.crs}}
-	                    				</td>
-	                    			</tr>
-	                    		</tbody>
-	                    	</table>	
-	                    </td>
-	                    <td class="text-right">
-	                        <div class="btn-group flex-btn-group-container">
-	                            <button type="submit"
-	                                    ui-sref="agent-detail({id:agent.id})"
-	                                    class="btn btn-info btn-sm">
-	                                <span class="glyphicon glyphicon-eye-open"></span>
-	                                <span class="hidden-sm-down"></span>
-	                            </button>
-	                            <button type="submit"
-	                                    ui-sref="agent.edit({id:agent.id})"
-	                                    class="btn btn-primary btn-sm">
-	                                <span class="glyphicon glyphicon-pencil"></span>
-	                                <span class="hidden-sm-down"></span>
-	                            </button>
-	                            <button type="submit"
-	                                    ui-sref="agent.delete({id:agent.id})"
-	                                    class="btn btn-danger btn-sm">
-	                                <span class="glyphicon glyphicon-remove-circle"></span>
-	                                <span class="hidden-sm-down"></span>
-	                            </button>
-	                        </div>
-	                    </td>
-	                </tr>
-	            </tbody>
-	        </table>
+    	<div class="table-wrapper">
+    		<div class="table-responsive">
+		        <table class="table table-stripped table-bordered datatable" jq-slider>
+		            <thead>
+		                <tr role="row" jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+		                    <th jh-sort-by="agentName">Agent Name <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th jh-sort-by="agentType">Agent Type <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th jh-sort-by="agentCategory">Agent Category <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th jh-sort-by="posCity">Pos City <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th jh-sort-by="posCountry">Pos Country <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th jh-sort-by="address">Address <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th jh-sort-by="telephone">Telephone <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th jh-sort-by="fax">Fax <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th jh-sort-by="email">Email <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th jh-sort-by="contact">Contact <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th jh-sort-by="iataCode">Iata Code <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th jh-sort-by="isDeleted">Is Deleted <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th jh-sort-by="isDeleted">PCC <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th></th>
+		                </tr>
+		            </thead>
+		            <tbody>
+		                <tr ng-repeat="agent in vm.agents track by agent.id">
+		                    <td>{{agent.agentName}}</td>
+		                    <td>{{agent.agentType}}</td>
+		                    <td>{{agent.agentCategory}}</td>
+		                    <td>{{agent.posCity}}</td>
+		                    <td>{{agent.posCountry}}</td>
+		                    <td>{{agent.address}}</td>
+		                    <td>{{agent.telephone}}</td>
+		                    <td>{{agent.fax}}</td>
+		                    <td>{{agent.email}}</td>
+		                    <td>{{agent.contact}}</td>
+		                    <td>{{agent.iataCode}}</td>
+		                    <td>{{agent.isDeleted}}</td>
+		                    <td>
+		                    	<table class="sub-table"  ng-if="agent.agentPcc != null && agent.agentPcc.length > 0">
+		                    		<thead>
+		                    			<tr><th  colspan="2"><center>PCC</center></th></tr>
+		                    			<tr>
+		                    				<th>Pseudo City</th>
+		                    				<th>CRS</th>
+		                    			</tr>			                    			
+		                    		</thead>
+		                    		<tbody>
+		                    			<tr ng-repeat="agentPcc in agent.agentPcc track by $index">
+		                    				<td>{{agentPcc.pdeudoCity}}</td>
+		                    				<td>
+		                    					{{agentPcc.crs}}
+		                    				</td>
+		                    			</tr>
+		                    		</tbody>
+		                    	</table>	
+		                    </td>
+		                    <td class="text-right">
+		                        <div class="btn-group flex-btn-group-container">
+		                            <button type="submit"
+		                                    ui-sref="agent-detail({id:agent.id})"
+		                                    class="btn btn-info btn-sm">
+		                                <span class="glyphicon glyphicon-eye-open"></span>
+		                                <span class="hidden-sm-down"></span>
+		                            </button>
+		                            <button type="submit"
+		                                    ui-sref="agent.edit({id:agent.id})"
+		                                    class="btn btn-primary btn-sm">
+		                                <span class="glyphicon glyphicon-pencil"></span>
+		                                <span class="hidden-sm-down"></span>
+		                            </button>
+		                            <button type="submit"
+		                                    ui-sref="agent.delete({id:agent.id})"
+		                                    class="btn btn-danger btn-sm">
+		                                <span class="glyphicon glyphicon-remove-circle"></span>
+		                                <span class="hidden-sm-down"></span>
+		                            </button>
+		                        </div>
+		                    </td>
+		                </tr>
+		            </tbody>
+		        </table>
+	    	</div>
     	</div>
+    	
     	<div class="text-center">
 	        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
 	        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
