@@ -4585,11 +4585,11 @@ a:hover {
 
 @font-face {
   font-family: "tungsten";
-  src: url("../Tungsten-Bold.ttf") format("truetype"); }
+  src: url("../fonts/Tungsten-Bold.ttf") format("truetype"); }
 
 @font-face {
   font-family: "tungsten-medium";
-  src: url("../Tungsten-Medium.ttf") format("truetype"); }
+  src: url("../fonts/Tungsten-Medium.ttf") format("truetype"); }
 
 .container-home {
   position: relative;
@@ -4627,7 +4627,7 @@ a:hover {
       -ms-flex-direction: row;
       flex-direction: row;
       margin-left: 0;
-      background-image: url("../bg.png");
+      background-image: url("../images/bg.png");
       background-repeat: no-repeat;
       background-size: cover; }
       .container-home .page-wrapper .page-home .u-width-limiter {
