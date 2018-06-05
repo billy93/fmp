@@ -85,6 +85,39 @@ public class Agent implements Serializable {
 		public void setCrs(String crs) {
 			this.crs = crs;
 		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((crs == null) ? 0 : crs.hashCode());
+			result = prime * result + ((pdeudoCity == null) ? 0 : pdeudoCity.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			AgentPcc other = (AgentPcc) obj;
+			if (crs == null) {
+				if (other.crs != null)
+					return false;
+			} else if (!crs.equals(other.crs))
+				return false;
+			if (pdeudoCity == null) {
+				if (other.pdeudoCity != null)
+					return false;
+			} else if (!pdeudoCity.equals(other.pdeudoCity))
+				return false;
+			return true;
+		}
+		
+		
     }
     
     
