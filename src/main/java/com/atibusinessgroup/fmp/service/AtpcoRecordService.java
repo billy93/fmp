@@ -18,6 +18,7 @@ import com.atibusinessgroup.fmp.domain.dto.CategoryAttributeObject;
 import com.atibusinessgroup.fmp.domain.dto.CategoryObject;
 import com.atibusinessgroup.fmp.domain.dto.DataTable;
 import com.atibusinessgroup.fmp.domain.dto.ReflectionObject;
+import com.atibusinessgroup.fmp.domain.dto.TextTable;
 import com.atibusinessgroup.fmp.resository.custom.AtpcoRecord3CategoryCustomRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -135,7 +136,7 @@ public class AtpcoRecordService {
 			match = true;
 		}
 
-		System.out.println("fare type: " + fFareType + ", " + rFareType + ", " + match);
+//		System.out.println("fare type: " + fFareType + ", " + rFareType + ", " + match);
 		
 		return match;
 	}
@@ -296,7 +297,7 @@ public class AtpcoRecordService {
 						}
 					}
 
-					result.add(convertObjectToCategoryAttribute(getCategoryTypeName(type), relationship, cat));
+					result.add(convertObjectToCategoryAttribute(getCategoryTypeName(type), relationship, cat, catdt.getTextTable996()));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -516,7 +517,7 @@ public class AtpcoRecordService {
 		return result;
 	}
 
-	public CategoryAttribute convertObjectToCategoryAttribute(String type, String relationship, Object obj) {
+	public CategoryAttribute convertObjectToCategoryAttribute(String type, String relationship, Object obj, TextTable textTable996) {
 		CategoryAttribute result = new CategoryAttribute();
 		result.setType(type);
 		result.setRelationship(relationship);
@@ -536,7 +537,17 @@ public class AtpcoRecordService {
 				CategoryAttributeObject attObj = new CategoryAttributeObject();
 				attObj.setKey(entry.getKey());
 				attObj.setValue(entry.getValue());
-
+				
+				if (textTable996 != null && entry.getKey().equalsIgnoreCase("text_tbl_no_996")) {
+					String text = "";
+					
+					for (String line:textTable996.getText()) {
+						text += line + "\n";
+					}
+					
+					attObj.setValue(text);
+				}
+				
 				// Add Exclusion of attributes
 				catAttrObjs.add(attObj);
 			}
