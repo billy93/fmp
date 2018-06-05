@@ -2,7 +2,9 @@ package com.atibusinessgroup.fmp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.atibusinessgroup.fmp.domain.Agent;
+import com.atibusinessgroup.fmp.domain.Agent.AgentPcc;
 import com.atibusinessgroup.fmp.domain.AgentHistory;
+import com.atibusinessgroup.fmp.domain.User;
 import com.atibusinessgroup.fmp.domain.WorkPackage.Attachment;
 import com.atibusinessgroup.fmp.domain.WorkPackage.ImportFares;
 import com.atibusinessgroup.fmp.repository.AgentHistoryRepository;
@@ -43,6 +45,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -526,7 +529,11 @@ public class AgentResource {
                 Iterator<Cell> cellIterator = currentRow.iterator();
 
                 Agent agent = new Agent();
-                for(int cell=0;cell<13;cell++) {
+                
+                List<AgentPcc> list_pcc = new ArrayList<>();
+            	AgentPcc pcc = new AgentPcc();
+            	
+                for(int cell=0;cell<14;cell++) {
                     Cell currentCell = currentRow.getCell(cell);
 
                     String value = "";
@@ -538,6 +545,7 @@ public class AgentResource {
                     System.out.println("CELL "+cell+" : "+value);
                     
                     try {
+                    	
 						if (cell == 0) {
 							agent.setAgentName(value);
 						} else if (cell == 1) {
@@ -547,9 +555,13 @@ public class AgentResource {
 						} else if (cell == 3) {
 							agent.setAgentCategory(value);
 						} else if (cell == 4) {
-//							agent.setPdeudoCity(value);
+							if(value !=null) {
+								pcc.setPdeudoCity(value);
+							}
 						} else if (cell == 5) {
-//							agent.setCrs(value);
+							if(value !=null) {
+								pcc.setCrs(value);
+							}
 						} else if (cell == 6) {
 							agent.setPosCity(value);
 						} else if (cell == 7) {
@@ -565,17 +577,32 @@ public class AgentResource {
 						} else if (cell == 12) {
 							agent.setContact(value);
 						} else if (cell == 13) {
-							agent.setIsDeleted(Boolean.valueOf(value));
-						} 
+							if(value.contentEquals("false")) {
+							agent.setIsDeleted(false);
+							}else if(value.contentEquals("true")) {
+							agent.setIsDeleted(true);
+							}
+						}						
 					} catch (Exception e) {
 						e.printStackTrace();
-					}
-                    
+					}                                        
                 }
+                           	
                 //checking exist or not 
-                Optional<Agent> initAgent = agentRepository.findOneByIataCode(agent.getIataCode());
+                Optional<Agent> initAgent = agentRepository.findOneByEmail(agent.getEmail());
                 if(!initAgent.isPresent()) {
-                	 agencies.add(agent);
+                	list_pcc.add(pcc);
+    				agent.setAgentPcc(list_pcc);
+                	agencies.add(agent);
+                	agenciesResult =  agentRepository.save(agent);
+                }else if(initAgent.isPresent()){
+                	Agent recent = initAgent.get();
+                	List<AgentPcc> list_pcc_recent = recent.getAgentPcc();
+                	if (!list_pcc_recent.contains(pcc)) {
+                		list_pcc_recent.add(pcc);
+                	}
+                	
+                	agenciesResult = agentRepository.save(recent);
                 }
                
             }
@@ -584,10 +611,13 @@ public class AgentResource {
 			e.printStackTrace();
 		}
         
-        for (Agent data : agencies) {
-        	agenciesResult = agentRepository.save(data);
-		}
-        
+//        for (Agent data : agencies) {
+//        	Optional<Agent> initAgent = agentRepository.findOneByEmail(data.getEmail());
+//        	if(!initAgent.isPresent()) {
+//        		agenciesResult = agentRepository.save(data);
+//        	}
+//		}
+//        
         return agenciesResult;
     }
     
@@ -601,4 +631,5 @@ public class AgentResource {
         }
         return true;            
     }
+    
 }
