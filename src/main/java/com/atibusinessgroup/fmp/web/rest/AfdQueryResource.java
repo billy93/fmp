@@ -123,7 +123,7 @@ public class AfdQueryResource {
         //ATPCO
         Page<AtpcoFareAfdQueryWithRecords> page = atpcoFareCustomRepository.findAtpcoFareAfdQueryWithRecords(param, ruleCategories, pageable);
         List<AtpcoFareAfdQueryWithRecords> a1fares = page.getContent();
-        
+
         List<AfdQuery> result = new ArrayList<>();
         
         for (AtpcoFareAfdQueryWithRecords a1fare:a1fares) {
