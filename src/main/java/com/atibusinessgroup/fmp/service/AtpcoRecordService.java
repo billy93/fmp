@@ -18,6 +18,7 @@ import com.atibusinessgroup.fmp.domain.dto.CategoryAttribute;
 import com.atibusinessgroup.fmp.domain.dto.CategoryAttributeObject;
 import com.atibusinessgroup.fmp.domain.dto.CategoryObject;
 import com.atibusinessgroup.fmp.domain.dto.DataTable;
+import com.atibusinessgroup.fmp.domain.dto.DateTable;
 import com.atibusinessgroup.fmp.domain.dto.Record3ReflectionObject;
 import com.atibusinessgroup.fmp.domain.dto.TextTable;
 import com.atibusinessgroup.fmp.resository.custom.AtpcoRecord3CategoryCustomRepository;
@@ -29,6 +30,7 @@ import com.mongodb.DBObject;
 public class AtpcoRecordService {
 
 	private final String[] textTable996Tags = new String[] {"text_tbl_no_996", "text_table_no_996", "textTableNumber996"};
+	private final String[] dateTable994Tags = new String[] {"date_tbl_no_994"};
 	
 	private final AtpcoRecord3CategoryCustomRepository atpcoRecord3CategoryCustomRepository;
 	private final MongoTemplate mongoTemplate;
@@ -193,8 +195,7 @@ public class AtpcoRecordService {
 		return match;
 	}
 
-	public List<CategoryObject> getAndConvertCategoryObjectDataTable(String category, List<DataTable> dataTables,
-			String type) {
+	public List<CategoryObject> getAndConvertCategoryObjectDataTable(String category, List<DataTable> dataTables, String type) {
 		List<CategoryObject> result = new ArrayList<>();
 
 		String classBasePackage = "com.atibusinessgroup.fmp.domain.atpco.";
@@ -260,6 +261,7 @@ public class AtpcoRecordService {
 
 		String relationship = null;
 		TextTable textTable996 = null;
+		DateTable dateTable996 = null;
 		
 		if (ro.getCollectionName() != null) {
 			List<AtpcoRecord3CategoryWithDataTable> catdts = atpcoRecord3CategoryCustomRepository
@@ -294,7 +296,16 @@ public class AtpcoRecordService {
 						}
 					}
 					
-					result.add(convertObjectToCategoryAttribute(getCategoryTypeName(type), relationship, cat, textTable996));
+					if (ro.getGetDateTable994NoMethodName() != null) {
+						Method dateTable994NoMethod = c.getMethod(ro.getGetDateTable994NoMethodName(), null);
+						String dateTable994No = (String) dateTable994NoMethod.invoke(cat);
+						
+						if (dateTable994No != null && !dateTable994No.isEmpty() && !dateTable994No.contentEquals("00000000")) {
+							dateTable996 = atpcoRecord3CategoryCustomRepository.findRecord3DateTable(dateTable994No);
+						}
+					}
+					
+					result.add(convertObjectToCategoryAttribute(getCategoryTypeName(type), relationship, cat, textTable996, dateTable996));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -549,7 +560,7 @@ public class AtpcoRecordService {
 		return result;
 	}
 
-	public CategoryAttribute convertObjectToCategoryAttribute(String type, String relationship, Object obj, TextTable textTable996) {
+	public CategoryAttribute convertObjectToCategoryAttribute(String type, String relationship, Object obj, TextTable textTable996, DateTable dateTable994) {
 		CategoryAttribute result = new CategoryAttribute();
 		result.setType(type);
 		result.setRelationship(relationship);
@@ -581,9 +592,11 @@ public class AtpcoRecordService {
 						}
 						
 						attObj.setValue(text);
-					} else {
-						attObj.setValue("No link number found: " + value);
 					}
+				}
+				
+				if (dateTable994 != null && ArrayUtils.contains(dateTable994Tags, key)) {
+					attObj.setValue(dateTable994);
 				}
 				
 				// Add Exclusion of attributes

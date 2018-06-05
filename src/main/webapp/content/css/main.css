@@ -107,6 +107,7 @@ th .glyphicon {
 .table.category td pre {
 	text-align: left;
     background: white;
+    margin: 0;
 }
 
 /* ==========================================================================
