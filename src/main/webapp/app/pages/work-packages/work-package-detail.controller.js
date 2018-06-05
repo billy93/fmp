@@ -2100,6 +2100,7 @@
 	  
 	  vm.approve = function(){
 		  var validated = true;
+		  var cekStatus = "";
 		  
 //		  console.log("REGULAR");
 		  if(vm.workPackage.fareSheet != null && vm.workPackage.fareSheet.length > 0){
@@ -2107,6 +2108,7 @@
 				  if(vm.workPackage.fareSheet[x].fares != null && vm.workPackage.fareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.fareSheet[x].fares.length;y++){
 						  if(vm.workPackage.fareSheet[x].fares[y].status != "APPROVED"){
+							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.fareSheet[x].fares[y].status;
 							  validated = false;
 //							  console.log("X : "+x+" | Y : "+y);
 //							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
@@ -2123,6 +2125,7 @@
 				  if(vm.workPackage.discountFareSheet[x].fares != null && vm.workPackage.discountFareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.discountFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.discountFareSheet[x].fares[y].status != "APPROVED"){
+							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.discountFareSheet[x].fares[y].status;
 							  validated = false;
 //							  console.log("X : "+x+" | Y : "+y);
 //							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
@@ -2139,6 +2142,7 @@
 				  if(vm.workPackage.addonFareSheet[x].fares != null && vm.workPackage.addonFareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.addonFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.addonFareSheet[x].fares[y].status != "APPROVED"){
+							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.addonFareSheet[x].fares[y].status;
 							  validated = false;
 //							  console.log("X : "+x+" | Y : "+y);
 //							  console.log(vm.workPackage.addonFareSheet[x].fares[y].status);
@@ -2155,6 +2159,7 @@
 				  if(vm.workPackage.marketFareSheet[x].fares != null && vm.workPackage.marketFareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.marketFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.marketFareSheet[x].fares[y].status != "APPROVED"){
+							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.marketFareSheet[x].fares[y].status;
 							  validated = false;
 //							  console.log("X : "+x+" | Y : "+y);
 //							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
@@ -2171,6 +2176,7 @@
 				  if(vm.workPackage.waiverFareSheet[x].fares != null && vm.workPackage.waiverFareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.waiverFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.waiverFareSheet[x].fares[y].status != "APPROVED"){
+							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.waiverFareSheet[x].fares[y].status;
 							  validated = false;
 //							  console.log("X : "+x+" | Y : "+y);
 //							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
@@ -2214,7 +2220,11 @@
 	      			
 	          });
 		  } else{
-			  alert('Work Package cannot be approved, please check the workorder');
+			  if(cekStatus.length != 0){
+				  alert(cekStatus);
+			  }else{
+				 alert('Work Package cannot be approved, please check the workorder');  
+			  }			  
 		  }
 	  };
 	  

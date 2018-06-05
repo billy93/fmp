@@ -2410,14 +2410,29 @@ public class WorkPackageResource {
         	content += "</tbody>";  
         content += "</table>";
         
-        if(workPackage.getApproveConfig().attachment) {
+        List<Attachment> sendAttachments = new ArrayList<>();
+        List<Attachment> attachments = workPackage.getAttachmentData();
+        for (Attachment attachment : attachments) {
+        	if(attachment.getInOnly().equals(true)) {
+        		sendAttachments.add(attachment);
+        	}
+		}
+        if(!sendAttachments.isEmpty()) {
         	log.debug("SEND EMAIL WITH ATTACHMENT");
-        	mailService.sendEmailWithAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true, workPackage.getAttachmentData());
+        	mailService.sendEmailWithAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true, sendAttachments);
         }
         else {
         	log.debug("SEND EMAIL WITHOUT ATTACHMENT");
         	mailService.sendEmailWithoutAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true);
         }
+//        if(workPackage.getApproveConfig().attachment) {
+//        	log.debug("SEND EMAIL WITH ATTACHMENT");
+//        	mailService.sendEmailWithAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true, sendAttachments);
+//        }
+//        else {
+//        	log.debug("SEND EMAIL WITHOUT ATTACHMENT");
+//        	mailService.sendEmailWithoutAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true);
+//        }
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -2488,14 +2503,32 @@ public class WorkPackageResource {
         	content += "</tbody>";  
         content += "</table>";
         
-        if(workPackage.getApproveConfig().attachment) {
+        List<Attachment> sendAttachments = new ArrayList<>();
+        List<Attachment> attachments = workPackage.getAttachmentData();
+        for (Attachment attachment : attachments) {
+        	try {
+        		if(attachment.getInOnly().equals(true)) {
+            		sendAttachments.add(attachment);
+            	}
+			} catch (Exception e) {	}        	
+		}
+        if(!sendAttachments.isEmpty()) {
         	log.debug("SEND EMAIL WITH ATTACHMENT");
-        	mailService.sendEmailWithAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true, workPackage.getAttachmentData());
+        	mailService.sendEmailWithAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true, sendAttachments);
         }
         else {
         	log.debug("SEND EMAIL WITHOUT ATTACHMENT");
         	mailService.sendEmailWithoutAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true);
         }
+        
+//        if(workPackage.getApproveConfig().attachment) {
+//        	log.debug("SEND EMAIL WITH ATTACHMENT");
+//        	mailService.sendEmailWithAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true, workPackage.getAttachmentData());
+//        }
+//        else {
+//        	log.debug("SEND EMAIL WITHOUT ATTACHMENT");
+//        	mailService.sendEmailWithoutAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true);
+//        }
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
