@@ -242,10 +242,10 @@ public class WorkPackageResource {
         wp.setLastModifiedBy(null);
         wp.setLastModifiedDate(null);
         wp.setFilingInstruction(false);
-        if(!wp.getReuseReplaceConfig().isAttachment()) {
-        	wp.setAttachment(false);
-        	wp.getAttachmentData().clear();
-        }
+//        if(!wp.getReuseReplaceConfig().isAttachment()) {
+//        	wp.setAttachment(false);
+//        	wp.getAttachmentData().clear();
+//        }
         for(WorkPackageFareSheet wps : wp.getFareSheet()) {
         	for(WorkPackageFare fare : wps.getFares()) {
         		fare.setStatus("PENDING");
@@ -301,9 +301,34 @@ public class WorkPackageResource {
         wp.setCreatedDate(null);
         wp.setLastModifiedBy(null);
         wp.setLastModifiedDate(null);
-        if(!workPackage.getReuseReplaceConfig().isAttachment()) {
-        	wp.setAttachment(false);
-        	wp.getAttachmentData().clear();
+//        if(!workPackage.getReuseReplaceConfig().isAttachment()) {
+//        	wp.setAttachment(false);
+//        	wp.getAttachmentData().clear();
+//        }
+        for(WorkPackageFareSheet wps : wp.getFareSheet()) {
+        	for(WorkPackageFare fare : wps.getFares()) {
+        		fare.setStatus("PENDING");
+        	}
+        }
+        for(WorkPackageFareSheet wps : wp.getAddonFareSheet()) {
+        	for(WorkPackageFare fare : wps.getFares()) {
+        		fare.setStatus("PENDING");
+        	}
+        }
+        for(WorkPackageFareSheet wps : wp.getMarketFareSheet()) {
+        	for(WorkPackageFare fare : wps.getFares()) {
+        		fare.setStatus("PENDING");
+        	}
+        }
+        for(WorkPackageFareSheet wps : wp.getWaiverFareSheet()) {
+        	for(WorkPackageFare fare : wps.getFares()) {
+        		fare.setStatus("PENDING");
+        	}
+        }
+        for(WorkPackageFareSheet wps : wp.getDiscountFareSheet()) {
+        	for(WorkPackageFare fare : wps.getFares()) {
+        		fare.setStatus("PENDING");
+        	}
         }
         WorkPackage result = workPackageService.save(wp);
         
@@ -2413,9 +2438,13 @@ public class WorkPackageResource {
         List<Attachment> sendAttachments = new ArrayList<>();
         List<Attachment> attachments = workPackage.getAttachmentData();
         for (Attachment attachment : attachments) {
-        	if(attachment.getInOnly().equals(true)) {
-        		sendAttachments.add(attachment);
-        	}
+        	try {
+            	if(attachment.getInOnly().equals(true)) {
+            		sendAttachments.add(attachment);
+            	}
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
 		}
         if(!sendAttachments.isEmpty()) {
         	log.debug("SEND EMAIL WITH ATTACHMENT");
@@ -2462,6 +2491,7 @@ public class WorkPackageResource {
 	        emailData = new String[workPackage.getApproveConfig().getEmail().size()];
 	        for (int i=0;i<workPackage.getApproveConfig().getEmail().size();i++) {
 	        	emailData[i] = workPackage.getApproveConfig().getEmail().get(i);
+	        	log.debug("cek : "+emailData[i]);
 	        }
         }
         

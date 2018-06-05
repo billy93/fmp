@@ -583,6 +583,31 @@
         		mandatory:[]
         	},
         	{
+        		name:"discountGlobal",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountRtgno",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountRtgnoTarno",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountNewFarebasis",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountNewBaseFareOwRt",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:[]
+        	},
+        	{
         		name:"discountNewBookingCode",
         		editable:["LSO", "HO",  "Distribution"],
         		mandatory:[]
@@ -2078,11 +2103,12 @@
               resolve: {
                   workPackage: vm.workPackage,              	  
 	              email: ['SystemParameter', function(SystemParameter) {
-	                   return SystemParameter.getSystemParameterByName({name : 'APPROVE_EMAIL'}).$promise;
+	                   return vm.workPackage.approveConfig.email
 	              }],
 	              ccEmail: ['SystemParameter', function(SystemParameter) {
-	                   return SystemParameter.getSystemParameterByName({name : 'APPROVE_CC_EMAIL'}).$promise;
+	                   return vm.workPackage.approveConfig.ccEmail
 	              }],
+	              statusResend : true
               }
           }).result.then(function(config) {
         	  vm.workPackage.approveConfig = config;
@@ -2202,6 +2228,7 @@
 		              ccEmail: ['SystemParameter', function(SystemParameter) {
 		                   return SystemParameter.getSystemParameterByName({name : 'APPROVE_CC_EMAIL'}).$promise;
 		              }],
+		              statusResend : false
 	              }
 	          }).result.then(function(config) {
 	        	  vm.workPackage.approveConfig = config;
