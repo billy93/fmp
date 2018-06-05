@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -67,6 +68,7 @@ import com.atibusinessgroup.fmp.domain.WorkPackage.Comment;
 import com.atibusinessgroup.fmp.domain.WorkPackage.FilingInstruction;
 import com.atibusinessgroup.fmp.domain.WorkPackage.ImportFares;
 import com.atibusinessgroup.fmp.domain.WorkPackage.MarketRules;
+import com.atibusinessgroup.fmp.domain.WorkPackage.WorkPackageFareSheet;
 import com.atibusinessgroup.fmp.domain.WorkPackageFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageHistory;
 import com.atibusinessgroup.fmp.domain.WorkPackageHistoryData;
@@ -222,10 +224,10 @@ public class WorkPackageResource {
      */
     @PostMapping("/work-packages/reuse")
     @Timed
-    public ResponseEntity<WorkPackage> reuseWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
-        log.debug("REST request to save reuse WorkPackage : {}", workPackage);
+    public ResponseEntity<WorkPackage> reuseWorkPackage(@RequestBody WorkPackage wp) throws URISyntaxException {
+        log.debug("REST request to save reuse WorkPackage : {}", wp);
         
-        WorkPackage wp = workPackageService.findOne(workPackage.getId());
+//        WorkPackage wp = workPackageService.findOne(workPackage.getId());
         wp.setReuseFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
@@ -240,9 +242,34 @@ public class WorkPackageResource {
         wp.setLastModifiedBy(null);
         wp.setLastModifiedDate(null);
         wp.setFilingInstruction(false);
-        if(!workPackage.getReuseReplaceConfig().isAttachment()) {
+        if(!wp.getReuseReplaceConfig().isAttachment()) {
         	wp.setAttachment(false);
         	wp.getAttachmentData().clear();
+        }
+        for(WorkPackageFareSheet wps : wp.getFareSheet()) {
+        	for(WorkPackageFare fare : wps.getFares()) {
+        		fare.setStatus("PENDING");
+        	}
+        }
+        for(WorkPackageFareSheet wps : wp.getAddonFareSheet()) {
+        	for(WorkPackageFare fare : wps.getFares()) {
+        		fare.setStatus("PENDING");
+        	}
+        }
+        for(WorkPackageFareSheet wps : wp.getMarketFareSheet()) {
+        	for(WorkPackageFare fare : wps.getFares()) {
+        		fare.setStatus("PENDING");
+        	}
+        }
+        for(WorkPackageFareSheet wps : wp.getWaiverFareSheet()) {
+        	for(WorkPackageFare fare : wps.getFares()) {
+        		fare.setStatus("PENDING");
+        	}
+        }
+        for(WorkPackageFareSheet wps : wp.getDiscountFareSheet()) {
+        	for(WorkPackageFare fare : wps.getFares()) {
+        		fare.setStatus("PENDING");
+        	}
         }
         WorkPackage result = workPackageService.save(wp);
         
@@ -1223,6 +1250,124 @@ public class WorkPackageResource {
             .body(att);
     }
     
+    public static class WorkPackageExportOption{
+    	public String outputTo;
+    	public boolean gridLines;
+    	public boolean columnHeaders;
+    	public boolean onlySelectedRows;
+		public String getOutputTo() {
+			return outputTo;
+		}
+		public void setOutputTo(String outputTo) {
+			this.outputTo = outputTo;
+		}
+		public boolean isGridLines() {
+			return gridLines;
+		}
+		public void setGridLines(boolean gridLines) {
+			this.gridLines = gridLines;
+		}
+		public boolean isColumnHeaders() {
+			return columnHeaders;
+		}
+		public void setColumnHeaders(boolean columnHeaders) {
+			this.columnHeaders = columnHeaders;
+		}
+		public boolean isOnlySelectedRows() {
+			return onlySelectedRows;
+		}
+		public void setOnlySelectedRows(boolean onlySelectedRows) {
+			this.onlySelectedRows = onlySelectedRows;
+		}
+    	
+    	
+    }
+    /**
+     * POST  /work-packages/export-fares : Export work package fares
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/work-packages/exportQueue")
+    @Timed
+    public ResponseEntity<Attachment> exportQueueWorkPackage(@RequestBody WorkPackageExportOption workPackageExportOption) throws URISyntaxException {
+    	log.debug("REST request to export work package : {}", workPackageExportOption);
+
+        XSSFWorkbook workbook = new XSSFWorkbook(); 
+        XSSFSheet spreadsheet = workbook.createSheet("Workorder Queue");
+        
+        XSSFRow row = spreadsheet.createRow(1);
+        XSSFCell cell;
+
+        cell = row.createCell(1);
+        cell.setCellValue("Status");
+        cell = row.createCell(2);
+        cell.setCellValue("Carrier");
+        cell = row.createCell(3);
+        cell.setCellValue("Action");
+        cell = row.createCell(4);
+        cell.setCellValue("Tar No");
+        cell = row.createCell(5);
+        cell.setCellValue("Tar Cd");
+        cell = row.createCell(6);
+        cell.setCellValue("Global");
+        cell = row.createCell(7);
+        cell.setCellValue("Origin");
+        cell = row.createCell(8);
+        cell.setCellValue("Dest");
+        cell = row.createCell(9);
+        cell.setCellValue("Fare Cls");
+        cell = row.createCell(10);
+        cell.setCellValue("Bkg Cls");
+        cell = row.createCell(11);
+        cell.setCellValue("Cabin");
+        cell = row.createCell(12);
+        cell.setCellValue("OW/RT");
+        cell = row.createCell(13);
+        cell.setCellValue("Ftnt");
+        cell = row.createCell(14);
+        cell.setCellValue("Rtg No");
+        cell = row.createCell(15);
+        cell.setCellValue("Rule No");
+        cell = row.createCell(16);
+        cell.setCellValue("Curr");
+        cell = row.createCell(17);
+        cell.setCellValue("Base Amt");
+        cell = row.createCell(18);
+        cell.setCellValue("Target AIF");        
+        cell = row.createCell(19);
+        cell.setCellValue("Travel Start");
+        cell = row.createCell(20);
+        cell.setCellValue("Travel End");
+        cell = row.createCell(21);
+        cell.setCellValue("Sales Start");
+        cell = row.createCell(22);
+        cell.setCellValue("Sales End");        
+        cell = row.createCell(23);
+        cell.setCellValue("Comment");
+        cell = row.createCell(24);
+        cell.setCellValue("Travel Complete");
+        cell = row.createCell(25);
+        cell.setCellValue("Travel Complete Indicator");
+        cell = row.createCell(26);
+        cell.setCellValue("Ratesheet Comment");
+        
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        try {
+			workbook.write(output);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        Attachment att = new Attachment();
+        att.setFile(output.toByteArray());
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
+            .body(att);
+    }
+    
     
     /**
      * POST  /work-packages/download-market-rules : Download Market Rules Template
@@ -1463,7 +1608,7 @@ public class WorkPackageResource {
 	    	
 	    	for(Priority p : priorities) {
 	    		if(p.getType().contentEquals("DAYS")) {
-	    			long val = zonedDateTimeDifference(ZonedDateTime.now(), workPackage.getSaleDate(), ChronoUnit.DAYS);
+	    			long val = zonedDateTimeDifference(ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS), workPackage.getSaleDate().truncatedTo(ChronoUnit.DAYS), ChronoUnit.DAYS);
 	    			long value = p.getValue();
 
 	    			if(val <= value) {    				
@@ -1480,6 +1625,74 @@ public class WorkPackageResource {
 		    	workPackage.setPriority(prioritiesDesc.get(0).getName());
 	    	}
     	}
+    	
+    	List<WorkPackageFare> allFares = new ArrayList<>();
+    	if(workPackage.getFareSheet().size() > 0) {
+    		for(WorkPackageFareSheet sheet : workPackage.getFareSheet()) {
+    			if(sheet.getFares().size() > 0) {
+    				for(WorkPackageFare fares : sheet.getFares()) {
+    					if(fares.getSaleStart() != null) {
+    						allFares.add(fares);
+    						continue;
+    					}
+    				}
+    			}
+    		}
+    	}
+    	if(workPackage.getAddonFareSheet().size() > 0) {
+    		for(WorkPackageFareSheet sheet : workPackage.getAddonFareSheet()) {
+    			if(sheet.getFares().size() > 0) {
+    				for(WorkPackageFare fares : sheet.getFares()) {
+    					if(fares.getSaleStart() != null) {
+    						allFares.add(fares);
+    						continue;
+    					}
+    				}
+    			}
+    		}
+    	}
+    	if(workPackage.getDiscountFareSheet().size() > 0) {
+    		for(WorkPackageFareSheet sheet : workPackage.getDiscountFareSheet()) {
+    			if(sheet.getFares().size() > 0) {
+    				for(WorkPackageFare fares : sheet.getFares()) {
+    					if(fares.getSaleStart() != null) {
+    						allFares.add(fares);
+    						continue;
+    					}
+    				}
+    			}
+    		}
+    	}
+    	if(workPackage.getMarketFareSheet().size() > 0) {
+    		for(WorkPackageFareSheet sheet : workPackage.getMarketFareSheet()) {
+    			if(sheet.getFares().size() > 0) {
+    				for(WorkPackageFare fares : sheet.getFares()) {
+    					if(fares.getSaleStart() != null) {
+    						allFares.add(fares);
+    						continue;
+    					}
+    				}
+    			}
+    		}
+    	}
+    	if(workPackage.getWaiverFareSheet().size() > 0) {
+    		for(WorkPackageFareSheet sheet : workPackage.getWaiverFareSheet()) {
+    			if(sheet.getFares().size() > 0) {
+    				for(WorkPackageFare fares : sheet.getFares()) {
+    					if(fares.getSaleStart() != null) {
+    						allFares.add(fares);
+    						continue;
+    					}
+    				}
+    			}
+    		}
+    	}
+    	
+    	if(allFares.size() > 0) {
+	    	Collections.sort(allFares, new WorkPackageFare.WorkPackageFareComparator());  
+	    	workPackage.setSaleDate(allFares.get(0).getSaleStart());
+    	}
+    	
     	workPackage.setValidation(null);
     	workPackage = workPackageService.save(workPackage);
 	    

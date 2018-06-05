@@ -6,7 +6,7 @@
     </div>
     <div class="modal-body">    	
    		<div class="clearfix">
-			<div class="pull-left w50">	
+			
 		   		<div class="form-group">
 					<div class="custom-label semibold">Include Attachment</div>
 					<div class="checkbox-wrapper">
@@ -14,8 +14,66 @@
 						Attachment
 					</div>
 				</div>
+				
+				<div class="form-group">
+					<div class="box-detail">
+      				<div class="box-header">Work Package Parameters</div>	
+      				<div class="box-body">
+      					<div class="form-group row">
+				            <label class="col-md-4">Workorder Name</label>
+				            <input type="text" class="col-md-8" name="name" id="field_name" ng-model="vm.workPackage.name"/>
+				        </div>
+				        
+				        <div class="form-group row">
+				            <label class="col-md-4" for="field_businessArea">Business Area</label>
+				            <div class="col-md-8 no-pad select">	
+				            	<!-- <select class="col-md-12" name="priority" ng-model="vm.workPackage.businessArea" id="field_businessArea">
+					                <option value="">Select Business Area</option>
+					                <option value="JKT" >JKT</option>
+					            </select> -->
+					            <select class="col-md-12" name="businessArea" ng-model="vm.workPackage.businessArea" id="field_businessArea">
+									<option ng-repeat="x in vm.businessAreas track by $index">{{x}}</option>
+								</select>
+				            </div>
+				        </div>
+      				</div>
+				</div>
+				
+				<div class="form-group">
+					<div class="box-detail">
+      				<div class="box-header">Work Sheet Parameters</div>	
+      				<div class="box-body">
+      					 <form name="outerForm" class="tab-form-demo">
+						    <uib-tabset active="activeForm">
+						      <uib-tab ng-repeat="workPackageFareSheet in vm.workPackage.fareSheet track by $index" heading="{{workPackageFareSheet.specifiedFaresName}}">
+						        <ng-form name="nestedForm">
+						          <div class="form-group">
+						            <label>Worksheet Type</label>
+						            <input type="text" class="form-control" required disabled value="Fares"/>
+						          </div>
+						          <div class="form-group">
+						            <label>Worksheet Name</label>
+						            <input type="text" class="form-control" required ng-model="workPackageFareSheet.specifiedFaresName"/>
+						          </div>
+						        </ng-form>
+						      </uib-tab>	
+						      <uib-tab ng-repeat="workPackageFareSheet in vm.workPackage.addonFareSheet track by $index" heading="{{workPackageFareSheet.addonFaresName}}">
+						        <ng-form name="nestedForm">
+						          <div class="form-group">
+						            <label>Worksheet Type</label>
+						            <input type="text" class="form-control" required disabled value="Addon Fares"/>
+						          </div>
+						          <div class="form-group">
+						            <label>Worksheet Name</label>
+						            <input type="text" class="form-control" required ng-model="workPackageFareSheet.addonFaresName"/>
+						          </div>
+						        </ng-form>
+						      </uib-tab>						      
+						    </uib-tabset>
+						  </form>
+      				</div>
+				</div>
 			</div>
-		</div>
     </div>
     <div class="modal-footer">
     	<button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-secondary" data-translate="entity.action.save">Save changes</button>

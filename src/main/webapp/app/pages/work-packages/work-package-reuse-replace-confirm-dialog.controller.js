@@ -5,17 +5,22 @@
         .module('fmpApp')
         .controller('WorkPackageReuseReplaceConfirmDialogController', WorkPackageReuseReplaceConfirmDialogController);
 
-    WorkPackageReuseReplaceConfirmDialogController.$inject = ['$scope', 'FileSaver', 'DataUtils', '$uibModalInstance', 'WorkPackage', '$state'];
+    WorkPackageReuseReplaceConfirmDialogController.$inject = ['$scope', 'FileSaver', 'DataUtils', '$uibModalInstance', 'WorkPackage', '$state', 'workPackage', 'businessAreas'];
 
-    function WorkPackageReuseReplaceConfirmDialogController($scope, FileSaver, DataUtils, $uibModalInstance, WorkPackage, $state) {
+    function WorkPackageReuseReplaceConfirmDialogController($scope, FileSaver, DataUtils, $uibModalInstance, WorkPackage, $state, workPackage, businessAreas) {
 
         var vm = this;
         vm.clear = clear;
+        vm.workPackage = workPackage;
+        vm.businessAreas = businessAreas;
         vm.option = {
-        		attachment:false
+        	attachment:false
         };
+        
+        
         vm.save = function(){
-        	$uibModalInstance.close(vm.option);
+        	vm.workPackage.reuseReplaceConfig.attachment = vm.option.attachment;
+        	$uibModalInstance.close(vm.workPackage);
         }
        
         function clear () {

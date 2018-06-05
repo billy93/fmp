@@ -144,6 +144,24 @@
 											</span>
 										</div>
 									</div>
+									<div class="form-group">
+										<label for="field_distributionDate">Distribution Date</label>
+										<div class="input-group">
+											<input id="field_distributionDate" type="text" 
+												ng-class="{'must-fill': editForm.distributionDate.$error.required}" 
+                   								ng-required="vm.isRequired('distributionDate')" 
+                   								name="distributionDate" 
+                   								ng-disabled="!vm.isEditable('distributionDate')" 
+                   								datetime-picker="{{dateformat}}" 
+                   								enable-time="false"
+                   								ng-model="vm.workPackage.distributionDate" 
+                   								is-open="vm.datePickerOpenStatus.distributionDate" class="form-control">
+                   								
+											<span class="input-group-addon">
+												<i class="fa fa-calendar" ng-click="vm.openCalendar('distributionDate')" ng-disabled="vm.isFieldDisable('distributionDate')"></i>
+											</span>
+										</div>
+									</div>
 									
 									<!-- <div class="form-group">
 										<label for="field_distributionDate">Distribution Date</label>
@@ -259,7 +277,7 @@
 						<button class="btn btn-default small">Workflow <i class="fa fa-caret-down"></i></button>
 						<ul class="dropdown-menu custom" role="menu">
 						    <li><a ng-click="vm.passUp()" 
-					        ng-class="{disabled : editForm.$invalid }" 
+					        ng-class="{'poiv-none' : (vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'REGULAR') ? editForm.editFormATPCO.$invalid : false }" 
 					        ng-show="vm.workPackage.reviewLevel != 'HO' && vm.workPackage.reviewLevel != 'DISTRIBUTION' && vm.workPackage.reviewLevel != 'ROUTE_MANAGEMENT'">Pass Up</a></li>
 					        <li><a ng-click="vm.passDown()" 
 					        ng-show="vm.workPackage.reviewLevel != 'LSO'  && vm.workPackage.reviewLevel != 'ROUTE_MANAGEMENT' && vm.workPackage.reviewLevel != 'DISTRIBUTION'">Pass Down</a></li>
@@ -840,46 +858,33 @@
 									</div>
 								
 								</div>
-							
-								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+$index}}" ng-class="{active:vm.currentAddonTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.addonFareSheet track by $index">
+								
+								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+$index}}" 
+								ng-class="{active:vm.currentAddonTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.addonFareSheet track by $index">
 									<div class="pb1 mb1 bbgrey">
 										<div class="clearfix">
-											<div class="pull-left">
-												<div class="clearfix">
-													<div class="pull-right datatable-button">
-														<div class="button-group dropdown custom">
-															<button class="btn btn-default small btn-secondary">Edit <i class="fa fa-caret-down"></i></button>
-															<ul class="dropdown-menu custom" role="menu">
-															    <li>
-															    	<a ng-click="vm.clearSelection()">Clear Selection</a>
-															    </li>	
-															    <li>
-															    	<a ng-click="vm.searchReplace(workPackageSheet)">Search/Replace</a>
-															    </li>														   
-															    <li>
-															    	<a ng-click="vm.addFares(workPackageSheet)">Add Rows</a>
-															    </li>
-															    <li>
-															    	<a href="#">Paste</a>
-															    </li>
-															    <li>
-															    	<a href="#">Paste As Cancel</a>
-															    </li>
-															</ul>
-														</div>													
-														<button class="btn btn-default small btn-secondary" ngf-select  ngf-change="vm.importFare($file)">Import</button>
-														<button class="btn btn-default small btn-secondary" ng-click="vm.exportFares()">Export</button>
-														<!-- <button class="btn btn-default small btn-secondary">Publish</button> -->
-														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.agent()">Agents</button>
-														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()">Rate Sheet</button> 
-														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.routemap()">Route Map</button> 
-													</div>
-												</div>		
+											<div class="pull-left w50 two-column">
+												<div class="form-group">
+													<label>Description</label>
+													
+													<textarea class="form-control" 
+									         		name="addonFaresName{{$index}}"
+									         		ng-model="workPackageSheet.addonFaresName" 
+									         		style="min-width: 100%; min-height:100%"
+									         		ng-class="{'must-fill': editForm.editFormATPCO.addonFaresName{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
+									         		ng-required="vm.isRequired('addonFaresName')"  
+									         		ng-disabled="!vm.isEditable('addonFaresName')">
+							          				</textarea>
+												</div>
 											</div>
+											<div class="pull-left w50 two-column">
+												<div class="form-group">
+													
+												</div>
+											</div>		
 										</div>
-									</div>
-									
-								
+									</div>	
+											
 									<!-- table details-->
 									<div class="table-wrapper">
 										<div class="datatable-wrapper form-inline">
@@ -1272,39 +1277,36 @@
 								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+vm.workPackage.addonFareSheet.length}}" ng-class="{active:vm.currentTabFilingInstruction}" ng-if="vm.workPackage.filingInstruction">
 									
 									<div class="box-header"></div>
-									<div class="box-body bbgrey">
+									<div class="box-body mb1">
 										<div class="form-group">
 											<label>Comment</label>
 											<wysiwyg-edit content="vm.commentStringFillingInstruction" config="vm.editorConfig"></wysiwyg-edit>
 										</div>
 										<div class="clearfix">
 											<div class="pull-right">
-												<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()"></i>Add</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()">Add</button>
 											</div>
 										</div>		
 									</div>
-									<div class="clearfix">
-										<div class="pull-right">
-											<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()"></i>Add</button>
-										</div>
-									</div>										
-						        	<div class="box-body">
-						        		<div class="comment-container">
-						        			<div class="comment-wrapper">
-								    			<div class="comment-list" ng-repeat="filingInstructionData in vm.workPackage.filingInstructionData.slice().reverse() track by $index">
-											    	<div class="clearfix">
-											    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
-											    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'short'}}</div>
-											    	</div>
-											    	<label> 
-											    		<input type="checkbox" id="comment-message" name="comment-message" ng-model="filingInstructionData.isDeleted">
-											    		<span>{{filingInstructionData.isDeleted ? "Deleted" : "Delete"}}</span> 
-														<span ng-show="!filingInstructionData.isDeleted" data-ng-bind-html="trustAsHtml(filingInstructionData.comment)"></span>
-													</label>
-												</div>
-								    		</div>
-						        		</div>					        		
-							    	</div>									
+									<div class="box-detail box-comment">
+										<div class="box-body">
+							        		<div class="comment-container">
+							        			<div class="comment-wrapper">
+									    			<div class="comment-list" ng-repeat="filingInstructionData in vm.workPackage.filingInstructionData.slice().reverse() track by $index">
+												    	<div class="clearfix">
+												    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
+												    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'short'}}</div>
+												    	</div>
+												    	<label> 
+												    		<input type="checkbox" id="comment-message" name="comment-message" ng-model="filingInstructionData.isDeleted">
+												    		<span>{{filingInstructionData.isDeleted ? "Deleted" : "Delete"}}</span> 
+															<span ng-show="!filingInstructionData.isDeleted" data-ng-bind-html="trustAsHtml(filingInstructionData.comment)"></span>
+														</label>
+													</div>
+									    		</div>
+							        		</div>					        		
+								    	</div>
+									</div>							
 							    </div>		
 								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+vm.workPackage.addonFareSheet.length+1}}" ng-class="{active:vm.currentTabAttachment}" ng-if="vm.workPackage.attachment">
 									<div class="action-btn-wrapper">
