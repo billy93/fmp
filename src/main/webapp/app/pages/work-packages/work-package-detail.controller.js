@@ -3838,8 +3838,12 @@
           }
       };
       
-      vm.exportFares = function(){
-    	  	  WorkPackage.exportFares(vm.workPackage, onExportSuccess, onExportFailure);
+      vm.exportFares = function(index){
+    	  //console.log("Fare sheet index : "+index);
+    	  
+    	  vm.workPackage.exportIndex = index;
+    	  WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
+    		  WorkPackage.exportFares(vm.workPackage, onExportSuccess, onExportFailure);
 	    	  function onExportSuccess(result){
 	    		  var fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
       			var templateFilename = "Workorder_Fare.xlsx";
@@ -3848,7 +3852,10 @@
 	    	  }
 	    	  function onExportFailure(){
 	    		  
-	    	  }    	  
+	    	  }    	 
+	    	}, function onSaveError(){
+	    		alert('An error occured, please try again');
+	    	});    	  	   
       }
       
       vm.exportFaresMarket = function(){

@@ -3,8 +3,6 @@ package com.atibusinessgroup.fmp.web.rest;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
@@ -22,8 +20,11 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.commons.io.IOUtils;
@@ -98,7 +99,6 @@ import com.atibusinessgroup.fmp.web.rest.errors.BadRequestAlertException;
 import com.atibusinessgroup.fmp.web.rest.util.HeaderUtil;
 import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
 import com.codahale.metrics.annotation.Timed;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
@@ -813,144 +813,43 @@ public class WorkPackageResource {
     }
    
 
-    /**
-     * POST  /work-packages/export-fares : Export work package fares
-     *
-     * @param workPackage the workPackage to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
-     * @throws URISyntaxException if the Location URI syntax is incorrect
-     */
-    @PostMapping("/work-packages/export-fares")
-    @Timed
-    public ResponseEntity<Attachment> exportFaresWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
-    	log.debug("REST request to save exportFares : {}", workPackage);
+    public Attachment createWorkbook(String sheetName, LinkedHashMap<String, Object> data) {
+    	
+    	XSSFWorkbook workbook = new XSSFWorkbook(); 
+        XSSFSheet spreadsheet = workbook.createSheet(sheetName);
+        
+    	int index = 0;
 
-        XSSFWorkbook workbook = new XSSFWorkbook(); 
-        XSSFSheet spreadsheet = workbook.createSheet("Workorder Fare");
-        
-        XSSFRow row = spreadsheet.createRow(1);
-        XSSFCell cell;
+    	XSSFRow row = spreadsheet.createRow(0);
+    	for(Map.Entry<String, Object> entry : data.entrySet()) {
+    		Object value = entry.getValue();
+    		String key = entry.getKey();
+            XSSFCell cell;
 
-        cell = row.createCell(1);
-        cell.setCellValue("Status");
-        cell = row.createCell(2);
-        cell.setCellValue("Carrier");
-        cell = row.createCell(3);
-        cell.setCellValue("Action");
-        cell = row.createCell(4);
-        cell.setCellValue("Tar No");
-        cell = row.createCell(5);
-        cell.setCellValue("Tar Cd");
-        cell = row.createCell(6);
-        cell.setCellValue("Global");
-        cell = row.createCell(7);
-        cell.setCellValue("Origin");
-        cell = row.createCell(8);
-        cell.setCellValue("Dest");
-        cell = row.createCell(9);
-        cell.setCellValue("Fare Cls");
-        cell = row.createCell(10);
-        cell.setCellValue("Bkg Cls");
-        cell = row.createCell(11);
-        cell.setCellValue("Cabin");
-        cell = row.createCell(12);
-        cell.setCellValue("OW/RT");
-        cell = row.createCell(13);
-        cell.setCellValue("Ftnt");
-        cell = row.createCell(14);
-        cell.setCellValue("Rtg No");
-        cell = row.createCell(15);
-        cell.setCellValue("Rule No");
-        cell = row.createCell(16);
-        cell.setCellValue("Curr");
-        cell = row.createCell(17);
-        cell.setCellValue("Base Amt");
-        cell = row.createCell(18);
-        cell.setCellValue("Target AIF");        
-        cell = row.createCell(19);
-        cell.setCellValue("Travel Start");
-        cell = row.createCell(20);
-        cell.setCellValue("Travel End");
-        cell = row.createCell(21);
-        cell.setCellValue("Sales Start");
-        cell = row.createCell(22);
-        cell.setCellValue("Sales End");        
-        cell = row.createCell(23);
-        cell.setCellValue("Comment");
-        cell = row.createCell(24);
-        cell.setCellValue("Travel Complete");
-        cell = row.createCell(25);
-        cell.setCellValue("Travel Complete Indicator");
-        cell = row.createCell(26);
-        cell.setCellValue("Ratesheet Comment");
-//        cell.setCellValue("Deal Code");
-//        cell = row.createCell(31);
-        
-//        List<WorkPackageFare> fares = workPackageFareService.findAllByWorkPackage(workPackage.getId());
-        WorkPackage wp = workPackageService.findOne(workPackage.getId());
-        List<WorkPackageFare> fares = wp.getFareSheet().get(0).getFares();
-        for(int i=0; i<fares.size(); i++) {
-        		XSSFRow rows = spreadsheet.createRow(i+2);
-            cell = rows.createCell(1);
-            cell.setCellValue(fares.get(i).getStatus());
-            cell = rows.createCell(2);
-            cell.setCellValue(fares.get(i).getCarrier());
-            cell = rows.createCell(3);
-            cell.setCellValue(fares.get(i).getAction());
-            cell = rows.createCell(4);
-            if(fares.get(i).getTariffNumber() != null) {
-            	cell.setCellValue(fares.get(i).getTariffNumber().getTarNo());
+            cell = row.createCell(index);
+            cell.setCellValue(key);
+            
+            if(value != null) {
+            	List<Object> val = (List<Object>) value;
+            	for(int x=0;x<val.size();x++) {
+            		XSSFRow rows = null;
+            		if(spreadsheet.getRow(x+1) != null) {
+            			rows = spreadsheet.getRow(x+1);
+            		}    
+            		else {
+            			rows = spreadsheet.createRow(x+1);
+            		}
+            		XSSFCell cellData =  rows.createCell(0+index);
+            		cellData.setCellValue(val.get(x) != null ? val.get(x).toString() : "");
+            	}
             }
-            cell = rows.createCell(5);
-            if(fares.get(i).getTariffNumber() != null) {
-            	cell.setCellValue(fares.get(i).getTariffNumber().getTarCd());
-            }
-            cell = rows.createCell(6);
-            if(fares.get(i).getTariffNumber() != null) {
-            	cell.setCellValue(fares.get(i).getTariffNumber().getGlobal());
-            }
-            cell = rows.createCell(7);
-            cell.setCellValue(fares.get(i).getOrigin());
-            cell = rows.createCell(8);
-            cell.setCellValue(fares.get(i).getDestination());
-            cell = rows.createCell(9);
-            cell.setCellValue(fares.get(i).getFareBasis());
-            cell = rows.createCell(10);
-            cell.setCellValue(fares.get(i).getBookingClass());
-            cell = rows.createCell(11);
-            cell.setCellValue(fares.get(i).getCabin());
-            cell = rows.createCell(12);
-            cell.setCellValue(fares.get(i).getTypeOfJourney());
-            cell = rows.createCell(13);
-            cell.setCellValue(fares.get(i).getFootnote1());
-            cell = rows.createCell(14);
-            cell.setCellValue(fares.get(i).getRtgno());
-            cell = rows.createCell(15);
-            cell.setCellValue(fares.get(i).getRuleno());
-            cell = rows.createCell(16);
-            cell.setCellValue(fares.get(i).getCurrency());
-            cell = rows.createCell(17);
-            cell.setCellValue(fares.get(i).getAmount());
-            cell = rows.createCell(18);
-            cell.setCellValue(fares.get(i).getAif());
-            cell = rows.createCell(19);
-            cell.setCellValue(fares.get(i).getTravelStart().toString());
-            cell = rows.createCell(20);
-            cell.setCellValue(fares.get(i).getTravelEnd().toString());
-            cell = rows.createCell(21);
-            cell.setCellValue(fares.get(i).getSaleStart().toString());
-            cell = rows.createCell(22);
-            cell.setCellValue(fares.get(i).getSaleEnd().toString());
-            cell = rows.createCell(23);
-            cell.setCellValue(fares.get(i).getComment());
-            cell = rows.createCell(24);
-            cell.setCellValue(fares.get(i).getTravelComplete().toString());
-            cell = rows.createCell(25);
-            cell.setCellValue(fares.get(i).getTravelCompleteIndicator());
-            cell = rows.createCell(26);
-            cell.setCellValue(fares.get(i).getRatesheetComment());
-        }
-        
+            
+//            XSSFRow rows = spreadsheet.createRow(i+2);
+//            cell = rows.createCell(1);
+            index++;
+    	}
+    	
+
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         try {
 			workbook.write(output);
@@ -961,13 +860,101 @@ public class WorkPackageResource {
         
         Attachment att = new Attachment();
         att.setFile(output.toByteArray());
+        
+        return att;
+    }
+    
+    /**
+     * POST  /work-packages/export-fares : Export work package fares
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/work-packages/export-fares")
+    @Timed
+    public ResponseEntity<Attachment> exportFaresWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
+    	log.debug("REST request to save exportFares : {}", workPackage.getExportIndex());
+    	
+    	LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+    	
+    	data.put("Status", new ArrayList<>());
+    	data.put("Carrier", new ArrayList<>());
+    	data.put("Action", new ArrayList<>());
+    	data.put("Tar No", new ArrayList<>());
+    	data.put("Tar Cd", new ArrayList<>());
+    	data.put("Global", new ArrayList<>());
+    	data.put("Origin", new ArrayList<>());
+    	data.put("Dest", new ArrayList<>());
+    	data.put("Fare Cls", new ArrayList<>());
+    	data.put("Bkg Cls", new ArrayList<>());
+    	data.put("Cabin", new ArrayList<>());
+    	data.put("OW/RT", new ArrayList<>());
+    	data.put("Ftnt", new ArrayList<>());
+    	data.put("Rtg No", new ArrayList<>());
+    	data.put("Rule No", new ArrayList<>());
+    	data.put("Curr", new ArrayList<>());
+    	data.put("Base Amt", new ArrayList<>());
+    	data.put("Target AIF", new ArrayList<>());
+    	data.put("Travel Start", new ArrayList<>());
+    	data.put("Travel End", new ArrayList<>());
+    	data.put("Sales Start", new ArrayList<>());
+    	data.put("Sales End", new ArrayList<>());
+    	data.put("Comment", new ArrayList<>());
+    	data.put("Travel Complete", new ArrayList<>());
+    	data.put("Travel Complete Indicator", new ArrayList<>());
+    	data.put("Ratesheet Comment", new ArrayList<>());
+    	
+    	WorkPackage wp = workPackageService.findOne(workPackage.getId());
+        List<WorkPackageFare> fares = wp.getFareSheet().get(workPackage.getExportIndex()).getFares();
+        for(int i=0; i<fares.size(); i++) {
+        	putValue(data.get("Status"), fares.get(i).getStatus());
+        	putValue(data.get("Carrier"), fares.get(i).getCarrier());
+        	putValue(data.get("Action"), fares.get(i).getAction());
+        	putValue(data.get("Tar No"), fares.get(i).getTariffNumber() != null ? fares.get(i).getTariffNumber().getTarNo() : null);
+        	putValue(data.get("Tar Cd"), fares.get(i).getTariffNumber() != null ?  fares.get(i).getTariffNumber().getTarCd() : null);
+        	putValue(data.get("Global"), fares.get(i).getTariffNumber() != null ? fares.get(i).getTariffNumber().getGlobal() : null);
+        	putValue(data.get("Origin"), fares.get(i).getOrigin());
+        	putValue(data.get("Dest"), fares.get(i).getDestination());
+        	putValue(data.get("Fare Cls"), fares.get(i).getFareBasis());
+        	putValue(data.get("Bkg Cls"), fares.get(i).getBookingClass());
+        	putValue(data.get("Cabin"), fares.get(i).getCabin());
+        	putValue(data.get("OW/RT"), fares.get(i).getTypeOfJourney());
+        	putValue(data.get("Ftnt"), fares.get(i).getFootnote1());
+        	putValue(data.get("Rtg No"), fares.get(i).getRtgno());
+        	putValue(data.get("Rule No"), fares.get(i).getRuleno());
+        	putValue(data.get("Curr"), fares.get(i).getCurrency());
+        	putValue(data.get("Base Amt"), fares.get(i).getAmount());
+        	putValue(data.get("Target AIF"), fares.get(i).getAif());
+        	putValue(data.get("Travel Start"), fares.get(i).getTravelStart() != null ? fares.get(i).getTravelStart().toString() : null);
+        	putValue(data.get("Travel End"), fares.get(i).getTravelEnd() != null ? fares.get(i).getTravelEnd().toString() : null);
+        	putValue(data.get("Sales Start"), fares.get(i).getSaleStart() != null ? fares.get(i).getSaleStart().toString() : null);
+        	putValue(data.get("Sales End"), fares.get(i).getSaleEnd() != null ? fares.get(i).getSaleEnd().toString() : null);
+        	putValue(data.get("Comment"), fares.get(i).getComment());
+        	putValue(data.get("Travel Complete"), fares.get(i).getTravelComplete() != null ? fares.get(i).getTravelComplete().toString() : null);
+        	putValue(data.get("Travel Complete Indicator"), fares.get(i).getTravelCompleteIndicator());
+        	putValue(data.get("Ratesheet Comment"), fares.get(i).getRatesheetComment());
+        }
+    	
+    	Attachment att = createWorkbook("Workorder Fare", data);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
             .body(att);
     }
     
 
-    /**
+    private void putValue(Object obj, String status) {
+		// TODO Auto-generated method stub
+    	List<Object> object = (List<Object>) obj;
+		if(status != null) {
+			object.add(status);
+		}
+		else {
+			object.add(null);
+		}
+	}
+
+	/**
      * POST  /work-packages/export-fares-market : Export work package fares market
      *
      * @param workPackage the workPackage to create
