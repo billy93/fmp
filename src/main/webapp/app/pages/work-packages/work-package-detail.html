@@ -3429,7 +3429,6 @@
 									                	<th>Original Basic Fare</th>
 									                	<th>New Basic Fare</th>
 									                	<th>Approved Fares</th>
-									                	
 										                <th>Fare Lost</th>
 									               		<th>Calculated PN</th>		               		
 									               		<th>Original PN</th>
@@ -3529,6 +3528,7 @@
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverFareLost', $event)" ng-class="{highlighted:fare.field['waiverFareLost']}">
 															<input type="text" class="form-control" ng-model="fare.waiverFareLost" name="waiverFareLost{{$parent.$index}}{{$index}}"
+															ng-change="vm.calculateTotalLost(fare)"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverFareLost{{$parent.$index}}{{$index}}.$valid}"												         		
 						           							ng-disabled="!vm.isEditable('waiverFareLost')"
 											             	ng-required="vm.isRequired('waiverFareLost')"/>
@@ -3561,6 +3561,7 @@
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverPenaltyLostAmount', $event)" ng-class="{highlighted:fare.field['waiverPenaltyLostAmount']}">
 															<input type="text" class="form-control" ng-model="fare.waiverPenaltyLostAmount" name="waiverPenaltyLostAmount{{$parent.$index}}{{$index}}"
+															ng-change="vm.calculateTotalLost(fare)"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverPenaltyLostAmount{{$parent.$index}}{{$index}}.$valid}"												         		
 						           							ng-disabled="!vm.isEditable('waiverPenaltyLostAmount')"
 											             	ng-required="vm.isRequired('waiverPenaltyLostAmount')"/>
@@ -3585,6 +3586,7 @@
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverTotalPax', $event)" ng-class="{highlighted:fare.field['waiverTotalPax']}">
 															<input type="text" class="form-control" ng-model="fare.waiverTotalPax" name="waiverTotalPax{{$parent.$index}}{{$index}}"
+															ng-change="vm.calculateTotalLost(fare)"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverTotalPax{{$parent.$index}}{{$index}}.$valid}"												         		
 						           							ng-disabled="!vm.isEditable('waiverTotalPax')"
 											             	ng-required="vm.isRequired('waiverTotalPax')"/>
@@ -3698,7 +3700,7 @@
 								</div>
 							</div>																						
 						
-							<div class="table-wrapper">
+							<!-- <div class="table-wrapper">
 								<div class="datatable-wrapper form-inline">
 									<div class="clearfix">
 										<div class="pull-left">
@@ -3765,7 +3767,7 @@
 								                </tr>
 											</thead>
 											<tbody ng-repeat="fare in vm.workPackage.waiverFareSheet[vm.selectedWaiverTab].fares track by $index">
-											<!-- ng-click="vm.rowTableClick($event, $index, 'waiver')" -->
+											ng-click="vm.rowTableClick($event, $index, 'waiver')"
 												<tr>
 													<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no']}">{{$index+1}}</td>
 													<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverType', $event)" ng-class="{highlighted:fare.field['waiverType']}">
@@ -3896,11 +3898,11 @@
 														    <ui-select-match placeholder="Currency">{{$select.selected.value.currencyCode}}</ui-select-match>
 															 <ui-select-choices style="min-width:300px" repeat="value.value.currencyCode as (key, value) in vm.currencies | filter: { value: { currencyCode: $select.search }}">
 														      <div ng-bind-html="value.value.currencyCode | highlight: $select.search"></div>
-														      <!-- <small>
+														      <small>
 														        Currency Code : {{value.value.currencyCode}}
 														        Currency Name : {{value.value.currencyName}}
 														        
-														      </small> -->
+														      </small>
 														    </ui-select-choices>
 														  </ui-select>
 													</td>
@@ -3946,7 +3948,7 @@
 										</table>
 									</div>
 								</div>
-			       			</div>
+			       			</div> -->
 							
 							<div class="tab-pane" ng-class="{active:vm.currentTabAttachment}">
 								<div class="action-btn-wrapper">
