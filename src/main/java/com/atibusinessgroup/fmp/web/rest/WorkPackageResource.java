@@ -13,10 +13,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -1447,11 +1451,17 @@ public class WorkPackageResource {
     	if(workPackage.getWpid() == null) {
     		isWorkPackageNew = true;
     		
-    		Counter c = counterRepository.findOne("workpackageId");
+    		DateFormat df = new SimpleDateFormat("yy"); // Just the year, with 2 digits
+    		DateFormat dfFull = new SimpleDateFormat("yyyy"); // Just the year, with 4 digits
+    		
+    		Counter c = counterRepository.findOneByIdAndYear("workpackageId", dfFull.format(Calendar.getInstance().getTime()));
+    		
+    		NumberFormat nf = new DecimalFormat("00000");
         	c.setSequenceValue(c.getSequenceValue()+1);
         	c = counterRepository.save(c);
         	
-    		workPackage.setWpid(String.valueOf(c.getSequenceValue()));
+    		String year = df.format(Calendar.getInstance().getTime());
+    		workPackage.setWpid(year+nf.format(c.getSequenceValue()+1));
         }
     	
 //	    workPackage = workPackageService.save(workPackage);
