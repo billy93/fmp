@@ -31,7 +31,7 @@
         }
 
         if(vm.workPackage.type == 'REGULAR' && vm.workPackage.targetDistribution == 'MARKET'){
-        	 vm.types = ["Market Fares"];
+        	 vm.types = ["Market Fares", "Add-Ons"];
         }
         else if(vm.workPackage.type == 'DISCOUNT'){
         	 vm.types = ["Discount Fares"];

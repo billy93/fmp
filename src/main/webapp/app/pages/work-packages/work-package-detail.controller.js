@@ -20,8 +20,8 @@
      * @param Clipboard
      * @returns
      */
-    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities', 'states', 'cityGroups'];
-    function WorkPackageDetailController($window, $sce, currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups) {
+    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities', 'states', 'cityGroups', 'Currency'];
+    function WorkPackageDetailController($window, $sce, currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups, Currency) {
     	var vm = this;
 
     	window.onbeforeunload = function () {
@@ -68,9 +68,35 @@
         vm.indexSelectedTab = 0;
         $scope.dateformat = "yyyy-MM-dd";
         vm.fareType = {};
+        vm.optionFare = [];
+        
         for(var x=0;x<fareTypes.length;x++){
-        	vm.fareType[fareTypes[x].name] = fareTypes[x].name;
+        	if(vm.workPackage.targetDistribution=="ATPCO" && vm.workPackage.type=="DISCOUNT"){
+        		if(fareTypes[x].atpcoDiscount){
+        			vm.fareType[fareTypes[x].name] = fareTypes[x].code+" | "+fareTypes[x].name; 
+        		}
+        	}else{
+        		if(!fareTypes[x].atpcoDiscount){
+//        			vm.fareType[fareTypes[x].name] = fareTypes[x].name;
+        			vm.fareType[fareTypes[x].name] = fareTypes[x].code+" | "+fareTypes[x].name;
+        		}
+            	        		
+        	}
         }
+             
+        for(var x=0;x<fareTypes.length;x++){
+        	if(vm.workPackage.targetDistribution=="ATPCO" && vm.workPackage.type=="DISCOUNT"){
+        		if(fareTypes[x].atpcoDiscount){
+        			vm.optionFare.push(fareTypes[x]); 
+        		}
+        	}else{
+        		if(!fareTypes[x].atpcoDiscount){
+        			vm.optionFare.push(fareTypes[x]);
+        		}
+            	        		
+        	}
+        }
+        
         
         vm.businessArea = {};
         for(var x=0;x<businessAreas.length;x++){
@@ -579,6 +605,31 @@
         	},
         	{
         		name:"discountBaseFareOwRt",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountGlobal",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountRtgno",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountRtgnoTarno",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountNewFarebasis",
+        		editable:["LSO", "HO",  "Distribution"],
+        		mandatory:[]
+        	},
+        	{
+        		name:"discountNewBaseFareOwRt",
         		editable:["LSO", "HO",  "Distribution"],
         		mandatory:[]
         	},
@@ -1445,7 +1496,7 @@
 	        			findTab = true;
 	        			
 	        			var index = vm.workPackage.fareSheet.indexOf(x);
-	        			vm.workPackage.fareSheet.push(vm.workPackage.fareSheet[x]);
+	        			vm.workPackage.fareSheet.push(angular.copy(vm.workPackage.fareSheet[x]));
 	        			break;
 	        		}
 	        	}
@@ -1458,7 +1509,7 @@
 	        			findTab = true;
 	        			
 	        			var index = vm.workPackage.addonFareSheet.indexOf(x);
-	        			vm.workPackage.addonFareSheet.push(vm.workPackage.addonFareSheet[x]);
+	        			vm.workPackage.addonFareSheet.push(angular.copy(vm.workPackage.addonFareSheet[x]));
 	        			break;
 	        		}
 	        	}
@@ -1471,7 +1522,7 @@
 	        			findTab = true;
 	        			
 	        			var index = vm.workPackage.marketFareSheet.indexOf(x);
-	        			vm.workPackage.marketFareSheet.push(vm.workPackage.marketFareSheet[x]);
+	        			vm.workPackage.marketFareSheet.push(angular.copy(vm.workPackage.marketFareSheet[x]));
 	        			break;
 	        		}
 	        	}
@@ -2078,11 +2129,12 @@
               resolve: {
                   workPackage: vm.workPackage,              	  
 	              email: ['SystemParameter', function(SystemParameter) {
-	                   return SystemParameter.getSystemParameterByName({name : 'APPROVE_EMAIL'}).$promise;
+	                   return vm.workPackage.approveConfig.email
 	              }],
 	              ccEmail: ['SystemParameter', function(SystemParameter) {
-	                   return SystemParameter.getSystemParameterByName({name : 'APPROVE_CC_EMAIL'}).$promise;
+	                   return vm.workPackage.approveConfig.ccEmail
 	              }],
+	              statusResend : true
               }
           }).result.then(function(config) {
         	  vm.workPackage.approveConfig = config;
@@ -2100,6 +2152,7 @@
 	  
 	  vm.approve = function(){
 		  var validated = true;
+		  var cekStatus = "";
 		  
 //		  console.log("REGULAR");
 		  if(vm.workPackage.fareSheet != null && vm.workPackage.fareSheet.length > 0){
@@ -2107,6 +2160,7 @@
 				  if(vm.workPackage.fareSheet[x].fares != null && vm.workPackage.fareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.fareSheet[x].fares.length;y++){
 						  if(vm.workPackage.fareSheet[x].fares[y].status != "APPROVED"){
+							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.fareSheet[x].fares[y].status;
 							  validated = false;
 //							  console.log("X : "+x+" | Y : "+y);
 //							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
@@ -2123,6 +2177,7 @@
 				  if(vm.workPackage.discountFareSheet[x].fares != null && vm.workPackage.discountFareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.discountFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.discountFareSheet[x].fares[y].status != "APPROVED"){
+							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.discountFareSheet[x].fares[y].status;
 							  validated = false;
 //							  console.log("X : "+x+" | Y : "+y);
 //							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
@@ -2139,6 +2194,7 @@
 				  if(vm.workPackage.addonFareSheet[x].fares != null && vm.workPackage.addonFareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.addonFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.addonFareSheet[x].fares[y].status != "APPROVED"){
+							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.addonFareSheet[x].fares[y].status;
 							  validated = false;
 //							  console.log("X : "+x+" | Y : "+y);
 //							  console.log(vm.workPackage.addonFareSheet[x].fares[y].status);
@@ -2155,6 +2211,7 @@
 				  if(vm.workPackage.marketFareSheet[x].fares != null && vm.workPackage.marketFareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.marketFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.marketFareSheet[x].fares[y].status != "APPROVED"){
+							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.marketFareSheet[x].fares[y].status;
 							  validated = false;
 //							  console.log("X : "+x+" | Y : "+y);
 //							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
@@ -2171,6 +2228,7 @@
 				  if(vm.workPackage.waiverFareSheet[x].fares != null && vm.workPackage.waiverFareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.waiverFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.waiverFareSheet[x].fares[y].status != "APPROVED"){
+							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.waiverFareSheet[x].fares[y].status;
 							  validated = false;
 //							  console.log("X : "+x+" | Y : "+y);
 //							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
@@ -2196,6 +2254,7 @@
 		              ccEmail: ['SystemParameter', function(SystemParameter) {
 		                   return SystemParameter.getSystemParameterByName({name : 'APPROVE_CC_EMAIL'}).$promise;
 		              }],
+		              statusResend : false
 	              }
 	          }).result.then(function(config) {
 	        	  vm.workPackage.approveConfig = config;
@@ -2214,7 +2273,11 @@
 	      			
 	          });
 		  } else{
-			  alert('Work Package cannot be approved, please check the workorder');
+			  if(cekStatus.length != 0){
+				  alert(cekStatus);
+			  }else{
+				 alert('Work Package cannot be approved, please check the workorder');  
+			  }			  
 		  }
 	  };
 	  
@@ -4130,11 +4193,24 @@
       vm.calculateFareLost = function(fare){
     	  if(fare.waiverApprovedFare != null && fare.waiverNewBasicFare != null){
     		  fare.waiverFareLost = parseInt(fare.waiverApprovedFare) - parseInt(fare.waiverNewBasicFare);
+    		  if(fare.waiverTotalPax !=null && fare.waiverPenaltyLostAmount != null){
+        		  fare.waiverTotalLost = (parseInt(fare.waiverFareLost)+parseInt(fare.waiverPenaltyLostAmount))*parseInt(fare.waiverTotalPax);
+        	  }
     	  }
       }
       vm.calculatePenaltyLost = function(fare){
     	  if(fare.waiverApprovedPn != null && fare.waiverOriginalPn != null){
-    		  fare.waiverPenaltyLostPercent = parseInt(fare.waiverApprovedPn) - parseInt(fare.waiverOriginalPn);
+    		  fare.waiverPenaltyLostPercent = (parseInt(fare.waiverApprovedPn) - parseInt(fare.waiverOriginalPn))/parseInt(fare.waiverApprovedPn)*100;
+    		  fare.waiverPenaltyLostAmount = parseInt(fare.waiverApprovedPn) - parseInt(fare.waiverOriginalPn);
+    		  if(fare.waiverTotalPax !=null && fare.waiverFareLost != null){
+        		  fare.waiverTotalLost = (parseInt(fare.waiverFareLost)+parseInt(fare.waiverPenaltyLostAmount))*parseInt(fare.waiverTotalPax);
+        	  }
+    	  }
+      }
+      
+      vm.calculateTotalLost = function(fare){
+    	  if(fare.waiverTotalPax !=null && fare.waiverFareLost != null && fare.waiverFareLost != null){
+    		  fare.waiverTotalLost = (parseInt(fare.waiverFareLost)+parseInt(fare.waiverPenaltyLostAmount))*parseInt(fare.waiverTotalPax);
     	  }
       }
       
@@ -4315,5 +4391,142 @@
       vm.getKey = function(obj, index){
     	  return Object.keys(obj)[index];
       }
+      
+      vm.selectTariff = function(fare, field){
+    	  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-select-tariff-dialog.html',
+              controller: 'WorkPackageSelectTariffDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              windowClass: 'full-page-modal',
+              resolve: {
+	              	fare: function(){
+	              		return fare;
+	              	},
+                  tariffNumber: ['TariffNumber', function(TariffNumber) {
+                      return TariffNumber.getAll().$promise;
+                  }],
+              }
+			}).result.then(function(option) {
+				if(option != null){
+					fare[field] = option;
+				}
+          }, function() {
+      			
+          });
+      }
+      
+      vm.selectCity = function(fare, field){
+    	  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-select-city-dialog.html',
+              controller: 'WorkPackageSelectCityDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              windowClass: 'full-page-modal',
+              resolve: {
+	              	fare: function(){
+	              		return fare;
+	              	},
+                  cities: ['City', function(City) {
+                      return City.getAll().$promise;
+                  }],
+              }
+			}).result.then(function(option) {
+				if(option != null)
+					fare[field] = option.cityCode;
+          }, function() {
+      			
+          });
+      }
+      
+      
+      vm.selectCurrency = function(fare, field){
+    	  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-select-currency-dialog.html',
+              controller: 'WorkPackageSelectCurrencyDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              windowClass: 'full-page-modal',
+              resolve: {
+	              	fare: function(){
+	              		return fare;
+	              	},
+                  currencies: ['Currency', function(City) {
+                      return Currency.getAll().$promise;
+                  }],
+              }
+			}).result.then(function(option) {
+				if(option != null)
+					fare[field] = option.currencyCode;
+          }, function() {
+      			
+          });
+      }
+      
+      vm.checkCurrency = function(fare, field){
+    	  if(fare[field] != null || fare[field] != ''){
+	    	  var exist = false;
+	    	  for(var x=0;x<vm.currencies.length;x++){
+	    		  if(vm.currencies[x].currencyCode.toUpperCase() == fare[field].toUpperCase()){
+	    			  exist = true;
+	    			  break;
+	    		  }
+	    	  }
+	    	  
+	    	  if(!exist){
+	    		  alert("Currency code '"+fare[field]+"' is invalid. Please select a correct code");
+	    		  fare[field] = null;
+	    		  return;
+	    	  }
+    	  }
+      }
+      
+      vm.checkCity = function(fare, field){
+    	  if(fare[field] != null || fare[field] != ''){
+	    	  var exist = false;
+	    	  for(var x=0;x<vm.cities.length;x++){
+	    		  if(vm.cities[x].cityCode.toUpperCase() == fare[field].toUpperCase()){
+	    			  exist = true;
+	    			  break;
+	    		  }
+	    	  }
+	    	  
+	    	  if(!exist){
+	    		  alert("City code '"+fare[field]+"' is invalid. Please select a correct code");
+	    		  fare[field] = null;
+	    		  return;
+	    	  }
+    	  }
+      }
+      
+      vm.checkTariff = function(fare, field, inputField){
+    	  var tariff = null;
+    	  if(fare[field][inputField] != undefined){
+	    	  var exist = false;
+	    	  for(var x=0;x<vm.tariffNumber.length;x++){	   
+	    		  if(vm.tariffNumber[x][inputField] == fare[field][inputField]){
+	    			  tariff = angular.copy(vm.tariffNumber[x]);
+	    			  exist = true;
+	    			  break;
+	    		  }
+	    	  }
+	    	  
+	    	  if(!exist){
+	    		  alert("Tariff number is invalid. Please select a correct code");
+	    		  fare[field] = null;
+	    		  return;
+	    	  }
+	    	  else{
+	    		  fare[field] = tariff;
+	    	  }
+    	  }
+    	  else{
+    		  fare[field] = null;
+    		  return;
+    	  }
+      }      
     }
 })();

@@ -18,11 +18,8 @@
         vm.loadAll = loadAll;
         vm.getRules = getRules;
         vm.getRules2 = getRules2;
-        vm.showDetail = showDetail;
-        vm.hideDetail = hideDetail;
         vm.reset = reset;
         vm.page = 1;
-        vm.clearFilter = clearFilter;
         vm.showCategoryDetail = showCategoryDetail;
         
         vm.getTab = getTab;
@@ -34,11 +31,8 @@
         function loadAll () {
         	vm.queryParams.page = vm.page - 1;
         	vm.queryParams.size = vm.itemsPerPage;
-        	RuleQuery.query(vm.queryParams, onSuccess, onError);
         	
-        	$("th").css({
-    			"text-align" : "center"
-    		});
+        	RuleQuery.query(vm.queryParams, onSuccess, onError);
         	
             function onSuccess(data, headers) {
                 vm.links = ParseLinks.parse(headers('link'));
@@ -72,8 +66,7 @@
         	}, function(error) {
         		console.log(error);
         	});
-        }
-        
+        }        
         
         function showDetail() {
         	$("#tblDetail").show();
@@ -125,13 +118,13 @@
         
         function reset() {
         	vm.queryParams = {
-        			cxr: null,
-            		ruleTarNo: null,
-            		ruleNo: null,
-            		type: null,
-            		src: null,
-            		cat: null,
-            		catNo: null
+    			cxr: null,
+        		ruleTarNo: null,
+        		ruleNo: null,
+        		type: null,
+        		src: null,
+        		cat: null,
+        		catNo: null
         	}
         	
         	vm.clearFilter();

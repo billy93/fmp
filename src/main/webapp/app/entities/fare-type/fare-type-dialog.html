@@ -31,7 +31,15 @@
                     ng-model="vm.fareType.code"
                     />
         </div>
-
+		<div class="form-group">
+			<div class="checkbox-wrapper">
+				<label class="black" for="atpcoDiscount">
+					<input type="checkbox" id="atpcoDiscount"
+					name="atpcoDiscount" ng-model="vm.fareType.atpcoDiscount">
+					ATPCO Discount
+				</label>
+			</div>
+		</div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">

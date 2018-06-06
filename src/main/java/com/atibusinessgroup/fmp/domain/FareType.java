@@ -26,6 +26,9 @@ public class FareType implements Serializable {
 
     @Field("code")
     private String code;
+    
+    @Field("atpcoDiscount")
+    private Boolean atpcoDiscount;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public String getId() {
@@ -74,9 +77,19 @@ public class FareType implements Serializable {
     public void setCode(String code) {
         this.code = code;
     }
+    
+    
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
-    @Override
+    public Boolean getAtpcoDiscount() {
+		return atpcoDiscount;
+	}
+
+	public void setAtpcoDiscount(Boolean atpcoDiscount) {
+		this.atpcoDiscount = atpcoDiscount;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

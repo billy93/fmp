@@ -44,6 +44,12 @@ var Anterec;
                 $(this.container).on("mouseup touchend", function () {
                     _this.cancelColumn();
                 });
+                $('.resize-div').on("mousedown touchstart", function (event) {
+                    event.stopPropagation();
+                });
+                $('.resize-div').on("mouseup touchend", function (event) {
+                    event.stopPropagation();
+                });
             };
 
             JsDragTable.prototype.selectColumn = function (header, event) {

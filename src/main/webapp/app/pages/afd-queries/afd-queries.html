@@ -316,6 +316,9 @@
 			                    <th>Fare Type</th>
 			                    <th>Pax Type</th>
 			                    <th>WO Id</th>
+			                    <th>WO Name</th>
+			                    <th>Tour Code</th>
+			                    <th>Cat 50 Title</th>
 			                    <th>Group Fare</th>
 			                    <th>Ref Amt</th>
 			                    <th>Ref YQYR</th>
@@ -388,12 +391,15 @@
 			                	<td></td>
 			                	<td></td>
 			                	<td></td>
+			                	<td></td>
+			                	<td></td>
+			                	<td></td>
 			                </tr>
 			            </tbody>
 			        </table>
 			    </div>
 			    <div class="additional-info-wrapper">
-           			<div class="additional-info" ng-click="vm.showCategoryDetail(cat)" ng-class="{'lightyellow': cat.catAttributes.length > 0 && cat.type.includes('F'), 'yellow': cat.catAttributes.length > 0 && cat.type.includes('R'), 'blue': cat.catAttributes.length > 0 && cat.type.includes('G')}" ng-repeat="cat in vm.categoryRules track by cat.catNo">
+           			<div class="additional-info" ng-click="vm.showCategoryDetail(cat)" ng-class="{'lightyellow': cat.catAttributes.length > 0 && cat.type.includes('F'), 'yellow': cat.catAttributes.length > 0 && cat.type.includes('R'), 'blue': cat.catAttributes.length > 0 && cat.type == 'G'}" ng-repeat="cat in vm.categoryRules track by cat.catNo">
            				{{cat.catNo}} {{cat.catName}} <span ng-if="cat.catAttributes.length > 0">({{cat.type}})</span>
            			</div>
            		</div>

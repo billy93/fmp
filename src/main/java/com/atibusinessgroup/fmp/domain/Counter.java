@@ -11,6 +11,9 @@ public class Counter {
     @Field("sequence_value")
     private int sequenceValue;
 
+    @Field("year")
+    private String year;
+
 	public String getId() {
 		return id;
 	}
@@ -25,6 +28,14 @@ public class Counter {
 
 	public void setSequenceValue(int sequenceValue) {
 		this.sequenceValue = sequenceValue;
+	}
+
+	public String getYear() {
+		return year;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
 	}
     
     

@@ -42,7 +42,7 @@ body {
 }
 
 .additional-info-wrapper {
-    margin: 10px 0;
+    margin: 10px 0 25px 0;
     display: inline-block;
     width: 100%;
 }
@@ -75,7 +75,7 @@ body {
 }
 
 .additional-info-wrapper .additional-info.blue {
-	background: #a7e7ff;
+	background: #9de4ff;
 	color: #000;
 	border-color: #000;
 	cursor: pointer;
@@ -91,6 +91,10 @@ body {
 	text-transform: capitalize;	
 }
 
+.table thead th {
+	text-align: center !important;
+}
+
 th .glyphicon {
 	font-size: 12px;
     margin: 0 5px;
@@ -103,6 +107,7 @@ th .glyphicon {
 .table.category td pre {
 	text-align: left;
     background: white;
+    margin: 0;
 }
 
 /* ==========================================================================

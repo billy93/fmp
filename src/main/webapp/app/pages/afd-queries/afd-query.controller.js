@@ -67,6 +67,9 @@
         vm.loadAll();
 
         function loadAll () {
+        	vm.categoryRules = null;
+        	vm.currentAfdQuery = null;
+        	
         	vm.queryParams.page = vm.page - 1;
         	vm.queryParams.size = vm.itemsPerPage;
         	
@@ -93,6 +96,7 @@
         		AfdQuery.getRules(afdQuery, function(data) {
             		vm.categoryRules = data;
             		vm.currentAfdQuery = afdQuery;
+            		console.log(vm.categoryRules);
             	}, function(error) {
             		console.log(error);
             	});

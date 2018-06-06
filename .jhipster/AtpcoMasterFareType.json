@@ -1,0 +1,23 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "fareTypeDesignation",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "typeCode",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "definition",
+            "fieldType": "String"
+        }
+    ],
+    "dto": "no",
+    "service": "serviceClass",
+    "entityTableName": "atpco_master_fare_type",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}
