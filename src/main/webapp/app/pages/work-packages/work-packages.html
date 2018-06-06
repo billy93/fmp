@@ -6,21 +6,7 @@
 			<!-- table panel -->
 			<div class="panel">
 				<div class="panel-body">
-					<div class="table-wrapper">
-						<div class="datatable-wrapper form-inline">
-							<div class="clearfix">
-								<div class="pull-left w50">
-									<div class="datatable-length">
-										<label>
-											My Business Area(s)
-										</label>
-										<p>{{vm.users.businessAreas.join(', ')}}</p>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					
+				
 					<!-- filter -->
 					<div class="filter-hero">
 						<div class="filter-label semibold show">Hide Filter</div>							
@@ -189,23 +175,40 @@
 								<table class="table table-stripped table-bordered datatable" jq-slider>
 									<thead>
 										<tr role="row" jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-											<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Action</th>
-											<th class="sorting_asc" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" aria-sort="ascending">No</th>
-											<th jh-sort-by="type" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">WO Type <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="targetDistribution" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Distribution Type <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="status" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Status <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="wpid" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">WO ID <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="name" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">WO Name <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="reviewLevel" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Review Level <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="approvalReference" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Approval Reference <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="reuseFrom" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Reuse from <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="replaceFrom" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Replace from <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="priority" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Priority <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="fareType" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Fare Types <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="createdDate" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Created Date <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="createdBy" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Created By <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="lastModifiedDate" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Last Modified Date <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="lastModifiedBy" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Last Modified By <span class="glyphicon glyphicon-sort"></span></th>
+											<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" 
+											rowspan="1" colspan="1">Action</th>
+											<th class="sorting_asc" tabindex="0" aria-controls="datatable-tabletools" 
+											rowspan="1" colspan="1" aria-sort="ascending">No</th>
+											<th jh-sort-by="type" class="sorting" tabindex="0" aria-controls="datatable-tabletools" 
+											rowspan="1" colspan="1">WO Type <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="targetDistribution" class="sorting" tabindex="0" aria-controls="datatable-tabletools" 
+											rowspan="1" colspan="1">Distribution Type <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="status" class="sorting" tabindex="0" aria-controls="datatable-tabletools" 
+											rowspan="1" colspan="1">Status <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="wpid" class="sorting" tabindex="0" aria-controls="datatable-tabletools" 
+											rowspan="1" colspan="1">WO ID <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="name" class="sorting" tabindex="0" aria-controls="datatable-tabletools" 
+											rowspan="1" colspan="1">WO Name <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="reviewLevel" class="sorting" tabindex="0" aria-controls="datatable-tabletools" 
+											rowspan="1" colspan="1">Review Level <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="approvalReference" class="sorting" tabindex="0" aria-controls="datatable-tabletools" 
+											rowspan="1" colspan="1">Approval Reference <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="reuseFrom" class="sorting" tabindex="0" aria-controls="datatable-tabletools" 
+											rowspan="1" colspan="1">Reuse from <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="replaceFrom" class="sorting" tabindex="0" aria-controls="datatable-tabletools" 
+											rowspan="1" colspan="1">Replace from <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="priority" class="sorting" tabindex="0" aria-controls="datatable-tabletools" 
+											rowspan="1" colspan="1">Priority <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="fareType" class="sorting" tabindex="0" aria-controls="datatable-tabletools" 
+											rowspan="1" colspan="1">Fare Types <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="createdDate" class="sorting" tabindex="0" aria-controls="datatable-tabletools" 
+											rowspan="1" colspan="1">Created Date <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="createdBy" class="sorting" tabindex="0" aria-controls="datatable-tabletools" 
+											rowspan="1" colspan="1">Created By <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="lastModifiedDate" class="sorting" tabindex="0" aria-controls="datatable-tabletools" 
+											rowspan="1" colspan="1">Last Modified Date <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="lastModifiedBy" class="sorting" tabindex="0" aria-controls="datatable-tabletools" 
+											rowspan="1" colspan="1">Last Modified By <span class="glyphicon glyphicon-sort"></span></th>
 										</tr>
 									</thead>
 									<tbody ng-repeat="workPackage in vm.workPackages track by $index" >
@@ -215,7 +218,7 @@
 						                        <div class="btn-group edit-btn entities flex-btn-group-container">
 						                            <button type="submit" title="Edit" ng-disabled="workPackage.locked"
 						                                    ui-sref="work-package-detail({id:workPackage.id})"
-						                                    class="btn btn-primary btn-sm">
+						                                    class="btn btn-primary btn-tiny mb0">
 						                                <span class="glyphicon glyphicon-pencil"></span>
 						                            </button>
 						                        </div>
@@ -232,7 +235,7 @@
 							                    	<table ng-if="workPackage.specifiedFares" class="sub-table">
 							                    		<thead>
 							                    			<tr><th  colspan="2"><center>Fare</center></th></tr>
-							                    			<tr>
+							                    			<tr class="sub-second-th">
 							                    				<th>Sheet</th>
 							                    				<th>Tour Code</th>
 							                    			</tr>			                    			
@@ -256,7 +259,7 @@
 							                    	<table ng-if="workPackage.specifiedFares" class="sub-table">
 							                    		<thead>
 							                    			<tr><th  colspan="2"><center>Fare</center></th></tr>
-							                    			<tr>
+							                    			<tr class="sub-second-th">
 							                    				<th>Sheet</th>
 							                    				<th>Fare Type</th>
 							                    			</tr>			                    			
@@ -275,7 +278,7 @@
 						                    	<table ng-if="workPackage.discount" class="sub-table">
 						                    		<thead>
 						                    			<tr><th  colspan="2"><center>Discount Fare</center></th></tr>
-						                    			<tr>
+						                    			<tr class="sub-second-th">
 						                    				<th>Sheet</th>
 						                    				<th>Fare Type</th>
 						                    			</tr>			                    			
@@ -293,7 +296,7 @@
 						                    	<table ng-if="workPackage.marketFares" class="sub-table">
 						                    		<thead>
 						                    			<tr><th  colspan="2"><center>Market Fare</center></th></tr>
-						                    			<tr>
+						                    			<tr class="sub-second-th">
 						                    				<th>Sheet</th>
 						                    				<th>Fare Type</th>
 						                    			</tr>			                    			
@@ -311,7 +314,7 @@
 						                    	<table ng-if="workPackage.waiverFares" class="sub-table">
 						                    		<thead>
 						                    			<tr><th  colspan="2"><center>Waiver Fare</center></th></tr>
-						                    			<tr>
+						                    			<tr class="sub-second-th">
 						                    				<th>Sheet</th>
 						                    				<th>Fare Type</th>
 						                    			</tr>			                    			
@@ -356,7 +359,8 @@
 							
 							<div class="text-center">
 						        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
-						        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
+						        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage"
+						         ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
 						    </div>
 							<div class="clearfix data-on">
 								<div class="pull-left dataTables_info">
