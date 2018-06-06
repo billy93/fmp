@@ -133,8 +133,6 @@ public class AtpcoFareCustomRepository {
 				
 				match.append("$match", and);
 				
-				System.out.println(match);
-				
 				return match;
 			}
 		});
