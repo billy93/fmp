@@ -1,13 +1,15 @@
 <div class="box-body bbgrey">
 	<div class="clearfix tab-body">
-		<ul class="clearfix nav-responsive nav nav-tabs"
-			style="font-size: 14px !important;">
-			<li ng-class="{active:vm.tab1}" class="semibold"><a
-				ng-click="vm.getTab('1')">Rule</a></li>
-			<li ng-class="{active:vm.tab2}" class="semibold"><a
-				ng-click="vm.getTab('2')">Fare Class</a></li>
-			<li ng-class="{active:vm.tab3}" class="semibold"><a
-				ng-click="vm.getTab('3')">Rec 8 - Fare By Rule</a></li>
+		<ul class="clearfix nav-responsive nav nav-tabs" style="font-size: 14px !important">
+			<li ng-class="{active:vm.tab1}" class="semibold">
+				<a ng-click="vm.getTab('1')">Rule</a>
+			</li>
+			<li ng-class="{active:vm.tab2}" class="semibold">
+				<a ng-click="vm.getTab('2')">Fare Class</a>
+			</li>
+			<li ng-class="{active:vm.tab3}" class="semibold">
+				<a ng-click="vm.getTab('3')">Rec 8 - Fare By Rule</a>
+			</li>
 		</ul>
 	</div>
 
@@ -29,10 +31,11 @@
 													<div class="custom-label semibold">Carrier</div>
 													<input type="text" class="form-control" name="carrier"
 														id="cxr" ng-model="vm.queryParams.cxr" uppercase />
+												</div>
+												<div class="form-group">
 													<div class="custom-label semibold">Rule Number</div>
 													<input type="text" class="form-control" name="ruleNumber"
 														id="ruleNo" ng-model="vm.queryParams.ruleNo" uppercase />
-
 												</div>
 											</div>
 											<div class="pull-left col-md-6 no-lpad">
@@ -45,10 +48,14 @@
 														<option value="2">General Rule</option>
 														<option value="3">Rule</option>
 													</select>
+												</div>
+												<div class="form-group">
 													<div class="custom-label semibold">Tariff</div>
 													<input type="text" class="form-control" name="tariff"
 														id="ruleTarNo" ng-model="vm.queryParams.ruleTarNo"
 														uppercase />
+												</div>
+												<div class="form-group">
 													<div class="custom-label semibold">Category</div>
 													<select class="form-control" name="category" id="catNo"
 														ng-model="vm.queryParams.catNo">
@@ -90,7 +97,7 @@
 										</div>
 
 										<div class="pull-left col-md-6 no-pad">
-											<div class="pull-left col-md-5 no-rpad">
+											<div class="pull-left col-md-6 no-rpad">
 												<div class="form-group">
 													<div class="custom-label semibold">Sales Country
 														Group</div>
@@ -123,6 +130,8 @@
 														<option value="SAUDIARABIA">SAUDI ARABIA</option>
 														<option value="">...MORE...</option>
 													</select>
+												</div>
+												<div class="form-group">
 													<div class="custom-label semibold">Fare Group</div>
 													<select class="form-control" name="fareGroup" id="fGroup"
 														ng-model="vm.queryParams.fareGroup">
@@ -136,13 +145,15 @@
 													</select>
 												</div>
 											</div>
-											<div class="pull-left col-md-5 no-rpad">
+											<div class="pull-left col-md-6 no-rpad">
 												<div class="form-group">
 													<div class="custom-label semibold">Product Sub Type</div>
 													<select class="form-control" name="productSubType"
 														id="prodSubType" ng-model="vm.queryParams.productSubType">
 														<option value="">All</option>
 													</select>
+												</div>
+												<div class="form-group">
 													<div class="custom-label semibold">Product Type</div>
 													<select class="form-control" name="productType"
 														id="prodType" ng-model="vm.queryParams.productType">
@@ -596,14 +607,7 @@
 
 		<!-- REC 8 -->
 		<div ng-class="{active:vm.tab3}" class="tab-pane" id="rec8">
-			kocong bang..!</div>
+			kocong bang..!
+		</div>
 	</div>
 </div>
-
-
-
-
-
-
-
-
