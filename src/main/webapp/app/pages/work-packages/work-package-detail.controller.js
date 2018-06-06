@@ -68,9 +68,35 @@
         vm.indexSelectedTab = 0;
         $scope.dateformat = "yyyy-MM-dd";
         vm.fareType = {};
+        vm.optionFare = [];
+        
         for(var x=0;x<fareTypes.length;x++){
-        	vm.fareType[fareTypes[x].name] = fareTypes[x].name;
+        	if(vm.workPackage.targetDistribution=="ATPCO" && vm.workPackage.type=="DISCOUNT"){
+        		if(fareTypes[x].atpcoDiscount){
+        			vm.fareType[fareTypes[x].name] = fareTypes[x].code+" | "+fareTypes[x].name; 
+        		}
+        	}else{
+        		if(!fareTypes[x].atpcoDiscount){
+//        			vm.fareType[fareTypes[x].name] = fareTypes[x].name;
+        			vm.fareType[fareTypes[x].name] = fareTypes[x].code+" | "+fareTypes[x].name;
+        		}
+            	        		
+        	}
         }
+             
+        for(var x=0;x<fareTypes.length;x++){
+        	if(vm.workPackage.targetDistribution=="ATPCO" && vm.workPackage.type=="DISCOUNT"){
+        		if(fareTypes[x].atpcoDiscount){
+        			vm.optionFare.push(fareTypes[x]); 
+        		}
+        	}else{
+        		if(!fareTypes[x].atpcoDiscount){
+        			vm.optionFare.push(fareTypes[x]);
+        		}
+            	        		
+        	}
+        }
+        
         
         vm.businessArea = {};
         for(var x=0;x<businessAreas.length;x++){
