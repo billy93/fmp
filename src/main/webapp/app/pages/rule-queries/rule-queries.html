@@ -7,15 +7,19 @@
 			<div class="filter-area">
 				<div class="clearfix">
 					<form name="queryForm" role="form" novalidate>
-						<div class="pull-left col-md-5 no-pad">
+						<div class="pull-left col-md-12 no-pad">
 							<div class="pull-left col-md-6 no-lpad">
 								<div class="form-group">
 									<div class="custom-label semibold">Carrier</div>
 									<input type="text" class="form-control" name="carrier" id="cxr"
 										ng-model="vm.queryParams.cxr" uppercase />
+								</div>
+								<div class="form-group">
 									<div class="custom-label semibold">Rule Number</div>
 									<input type="text" class="form-control" name="ruleNumber"
 										id="ruleNo" ng-model="vm.queryParams.ruleNo" uppercase />
+								</div>
+								<div class="form-group">
 									<div class="custom-label semibold">Rule Type</div>
 									<input type="text" class="form-control" name="ruleType"
 										id="type" ng-model="vm.queryParams.type" uppercase />
@@ -26,9 +30,13 @@
 									<div class="custom-label semibold">Source</div>
 									<input type="text" class="form-control" name="source" id="src"
 										ng-model="vm.queryParams.src" uppercase />
+								</div>
+								<div class="form-group">
 									<div class="custom-label semibold">Tariff</div>
 									<input type="text" class="form-control" name="tariff"
 										id="ruleTarNo" ng-model="vm.queryParams.ruleTarNo" uppercase />
+								</div>
+								<div class="form-group">
 									<div class="custom-label semibold">Category</div>
 									<select class="form-control" name="category" id="catNo" ng-model="vm.queryParams.catNo">
 										<option value="">All</option>
