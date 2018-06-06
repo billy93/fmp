@@ -20,8 +20,8 @@
      * @param Clipboard
      * @returns
      */
-    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities', 'states', 'cityGroups'];
-    function WorkPackageDetailController($window, $sce, currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups) {
+    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities', 'states', 'cityGroups', 'Currency'];
+    function WorkPackageDetailController($window, $sce, currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups, Currency) {
     	var vm = this;
 
     	window.onbeforeunload = function () {
@@ -4314,6 +4314,144 @@
       
       vm.getKey = function(obj, index){
     	  return Object.keys(obj)[index];
+      }
+      
+      vm.selectTariff = function(fare, field){
+    	  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-select-tariff-dialog.html',
+              controller: 'WorkPackageSelectTariffDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              windowClass: 'full-page-modal',
+              resolve: {
+	              	fare: function(){
+	              		return fare;
+	              	},
+                  tariffNumber: ['TariffNumber', function(TariffNumber) {
+                      return TariffNumber.getAll().$promise;
+                  }],
+              }
+			}).result.then(function(option) {
+				if(option != null){
+					fare[field] = option;
+				}
+          }, function() {
+      			
+          });
+      }
+      
+      vm.selectCity = function(fare, field){
+    	  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-select-city-dialog.html',
+              controller: 'WorkPackageSelectCityDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              windowClass: 'full-page-modal',
+              resolve: {
+	              	fare: function(){
+	              		return fare;
+	              	},
+                  cities: ['City', function(City) {
+                      return City.getAll().$promise;
+                  }],
+              }
+			}).result.then(function(option) {
+				if(option != null)
+					fare[field] = option.cityCode;
+          }, function() {
+      			
+          });
+      }
+      
+      
+      vm.selectCurrency = function(fare, field){
+    	  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-select-currency-dialog.html',
+              controller: 'WorkPackageSelectCurrencyDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              windowClass: 'full-page-modal',
+              resolve: {
+	              	fare: function(){
+	              		return fare;
+	              	},
+                  currencies: ['Currency', function(City) {
+                      return Currency.getAll().$promise;
+                  }],
+              }
+			}).result.then(function(option) {
+				if(option != null)
+					fare[field] = option.currencyCode;
+          }, function() {
+      			
+          });
+      }
+      
+      vm.checkCurrency = function(fare, field){
+    	  if(fare[field] != null || fare[field] != ''){
+	    	  var exist = false;
+	    	  for(var x=0;x<vm.currencies.length;x++){
+	    		  if(vm.currencies[x].currencyCode.toUpperCase() == fare[field].toUpperCase()){
+	    			  exist = true;
+	    			  break;
+	    		  }
+	    	  }
+	    	  
+	    	  if(!exist){
+	    		  alert("Currency code '"+fare[field]+"' is invalid. Please select a correct code");
+	    		  fare[field] = null;
+	    		  return;
+	    	  }
+    	  }
+      }
+      
+      vm.checkCity = function(fare, field){
+    	  if(fare[field] != null || fare[field] != ''){
+	    	  var exist = false;
+	    	  for(var x=0;x<vm.cities.length;x++){
+	    		  if(vm.cities[x].cityCode.toUpperCase() == fare[field].toUpperCase()){
+	    			  exist = true;
+	    			  break;
+	    		  }
+	    	  }
+	    	  
+	    	  if(!exist){
+	    		  alert("City code '"+fare[field]+"' is invalid. Please select a correct code");
+	    		  fare[field] = null;
+	    		  return;
+	    	  }
+    	  }
+      }
+      
+      vm.checkTariff = function(fare, field, inputField){
+    	  var tariff = null;
+    	  if(fare[field][inputField] != undefined){
+	    	  var exist = false;
+	    	  for(var x=0;x<vm.tariffNumber.length;x++){	   
+//	    		  console.log(vm.tariffNumber[x]);
+	    		  if(vm.tariffNumber[x][inputField] == fare[field][inputField]){
+	    			  tariff = angular.copy(vm.tariffNumber[x]);
+	    			  exist = true;
+	    			  break;
+	    		  }
+	    	  }
+	    	  
+	    	  if(!exist){
+	    		  alert("Tariff number is invalid. Please select a correct code");
+	    		  fare[field] = null;
+	    		  return;
+	    	  }
+	    	  else{
+	    		  fare[field] = tariff;
+	    	  }
+    	  }
+    	  else{
+    		  fare[field] = null;
+    		  return;
+    	  }
       }
     }
 })();
