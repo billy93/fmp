@@ -9,8 +9,6 @@
 
     function FootnoteQueryController($state, FootnoteQuery, ParseLinks, AlertService, paginationConstants, queryParams, $uibModal) {
     	
-    	console.log("queryParams :: ",queryParams);
-
         var vm = this;
         vm.loadPage = loadPage;
         vm.itemsPerPage = paginationConstants.itemsPerPage;
@@ -18,34 +16,25 @@
         vm.loadAll = loadAll;
         vm.getFtnt = getFtnt;
         vm.getFtnt2 = getFtnt2;
-        vm.showDetail = showDetail;
-        vm.hideDetail = hideDetail;
         vm.reset = reset;
         vm.page = 1;
-        vm.clearFilter = clearFilter;
         vm.showCategoryDetail = showCategoryDetail;
         
         vm.datePickerOpenStatus = {};
         vm.dateFormat = "yyyy-MM-dd";
         vm.openCalendar = openCalendar;
         
-
         function loadAll () {
         	vm.queryParams.page = vm.page - 1;
         	vm.queryParams.size = vm.itemsPerPage;
-        	console.log(vm.queryParams);
-        	FootnoteQuery.query(vm.queryParams, onSuccess, onError);
         	
-        	$("th").css({
-    			"text-align" : "center"
-    		});
+        	FootnoteQuery.query(vm.queryParams, onSuccess, onError);
         	
             function onSuccess(data, headers) {
                 vm.links = ParseLinks.parse(headers('link'));
                 vm.totalItems = headers('X-Total-Count');
                 vm.queryCount = vm.totalItems;
                 vm.footnoteQueries = data;
-                console.log(data);
             }
             
             function onError(error) {
@@ -73,31 +62,6 @@
         	});
         }
         
-        function showDetail() {
-        	$("#tblDetail").show();
-        	$("#tblDetail").focus();
-        	$("#tblDetail").css("display","block");
-        	$("#tblDetail").css("max-height","440px");
-        	$("#tblDetail").css("overflow-y","scroll");
-        	$("#ruleCategories").show();
-        	
-        }
-        
-        function hideDetail() {
-        	$("#tblDetail").css("display","none");
-        	$("#tblDetail").hide();
-        	$("#ruleCategories").hide();
-        }
-        
-        function clearFilter() {
-        	$("#cxr").val("");
-        	$("#ruleNo").val("");
-        	$("#type").val("");
-        	$("#src").val("");
-        	$("#ruleTarNo").val("");
-        	$("#catNo").val("");
-        }
-        
         function openCalendar (e, date) {
         	e.preventDefault();
             e.stopPropagation();
@@ -107,16 +71,16 @@
         
         function reset() {
         	vm.queryParams = {
-        			cxr: null,
-            		ftnt: null,
-            		tarNo: null,
-            		catNo: null,
-            		saleDateFrom: null,
-            		saleDateTo: null,
-            		travelDateFrom: null,
-            		travelDateTo: null,
-            		completedDateFrom: null,
-            		travelOpt: null
+    			cxr: null,
+        		ftnt: null,
+        		tarNo: null,
+        		catNo: null,
+        		saleDateFrom: null,
+        		saleDateTo: null,
+        		travelDateFrom: null,
+        		travelDateTo: null,
+        		completedDateFrom: null,
+        		travelOpt: null
         	}
         	
         	vm.loadAll();

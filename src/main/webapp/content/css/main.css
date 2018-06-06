@@ -42,7 +42,7 @@ body {
 }
 
 .additional-info-wrapper {
-    margin: 10px 0;
+    margin: 10px 0 25px 0;
     display: inline-block;
     width: 100%;
 }
@@ -91,6 +91,10 @@ body {
 	text-transform: capitalize;	
 }
 
+.table thead th {
+	text-align: center !important;
+}
+
 th .glyphicon {
 	font-size: 12px;
     margin: 0 5px;
@@ -98,6 +102,12 @@ th .glyphicon {
 
 .form-control[disabled] {
 	background: #d0d0d0;
+}
+
+.table.category td pre {
+	text-align: left;
+    background: white;
+    margin: 0;
 }
 
 /* ==========================================================================

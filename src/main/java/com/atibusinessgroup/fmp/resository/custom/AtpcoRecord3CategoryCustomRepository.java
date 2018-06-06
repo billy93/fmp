@@ -12,7 +12,10 @@ import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperationContext;
 import org.springframework.stereotype.Service;
 
+import com.atibusinessgroup.fmp.constant.CollectionName;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord3CategoryWithDataTable;
+import com.atibusinessgroup.fmp.domain.dto.DateTable;
+import com.atibusinessgroup.fmp.domain.dto.TextTable;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
@@ -40,10 +43,18 @@ public class AtpcoRecord3CategoryCustomRepository {
 		aggregationOperations.add(new AggregationOperation() {
 			@Override
 			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject project = new BasicDBObject();
+				project.append("$project", new BasicDBObject("category", "$$ROOT"));
+				return project;
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
 				BasicDBObject projectResult = new BasicDBObject();
 				BasicDBObject query = new BasicDBObject();
 				query.append("_id", 0);
-				query.append("category", "$$ROOT");
 				projectResult.append("$project", query);
 				return projectResult;
 			}
@@ -52,6 +63,72 @@ public class AtpcoRecord3CategoryCustomRepository {
 		Aggregation aggregation = newAggregation(aggregationOperations);
 		
 		List<AtpcoRecord3CategoryWithDataTable> result = mongoTemplate.aggregate(aggregation, collectionName, AtpcoRecord3CategoryWithDataTable.class).getMappedResults();
+		
+		return result;
+	}
+	
+	public TextTable findRecord3TextTable(String tableNo) {
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject match = new BasicDBObject();
+				BasicDBObject no = new BasicDBObject();
+				no.append("tbl_no", tableNo);
+				match.append("$match", no);
+				return match;
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject group = new BasicDBObject();
+				group.append("$group", new BasicDBObject("_id", "$tbl_no").append("text", new BasicDBObject("$push", "$text")));
+				return group;
+			}
+		});
+		
+		Aggregation aggregation = newAggregation(aggregationOperations);
+		
+		TextTable result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_RECORD_TEXT_TABLE_996, TextTable.class).getUniqueMappedResult();
+		
+		return result;
+	}
+
+	public DateTable findRecord3DateTable(String tableNo) {
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject match = new BasicDBObject();
+				BasicDBObject no = new BasicDBObject();
+				no.append("tbl_no", tableNo);
+				match.append("$match", no);
+				return match;
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject project = new BasicDBObject();
+				project.append("$project", new BasicDBObject("_id", 0)
+						.append("travel_dates_eff", 1)
+						.append("travel_dates_disc", 1)
+						.append("ticketing_dates_eff", 1)
+						.append("ticketing_dates_disc", 1)
+						.append("reservations_dates_eff", 1)
+						.append("reservations_dates_disc", 1));
+				return project;
+			}
+		});
+		
+		Aggregation aggregation = newAggregation(aggregationOperations);
+		
+		DateTable result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_RECORD_DATE_TABLE_994, DateTable.class).getUniqueMappedResult();
 		
 		return result;
 	}

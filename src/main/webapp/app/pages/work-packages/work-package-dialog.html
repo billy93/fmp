@@ -10,31 +10,23 @@
         <div class="tab-content afd">
         	<div class="row">
 	        	<div class="col-md-12">	
-	        		<div class="form-group row">
-			            <label class="col-md-4">Workorder Name</label>
-			            <input type="text" class="col-md-8" name="name" id="field_name" ng-model="vm.workPackage.name"/>
+	        		<div class="form-group">
+			            <label>Workorder Name</label>
+			            <input type="text" class="form-control" name="name" id="field_name" ng-model="vm.workPackage.name"/>
 			        </div>
 			        
-			        <div class="form-group row">
-			            <label class="col-md-4" for="field_businessArea">Business Area</label>
-			            <div class="col-md-8 no-pad select">	
-			            	<!-- <select class="col-md-12" name="priority" ng-model="vm.workPackage.businessArea" id="field_businessArea">
-				                <option value="">Select Business Area</option>
-				                <option value="JKT" >JKT</option>
-				            </select> -->
-				            <select class="col-md-12" name="businessArea" ng-model="vm.workPackage.businessArea" id="field_businessArea">
-								<option ng-repeat="x in vm.businessAreas track by $index">{{x}}</option>
-							</select>
-			            </div>
+			        <div class="form-group">
+			            <label for="field_businessArea">Business Area</label>
+			            <select class="form-control" name="businessArea" ng-model="vm.workPackage.businessArea" id="field_businessArea">
+							<option ng-repeat="x in vm.businessAreas track by $index">{{x}}</option>
+						</select>
 			        </div>
 			        
-			        <div class="form-group row" ng-show="vm.workPackage.type=='REGULAR' || vm.workPackage.type=='DISCOUNT' || vm.workPackage.type=='WAIVER'">
-			        	<label class="col-md-4" >Distribution Type</label>
-			        	<div class="col-md-8 no-pad select">	
-			        		<select class="col-md-12" name="distributionType" ng-model="vm.workPackage.targetDistribution" id="field_distributionType">
-								<option ng-repeat="x in vm.distributionTypes track by $index">{{x}}</option>
-							</select>
-			        	</div>
+			        <div class="form-group" ng-show="vm.workPackage.type=='REGULAR' || vm.workPackage.type=='DISCOUNT' || vm.workPackage.type=='WAIVER'">
+			        	<label>Distribution Type</label>
+			        	<select class="form-control" name="distributionType" ng-model="vm.workPackage.targetDistribution" id="field_distributionType">
+							<option ng-repeat="x in vm.distributionTypes track by $index">{{x}}</option>
+						</select>
 			        </div>
 	        	</div>
 	        </div>
@@ -43,7 +35,7 @@
 	        	
 	        	<div class="row pm0 mb5px" ng-show="vm.workPackage.targetDistribution == 'MARKET'">
 	        		<div class="col-md-4">	
-	        			<div class="form-group row pm0 mb5px">
+	        			<div class="form-group pm0 mb5px">
 					        <div class="col-md-12 no-pad checkbox auto">	
 								<label><input type="checkbox" ng-model="vm.workPackage.marketFares">Market Fares</label>
 					        </div>
@@ -52,21 +44,25 @@
 					
 					 <div class="row pm0 mb5px" ng-show="vm.workPackage.marketFares"> 
 					    <div class="col-xs-3">
-					        Name
-					        <input type="text" class="form-control" name="name" id="field_name" ng-model="vm.workPackage.marketFareSheet[0].marketFaresName"/>
-					        <input type="hidden" class="form-control" name="carrier" id="field_carrier" ng-model="vm.workPackage.marketFareSheet[0].fareCarrier"/>
+					    	<div class="form-group pm0 mb5px">
+								<label class="normal-weight">Name</label>
+						     	<input type="text" class="form-control" name="name" id="field_name" ng-model="vm.workPackage.marketFareSheet[0].marketFaresName"/>
+					        	<input type="hidden" class="form-control" name="carrier" id="field_carrier" ng-model="vm.workPackage.marketFareSheet[0].fareCarrier"/>
+							</div>
 					    </div>
 					    <div class="col-xs-3">
-					       Fare Type
-					       <select class="form-control" ng-model="vm.workPackage.marketFareSheet[0].fareType" 
+					    	<div class="form-group pm0 mb5px">
+								<label class="normal-weight">Fare Type</label>
+								<select class="form-control" ng-model="vm.workPackage.marketFareSheet[0].fareType" 
 					       ng-options="key as value for (key , value) in vm.fareType"></select>
+							</div>
 					    </div>
 					 </div>
 	        	</div>
 	        	
 	        	<div class="row pm0 mb5px" ng-show="vm.workPackage.targetDistribution == 'ATPCO'">
 	        		<div class="col-md-4">	
-	        			<div class="form-group row pm0 mb5px">
+	        			<div class="form-group pm0 mb5px">
 					        <div class="col-md-12 no-pad checkbox auto">	
 								<label><input type="checkbox" ng-model="vm.workPackage.specifiedFares">Specified Fares</label>
 					        </div>
@@ -74,37 +70,41 @@
 					</div>
 					
 					 <div class="row pm0 mb5px" ng-show="vm.workPackage.specifiedFares"> 
-					    <div class="col-xs-3">
-					        Name
-					        <input type="text" class="form-control" name="name" id="field_name" ng-model="vm.workPackage.fareSheet[0].specifiedFaresName"/>
+					 	<div class="col-xs-3">
+					    	<div class="form-group pm0 mb5px">
+								<label class="normal-weight">Name</label>
+						     	<input type="text" class="form-control" name="name" id="field_name" ng-model="vm.workPackage.fareSheet[0].specifiedFaresName"/>
 					        <input type="hidden" class="form-control" name="carrier" id="field_carrier" ng-model="vm.workPackage.fareSheet[0].fareCarrier"/>
+							</div>
 					    </div>
 					    <div class="col-xs-3">
-					       Fare Type
-					       <select class="form-control"ng-model="vm.workPackage.fareSheet[0].fareType" 
+					    	<div class="form-group pm0 mb5px">
+								<label class="normal-weight">Fare Type</label>
+								<select class="form-control"ng-model="vm.workPackage.fareSheet[0].fareType" 
 					       ng-options="key as value for (key , value) in vm.fareType"></select>
+							</div>
 					    </div>
-					  </div>
+					</div>
 	        	</div>
 	        	
 		        <div class="row pm0 mb5px" ng-show="vm.workPackage.targetDistribution == 'ATPCO'">
 	        		<div class="col-md-4">	
-	        			<div class="form-group row pm0 mb5px">
+	        			<div class="form-group pm0 mb5px">
 					        <div class="col-md-12 no-pad checkbox auto">	
 								<label><input type="checkbox" ng-model="vm.workPackage.addon" value="">Add Ons</label>
 					        </div>
 						</div>
 					</div>
 					<div class="col-md-8" ng-show="vm.workPackage.addon">
-						<div class="form-group row pm0 mb5px">
-							<label>Name</label>
+						<div class="form-group pm0 mb5px">
+							<label class="normal-weight">Name</label>
 					     	<input type="text" class="form-control" name="name" id="field_name" ng-model="vm.workPackage.addonFareSheet[0].addonFaresName"/>
 						</div>
 					</div>
 	        	</div>
 	        	<div class="row pm0 mb5px" ng-show="vm.workPackage.targetDistribution == 'MARKET'">
 	        		<div class="col-md-4">	
-	        			<div class="form-group row pm0 mb5px">
+	        			<div class="form-group pm0 mb5px">
 					        <div class="col-md-12 no-pad checkbox auto">	
 								<label><input type="checkbox" ng-model="vm.workPackage.marketRules" value="">Market Rules</label>
 					        </div>
@@ -113,7 +113,7 @@
 	        	</div>
 				<div class="row pm0 mb5px" ng-show="vm.workPackage.targetDistribution == 'ATPCO' || vm.workPackage.targetDistribution == 'MARKET'">
 	        		<div class="col-md-4">	
-	        			<div class="form-group row pm0 mb5px">
+	        			<div class="form-group pm0 mb5px">
 					        <div class="col-md-12 no-pad checkbox auto">	
 								<label><input type="checkbox" ng-model="vm.workPackage.filingInstruction" value="">Filing Instructions</label>
 					        </div>
@@ -122,7 +122,7 @@
 	        	</div>
 	        	<div class="row pm0 mb5px">
 	        		<div class="col-md-4">	
-	        			<div class="form-group row pm0 mb5px">
+	        			<div class="form-group pm0 mb5px">
 					        <div class="col-md-12 no-pad checkbox auto">	
 								<label><input type="checkbox" ng-model="vm.workPackage.attachment" value="">Attachments</label>
 					        </div>
@@ -133,7 +133,7 @@
 			<div ng-show="vm.workPackage.type=='DISCOUNT' && vm.workPackage.targetDistribution != null">
 				<div class="row pm0 mb5px">
 	        		<div class="col-md-4">	
-	        			<div class="form-group row pm0 mb5px">
+	        			<div class="form-group pm0 mb5px">
 					        <div class="col-md-12 no-pad checkbox auto">	
 								<label><input type="checkbox" ng-model="vm.workPackage.discount" value="">Discount</label>
 					        </div>
@@ -158,7 +158,7 @@
 	        	</div>
 				<div class="row pm0 mb5px">
 	        		<div class="col-md-4">	
-	        			<div class="form-group row pm0 mb5px">
+	        			<div class="form-group pm0 mb5px">
 					        <div class="col-md-12 no-pad checkbox auto">	
 								<label><input type="checkbox" ng-disabled="vm.workPackage.targetDistribution== 'MARKET'" ng-model="vm.workPackage.filingInstruction" value="">Filing Instructions</label>
 					        </div>
@@ -167,7 +167,7 @@
 	        	</div>
 				<div class="row pm0 mb5px">
 	        		<div class="col-md-4">	
-	        			<div class="form-group row pm0 mb5px">
+	        			<div class="form-group pm0 mb5px">
 					        <div class="col-md-12 no-pad checkbox auto">	
 								<label><input type="checkbox" ng-model="vm.workPackage.attachment" value="">Attachments</label>
 					        </div>
@@ -178,7 +178,7 @@
         	<div ng-show="vm.workPackage.type=='WAIVER'  && vm.workPackage.targetDistribution != null">
 	        	<div class="row">
 	        		<div class="col-md-4">	
-	        			<div class="form-group row">
+	        			<div class="form-group">
 					        <div class="col-md-12 no-pad checkbox auto">	
 								<label><input type="checkbox" ng-model="vm.workPackage.waiverFares">Waiver Fares</label>
 					        </div>
@@ -199,7 +199,7 @@
 				    	
 	        	<div class="row">
 	        		<div class="col-md-4">	
-	        			<div class="form-group row">
+	        			<div class="form-group">
 					        <div class="col-md-12 no-pad checkbox auto">	
 								<label><input type="checkbox" ng-model="vm.workPackage.waiverRules" value="">Waiver Rules</label>
 					        </div>
@@ -208,7 +208,7 @@
 	        	</div>				
 	        	<div class="row">
 	        		<div class="col-md-4">	
-	        			<div class="form-group row">
+	        			<div class="form-group">
 					        <div class="col-md-12 no-pad checkbox auto">	
 								<label><input type="checkbox" ng-model="vm.workPackage.attachment" value="">Attachments</label>
 					        </div>
@@ -219,7 +219,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">Create</button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-secondary">Create</button>
         <button type="button" ng-click="vm.clear()" class="btn btn-back" data-dismiss="modal" data-translate="entity.action.cancel">Cancel</button>
     </div>
 </form>

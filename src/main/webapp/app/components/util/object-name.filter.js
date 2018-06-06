@@ -15,10 +15,16 @@
             	} else {
             		var positions = [];
             		var result = input;
+            		var numberFound = false;
             		
             		for (var i = 0; i < input.length; i++) {
             		    if (input[i].match(/[A-Z]/) != null) {
             		        positions.push(i);
+            		    }
+            		    
+            		    if (!numberFound && input[i].match(/^[0-9].*$/) != null) {
+            		    	positions.push(i);
+            		    	numberFound = true;
             		    }
             		}
             		

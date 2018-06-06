@@ -18,11 +18,8 @@
         vm.loadAll = loadAll;
         vm.getRules = getRules;
         vm.getRules2 = getRules2;
-        vm.showDetail = showDetail;
-        vm.hideDetail = hideDetail;
         vm.reset = reset;
         vm.page = 1;
-        vm.clearFilter = clearFilter;
         vm.showCategoryDetail = showCategoryDetail;
         
         vm.datePickerOpenStatus = {};
@@ -34,11 +31,8 @@
         function loadAll () {
         	vm.queryParams.page = vm.page - 1;
         	vm.queryParams.size = vm.itemsPerPage;
-        	RuleQuery.query(vm.queryParams, onSuccess, onError);
         	
-        	$("th").css({
-    			"text-align" : "center"
-    		});
+        	RuleQuery.query(vm.queryParams, onSuccess, onError);
         	
             function onSuccess(data, headers) {
                 vm.links = ParseLinks.parse(headers('link'));
@@ -73,31 +67,6 @@
         	});
         }
         
-        function showDetail() {
-        	$("#tblDetail").show();
-        	$("#tblDetail").focus();
-        	$("#tblDetail").css("display","block");
-        	$("#tblDetail").css("height","440px");
-        	$("#tblDetail").css("overflow-y","scroll");
-        	$("#ruleCategories").show();
-        	
-        }
-        
-        function hideDetail() {
-        	$("#tblDetail").css("display","none");
-        	$("#tblDetail").hide();
-        	$("#ruleCategories").hide();
-        }
-        
-        function clearFilter() {
-        	$("#cxr").val("");
-        	$("#ruleNo").val("");
-        	$("#type").val("");
-        	$("#src").val("");
-        	$("#ruleTarNo").val("");
-        	$("#catNo").val("");
-        }
-        
         function openCalendar (e, date) {
         	e.preventDefault();
             e.stopPropagation();
@@ -107,13 +76,13 @@
         
         function reset() {
         	vm.queryParams = {
-        			cxr: null,
-            		ruleTarNo: null,
-            		ruleNo: null,
-            		type: null,
-            		src: null,
-            		cat: null,
-            		catNo: null
+    			cxr: null,
+        		ruleTarNo: null,
+        		ruleNo: null,
+        		type: null,
+        		src: null,
+        		cat: null,
+        		catNo: null
         	}
         	
         	vm.loadAll();
