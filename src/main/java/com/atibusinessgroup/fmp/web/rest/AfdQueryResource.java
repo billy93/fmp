@@ -258,7 +258,8 @@ public class AfdQueryResource {
         	AtpcoRecord2 matchedGeneralRecord2 = null;
         	AtpcoRecord2 matchedRecord2 = null;
         	AtpcoFootnoteRecord2 matchedFRecord2 = null;
-        	
+        	GeneralRuleApplication matchedGeneral = null;
+
         	all : for (AtpcoRecord2GroupByCatNo arecord2:arecords2) {
             	if (arecord2.getCatNo().contentEquals(entry.getKey())) {
             		for (AtpcoRecord2 record2:arecord2.getRecords2()) {
@@ -286,6 +287,15 @@ public class AfdQueryResource {
             		}
             	}
             }	
+    		
+    		all : for (AtpcoRecord0 arecord0:arecords0) {
+    			for (GeneralRuleApplication gra:arecord0.getGeneralRuleApplications()) {
+    				if (entry.getKey().contentEquals(gra.getCatNo())) {
+    					matchedGeneral = gra;
+    					break all;
+    				}
+    			}
+    		}
             
         	Category cat = new Category();
         	cat.setCatName(entry.getValue());
@@ -298,48 +308,32 @@ public class AfdQueryResource {
         		e.printStackTrace();
         	}
         	
+        	if (matchedGeneral != null) {
+    			List<AtpcoRecord2GroupByCatNo> generalRecords2 = atpcoFareCustomRepository.findAtpcoRecord2ByRecordId(matchedGeneral.getSourceTariff() + afdQuery.getCarrierCode() + matchedGeneral.getRuleNo() + "");
+        		
+        		all : for (AtpcoRecord2GroupByCatNo grecord2:generalRecords2) {
+                	if (grecord2.getCatNo().contentEquals(entry.getKey())) {
+                		for (AtpcoRecord2 record2:grecord2.getRecords2()) {
+                			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afdQuery.getOriginCity(), "C", afdQuery.getDestinationCity(), afdQuery.getFareClassCode(), afdQuery.getFareType(), afdQuery.getSeason(), afdQuery.getDayOfWeekType(), afdQuery.getOwrt(), afdQuery.getRoutingNo(), afdQuery.getFootnote(), afdQuery.getEffectiveDate(), afdQuery.getDiscontinueDate(),
+                					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getFareClass(), record2.getFareType(), record2.getSeasonType(), record2.getDayOfWeekType(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
+                        	
+                    		if (matched) {
+                    			matchedGeneralRecord2 = record2;
+                    			break all;
+                    		} 
+                		}
+                	}
+                }	
+        		
+        		if (matchedGeneralRecord2 != null && matchedGeneralRecord2.getDataTables() != null && matchedGeneralRecord2.getDataTables().size() > 0) {
+        			type += CategoryType.GENERAL_RULE;
+            		cat.getCatAttributes().addAll(atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), matchedGeneralRecord2.getDataTables(), CategoryType.GENERAL_RULE));
+        		}
+    		}
+        	
         	if (matchedFRecord2 != null && matchedFRecord2.getDataTables() != null && matchedFRecord2.getDataTables().size() > 0) {
         		type += CategoryType.FOOTNOTE;
         		cat.getCatAttributes().addAll(atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), matchedFRecord2.getDataTables(), CategoryType.FOOTNOTE));
-        	}
-        	
-        	if (matchedRecord2 == null) {
-        		GeneralRuleApplication matchedGeneral = null;
-        		
-        		all : for (AtpcoRecord0 arecord0:arecords0) {
-        			for (GeneralRuleApplication gra:arecord0.getGeneralRuleApplications()) {
-        				if (entry.getKey().contentEquals(gra.getCatNo())) {
-        					matchedGeneral = gra;
-        					break all;
-        				}
-        			}
-        		}
-        	
-        		if (matchedGeneral != null) {
-        			List<AtpcoRecord2GroupByCatNo> generalRecords2 = atpcoFareCustomRepository.findAtpcoRecord2ByRecordId(matchedGeneral.getSourceTariff() + afdQuery.getCarrierCode() + matchedGeneral.getRuleNo() + "");
-            		
-            		all : for (AtpcoRecord2GroupByCatNo grecord2:generalRecords2) {
-                    	if (grecord2.getCatNo().contentEquals(entry.getKey())) {
-                    		for (AtpcoRecord2 record2:grecord2.getRecords2()) {
-                    			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afdQuery.getOriginCity(), "C", afdQuery.getDestinationCity(), afdQuery.getFareClassCode(), afdQuery.getFareType(), afdQuery.getSeason(), afdQuery.getDayOfWeekType(), afdQuery.getOwrt(), afdQuery.getRoutingNo(), afdQuery.getFootnote(), afdQuery.getEffectiveDate(), afdQuery.getDiscontinueDate(),
-                    					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getFareClass(), record2.getFareType(), record2.getSeasonType(), record2.getDayOfWeekType(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
-                            	
-                        		if (matched) {
-                        			matchedGeneralRecord2 = record2;
-                        			break all;
-                        		} 
-                    		}
-                    	}
-                    }	
-            		
-            		if (matchedGeneralRecord2 != null && matchedGeneralRecord2.getDataTables() != null && matchedGeneralRecord2.getDataTables().size() > 0) {
-            			type += CategoryType.GENERAL_RULE;
-                		cat.getCatAttributes().addAll(atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), matchedGeneralRecord2.getDataTables(), CategoryType.GENERAL_RULE));
-            		}
-
-        			System.out.println("");
-        			
-        		}
         	}
         	
         	if (matchedRecord2 != null && matchedRecord2.getDataTables() != null && matchedRecord2.getDataTables().size() > 0) {

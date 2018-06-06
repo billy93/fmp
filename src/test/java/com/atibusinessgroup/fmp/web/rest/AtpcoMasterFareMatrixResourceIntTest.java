@@ -85,8 +85,7 @@ public class AtpcoMasterFareMatrixResourceIntTest {
     public static AtpcoMasterFareMatrix createEntity() {
         AtpcoMasterFareMatrix atpcoMasterFareMatrix = new AtpcoMasterFareMatrix()
             .cabinService(DEFAULT_CABIN_SERVICE)
-            .cabinCode(DEFAULT_CABIN_CODE)
-            .fareTypeCode(DEFAULT_FARE_TYPE_CODE);
+            .cabinCode(DEFAULT_CABIN_CODE);
         return atpcoMasterFareMatrix;
     }
 
@@ -181,8 +180,7 @@ public class AtpcoMasterFareMatrixResourceIntTest {
         AtpcoMasterFareMatrix updatedAtpcoMasterFareMatrix = atpcoMasterFareMatrixRepository.findOne(atpcoMasterFareMatrix.getId());
         updatedAtpcoMasterFareMatrix
             .cabinService(UPDATED_CABIN_SERVICE)
-            .cabinCode(UPDATED_CABIN_CODE)
-            .fareTypeCode(UPDATED_FARE_TYPE_CODE);
+            .cabinCode(UPDATED_CABIN_CODE);
 
         restAtpcoMasterFareMatrixMockMvc.perform(put("/api/atpco-master-fare-matrices")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
