@@ -297,7 +297,7 @@
 						<button class="btn btn-default small">Action <i class="fa fa-caret-down"></i></button>
 						<ul class="dropdown-menu custom" role="menu">
 						    <li>
-						    	<a href="#">Save and Validate</a>
+						    	<a>Save and Validate</a>
 						    </li>
 						</ul>
 					</div>	
@@ -859,8 +859,7 @@
 								
 								</div>
 								
-								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+$index}}" 
-								ng-class="{active:vm.currentAddonTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.addonFareSheet track by $index">
+								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+$index}}" ng-class="{active:vm.currentAddonTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.addonFareSheet track by $index">
 									<div class="pb1 mb1 bbgrey">
 										<div class="clearfix">
 											<div class="pull-left w50 two-column">
@@ -1320,7 +1319,7 @@
 									
 									
 						     			<div ng-repeat="attachment in vm.workPackage.attachmentData.slice().reverse() track by $index" class="form-repeat">
-					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete"><span class="glyphicon glyphicon-remove"></span></button>
+					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.status !='NEW' && vm.workPackage.reuseFrom != null" ><span class="glyphicon glyphicon-remove"></span></button>
 							       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'short'}}</label>
 							       			<div class="row">
 								        		<div class="col-md-6">
@@ -1343,9 +1342,13 @@
 											                    Add file
 											                </button>
 											                <button type="button" ng-click="attachment.file=null;attachment.fileContentType=null;"
-										                            class="btn btn-back delete grey">
+										                            class="btn btn-back delete grey" ng-disabled="vm.workPackage.status !='NEW' && vm.workPackage.reuseFrom != null" >
 										                        <span class="glyphicon glyphicon-remove"></span>
 										                    </button>
+										                    <label class="black" for="inOnly">									                    
+																Inter Office Notification
+																<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly">
+															</label>
 											            </div>
 											            <input type="hidden" class="form-control" name="file" id="field_file"
 											                    ng-model="attachment.file"
@@ -2301,6 +2304,7 @@
 						<ul class="clearfix nav-responsive nav nav-tabs">
 						    <li ng-if="vm.workPackage.marketFares" ng-class="{active:vm.currentMarketTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.marketFareSheet track by $index"><a ng-click="vm.selectMarketTab($index);">Market Fares : {{vm.workPackage.marketFareSheet[$index].marketFaresName}}</a></li>
 						    <li ng-if="vm.workPackage.marketRules" ng-class="{active:vm.currentTabMarketRules}"><a ng-click="vm.selectOtherTab('marketRules')">Market Rules</a></li>
+						    <li ng-if="vm.workPackage.addon" ng-class="{active:vm.currentAddonTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.addonFareSheet track by $index"><a ng-click="vm.selectAddonTab($index);">Addon Fares : {{vm.workPackage.addonFareSheet[$index].addonFaresName}}</a></li>
 						    <li ng-if="vm.workPackage.attachment" ng-class="{active:vm.currentTabAttachment}"><a ng-click="vm.selectOtherTab('attachment')">Attachment</a></li>
 							<li ng-if="vm.workPackage.filingInstruction" ng-class="{active:vm.currentTabFilingInstruction}"><a ng-click="vm.selectOtherTab('filingInstruction')">Filing Instruction</a></li>					          
 						</ul>
@@ -2721,7 +2725,7 @@
 			       					No Market Rules Available
 			       				</label>
 								<div ng-repeat="marketRules in vm.workPackage.marketRulesData track by $index" class="form-repeat">
-			       					<button ng-click="vm.removeMarketRules(marketRules)" class="bordered delete"><span class="glyphicon glyphicon-remove"></span></button>
+			       					<button ng-click="vm.removeMarketRules(marketRules)" class="bordered delete" ng-disabled="vm.workPackage.status !='NEW' && vm.workPackage.reuseFrom != null"><span class="glyphicon glyphicon-remove"></span></button>
 				       				<label class="user">{{marketRules.username}} <span class="vseparator no-mar"></span> {{marketRules.createdTime | date:'short'}}</label>
 						        	<div class="row">
 						        		<div class="col-md-6">						      			
@@ -2748,9 +2752,13 @@
 										                    Add file
 										                </button>
 										                <button type="button" ng-click="marketRules.file=null;marketRules.fileContentType=null;"
-									                            class="btn btn-default delete grey">
+									                            class="btn btn-default delete grey" ng-disabled="vm.workPackage.status !='NEW' && vm.workPackage.reuseFrom != null">
 									                        Remove file
 									                    </button>
+									                    <label class="black" for="inOnly">									                    
+																Inter Office Notification
+																<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly">
+														</label>
 									                </div>
 									            </div>
 									            <input type="hidden" class="form-control" name="file" id="field_file" ng-model="marketRules.file"/>
@@ -2760,6 +2768,420 @@
 						      		</div>
 								</div>
 			       			</div>
+							
+							<div class="tab-pane" ng-class="{active:vm.currentAddonTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.addonFareSheet track by $index">
+									<div class="pb1 mb1 bbgrey">
+										<div class="clearfix">
+											<div class="pull-left w50 two-column">
+												<div class="form-group">
+													<label>Description</label>
+													
+													<textarea class="form-control" 
+									         		name="addonFaresName{{$index}}"
+									         		ng-model="workPackageSheet.addonFaresName" 
+									         		style="min-width: 100%; min-height:100%"
+									         		ng-class="{'must-fill': editForm.editFormATPCO.addonFaresName{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
+									         		ng-required="vm.isRequired('addonFaresName')"  
+									         		ng-disabled="!vm.isEditable('addonFaresName')">
+							          				</textarea>
+												</div>
+											</div>
+											<div class="pull-left w50 two-column">
+												<div class="form-group">
+													
+												</div>
+											</div>		
+										</div>
+									</div>	
+											
+									<!-- table details-->
+									<div class="table-wrapper">
+										<div class="datatable-wrapper form-inline">
+											<div class="clearfix">
+												<div class="pull-left">
+													<div class="clearfix">
+														<div class="pull-right datatable-button">
+															<div class="button-group dropdown custom">
+																<button class="btn btn-default small btn-secondary">Edit <i class="fa fa-caret-down"></i></button>
+																<ul class="dropdown-menu custom" role="menu">
+																	<li>
+																    	<a ng-click="vm.clearSelection(workPackageSheet)">Clear Selection</a>
+																    </li>	
+																    <li>
+																    	<a ng-click="vm.fillDown(workPackageSheet)">Fill Down</a>
+																    </li>	
+																    <li>
+																    	<a ng-click="vm.addFares(workPackageSheet)">Add Rows</a>
+																    </li>
+																    <li>
+																    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)">Duplicate Selected Rows</a>
+																    </li>
+																    <li>
+																    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)">Delete Selected Rows</a>
+																    </li>
+																    <li>
+																    	<a href="#">Paste</a>
+																    </li>
+																    <li>
+																    	<a href="#">Paste As Cancel</a>
+																    </li>
+																</ul>
+															</div>													
+															<button class="btn btn-default small btn-secondary">Import</button>
+															<button class="btn btn-default small btn-secondary">Export</button>
+															<button class="btn btn-default small btn-secondary">Publish</button>
+															<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalAgent">Agents</button>
+															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()">Rate Sheet</button>
+														</div>
+													</div>																						
+												</div>
+											</div>
+											<div class="table-responsive">
+												<table class="table table-stripped table-bordered datatable" jq-slider>
+													<thead>
+														<tr role="row">																	
+															<th>No</th>
+									                		<th>Status</th>
+										                	<th>Carrier</th>		                	
+									                		<th>Action</th>
+										                	<th>Tar No</th>
+										                	<th>Tar Cd</th>
+										                	<th>Global</th>
+										                	<th>Origin</th>
+										                	<th>Dest</th>
+										                	<th>Addon Bucket</th>
+										                	<th>OW/RT</th>
+										                	<th>Ftnt</th>
+										                	<th>Zone</th>
+										                	<th>Rtg No</th>
+										                	<th>Filing Curr</th>
+										                	<th>Base Amt</th>
+										                	<th>Amt Diff</th>
+										                	<th>% Amt Diff</th>
+											                <th>Travel Start</th>
+										               		<th>Travel End</th>		               		
+										               		<th>Sale Start</th>
+										               		<th>Sale End</th>	
+										               		<th>Comment</th>	               		
+										               		<th>Travel Complete</th>	               		
+										               		<th>Travel Complete Indicator</th>		
+														</tr>
+													</thead>
+													<tbody ng-repeat="fare in workPackageSheet.fares track by $index">
+														<!-- ng-click="vm.rowTableClick($event, $parent.$index+''+$index, 'addon')" -->
+														<tr role="row" class="datatable-row">
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no']}">{{$index+1}}</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'status', $event)" ng-class="{highlighted:fare.field['status']}">
+																<select class="form-control inside-table" name="addonFareStatus{{$index}}" ng-model="fare.status" id="field_status" 
+																	ng-class="{'must-fill': !editForm.editFormATPCO.addonFareStatus{{$index}}.$valid && fare.action != 'Canceled'}"												         		
+								           							ng-disabled="!vm.isEditable('addonFareStatus')"
+													             	ng-required="vm.isRequired('addonFareStatus')"
+													             	ng-options="key as value for (key , value) in vm.status">
+																</select>
+																<!-- <span ng-if="vm.isFieldEditable( 'addonFareStatus')">
+																	<select class="form-control inside-table" name="addonFareStatus{{$index}}" ng-model="fare.status" id="field_status" 
+																		ng-class="{'must-fill': !editForm.editFormATPCO.addonFareStatus{{$index}}.$valid && fare.action != 'Canceled'}"												         		
+									           							ng-disabled="vm.isFieldDisable('addonFareStatus')"
+														             	ng-required="vm.checkRequiredField('addonFareStatus')"
+														             	ng-options="key as value for (key , value) in vm.status">
+																	</select>
+																	<span class="form-control inside-table" ng-if="!vm.isFieldEditable( 'addonFareStatus')">
+											           					{{fare.status}}
+											           				</span>
+																</span> -->
+															</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'carrier', $event)" ng-class="{highlighted:fare.field['carrier']}">
+																<input type="text" class="form-control" name="addonFareCarrier{{$index}}" id="field_carrier"
+											                    		ng-model="fare.carrier"
+											                    		ng-disabled="!vm.isEditable('addonFareCarrier')"
+											                    		ng-class="{'must-fill': ditForm.editFormATPCO.addonFareCarrier{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
+															            ng-required="vm.isRequired('addonFareCarrier')"/>
+															</td>																
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'action', $event)" ng-class="{highlighted:fare.field['action']}">{{fare.action}}</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'tarno', $event)" ng-class="{highlighted:fare.field['tarno']}">
+																<ui-select ng-model="fare.tariffNumber" name="addonFareTarno{{$parent.$index}}{{$index}}" theme="select2" title="Tarif Number"  class="form-control"
+																	ng-required="vm.isRequired('addonFareTarno')"  
+																	ng-disabled="!vm.isEditable('addonFareTarno')"
+																	ng-class="{'must-fill': editForm.editFormATPCO.addonFareTarno{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+										                    	>
+															    <ui-select-match placeholder="TarNo">{{$select.selected.tarNo == null ? $select.selected.value.tarNo : $select.selected.tarNo}}</ui-select-match>
+																 <ui-select-choices style="min-width:300px" repeat="value.value as (key, value) in vm.tariffNumber | filter: { value: { tarNo: $select.search }}">
+															      <div ng-bind-html="value.value.tarNo | highlight: $select.search"></div>
+															      <!-- <small>
+															        TarNo : {{value.value.tarNo}}
+															        TarCd : {{value.value.tarCd}}
+															        Global : {{value.value.global}}
+															      </small> -->
+															    </ui-select-choices>
+															  </ui-select>
+															</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'tarcd', $event)" ng-class="{highlighted:fare.field['tarcd']}">
+																<ui-select ng-model="fare.tariffNumber" theme="select2" class="form-control"
+																name="addonFareTarcd{{$parent.$index}}{{$index}}"
+																ng-required="vm.isRequired('addonFareTarcd') && fare.action != 'Canceled'"  
+																ng-disabled="!vm.isEditable('addonFareTarcd')"
+																
+																ng-class="{'must-fill': editForm.editFormATPCO.addonFareTarcd{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+											                    	>
+																    <ui-select-match placeholder="TarCd">{{$select.selected.tarCd == null ? $select.selected.value.tarCd : $select.selected.tarCd}}</ui-select-match>
+																	 <ui-select-choices style="min-width:300px" repeat="value.value as (key, value) in vm.tariffNumber | filter: { value: { tarCd: $select.search }}">
+																      <div ng-bind-html="value.value.tarCd | highlight: $select.search"></div>
+																      <!-- <small>
+																        TarNo : {{value.value.tarNo}}
+																        TarCd : {{value.value.tarCd}}
+																        Global : {{value.value.global}}
+																      </small> -->
+																    </ui-select-choices>
+																  </ui-select>
+															</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'global', $event)" ng-class="{highlighted:fare.field['global']}">{{fare.tariffNumber.global}}</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'origin', $event)" ng-class="{highlighted:fare.field['origin']}">
+																<ui-select ng-model="fare.origin" theme="select2" class="form-control"
+																name="addonFareOrigin{{$parent.$index}}{{$index}}"
+																ng-required="vm.isRequired('addonFareOrigin') && fare.action != 'Canceled'"  
+																ng-disabled="!vm.isEditable('addonFareOrigin')"
+																
+																ng-class="{'must-fill': editForm.editFormATPCO.addonFareOrigin{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+											                    	>
+																    <ui-select-match placeholder="Origin">{{$select.selected.value.cityCode}}</ui-select-match>
+																	 <ui-select-choices style="min-width:300px" repeat="value.value.cityCode as (key, value) in vm.cities | filter: { value: { cityCode: $select.search }}">
+																      <div ng-bind-html="value.value.cityCode | highlight: $select.search"></div>
+																      <!-- <small>
+																        City Code : {{value.value.cityCode}}
+																        City Name : {{value.value.cityName}}
+																        Country Code : {{value.value.countryCode}}
+																        Country Name : {{value.value.countryName}}
+																        
+																      </small> -->
+																    </ui-select-choices>
+																  </ui-select>
+															</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'destination', $event)" ng-class="{highlighted:fare.field['destination']}">
+																<ui-select ng-model="fare.destination" theme="select2"class="form-control"
+																name="addonFareDestination{{$parent.$index}}{{$index}}"
+																ng-required="vm.isRequired('addonFareDestination') && fare.action != 'Canceled'"  
+																ng-disabled="!vm.isEditable('addonFareDestination')"
+																
+																ng-class="{'must-fill': editForm.editFormATPCO.addonFareDestination{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+											                    	>
+																    <ui-select-match placeholder="Destination">{{$select.selected.value.cityCode}}</ui-select-match>
+																	 <ui-select-choices style="min-width:300px" repeat="value.value.cityCode as (key, value) in vm.cities | filter: { value: { cityCode: $select.search }}">
+																      <div ng-bind-html="value.value.cityCode | highlight: $select.search"></div>
+																      <!-- <small>
+																        City Code : {{value.value.cityCode}}
+																        City Name : {{value.value.cityName}}
+																        Country Code : {{value.value.countryCode}}
+																        Country Name : {{value.value.countryName}}
+																        
+																      </small> -->
+																    </ui-select-choices>
+																  </ui-select>
+															</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'bucket', $event)" ng-class="{highlighted:fare.field['bucket']}">
+																<input type="text" class="form-control" ng-model="fare.bucket" name="addonFareBucket{$parent.$index}}{{$index}}"
+											           				ng-disabled="!vm.isEditable('addonFareBucket')"
+														            ng-class="{'must-fill': editForm.editFormATPCO.addonFareBucket{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+														            ng-required="vm.isRequired('addonFareBucket')" />
+															</td>
+										           			<td ng-click="vm.tdClick(workPackageSheet, fare, 'typeOfJourney', $event)" ng-class="{highlighted:fare.field['typeOfJourney']}">
+										           				<select class="form-control" 
+														             name="addonFareTypeOfJourney{{$parent.$index}}{{$index}}"
+														             ng-required="vm.isRequired('addonFareTypeOfJourney')"
+														             ng-class="{'must-fill': !editForm.editFormATPCO.addonFareTypeOfJourney{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"																			            
+														             ng-model="fare.typeOfJourney" id="field_typeOfJourney"
+														             ng-disabled="!vm.isEditable('addonFareTypeOfJourney')"
+														             ng-options="key as value for (key , value) in vm.typeOfJourney"></select>
+										           			</td>
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'footnote', $event)" ng-class="{highlighted:fare.field['footnote']}">
+									               				<input type="text" class="form-control" name="addonFareFootnote{{$parent.$index}}{{$index}}" id="field_footnote"
+															            ng-class="{'must-fill': editForm.editFormATPCO.addonFareFootnote{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+															            ng-disabled="!vm.isEditable('addonFareFootnote')"
+															            ng-required="vm.isRequired('addonFareFootnote')"
+											                    		ng-model="fare.footnote"/>
+									               			</td>
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'zone', $event)" ng-class="{highlighted:fare.field['zone']}">
+									               				<input type="text" class="form-control" name="addonFareZone{{$parent.$index}}{{$index}}" id="field_footnote"
+															            ng-class="{'must-fill': editForm.editFormATPCO.addonFareZone{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+															            ng-disabled="!vm.isEditable('addonFareZone')"
+															            ng-required="vm.isRequired('addonFareZone')"
+											                    		ng-model="fare.zone"/>
+									               			</td>
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'rtgno', $event)" ng-class="{highlighted:fare.field['rtgno']}">
+									               				<input type="text" class="form-control" name="addonFareRtgno{{$parent.$index}}{{$index}}" id="field_bookingClass"
+										                				ng-disabled="!vm.isEditable('addonFareRtgno')"
+										                				ng-required="vm.isRequired('addonFareRtgno')" 
+										                				ng-class="{'must-fill': editForm.editFormATPCO.addonFareRtgno{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+															            ng-model="fare.rtgno"/>
+									               			</td>
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'currency', $event)" ng-class="{highlighted:fare.field['currency']}">
+									               				<ui-select ng-model="fare.currency" theme="select2" ng-disabled="vm.disabled" class="form-control"
+																	name="addonFareCurrency{{$parent.$index}}{{$index}}"
+																	ng-required="vm.isRequired('addonFareCurrency') && fare.action != 'Canceled'"  
+																	ng-disabled="!vm.isEditable('addonFareCurrency')"
+																	
+																	ng-class="{'must-fill': editForm.editFormATPCO.addonFareCurrency{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+												                    	>
+																	    <ui-select-match placeholder="Currency">{{$select.selected.value.currencyCode}}</ui-select-match>
+																		 <ui-select-choices style="min-width:300px" repeat="value.value.currencyCode as (key, value) in vm.currencies | filter: { value: { currencyCode: $select.search }}">
+																	      <div ng-bind-html="value.value.currencyCode | highlight: $select.search"></div>
+																	     <!--  <small>
+																	        Currency Code : {{value.value.currencyCode}}
+																	        Currency Name : {{value.value.currencyName}}
+																	        
+																	      </small> -->
+																	    </ui-select-choices>
+																	  </ui-select>
+									               			</td>
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'amount', $event)" ng-class="{highlighted:fare.field['amount']}">
+									               				<input type="text" class="form-control" name="addonFareAmount{{$parent.$index}}{{$index}}" id="field_amount"
+										                				ng-disabled="!vm.isEditable('addonFareAmount')"
+										                				ng-required="vm.isRequired('addonFareAmount')" 
+										                				ng-class="{'must-fill': editForm.editFormATPCO.addonFareAmount{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+															            ng-model="fare.amount"/>
+									               			</td>
+									               			<td></td>
+									               			<td></td>
+										               		
+										               		<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelStart', $event)" ng-class="{highlighted:fare.field['travelStart']}" >
+									               				<span class="input-group">
+																	<input id="field_addonFareTravelStartDate" 
+																		type="text"
+																		name="addonFareTravelStartDate{{$parent.$index}}{{$index}}" id="field_travelEndDate"
+										                				ng-disabled="!vm.isEditable('addonFareTravelStartDate')"	
+										                				class="form-control input-date"					                				
+										                				ng-required="vm.isRequired('addonFareTravelStartDate')"
+											                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareTravelStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+															            ng-model="fare.travelStart" 
+															            datetime-picker="{{dateformat}}" 
+															            is-open="vm.datePickerOpenStatus['addonFareTravelStartDate'+$parent.$index+''+$index]">
+																	<span class="input-group-addon disabled">
+																		<i ng-click="vm.openCalendar('addonFareTravelStartDate'+$parent.$index+''+$index)" class="fa fa-calendar"></i>
+																	</span>
+																</span>
+									               			</td>
+									               			
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelEnd', $event)" ng-class="{highlighted:fare.field['travelEnd']}">
+									               				<span class="input-group">
+																	<input id="field_addonFareTravelEndDate" 
+																		type="text"
+																		name="addonFareTravelEndDate{{$parent.$index}}{{$index}}" id="field_travelEndDate"
+										                				ng-disabled="!vm.isEditable('addonFareTravelEndDate')"	
+										                				class="form-control input-date"					                				
+										                				ng-required="vm.isRequired('addonFareTravelEndDate')"
+											                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareTravelEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+															            ng-model="fare.travelEnd" 
+															            datetime-picker="{{dateformat}}" 
+															            enable-time="false"
+															            is-open="vm.datePickerOpenStatus['addonFareTravelEndDate'+$parent.$index+''+$index]">
+																	<span class="input-group-addon disabled">
+																		<i ng-click="vm.openCalendar('addonFareTravelEndDate'+$parent.$index+''+$index)" class="fa fa-calendar"></i>
+																	</span>
+																</span>
+									               			</td>
+									               			
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'saleStart', $event)" ng-class="{highlighted:fare.field['saleStart']}">
+									               				<span class="input-group">
+																	<input id="field_addonFareSaleStartDate" 
+																		type="text"
+																		name="addonFareSaleStartDate{{$parent.$index}}{{$index}}" id="field_travelEndDate"
+										                				ng-disabled="!vm.isEditable('addonFareSaleStartDate')"	
+										                				class="form-control input-date"					                				
+										                				ng-required="vm.isRequired('addonFareSaleStartDate')"
+											                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareSaleStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+															            ng-model="fare.saleStart" 
+															            datetime-picker="{{dateformat}}" 
+															            enable-time="false"
+															            is-open="vm.datePickerOpenStatus['addonFareSaleStartDate'+$parent.$index+''+$index]">
+																	<span class="input-group-addon disabled">
+																		<i ng-click="vm.openCalendar('addonFareSaleStartDate'+$parent.$index+''+$index)" class="fa fa-calendar"></i>
+																	</span>
+																</span>
+									               			</td>
+									               			
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'saleEnd', $event)" ng-class="{highlighted:fare.field['saleEnd']}">
+									               				<span class="input-group">
+																	<input id="field_addonFareSaleEndDate" 
+																		type="text"
+																		name="addonFareSaleEndDate{{$parent.$index}}{{$index}}" id="field_travelEndDate"
+										                				ng-disabled="!vm.isEditable('addonFareSaleEndDate')"	
+										                				class="form-control input-date"					                				
+										                				ng-required="vm.isRequired('addonFareSaleEndDate')"
+											                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareSaleEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+															            ng-model="fare.saleEnd" 
+															            datetime-picker="{{dateformat}}" 
+															            enable-time="false"
+															            is-open="vm.datePickerOpenStatus['addonFareSaleEndDate'+$parent.$index+''+$index]">
+																	<span class="input-group-addon disabled">
+																		<i ng-click="vm.openCalendar('addonFareSaleEndDate'+$parent.$index+''+$index)" class="fa fa-calendar"></i>
+																	</span>
+																</span>
+									               			</td>
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'comment', $event)" ng-class="{highlighted:fare.field['comment']}">
+									               				<input type="text" class="form-control" name="addonFareComment{{$parent.$index}}{{$index}}" id="field_comment"
+											                    		ng-model="fare.comment"/>
+									               			</td>
+									               			
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelComplete', $event)" ng-class="{highlighted:fare.field['travelComplete']}">
+									               				<span class="input-group">
+																	<input id="field_addonFareTravelComplete" 
+																		type="text"
+																		name="addonFareTravelComplete{{$parent.$index}}{{$index}}" id="field_travelEndDate"
+										                				ng-disabled="!vm.isEditable('addonFareTravelComplete')"	
+										                				class="form-control input-date"					                				
+										                				ng-required="vm.isRequired('addonFareTravelComplete')"
+											                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareTravelComplete{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+															            ng-model="fare.travelComplete" 
+															            datetime-picker="{{dateformat}}" 
+															            enable-time="false"
+															            is-open="vm.datePickerOpenStatus['addonFareTravelComplete'+$parent.$index+''+$index]">
+																	<span class="input-group-addon disabled">
+																		<i ng-disabled="true" ng-click="vm.openCalendar('addonFareTravelComplete'+$parent.$index+''+$index)" class="fa fa-calendar"></i>
+																	</span>
+																</span>
+									               			</td>
+									               			<td>
+									               				<select class="form-control" name="addonFareTravelIndicator{{$index}}" id="field_travelIndicator"
+										                				ng-disabled="!vm.isEditable('addonFareTravelIndicator')"
+										                				ng-required="vm.isRequired('addonFareTravelIndicator')"
+											                    		ng-class="{'must-fill': !editForm.editFormATPCO.addonFareTravelIndicator{{$index}}.$valid && fare.action != 'Canceled'}"	
+											                    		
+											                    		ng-options="key as value for (key , value) in vm.travelCompleteIndicator"
+														             																		            														                    		
+										                				ng-model="fare.travelCompleteIndicator"></select>
+									               			</td>
+														</tr>
+														<tr class="datatable-action{{$index}}" ng-show="vm.addonFaresActionButton[$parent.$index+''+$index]">
+															<td colspan="18" class="">
+																<div class="btn btn-app" ng-click="vm.deleteFaresSelected(workPackageSheet, $index)">
+																	<i class="fa fa-trash"></i>Delete
+																</div>
+																<div class="btn btn-app" ng-click="vm.moveUpFare(workPackageSheet, $index)">
+																	<i class="fa fa-level-up"></i>Move Up
+																</div>
+																<div class="btn btn-app" ng-click="vm.moveDownFare(workPackageSheet, $index)">
+																	<i class="fa fa-level-down"></i>Move Down
+																</div>
+																<div class="btn btn-app" ng-click="vm.copyFare(workPackageSheet, $index)">
+																	<i class="fa fa-copy"></i>Copy
+																</div>		
+																<div class="btn btn-app">
+																	<i class="fa fa-stack-exchange"></i>Derived Fares
+																</div>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+											<div class="clearfix">
+												<div class="pull-left dataTables_info italic">
+													* Field can not be empty.
+												</div>
+											</div>	
+										</div>
+									</div>
+								
+								</div>
+								
 							
 							<div class="tab-pane" ng-class="{active:vm.currentTabAttachment}" ng-if="vm.workPackage.attachment">
 								<div class="action-btn-wrapper">
@@ -2774,7 +3196,7 @@
 								
 								
 					     			<div ng-repeat="attachment in vm.workPackage.attachmentData.slice().reverse() track by $index" class="form-repeat">
-				       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete"><span class="glyphicon glyphicon-remove"></span></button>
+				       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.status !='NEW' && vm.workPackage.reuseFrom != null"><span class="glyphicon glyphicon-remove"></span></button>
 						       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'short'}}</label>
 						       			<div class="row">
 							        		<div class="col-md-6">
@@ -2796,9 +3218,13 @@
 										                    Add file
 										                </button>
 										                <button type="button" ng-click="attachment.file=null;attachment.fileContentType=null;"
-									                            class="btn btn-default delete grey">
+									                            class="btn btn-default delete grey" ng-disabled="vm.workPackage.status !='NEW' && vm.workPackage.reuseFrom != null">
 									                        Remove file
 									                    </button>
+									                    <label class="black" for="inOnly">									                    
+															Inter Office Notification
+															<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly">
+														</label>
 										            </div>
 										            <input type="hidden" class="form-control" name="file" id="field_file"
 										                    ng-model="attachment.file"
@@ -3213,7 +3639,7 @@
 			       					No Waiver Rules Available
 			       				</label>
 								<div ng-repeat="waiverRules in vm.workPackage.waiverRulesData track by $index" class="form-repeat">
-			       					<button ng-click="vm.removeWaiverRules(waiverRules)" class="bordered delete"><span class="glyphicon glyphicon-remove"></span></button>
+			       					<button ng-click="vm.removeWaiverRules(waiverRules)" class="bordered delete" ng-disabled="vm.workPackage.status !='NEW' && vm.workPackage.reuseFrom != null"><span class="glyphicon glyphicon-remove"></span></button>
 				       				<label class="user">admin <span class="vseparator no-mar"></span> 12JAN18 09:15:16</label>
 						        	<div class="row">
 						        		<div class="col-md-6">
@@ -3255,9 +3681,13 @@
 										                    Add file
 										                </button>
 										                <button type="button" ng-click="waiverRules.file=null;waiverRules.fileContentType=null;"
-									                            class="btn btn-default delete grey">
+									                            class="btn btn-default delete grey" ng-disabled="vm.workPackage.status !='NEW' && vm.workPackage.reuseFrom != null">
 									                        Remove file
 									                    </button>
+									                    <label class="black" for="inOnly">									                    
+															Inter Office Notification
+															<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly">
+														</label>
 									                </div>
 									            </div>
 									            <input type="hidden" class="form-control" name="file" id="field_file" ng-model="waiverRules.file"/>
@@ -3529,7 +3959,7 @@
 			       					No Attachment Available
 			       				</label>
 			       				<div ng-repeat="attachment in vm.workPackage.attachmentData track by $index" class="form-repeat">
-			       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete"><span class="glyphicon glyphicon-remove"></span></button>
+			       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.status !='NEW' && vm.workPackage.reuseFrom != null"><span class="glyphicon glyphicon-remove"></span></button>
 					       			<label class="user">admin <span class="vseparator no-mar"></span> 12JAN18 09:15:16</label>
 					       			<div class="row">
 						        		<div class="col-md-6">
@@ -3551,9 +3981,13 @@
 									                    Add file
 									                </button>
 									                <button type="button" ng-click="attachment.file=null;attachment.fileContentType=null;"
-								                            class="btn btn-default delete grey">
+								                            class="btn btn-default delete grey" ng-disabled="vm.workPackage.status !='NEW' && vm.workPackage.reuseFrom != null">
 								                        Remove file
 								                    </button>
+								                    <label class="black" for="inOnly">									                    
+														Inter Office Notification
+														<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly">
+													</label>
 									            </div>
 									            <input type="hidden" class="form-control" name="file" id="field_file"
 									                    ng-model="attachment.file"
