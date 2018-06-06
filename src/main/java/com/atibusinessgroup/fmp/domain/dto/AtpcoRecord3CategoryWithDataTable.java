@@ -8,7 +8,7 @@ public class AtpcoRecord3CategoryWithDataTable {
 	
 	@Field("category")
 	private DBObject category;
-
+	
 	public DBObject getCategory() {
 		return category;
 	}
@@ -21,6 +21,4 @@ public class AtpcoRecord3CategoryWithDataTable {
 	public String toString() {
 		return "AtpcoRecord3CategoryWithDataTable [category=" + category + "]";
 	}
-
-	
 }

@@ -18,6 +18,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface AgentRepository extends MongoRepository<Agent, String>, AgentRepositoryCustomAnyName {
 	
 	Optional<Agent> findOneByIataCode(String iata_code);
+
+	Optional<Agent> findOneByEmail(String email);
 	
 	Optional<Agent> findOneById(String id);
 

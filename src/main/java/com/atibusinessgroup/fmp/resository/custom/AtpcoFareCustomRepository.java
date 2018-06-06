@@ -5,6 +5,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.newA
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -63,7 +64,14 @@ public class AtpcoFareCustomRepository {
 				
 				if (param.getFareBasis() != null && !param.getFareBasis().isEmpty()) {
 					BasicDBObject fareBasis = new BasicDBObject();
-					fareBasis.append("fare_class_cd", param.getFareBasis());
+					String fbc = param.getFareBasis();
+					
+					if (param.getFareBasis().contains("*")) {
+						fbc = "^" + param.getFareBasis().replace("*", "");
+						fareBasis.append("fare_class_cd", new BasicDBObject("$regex", Pattern.compile(fbc)));
+					} else {
+						fareBasis.append("fare_class_cd", fbc);
+					}
 					queries.add(fareBasis);
 				}
 				
@@ -93,7 +101,7 @@ public class AtpcoFareCustomRepository {
 				
 				if (param.getRuleNo() != null && !param.getRuleNo().isEmpty()) {
 					BasicDBObject ruleNo = new BasicDBObject();
-					ruleNo.append("rule_no", param.getRuleNo());
+					ruleNo.append("rules_no", param.getRuleNo());
 					queries.add(ruleNo);
 				}
 				
@@ -124,6 +132,8 @@ public class AtpcoFareCustomRepository {
 				}
 				
 				match.append("$match", and);
+				
+				System.out.println(match);
 				
 				return match;
 			}

@@ -26,7 +26,8 @@
 				                	<td>{{catAtts.type}}</td>
 				                	<td>{{catAtts.relationship}} <span ng-if="catAtts.relationship == '='">Then</span><span ng-if="catAtts.relationship == ':'">If</span><span ng-if="catAtts.relationship == '&'">And</span><span ng-if="catAtts.relationship == '/'">Or</span><span ng-if="catAtts.relationship == '*'">Else</span></td>
 				                    <td ng-repeat="att in catAtts.attributes">
-				                    	<span ng-if="att.key != 'id'">{{att.value}}</span>	
+				                    	<span ng-if="vm.checkPreElement(att.key, att.value)"><pre>{{att.value}}</pre></span>
+				                    	<span ng-if="att.key != 'id' && !vm.checkPreElement(att.key)">{{att.value}}</span>	
 				                    </td>
 			                    </tr>
 				        	</tbody>

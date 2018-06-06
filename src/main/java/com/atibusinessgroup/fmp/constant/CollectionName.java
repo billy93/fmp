@@ -42,4 +42,7 @@ public class CollectionName {
 	public final static String ATPCO_FOOTNOTE_RECORD_3_CAT_011 = "atpco_footnote_record_3_cat_011";
 	public final static String ATPCO_FOOTNOTE_RECORD_3_CAT_014 = "atpco_footnote_record_3_cat_014";
 	public final static String ATPCO_FOOTNOTE_RECORD_3_CAT_015 = "atpco_footnote_record_3_cat_015";
+	
+	public final static String ATPCO_RECORD_DATE_TABLE_994 = "atpco_record_date_table_994";
+	public final static String ATPCO_RECORD_TEXT_TABLE_996 = "atpco_record_text_table_996";
 }

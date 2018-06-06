@@ -123,7 +123,7 @@ public class AfdQueryResource {
         //ATPCO
         Page<AtpcoFareAfdQueryWithRecords> page = atpcoFareCustomRepository.findAtpcoFareAfdQueryWithRecords(param, ruleCategories, pageable);
         List<AtpcoFareAfdQueryWithRecords> a1fares = page.getContent();
-        
+
         List<AfdQuery> result = new ArrayList<>();
         
         for (AtpcoFareAfdQueryWithRecords a1fare:a1fares) {
@@ -168,10 +168,6 @@ public class AfdQueryResource {
                 }	
         		
         		if (matchedRecord2 != null && matchedRecord2.getDataTables() != null && matchedRecord2.getDataTables().size() > 0) {
-
-        			System.out.println(entry.getKey());
-        			System.out.println(matchedRecord2.toString());
-        			
             		List<CategoryObject> rules = atpcoRecordService.getAndConvertCategoryObjectDataTable(entry.getKey(), matchedRecord2.getDataTables(), "Rule");
             		
             		switch (entry.getKey()) {
@@ -304,9 +300,6 @@ public class AfdQueryResource {
         	}
         	
         	if (matchedRecord2 != null && matchedRecord2.getDataTables() != null && matchedRecord2.getDataTables().size() > 0) {
-
-    			System.out.println(entry.getKey());
-    			System.out.println(matchedRecord2.toString());
         		type += CategoryType.RULE;
         		cat.getCatAttributes().addAll(atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), matchedRecord2.getDataTables(), CategoryType.RULE));
         	}
