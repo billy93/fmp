@@ -1445,7 +1445,7 @@
 	        			findTab = true;
 	        			
 	        			var index = vm.workPackage.fareSheet.indexOf(x);
-	        			vm.workPackage.fareSheet.push(vm.workPackage.fareSheet[x]);
+	        			vm.workPackage.fareSheet.push(angular.copy(vm.workPackage.fareSheet[x]));
 	        			break;
 	        		}
 	        	}
@@ -1458,7 +1458,7 @@
 	        			findTab = true;
 	        			
 	        			var index = vm.workPackage.addonFareSheet.indexOf(x);
-	        			vm.workPackage.addonFareSheet.push(vm.workPackage.addonFareSheet[x]);
+	        			vm.workPackage.addonFareSheet.push(angular.copy(vm.workPackage.addonFareSheet[x]));
 	        			break;
 	        		}
 	        	}
@@ -1471,7 +1471,7 @@
 	        			findTab = true;
 	        			
 	        			var index = vm.workPackage.marketFareSheet.indexOf(x);
-	        			vm.workPackage.marketFareSheet.push(vm.workPackage.marketFareSheet[x]);
+	        			vm.workPackage.marketFareSheet.push(angular.copy(vm.workPackage.marketFareSheet[x]));
 	        			break;
 	        		}
 	        	}
@@ -4431,7 +4431,6 @@
     	  if(fare[field][inputField] != undefined){
 	    	  var exist = false;
 	    	  for(var x=0;x<vm.tariffNumber.length;x++){	   
-//	    		  console.log(vm.tariffNumber[x]);
 	    		  if(vm.tariffNumber[x][inputField] == fare[field][inputField]){
 	    			  tariff = angular.copy(vm.tariffNumber[x]);
 	    			  exist = true;
@@ -4452,6 +4451,6 @@
     		  fare[field] = null;
     		  return;
     	  }
-      }
+      }      
     }
 })();
