@@ -68,9 +68,35 @@
         vm.indexSelectedTab = 0;
         $scope.dateformat = "yyyy-MM-dd";
         vm.fareType = {};
+        vm.optionFare = [];
+        
         for(var x=0;x<fareTypes.length;x++){
-        	vm.fareType[fareTypes[x].name] = fareTypes[x].name;
+        	if(vm.workPackage.targetDistribution=="ATPCO" && vm.workPackage.type=="DISCOUNT"){
+        		if(fareTypes[x].atpcoDiscount){
+        			vm.fareType[fareTypes[x].name] = fareTypes[x].code+" | "+fareTypes[x].name; 
+        		}
+        	}else{
+        		if(!fareTypes[x].atpcoDiscount){
+//        			vm.fareType[fareTypes[x].name] = fareTypes[x].name;
+        			vm.fareType[fareTypes[x].name] = fareTypes[x].code+" | "+fareTypes[x].name;
+        		}
+            	        		
+        	}
         }
+             
+        for(var x=0;x<fareTypes.length;x++){
+        	if(vm.workPackage.targetDistribution=="ATPCO" && vm.workPackage.type=="DISCOUNT"){
+        		if(fareTypes[x].atpcoDiscount){
+        			vm.optionFare.push(fareTypes[x]); 
+        		}
+        	}else{
+        		if(!fareTypes[x].atpcoDiscount){
+        			vm.optionFare.push(fareTypes[x]);
+        		}
+            	        		
+        	}
+        }
+        
         
         vm.businessArea = {};
         for(var x=0;x<businessAreas.length;x++){
@@ -4167,11 +4193,24 @@
       vm.calculateFareLost = function(fare){
     	  if(fare.waiverApprovedFare != null && fare.waiverNewBasicFare != null){
     		  fare.waiverFareLost = parseInt(fare.waiverApprovedFare) - parseInt(fare.waiverNewBasicFare);
+    		  if(fare.waiverTotalPax !=null && fare.waiverPenaltyLostAmount != null){
+        		  fare.waiverTotalLost = (parseInt(fare.waiverFareLost)+parseInt(fare.waiverPenaltyLostAmount))*parseInt(fare.waiverTotalPax);
+        	  }
     	  }
       }
       vm.calculatePenaltyLost = function(fare){
     	  if(fare.waiverApprovedPn != null && fare.waiverOriginalPn != null){
-    		  fare.waiverPenaltyLostPercent = parseInt(fare.waiverApprovedPn) - parseInt(fare.waiverOriginalPn);
+    		  fare.waiverPenaltyLostPercent = (parseInt(fare.waiverApprovedPn) - parseInt(fare.waiverOriginalPn))/parseInt(fare.waiverApprovedPn)*100;
+    		  fare.waiverPenaltyLostAmount = parseInt(fare.waiverApprovedPn) - parseInt(fare.waiverOriginalPn);
+    		  if(fare.waiverTotalPax !=null && fare.waiverFareLost != null){
+        		  fare.waiverTotalLost = (parseInt(fare.waiverFareLost)+parseInt(fare.waiverPenaltyLostAmount))*parseInt(fare.waiverTotalPax);
+        	  }
+    	  }
+      }
+      
+      vm.calculateTotalLost = function(fare){
+    	  if(fare.waiverTotalPax !=null && fare.waiverFareLost != null && fare.waiverFareLost != null){
+    		  fare.waiverTotalLost = (parseInt(fare.waiverFareLost)+parseInt(fare.waiverPenaltyLostAmount))*parseInt(fare.waiverTotalPax);
     	  }
       }
       

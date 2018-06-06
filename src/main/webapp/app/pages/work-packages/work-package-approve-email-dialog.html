@@ -39,7 +39,7 @@
 				            <div class="multi-values" >
 								<span ng-repeat="email in vm.option.email track by $index">
 				           		<label name="remove_email" >
-				           			{{email}}<span class="delete"  ng-click="vm.removeEmail()"><i class="glyphicon glyphicon-remove-sign"></i></span>
+				           			{{email}}<span class="delete"  ng-click="vm.removeEmail($index)"><i class="glyphicon glyphicon-remove-sign"></i></span>
 				           		</label>
 				           		<br/><br/>
 				           		</span>
@@ -65,7 +65,7 @@
 				            <div class="multi-values" >
 								<span ng-repeat="email in vm.option.ccEmail track by $index">
 				           		<label name="remove_email" >
-				           			{{email}}<span class="delete"  ng-click="vm.removeCcEmail()"><i class="glyphicon glyphicon-remove-sign"></i></span>
+				           			{{email}}<span class="delete"  ng-click="vm.removeCcEmail($index)"><i class="glyphicon glyphicon-remove-sign"></i></span>
 				           		</label>
 				           		<br/><br/>
 				           		</span>

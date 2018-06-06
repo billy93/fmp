@@ -111,7 +111,7 @@
                 </span>
             </div>
            	<div class="agent-list-wrapper mb1">
-	           	<div class="agent-list" ng-repeat="businessArea in vm.user.businessAreas track bi $index">
+	           	<div class="agent-list" ng-repeat="businessArea in vm.user.businessAreas track by $index">
 	           		<span>{{businessArea}}</span>
 	           		<div class='remove-agent' ng-click="vm.removeBusinessArea($index)">
 	           			<i class='fa fa-close'></i>

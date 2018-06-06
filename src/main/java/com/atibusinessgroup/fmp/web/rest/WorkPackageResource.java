@@ -2384,13 +2384,26 @@ public class WorkPackageResource {
         
         WorkPackage result = workPackageService.findOne(workPackage.getId());
         String reviewLevel = result.getReviewLevel();
+        String distribution = result.getTargetDistribution();
+        String type = result.getType().name();
         
-        if(reviewLevel.contentEquals("HO")) {
+        if(reviewLevel.contentEquals("HO") && distribution.contentEquals("MARKET") && type.contentEquals("REGULAR")) {
+        	result.setDistributionReviewLevel(reviewLevel);
+        	result.setReviewLevel("LSO");
+    		result.setLocked(false);
+    		result.setStatus(Status.DISTRIBUTED);
+        }else if(reviewLevel.contentEquals("HO")) {
     		result.setDistributionReviewLevel(reviewLevel);
     		result.setReviewLevel("DISTRIBUTION");
     		result.setLocked(false);
     		result.setStatus(Status.PENDING);        		
 	    }
+//        if(reviewLevel.contentEquals("HO")) {
+//    		result.setDistributionReviewLevel(reviewLevel);
+//    		result.setReviewLevel("DISTRIBUTION");
+//    		result.setLocked(false);
+//    		result.setStatus(Status.PENDING);        		
+//	    }
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
