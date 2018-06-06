@@ -13,10 +13,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -242,10 +246,10 @@ public class WorkPackageResource {
         wp.setLastModifiedBy(null);
         wp.setLastModifiedDate(null);
         wp.setFilingInstruction(false);
-        if(!wp.getReuseReplaceConfig().isAttachment()) {
-        	wp.setAttachment(false);
-        	wp.getAttachmentData().clear();
-        }
+//        if(!wp.getReuseReplaceConfig().isAttachment()) {
+//        	wp.setAttachment(false);
+//        	wp.getAttachmentData().clear();
+//        }
         for(WorkPackageFareSheet wps : wp.getFareSheet()) {
         	for(WorkPackageFare fare : wps.getFares()) {
         		fare.setStatus("PENDING");
@@ -301,9 +305,34 @@ public class WorkPackageResource {
         wp.setCreatedDate(null);
         wp.setLastModifiedBy(null);
         wp.setLastModifiedDate(null);
-        if(!workPackage.getReuseReplaceConfig().isAttachment()) {
-        	wp.setAttachment(false);
-        	wp.getAttachmentData().clear();
+//        if(!workPackage.getReuseReplaceConfig().isAttachment()) {
+//        	wp.setAttachment(false);
+//        	wp.getAttachmentData().clear();
+//        }
+        for(WorkPackageFareSheet wps : wp.getFareSheet()) {
+        	for(WorkPackageFare fare : wps.getFares()) {
+        		fare.setStatus("PENDING");
+        	}
+        }
+        for(WorkPackageFareSheet wps : wp.getAddonFareSheet()) {
+        	for(WorkPackageFare fare : wps.getFares()) {
+        		fare.setStatus("PENDING");
+        	}
+        }
+        for(WorkPackageFareSheet wps : wp.getMarketFareSheet()) {
+        	for(WorkPackageFare fare : wps.getFares()) {
+        		fare.setStatus("PENDING");
+        	}
+        }
+        for(WorkPackageFareSheet wps : wp.getWaiverFareSheet()) {
+        	for(WorkPackageFare fare : wps.getFares()) {
+        		fare.setStatus("PENDING");
+        	}
+        }
+        for(WorkPackageFareSheet wps : wp.getDiscountFareSheet()) {
+        	for(WorkPackageFare fare : wps.getFares()) {
+        		fare.setStatus("PENDING");
+        	}
         }
         WorkPackage result = workPackageService.save(wp);
         
@@ -1422,11 +1451,17 @@ public class WorkPackageResource {
     	if(workPackage.getWpid() == null) {
     		isWorkPackageNew = true;
     		
-    		Counter c = counterRepository.findOne("workpackageId");
+    		DateFormat df = new SimpleDateFormat("yy"); // Just the year, with 2 digits
+    		DateFormat dfFull = new SimpleDateFormat("yyyy"); // Just the year, with 4 digits
+    		
+    		Counter c = counterRepository.findOneByIdAndYear("workpackageId", dfFull.format(Calendar.getInstance().getTime()));
+    		
+    		NumberFormat nf = new DecimalFormat("00000");
         	c.setSequenceValue(c.getSequenceValue()+1);
         	c = counterRepository.save(c);
         	
-    		workPackage.setWpid(String.valueOf(c.getSequenceValue()));
+    		String year = df.format(Calendar.getInstance().getTime());
+    		workPackage.setWpid(year+nf.format(c.getSequenceValue()+1));
         }
     	
 //	    workPackage = workPackageService.save(workPackage);
@@ -2410,14 +2445,33 @@ public class WorkPackageResource {
         	content += "</tbody>";  
         content += "</table>";
         
-        if(workPackage.getApproveConfig().attachment) {
+        List<Attachment> sendAttachments = new ArrayList<>();
+        List<Attachment> attachments = workPackage.getAttachmentData();
+        for (Attachment attachment : attachments) {
+        	try {
+            	if(attachment.getInOnly().equals(true)) {
+            		sendAttachments.add(attachment);
+            	}
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+        if(!sendAttachments.isEmpty()) {
         	log.debug("SEND EMAIL WITH ATTACHMENT");
-        	mailService.sendEmailWithAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true, workPackage.getAttachmentData());
+        	mailService.sendEmailWithAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true, sendAttachments);
         }
         else {
         	log.debug("SEND EMAIL WITHOUT ATTACHMENT");
         	mailService.sendEmailWithoutAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true);
         }
+//        if(workPackage.getApproveConfig().attachment) {
+//        	log.debug("SEND EMAIL WITH ATTACHMENT");
+//        	mailService.sendEmailWithAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true, sendAttachments);
+//        }
+//        else {
+//        	log.debug("SEND EMAIL WITHOUT ATTACHMENT");
+//        	mailService.sendEmailWithoutAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true);
+//        }
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -2447,6 +2501,7 @@ public class WorkPackageResource {
 	        emailData = new String[workPackage.getApproveConfig().getEmail().size()];
 	        for (int i=0;i<workPackage.getApproveConfig().getEmail().size();i++) {
 	        	emailData[i] = workPackage.getApproveConfig().getEmail().get(i);
+	        	log.debug("cek : "+emailData[i]);
 	        }
         }
         
@@ -2488,14 +2543,32 @@ public class WorkPackageResource {
         	content += "</tbody>";  
         content += "</table>";
         
-        if(workPackage.getApproveConfig().attachment) {
+        List<Attachment> sendAttachments = new ArrayList<>();
+        List<Attachment> attachments = workPackage.getAttachmentData();
+        for (Attachment attachment : attachments) {
+        	try {
+        		if(attachment.getInOnly().equals(true)) {
+            		sendAttachments.add(attachment);
+            	}
+			} catch (Exception e) {	}        	
+		}
+        if(!sendAttachments.isEmpty()) {
         	log.debug("SEND EMAIL WITH ATTACHMENT");
-        	mailService.sendEmailWithAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true, workPackage.getAttachmentData());
+        	mailService.sendEmailWithAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true, sendAttachments);
         }
         else {
         	log.debug("SEND EMAIL WITHOUT ATTACHMENT");
         	mailService.sendEmailWithoutAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true);
         }
+        
+//        if(workPackage.getApproveConfig().attachment) {
+//        	log.debug("SEND EMAIL WITH ATTACHMENT");
+//        	mailService.sendEmailWithAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true, workPackage.getAttachmentData());
+//        }
+//        else {
+//        	log.debug("SEND EMAIL WITHOUT ATTACHMENT");
+//        	mailService.sendEmailWithoutAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true);
+//        }
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);

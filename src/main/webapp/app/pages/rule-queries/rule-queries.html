@@ -5,28 +5,72 @@
 			<div class="filter-area">
 				<div class="clearfix">
 					<form name="queryForm" role="form" novalidate>
-						<div class="col-md-6 no-lpad">
-							<div class="form-group">
-								<div class="custom-label semibold">Carrier</div>
-								<input type="text" class="form-control" name="carrier" id="cxr"
-									ng-model="vm.queryParams.cxr" uppercase/>
+						<div class="pull-left col-md-12 no-pad">
+							<div class="pull-left col-md-6 no-lpad">
+								<div class="form-group">
+									<div class="custom-label semibold">Carrier</div>
+									<input type="text" class="form-control" name="carrier" id="cxr"
+										ng-model="vm.queryParams.cxr" uppercase />
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Rule Number</div>
+									<input type="text" class="form-control" name="ruleNumber"
+										id="ruleNo" ng-model="vm.queryParams.ruleNo" uppercase />
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Rule Type</div>
+									<input type="text" class="form-control" name="ruleType"
+										id="type" ng-model="vm.queryParams.type" uppercase />
+								</div>
 							</div>
-							<div class="form-group">
-								<div class="custom-label semibold">Rule Number</div>
-								<input type="text" class="form-control" name="ruleNumber"
-									id="ruleNo" ng-model="vm.queryParams.ruleNo" uppercase/>
-							</div>
-							<div class="form-group">
-								<div class="custom-label semibold">Rule Type</div>
-								<input type="text" class="form-control" name="ruleType"
-									id="type" ng-model="vm.queryParams.type" uppercase/>
-							</div>
-						</div>
-						<div class="col-md-6 no-rpad">
-							<div class="form-group">
-								<div class="custom-label semibold">Source</div>
-								<input type="text" class="form-control" name="source" id="src"
-									ng-model="vm.queryParams.src" uppercase/>
+							<div class="pull-right col-md-6 no-rpad">
+								<div class="form-group">
+									<div class="custom-label semibold">Source</div>
+									<input type="text" class="form-control" name="source" id="src"
+										ng-model="vm.queryParams.src" uppercase />
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Tariff</div>
+									<input type="text" class="form-control" name="tariff"
+										id="ruleTarNo" ng-model="vm.queryParams.ruleTarNo" uppercase />
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Category</div>
+									<select class="form-control" name="category" id="catNo" ng-model="vm.queryParams.catNo">
+										<option value="">All</option>
+										<option value="001">01 - Eligibility</option>
+										<option value="002">02 - Day/Time</option>
+										<option value="003">03 - Season App</option>
+										<option value="004">04 - Flight App</option>
+										<option value="005">05 - Adv Bkg</option>
+										<option value="006">06 - Min Stay</option>
+										<option value="007">07 - Max Stay</option>
+										<option value="008">08 - Stopovers</option>
+										<option value="009">09 - Transfers</option>
+										<option value="010">10 - Comb'ty</option>
+										<option value="011">11 - Blackouts</option>
+										<option value="012">12 - Surcharges</option>
+										<option value="013">13 - Accmp Tvl</option>
+										<option value="014">14 - Tvl Rest</option>
+										<option value="015">15 - Sale Rest</option>
+										<option value="016">16 - Penalties</option>
+										<option value="017">17 - Hi Int Pt</option>
+										<option value="018">18 - Tkt Endorse</option>
+										<option value="019">19 - Child Disc</option>
+										<option value="020">20 - Tour Disc</option>
+										<option value="021">21 - Agents Disc</option>
+										<option value="022">22 - Other Disc</option>
+										<option value="023">23 - Misc Tags</option>
+										<option value="026">26 - Groups</option>
+										<option value="027">27 - Tours</option>
+										<option value="028">28 - Visit Cntry</option>
+										<option value="029">29 - Deposits</option>
+										<option value="031">31 - Vol Chgs</option>
+										<option value="033">33 - Vol Refunds</option>
+										<option value="035">35 - Neg Fares</option>
+										<option value="050">50 - Rule App</option>
+									</select>
+								</div>
 							</div>
 							<div class="form-group">
 								<div class="custom-label semibold">Tariff</div>

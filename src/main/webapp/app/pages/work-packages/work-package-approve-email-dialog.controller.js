@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('WorkPackageApproveEmailDialogController', WorkPackageApproveEmailDialogController);
 
-    WorkPackageApproveEmailDialogController.$inject = ['email', 'ccEmail',  'User', 'Principal', 'workPackage', '$scope', '$uibModalInstance', '$state'];
+    WorkPackageApproveEmailDialogController.$inject = ['statusResend','email', 'ccEmail',  'User', 'Principal', 'workPackage', '$scope', '$uibModalInstance', '$state'];
 
-    function WorkPackageApproveEmailDialogController(email, ccEmail, User, Principal, workPackage, $scope, $uibModalInstance, $state) {
+    function WorkPackageApproveEmailDialogController(statusResend,email, ccEmail, User, Principal, workPackage, $scope, $uibModalInstance, $state) {
 
         var vm = this;     
         vm.clear = clear;
@@ -22,8 +22,14 @@
         }
         
         vm.workPackage = workPackage;
-        vm.option.email =  email.value.split(",");
-        vm.option.ccEmail =  ccEmail.value.split(",");
+        if(statusResend){
+        	vm.option.email =  email;
+            vm.option.ccEmail =  ccEmail;
+        }else{
+        	vm.option.email =  email.value.split(",");
+            vm.option.ccEmail =  ccEmail.value.split(",");
+        }
+        
         vm.save = function(){
         	$uibModalInstance.close(vm.option);
         }

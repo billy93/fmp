@@ -841,6 +841,9 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 	    
 	    @Field("createdTime")	    
 		private ZonedDateTime createdTime;
+	    
+	    @Field("inOnly")
+	    private Boolean inOnly;
 		
 		public String getComment() {
 			return comment;
@@ -881,6 +884,14 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 		public void setCreatedTime(ZonedDateTime createdTime) {
 			this.createdTime = createdTime;
 		}
+
+		public Boolean getInOnly() {
+			return inOnly;
+		}
+
+		public void setInOnly(Boolean inOnly) {
+			this.inOnly = inOnly;
+		}	
 		
 	}
 

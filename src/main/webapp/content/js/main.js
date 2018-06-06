@@ -106,9 +106,11 @@ $(function(){
 		$(this).find('.tab-content').slideToggle(200);
 	});
 	
-//	$(document).on('change','.select-all-wpdetail',function(){
-//		var _checkbox = $('.checkbox-table-wpdetail');
-//		_checkbox.prop('checked', !_checkbox.prop('checked'));
-//	});
+	$(document).on('click','.sub-table',function(e){
+		e.stopPropagation();
+		$(this).toggleClass('opened');
+		$(this).find('.sub-second-th').slideToggle(200);
+		$(this).find('tbody').slideToggle(200);
+	});
 	
 });
