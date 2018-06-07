@@ -65,7 +65,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.atibusinessgroup.fmp.domain.Counter;
 import com.atibusinessgroup.fmp.domain.Priority;
-import com.atibusinessgroup.fmp.domain.TariffNumber;
 import com.atibusinessgroup.fmp.domain.User;
 import com.atibusinessgroup.fmp.domain.WorkPackage;
 import com.atibusinessgroup.fmp.domain.WorkPackage.Attachment;
@@ -377,6 +376,62 @@ public class WorkPackageResource {
     }
     
     
+    static class ImportHeader{
+    	int index;
+    	String name;
+    }
+    
+    public LinkedHashMap<ImportHeader, List<Object>> importExcel(byte[] file) throws IOException{
+    	InputStream input = new ByteArrayInputStream(file);
+		
+		Workbook workbook = new XSSFWorkbook(input);
+		Sheet datatypeSheet = workbook.getSheetAt(0);	
+		
+		Iterator<Row> rowIterator = datatypeSheet.iterator();
+		Row row = rowIterator.next();
+
+		LinkedHashMap<ImportHeader, List<Object>> map = new LinkedHashMap<>();
+		Map<Integer, ImportHeader> importHeaderList = new HashMap<>();
+		int rowIndex = 0;
+		
+        while (rowIterator.hasNext()){
+            if(rowIndex == 0) {
+        		log.debug("ROW INDEX : {}", rowIndex);
+        		int headerIndex = 0;
+	            for (Iterator<Cell> iter = row.cellIterator(); iter.hasNext(); ) {
+	            	log.debug("ROW HEADER INDEX : {}", headerIndex);
+				    Cell element = iter.next();
+				    
+				    ImportHeader importHeader = new ImportHeader();
+				    importHeader.index = headerIndex;
+				    importHeader.name = element.getStringCellValue();
+				    importHeaderList.put(headerIndex, importHeader);
+				    map.put(importHeader, new ArrayList<>());
+				    
+				    headerIndex++;
+				}
+        	}
+        	else {
+        		row = rowIterator.next();
+            	
+        		int cellIndex = 0;
+        		for (Iterator<Cell> iter = row.cellIterator(); iter.hasNext(); ) {	 
+        			Cell element = iter.next();
+        			List<Object> value = map.get(importHeaderList.get(cellIndex));
+    				value.add(getCellValueAsString(element));
+        			cellIndex++;
+        		}        		
+        	}
+            rowIndex++;
+        }
+        
+    	return map;
+    }
+    
+    public Object getElementByIndex(LinkedHashMap map,int index){
+        return map.get( (map.keySet().toArray())[ index ] );
+    }
+    
     /**
      * POST  /work-packages/import-fares : Import a new fares workPackage.
      *
@@ -391,7 +446,51 @@ public class WorkPackageResource {
 
         try {
             ImportFares importData = workPackage.getImportFares();
-			InputStream input = new ByteArrayInputStream(importData.getFile());
+            int importIndex = workPackage.getImportIndex();
+            LinkedHashMap<ImportHeader, List<Object>> mapValue = importExcel(importData.getFile());
+            
+            List<Object> rows = (List<Object>) getElementByIndex(mapValue, 0);
+            List<WorkPackageFare> fares = new ArrayList<>();
+            for(int i=0;i<rows.size();i++) {
+            	fares.add(new WorkPackageFare());
+            }
+            
+            for (Map.Entry<ImportHeader, List<Object>> entry : mapValue.entrySet()) {
+                ImportHeader key = entry.getKey();
+            	String header = key.name;
+                List<Object> value = entry.getValue();
+                
+                int i=0;
+                for(Object o : value) {
+                	if(header.contentEquals("Status")) {
+                		fares.get(i).setStatus(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Carrier")) {
+                		fares.get(i).setCarrier(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Action")) {
+                		fares.get(i).setAction(String.valueOf(o));
+                	}
+                	i++;
+                }
+            }
+//			Iterator<Row> iterator = datatypeSheet.iterator();
+//			iterator.next();
+//			while (iterator.hasNext()) {
+//                Row currentRow = iterator.next();
+//                Iterator<Cell> cellIterator = currentRow.iterator();
+//
+//                WorkPackageFare wpFare = new WorkPackageFare();
+//                TariffNumber tariffNumber = new TariffNumber();
+//                wpFare.setTariffNumber(tariffNumber);
+//                
+//                Cell currentCell = currentRow.getCell(cell);
+//                //for(int cell=1;cell<=30;cell++) {
+//                
+//                //}
+//			}
+			
+			/*
 			Workbook workbook = new XSSFWorkbook(input);
 			Sheet datatypeSheet = workbook.getSheetAt(0);	
 			
@@ -506,7 +605,8 @@ public class WorkPackageResource {
 //            workPackage.getFareSheet().get(0).getFares().addAll(workPackageFares);
             workPackage.getFareSheet().get(0).getFares().addAll(workPackageFares);
             workPackage = workPackageService.save(workPackage);
-		} catch (IOException e) {
+            */
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

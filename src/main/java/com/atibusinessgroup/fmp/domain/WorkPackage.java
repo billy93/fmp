@@ -25,6 +25,7 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     private String id;
 
     private int exportIndex;
+    private int importIndex;
     
     @Field("discount")
     private boolean discount;
@@ -169,7 +170,16 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     private Validation validation;
     private boolean validate;
     
-    public int getExportIndex() {
+    
+    public int getImportIndex() {
+		return importIndex;
+	}
+
+	public void setImportIndex(int importIndex) {
+		this.importIndex = importIndex;
+	}
+
+	public int getExportIndex() {
 		return exportIndex;
 	}
 

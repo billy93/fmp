@@ -3671,7 +3671,7 @@
     	  	//END DISCOUNT FARE
       }
       
-      vm.importFare = function ($file) {
+      vm.importFare = function ($file, index) {
           if ($file) {
               DataUtils.toBase64($file, function(base64Data) {
                   $scope.$apply(function() {
@@ -3681,8 +3681,9 @@
                       };
                       
                       vm.workPackage.importFares = testing;
-  
+                      vm.workPackage.importIndex = index;
                       //send to backend
+                      
                       WorkPackage.importFares(vm.workPackage, onImportSuccess, onImportFailure);
                       
                       function onImportSuccess(result){
@@ -3839,7 +3840,25 @@
       };
       
       vm.exportFares = function(index){
-    	  //console.log("Fare sheet index : "+index);
+    	  /*
+    	  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-export-dialog.html',
+              controller: 'WorkPackageExportDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              resolve: {
+              }
+          }).result.then(function(workPackage) {
+//              	var params = {
+//              			id: workPackage.id
+//              	};
+//            	$state.go('work-package-detail', params);
+              //$state.go('work-package', null, { reload: 'work-package' });
+          }, function() {
+//              $state.go('work-package');
+          });
+    	  */
     	  
     	  vm.workPackage.exportIndex = index;
     	  WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
@@ -3855,7 +3874,8 @@
 	    	  }    	 
 	    	}, function onSaveError(){
 	    		alert('An error occured, please try again');
-	    	});    	  	   
+	    	}); 
+	       
       }
       
       vm.exportFaresMarket = function(){
