@@ -3217,6 +3217,12 @@ p {
   padding: 0;
   margin: 0; }
 
+.mt1 {
+  margin-top: 1em !important; }
+
+.mt2 {
+  margin-top: 2em !important; }
+
 .mb0 {
   margin-bottom: 0 !important; }
 
@@ -3412,6 +3418,75 @@ p {
   margin-top: 0;
   padding: 10px 20px 15px;
   border-top: none; }
+
+.custom-dropdown-select {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 28px;
+  padding: 6px 12px;
+  font-size: 11px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #d2d6de;
+  border-radius: 4px;
+  -webkit-box-shadow: none;
+  box-shadow: none; }
+  .custom-dropdown-select.focused {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6); }
+  .custom-dropdown-select:after {
+    cursor: pointer;
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    content: "\f0d7";
+    font-family: FontAwesome;
+    font-size: 14px;
+    font-weight: 400;
+    color: #222; }
+
+.dropdown-select-menu {
+  display: none;
+  position: absolute;
+  z-index: 1000;
+  float: left;
+  min-width: 160px;
+  max-height: 140px;
+  overflow: auto;
+  padding: 0;
+  margin: 3px 0 0;
+  font-size: 11px;
+  text-align: left;
+  list-style: none;
+  background-color: #fff;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  -webkit-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
+  .dropdown-select-menu li {
+    padding: 3px 15px;
+    font-size: 11px;
+    display: block;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+    cursor: pointer; }
+    .dropdown-select-menu li:hover {
+      background-color: #66afe9; }
+    .dropdown-select-menu li:first-child {
+      padding-top: 5px; }
+    .dropdown-select-menu li:last-child {
+      padding-bottom: 5px; }
 
 .btn {
   min-width: 80px;
@@ -3958,6 +4033,7 @@ body {
 .js .page-wrapper {
   position: relative;
   overflow-x: hidden;
+  overflow-y: scroll;
   width: 100vw;
   height: 100vh;
   z-index: 0; }
@@ -4503,11 +4579,12 @@ a:hover {
       font-weight: 600;
       opacity: 1; }
 
+.main-container {
+  overflow: hidden; }
+
 .page-wrapper {
   float: left;
-  padding-top: 70px;
-  width: 100%;
-  z-index: 110; }
+  padding-top: 70px; }
   .page-wrapper .page-content {
     margin-left: 100px;
     padding: 20px 40px 120px;
