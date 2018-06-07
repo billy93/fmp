@@ -129,7 +129,7 @@ public class CompetitorMonitoringResource {
         //ATPCO
         Page<AtpcoFareAfdQueryWithRecords> page = atpcoFareCustomRepository.findAtpcoFareAfdQueryWithRecords(param, ruleCategories, pageable);
         List<AtpcoFareAfdQueryWithRecords> a1fares = page.getContent();
-
+        
         List<AfdQuery> result = new ArrayList<>();
         
         for (AtpcoFareAfdQueryWithRecords a1fare:a1fares) {
@@ -228,7 +228,8 @@ public class CompetitorMonitoringResource {
             	}
         	}
         	
-        	AfdQuery afdQuery = afdQueryMapper.convertAtpcoFare(afare, matchedRecord1, cat03s, cat05s, cat06s, cat07s, cat14s, cat15s, footnote14s, footnote15s);
+        	AfdQuery afdQuery = afdQueryMapper.convertAtpcoFare(afare, matchedRecord1, cat03s, cat05s, cat06s, cat07s, cat14s, cat15s, 
+        			footnote14s, footnote15s, param.getEffectiveDateFrom(), param.getEffectiveDateTo());
         	
         	result.add(afdQuery);
         }
