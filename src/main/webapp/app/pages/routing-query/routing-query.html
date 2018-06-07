@@ -1,0 +1,157 @@
+<div class="panel">
+	<div class="panel-body">
+		<div class="filter-hero">
+			<div class="filter-label semibold show">Hide Filter</div>
+			<div class="filter-area">
+				<div class="clearfix">
+					<form name="queryForm" role="form" novalidate>
+						<div class="pull-left col-md-12 no-pad">
+							<div class="pull-left col-md-4 no-lpad">
+								<div class="form-group">	
+									<div class="custom-label semibold">Tar No</div>
+									<input type="text" class="form-control" name="tarno" id="tarno" ng-model="vm.queryParams.tarNo" uppercase />
+								</div>
+								<div class="form-group">	
+									<div class="custom-label semibold">Carrier</div>
+									<input type="text" class="form-control" name="carrier" id="carrier" ng-model="vm.queryParams.carrier" uppercase />
+								</div>
+							</div>
+							<div class="pull-left col-md-4 no-lpad">
+								<div class="form-group">
+									<div class="custom-label semibold">Routing No</div>
+									<input type="text" class="form-control" name="routingno" id="routingno" ng-model="vm.queryParams.routingNo" uppercase />
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Effective Date</div>
+									<div class="row no-mar">
+										<div class="col-md-6 no-lpad">
+											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'effectiveDateFrom')" 
+												is-open="vm.datePickerOpenStatus['effectiveDateFrom']" datetime-picker="{{vm.dateFormat}}" 
+												enable-time="false" name="effectiveDateFrom" id="datepicker" 
+												ng-model="vm.queryParams.effectiveDateFrom" placeholder="From"/>
+										</div>
+										<div class="col-md-6 no-pad">
+											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'effectiveDateTo')" 
+												is-open="vm.datePickerOpenStatus['effectiveDateTo']" datetime-picker="{{vm.dateFormat}}" 
+												enable-time="false" name="effectiveDateTo" id="datepicker" 
+												ng-model="vm.queryParams.effectiveDateTo" placeholder="To"/>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="pull-left col-md-4 no-lpad">
+								<div class="form-group">	
+									<div class="custom-label semibold">Entry Point</div>
+									<input type="text" class="form-control" name="entrypoint" id="entrypoint" ng-model="vm.queryParams.entryPoint" uppercase />
+								</div>
+								<div class="form-group">	
+									<div class="custom-label semibold">Exit Point</div>
+									<input type="text" class="form-control" name="exitpoint" id="exitpoint" ng-model="vm.queryParams.exitPoint" uppercase />
+								</div>
+							</div>
+<!-- 							<div class="pull-left col-md-2 no-lpad"> -->
+<!-- 								<div class="form-group">	 -->
+<!-- 									<div class="custom-label semibold">Additional Options</div> -->
+<!-- 										<div class="checkbox-wrapper"> -->
+<!-- 											<label> -->
+<!-- 												<input type="checkbox" name="showroutesmaps" ng-model="vm.queryParams.showRoutesMaps">  -->
+<!-- 												Show Routes Maps -->
+<!-- 											</label> -->
+<!-- 										</div> -->
+<!-- 									</div> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+							<div class="pull-left col-md-12 no-pad">
+								<div class="form-group">
+									<div class="pull-right query-button-wrapper">
+										<button type="button" class="btn btn-default small pull-left" ng-click="vm.loadAll(); vm.hideDetail()">Query</button>
+										<button type="button" class="btn btn-default small pull-left" ng-click="vm.hideDetail(); vm.clearFilter();">Clear</button>
+										<button type="reset" ng-click="vm.resetFilter(); vm.hideDetail()" class="btn btn-default small pull-left">Reset</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="table-wrapper">
+			<div class="datatable-wrapper form-inline">
+				<div class="table-responsive">
+					<table class="table table-striped table-bordered datatable">
+						<thead>
+							<tr role="row" jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+								<th>No.</th>
+								<th jh-sort-by="cxr"><span>CXR</span>  <span class="glyphicon glyphicon-sort"></span></th>
+								<th jh-sort-by="tarNo"><span>TAR NO</span>  <span class="glyphicon glyphicon-sort"></span></th>
+								<th jh-sort-by="routingNo"><span>ROUTING NO</span>  <span class="glyphicon glyphicon-sort"></span></th>
+								<th jh-sort-by="effectiveDate"><span>EFFECTIVE DATE</span>  <span class="glyphicon glyphicon-sort"></span></th>
+								<th jh-sort-by="discontinuedDate"><span>DISCONTINUED DATE</span>  <span class="glyphicon glyphicon-sort"></span></th>
+								<th jh-sort-by="drv"><span>DRV INDICATOR</span>  <span class="glyphicon glyphicon-sort"></span></th>
+								<th jh-sort-by="cpi"><span>CPI</span>  <span class="glyphicon glyphicon-sort"></span></th>
+								<th jh-sort-by="di"><span>DI</span>  <span class="glyphicon glyphicon-sort"></span></th>
+								<th jh-sort-by="intPt"><span>INT PT</span>  <span class="glyphicon glyphicon-sort"></span></th>
+								<th jh-sort-by="untPt"><span>UNT PT</span>  <span class="glyphicon glyphicon-sort"></span></th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="routingQuery in vm.routingqueries" ng-class="{'selected': vm.selectedRow == routingQuery}" ng-click="vm.selectedRow = routingQuery; vm.getDetails(routingQuery);">
+								<td>{{$index + 1}}</td>
+			                    <td>{{routingQuery.cxr}}</td>
+			                    <td>{{routingQuery.tarNo}}</td>
+			                    <td>{{routingQuery.routingNo}}</td>
+			                    <td>{{routingQuery.effectiveDate | date:'medium'}}</td>
+			                    <td>{{routingQuery.discontinuedDate | date:'medium'}}</td>
+			                    <td>{{routingQuery.drv}}</td>
+			                    <td>{{routingQuery.cpi}}</td>
+			                    <td>{{routingQuery.di}}</td>
+			                    <td>{{routingQuery.intPt}}</td>
+			                    <td>{{routingQuery.untPt}}</td>
+			                    <td class="text-right">
+			                        <div class="btn-group flex-btn-group-container">
+			                            <button type="submit"
+			                                    ui-sref="routingquery-detail({id:routingQuery.id})"
+			                                    class="btn btn-info btn-sm">
+			                                <span class="glyphicon glyphicon-eye-open"></span>
+			                                <span class="hidden-sm-down"></span>
+			                            </button>
+			                        </div>
+			                    </td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="text-center">
+			        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+			        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
+			    </div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="panel">
+	<div class="panel-body">
+		<div>
+			<h5>Maps</h5>
+			<div class="table-wrapper">
+				<div class="datatable-wrapper form-inline">
+					<div class="table-responsive">
+						<table class="table table-striped table-bordered datatable">
+							<thead>
+					  		</thead>
+					  		<tbody>
+					  			<tr ng-repeat="details in vm.routingDetails">
+					  				<td>{{$index + 1}}</td>
+					  				<td ng-repeat="detail in details" style="white-space:normal">
+					  					<div style="word-break:break-all; width: 10vw">{{detail}}</div>
+					  				</td>
+					  			</tr>
+					  		</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
