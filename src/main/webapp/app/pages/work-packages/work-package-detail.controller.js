@@ -4471,7 +4471,8 @@
       			
           });
       }
-      
+    
+    	  
       vm.selectCity = function(fare, field){
     	  $uibModal.open({
               templateUrl: 'app/pages/work-packages/work-package-select-city-dialog.html',
@@ -4496,6 +4497,124 @@
           });
       }
       
+      vm.selectCityATPCODiscount = function(fare, field){
+    	  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-select-city-dialog.html',
+              controller: 'WorkPackageSelectCityDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              windowClass: 'full-page-modal',
+              resolve: {
+	              	fare: function(){
+	              		return fare;
+	              	},
+                  cities: ['City', function(City) {
+                      return City.getAll().$promise;
+                  }],
+              }
+			}).result.then(function(option) {
+				if(option != null){
+					if(field == 'loc1'){
+						if(fare.loc1Type == 'C'){
+							fare[field] = option.cityCode;				
+						}else if(fare.loc1Type == 'N'){
+							fare[field] = option.countryCode;
+						}
+					}else if(field == 'loc2'){
+						if(fare.loc2Type == 'C'){
+							fare[field] = option.cityCode;				
+						}else if(fare.loc2Type == 'N'){
+							fare[field] = option.countryCode;
+						}
+					}					
+				}
+					
+          }, function() {
+      			
+          });
+      }
+      
+      vm.selectState = function(fare, field){
+    	  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-select-state-dialog.html',
+              controller: 'WorkPackageSelectStateDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              windowClass: 'full-page-modal',
+              resolve: {
+	              	fare: function(){
+	              		return fare;
+	              	},
+              	 states: ['State', function(State) {
+                     return State.getAll().$promise;
+                 }],
+                 header : function(){ return "States"}
+              }
+			}).result.then(function(option) {
+				if(option != null){
+					fare[field] = option.code;	
+				}
+					
+          }, function() {
+      			
+          });
+      }
+      
+      vm.selectCityGroup = function(fare, field){
+    	  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-select-state-dialog.html',
+              controller: 'WorkPackageSelectStateDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              windowClass: 'full-page-modal',
+              resolve: {
+	              	fare: function(){
+	              		return fare;
+	              	},
+              	 states: ['CityGroup', function(CityGroup) {
+                     return CityGroup.getAll().$promise;
+                 }],
+                 header : function(){ return "City Group"}
+              }
+			}).result.then(function(option) {
+				if(option != null){
+					fare[field] = option.code;	
+				}
+					
+          }, function() {
+      			
+          });
+      }
+      
+      vm.selectPax = function(fare, field){
+    	  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-select-state-dialog.html',
+              controller: 'WorkPackageSelectStateDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              windowClass: 'full-page-modal',
+              resolve: {
+	              	fare: function(){
+	              		return fare;
+	              	},
+              	 states: ['Passenger', function(Passenger) {
+                     return Passenger.getAll().$promise;
+                 }],
+                 header : function(){ return "Passenger"}
+              }
+			}).result.then(function(option) {
+				if(option != null){
+					fare[field] = option.code;	
+				}
+					
+          }, function() {
+      			
+          });
+      }
       
       vm.selectCurrency = function(fare, field){
     	  $uibModal.open({
@@ -4539,6 +4658,24 @@
     	  }
       }
       
+      vm.checkpassengerType = function(fare, field){
+    	  if(fare[field] != null || fare[field] != ''){
+	    	  var exist = false;
+	    	  for(var x=0;x<vm.passengers.length;x++){
+	    		  if(vm.passengers[x].code.toUpperCase() == fare[field].toUpperCase()){
+	    			  exist = true;
+	    			  break;
+	    		  }
+	    	  }
+	    	  
+	    	  if(!exist){
+	    		  alert("Passenger code '"+fare[field]+"' is invalid. Please select a correct code");
+	    		  fare[field] = null;
+	    		  return;
+	    	  }
+    	  }
+      }
+      
       vm.checkCity = function(fare, field){
     	  if(fare[field] != null || fare[field] != ''){
 	    	  var exist = false;
@@ -4557,6 +4694,66 @@
     	  }
       }
       
+      vm.checkLoc = function(fare, field){
+    	  if(fare[field] != null || fare[field] != ''){
+	    	  var exist = false;
+	    	  if(fare.loc1Type == 'C'){
+	    		  for(var x=0;x<vm.cities.length;x++){
+		    		  if(vm.cities[x].cityCode.toUpperCase() == fare[field].toUpperCase()){
+		    			  exist = true;
+		    			  break;
+		    		  }
+		    	  }				
+				}else if(fare.loc1Type == 'N'){
+					 for(var x=0;x<vm.cities.length;x++){
+			    		  if(vm.cities[x].countryCode.toUpperCase() == fare[field].toUpperCase()){
+			    			  exist = true;
+			    			  break;
+			    		  }
+			    	  }
+				}else if(fare.loc1Type == 'S'){
+					 for(var x=0;x<vm.states.length;x++){
+			    		  if(vm.states[x].code.toUpperCase() == fare[field].toUpperCase()){
+			    			  exist = true;
+			    			  break;
+			    		  }
+			    	  }
+				}else if(fare.loc1Type == 'A'){
+					 for(var x=0;x<vm.areas.length;x++){
+						 console.log(vm.areas[x]);
+						 console.log(fare[field]);
+			    		  if(vm.areas[x].code == fare[field]){
+			    			  exist = true;
+			    			  break;
+			    		  }
+			    	  }
+				}else if(fare.loc1Type == 'G'){
+					 for(var x=0;x<vm.cityGroups.length;x++){
+			    		  if(vm.cityGroups[x].code.toUpperCase() == fare[field].toUpperCase()){
+			    			  exist = true;
+			    			  break;
+			    		  }
+			    	  }
+				}		    	 
+	    	  
+	    	  if(!exist){
+	    		  if(fare.loc1Type == 'C'){
+	    		  alert("City code '"+fare[field]+"' is invalid. Please select a correct code");
+	    		  }else if(fare.loc1Type == 'N'){
+	    		  alert("Country code '"+fare[field]+"' is invalid. Please select a correct code");
+	    		  }else if(fare.loc1Type == 'S'){
+	    		  alert("State code '"+fare[field]+"' is invalid. Please select a correct code");
+	    		  }else if(fare.loc1Type == 'A'){
+	    		  alert("Area code '"+fare[field]+"' is invalid. Please select a correct code");
+	    		  }else if(fare.loc1Type == 'G'){
+	    		  alert("City Group code '"+fare[field]+"' is invalid. Please select a correct code");
+	    		  }
+	    		  fare[field] = null;
+	    		  return;
+	    	  }
+    	  }
+      }
+          
       vm.checkTariff = function(fare, field, inputField){
     	  var tariff = null;
     	  if(fare[field][inputField] != undefined){
