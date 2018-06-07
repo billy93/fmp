@@ -1,0 +1,252 @@
+<div class="panel">
+	<div class="panel-body">
+		<div class="filter-hero">
+			<div class="filter-label semibold show">Hide Filter</div>
+			<div class="filter-area">
+				<div class="clearfix">
+					<form name="queryForm" role="form" novalidate>
+						<div class="pull-left col-md-3 no-pad">
+							<div class="pull-left col-md-7 no-pad">
+								<div class="form-group">
+									<div class="custom-label semibold">Carrier</div>
+									<input type="text" class="form-control" name="carrier"
+										id="carrier" ng-model="vm.queryParams.carrier" uppercase />
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Origin Destination</div>
+									<input type="text" class="form-control" name="origdest"
+										id="origdest" ng-model="vm.origdest" uppercase />
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">OW/RT</div>
+									<select class="form-control" name="owrt" id="owrt"
+										ng-model="vm.queryParams.owrt">
+										<option value="{{value.key}}"
+											ng-repeat="value in vm.owrts track by $index">{{value.value}}</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="pull-left col-md-3 no-lpad">
+							<div class="form-group">
+								<div class="custom-label semibold">Travel Date</div>
+								<div class="row no-mar">
+									<div class="col-md-4 no-lpad">
+										<input type="text" class="form-control"
+											ng-click="vm.openCalendar($event, 'travelDateFrom')"
+											ng-disabled="true"
+											is-open="vm.datePickerOpenStatus['travelDateFrom']"
+											datetime-picker="{{vm.dateFormat}}" enable-time="false"
+											name="travelDateFrom" id="datepicker"
+											ng-model="vm.queryParams.travelDateFrom" placeholder="From" />
+									</div>
+									<div class="col-md-4 no-lpad">
+										<input type="text" class="form-control"
+											ng-click="vm.openCalendar($event, 'travelDateTo')"
+											ng-disabled="true"
+											is-open="vm.datePickerOpenStatus['travelDateTo']"
+											datetime-picker="{{vm.dateFormat}}" enable-time="false"
+											name="travelDateTo" id="datepicker"
+											ng-model="vm.queryParams.travelDateTo" placeholder="To" />
+									</div>
+									<div class="col-md-4 no-lpad">
+										<select class="form-control" name="travelDateOption"
+											id="travelDateOption"
+											ng-init="vm.queryParams.travelDateOption = vm.dateOptions[0].key"
+											ng-model="vm.queryParams.travelDateOption" ng-disabled="true">
+											<option value="{{value.key}}"
+												ng-repeat="value in vm.dateOptions track by $index">{{value.value}}</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="custom-label semibold">Sale Date</div>
+								<div class="row no-mar">
+									<div class="col-md-4 no-lpad">
+										<input type="text" class="form-control"
+											ng-click="vm.openCalendar($event, 'saleDateFrom')"
+											ng-disabled="true"
+											is-open="vm.datePickerOpenStatus['saleDateFrom']"
+											datetime-picker="{{vm.dateFormat}}" enable-time="false"
+											name="saleDateFrom" id="datepicker"
+											ng-model="vm.queryParams.saleDateFrom" placeholder="From" />
+									</div>
+									<div class="col-md-4 no-lpad">
+										<input type="text" class="form-control"
+											ng-click="vm.openCalendar($event, 'saleDateTo')"
+											ng-disabled="true"
+											is-open="vm.datePickerOpenStatus['saleDateTo']"
+											datetime-picker="{{vm.dateFormat}}" enable-time="false"
+											name="saleDateTo" id="datepicker"
+											ng-model="vm.queryParams.saleDateTo" placeholder="To" />
+									</div>
+									<div class="col-md-4 no-lpad">
+										<select class="form-control" name="saleDateOption"
+											id="saleDateOption"
+											ng-init="vm.queryParams.saleDateOption = vm.dateOptions[0].key"
+											ng-model="vm.queryParams.saleDateOption" ng-disabled="true">
+											<option value="{{value.key}}"
+												ng-repeat="value in vm.dateOptions track by $index">{{value.value}}</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="pull-left col-md-6 no-lpad">
+									<div class="checkbox-wrapper">
+										<label> <input type="checkbox"
+											name="includeConstructed"
+											ng-model="vm.queryParams.includeConstructed"
+											ng-disabled="true"> Calculate TFC
+										</label> <label> <input type="checkbox" name="appendResults"
+											ng-model="vm.queryParams.appendResults" ng-disabled="true">
+											Lowest level only
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="pull-left col-md-3 no-pad">
+							<div class="pull-right col-md-7 no-lpad">
+								<div class="form-group">
+									<div class="custom-label semibold">GA Rule No</div>
+									<input type="text" class="form-control" name="ruleNo"
+										id="ruleNo" ng-model="vm.queryParams.ruleNo" maxlength="4"
+										uppercase />
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">GA Source</div>
+									<select class="form-control" name="gaFareType" id="gaFareType"
+										ng-disabled="vm.queryParams.source != 'M'"
+										ng-model="vm.queryParams.gaFareType">
+										<option value="{{value}}"
+											ng-repeat="value in vm.gaFareTypes track by $index">{{value}}</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">GA FBC</div>
+									<input type="text" class="form-control" name="fareBasis"
+										id="fareBasis" ng-model="vm.queryParams.fareBasis" />
+								</div>
+							</div>
+						</div>
+
+
+						<div class="pull-right col-md-3 no-lpad">
+							<div class="col-md-12 no-lpad">
+								<div class="clearfix form-group">
+									<div class="pull-right query-button-wrapper">
+										<button type="reset" ng-click="vm.reset()"
+											class="btn btn-default small pull-right">Reset</button>
+										<button type="button" class="btn btn-default small pull-right"
+											ng-click="vm.generateGraph(vm.compMonitoring)" disabled="{{vm.graphdEnabled}}">Generate Graph</button>
+										<button type="button" class="btn btn-default small pull-right"
+											ng-click="vm.loadAll()">Query</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div class="table-wrapper" ng-if="vm.compMonitoring">
+			<div class="datatable-wrapper form-inline">
+				<div class="table-responsive">
+					<table class="table table-striped table-bordered datatable">
+						<thead>
+							<tr>
+								<th>NO</th>
+								<th>CARRIER</th>
+								<th>ORIG-DEST</th>
+								<th>TRAVEL START</th>
+								<th>TRAVEL END</th>
+								<th>SALE START</th>
+								<th>SALE END</th>
+								<th>CABIN</th>
+								<th>BOOKING CLASS</th>
+								<th>OW / RT</th>
+								<th>RULE NO</th>
+								<th>SOURCE</th>
+								<th>FARE CLASS</th>
+								<th>PUBLIC / PRIVATE</th>
+								<th>CURR</th>
+								<th>AMOUNT</th>
+								<th ng-if="vm.showTFC">Error</th>
+								<th ng-if="vm.showTFC">TFC Calc Date</th>
+								<th ng-if="vm.showTFC">TFC Focus Date</th>
+								<th ng-if="vm.showTFC">YQYR</th>
+								<th ng-if="vm.showTFC">Taxes</th>
+								<th>TFC <span ng-click="vm.showTFC = !vm.showTFC"><i
+										ng-if="vm.showTFC" class="glyphicon glyphicon-minus"></i><i
+										ng-if="!vm.showTFC" class="glyphicon glyphicon-plus"></i></span></th>
+							</tr>
+						</thead>
+						<tbody
+							ng-repeat="afdQuery in vm.compMonitoring track by afdQuery.atpcoFareId">
+							<tr ng-click="vm.selectedRow = afdQuery;"
+								ng-class="{'selected': vm.selectedRow == afdQuery}">
+								<td><a ui-sref="system-parameter-detail({id:afdQuery.id})">{{$index
+										+ 1}}</a></td>
+								<td>{{afdQuery.carrierCode}}</td>
+								<td>{{afdQuery.origDest}}</td>
+								<td><span ng-if="afdQuery.travelStartDate != 'indef'">{{afdQuery.travelStartDate
+										| date:'ddMMMyyyy'}}</span></td>
+								<td><span ng-if="afdQuery.travelEndDate != 'indef'">{{afdQuery.travelEndDate
+										| date:'ddMMMyyyy'}}</span></td>
+								<td><span ng-if="afdQuery.saleStartDate != 'indef'">{{afdQuery.saleStartDate
+										| date:'ddMMMyyyy'}}</span></td>
+								<td><span ng-if="afdQuery.saleEndDate != 'indef'">{{afdQuery.saleEndDate
+										| date:'ddMMMyyyy'}}</span></td>
+								<td>=CABIN=</td>
+								<td>{{afdQuery.bookingClass}}</td>
+								<td><span ng-if="afdQuery.owrt == '1'">OW</span><span
+									ng-if="afdQuery.owrt == '2'">RT</span><span
+									ng-if="afdQuery.owrt == '3'">OO</span></td>
+								<td>{{afdQuery.ruleNo}}</td>
+								<td>{{afdQuery.source}}</td>
+								<td>{{afdQuery.fareClassCode}}</td>
+								<td>=PUBLIC/PRIVATE=</td>
+								<td>{{afdQuery.currencyCode}}</td>
+								<td>{{afdQuery.baseAmount}}</td>
+								<td ng-if="vm.showTFC">=TFC=</td>
+								<td ng-if="vm.showTFC">=TFC=</td>
+								<td ng-if="vm.showTFC">=TFC=</td>
+								<td ng-if="vm.showTFC">=TFC=</td>
+								<td ng-if="vm.showTFC">=TFC=</td>
+								<td>=TFC=</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		
+		<div id="container" class="col-md-12 no-pad" hidden="hidden"></div>
+		
+
+		<!-- 		<div class="additional-info-wrapper" ng-if="vm.categoryRules"> -->
+		<!--      		<div class="additional-info" ng-click="vm.showCategoryDetail(cat)" ng-class="{'lightyellow': cat.catAttributes.length > 0 && cat.type.includes('F'), 'yellow': cat.catAttributes.length > 0 && cat.type.includes('R'), 'blue': cat.catAttributes.length > 0 && cat.type == 'G'}" ng-repeat="cat in vm.categoryRules track by cat.catNo"> -->
+		<!--         		{{cat.catNo}} {{cat.catName}} <span ng-if="cat.catAttributes.length > 0">({{cat.type}})</span> -->
+		<!--       		</div> -->
+		<!--       		<div class="additional-info action dropdown custom" ng-click="vm.actionClicked = !vm.actionClicked"> -->
+		<!--       			Actions <i class="fa fa-caret-down pull-right"></i> -->
+		<!--       			<div class="action-wrapper" ng-if="vm.actionClicked"> -->
+		<!--       				<a ng-click="vm.showLegend()">Show Legend</a> -->
+		<!--       				<a ng-click="vm.viewFullText()">View Full Text</a> -->
+		<!--       			</div> -->
+		<!--       		</div> -->
+		<!--    		</div> -->
+
+		<div class="text-center" ng-if="vm.compMonitoring">
+			<jhi-item-count page="vm.page" total="vm.queryCount"
+				items-per-page="vm.itemsPerPage"></jhi-item-count>
+			<uib-pagination class="pagination-sm" total-items="vm.totalItems"
+				items-per-page="vm.itemsPerPage" ng-model="vm.page"
+				ng-change="vm.loadAll()"></uib-pagination>
+		</div>
+	</div>
+</div>
