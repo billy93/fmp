@@ -3,7 +3,7 @@
 	min-width:30px;
 }
 .highlighted{
-	background-color:rgb(222, 255, 94, .7) !important;
+	background-color:rgba(222, 255, 94, .7) !important;
 }
 </style>
 
@@ -444,8 +444,8 @@
 																    </li>
 																</ul>
 															</div>													
-															<button class="btn btn-default small btn-secondary" ngf-select  ngf-change="vm.importFare($file)">Import</button>
-															<button class="btn btn-default small btn-secondary" ng-click="vm.exportFares()">Export</button>
+															<button class="btn btn-default small btn-secondary" ngf-select  ngf-change="vm.importFare($file, $index)">Import</button>
+															<button class="btn btn-default small btn-secondary" ng-click="vm.exportFares($index)">Export</button>
 															<!-- <button class="btn btn-default small btn-secondary">Publish</button> -->
 															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.agent()">Agents</button>
 															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()">Rate Sheet</button> 
@@ -638,7 +638,7 @@
 																	<input type="text" class="form-control" name="origin{{$parent.$index}}{{$index}}" id="field_carrier"
 											                    		ng-model="fare.origin"
 											                    		ng-disabled="!vm.isEditable('origin')"
-											                    		style="min-width:120px"
+											                    		style="min-width:120px; text-transform:uppercase"
 											                    		ng-class="{'must-fill': editForm.editFormATPCO.origin{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('origin')"
 															            ng-focus="origin[$parent.$index][$index]=true" ng-blur="origin[$parent.$index][$index]=false; vm.checkCity(fare, 'origin');"/>
@@ -674,7 +674,7 @@
 																	<input type="text" class="form-control" name="destination{{$parent.$index}}{{$index}}" id="field_carrier"
 											                    		ng-model="fare.destination"
 											                    		ng-disabled="!vm.isEditable('destination')"
-											                    		style="min-width:120px"
+											                    		style="min-width:120px; text-transform:uppercase"
 											                    		ng-class="{'must-fill': editForm.editFormATPCO.destination{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('destination')"
 															            ng-focus="destination[$parent.$index][$index]=true" ng-blur="destination[$parent.$index][$index]=false; vm.checkCity(fare, 'destination');"/>
@@ -710,12 +710,20 @@
 																<input type="text" class="form-control" name="farebasis{{$parent.$index}}{{$index}}" id="field_farebasis"
 									                				ng-disabled="!vm.isEditable('farebasis')"
 									                				ng-required="vm.isRequired('farebasis') && fare.action != 'Canceled'" 
+									                				style="text-transform:uppercase"
+									                				ng-pattern="/^[a-zA-Z0-9*]*$/"
+									                				ng-class="{'must-fill':editForm.editFormATPCO.farebasis{{$parent.$index}}{{$index}}.$error.required || 
+										                				editForm.editFormATPCO.farebasis{{$parent.$index}}{{$index}}.$error.maxlength || 
+										                				editForm.editFormATPCO.farebasis{{$parent.$index}}{{$index}}.$error.pattern}"
+									                				maxlength="8"
+									                				ng-maxlength="8"
 									                				ng-model="fare.fareBasis"/>				
 															</td>	
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'bookingClass', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['bookingClass']}">
 																<input type="text" class="form-control" name="bookingClass{{$parent.$index}}{{$index}}" id="field_bookingClass"
 									                				ng-maxlength="2"
 									                				maxlength="2"
+									                				style="text-transform:uppercase"
 									                				ng-pattern="/^[a-zA-Z]{1,2}$/"
 									                				ng-disabled="!vm.isEditable('bookingClass')"
 									                				ng-required="vm.isRequired('bookingClass')" 
