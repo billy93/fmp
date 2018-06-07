@@ -4,42 +4,34 @@
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                 ng-click="vm.clear()">&times;</button>
-        <h4 class="modal-title" id="myFareTypeLabel">Create or edit a Fare Type</h4>
+        <h4 class="modal-title" id="myAtpcoMasterFareTypeLabel">Create or edit a Atpco Master Fare Type</h4>
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
-        <div class="form-group" ng-show="vm.fareType.id">
+        <div class="form-group" ng-show="vm.atpcoMasterFareType.id">
             <label for="id">ID</label>
             <input type="text" class="form-control" id="id" name="id"
-                    ng-model="vm.fareType.id" readonly />
+                    ng-model="vm.atpcoMasterFareType.id" readonly />
         </div>
         <div class="form-group">
-            <label class="control-label" for="field_name">Name</label>
-            <input type="text" class="form-control" name="name" id="field_name"
-                    ng-model="vm.fareType.name"
+            <label class="control-label" for="field_fareTypeDesignation">Fare Type Designation</label>
+            <input type="text" class="form-control" name="fareTypeDesignation" id="field_fareTypeDesignation"
+                    ng-model="vm.atpcoMasterFareType.fareTypeDesignation"
                     />
         </div>
         <div class="form-group">
-            <label class="control-label" for="field_description">Description</label>
-            <input type="text" class="form-control" name="description" id="field_description"
-                    ng-model="vm.fareType.description"
+            <label class="control-label" for="field_typeCode">Type Code</label>
+            <input type="text" class="form-control" name="typeCode" id="field_typeCode"
+                    ng-model="vm.atpcoMasterFareType.typeCode"
                     />
         </div>
         <div class="form-group">
-            <label class="control-label" for="field_code">Code</label>
-            <input type="text" class="form-control" name="code" id="field_code"
-                    ng-model="vm.fareType.code"
+            <label class="control-label" for="field_definition">Definition</label>
+            <input type="text" class="form-control" name="definition" id="field_definition"
+                    ng-model="vm.atpcoMasterFareType.definition"
                     />
         </div>
-		<div class="form-group">
-			<div class="checkbox-wrapper">
-				<label class="black" for="atpcoDiscount">
-					<input type="checkbox" id="atpcoDiscount"
-					name="atpcoDiscount" ng-model="vm.fareType.atpcoDiscount">
-					ATPCO Discount
-				</label>
-			</div>
-		</div>
+
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">

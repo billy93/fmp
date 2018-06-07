@@ -253,12 +253,12 @@ public class AtpcoRecordService {
 
 		Record3ReflectionObject ro = null;
 
-		if (type.contentEquals(CategoryType.RULE)) {
-			ro = getCategorySettingInfo(classBasePackage, category);
-		} else if (type.contentEquals(CategoryType.FOOTNOTE)) {
+		if (type.contentEquals(CategoryType.FOOTNOTE)) {
 			ro = getFootnoteCategorySettingInfo(classBasePackage, category);
+		} else {
+			ro = getCategorySettingInfo(classBasePackage, category);
 		}
-
+		
 		String relationship = null;
 		TextTable textTable996 = null;
 		DateTable dateTable996 = null;
@@ -388,7 +388,7 @@ public class AtpcoRecordService {
 		case "012":
 			result.setClassName(classBasePackage.concat("AtpcoRecord3Cat12"));
 			result.setGetTableNoMethodName("getTbl_no");
-			result.setGetTextTable996NoMethodName("getText_tbl_no_996");
+			result.setGetTextTable996NoMethodName("getText_table_no_996");
 			result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_012);
 			break;
 		case "013":
@@ -618,6 +618,10 @@ public class AtpcoRecordService {
 			result = "Rule";
 		} else if (type.contentEquals(CategoryType.FOOTNOTE)) {
 			result = "Footnote";
+		} else if (type.contentEquals(CategoryType.GENERAL_RULE)) {
+			result = "General Rule";
+		} else if (type.contentEquals(CategoryType.ALTERNATE_GENERAL_RULE)) {
+			result = "Alternate General Rule";
 		}
 
 		return result;

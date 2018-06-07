@@ -22,11 +22,11 @@
         vm.page = 1;
         vm.showCategoryDetail = showCategoryDetail;
         
+        vm.getTab = getTab;
+        
         vm.datePickerOpenStatus = {};
         vm.dateFormat = "yyyy-MM-dd";
         vm.openCalendar = openCalendar;
-        
-        vm.loadAll();
 
         function loadAll () {
         	vm.queryParams.page = vm.page - 1;
@@ -44,6 +44,7 @@
             function onError(error) {
                 AlertService.error(error.data.message);
             }
+        	
         }
 
         function loadPage(page) {
@@ -65,6 +66,30 @@
         	}, function(error) {
         		console.log(error);
         	});
+        }        
+        
+        function showDetail() {
+        	$("#tblDetail").show();
+        	$("#tblDetail").focus();
+        	$("#tblDetail").css("display","block");
+        	$("#tblDetail").css("height","440px");
+        	$("#ruleCategories").show();
+        	
+        }
+        
+        function hideDetail() {
+        	$("#tblDetail").css("display","none");
+        	$("#tblDetail").hide();
+        	$("#ruleCategories").hide();
+        }
+        
+        function clearFilter() {
+        	$("#cxr").val("");
+        	$("#ruleNo").val("");
+        	$("#type").val("");
+        	$("#src").val("");
+        	$("#ruleTarNo").val("");
+        	$("#catNo").val("");
         }
         
         function openCalendar (e, date) {
@@ -72,6 +97,23 @@
             e.stopPropagation();
             
             vm.datePickerOpenStatus[date] = true;
+        }
+        
+        vm.tab1 = true;
+        function getTab(tab) {
+        	if(tab=='1') {
+        		vm.tab1 = true;
+        		vm.tab2 = false;
+        		vm.tab3 = false;
+        	} else if(tab=='2') {
+        		vm.tab1 = false;
+        		vm.tab2 = true;
+        		vm.tab3 = false;
+        	}  else if(tab=='3') {
+        		vm.tab1 = false;
+        		vm.tab2 = false;
+        		vm.tab3 = true;
+        	}
         }
         
         function reset() {
@@ -85,7 +127,10 @@
         		catNo: null
         	}
         	
-        	vm.loadAll();
+        	vm.clearFilter();
+        	vm.ruleQueries = null;
+        	vm.ruleQueryCategories = null;
+        	vm.ruleQueryCategories2 = null;
         }
         
         function showCategoryDetail(category) {

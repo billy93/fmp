@@ -1,0 +1,23 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "cabinService",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "cabinCode",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "fareTypeCode",
+            "fieldType": "String"
+        }
+    ],
+    "dto": "no",
+    "service": "serviceClass",
+    "entityTableName": "atpco_master_fare_matrix",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}

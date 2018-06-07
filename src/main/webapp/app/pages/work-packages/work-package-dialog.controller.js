@@ -23,6 +23,9 @@
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
         vm.save = save;
+        vm.fareType = {};
+        vm.optionFare = [];
+        vm.optionFareDiscount = [];
 
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
@@ -35,12 +38,21 @@
         
         
 //        vm.fareType = ["Yearly", "Promotion", "Ad-hoc", "Corporate", "SPA & Code-share", "Miles", "Waiver"];
-        vm.fareType = {};
-        for(var x=0;x<fareTypes.length;x++){
-        	vm.fareType[fareTypes[x].name] = fareTypes[x].name;
-        }
+//        vm.fareType = {};
+//        for(var x=0;x<fareTypes.length;x++){
+//        	vm.fareType[fareTypes[x].name] = fareTypes[x].name;
+//        }
 //        vm.fareType = fareTypes;
 //        console.log(fareTypes);
+        
+        for(var x=0;x<fareTypes.length;x++){
+        	if(fareTypes[x].atpcoDiscount){
+    			vm.optionFareDiscount.push(fareTypes[x]); 
+        	}
+        	else if(!fareTypes[x].atpcoDiscount){
+        		vm.optionFare.push(fareTypes[x]);
+        	}    	        		
+        }
         
         vm.distributionTypes = ['ATPCO'];
         

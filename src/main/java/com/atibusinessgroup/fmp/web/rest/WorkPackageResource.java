@@ -67,6 +67,7 @@ import com.atibusinessgroup.fmp.domain.Priority;
 import com.atibusinessgroup.fmp.domain.TariffNumber;
 import com.atibusinessgroup.fmp.domain.User;
 import com.atibusinessgroup.fmp.domain.WorkPackage;
+import com.atibusinessgroup.fmp.domain.WorkPackage.ApproveConfig;
 import com.atibusinessgroup.fmp.domain.WorkPackage.Attachment;
 import com.atibusinessgroup.fmp.domain.WorkPackage.Comment;
 import com.atibusinessgroup.fmp.domain.WorkPackage.FilingInstruction;
@@ -2384,13 +2385,26 @@ public class WorkPackageResource {
         
         WorkPackage result = workPackageService.findOne(workPackage.getId());
         String reviewLevel = result.getReviewLevel();
+        String distribution = result.getTargetDistribution();
+        String type = result.getType().name();
         
-        if(reviewLevel.contentEquals("HO")) {
+        if(reviewLevel.contentEquals("HO") && distribution.contentEquals("MARKET") && type.contentEquals("REGULAR")) {
+        	result.setDistributionReviewLevel(reviewLevel);
+        	result.setReviewLevel("LSO");
+    		result.setLocked(false);
+    		result.setStatus(Status.DISTRIBUTED);
+        }else if(reviewLevel.contentEquals("HO")) {
     		result.setDistributionReviewLevel(reviewLevel);
     		result.setReviewLevel("DISTRIBUTION");
     		result.setLocked(false);
     		result.setStatus(Status.PENDING);        		
 	    }
+//        if(reviewLevel.contentEquals("HO")) {
+//    		result.setDistributionReviewLevel(reviewLevel);
+//    		result.setReviewLevel("DISTRIBUTION");
+//    		result.setLocked(false);
+//    		result.setStatus(Status.PENDING);        		
+//	    }
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -2398,6 +2412,8 @@ public class WorkPackageResource {
         history.setType("APPROVE");
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
+        
+        ApproveConfig x = new ApproveConfig();
         
         String[] emailData = null;
         if(workPackage.getApproveConfig().getEmail() != null && workPackage.getApproveConfig().getEmail().size() > 0) {
@@ -2407,6 +2423,9 @@ public class WorkPackageResource {
 	        }
         }
         
+        x.setEmail(workPackage.getApproveConfig().getEmail()); 
+        workPackage.setApproveConfig(x);
+        
         String[] emailDataCc = null;
         if(workPackage.getApproveConfig().getCcEmail() != null && workPackage.getApproveConfig().getCcEmail().size() > 0) {
 	        emailDataCc = new String[workPackage.getApproveConfig().getCcEmail().size()];        
@@ -2414,6 +2433,11 @@ public class WorkPackageResource {
 	        	emailDataCc[i] = workPackage.getApproveConfig().getCcEmail().get(i);
 	        }
         }
+        
+        x.setCcEmail(workPackage.getApproveConfig().getCcEmail()); 
+        workPackage.setApproveConfig(x);
+        
+        workPackageService.save(workPackage);
         User u = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
         
         String content = "<h2>Inter Office Comment</h2>";
@@ -2496,6 +2520,9 @@ public class WorkPackageResource {
         result.setLocked(false);
         workPackageService.save(result);
         
+        ApproveConfig x = new ApproveConfig();
+        
+        
         String[] emailData = null;
         if(workPackage.getApproveConfig().getEmail() != null && workPackage.getApproveConfig().getEmail().size() > 0) {
 	        emailData = new String[workPackage.getApproveConfig().getEmail().size()];
@@ -2505,6 +2532,10 @@ public class WorkPackageResource {
 	        }
         }
         
+        
+        x.setEmail(workPackage.getApproveConfig().getEmail()); 
+        workPackage.setApproveConfig(x);
+        
         String[] emailDataCc = null;
         if(workPackage.getApproveConfig().getCcEmail() != null && workPackage.getApproveConfig().getCcEmail().size() > 0) {
 	        emailDataCc = new String[workPackage.getApproveConfig().getCcEmail().size()];        
@@ -2512,6 +2543,11 @@ public class WorkPackageResource {
 	        	emailDataCc[i] = workPackage.getApproveConfig().getCcEmail().get(i);
 	        }
         }
+        
+        x.setCcEmail(workPackage.getApproveConfig().getCcEmail()); 
+        workPackage.setApproveConfig(x);
+        
+        workPackageService.save(workPackage);
         User u = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
         
         String content = "<h2>Inter Office Comment</h2>";

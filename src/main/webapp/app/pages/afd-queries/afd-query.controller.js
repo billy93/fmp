@@ -16,6 +16,8 @@
         vm.loadAll = loadAll;
         vm.getRules = getRules;
         vm.showCategoryDetail = showCategoryDetail;
+        vm.showLegend = showLegend;
+        vm.viewFullText = viewFullText;
         
         vm.reset = reset;
         vm.page = 1;
@@ -67,6 +69,9 @@
         vm.loadAll();
 
         function loadAll () {
+        	vm.categoryRules = null;
+        	vm.currentAfdQuery = null;
+        	
         	vm.queryParams.page = vm.page - 1;
         	vm.queryParams.size = vm.itemsPerPage;
         	
@@ -93,6 +98,7 @@
         		AfdQuery.getRules(afdQuery, function(data) {
             		vm.categoryRules = data;
             		vm.currentAfdQuery = afdQuery;
+            		console.log(vm.categoryRules);
             	}, function(error) {
             		console.log(error);
             	});
@@ -162,6 +168,40 @@
                 windowClass: 'full',
                 resolve: {
                     entity: category
+                }
+            }).result.then(function() {
+                $state.go('afd-query', {}, { reload: false });
+            }, function() {
+                $state.go('afd-query');
+            });
+        }
+        
+        function showLegend() {
+        	$uibModal.open({
+                templateUrl: 'app/pages/category-modals/legend-modal.html',
+                controller: 'LegendModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'md'
+            }).result.then(function() {
+                $state.go('afd-query', {}, { reload: false });
+            }, function() {
+                $state.go('afd-query');
+            });
+        }
+        
+        function viewFullText() {
+        	$uibModal.open({
+                templateUrl: 'app/pages/category-modals/full-text-modal.html',
+                controller: 'FullTextModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full',
+                resolve: {
+                    entity: {
+                    	categories: vm.categoryRules
+                    }
                 }
             }).result.then(function() {
                 $state.go('afd-query', {}, { reload: false });

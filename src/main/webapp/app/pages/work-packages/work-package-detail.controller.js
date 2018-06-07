@@ -68,9 +68,35 @@
         vm.indexSelectedTab = 0;
         $scope.dateformat = "yyyy-MM-dd";
         vm.fareType = {};
+        vm.optionFare = [];
+        
         for(var x=0;x<fareTypes.length;x++){
-        	vm.fareType[fareTypes[x].name] = fareTypes[x].name;
+        	if(vm.workPackage.targetDistribution=="ATPCO" && vm.workPackage.type=="DISCOUNT"){
+        		if(fareTypes[x].atpcoDiscount){
+        			vm.fareType[fareTypes[x].name] = fareTypes[x].code+" | "+fareTypes[x].name; 
+        		}
+        	}else{
+        		if(!fareTypes[x].atpcoDiscount){
+//        			vm.fareType[fareTypes[x].name] = fareTypes[x].name;
+        			vm.fareType[fareTypes[x].name] = fareTypes[x].code+" | "+fareTypes[x].name;
+        		}
+            	        		
+        	}
         }
+             
+        for(var x=0;x<fareTypes.length;x++){
+        	if(vm.workPackage.targetDistribution=="ATPCO" && vm.workPackage.type=="DISCOUNT"){
+        		if(fareTypes[x].atpcoDiscount){
+        			vm.optionFare.push(fareTypes[x]); 
+        		}
+        	}else{
+        		if(!fareTypes[x].atpcoDiscount){
+        			vm.optionFare.push(fareTypes[x]);
+        		}
+            	        		
+        	}
+        }
+        
         
         vm.businessArea = {};
         for(var x=0;x<businessAreas.length;x++){
@@ -1470,7 +1496,7 @@
 	        			findTab = true;
 	        			
 	        			var index = vm.workPackage.fareSheet.indexOf(x);
-	        			vm.workPackage.fareSheet.push(vm.workPackage.fareSheet[x]);
+	        			vm.workPackage.fareSheet.push(angular.copy(vm.workPackage.fareSheet[x]));
 	        			break;
 	        		}
 	        	}
@@ -1483,7 +1509,7 @@
 	        			findTab = true;
 	        			
 	        			var index = vm.workPackage.addonFareSheet.indexOf(x);
-	        			vm.workPackage.addonFareSheet.push(vm.workPackage.addonFareSheet[x]);
+	        			vm.workPackage.addonFareSheet.push(angular.copy(vm.workPackage.addonFareSheet[x]));
 	        			break;
 	        		}
 	        	}
@@ -1496,7 +1522,7 @@
 	        			findTab = true;
 	        			
 	        			var index = vm.workPackage.marketFareSheet.indexOf(x);
-	        			vm.workPackage.marketFareSheet.push(vm.workPackage.marketFareSheet[x]);
+	        			vm.workPackage.marketFareSheet.push(angular.copy(vm.workPackage.marketFareSheet[x]));
 	        			break;
 	        		}
 	        	}
@@ -2123,6 +2149,34 @@
           });
 	  };
 	  
+	  vm.viewRecipients = function(){
+		  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-view-email-dialog.html',
+              controller: 'WorkPackageViewEmailDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              resolve: {
+                  workPackage: vm.workPackage,              	  
+	              email: ['SystemParameter', function(SystemParameter) {
+	                   return vm.workPackage.approveConfig.email
+	              }],
+	              ccEmail: ['SystemParameter', function(SystemParameter) {
+	                   return vm.workPackage.approveConfig.ccEmail
+	              }],
+	              statusResend : true
+              }
+          }).result.then(function(config) {
+        	  vm.workPackage.approveConfig = config;
+        	  	WorkPackage.resendApprove(vm.workPackage, function(){
+	    			$state.go('work-package');
+    		}, function(){
+    			console.log("fail");
+    		});
+          }, function() {
+      			
+          });
+	  };
 	  
 	  vm.approve = function(){
 		  var validated = true;
@@ -4167,11 +4221,24 @@
       vm.calculateFareLost = function(fare){
     	  if(fare.waiverApprovedFare != null && fare.waiverNewBasicFare != null){
     		  fare.waiverFareLost = parseInt(fare.waiverApprovedFare) - parseInt(fare.waiverNewBasicFare);
+    		  if(fare.waiverTotalPax !=null && fare.waiverPenaltyLostAmount != null){
+        		  fare.waiverTotalLost = (parseInt(fare.waiverFareLost)+parseInt(fare.waiverPenaltyLostAmount))*parseInt(fare.waiverTotalPax);
+        	  }
     	  }
       }
       vm.calculatePenaltyLost = function(fare){
     	  if(fare.waiverApprovedPn != null && fare.waiverOriginalPn != null){
-    		  fare.waiverPenaltyLostPercent = parseInt(fare.waiverApprovedPn) - parseInt(fare.waiverOriginalPn);
+    		  fare.waiverPenaltyLostPercent = (parseInt(fare.waiverApprovedPn) - parseInt(fare.waiverOriginalPn))/parseInt(fare.waiverApprovedPn)*100;
+    		  fare.waiverPenaltyLostAmount = parseInt(fare.waiverApprovedPn) - parseInt(fare.waiverOriginalPn);
+    		  if(fare.waiverTotalPax !=null && fare.waiverFareLost != null){
+        		  fare.waiverTotalLost = (parseInt(fare.waiverFareLost)+parseInt(fare.waiverPenaltyLostAmount))*parseInt(fare.waiverTotalPax);
+        	  }
+    	  }
+      }
+      
+      vm.calculateTotalLost = function(fare){
+    	  if(fare.waiverTotalPax !=null && fare.waiverFareLost != null && fare.waiverFareLost != null){
+    		  fare.waiverTotalLost = (parseInt(fare.waiverFareLost)+parseInt(fare.waiverPenaltyLostAmount))*parseInt(fare.waiverTotalPax);
     	  }
       }
       
@@ -4468,7 +4535,6 @@
     	  if(fare[field][inputField] != undefined){
 	    	  var exist = false;
 	    	  for(var x=0;x<vm.tariffNumber.length;x++){	   
-//	    		  console.log(vm.tariffNumber[x]);
 	    		  if(vm.tariffNumber[x][inputField] == fare[field][inputField]){
 	    			  tariff = angular.copy(vm.tariffNumber[x]);
 	    			  exist = true;
@@ -4489,6 +4555,6 @@
     		  fare[field] = null;
     		  return;
     	  }
-      }
+      }      
     }
 })();

@@ -58,6 +58,37 @@ body {
     pointer-events: none;
 }
 
+.additional-info-wrapper .additional-info.action {
+	background: #404040;
+    color: white;
+    border: none;
+    pointer-events: initial;
+    cursor: pointer;
+}
+
+.additional-info-wrapper .additional-info.action .action-wrapper {
+	position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+	border: 1px solid #ababab;
+    border-top: none;
+}
+
+.additional-info-wrapper .additional-info.action .action-wrapper a {
+	padding: 7px 8px 5px 8px;
+    border-bottom: 1px solid #ababab;
+    width: 100%;
+    display: inline-block;
+    text-decoration: none;
+    color: #000;
+}
+
+.additional-info-wrapper .additional-info.action i {
+	top: 2px;
+    position: relative;
+}
+
 .additional-info-wrapper .additional-info.yellow {
     background: #ffdb76;
     color: #000;
@@ -75,7 +106,7 @@ body {
 }
 
 .additional-info-wrapper .additional-info.blue {
-	background: #a7e7ff;
+	background: #9de4ff;
 	color: #000;
 	border-color: #000;
 	cursor: pointer;
