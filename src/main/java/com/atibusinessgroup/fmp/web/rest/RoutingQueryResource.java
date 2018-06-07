@@ -35,6 +35,7 @@ public class RoutingQueryResource {
     private static final String ENTITY_NAME = "routingquery";
 
 //    private final RoutingqueryRepository routingqueryRepository;
+    //add comment by ridho-07062018
     private final RoutingQueryService routingQueryService;
 
     public RoutingQueryResource(RoutingQueryService routingQueryService) {
