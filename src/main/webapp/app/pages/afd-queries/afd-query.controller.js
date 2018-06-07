@@ -14,10 +14,12 @@
         vm.itemsPerPage = paginationConstants.itemsPerPage;
         vm.queryParams = queryParams;
         vm.loadAll = loadAll;
+        vm.checkValidParameters = checkValidParameters;
         vm.getRules = getRules;
         vm.showCategoryDetail = showCategoryDetail;
         vm.showLegend = showLegend;
         vm.viewFullText = viewFullText;
+        vm.showErrorModal = showErrorModal;
         
         vm.reset = reset;
         vm.page = 1;
@@ -69,6 +71,11 @@
         vm.loadAll();
 
         function loadAll () {
+        	if (!vm.checkValidParameters()) {
+        		vm.showErrorModal();
+        		return;
+        	}
+        	
         	vm.categoryRules = null;
         	vm.currentAfdQuery = null;
         	
@@ -87,6 +94,14 @@
             function onError(error) {
                 AlertService.error(error.data.message);
             }
+        }
+        
+        function checkValidParameters() {
+        	console.log(vm.queryParams);
+        	
+        	//Effective to must be minimum of tommorrow when effective from is not filled
+        	
+        	return true;
         }
 
         function loadPage(page) {
@@ -131,16 +146,16 @@
         		woId: null,
         		effectiveDateFrom: null,
         		effectiveDateTo: null,
-        		effectiveDateOption: null,
+        		effectiveDateOption: vm.dateOptions[0].key,
         		saleDateFrom: null,
         		saleDateTo: null,
-        		saleDateOption: null,
+        		saleDateOption: vm.dateOptions[0].key,
         		travelDateFrom: null,
         		travelDateTo: null,
-        		travelDateOption: null,
+        		travelDateOption: vm.dateOptions[0].key,
         		seasonDateFrom: null,
         		seasonDateTo: null,
-        		seasonDateOption: null,
+        		seasonDateOption: vm.dateOptions[0].key,
         		amountRange: null,
         		tourCode: null,
         		paxType: null,
@@ -208,6 +223,20 @@
             }, function() {
                 $state.go('afd-query');
             });
+        }
+        
+        function showErrorModal() {
+//        	$uibModal.open({
+//                templateUrl: 'app/pages/category-modals/legend-modal.html',
+//                controller: 'LegendModalController',
+//                controllerAs: 'vm',
+//                backdrop: 'static',
+//                size: 'md'
+//            }).result.then(function() {
+//                $state.go('afd-query', {}, { reload: false });
+//            }, function() {
+//                $state.go('afd-query');
+//            });
         }
     }
 })();

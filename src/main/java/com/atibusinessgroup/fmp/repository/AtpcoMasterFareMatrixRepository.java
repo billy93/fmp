@@ -1,7 +1,8 @@
 package com.atibusinessgroup.fmp.repository;
 
-import com.atibusinessgroup.fmp.domain.AtpcoMasterFareMatrix;
 import org.springframework.stereotype.Repository;
+
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterFareMatrix;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 

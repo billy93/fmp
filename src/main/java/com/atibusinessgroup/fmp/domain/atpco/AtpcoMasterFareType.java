@@ -1,4 +1,4 @@
-package com.atibusinessgroup.fmp.domain;
+package com.atibusinessgroup.fmp.domain.atpco;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;

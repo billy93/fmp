@@ -86,19 +86,19 @@
 									<div class="custom-label semibold">Effective Date</div>
 									<div class="row no-mar">
 										<div class="col-md-4 no-lpad">
-											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'effectiveDateFrom')" ng-disabled="true" 
+											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'effectiveDateFrom')" 
 												is-open="vm.datePickerOpenStatus['effectiveDateFrom']" datetime-picker="{{vm.dateFormat}}" 
 												enable-time="false" name="effectiveDateFrom" id="datepicker" 
 												ng-model="vm.queryParams.effectiveDateFrom" placeholder="From"/>
 										</div>
 										<div class="col-md-4 no-pad">
-											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'effectiveDateTo')" ng-disabled="true" 
+											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'effectiveDateTo')"
 												is-open="vm.datePickerOpenStatus['effectiveDateTo']" datetime-picker="{{vm.dateFormat}}" 
 												enable-time="false" name="effectiveDateTo" id="datepicker" 
 												ng-model="vm.queryParams.effectiveDateTo" placeholder="To"/>
 										</div>
 										<div class="col-md-4 no-rpad">
-											<select class="form-control" name="effectiveDateOption" id="effectiveDateOption" ng-init="vm.queryParams.effectiveDateOption = vm.dateOptions[0].key" ng-model="vm.queryParams.effectiveDateOption" ng-disabled="true">
+											<select class="form-control" name="effectiveDateOption" id="effectiveDateOption" ng-init="vm.queryParams.effectiveDateOption = vm.dateOptions[0].key" ng-model="vm.queryParams.effectiveDateOption">
 												<option value="{{value.key}}" ng-repeat="value in vm.dateOptions track by $index">{{value.value}}</option>
 											</select>
 										</div>
@@ -222,7 +222,7 @@
 							</div>
 							<div class="col-md-12 no-lpad">
 								<div class="clearfix">
-									<div class="pull-left w50">
+									<div class="pull-left">
 										<div class="form-group">
 											<div class="custom-label semibold">Additional Options</div>
 											<div class="checkbox-wrapper">
@@ -361,7 +361,7 @@
 			                	<td><span ng-if="afdQuery.discontinueDate != 'indef'">{{afdQuery.discontinueDate | date:'ddMMMyyyy'}}</span></td>
 			                	<td><span ng-if="afdQuery.gfsDate != undefined && afdQuery.gfsDate != null">{{afdQuery.gfsDate | date:'ddMMMyyyy'}} - {{afdQuery.gfsReference}}</span></td>
 			                	<td>{{afdQuery.globalIndicator}}</td>
-			                	<td></td>
+			                	<td><span ng-if="afdQuery.ruleFocusDate != 'indef'">{{afdQuery.ruleFocusDate | date:'ddMMMyyyy'}}</span></td>
 			                	<td></td>
 			                	<td><span ng-if="afdQuery.travelStartDate != 'indef'">{{afdQuery.travelStartDate | date:'ddMMMyyyy'}}</span></td>
 			                	<td><span ng-if="afdQuery.travelEndDate != 'indef'">{{afdQuery.travelEndDate | date:'ddMMMyyyy'}}</span></td>

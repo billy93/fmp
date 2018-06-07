@@ -228,7 +228,8 @@ public class AfdQueryResource {
             	}
         	}
         	
-        	AfdQuery afdQuery = afdQueryMapper.convertAtpcoFare(afare, matchedRecord1, cat03s, cat05s, cat06s, cat07s, cat14s, cat15s, footnote14s, footnote15s);
+        	AfdQuery afdQuery = afdQueryMapper.convertAtpcoFare(afare, matchedRecord1, cat03s, cat05s, cat06s, cat07s, cat14s, cat15s, 
+        			footnote14s, footnote15s, param.getEffectiveDateFrom(), param.getEffectiveDateTo());
         	
         	result.add(afdQuery);
         }

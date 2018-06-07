@@ -1,6 +1,6 @@
 package com.atibusinessgroup.fmp.service;
 
-import com.atibusinessgroup.fmp.domain.AtpcoMasterFareMatrix;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterFareMatrix;
 import com.atibusinessgroup.fmp.repository.AtpcoMasterFareMatrixRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

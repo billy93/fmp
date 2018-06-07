@@ -2,6 +2,7 @@ package com.atibusinessgroup.fmp.service.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class DateUtil {
 	
@@ -37,6 +38,33 @@ public class DateUtil {
 			} else {
 				result += "XXXX";
 			}
+		} catch (Exception e) {
+		}
+		
+		return result;
+	}
+	
+	public static boolean firstDateIsLessThanEqualSecondDate(Date firstDate, Date secondDate) {
+		System.out.println(firstDate + " " + secondDate);
+		
+		if (firstDate == null || secondDate == null) {
+			return true;
+		}
+		
+		if (firstDate.equals(secondDate)) {
+			return true;
+		} else if (firstDate.before(secondDate)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public static Date convertObjectToDate(Object date) {
+		Date result = null;
+		
+		try {
+			result = (Date) date;
 		} catch (Exception e) {
 		}
 		

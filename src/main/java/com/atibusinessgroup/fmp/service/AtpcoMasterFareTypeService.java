@@ -1,6 +1,6 @@
 package com.atibusinessgroup.fmp.service;
 
-import com.atibusinessgroup.fmp.domain.AtpcoMasterFareType;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterFareType;
 import com.atibusinessgroup.fmp.repository.AtpcoMasterFareTypeRepository;
 
 import java.util.List;

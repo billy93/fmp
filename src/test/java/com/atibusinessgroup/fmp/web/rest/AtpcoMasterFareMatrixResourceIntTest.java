@@ -1,8 +1,7 @@
 package com.atibusinessgroup.fmp.web.rest;
 
 import com.atibusinessgroup.fmp.FmpApp;
-
-import com.atibusinessgroup.fmp.domain.AtpcoMasterFareMatrix;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterFareMatrix;
 import com.atibusinessgroup.fmp.repository.AtpcoMasterFareMatrixRepository;
 import com.atibusinessgroup.fmp.service.AtpcoMasterFareMatrixService;
 import com.atibusinessgroup.fmp.web.rest.errors.ExceptionTranslator;
