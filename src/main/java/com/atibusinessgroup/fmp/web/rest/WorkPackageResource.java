@@ -1456,7 +1456,11 @@ public class WorkPackageResource {
     		DateFormat dfFull = new SimpleDateFormat("yyyy"); // Just the year, with 4 digits
     		
     		Counter c = counterRepository.findOneByIdAndYear("workpackageId", dfFull.format(Calendar.getInstance().getTime()));
-    		
+    		if(c == null) {
+    			c.setSequenceValue(0);
+    			c.setYear(dfFull.format(Calendar.getInstance().getTime()));
+    			c = counterRepository.save(c);
+    		}
     		NumberFormat nf = new DecimalFormat("00000");
         	c.setSequenceValue(c.getSequenceValue()+1);
         	c = counterRepository.save(c);
