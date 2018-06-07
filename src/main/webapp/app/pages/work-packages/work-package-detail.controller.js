@@ -2149,6 +2149,34 @@
           });
 	  };
 	  
+	  vm.viewRecipients = function(){
+		  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-view-email-dialog.html',
+              controller: 'WorkPackageViewEmailDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              resolve: {
+                  workPackage: vm.workPackage,              	  
+	              email: ['SystemParameter', function(SystemParameter) {
+	                   return vm.workPackage.approveConfig.email
+	              }],
+	              ccEmail: ['SystemParameter', function(SystemParameter) {
+	                   return vm.workPackage.approveConfig.ccEmail
+	              }],
+	              statusResend : true
+              }
+          }).result.then(function(config) {
+        	  vm.workPackage.approveConfig = config;
+        	  	WorkPackage.resendApprove(vm.workPackage, function(){
+	    			$state.go('work-package');
+    		}, function(){
+    			console.log("fail");
+    		});
+          }, function() {
+      			
+          });
+	  };
 	  
 	  vm.approve = function(){
 		  var validated = true;
