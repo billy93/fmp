@@ -1,8 +1,7 @@
 package com.atibusinessgroup.fmp.web.rest;
 
 import com.atibusinessgroup.fmp.FmpApp;
-
-import com.atibusinessgroup.fmp.domain.AtpcoMasterFareType;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterFareType;
 import com.atibusinessgroup.fmp.repository.AtpcoMasterFareTypeRepository;
 import com.atibusinessgroup.fmp.service.AtpcoMasterFareTypeService;
 import com.atibusinessgroup.fmp.web.rest.errors.ExceptionTranslator;

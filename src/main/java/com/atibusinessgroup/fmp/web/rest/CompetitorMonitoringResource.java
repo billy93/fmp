@@ -43,7 +43,7 @@ import com.codahale.metrics.annotation.Timed;
 
 @RestController
 @RequestMapping("/api")
-public class AfdQueryResource {
+public class CompetitorMonitoringResource {
 
 	private final LinkedHashMap<String, String> fareCategories = new LinkedHashMap<>();
 	private final LinkedHashMap<String, String> fareFootnotes = new LinkedHashMap<>();
@@ -51,7 +51,7 @@ public class AfdQueryResource {
 	private final LinkedHashMap<String, String> footnotes = new LinkedHashMap<>();
 	private final String[] ruleCategories = new String[] {"003", "005", "006", "007", "014", "015"};
 	
-	private final Logger log = LoggerFactory.getLogger(AfdQueryResource.class);
+	private final Logger log = LoggerFactory.getLogger(CompetitorMonitoringResource.class);
 
 	private final AtpcoRecord0Repository atpcoRecord0Repository;
 	
@@ -61,7 +61,7 @@ public class AfdQueryResource {
 	
 	private final AtpcoRecordService atpcoRecordService;
 	
-    public AfdQueryResource(AtpcoRecord0Repository atpcoRecord0Repository, AtpcoFareCustomRepository atpcoFareCustomRepository, AfdQueryMapper afdQueryMapper, AtpcoRecordService atpcoRecordService) {
+    public CompetitorMonitoringResource(AtpcoRecord0Repository atpcoRecord0Repository, AtpcoFareCustomRepository atpcoFareCustomRepository, AfdQueryMapper afdQueryMapper, AtpcoRecordService atpcoRecordService) {
     	this.atpcoRecord0Repository = atpcoRecord0Repository;
     	this.atpcoFareCustomRepository = atpcoFareCustomRepository;
     	this.afdQueryMapper = afdQueryMapper;
@@ -114,12 +114,12 @@ public class AfdQueryResource {
     }
     
     /**
-     * POST  /afd-queries : get all the afd queries.
+     * POST  /competitor-monitoring : get all the afd queries.
      *
      * @param query params, pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of afdQueries in body
      */
-    @PostMapping("/afd-queries")
+    @PostMapping("/competitor-monitoring")
     @Timed
     public ResponseEntity<List<AfdQuery>> getAllAfdQueries(@RequestBody AfdQueryParam param) {
         log.debug("REST request to get a page of AfdQueries: {}", param);
@@ -129,7 +129,7 @@ public class AfdQueryResource {
         //ATPCO
         Page<AtpcoFareAfdQueryWithRecords> page = atpcoFareCustomRepository.findAtpcoFareAfdQueryWithRecords(param, ruleCategories, pageable);
         List<AtpcoFareAfdQueryWithRecords> a1fares = page.getContent();
-
+        
         List<AfdQuery> result = new ArrayList<>();
         
         for (AtpcoFareAfdQueryWithRecords a1fare:a1fares) {
@@ -234,17 +234,17 @@ public class AfdQueryResource {
         	result.add(afdQuery);
         }
         
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/afd-queries");
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/competitor-monitoring");
         
         return new ResponseEntity<>(result, headers, HttpStatus.OK);
     }
     
     /**
-     * GET  /afd-queries/rules : get afd query rules.
+     * GET  /competitor-monitoring/rules : get afd query rules.
      *
      * @return the ResponseEntity with status 200 (OK) and the list of rules in body
      */
-    @GetMapping("/afd-queries/rules")
+    @GetMapping("/competitor-monitoring/rules")
     @Timed
     public ResponseEntity<List<Category>> getAfdQueryRules(AfdQuery afdQuery) {
         log.debug("REST request to get AfdQueries rules: {}", afdQuery);

@@ -67,11 +67,16 @@ public class AtpcoFareCustomRepository {
 					String fbc = param.getFareBasis();
 					
 					if (param.getFareBasis().contains("*")) {
-						fbc = "^" + param.getFareBasis().replace("*", "");
+						fbc = "^" + param.getFareBasis().replace("*", ".*") + "$";
+						fareBasis.append("fare_class_cd", new BasicDBObject("$regex", Pattern.compile(fbc)));
+					} else if (param.getFareBasis().contains("-")) {
+						fbc = "^" + param.getFareBasis().replace("-", "[A-Z0-9]{1}")  + "$";
+						System.out.println(fbc);
 						fareBasis.append("fare_class_cd", new BasicDBObject("$regex", Pattern.compile(fbc)));
 					} else {
 						fareBasis.append("fare_class_cd", fbc);
 					}
+					
 					queries.add(fareBasis);
 				}
 				
@@ -111,21 +116,29 @@ public class AtpcoFareCustomRepository {
 					queries.add(routingNo);
 				}
 				
-//				if (param.getEffectiveDateFrom() == null) {
-//					param.setEffectiveDateFrom(new Date());
-//				}
-//				
-//				BasicDBObject effectiveFrom = new BasicDBObject();
-//				effectiveFrom.append("$or", Arrays.asList(new BasicDBObject("tar_eff_date", "indef"), new BasicDBObject("tar_eff_date", new BasicDBObject("$gte", param.getEffectiveDateFrom()))));
-//				queries.add(effectiveFrom);
-//				
-//				if (param.getEffectiveDateTo() == null) {
-//					param.setEffectiveDateTo(new Date());
-//				}
-//				
-//				BasicDBObject effectiveTo = new BasicDBObject();
-//				effectiveTo.append("$or", Arrays.asList(new BasicDBObject("tar_eff_date", "indef"), new BasicDBObject("tar_eff_date", new BasicDBObject("$lte", param.getEffectiveDateTo()))));
-//				queries.add(effectiveTo);
+				if (param.getEffectiveDateOption() != null && param.getEffectiveDateOption().contentEquals("A")) {
+					if (param.getEffectiveDateFrom() != null && param.getEffectiveDateTo() != null) {
+						BasicDBObject effective = new BasicDBObject();
+						effective.append("$and", Arrays.asList(new BasicDBObject("tar_eff_date", new BasicDBObject("$lte", param.getEffectiveDateFrom())), 
+								new BasicDBObject("dates_discontinue", new BasicDBObject("$gte", param.getEffectiveDateTo()))));
+						queries.add(effective);
+					} else {
+						if (param.getEffectiveDateFrom() == null && param.getEffectiveDateTo() != null) {
+							BasicDBObject effective = new BasicDBObject();
+							effective.append("dates_discontinue", new BasicDBObject("$gte", param.getEffectiveDateTo()));
+							queries.add(effective);
+						} else if (param.getEffectiveDateFrom() != null && param.getEffectiveDateTo() == null) {
+							BasicDBObject effective = new BasicDBObject();
+							effective.append("tar_eff_date", new BasicDBObject("$lte", param.getEffectiveDateFrom()));
+							queries.add(effective);
+						}
+					}
+				} else if (param.getEffectiveDateOption() != null && param.getEffectiveDateOption().contentEquals("E")) {
+					BasicDBObject effective = new BasicDBObject();
+					effective.append("$and", Arrays.asList(new BasicDBObject("tar_eff_date", new BasicDBObject("$eq", param.getEffectiveDateFrom())), 
+							new BasicDBObject("dates_discontinue", new BasicDBObject("$eq", param.getEffectiveDateTo()))));
+					queries.add(effective);
+				}
 				
 				if (queries.size() > 0) {
 					and.append("$and", queries);

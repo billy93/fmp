@@ -1,7 +1,7 @@
 package com.atibusinessgroup.fmp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.atibusinessgroup.fmp.domain.AtpcoMasterFareType;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterFareType;
 import com.atibusinessgroup.fmp.service.AtpcoMasterFareTypeService;
 import com.atibusinessgroup.fmp.web.rest.errors.BadRequestAlertException;
 import com.atibusinessgroup.fmp.web.rest.util.HeaderUtil;

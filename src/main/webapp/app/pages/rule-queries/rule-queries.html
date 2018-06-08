@@ -1,15 +1,13 @@
 <div class="box-body bbgrey">
 	<div class="clearfix tab-body">
-		<ul class="clearfix nav-responsive nav nav-tabs" style="font-size: 14px !important">
-			<li ng-class="{active:vm.tab1}" class="semibold">
-				<a ng-click="vm.getTab('1')">Rule</a>
-			</li>
-			<li ng-class="{active:vm.tab2}" class="semibold">
-				<a ng-click="vm.getTab('2')">Fare Class</a>
-			</li>
-			<li ng-class="{active:vm.tab3}" class="semibold">
-				<a ng-click="vm.getTab('3')">Rec 8 - Fare By Rule</a>
-			</li>
+		<ul class="clearfix nav-responsive nav nav-tabs"
+			style="font-size: 14px !important">
+			<li ng-class="{active:vm.tab1}" class="semibold"><a
+				ng-click="vm.getTab('1')">Rule</a></li>
+			<li ng-class="{active:vm.tab2}" class="semibold"><a
+				ng-click="vm.getTab('2')">Fare Class</a></li>
+			<li ng-class="{active:vm.tab3}" class="semibold"><a
+				ng-click="vm.getTab('3')">Rec 8 - Fare By Rule</a></li>
 		</ul>
 	</div>
 
@@ -55,6 +53,11 @@
 														id="ruleTarNo" ng-model="vm.queryParams.ruleTarNo"
 														uppercase />
 												</div>
+											</div>
+										</div>
+
+										<div class="pull-left col-md-6 no-pad">
+											<div class="pull-left col-md-6 no-rpad">
 												<div class="form-group">
 													<div class="custom-label semibold">Category</div>
 													<select class="form-control" name="category" id="catNo"
@@ -93,44 +96,6 @@
 														<option value="050">50 - Rule App</option>
 													</select>
 												</div>
-											</div>
-										</div>
-
-										<div class="pull-left col-md-6 no-pad">
-											<div class="pull-left col-md-6 no-rpad">
-												<div class="form-group">
-													<div class="custom-label semibold">Sales Country
-														Group</div>
-													<select class="form-control" name="salesCountry"
-														id="salesCntry" ng-model="vm.queryParams.salesCountry">
-														<option value="">All</option>
-														<option value="ARAB">ARAB EMIRATES</option>
-														<option value="AUSTRALIA">AUSTRALIA</option>
-														<option value="BRUNEI">BRUNEI DARUSSALAM</option>
-														<option value="CHINA">CHINA</option>
-														<option value="DENMARK">DENMARK</option>
-														<option value="DOHA">DOHA</option>
-														<option value="FRANCE">FRANCE</option>
-														<option value="GERMANY">GERMANY</option>
-														<option value="HONGKONG">HONGKONG</option>
-														<option value="INDIA">INDIA</option>
-														<option value="INDONESIA">INDONESIA</option>
-														<option value="ITALY">ITALY</option>
-														<option value="JAPAN">JAPAN</option>
-														<option value="KOREA">KOREA</option>
-														<option value="KUWAIT">KUWAIT</option>
-														<option value="LONDON">LONDON</option>
-														<option value="MALAYSIA">MALAYSIA</option>
-														<option value="NETHERLAND">NETHERLAND</option>
-														<option value="NEWZELAND">NEW ZELAND</option>
-														<option value="OMAN">OMAN</option>
-														<option value="PHILLIPINES">PHILLIPINES</option>
-														<option value="QATAR">QATAR</option>
-														<option value="RUSIA">RUSIA</option>
-														<option value="SAUDIARABIA">SAUDI ARABIA</option>
-														<option value="">...MORE...</option>
-													</select>
-												</div>
 												<div class="form-group">
 													<div class="custom-label semibold">Fare Group</div>
 													<select class="form-control" name="fareGroup" id="fGroup"
@@ -144,6 +109,8 @@
 														<option value="F">F - ECONOMY GLOBAL</option>
 													</select>
 												</div>
+
+
 											</div>
 											<div class="pull-left col-md-6 no-rpad">
 												<div class="form-group">
@@ -492,6 +459,7 @@
 									</div>
 								</div>
 							</div>
+
 							<div class="pull-left ph5px w40">
 								<div class="box-detail">
 									<div class="box-header">Fare Classes Of Selected Group</div>
@@ -547,6 +515,7 @@
 						<div class="box-detail box-comment">
 							<div class="box-header">Details Of Selected Fare Classes</div>
 							<div class="box-body">
+
 								<div class="table-wrapper">
 									<div class="datatable-wrapper form-inline">
 										<div class="table-responsive">
@@ -613,6 +582,7 @@
 								</div>
 							</div>
 						</div>
+
 					</div>
 
 				</div>
@@ -623,7 +593,6 @@
 
 		<!-- REC 8 -->
 		<div ng-class="{active:vm.tab3}" class="tab-pane" id="rec8">
-			kocong bang..!
-		</div>
+			kocong bang..!</div>
 	</div>
 </div>

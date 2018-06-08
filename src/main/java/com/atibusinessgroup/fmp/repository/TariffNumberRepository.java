@@ -12,4 +12,10 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 @Repository
 public interface TariffNumberRepository extends MongoRepository<TariffNumber, String> {
 
+	TariffNumber findOneByTarNo(String valueOf);
+
+	TariffNumber findOneByTarCd(String valueOf);
+
+	TariffNumber findOneByGlobal(String valueOf);
+
 }

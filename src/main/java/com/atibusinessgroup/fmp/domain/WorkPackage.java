@@ -24,6 +24,9 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     @Id
     private String id;
 
+    private int exportIndex;
+    private int importIndex;
+    
     @Field("discount")
     private boolean discount;
     
@@ -168,7 +171,23 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     private boolean validate;
     
     
-    public boolean isValidate() {
+    public int getImportIndex() {
+		return importIndex;
+	}
+
+	public void setImportIndex(int importIndex) {
+		this.importIndex = importIndex;
+	}
+
+	public int getExportIndex() {
+		return exportIndex;
+	}
+
+	public void setExportIndex(int exportIndex) {
+		this.exportIndex = exportIndex;
+	}
+
+	public boolean isValidate() {
 		return validate;
 	}
 
@@ -178,8 +197,27 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 
 	public static class Validation{
     	private List<Tab> tab;
+    	private int errorsCount;
+    	private int warningsCount;
     	
-    	public List<Tab> getTab() {
+    	
+    	public int getErrorsCount() {
+			return errorsCount;
+		}
+
+		public void setErrorsCount(int errorsCount) {
+			this.errorsCount = errorsCount;
+		}
+
+		public int getWarningsCount() {
+			return warningsCount;
+		}
+
+		public void setWarningsCount(int warningsCount) {
+			this.warningsCount = warningsCount;
+		}
+
+		public List<Tab> getTab() {
 			return tab;
 		}
 

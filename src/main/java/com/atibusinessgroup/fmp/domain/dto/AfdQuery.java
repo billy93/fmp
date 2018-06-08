@@ -34,7 +34,7 @@ public class AfdQuery {
 	private String gfsReference;
 	private Object gfsDate;
 	private String globalIndicator;
-	private String ruleFocusDate;
+	private Object ruleFocusDate;
 	private boolean sellable;
 	private Object travelStartDate;
 	private Object travelEndDate;
@@ -329,11 +329,11 @@ public class AfdQuery {
 		this.globalIndicator = globalIndicator;
 	}
 	
-	public String getRuleFocusDate() {
+	public Object getRuleFocusDate() {
 		return ruleFocusDate;
 	}
 	
-	public void setRuleFocusDate(String ruleFocusDate) {
+	public void setRuleFocusDate(Object ruleFocusDate) {
 		this.ruleFocusDate = ruleFocusDate;
 	}
 	

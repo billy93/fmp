@@ -32,9 +32,8 @@
                     value: 'last_modified_date,desc',
                     squash: true
                 },
-                size: null
-//                itemsPerPage: "10",
-                //workPackageFilter: null
+                size: null,
+                workPackageFilter: null
             },
             resolve: {
                 pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
