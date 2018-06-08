@@ -2358,9 +2358,14 @@
 	    }
 	  }
 	  
-	  function save () {
+	  function save (isValidate) {
           vm.isSaving = true;
           if (vm.workPackage.id !== null) {
+        	  if(isValidate){
+        		  vm.workPackage.validate = true;
+        	  }else{
+        		  vm.workPackage.validate = false;
+        	  }
               WorkPackage.update(vm.workPackage, onSaveSuccess, onSaveError);
           } else {
               WorkPackage.save(vm.workPackage, onSaveSuccess, onSaveError);
