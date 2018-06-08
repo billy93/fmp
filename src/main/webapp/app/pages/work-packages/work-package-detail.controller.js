@@ -4515,6 +4515,18 @@
     		  fare[field] = null;
     		  return;
     	  }
-      }      
+      }  
+      
+      vm.keypress = function(event, regexp){
+    	  
+    	  if (event.charCode!=0) {
+    			var regex = new RegExp(regexp);
+    			var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+    			if (!regex.test(key)) {
+    				event.preventDefault();
+    				return false;
+    			}
+    		}
+      }
     }
 })();
