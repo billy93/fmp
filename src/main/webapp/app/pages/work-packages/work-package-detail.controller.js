@@ -2441,6 +2441,7 @@
           	}
           }
           
+          console.log($scope.editForm.editFormATPCO);
           vm.workPackage = data;
           vm.isSaving = false;
       }

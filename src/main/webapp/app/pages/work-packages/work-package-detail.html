@@ -4010,6 +4010,7 @@
 	</div>
 	<div class="panel panel-tabs">
 		<div class="panel-body">
+		
 			<div class="tab-wrapper tab-validation">
 				<div class="clearfix tab-body">
 					<ul class="clearfix nav-responsive nav nav-tabs">
@@ -4021,23 +4022,33 @@
 							<ul class="tree">
 								<li>
 							    	<input type="checkbox" checked="checked" id="c1" />
-							    	<label class="tree_label main-label" for="c1">There is 1 error(s) and 2 warning(s)</label>
-								    <ul>
+							    	<label class="tree_label main-label" for="c1">There is {{vm.workPackage.validation.errorsCount}} error(s) and {{vm.workPackage.validation.warningsCount}} warning(s)</label>
+								    <ul ng-repeat="workPackageTab in vm.workPackage.validation.tab track by $index">
 								    	<li>
 								        	<input type="checkbox" checked="checked" id="c2" />
-								        	<label for="c2" class="tree_label second-label">Fares &amp; Add-Ons.Fares: TEST</label>
+								        	<label for="c2" class="tree_label second-label">{{workPackageTab.name}}</label>
 									        <ul>
-									          	<li>
+									          	<li ng-if="workPackageTab.warning.length > 0">
 									          		<input type="checkbox" checked="checked" id="c3" />
 								        			<label for="c3" class="tree_label warning-label">Warnings</label>
 								        			<ul>
-								        			    <li><span class="tree_label tree-detail">Warning 1</span></li>
-								        			    <li><span class="tree_label tree-detail">Warning 2</span></li>
+								        			    <li ng-repeat="warning in workPackageTab.warning track by $index">
+								        			    	<span class="tree_label tree-detail">{{warning.message}}</span>
+								        			    </li>
+								        			</ul>
+									          	</li>
+									          	<li ng-if="workPackageTab.error.length > 0">
+									          		<input type="checkbox" checked="checked" id="c5" />
+								        			<label for="c5" class="tree_label error-label">Errors</label>
+								        			<ul>
+								        			    <li ng-repeat="error in workPackageTab.error track by $index">
+								        			    	<span class="tree_label tree-detail">{{error.message}}</span>
+								        			    </li>
 								        			</ul>
 									          	</li>
 									        </ul>
 								      	</li>
-								      	<li>
+								      	<!-- <li>
 								        	<input type="checkbox" checked="checked" id="c4" />
 								        	<label for="c4" class="tree_label second-label">Attachments</label>
 									        <ul>
@@ -4050,7 +4061,7 @@
 								        			</ul>
 									          	</li>
 									        </ul>
-								      	</li>
+								      	</li> -->
 								    </ul>
 							  	</li>
 							  										  
