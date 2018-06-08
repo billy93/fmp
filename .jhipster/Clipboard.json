@@ -1,0 +1,27 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "username",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "type",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "page",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "copyDateTime",
+            "fieldType": "Instant"
+        }
+    ],
+    "dto": "no",
+    "service": "serviceClass",
+    "entityTableName": "clipboard",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}

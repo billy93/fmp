@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('AfdQueryController', AfdQueryController);
 
-    AfdQueryController.$inject = ['$state', 'AfdQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', 'tariffNumbers', 'cities', '$uibModal'];
+    AfdQueryController.$inject = ['$state', 'AfdQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', 'tariffNumbers', 'cities', '$uibModal', 'Clipboard'];
 
-    function AfdQueryController($state, AfdQuery, ParseLinks, AlertService, paginationConstants, queryParams, tariffNumbers, cities, $uibModal) {
+    function AfdQueryController($state, AfdQuery, ParseLinks, AlertService, paginationConstants, queryParams, tariffNumbers, cities, $uibModal, Clipboard ) {
 
         var vm = this;
         vm.loadPage = loadPage;
@@ -15,11 +15,15 @@
         vm.queryParams = queryParams;
         vm.loadAll = loadAll;
         vm.checkValidParameters = checkValidParameters;
+        vm.setSelectedRow = setSelectedRow;
         vm.getRules = getRules;
         vm.showCategoryDetail = showCategoryDetail;
+        vm.copyAfdQueryFares = copyAfdQueryFares;
+        vm.selectAll = selectAll;
         vm.showLegend = showLegend;
         vm.viewFullText = viewFullText;
         vm.showErrorModal = showErrorModal;
+        vm.selectedRows = [];
         
         vm.reset = reset;
         vm.page = 1;
@@ -171,6 +175,45 @@
         	}
         	
         	vm.loadAll();
+        }
+        
+        function setSelectedRow(index, afdQuery) {
+        	if (vm.selectedRows[index] != null) {
+        		vm.selectedRows[index] = null;
+        	} else {
+        		vm.selectedRows[index] = afdQuery;
+        	}
+        }
+        
+        function selectAll() {
+        	for (var i = 0; i < vm.afdQueries.length; i++) {
+        		vm.selectedRows[i] = vm.afdQueries[i];
+        	}
+        }
+        
+        function copyAfdQueryFares() {
+        	if (vm.selectedRows.length > 0) {
+        		var selectedFares = [];
+        		
+        		vm.selectedRows.forEach(function(row) {
+        			if (row != null) {
+        				selectedFares.push(row);
+        			}
+        		})
+        		
+        		var clipboard = {
+        			page: 'AFD_QUERY',
+        			content: {
+        				'ATPCO_FARE': selectedFares
+        			}
+        		}
+        		
+        		Clipboard.copy(clipboard, function(data) {
+        			console.log(data);
+        		}, function(error) {
+        			console.log(error);
+        		})
+        	}
         }
         
         function showCategoryDetail(category) {

@@ -59,9 +59,9 @@ body {
 }
 
 .additional-info-wrapper .additional-info.action {
-	background: #404040;
-    color: white;
-    border: none;
+    background: #ffffff;
+    color: #000;
+    border-color: #000;
     pointer-events: initial;
     cursor: pointer;
 }
@@ -106,7 +106,7 @@ body {
 }
 
 .additional-info-wrapper .additional-info.blue {
-	background: #9de4ff;
+	background: #6ec9ff;
 	color: #000;
 	border-color: #000;
 	cursor: pointer;
@@ -139,6 +139,11 @@ th .glyphicon {
 	text-align: left;
     background: white;
     margin: 0;
+}
+
+.dropdown .dropdown-menu li a[disabled] {
+	opacity: 0.6;
+    cursor: not-allowed;
 }
 
 /* ==========================================================================
