@@ -12,7 +12,7 @@
 						<div class="filter-label semibold show">Hide Filter</div>							
 						<div class="filter-area">
 							<div class="clearfix">
-								<div class="pull-left w50">
+								<div class="pull-left w50 ph5px">
 									<div class="form-group">
 										<div class="custom-label semibold">Review Level</div>
 										<div class="checkbox-wrapper">
@@ -69,7 +69,7 @@
 										<input type="text" class="form-control" ng-model="vm.workPackageFilter.approvalReference"  />
 									</div>
 								</div>
-								<div class="pull-left w50">
+								<div class="pull-left w50 ph5px">
 									<div class="form-group">
 										<div class="custom-label semibold">WO Status</div>
 										<div class="clearfix">
@@ -115,20 +115,36 @@
 											</div>
 										</div>
 									</div>
-									<div class="form-group">
-										<div class="custom-label semibold">Reuse/Replace</div>
-										
-										<div class="clearfix">
-											<div class="pull-left multi-option-checkbox">
-												<div class="checkbox-wrapper">
-													<label>
-														<input type="checkbox" ng-model="vm.workPackageFilter.status.replace">
-															Replace
-													</label>
-													<label>
-														<input type="checkbox" ng-model="vm.workPackageFilter.status.reuse">
-															Reuse
-													</label>
+									<div class="clearfix">
+										<div class="pull-left">
+											<div class="form-group">
+												<div class="custom-label semibold">Reuse/Replace</div>
+												<div class="multi-option-checkbox">
+													<div class="checkbox-wrapper">
+														<label>
+															<input type="checkbox" ng-model="vm.workPackageFilter.status.replace">
+																Replace
+														</label>
+														<label>
+															<input type="checkbox" ng-model="vm.workPackageFilter.status.reuse">
+																Reuse
+														</label>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="pull-left ml2">
+											<div class="form-group">
+												<div class="rangeslider-wrapper">
+													<div class="custom-label semibold">Created Time</div>
+													<div class="clearfix">
+														<div class="pull-left ph5px">
+															<input type="range" class="custom-range-slider" name="" value="10" min="1" max="24">
+														</div>
+														<div class="pull-left ph5px">
+															<div class="range-slider-time">1 Month</div>
+														</div>
+													</div>
 												</div>
 											</div>
 										</div>

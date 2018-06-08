@@ -3235,6 +3235,12 @@ p {
 .mb10px {
   margin-bottom: 10px !important; }
 
+.ml1 {
+  margin-left: 1em !important; }
+
+.ml2 {
+  margin-left: 2em !important; }
+
 .pv1 {
   padding-top: 1em !important;
   padding-bottom: 1em !important; }
@@ -3487,6 +3493,10 @@ p {
       padding-top: 5px; }
     .dropdown-select-menu li:last-child {
       padding-bottom: 5px; }
+
+.range-slider-time {
+  color: #fff;
+  font-size: 13px; }
 
 .btn {
   min-width: 80px;
