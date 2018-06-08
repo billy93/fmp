@@ -347,10 +347,10 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 					
 					List<BasicDBObject> orPointList = new ArrayList<>();
 					if((param.getEntryPoint() != null && !param.getEntryPoint().isEmpty()) && (param.getExitPoint() != null && !param.getExitPoint().isEmpty())) {
-						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", 1), new BasicDBObject("city_1_name", param.getEntryPoint()))));
+						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", "1"), new BasicDBObject("city_1_name", param.getEntryPoint()))));
 						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", "X"), new BasicDBObject("city_1_name", param.getExitPoint()))));
 					} else if(param.getEntryPoint() != null && !param.getEntryPoint().isEmpty()) {
-						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", 1), new BasicDBObject("city_1_name", param.getEntryPoint()))));
+						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", "1"), new BasicDBObject("city_1_name", param.getEntryPoint()))));
 					} else if(param.getExitPoint() != null && !param.getExitPoint().isEmpty()) {
 						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", "X"), new BasicDBObject("city_1_name", param.getExitPoint()))));
 					}
@@ -359,8 +359,8 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 					BasicDBObject and = new BasicDBObject();
 					and.append("$and", Arrays.asList(
 							new BasicDBObject("$expr", new BasicDBObject("$eq", Arrays.asList("$batch_number", "$$batchNumber"))),
-							new BasicDBObject("$expr", new BasicDBObject("$eq", Arrays.asList("$link_no", "$$linkNo")))
-//							new BasicDBObject("$or", orPointList)
+							new BasicDBObject("$expr", new BasicDBObject("$eq", Arrays.asList("$link_no", "$$linkNo"))),
+							new BasicDBObject("$or", orPointList)
 						)
 					);
 					match.append("$match", and);
@@ -405,7 +405,11 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 					BasicDBObject match = new BasicDBObject();
 					BasicDBObject matchInline = new BasicDBObject();
 					BasicDBObject detailSize = new BasicDBObject();
-					detailSize.append("$gt", 1);
+					if((param.getEntryPoint() != null && !param.getEntryPoint().isEmpty()) && (param.getExitPoint() != null && !param.getExitPoint().isEmpty())) {
+						detailSize.append("$gt", 1);
+					} else {
+						detailSize.append("$gte", 1);
+					}
 					matchInline.append("details_size", detailSize);
 					
 					match.append("$match", matchInline);
