@@ -33,6 +33,7 @@ import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.Category;
 import com.atibusinessgroup.fmp.domain.dto.CategoryObject;
+import com.atibusinessgroup.fmp.domain.dto.CategoryTextFormatAndAttribute;
 import com.atibusinessgroup.fmp.domain.dto.GeneralRuleApplication;
 import com.atibusinessgroup.fmp.repository.AtpcoRecord0Repository;
 import com.atibusinessgroup.fmp.resository.custom.AtpcoFareCustomRepository;
@@ -302,11 +303,28 @@ public class AfdQueryResource {
         	cat.setCatName(entry.getValue());
         	
         	String type = "";
+        	String textFormat = "";
         	
         	try {
         		cat.setCatNo(Integer.parseInt(entry.getKey()));
         	} catch (Exception e) {
         		e.printStackTrace();
+        	}
+        	
+        	if (matchedFRecord2 != null && matchedFRecord2.getDataTables() != null && matchedFRecord2.getDataTables().size() > 0) {
+        		type += CategoryType.FOOTNOTE;
+        		textFormat += atpcoRecordService.generateCategoryTextHeader(CategoryType.FOOTNOTE, afdQuery.getTariffNo(), afdQuery.getTariffCode(), afdQuery.getRuleNo(), matchedFRecord2.getSequenceNo(), matchedFRecord2.getEffectiveDateObject());
+        		CategoryTextFormatAndAttribute ctfa = atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), matchedFRecord2.getDataTables(), CategoryType.FOOTNOTE);
+        		textFormat += ctfa.getTextFormat();
+        		cat.getCatAttributes().addAll(ctfa.getAttributes());
+        	}
+        	
+        	if (matchedRecord2 != null && matchedRecord2.getDataTables() != null && matchedRecord2.getDataTables().size() > 0) {
+        		type += CategoryType.RULE;
+        		textFormat += atpcoRecordService.generateCategoryTextHeader(CategoryType.RULE, afdQuery.getTariffNo(), afdQuery.getTariffCode(), afdQuery.getRuleNo(), matchedRecord2.getSequenceNo(), matchedRecord2.getEffectiveDateObject());
+        		CategoryTextFormatAndAttribute ctfa = atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), matchedRecord2.getDataTables(), CategoryType.RULE);
+        		textFormat += ctfa.getTextFormat();
+        		cat.getCatAttributes().addAll(ctfa.getAttributes());
         	}
         	
         	if (matchedGeneral != null) {
@@ -328,21 +346,15 @@ public class AfdQueryResource {
         		
         		if (matchedGeneralRecord2 != null && matchedGeneralRecord2.getDataTables() != null && matchedGeneralRecord2.getDataTables().size() > 0) {
         			type += CategoryType.GENERAL_RULE;
-            		cat.getCatAttributes().addAll(atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), matchedGeneralRecord2.getDataTables(), CategoryType.GENERAL_RULE));
+        			textFormat += atpcoRecordService.generateCategoryTextHeader(CategoryType.GENERAL_RULE, afdQuery.getTariffNo(), afdQuery.getTariffCode(), afdQuery.getRuleNo(), matchedGeneralRecord2.getSequenceNo(), matchedGeneralRecord2.getEffectiveDateObject());
+        			CategoryTextFormatAndAttribute ctfa = atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), matchedGeneralRecord2.getDataTables(), CategoryType.GENERAL_RULE);
+            		textFormat += ctfa.getTextFormat();
+            		cat.getCatAttributes().addAll(ctfa.getAttributes());
         		}
     		}
         	
-        	if (matchedFRecord2 != null && matchedFRecord2.getDataTables() != null && matchedFRecord2.getDataTables().size() > 0) {
-        		type += CategoryType.FOOTNOTE;
-        		cat.getCatAttributes().addAll(atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), matchedFRecord2.getDataTables(), CategoryType.FOOTNOTE));
-        	}
-        	
-        	if (matchedRecord2 != null && matchedRecord2.getDataTables() != null && matchedRecord2.getDataTables().size() > 0) {
-        		type += CategoryType.RULE;
-        		cat.getCatAttributes().addAll(atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), matchedRecord2.getDataTables(), CategoryType.RULE));
-        	}
-        	
         	cat.setType(type);
+        	cat.setTextFormat(textFormat);
         	
         	result.add(cat);
         }

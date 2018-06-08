@@ -1,7 +1,9 @@
 package com.atibusinessgroup.fmp.service;
 
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,10 +15,12 @@ import org.springframework.stereotype.Service;
 
 import com.atibusinessgroup.fmp.constant.CategoryType;
 import com.atibusinessgroup.fmp.constant.CollectionName;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat01;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord3CategoryWithDataTable;
 import com.atibusinessgroup.fmp.domain.dto.CategoryAttribute;
 import com.atibusinessgroup.fmp.domain.dto.CategoryAttributeObject;
 import com.atibusinessgroup.fmp.domain.dto.CategoryObject;
+import com.atibusinessgroup.fmp.domain.dto.CategoryTextFormatAndAttribute;
 import com.atibusinessgroup.fmp.domain.dto.DataTable;
 import com.atibusinessgroup.fmp.domain.dto.DateTable;
 import com.atibusinessgroup.fmp.domain.dto.Record3ReflectionObject;
@@ -245,10 +249,11 @@ public class AtpcoRecordService {
 		return result;
 	}
 
-	public List<CategoryAttribute> getAndConvertCategoryDataTable(String category, List<DataTable> dataTables,
+	public CategoryTextFormatAndAttribute getAndConvertCategoryDataTable(String category, List<DataTable> dataTables,
 			String type) {
-		List<CategoryAttribute> result = new ArrayList<>();
-
+		CategoryTextFormatAndAttribute result = new CategoryTextFormatAndAttribute();
+		List<CategoryAttribute> attributes = new ArrayList<>();
+		
 		String classBasePackage = "com.atibusinessgroup.fmp.domain.atpco.";
 
 		Record3ReflectionObject ro = null;
@@ -259,6 +264,7 @@ public class AtpcoRecordService {
 			ro = getCategorySettingInfo(classBasePackage, category);
 		}
 		
+		String textFormat = "";
 		String relationship = null;
 		TextTable textTable996 = null;
 		DateTable dateTable996 = null;
@@ -305,16 +311,130 @@ public class AtpcoRecordService {
 						}
 					}
 					
-					result.add(convertObjectToCategoryAttribute(getCategoryTypeName(type), relationship, cat, textTable996, dateTable996));
+					textFormat = convertCodedCategoryValueToText(category, cat);
+					
+					String text = convertTextTableToText(textTable996);
+					if (text != null) {
+						textFormat += text + "\n";
+					}
+					
+					attributes.add(convertObjectToCategoryAttribute(getCategoryTypeName(type), relationship, cat, text, dateTable996));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		}
+		
+		result.setTextFormat(textFormat);
+		result.setAttributes(attributes);
 
 		return result;
 	}
 
+	public CategoryAttribute convertObjectToCategoryAttribute(String type, String relationship, Object obj, String textTable996, DateTable dateTable994) {
+		CategoryAttribute result = new CategoryAttribute();
+		result.setType(type);
+		result.setRelationship(relationship);
+
+		List<CategoryAttributeObject> catAttrObjs = new ArrayList<>();
+
+		ObjectMapper mapper = new ObjectMapper();
+
+		try {
+			String objJson = mapper.writeValueAsString(obj);
+
+			Map<String, Object> map = new HashMap<String, Object>();
+			map = mapper.readValue(objJson, new TypeReference<Map<String, Object>>() {});
+			
+			for (Map.Entry<String, Object> entry : map.entrySet()) {
+				String key = entry.getKey();
+				Object value = entry.getValue();
+				
+				CategoryAttributeObject attObj = new CategoryAttributeObject();
+				attObj.setKey(key);
+				attObj.setValue(value);
+				
+				if (ArrayUtils.contains(textTable996Tags, key) && textTable996 != null) {
+					attObj.setValue(textTable996);
+				}
+				
+				if (dateTable994 != null && ArrayUtils.contains(dateTable994Tags, key)) {
+					attObj.setValue(dateTable994);
+				}
+				
+				catAttrObjs.add(attObj);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		result.setAttributes(catAttrObjs);
+
+		return result;
+	}
+
+	public Object convertDBObjectToPOJO(Class<?> c, DBObject category) {
+		Object result = null;
+
+		try {
+			result = mongoTemplate.getConverter().read(c, category);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+	
+	public String generateCategoryTextHeader(String type, String tariffNo, String tariffCode, String ruleNo, String sequence, Object date) {
+		String result = "";
+		
+		String catType = getCategoryTypeName(type);
+		
+		result += (catType != null ? catType : "") + " RULE " + (ruleNo != null ? ruleNo : "") + " IN TARIFF " + (tariffCode != null ? tariffCode : "") + " (" + (tariffNo != null ? tariffNo : "") + ")\n";
+		result += "SEQUENCE: " + (sequence != null ? sequence : "") + "\n";
+		
+		String effStr = null;
+		try {
+			Date eff = (Date) date;
+			effStr = new SimpleDateFormat("ddMMMyyyy").format(eff);
+		} catch (Exception e) {
+		}
+		
+		result += "EFFECTIVE: " + (effStr != null ? effStr.toUpperCase() : "") + "\n\n";
+		
+		return result;
+	}
+	
+	public String convertTextTableToText(TextTable textTable996) {
+		String result = null;
+		
+		if (textTable996 != null && textTable996.getText().size() > 0) {
+			result = "";
+			
+			for (String line:textTable996.getText()) {
+				result += "\t" + line + "\n";
+			}
+		}
+		
+		return result;
+	}
+	
+	public String getCategoryTypeName(String type) {
+		String result = null;
+
+		if (type.contentEquals(CategoryType.RULE)) {
+			result = "RULE";
+		} else if (type.contentEquals(CategoryType.FOOTNOTE)) {
+			result = "FOOTNOTE";
+		} else if (type.contentEquals(CategoryType.GENERAL_RULE)) {
+			result = "GENERAL";
+		} else if (type.contentEquals(CategoryType.ALTERNATE_GENERAL_RULE)) {
+			result = "ALTERNATE GENERAL";
+		}
+
+		return result;
+	}
+	
 	public Record3ReflectionObject getCategorySettingInfo(String classBasePackage, String category) {
 		Record3ReflectionObject result = new Record3ReflectionObject();
 
@@ -548,82 +668,27 @@ public class AtpcoRecordService {
 		return result;
 	}
 
-	public Object convertDBObjectToPOJO(Class<?> c, DBObject category) {
-		Object result = null;
-
-		try {
-			result = mongoTemplate.getConverter().read(c, category);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return result;
-	}
-
-	public CategoryAttribute convertObjectToCategoryAttribute(String type, String relationship, Object obj, TextTable textTable996, DateTable dateTable994) {
-		CategoryAttribute result = new CategoryAttribute();
-		result.setType(type);
-		result.setRelationship(relationship);
-
-		List<CategoryAttributeObject> catAttrObjs = new ArrayList<>();
-
-		ObjectMapper mapper = new ObjectMapper();
-
-		try {
-			String objJson = mapper.writeValueAsString(obj);
-
-			Map<String, Object> map = new HashMap<String, Object>();
-			map = mapper.readValue(objJson, new TypeReference<Map<String, Object>>() {});
-			
-			for (Map.Entry<String, Object> entry : map.entrySet()) {
-				String key = entry.getKey();
-				Object value = entry.getValue();
-				
-				CategoryAttributeObject attObj = new CategoryAttributeObject();
-				attObj.setKey(key);
-				attObj.setValue(value);
-				
-				if (textTable996 != null && ArrayUtils.contains(textTable996Tags, key)) {
-					if (textTable996.getText().size() > 0) {
-						String text = "";
-						
-						for (String line:textTable996.getText()) {
-							text += line + "\n";
-						}
-						
-						attObj.setValue(text);
-					}
-				}
-				
-				if (dateTable994 != null && ArrayUtils.contains(dateTable994Tags, key)) {
-					attObj.setValue(dateTable994);
-				}
-				
-				// Add Exclusion of attributes
-				catAttrObjs.add(attObj);
+	private String convertCodedCategoryValueToText(String category, Object catObj) {
+		String result = "";
+		
+		switch (category) {
+		case "001":
+			AtpcoRecord3Cat01 cat = (AtpcoRecord3Cat01) catObj;
+			if (cat.getPsgr_type() != null && !cat.getPsgr_type().isEmpty()) {
+				result += "VALID FOR: " + cat.getPsgr_type() + "\n";
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			if (cat.getAge_min() != null && !cat.getAge_min().isEmpty()) {
+				result += "MINIMUM AGE: " + cat.getAge_min() + "\n";
+			}
+			if (cat.getAge_max() != null && !cat.getAge_max().isEmpty()) {
+				result += "MAXIMUM AGE: " + cat.getAge_max() + "\n";
+			}
+			if (cat.getAccount_code() != null && !cat.getAccount_code().isEmpty()) {
+				result += "ACCOUNT CODE: " + cat.getAccount_code() + "\n\n";
+			}
+			break;
 		}
-
-		result.setAttributes(catAttrObjs);
-
-		return result;
-	}
-
-	public String getCategoryTypeName(String type) {
-		String result = null;
-
-		if (type.contentEquals(CategoryType.RULE)) {
-			result = "Rule";
-		} else if (type.contentEquals(CategoryType.FOOTNOTE)) {
-			result = "Footnote";
-		} else if (type.contentEquals(CategoryType.GENERAL_RULE)) {
-			result = "General Rule";
-		} else if (type.contentEquals(CategoryType.ALTERNATE_GENERAL_RULE)) {
-			result = "Alternate General Rule";
-		}
-
+		
 		return result;
 	}
 }

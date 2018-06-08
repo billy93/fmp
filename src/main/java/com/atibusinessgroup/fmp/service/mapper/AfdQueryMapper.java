@@ -40,6 +40,7 @@ public class AfdQueryMapper {
 		result.setSource(afare.getSource());
 		result.setSc("S");
 		result.setTariffNo(afare.getTariffNo());
+//		result.setTariffCode(tariffCode);
 		result.setCarrierCode(afare.getCarrierCode());
 		result.setOriginCity(afare.getOriginCity());
 		result.setOriginCountry(afare.getOriginCountry());
