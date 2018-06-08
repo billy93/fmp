@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('RoutingqueryController', RoutingqueryController);
 
-    RoutingqueryController.$inject = ['$state', '$stateParams', 'Routingquery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', 'pagingParams'];
+    RoutingqueryController.$inject = ['$state', '$stateParams', 'Routingquery', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams'];
 
-    function RoutingqueryController($state, $stateParams, Routingquery, ParseLinks, AlertService, paginationConstants, queryParams, pagingParams) {
+    function RoutingqueryController($state, $stateParams, Routingquery, ParseLinks, AlertService, paginationConstants, pagingParams) {
 
         var vm = this;
         
@@ -26,14 +26,16 @@
         vm.dateFormat = "yyyy-MM-dd";
         vm.openCalendar = openCalendar;
         
-        vm.queryParams = queryParams;
+        if($stateParams.routingQueryFilter != null){
+        	vm.queryParams = $stateParams.routingQueryFilter;
+        } else {
+        	vm.clearFilter();
+        }
         
-        //vm.clearFilter();
         vm.loadAll();
-        console.log('initial');
 
-        function loadAll () {
-        	vm.queryParams.page= pagingParams.page - 1;
+        function loadAll(isQueryClick = false) {
+        	vm.queryParams.page = pagingParams.page - 1;
 			vm.queryParams.size= vm.itemsPerPage;
 			vm.queryParams.sort= sort();
 			
@@ -56,6 +58,11 @@
             function onError(error) {
                 AlertService.error(error.data.message);
             }
+        	
+        	if(isQueryClick) {
+        		vm.page = 1;
+        		vm.transition();
+        	}
         }
 
         function loadPage(page) {
@@ -67,7 +74,8 @@
             $state.transitionTo($state.$current, {
                 page: vm.page,
                 sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
-                search: vm.currentSearch
+                search: vm.currentSearch,
+                routingQueryFilter : vm.queryParams
             });
         }
         
@@ -111,14 +119,6 @@
         	}, function(error) {
         		console.log(error);
         	});
-        }
-        
-        function showDetail() {
-        	
-        }
-        
-        function hideDetail() {
-        	
         }
     }
 })();
