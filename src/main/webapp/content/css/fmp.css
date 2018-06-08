@@ -3822,7 +3822,7 @@ p {
     .table-wrapper table.table-bordered {
       border-color: rgba(158, 173, 195, 0.16);
       border-style: solid;
-      border-width: 1px 0 1px 1px;
+      border-width: 1px;
       font-size: 11px;
       width: 100%;
       border-spacing: 0;
@@ -3974,6 +3974,20 @@ tr.rejected {
 tr td.highlighted {
   background-color: rgba(222, 255, 94, 0.7) !important; }
 
+.table {
+  width: 100%; }
+  .table.table-header-fixed tbody {
+    display: block;
+    height: 200px;
+    overflow-y: auto;
+    width: 100%; }
+  .table.table-header-fixed thead {
+    display: table;
+    width: 100%;
+    overflow: auto; }
+  .table.table-header-fixed td {
+    min-width: 80px; }
+
 .tab-wrapper {
   position: relative;
   border-radius: 3px;
@@ -4022,7 +4036,7 @@ tr td.highlighted {
 html,
 body {
   min-height: 100vh;
-  overflow-x: hidden; }
+  overflow: hidden; }
 
 .js .container {
   position: relative;
@@ -4468,6 +4482,17 @@ label.tree_label:after {
   display: block;
   margin: -3px -18px -7px;
   padding: 5px 10px; }
+
+.nav-responsive.nav-tabs {
+  border-bottom: none; }
+
+.nav-responsive li a {
+  font-weight: normal;
+  font-size: 13px !important; }
+
+.nav-responsive li.active a {
+  background: #3c8dbc;
+  color: #fff; }
 
 /* General Demo Style */
 body, html {
