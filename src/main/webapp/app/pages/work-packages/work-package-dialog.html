@@ -168,8 +168,8 @@
 					       	ng-style="editForm.editFormATPCO.fareType{{$index}}.$error.required && vm.errorStyle"
 					       	ng-required="vm.checkRequiredField('discountFareType')"
 		      				ng-disabled="vm.isFieldDisable('discountFareType')">
-								<option ng-repeat="fare in vm.optionFareDiscount track by $index" value="{{fare.name}}">
-									{{fare.code}} | {{fare.name}}
+								<option ng-repeat="fare in vm.atpcoFareTypes track by $index" value="{{fare.typeCode}}">
+									{{fare.typeCode}}  {{fare.definition}}
 								</option>
 							</select>
 					    </div>

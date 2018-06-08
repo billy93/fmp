@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('WorkPackageDialogController', WorkPackageDialogController);
 
-    WorkPackageDialogController.$inject = ['type', '$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'WorkPackage', 'reviewLevels', 'businessAreas', 'fareTypes'];
+    WorkPackageDialogController.$inject = ['type', '$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'WorkPackage', 'reviewLevels', 'businessAreas', 'fareTypes', 'atpcoFareTypes'];
 
-    function WorkPackageDialogController (type, $timeout, $scope, $stateParams, $uibModalInstance, entity, WorkPackage, reviewLevels, businessAreas, fareTypes) {
+    function WorkPackageDialogController (type, $timeout, $scope, $stateParams, $uibModalInstance, entity, WorkPackage, reviewLevels, businessAreas, fareTypes, atpcoFareTypes) {
         var vm = this;
 
         vm.workPackage = entity;
@@ -24,8 +24,8 @@
         vm.openCalendar = openCalendar;
         vm.save = save;
         vm.fareType = {};
-        vm.optionFare = [];
-        vm.optionFareDiscount = [];
+        vm.optionFare = fareTypes;
+        vm.atpcoFareTypes = atpcoFareTypes;
 
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
@@ -35,25 +35,7 @@
         function openCalendar (date) {
             vm.datePickerOpenStatus[date] = true;
         }
-        
-        
-//        vm.fareType = ["Yearly", "Promotion", "Ad-hoc", "Corporate", "SPA & Code-share", "Miles", "Waiver"];
-//        vm.fareType = {};
-//        for(var x=0;x<fareTypes.length;x++){
-//        	vm.fareType[fareTypes[x].name] = fareTypes[x].name;
-//        }
-//        vm.fareType = fareTypes;
-//        console.log(fareTypes);
-        
-        for(var x=0;x<fareTypes.length;x++){
-        	if(fareTypes[x].atpcoDiscount){
-    			vm.optionFareDiscount.push(fareTypes[x]); 
-        	}
-        	else if(!fareTypes[x].atpcoDiscount){
-        		vm.optionFare.push(fareTypes[x]);
-        	}    	        		
-        }
-        
+                
         vm.distributionTypes = ['ATPCO'];
         
         if($stateParams.type == null){
