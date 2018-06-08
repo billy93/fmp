@@ -1837,8 +1837,8 @@
 						                        ng-disabled="!vm.isEditable('discountFareType')"></select>	 -->
 											<select class="form-control" name="discountFareType{{$index}}" ng-model="workPackageSheet.discountFareType" ng-class="{'must-fill': !editForm.editFormDiscount.discountFareType{{$index}}.$valid}"
 												ng-required="vm.isRequired('discountFareType')" ng-disabled="!vm.isEditable('discountFareType')">
-												<option ng-repeat="fare in vm.optionFare track by $index" value="{{fare.name}}">
-													{{fare.code}} | {{fare.name}}
+												<option ng-repeat="fare in vm.atpcoFareTypes track by $index" value="{{fare.typeCode}}">
+													{{fare.typeCode}}  {{fare.definition}}
 												</option>
 											</select>								      				
 						                </div>
@@ -2137,13 +2137,13 @@
 												  </ui-select> -->
 				                              </td>
 				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'fareType', $event)" ng-class="{highlighted:fare.field['fareType']}">
-				                                <select class="form-control" 
-				                                   name="discountFareFareType{{$parent.$index}}{{$index}}"
-				                                   ng-required="vm.isRequired('discountFareFareType')"
-				                                   ng-class="{'must-fill': !editForm.editFormDiscount.discountFareFareType{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"																			            
-				                                   ng-model="fare.fareType"
-				                                   ng-disabled="!vm.isEditable('discountFareFareType')"
-				                                   ng-options="key as value for (key , value) in vm.fareType"></select>
+				                                   <select class="form-control" name="discountFareFareType{{$parent.$index}}{{$index}}" ng-model="fare.fareType" 
+				                                   ng-class="{'must-fill': !editForm.editFormDiscount.discountFareFareType{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"
+														ng-required="vm.isRequired('discountFareFareType')" ng-disabled="!vm.isEditable('discountFareFareType')">
+														<option ng-repeat="fare in vm.atpcoFareTypes track by $index" value="{{fare.typeCode}}">
+															{{fare.typeCode}}  {{fare.definition}}
+														</option>
+													</select>
 				                              </td>
 				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'ticketCode', $event)" ng-class="{highlighted:fare.field['ticketCode']}">
 				                                <input type="text" class="form-control" name="discountTicketCode{{$parent.$index}}{{$index}}"
