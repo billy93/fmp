@@ -1,0 +1,98 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myRoutingqueryLabel">Create or edit a Routingquery</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" ng-show="vm.routingquery.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="vm.routingquery.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_linkNo">Link No</label>
+            <input type="text" class="form-control" name="linkNo" id="field_linkNo"
+                    ng-model="vm.routingquery.linkNo"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_src">Src</label>
+            <input type="text" class="form-control" name="src" id="field_src"
+                    ng-model="vm.routingquery.src"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_cxr">Cxr</label>
+            <input type="text" class="form-control" name="cxr" id="field_cxr"
+                    ng-model="vm.routingquery.cxr"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_tarNo">Tar No</label>
+            <input type="text" class="form-control" name="tarNo" id="field_tarNo"
+                    ng-model="vm.routingquery.tarNo"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_routingNo">Routing No</label>
+            <input type="text" class="form-control" name="routingNo" id="field_routingNo"
+                    ng-model="vm.routingquery.routingNo"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_effectiveDate">Effective Date</label>
+            <input type="text" class="form-control" name="effectiveDate" id="field_effectiveDate"
+                    ng-model="vm.routingquery.effectiveDate"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_discontinuedDate">Discontinued Date</label>
+            <input type="text" class="form-control" name="discontinuedDate" id="field_discontinuedDate"
+                    ng-model="vm.routingquery.discontinuedDate"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_drv">Drv</label>
+            <input type="text" class="form-control" name="drv" id="field_drv"
+                    ng-model="vm.routingquery.drv"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_cpi">Cpi</label>
+            <input type="text" class="form-control" name="cpi" id="field_cpi"
+                    ng-model="vm.routingquery.cpi"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_di">Di</label>
+            <input type="text" class="form-control" name="di" id="field_di"
+                    ng-model="vm.routingquery.di"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_intPt">Int Pt</label>
+            <input type="text" class="form-control" name="intPt" id="field_intPt"
+                    ng-model="vm.routingquery.intPt"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_untPt">Unt Pt</label>
+            <input type="text" class="form-control" name="untPt" id="field_untPt"
+                    ng-model="vm.routingquery.untPt"
+                    />
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

@@ -128,6 +128,7 @@
             	page: vm.page,
                 size: vm.itemsPerPage,
                 sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
+                workPackageFilter : vm.workPackageFilter
             });
         }
         

@@ -1,0 +1,59 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "linkNo",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "src",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "cxr",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "tarNo",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "routingNo",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "effectiveDate",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "discontinuedDate",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "drv",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "cpi",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "di",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "intPt",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "untPt",
+            "fieldType": "String"
+        }
+    ],
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "routingquery",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}

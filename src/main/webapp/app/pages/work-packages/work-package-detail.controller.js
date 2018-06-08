@@ -2441,6 +2441,7 @@
           	}
           }
           
+          console.log($scope.editForm.editFormATPCO);
           vm.workPackage = data;
           vm.isSaving = false;
       }
@@ -3742,82 +3743,7 @@
                       
                       function onImportSuccess(result){
                     	  	alert('Import Success');
-                    	  	data = result;
-                    	  	data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
-                            data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
-                            data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
-                            data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
-                            data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
-                            data.lockedSince = DateUtils.convertDateTimeFromServer(data.lockedSince);
-                            data.saleDate = DateUtils.convertDateTimeFromServer(data.saleDate);
-                            
-                            if(data.fareSheet.length > 0){
-                            	for(var x=0;x<data.fareSheet.length;x++){
-                            		var fares = data.fareSheet[x].fares;
-                            		for(var y=0;y<fares.length;y++){
-    	                        		if(fares[y] != null){
-    	                        			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
-    	                        			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
-    	                        			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
-    	                        			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
-    	                        			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
-    	                        		}
-                            		}
-                            	}
-                            }
-                            
-                            if(data.addonFareSheet.length > 0){
-                            	for(var x=0;x<data.addonFareSheet.length;x++){
-                            		var fares = data.addonFareSheet[x].fares;
-                            		for(var y=0;y<fares.length;y++){
-    	                        		if(fares[y] != null){
-    	                        			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
-    	                        			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
-    	                        			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
-    	                        			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
-    	                        			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
-    	                        		}
-                            		}
-                            	}
-                            }
-                            
-                            if(data.marketFareSheet.length > 0){
-                            	for(var x=0;x<data.marketFareSheet.length;x++){
-                            		var fares = data.marketFareSheet[x].fares;
-                            		for(var y=0;y<fares.length;y++){
-    	                        		if(fares[y] != null){
-    	                        			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
-    	                        			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
-    	                        			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
-    	                        			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
-    	                        			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
-    	                        		}
-                            		}
-                            	}
-                            }
-                            
-                            
-                            if(data.discountFareSheet.length > 0){
-                            	for(var x=0;x<data.discountFareSheet.length;x++){
-                            		var fares = data.discountFareSheet[x].fares;
-                            		for(var y=0;y<fares.length;y++){
-    	                        		if(fares[y] != null){
-    	                        			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
-    	                        			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
-    	                        			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
-    	                        			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
-    	                        			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
-    	                        		}
-                            		}
-                            	}
-                            }
-                            vm.workPackage = data;
-//                    	  	vm.workPackage.filingDate = DateUtils.convertDateTimeFromServer(vm.workPackage.filingDate);
-//                    	  	vm.workPackage.createdDate = DateUtils.convertDateTimeFromServer(vm.workPackage.createdDate);
-                    	 // 	vm.workPackage.distributionDate = DateUtils.convertDateTimeFromServer(vm.workPackage.distributionDate);
-                         //vm.workPackage.discExpiryDate = DateUtils.convertDateTimeFromServer(vm.workPackage.discExpiryDate);
-                         //vm.workPackage.queuedDate = DateUtils.convertDateTimeFromServer(vm.workPackage.queuedDate);
-                         //vm.workPackage.lockedSince = DateUtils.convertDateTimeFromServer(vm.workPackage.lockedSince);
+                    	  	vm.mapWorkpackage(result);
                       }
                       
                       function onImportFailure(){
@@ -3828,6 +3754,107 @@
           }
       };
       
+      vm.importFareAddon = function ($file, index) {
+          if ($file) {
+              DataUtils.toBase64($file, function(base64Data) {
+                  $scope.$apply(function() {
+                      var testing = { 
+                    		  file : base64Data,
+                    		  fileContentType : $file.type
+                      };
+                      
+                      vm.workPackage.importFares = testing;
+                      vm.workPackage.importIndex = index;
+                      //send to backend
+                      
+                      WorkPackage.importFares(vm.workPackage, onImportSuccess, onImportFailure);
+                      
+                      function onImportSuccess(result){
+                  	  		alert('Import Success');
+                  	  		vm.mapWorkpackage(result);
+                    	  	
+                      }
+                      
+                      function onImportFailure(){
+                    	    alert('Import Failed');
+                      }
+                  });
+              });
+          }
+      };
+      
+      vm.mapWorkpackage = function(result){
+    	  data = result;
+  	  	  data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
+          data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+          data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
+          data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
+          data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
+          data.lockedSince = DateUtils.convertDateTimeFromServer(data.lockedSince);
+          data.saleDate = DateUtils.convertDateTimeFromServer(data.saleDate);
+          
+          if(data.fareSheet.length > 0){
+          	for(var x=0;x<data.fareSheet.length;x++){
+          		var fares = data.fareSheet[x].fares;
+          		for(var y=0;y<fares.length;y++){
+              		if(fares[y] != null){
+              			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
+              			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
+              			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
+              			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
+              			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+              		}
+          		}
+          	}
+          }
+          
+          if(data.addonFareSheet.length > 0){
+          	for(var x=0;x<data.addonFareSheet.length;x++){
+          		var fares = data.addonFareSheet[x].fares;
+          		for(var y=0;y<fares.length;y++){
+              		if(fares[y] != null){
+              			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
+              			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
+              			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
+              			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
+              			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+              		}
+          		}
+          	}
+          }
+          
+          if(data.marketFareSheet.length > 0){
+          	for(var x=0;x<data.marketFareSheet.length;x++){
+          		var fares = data.marketFareSheet[x].fares;
+          		for(var y=0;y<fares.length;y++){
+              		if(fares[y] != null){
+              			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
+              			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
+              			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
+              			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
+              			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+              		}
+          		}
+          	}
+          }
+          
+          
+          if(data.discountFareSheet.length > 0){
+          	for(var x=0;x<data.discountFareSheet.length;x++){
+          		var fares = data.discountFareSheet[x].fares;
+          		for(var y=0;y<fares.length;y++){
+              		if(fares[y] != null){
+              			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
+              			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
+              			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
+              			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
+              			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+              		}
+          		}
+          	}
+          }
+          vm.workPackage = data;
+      }
       vm.importFareDiscount = function ($file) {
           if ($file) {
               DataUtils.toBase64($file, function(base64Data) {
@@ -3917,6 +3944,45 @@
     	  vm.workPackage.exportIndex = index;
     	  WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
     		  WorkPackage.exportFares(vm.workPackage, onExportSuccess, onExportFailure);
+	    	  function onExportSuccess(result){
+	    		  var fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+      			var templateFilename = "Workorder_Fare.xlsx";
+      			var blob = b64toBlob(result.file, fileType);
+      			FileSaver.saveAs(blob, templateFilename);
+	    	  }
+	    	  function onExportFailure(){
+	    		  
+	    	  }    	 
+	    	}, function onSaveError(){
+	    		alert('An error occured, please try again');
+	    	}); 
+	       
+      }
+      
+      vm.exportFaresAddon = function(index){
+    	  /*
+    	  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-export-dialog.html',
+              controller: 'WorkPackageExportDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              resolve: {
+              }
+          }).result.then(function(workPackage) {
+//              	var params = {
+//              			id: workPackage.id
+//              	};
+//            	$state.go('work-package-detail', params);
+              //$state.go('work-package', null, { reload: 'work-package' });
+          }, function() {
+//              $state.go('work-package');
+          });
+    	  */
+    	  
+    	  vm.workPackage.exportIndex = index;
+    	  WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
+    		  WorkPackage.exportFaresAddon(vm.workPackage, onExportSuccess, onExportFailure);
 	    	  function onExportSuccess(result){
 	    		  var fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
       			var templateFilename = "Workorder_Fare.xlsx";
@@ -4471,7 +4537,8 @@
       			
           });
       }
-      
+    
+    	  
       vm.selectCity = function(fare, field){
     	  $uibModal.open({
               templateUrl: 'app/pages/work-packages/work-package-select-city-dialog.html',
@@ -4496,6 +4563,124 @@
           });
       }
       
+      vm.selectCityATPCODiscount = function(fare, field){
+    	  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-select-city-dialog.html',
+              controller: 'WorkPackageSelectCityDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              windowClass: 'full-page-modal',
+              resolve: {
+	              	fare: function(){
+	              		return fare;
+	              	},
+                  cities: ['City', function(City) {
+                      return City.getAll().$promise;
+                  }],
+              }
+			}).result.then(function(option) {
+				if(option != null){
+					if(field == 'loc1'){
+						if(fare.loc1Type == 'C'){
+							fare[field] = option.cityCode;				
+						}else if(fare.loc1Type == 'N'){
+							fare[field] = option.countryCode;
+						}
+					}else if(field == 'loc2'){
+						if(fare.loc2Type == 'C'){
+							fare[field] = option.cityCode;				
+						}else if(fare.loc2Type == 'N'){
+							fare[field] = option.countryCode;
+						}
+					}					
+				}
+					
+          }, function() {
+      			
+          });
+      }
+      
+      vm.selectState = function(fare, field){
+    	  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-select-state-dialog.html',
+              controller: 'WorkPackageSelectStateDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              windowClass: 'full-page-modal',
+              resolve: {
+	              	fare: function(){
+	              		return fare;
+	              	},
+              	 states: ['State', function(State) {
+                     return State.getAll().$promise;
+                 }],
+                 header : function(){ return "States"}
+              }
+			}).result.then(function(option) {
+				if(option != null){
+					fare[field] = option.code;	
+				}
+					
+          }, function() {
+      			
+          });
+      }
+      
+      vm.selectCityGroup = function(fare, field){
+    	  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-select-state-dialog.html',
+              controller: 'WorkPackageSelectStateDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              windowClass: 'full-page-modal',
+              resolve: {
+	              	fare: function(){
+	              		return fare;
+	              	},
+              	 states: ['CityGroup', function(CityGroup) {
+                     return CityGroup.getAll().$promise;
+                 }],
+                 header : function(){ return "City Group"}
+              }
+			}).result.then(function(option) {
+				if(option != null){
+					fare[field] = option.code;	
+				}
+					
+          }, function() {
+      			
+          });
+      }
+      
+      vm.selectPax = function(fare, field){
+    	  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-select-state-dialog.html',
+              controller: 'WorkPackageSelectStateDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              windowClass: 'full-page-modal',
+              resolve: {
+	              	fare: function(){
+	              		return fare;
+	              	},
+              	 states: ['Passenger', function(Passenger) {
+                     return Passenger.getAll().$promise;
+                 }],
+                 header : function(){ return "Passenger"}
+              }
+			}).result.then(function(option) {
+				if(option != null){
+					fare[field] = option.code;	
+				}
+					
+          }, function() {
+      			
+          });
+      }
       
       vm.selectCurrency = function(fare, field){
     	  $uibModal.open({
@@ -4539,6 +4724,24 @@
     	  }
       }
       
+      vm.checkpassengerType = function(fare, field){
+    	  if(fare[field] != null || fare[field] != ''){
+	    	  var exist = false;
+	    	  for(var x=0;x<vm.passengers.length;x++){
+	    		  if(vm.passengers[x].code.toUpperCase() == fare[field].toUpperCase()){
+	    			  exist = true;
+	    			  break;
+	    		  }
+	    	  }
+	    	  
+	    	  if(!exist){
+	    		  alert("Passenger code '"+fare[field]+"' is invalid. Please select a correct code");
+	    		  fare[field] = null;
+	    		  return;
+	    	  }
+    	  }
+      }
+      
       vm.checkCity = function(fare, field){
     	  if(fare[field] != null || fare[field] != ''){
 	    	  var exist = false;
@@ -4557,6 +4760,66 @@
     	  }
       }
       
+      vm.checkLoc = function(fare, field){
+    	  if(fare[field] != null || fare[field] != ''){
+	    	  var exist = false;
+	    	  if(fare.loc1Type == 'C'){
+	    		  for(var x=0;x<vm.cities.length;x++){
+		    		  if(vm.cities[x].cityCode.toUpperCase() == fare[field].toUpperCase()){
+		    			  exist = true;
+		    			  break;
+		    		  }
+		    	  }				
+				}else if(fare.loc1Type == 'N'){
+					 for(var x=0;x<vm.cities.length;x++){
+			    		  if(vm.cities[x].countryCode.toUpperCase() == fare[field].toUpperCase()){
+			    			  exist = true;
+			    			  break;
+			    		  }
+			    	  }
+				}else if(fare.loc1Type == 'S'){
+					 for(var x=0;x<vm.states.length;x++){
+			    		  if(vm.states[x].code.toUpperCase() == fare[field].toUpperCase()){
+			    			  exist = true;
+			    			  break;
+			    		  }
+			    	  }
+				}else if(fare.loc1Type == 'A'){
+					 for(var x=0;x<vm.areas.length;x++){
+						 console.log(vm.areas[x]);
+						 console.log(fare[field]);
+			    		  if(vm.areas[x].code == fare[field]){
+			    			  exist = true;
+			    			  break;
+			    		  }
+			    	  }
+				}else if(fare.loc1Type == 'G'){
+					 for(var x=0;x<vm.cityGroups.length;x++){
+			    		  if(vm.cityGroups[x].code.toUpperCase() == fare[field].toUpperCase()){
+			    			  exist = true;
+			    			  break;
+			    		  }
+			    	  }
+				}		    	 
+	    	  
+	    	  if(!exist){
+	    		  if(fare.loc1Type == 'C'){
+	    		  alert("City code '"+fare[field]+"' is invalid. Please select a correct code");
+	    		  }else if(fare.loc1Type == 'N'){
+	    		  alert("Country code '"+fare[field]+"' is invalid. Please select a correct code");
+	    		  }else if(fare.loc1Type == 'S'){
+	    		  alert("State code '"+fare[field]+"' is invalid. Please select a correct code");
+	    		  }else if(fare.loc1Type == 'A'){
+	    		  alert("Area code '"+fare[field]+"' is invalid. Please select a correct code");
+	    		  }else if(fare.loc1Type == 'G'){
+	    		  alert("City Group code '"+fare[field]+"' is invalid. Please select a correct code");
+	    		  }
+	    		  fare[field] = null;
+	    		  return;
+	    	  }
+    	  }
+      }
+          
       vm.checkTariff = function(fare, field, inputField){
     	  var tariff = null;
     	  if(fare[field][inputField] != undefined){
@@ -4582,6 +4845,18 @@
     		  fare[field] = null;
     		  return;
     	  }
-      }      
+      }  
+      
+      vm.keypress = function(event, regexp){
+    	  
+    	  if (event.charCode!=0) {
+    			var regex = new RegExp(regexp);
+    			var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+    			if (!regex.test(key)) {
+    				event.preventDefault();
+    				return false;
+    			}
+    		}
+      }
     }
 })();

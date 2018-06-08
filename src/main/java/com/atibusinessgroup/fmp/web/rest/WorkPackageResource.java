@@ -15,11 +15,15 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -65,6 +69,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.atibusinessgroup.fmp.domain.Counter;
 import com.atibusinessgroup.fmp.domain.Priority;
+import com.atibusinessgroup.fmp.domain.TariffNumber;
 import com.atibusinessgroup.fmp.domain.User;
 import com.atibusinessgroup.fmp.domain.WorkPackage;
 import com.atibusinessgroup.fmp.domain.WorkPackage.ApproveConfig;
@@ -83,6 +88,7 @@ import com.atibusinessgroup.fmp.repository.ContractFareFMPRepository;
 import com.atibusinessgroup.fmp.repository.CounterRepository;
 import com.atibusinessgroup.fmp.repository.FormRepository;
 import com.atibusinessgroup.fmp.repository.PriorityRepository;
+import com.atibusinessgroup.fmp.repository.TariffNumberRepository;
 import com.atibusinessgroup.fmp.repository.UserRepository;
 import com.atibusinessgroup.fmp.repository.WorkPackageFareHistoryDataRepository;
 import com.atibusinessgroup.fmp.repository.WorkPackageHistoryDataRepository;
@@ -142,9 +148,11 @@ public class WorkPackageResource {
     private final CounterRepository counterRepository;
     private final PriorityRepository priorityRepository;
     private final MailService mailService;
+    private final TariffNumberRepository tariffNumberRepository;
+    
     public WorkPackageResource(WorkPackageService workPackageService, WorkPackageFareService workPackageFareService, TargetDistributionService targetDistributionService, BusinessAreaService businessAreaService, ReviewLevelService reviewLevelService, UserService userService, UserRepository userRepository, WorkPackageHistoryService workPackageHistoryService,
     		ContractFMPRepository contractFMPRepository, FormRepository formRepository, WorkPackageHistoryDataRepository workPackageHistoryDataRepository,
-    		WorkPackageFareHistoryDataRepository workPackageFareHistoryDataRepository, ContractFareFMPRepository contractFareFMPRepository, CounterRepository counterRepository, PriorityRepository priorityRepository, MailService mailService) {
+    		WorkPackageFareHistoryDataRepository workPackageFareHistoryDataRepository, ContractFareFMPRepository contractFareFMPRepository, CounterRepository counterRepository, PriorityRepository priorityRepository, MailService mailService, TariffNumberRepository tariffNumberRepository) {
         this.workPackageService = workPackageService;
         this.workPackageFareService = workPackageFareService;
         this.targetDistributionService = targetDistributionService;
@@ -161,6 +169,7 @@ public class WorkPackageResource {
         this.counterRepository = counterRepository;
         this.priorityRepository = priorityRepository;
         this.mailService = mailService;
+        this.tariffNumberRepository = tariffNumberRepository;
     }
 
     /**
@@ -433,6 +442,15 @@ public class WorkPackageResource {
         return map.get( (map.keySet().toArray())[ index ] );
     }
     
+    
+    public static ZonedDateTime toZonedDateTime(Date utilDate) {
+        if (utilDate == null) {
+          return null;
+        }
+        final ZoneId systemDefault = ZoneId.systemDefault();
+        return ZonedDateTime.ofInstant(utilDate.toInstant(), systemDefault);
+      }
+    
     /**
      * POST  /work-packages/import-fares : Import a new fares workPackage.
      *
@@ -462,9 +480,10 @@ public class WorkPackageResource {
                 List<Object> value = entry.getValue();
                 
                 int i=0;
+                TariffNumber tfNumber = new TariffNumber();
                 for(Object o : value) {
                 	if(header.contentEquals("Status")) {
-                		fares.get(i).setStatus(String.valueOf(o));
+                		fares.get(i).setStatus("PENDING");
                 	}
                 	else if(header.contentEquals("Carrier")) {
                 		fares.get(i).setCarrier(String.valueOf(o));
@@ -472,141 +491,128 @@ public class WorkPackageResource {
                 	else if(header.contentEquals("Action")) {
                 		fares.get(i).setAction(String.valueOf(o));
                 	}
+                	else if(header.contentEquals("Tar No")) {
+                		try {
+	                		if(fares.get(i).getTariffNumber() == null) {
+	                			if(String.valueOf(o) != null) {
+	                				fares.get(i).setTariffNumber(tariffNumberRepository.findOneByTarNo(String.valueOf(o)));
+	                			}                			
+	                		}
+	                		else {
+	                		}
+                		}catch(Exception e) {
+                			
+                		}
+                	}
+                	else if(header.contentEquals("Tar Cd")) {
+                		//fares.get(i).setTarcd(String.valueOf(o));
+                		try {
+	                		if(fares.get(i).getTariffNumber() == null) {
+	                			if(String.valueOf(o) != null) {
+	                				fares.get(i).setTariffNumber(tariffNumberRepository.findOneByTarCd(String.valueOf(o)));
+	                			}                			
+	                		}
+	                		else {
+	                		}
+                		}catch(Exception e) {
+                			
+                		}
+                	}
+                	else if(header.contentEquals("Global")) {
+                		//fares.get(i).setGlobal(String.valueOf(o));
+                		try {
+	                		if(fares.get(i).getTariffNumber() == null) {
+	                			if(String.valueOf(o) != null) {
+	                				fares.get(i).setTariffNumber(tariffNumberRepository.findOneByGlobal(String.valueOf(o)));
+	                			}                			
+	                		}
+	                		else {
+	                		}
+                		}catch(Exception e) {
+                			
+                		}
+                	}
+                	else if(header.contentEquals("Origin")) {
+                		fares.get(i).setOrigin(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Dest")) {
+                		fares.get(i).setDestination(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Fare Cls")) {
+                		fares.get(i).setFareBasis(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Bkg Cls")) {
+                		fares.get(i).setBookingClass(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Cabin")) {
+                		fares.get(i).setCabin(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("OW/RT")) {
+                		fares.get(i).setTypeOfJourney(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Ftnt")) {
+                		fares.get(i).setFootnote1(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Rtg No")) {
+                		fares.get(i).setRtgno(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Rule No")) {
+                		fares.get(i).setRuleno(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Curr")) {
+                		fares.get(i).setCurrency(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Base Amt")) {
+                		fares.get(i).setAmount(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Target AIF")) {
+                		fares.get(i).setAif(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Travel Start")) {
+                		if(o != null && !String.valueOf(o).contentEquals("")) {
+	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+	                		fares.get(i).setTravelStart(toZonedDateTime(date1));
+                		}
+                	}
+                	else if(header.contentEquals("Travel End")) {
+                		if(o != null && !String.valueOf(o).contentEquals("")) {
+	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+	                		fares.get(i).setTravelEnd(toZonedDateTime(date1));
+                		}
+                	}
+                	else if(header.contentEquals("Sales Start")) {
+                		if(o != null && !String.valueOf(o).contentEquals("")) {
+	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+	                		fares.get(i).setSaleStart(toZonedDateTime(date1));
+                		}
+                	}
+                	else if(header.contentEquals("Sales End")) {
+                		if(o != null && !String.valueOf(o).contentEquals("")) {
+	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+	                		fares.get(i).setSaleEnd(toZonedDateTime(date1));
+                		}
+                	}
+                	else if(header.contentEquals("Comment")) {
+                		fares.get(i).setComment(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Travel Complete")) {
+                		if(o != null && !String.valueOf(o).contentEquals("")) {
+	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+	                		fares.get(i).setTravelComplete(toZonedDateTime(date1));
+                		}
+                	}
+                	else if(header.contentEquals("Travel Complete Indicator")) {
+                		fares.get(i).setTravelCompleteIndicator(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Ratesheet Comment")) {
+                		fares.get(i).setRatesheetComment(String.valueOf(o));
+                	}
                 	i++;
                 }
             }
-//			Iterator<Row> iterator = datatypeSheet.iterator();
-//			iterator.next();
-//			while (iterator.hasNext()) {
-//                Row currentRow = iterator.next();
-//                Iterator<Cell> cellIterator = currentRow.iterator();
-//
-//                WorkPackageFare wpFare = new WorkPackageFare();
-//                TariffNumber tariffNumber = new TariffNumber();
-//                wpFare.setTariffNumber(tariffNumber);
-//                
-//                Cell currentCell = currentRow.getCell(cell);
-//                //for(int cell=1;cell<=30;cell++) {
-//                
-//                //}
-//			}
-			
-			/*
-			Workbook workbook = new XSSFWorkbook(input);
-			Sheet datatypeSheet = workbook.getSheetAt(0);	
-			
-			datatypeSheet.getRow(1).getCell(1).getStringCellValue();
-			
-			Iterator<Row> iterator = datatypeSheet.iterator();
-			iterator.next();
-			
 
-            List<WorkPackageFare> workPackageFares = new ArrayList<WorkPackageFare>();
-			
-            while (iterator.hasNext()) {
-                Row currentRow = iterator.next();
-                Iterator<Cell> cellIterator = currentRow.iterator();
-
-                WorkPackageFare wpFare = new WorkPackageFare();
-                TariffNumber tariffNumber = new TariffNumber();
-                wpFare.setTariffNumber(tariffNumber);
-                for(int cell=1;cell<=30;cell++) {
-                    Cell currentCell = currentRow.getCell(cell);
-
-                    String value = "";
-                    try {
-                    		value = getCellValueAsString(currentCell);
-                    }catch(Exception e) {
-                    	
-                    }
-//                    System.out.println("CELL "+cell+" : "+value);
-                    if(cell == 1) {
-                    		wpFare.setStatus(value);
-                    }
-                    else if(cell == 2) {
-	                		wpFare.setCarrier(value);
-	                }
-                    else if(cell == 3) {
-	                		wpFare.setAction(value);
-	                }
-                    else if(cell == 4) {
-                    	tariffNumber.setTarNo(value);
-	                }
-                    else if(cell == 5) {
-                    	tariffNumber.setTarCd(value);
-	                }
-                    else if(cell == 6) {
-                    	tariffNumber.setGlobal(value);
-	                }
-                    else if(cell == 7) {
-	                		wpFare.setOrigin(value);
-	                }
-                    else if(cell == 8) {
-	                		wpFare.setDestination(value);
-	                }
-                    else if(cell == 9) {
-                			wpFare.setFareBasis(value);
-                    }
-                    else if(cell == 10) {
-	            			wpFare.setBookingClass(value);
-	                }
-                    else if(cell == 11) {
-	            			wpFare.setCabin(value);
-	                }
-                    else if(cell == 12) {
-            				wpFare.setTypeOfJourney(value);	
-                    }
-                    else if(cell == 13) {
-	        				wpFare.setFootnote1(value);	
-	                }
-                    else if(cell == 14) {
-	        				wpFare.setRtgno(value);	
-	                }
-                    else if(cell == 15) {
-	        				wpFare.setRuleno(value);	
-	                }
-                    else if(cell == 16) {
-	        				wpFare.setCurrency(value);	
-	                }
-                    else if(cell == 17) {
-	        				wpFare.setAmount(value);	
-	                }
-                    else if(cell == 18) {
-	        				wpFare.setAif(value);	
-	                }
-                    else if(cell == 19) {
-	                    	wpFare.setTravelStart(ZonedDateTime.now());
-	                }
-                    else if(cell == 20) {
-                    		wpFare.setTravelEnd(ZonedDateTime.now());
-	                }
-                    else if(cell == 21) {
-                    		wpFare.setSaleStart(ZonedDateTime.now());
-	                }
-                    else if(cell == 22) {
-                    		wpFare.setSaleEnd(ZonedDateTime.now());
-	                }
-                    else if(cell == 23) {
-                    		wpFare.setComment(value);
-	                }
-                    else if(cell == 24) {
-                    		wpFare.setTravelComplete(ZonedDateTime.now());
-	                }
-                    else if(cell == 25) {
-                    		wpFare.setTravelCompleteIndicator(value);
-	                }
-                    else if(cell == 26) {
-                    		wpFare.setRatesheetComment(value);
-	                }
-                }
-                workPackageFares.add(wpFare);
-            }			
-            
-//            workPackage = workPackageService.findOne(workPackage.getId());
-//            workPackage.getFareSheet().get(0).getFares().addAll(workPackageFares);
-            workPackage.getFareSheet().get(0).getFares().addAll(workPackageFares);
+            workPackage.getFareSheet().get(importIndex).getFares().addAll(fares);
             workPackage = workPackageService.save(workPackage);
-            */
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1008,6 +1014,8 @@ public class WorkPackageResource {
     	
     	WorkPackage wp = workPackageService.findOne(workPackage.getId());
         List<WorkPackageFare> fares = wp.getFareSheet().get(workPackage.getExportIndex()).getFares();
+
+        DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy"); 
         for(int i=0; i<fares.size(); i++) {
         	putValue(data.get("Status"), fares.get(i).getStatus());
         	putValue(data.get("Carrier"), fares.get(i).getCarrier());
@@ -1027,12 +1035,14 @@ public class WorkPackageResource {
         	putValue(data.get("Curr"), fares.get(i).getCurrency());
         	putValue(data.get("Base Amt"), fares.get(i).getAmount());
         	putValue(data.get("Target AIF"), fares.get(i).getAif());
-        	putValue(data.get("Travel Start"), fares.get(i).getTravelStart() != null ? fares.get(i).getTravelStart().toString() : null);
-        	putValue(data.get("Travel End"), fares.get(i).getTravelEnd() != null ? fares.get(i).getTravelEnd().toString() : null);
-        	putValue(data.get("Sales Start"), fares.get(i).getSaleStart() != null ? fares.get(i).getSaleStart().toString() : null);
-        	putValue(data.get("Sales End"), fares.get(i).getSaleEnd() != null ? fares.get(i).getSaleEnd().toString() : null);
+//        	Date.from(
+        	
+        	putValue(data.get("Travel Start"), fares.get(i).getTravelStart() != null ? dfFull.format(Date.from(fares.get(i).getTravelStart().toInstant())) : null);
+        	putValue(data.get("Travel End"), fares.get(i).getTravelEnd() != null ? dfFull.format(Date.from(fares.get(i).getTravelEnd().toInstant())) : null);
+        	putValue(data.get("Sales Start"), fares.get(i).getSaleStart() != null ? dfFull.format(Date.from(fares.get(i).getSaleStart().toInstant())) : null);
+        	putValue(data.get("Sales End"), fares.get(i).getSaleEnd() != null ? dfFull.format(Date.from(fares.get(i).getSaleEnd().toInstant())) : null);
         	putValue(data.get("Comment"), fares.get(i).getComment());
-        	putValue(data.get("Travel Complete"), fares.get(i).getTravelComplete() != null ? fares.get(i).getTravelComplete().toString() : null);
+        	putValue(data.get("Travel Complete"), fares.get(i).getTravelComplete() != null ? dfFull.format(Date.from(fares.get(i).getTravelComplete().toInstant())): null);
         	putValue(data.get("Travel Complete Indicator"), fares.get(i).getTravelCompleteIndicator());
         	putValue(data.get("Ratesheet Comment"), fares.get(i).getRatesheetComment());
         }
@@ -1543,7 +1553,11 @@ public class WorkPackageResource {
     		DateFormat dfFull = new SimpleDateFormat("yyyy"); // Just the year, with 4 digits
     		
     		Counter c = counterRepository.findOneByIdAndYear("workpackageId", dfFull.format(Calendar.getInstance().getTime()));
-    		
+    		if(c == null) {
+    			c.setSequenceValue(0);
+    			c.setYear(dfFull.format(Calendar.getInstance().getTime()));
+    			c = counterRepository.save(c);
+    		}
     		NumberFormat nf = new DecimalFormat("00000");
         	c.setSequenceValue(c.getSequenceValue()+1);
         	c = counterRepository.save(c);
@@ -1819,33 +1833,89 @@ public class WorkPackageResource {
     	workPackage.setValidation(null);
     	workPackage = workPackageService.save(workPackage);
 	    
-    	if(workPackage.isValidate()) {
+//    	if(workPackage.isValidate()) {
     		WorkPackage.Validation validation = new WorkPackage.Validation();
     		
-    		List<WorkPackage.Validation.Tab> tabs = new ArrayList<WorkPackage.Validation.Tab>();
-	    		WorkPackage.Validation.Tab tab1 = new WorkPackage.Validation.Tab();
-		    		tab1.setName("Fare");
+    		
+			int errorsCount = 0;
+			int warningsCount = 0;
+			List<WorkPackage.Validation.Tab> tabs = new ArrayList<WorkPackage.Validation.Tab>();
+			for(WorkPackageFareSheet wpfs : workPackage.getFareSheet()) {
+				WorkPackage.Validation.Tab tab1 = new WorkPackage.Validation.Tab();
+		    		tab1.setName(wpfs.getSpecifiedFaresName());
+		    		
 		    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
 		    		
-		    			//List Error
-			    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
-			    		err1.setMessage("ERROR 1");
-			    		errors.add(err1);
-			    		
+			    		List<WorkPackageFare> fares = wpfs.getFares();
+						for(WorkPackageFare fare : fares) {
+							if(fare.getTariffNumber() == null) {
+								//List Error
+					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setMessage("Tariff Number is required");
+					    		errors.add(err1);
+							}
+							else if(fare.getOrigin() == null && fare.getOrigin().contentEquals("")) {
+								//List Error
+					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setMessage("Origin is required");
+					    		errors.add(err1);
+							}
+						}
+						
 		    		tab1.setError(errors);
 		    		
 		    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
-		    		
-			    		//List Warning
-			    		WorkPackage.Validation.Tab.Error warn1 = new WorkPackage.Validation.Tab.Error();
-			    		warn1.setMessage("WARNING 1");
-			    		warnings.add(err1);
-			    		
-		    		tab1.setWarning(warnings);
-	    		tabs.add(tab1);
+//		    		
+//			    		//List Warning
+//			    		WorkPackage.Validation.Tab.Error warn1 = new WorkPackage.Validation.Tab.Error();
+//			    		warn1.setMessage("WARNING 1");
+//			    		warnings.add(warn1);
+//			    		
+//		    		tab1.setWarning(warnings);
+		    		errorsCount += errors.size();
+		    		warningsCount += warnings.size();
+		    	if(errors.size() > 0 || warnings.size() > 0) {
+		    		tabs.add(tab1);
+		    	}
+			}
+			
+    		
+//	    		WorkPackage.Validation.Tab tab1 = new WorkPackage.Validation.Tab();
+//		    		tab1.setName("Fare");
+//		    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
+//		    		
+//		    			//List Error
+//			    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+//			    		err1.setMessage("ERROR 1");
+//			    		errors.add(err1);
+//			    		
+//		    		tab1.setError(errors);
+//		    		
+//		    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
+//		    		
+//			    		//List Warning
+//			    		WorkPackage.Validation.Tab.Error warn1 = new WorkPackage.Validation.Tab.Error();
+//			    		warn1.setMessage("WARNING 1");
+//			    		warnings.add(warn1);
+//			    		
+//		    		tab1.setWarning(warnings);
+//	    		tabs.add(tab1);
+//	    		
+//	    		WorkPackage.Validation.Tab tab2 = new WorkPackage.Validation.Tab();
+//		    		tab2.setName("Attachments");
+//		    		List<WorkPackage.Validation.Tab.Error> error2 = new ArrayList<>();
+//			    		
+//		    			WorkPackage.Validation.Tab.Error e = new WorkPackage.Validation.Tab.Error();
+//			    		e.setMessage("Worksheet 'Attachments' cannot be empty");
+//			    		error2.add(e);
+//			    		
+//		    		tab2.setError(error2);
+//	    		tabs.add(tab2);
     		validation.setTab(tabs);
+    		validation.setErrorsCount(errorsCount);
+    		validation.setWarningsCount(warningsCount);
     		workPackage.setValidation(validation);
-    	}
+//    	}
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(workPackage));    	
     }
     

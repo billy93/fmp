@@ -49,9 +49,25 @@
 <!-- 		    		    <li> -->
 <!-- 		    		    	<a ui-sref="yqyr-query" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> YQ/YR Query </a> -->
 <!-- 		    		    </li> -->
+						<li>
+		    		    	<a ui-sref="routingquery" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Routing Query </a>
+		    		    </li>
 		    		</ul>
 		    	</div>
 		    	<div class="tooltip">AFD Query</div>
+		    </li>
+		    <li class="menu-list has-sub">
+		    	<a>
+		    		<i class="fa fa-file-text"></i><span>Competitor Monitoring</span>
+		    	</a>
+		    	<div class="sub-menu">
+		    		<ul>
+		    		    <li>
+		    		    	<a ui-sref="competitor-monitoring" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Competitor Monitoring</a>
+		    		    </li>
+		    		</ul>
+		    	</div>
+		    	<div class="tooltip">Competitor Monitoring</div>
 		    </li>
 		    <li class="menu-list" ng-click="vm.toggleMenu($event)">
 		    	<a href="#" class="linkClick">
@@ -119,7 +135,7 @@
 		    </li>
 		    <li class="menu-list has-sub" ng-click="vm.toggleMenu($event)">
 		    	<a>
-		    		<i class="fa fa-list"></i><span>ATPCO Entities</span>
+		    		<i class="fa fa-archive"></i><span>ATPCO Entities</span>
 		    	</a>
 		    	<div class="sub-menu">
 		    		<ul>
