@@ -273,59 +273,59 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 	
 	@Override
 	public Page<RoutingQuery> findCustomJoin(RoutingQueryParam param, Pageable pageable) {
-		if((param.getEntryPoint() == null || param.getEntryPoint().isEmpty())
-				&& (param.getExitPoint() == null || param.getExitPoint().isEmpty())) 
-		{
-			return findCustom(param, pageable);
-		} else {
-			List<AggregationOperation> aggregationOperations = new ArrayList<>();
-			
-			aggregationOperations.add(new AggregationOperation() {
-				@Override
-				public DBObject toDBObject(AggregationOperationContext context) {
-					BasicDBObject match = new BasicDBObject();
-					BasicDBObject and = new BasicDBObject();
-					List<BasicDBObject> queries = new ArrayList<>();
-					
-					if (param.getTarNo() != null && !param.getTarNo().isEmpty()) {
-						BasicDBObject linkNo = new BasicDBObject();
-						linkNo.append("tar_no", param.getTarNo());
-						queries.add(linkNo);
-					}
-
-					if (param.getCarrier() != null && !param.getCarrier().isEmpty()) {
-						BasicDBObject cxr = new BasicDBObject();
-						cxr.append("cxr_cd", param.getCarrier());
-						queries.add(cxr);
-					}
-
-					if (param.getRoutingNo() != null && !param.getRoutingNo().isEmpty()) {
-						BasicDBObject rtg = new BasicDBObject();
-						rtg.append("rtg_no", param.getRoutingNo());
-						queries.add(rtg);
-					}
-					
-//					if (param.getEffectiveDateFrom() != null && param.getEffectiveDateTo() != null) {
-//						BasicDBObject effectiveDate = new BasicDBObject();
-//						effectiveDate.append("dates_effective", BasicDBObjectBuilder.start("$gte", param.getEffectiveDateFrom()).add("$lte", param.getEffectiveDateTo()).get());
-//					} else if(param.getEffectiveDateFrom() != null) {
-//						BasicDBObject effectiveDate = new BasicDBObject();
-//						effectiveDate.append("dates_effective", new BasicDBObject("$gte", param.getEffectiveDateFrom()));
-//					} else if(param.getEffectiveDateTo() != null) {
-//						BasicDBObject effectiveDate = new BasicDBObject();
-//						effectiveDate.append("dates_effective", new BasicDBObject("$lte", param.getEffectiveDateTo()));
-//					}
-					
-					if (queries.size() > 0) {
-						and.append("$and", queries);
-					}
-					
-					match.append("$match", and);
-					
-					return match;
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject match = new BasicDBObject();
+				BasicDBObject and = new BasicDBObject();
+				List<BasicDBObject> queries = new ArrayList<>();
+				
+				if (param.getTarNo() != null && !param.getTarNo().isEmpty()) {
+					BasicDBObject linkNo = new BasicDBObject();
+					linkNo.append("tar_no", param.getTarNo());
+					queries.add(linkNo);
 				}
-			});
-			
+
+				if (param.getCarrier() != null && !param.getCarrier().isEmpty()) {
+					BasicDBObject cxr = new BasicDBObject();
+					cxr.append("cxr_cd", param.getCarrier());
+					queries.add(cxr);
+				}
+
+				if (param.getRoutingNo() != null && !param.getRoutingNo().isEmpty()) {
+					BasicDBObject rtg = new BasicDBObject();
+					rtg.append("rtg_no", param.getRoutingNo());
+					queries.add(rtg);
+				}
+				
+				if (param.getEffectiveDateFrom() != null && param.getEffectiveDateTo() != null) {
+					BasicDBObject effectiveDate = new BasicDBObject();
+					effectiveDate.append("dates_effective", BasicDBObjectBuilder.start("$gte", param.getEffectiveDateFrom()).add("$lte", param.getEffectiveDateTo()).get());
+					queries.add(effectiveDate);
+				} else if(param.getEffectiveDateFrom() != null) {
+					BasicDBObject effectiveDate = new BasicDBObject();
+					effectiveDate.append("dates_effective", new BasicDBObject("$gte", param.getEffectiveDateFrom()));
+					queries.add(effectiveDate);
+				} else if(param.getEffectiveDateTo() != null) {
+					BasicDBObject effectiveDate = new BasicDBObject();
+					effectiveDate.append("dates_effective", new BasicDBObject("$lte", param.getEffectiveDateTo()));
+					queries.add(effectiveDate);
+				}
+				
+				if (queries.size() > 0) {
+					and.append("$and", queries);
+				}
+				
+				match.append("$match", and);
+				
+				return match;
+			}
+		});
+		
+		if((param.getEntryPoint() != null && !param.getEntryPoint().isEmpty()) || (param.getExitPoint() != null && !param.getExitPoint().isEmpty())) {
+			log.debug("masuk");
 			aggregationOperations.add(new AggregationOperation() {
 				@Override
 				public DBObject toDBObject(AggregationOperationContext context) {
@@ -345,16 +345,22 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 					query.append("from", "Full_Map_Routing_Details");
 					query.append("let", new BasicDBObject("linkNo", "$header.link_no").append("batchNumber", "$header.batch_number"));
 					
+					List<BasicDBObject> orPointList = new ArrayList<>();
+					if((param.getEntryPoint() != null && !param.getEntryPoint().isEmpty()) && (param.getExitPoint() != null && !param.getExitPoint().isEmpty())) {
+						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", 1), new BasicDBObject("city_1_name", param.getEntryPoint()))));
+						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", "X"), new BasicDBObject("city_1_name", param.getExitPoint()))));
+					} else if(param.getEntryPoint() != null && !param.getEntryPoint().isEmpty()) {
+						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", 1), new BasicDBObject("city_1_name", param.getEntryPoint()))));
+					} else if(param.getExitPoint() != null && !param.getExitPoint().isEmpty()) {
+						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", "X"), new BasicDBObject("city_1_name", param.getExitPoint()))));
+					}
+					
 					BasicDBObject match = new BasicDBObject();
 					BasicDBObject and = new BasicDBObject();
 					and.append("$and", Arrays.asList(
 							new BasicDBObject("$expr", new BasicDBObject("$eq", Arrays.asList("$batch_number", "$$batchNumber"))),
 							new BasicDBObject("$expr", new BasicDBObject("$eq", Arrays.asList("$link_no", "$$linkNo")))
-//							new BasicDBObject("$or", Arrays.asList(
-//									new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", 1), new BasicDBObject("city_1_name", param.getEntryPoint()))),
-//									new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", "X"), new BasicDBObject("city_1_name", param.getExitPoint())))
-//								)
-//							)
+//							new BasicDBObject("$or", orPointList)
 						)
 					);
 					match.append("$match", and);
@@ -429,24 +435,27 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 					return project;
 				}
 			});
-			
-			Aggregation aggregation = newAggregation(aggregationOperations);
-			
-			SkipOperation skip = new SkipOperation(pageable.getPageNumber() * pageable.getPageSize());
-			aggregationOperations.add(skip);
-			
-			LimitOperation limit = new LimitOperation(pageable.getPageSize());
-			aggregationOperations.add(limit);
-		
-			Aggregation aggregationPagination = newAggregation(aggregationOperations);
-			
-			log.debug("aggregation "+aggregation);
-			log.debug("ambil data mulai");
-			List<RoutingQuery> result = mongoTemplate.aggregate(aggregationPagination, "Full_Map_Routing_Header", RoutingQuery.class).getMappedResults();
-			log.debug("routingqueries "+result);
-			log.debug("ambil data selesai");
-			
-			return new PageImpl<>(result, pageable, mongoTemplate.aggregate(aggregation, "Full_Map_Routing_Header", RoutingQuery.class).getMappedResults().size());
 		}
+		
+		
+		Aggregation aggregation = newAggregation(aggregationOperations);
+		SkipOperation skip = new SkipOperation(pageable.getPageNumber() * pageable.getPageSize());
+		aggregationOperations.add(skip);
+		LimitOperation limit = new LimitOperation(pageable.getPageSize());
+		aggregationOperations.add(limit);
+		Aggregation aggregationPagination = newAggregation(aggregationOperations);
+		
+		log.debug("ambil data mulai");
+		log.debug(pageable.toString());
+		log.debug("aggregationPagination "+aggregationPagination);
+		log.debug("aggregation "+aggregation);
+		List<RoutingQuery> result = mongoTemplate.aggregate(aggregationPagination, RoutingQuery.class, RoutingQuery.class).getMappedResults();
+		long allResultCount = mongoTemplate.aggregate(aggregation, RoutingQuery.class, RoutingQuery.class).getMappedResults().size();
+		
+		log.debug("routingqueries "+result);
+		log.debug("allResultCount "+allResultCount);
+		log.debug("ambil data selesai");
+		
+		return new PageImpl<>(result, pageable, allResultCount);
 	}
 }
