@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterFareMatrix;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord1;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat03;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat05;
@@ -16,11 +17,18 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat15;
 import com.atibusinessgroup.fmp.domain.dto.AfdQuery;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord1FareClassInformation;
 import com.atibusinessgroup.fmp.domain.dto.CategoryObject;
+import com.atibusinessgroup.fmp.service.AtpcoMasterFareMatrixService;
 import com.atibusinessgroup.fmp.service.util.DateUtil;
 import com.atibusinessgroup.fmp.service.util.TypeConverterUtil;
 
 @Service
 public class AfdQueryMapper {
+	
+	private final AtpcoMasterFareMatrixService atpcoMasterFareMatrixService;
+	
+	public AfdQueryMapper(AtpcoMasterFareMatrixService atpcoMasterFareMatrixService) {
+		this.atpcoMasterFareMatrixService = atpcoMasterFareMatrixService;
+	}
 	
 	public AfdQuery convertAtpcoFare(AtpcoFare afare, AtpcoRecord1 record1, List<CategoryObject> cat03s, List<CategoryObject> cat05s, List<CategoryObject> cat06s, List<CategoryObject> cat07s, 
 			List<CategoryObject> cat14s, List<CategoryObject> cat15s, List<CategoryObject> footnote14s, List<CategoryObject> footnote15s, Date queryDateFrom, Date queryDateTo) {
@@ -32,6 +40,7 @@ public class AfdQueryMapper {
 		result.setSource(afare.getSource());
 		result.setSc("S");
 		result.setTariffNo(afare.getTariffNo());
+//		result.setTariffCode(tariffCode);
 		result.setCarrierCode(afare.getCarrierCode());
 		result.setOriginCity(afare.getOriginCity());
 		result.setOriginCountry(afare.getOriginCountry());
@@ -62,6 +71,11 @@ public class AfdQueryMapper {
 			
 			result.setSeason(record1.getSeasonType());
 			result.setFareType(record1.getFareType());
+			
+			if (result.getFareType() != null && !result.getFareType().isEmpty()) {
+				AtpcoMasterFareMatrix fareMatrix = atpcoMasterFareMatrixService.findOneByFareTypeCode(result.getFareType());
+				result.setCabin(fareMatrix.getCabinCode());
+			}
 		}
 		
 		//Rule attributes

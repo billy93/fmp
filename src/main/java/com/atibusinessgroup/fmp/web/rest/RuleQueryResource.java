@@ -185,7 +185,7 @@ public class RuleQueryResource {
 			}
 
 			if (dataTables.size() > 0) {
-				cat.setCatAttributes(atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), dataTables, CategoryType.RULE));
+				cat.setCatAttributes(atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), dataTables, CategoryType.RULE).getAttributes());
 			}
 
 			result.add(cat);
