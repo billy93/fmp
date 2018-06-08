@@ -3743,82 +3743,7 @@
                       
                       function onImportSuccess(result){
                     	  	alert('Import Success');
-                    	  	data = result;
-                    	  	data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
-                            data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
-                            data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
-                            data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
-                            data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
-                            data.lockedSince = DateUtils.convertDateTimeFromServer(data.lockedSince);
-                            data.saleDate = DateUtils.convertDateTimeFromServer(data.saleDate);
-                            
-                            if(data.fareSheet.length > 0){
-                            	for(var x=0;x<data.fareSheet.length;x++){
-                            		var fares = data.fareSheet[x].fares;
-                            		for(var y=0;y<fares.length;y++){
-    	                        		if(fares[y] != null){
-    	                        			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
-    	                        			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
-    	                        			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
-    	                        			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
-    	                        			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
-    	                        		}
-                            		}
-                            	}
-                            }
-                            
-                            if(data.addonFareSheet.length > 0){
-                            	for(var x=0;x<data.addonFareSheet.length;x++){
-                            		var fares = data.addonFareSheet[x].fares;
-                            		for(var y=0;y<fares.length;y++){
-    	                        		if(fares[y] != null){
-    	                        			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
-    	                        			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
-    	                        			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
-    	                        			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
-    	                        			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
-    	                        		}
-                            		}
-                            	}
-                            }
-                            
-                            if(data.marketFareSheet.length > 0){
-                            	for(var x=0;x<data.marketFareSheet.length;x++){
-                            		var fares = data.marketFareSheet[x].fares;
-                            		for(var y=0;y<fares.length;y++){
-    	                        		if(fares[y] != null){
-    	                        			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
-    	                        			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
-    	                        			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
-    	                        			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
-    	                        			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
-    	                        		}
-                            		}
-                            	}
-                            }
-                            
-                            
-                            if(data.discountFareSheet.length > 0){
-                            	for(var x=0;x<data.discountFareSheet.length;x++){
-                            		var fares = data.discountFareSheet[x].fares;
-                            		for(var y=0;y<fares.length;y++){
-    	                        		if(fares[y] != null){
-    	                        			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
-    	                        			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
-    	                        			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
-    	                        			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
-    	                        			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
-    	                        		}
-                            		}
-                            	}
-                            }
-                            vm.workPackage = data;
-//                    	  	vm.workPackage.filingDate = DateUtils.convertDateTimeFromServer(vm.workPackage.filingDate);
-//                    	  	vm.workPackage.createdDate = DateUtils.convertDateTimeFromServer(vm.workPackage.createdDate);
-                    	 // 	vm.workPackage.distributionDate = DateUtils.convertDateTimeFromServer(vm.workPackage.distributionDate);
-                         //vm.workPackage.discExpiryDate = DateUtils.convertDateTimeFromServer(vm.workPackage.discExpiryDate);
-                         //vm.workPackage.queuedDate = DateUtils.convertDateTimeFromServer(vm.workPackage.queuedDate);
-                         //vm.workPackage.lockedSince = DateUtils.convertDateTimeFromServer(vm.workPackage.lockedSince);
+                    	  	vm.mapWorkpackage(result);
                       }
                       
                       function onImportFailure(){
@@ -3829,6 +3754,107 @@
           }
       };
       
+      vm.importFareAddon = function ($file, index) {
+          if ($file) {
+              DataUtils.toBase64($file, function(base64Data) {
+                  $scope.$apply(function() {
+                      var testing = { 
+                    		  file : base64Data,
+                    		  fileContentType : $file.type
+                      };
+                      
+                      vm.workPackage.importFares = testing;
+                      vm.workPackage.importIndex = index;
+                      //send to backend
+                      
+                      WorkPackage.importFares(vm.workPackage, onImportSuccess, onImportFailure);
+                      
+                      function onImportSuccess(result){
+                  	  		alert('Import Success');
+                  	  		vm.mapWorkpackage(result);
+                    	  	
+                      }
+                      
+                      function onImportFailure(){
+                    	    alert('Import Failed');
+                      }
+                  });
+              });
+          }
+      };
+      
+      vm.mapWorkpackage = function(result){
+    	  data = result;
+  	  	  data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
+          data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+          data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
+          data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
+          data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
+          data.lockedSince = DateUtils.convertDateTimeFromServer(data.lockedSince);
+          data.saleDate = DateUtils.convertDateTimeFromServer(data.saleDate);
+          
+          if(data.fareSheet.length > 0){
+          	for(var x=0;x<data.fareSheet.length;x++){
+          		var fares = data.fareSheet[x].fares;
+          		for(var y=0;y<fares.length;y++){
+              		if(fares[y] != null){
+              			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
+              			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
+              			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
+              			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
+              			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+              		}
+          		}
+          	}
+          }
+          
+          if(data.addonFareSheet.length > 0){
+          	for(var x=0;x<data.addonFareSheet.length;x++){
+          		var fares = data.addonFareSheet[x].fares;
+          		for(var y=0;y<fares.length;y++){
+              		if(fares[y] != null){
+              			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
+              			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
+              			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
+              			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
+              			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+              		}
+          		}
+          	}
+          }
+          
+          if(data.marketFareSheet.length > 0){
+          	for(var x=0;x<data.marketFareSheet.length;x++){
+          		var fares = data.marketFareSheet[x].fares;
+          		for(var y=0;y<fares.length;y++){
+              		if(fares[y] != null){
+              			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
+              			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
+              			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
+              			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
+              			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+              		}
+          		}
+          	}
+          }
+          
+          
+          if(data.discountFareSheet.length > 0){
+          	for(var x=0;x<data.discountFareSheet.length;x++){
+          		var fares = data.discountFareSheet[x].fares;
+          		for(var y=0;y<fares.length;y++){
+              		if(fares[y] != null){
+              			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
+              			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
+              			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
+              			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
+              			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+              		}
+          		}
+          	}
+          }
+          vm.workPackage = data;
+      }
       vm.importFareDiscount = function ($file) {
           if ($file) {
               DataUtils.toBase64($file, function(base64Data) {
@@ -3918,6 +3944,45 @@
     	  vm.workPackage.exportIndex = index;
     	  WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
     		  WorkPackage.exportFares(vm.workPackage, onExportSuccess, onExportFailure);
+	    	  function onExportSuccess(result){
+	    		  var fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+      			var templateFilename = "Workorder_Fare.xlsx";
+      			var blob = b64toBlob(result.file, fileType);
+      			FileSaver.saveAs(blob, templateFilename);
+	    	  }
+	    	  function onExportFailure(){
+	    		  
+	    	  }    	 
+	    	}, function onSaveError(){
+	    		alert('An error occured, please try again');
+	    	}); 
+	       
+      }
+      
+      vm.exportFaresAddon = function(index){
+    	  /*
+    	  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-export-dialog.html',
+              controller: 'WorkPackageExportDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              resolve: {
+              }
+          }).result.then(function(workPackage) {
+//              	var params = {
+//              			id: workPackage.id
+//              	};
+//            	$state.go('work-package-detail', params);
+              //$state.go('work-package', null, { reload: 'work-package' });
+          }, function() {
+//              $state.go('work-package');
+          });
+    	  */
+    	  
+    	  vm.workPackage.exportIndex = index;
+    	  WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
+    		  WorkPackage.exportFaresAddon(vm.workPackage, onExportSuccess, onExportFailure);
 	    	  function onExportSuccess(result){
 	    		  var fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
       			var templateFilename = "Workorder_Fare.xlsx";
