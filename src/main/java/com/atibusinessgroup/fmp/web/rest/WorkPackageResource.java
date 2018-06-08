@@ -2974,43 +2974,43 @@ public class WorkPackageResource {
 						    		err1.setMessage("Ori is required");
 						    		errors.add(err1);						    		
 								}
-								if(fare.getWaiverDest() != null|| fare.getWaiverDest().contentEquals("")) {
+								if(fare.getWaiverDest() == null|| fare.getWaiverDest().contentEquals("")) {
 									//List Error
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Dest is required");
 						    		errors.add(err1);	
 								}
-								if(fare.getWaiverOriginalItinerary() != null|| fare.getWaiverOriginalItinerary().contentEquals("")) {
+								if(fare.getWaiverOriginalItinerary() == null|| fare.getWaiverOriginalItinerary().contentEquals("")) {
 									//List Error
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Original Itinerary Start is required");
 						    		errors.add(err1);	
 								}
-								if(fare.getWaiverOriginalBasicFare() != null|| fare.getWaiverOriginalBasicFare().contentEquals("")) {
+								if(fare.getWaiverOriginalBasicFare() == null|| fare.getWaiverOriginalBasicFare().contentEquals("")) {
 									//List Error
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Original Basic Fare is required");
 						    		errors.add(err1);	
 								}
-								if(fare.getWaiverCalculatedPn() != null|| fare.getWaiverCalculatedPn().contentEquals("")) {
+								if(fare.getWaiverCalculatedPn() == null|| fare.getWaiverCalculatedPn().contentEquals("")) {
 									//List Error
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Calculated PN is required");
 						    		errors.add(err1);	
 								}
-								if(fare.getWaiverOriginalPn() != null|| fare.getWaiverOriginalPn().contentEquals("")) {
+								if(fare.getWaiverOriginalPn() == null|| fare.getWaiverOriginalPn().contentEquals("")) {
 									//List Error
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Original PN   is required");
 						    		errors.add(err1);	
 								}
-								if(fare.getWaiverApprovedPn() != null|| fare.getWaiverApprovedPn().contentEquals("")) {
+								if(fare.getWaiverApprovedPn() == null|| fare.getWaiverApprovedPn().contentEquals("")) {
 									//List Error
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Aprrove PN is required");
 						    		errors.add(err1);	
 								}
-								if(fare.getWaiverTotalPax() != null|| fare.getWaiverTotalPax().contentEquals("")) {
+								if(fare.getWaiverTotalPax() == null|| fare.getWaiverTotalPax().contentEquals("")) {
 									//List Error
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Total Pax is required");
@@ -3071,43 +3071,43 @@ public class WorkPackageResource {
 						    		err1.setMessage("Ori is required");
 						    		errors.add(err1);						    		
 								}
-								if(fare.getWaiverDest() != null|| fare.getWaiverDest().contentEquals("")) {
+								if(fare.getWaiverDest() == null|| fare.getWaiverDest().contentEquals("")) {
 									//List Error
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Dest is required");
 						    		errors.add(err1);	
 								}
-								if(fare.getWaiverOriginalItinerary() != null|| fare.getWaiverOriginalItinerary().contentEquals("")) {
+								if(fare.getWaiverOriginalItinerary() == null|| fare.getWaiverOriginalItinerary().contentEquals("")) {
 									//List Error
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Original Itinerary Start is required");
 						    		errors.add(err1);	
 								}
-								if(fare.getWaiverOriginalBasicFare() != null|| fare.getWaiverOriginalBasicFare().contentEquals("")) {
+								if(fare.getWaiverOriginalBasicFare() == null|| fare.getWaiverOriginalBasicFare().contentEquals("")) {
 									//List Error
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Original Basic Fare is required");
 						    		errors.add(err1);	
 								}
-								if(fare.getWaiverCalculatedPn() != null|| fare.getWaiverCalculatedPn().contentEquals("")) {
+								if(fare.getWaiverCalculatedPn() == null|| fare.getWaiverCalculatedPn().contentEquals("")) {
 									//List Error
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Calculated PN is required");
 						    		errors.add(err1);	
 								}
-								if(fare.getWaiverOriginalPn() != null|| fare.getWaiverOriginalPn().contentEquals("")) {
+								if(fare.getWaiverOriginalPn() == null|| fare.getWaiverOriginalPn().contentEquals("")) {
 									//List Error
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Original PN   is required");
 						    		errors.add(err1);	
 								}
-								if(fare.getWaiverApprovedPn() != null|| fare.getWaiverApprovedPn().contentEquals("")) {
+								if(fare.getWaiverApprovedPn() == null|| fare.getWaiverApprovedPn().contentEquals("")) {
 									//List Error
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Aprrove PN is required");
 						    		errors.add(err1);	
 								}
-								if(fare.getWaiverTotalPax() != null|| fare.getWaiverTotalPax().contentEquals("")) {
+								if(fare.getWaiverTotalPax() == null|| fare.getWaiverTotalPax().contentEquals("")) {
 									//List Error
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Total Pax is required");
