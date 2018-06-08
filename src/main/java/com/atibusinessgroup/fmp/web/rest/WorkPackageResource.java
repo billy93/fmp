@@ -1833,33 +1833,89 @@ public class WorkPackageResource {
     	workPackage.setValidation(null);
     	workPackage = workPackageService.save(workPackage);
 	    
-    	if(workPackage.isValidate()) {
+//    	if(workPackage.isValidate()) {
     		WorkPackage.Validation validation = new WorkPackage.Validation();
     		
-    		List<WorkPackage.Validation.Tab> tabs = new ArrayList<WorkPackage.Validation.Tab>();
-	    		WorkPackage.Validation.Tab tab1 = new WorkPackage.Validation.Tab();
-		    		tab1.setName("Fare");
+    		
+			int errorsCount = 0;
+			int warningsCount = 0;
+			List<WorkPackage.Validation.Tab> tabs = new ArrayList<WorkPackage.Validation.Tab>();
+			for(WorkPackageFareSheet wpfs : workPackage.getFareSheet()) {
+				WorkPackage.Validation.Tab tab1 = new WorkPackage.Validation.Tab();
+		    		tab1.setName(wpfs.getSpecifiedFaresName());
+		    		
 		    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
 		    		
-		    			//List Error
-			    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
-			    		err1.setMessage("ERROR 1");
-			    		errors.add(err1);
-			    		
+			    		List<WorkPackageFare> fares = wpfs.getFares();
+						for(WorkPackageFare fare : fares) {
+							if(fare.getTariffNumber() == null) {
+								//List Error
+					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setMessage("Tariff Number is required");
+					    		errors.add(err1);
+							}
+							else if(fare.getOrigin() == null && fare.getOrigin().contentEquals("")) {
+								//List Error
+					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setMessage("Origin is required");
+					    		errors.add(err1);
+							}
+						}
+						
 		    		tab1.setError(errors);
 		    		
 		    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
-		    		
-			    		//List Warning
-			    		WorkPackage.Validation.Tab.Error warn1 = new WorkPackage.Validation.Tab.Error();
-			    		warn1.setMessage("WARNING 1");
-			    		warnings.add(err1);
-			    		
-		    		tab1.setWarning(warnings);
-	    		tabs.add(tab1);
+//		    		
+//			    		//List Warning
+//			    		WorkPackage.Validation.Tab.Error warn1 = new WorkPackage.Validation.Tab.Error();
+//			    		warn1.setMessage("WARNING 1");
+//			    		warnings.add(warn1);
+//			    		
+//		    		tab1.setWarning(warnings);
+		    		errorsCount += errors.size();
+		    		warningsCount += warnings.size();
+		    	if(errors.size() > 0 || warnings.size() > 0) {
+		    		tabs.add(tab1);
+		    	}
+			}
+			
+    		
+//	    		WorkPackage.Validation.Tab tab1 = new WorkPackage.Validation.Tab();
+//		    		tab1.setName("Fare");
+//		    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
+//		    		
+//		    			//List Error
+//			    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+//			    		err1.setMessage("ERROR 1");
+//			    		errors.add(err1);
+//			    		
+//		    		tab1.setError(errors);
+//		    		
+//		    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
+//		    		
+//			    		//List Warning
+//			    		WorkPackage.Validation.Tab.Error warn1 = new WorkPackage.Validation.Tab.Error();
+//			    		warn1.setMessage("WARNING 1");
+//			    		warnings.add(warn1);
+//			    		
+//		    		tab1.setWarning(warnings);
+//	    		tabs.add(tab1);
+//	    		
+//	    		WorkPackage.Validation.Tab tab2 = new WorkPackage.Validation.Tab();
+//		    		tab2.setName("Attachments");
+//		    		List<WorkPackage.Validation.Tab.Error> error2 = new ArrayList<>();
+//			    		
+//		    			WorkPackage.Validation.Tab.Error e = new WorkPackage.Validation.Tab.Error();
+//			    		e.setMessage("Worksheet 'Attachments' cannot be empty");
+//			    		error2.add(e);
+//			    		
+//		    		tab2.setError(error2);
+//	    		tabs.add(tab2);
     		validation.setTab(tabs);
+    		validation.setErrorsCount(errorsCount);
+    		validation.setWarningsCount(warningsCount);
     		workPackage.setValidation(validation);
-    	}
+//    	}
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(workPackage));    	
     }
     
