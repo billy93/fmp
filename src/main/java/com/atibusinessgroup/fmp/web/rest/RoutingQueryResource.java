@@ -11,6 +11,7 @@ import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -92,9 +93,10 @@ public class RoutingQueryResource {
      */
     @PostMapping("/routingqueries")
     @Timed
-    public ResponseEntity<List<RoutingQuery>> getAllRoutingqueries(@RequestBody RoutingQueryParam routingQueryParam, Pageable pageable) {
+    public ResponseEntity<List<RoutingQuery>> getAllRoutingqueries(@RequestBody RoutingQueryParam routingQueryParam) {
         log.debug("REST request to get a page of Routingqueries");
         log.debug(routingQueryParam.toString());
+        Pageable pageable = new PageRequest(routingQueryParam.getPage(), routingQueryParam.getSize());
 //        Page<Routingquery> page = routingQueryService.findAll(pageable);
 //        Page<RoutingQuery> page = routingQueryService.findCustom(routingQueryParam, pageable);
         Page<RoutingQuery> page = routingQueryService.findCustomJoin(routingQueryParam, pageable);

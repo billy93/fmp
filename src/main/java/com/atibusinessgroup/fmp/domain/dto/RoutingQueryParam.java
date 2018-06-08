@@ -13,6 +13,8 @@ public class RoutingQueryParam {
 	private Date effectiveDateFrom;
 	private Date effectiveDateTo;
 	private boolean showRoutesMaps;
+	private int page;
+	private int size;
 	
 	public RoutingQueryParam() {
 		// TODO Auto-generated constructor stub
@@ -90,12 +92,30 @@ public class RoutingQueryParam {
 		this.showRoutesMaps = showRoutesMaps;
 	}
 
+	public int getPage() {
+		return page;
+	}
+
+	public void setPage(int page) {
+		this.page = page;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
+	}
+
 	@Override
 	public String toString() {
 		return "RoutingQueryParam [src=" + src + ", tarNo=" + tarNo + ", carrier=" + carrier + ", routingNo="
 				+ routingNo + ", entryPoint=" + entryPoint + ", exitPoint=" + exitPoint + ", effectiveDateFrom="
 				+ effectiveDateFrom + ", effectiveDateTo=" + effectiveDateTo + ", showRoutesMaps=" + showRoutesMaps
-				+ "]";
+				+ ", page=" + page + ", size=" + size + "]";
 	}
+
+	
 	
 }

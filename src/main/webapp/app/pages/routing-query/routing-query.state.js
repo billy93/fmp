@@ -37,6 +37,19 @@
                 itemsPerPage: "10",
             },
             resolve: {
+            	queryParams: [function() {
+            		return {
+            			src: null,
+            			tarNo: null,
+            			carrier: null,
+            			routingNo: null,
+            			entryPoint: null,
+            			exitPoint: null,
+            			effectiveDateFrom: null,
+            			effectiveDateTo: null,
+            			showRoutesMaps: false
+                	}
+            	}],
                 pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
                     return {
                         page: PaginationUtil.parsePage($stateParams.page),

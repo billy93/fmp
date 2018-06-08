@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('RoutingqueryController', RoutingqueryController);
 
-    RoutingqueryController.$inject = ['$state', '$stateParams', 'Routingquery', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams'];
+    RoutingqueryController.$inject = ['$state', '$stateParams', 'Routingquery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', 'pagingParams'];
 
-    function RoutingqueryController($state, $stateParams, Routingquery, ParseLinks, AlertService, paginationConstants, pagingParams) {
+    function RoutingqueryController($state, $stateParams, Routingquery, ParseLinks, AlertService, paginationConstants, queryParams, pagingParams) {
 
         var vm = this;
         
@@ -26,15 +26,11 @@
         vm.dateFormat = "yyyy-MM-dd";
         vm.openCalendar = openCalendar;
         
-//        if($stateParams.size != null || $stateParams.size != undefined){
-//        	vm.itemsPerPage = $stateParams.size;
-//        }
-//        else{
-//        	vm.itemsPerPage = "10";
-//        }
+        vm.queryParams = queryParams;
         
-        vm.clearFilter();
+        //vm.clearFilter();
         vm.loadAll();
+        console.log('initial');
 
         function loadAll () {
         	vm.queryParams.page= pagingParams.page - 1;

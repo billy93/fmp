@@ -26,7 +26,7 @@ public class RoutingQuery implements Serializable {
     @Field("link_no")
     private String linkNo;
 
-    @Field("src")
+    //@Field("src")
     private String src;
 
     @Field("cxr_cd")
