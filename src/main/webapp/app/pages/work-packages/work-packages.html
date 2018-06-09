@@ -6,10 +6,10 @@
 			<!-- table panel -->
 			<div class="panel">
 				<div class="panel-body">
-				
+
 					<!-- filter -->
 					<div class="filter-hero">
-						<div class="filter-label semibold show">Hide Filter</div>							
+						<div class="filter-label semibold show">Hide Filter</div>
 						<div class="filter-area">
 							<div class="clearfix">
 								<div class="pull-left w50 ph5px">
@@ -17,19 +17,19 @@
 										<div class="custom-label semibold">Review Level</div>
 										<div class="checkbox-wrapper">
 											<label>
-												<input type="checkbox" ng-model="vm.workPackageFilter.reviewLevel.lso">
+												<input type="checkbox" ng-disabled="vm.workPackageFilter.reviewLevel.lso!=true && vm.reviewLevelLSO==null" ng-model="vm.workPackageFilter.reviewLevel.lso">
 												LSO
 											</label>
 											<label>
-												<input type="checkbox" ng-model="vm.workPackageFilter.reviewLevel.ho">
+												<input type="checkbox" ng-disabled="vm.workPackageFilter.reviewLevel.ho!=true && vm.reviewLevelHO==null" ng-model="vm.workPackageFilter.reviewLevel.ho">
 												HO
 											</label>
 											<label>
-												<input type="checkbox" ng-model="vm.workPackageFilter.reviewLevel.distribution">
+												<input type="checkbox" ng-disabled="vm.workPackageFilter.reviewLevel.distribution!=true && vm.reviewLevelDISTRIBUTION==null" ng-model="vm.workPackageFilter.reviewLevel.distribution">
 												Distribution
 											</label>
 											<label>
-												<input type="checkbox" ng-model="vm.workPackageFilter.reviewLevel.routeManagement">
+												<input type="checkbox" ng-disabled="vm.workPackageFilter.reviewLevel.routeManagement!=true && vm.reviewLevelROUTEMANAGEMENT==null" ng-model="vm.workPackageFilter.reviewLevel.routeManagement">
 												Route Management
 											</label>
 										</div>
@@ -151,7 +151,7 @@
 									</div>
 								</div>
 							</div>
-						</div>							
+						</div>
 					</div>
 					<!-- end of filter -->
 
@@ -187,12 +187,12 @@
 												    	<a ui-sref="work-package.new({type:'waiver'})">Waiver Work Order</a>
 												    </li>
 												</ul>
-											</div>													
+											</div>
 											<button class="btn btn-default small" ng-click="vm.refresh()">Refresh</button>
 											<button class="btn btn-default small" ui-sref="work-package.export">Print/Export</button>
 											<button class="btn btn-default small">Discontinue</button>
 										</div>
-									</div>																						
+									</div>
 								</div>
 							</div>
 							<div class="table-responsive main-table">
@@ -224,7 +224,7 @@
 										</tr>
 									</thead>
 									<tbody ng-repeat="workPackage in vm.workPackages track by $index" >
-										<tr role="row" class="datatable-row" 
+										<tr role="row" class="datatable-row"
 											ng-click="vm.rowSelected($index, workPackage)">
 											<td class="text-right" ng-class="{selected: workPackage === vm.selectedRow, locked: workPackage.locked}">
 						                        <div class="btn-group edit-btn entities flex-btn-group-container">
@@ -251,7 +251,7 @@
 							                    			<tr class="sub-second-th">
 							                    				<th>Sheet</th>
 							                    				<th>Tour Code</th>
-							                    			</tr>			                    			
+							                    			</tr>
 							                    		</thead>
 							                    		<tbody>
 							                    			<tr ng-repeat="fareSheet in workPackage.fareSheet track by $index">
@@ -261,7 +261,7 @@
 							                    				</td>
 							                    			</tr>
 							                    		</tbody>
-							                    	</table>							                    	
+							                    	</table>
 						                    	</div>
 						                    </td>
 						                    <td>{{workPackage.reuseFrom}}</td>
@@ -277,7 +277,7 @@
 							                    			<tr class="sub-second-th">
 							                    				<th>Sheet</th>
 							                    				<th>Fare Type</th>
-							                    			</tr>			                    			
+							                    			</tr>
 							                    		</thead>
 							                    		<tbody>
 							                    			<tr ng-repeat="fareSheet in workPackage.fareSheet track by $index">
@@ -287,16 +287,16 @@
 							                    				</td>
 							                    			</tr>
 							                    		</tbody>
-							                    	</table>							                    	
+							                    	</table>
 						                    	</div>
-						                    	
+
 						                    	<table ng-if="workPackage.discount" class="sub-table">
 						                    		<thead>
 						                    			<tr><th  colspan="2"><center>Discount Fare</center></th></tr>
 						                    			<tr class="sub-second-th">
 						                    				<th>Sheet</th>
 						                    				<th>Fare Type</th>
-						                    			</tr>			                    			
+						                    			</tr>
 						                    		</thead>
 						                    		<tbody>
 						                    			<tr ng-repeat="fareSheet in workPackage.discountFareSheet track by $index">
@@ -307,14 +307,14 @@
 						                    			</tr>
 						                    		</tbody>
 						                    	</table>
-						                    	
+
 						                    	<table ng-if="workPackage.marketFares" class="sub-table">
 						                    		<thead>
 						                    			<tr><th  colspan="2"><center>Market Fare</center></th></tr>
 						                    			<tr class="sub-second-th">
 						                    				<th>Sheet</th>
 						                    				<th>Fare Type</th>
-						                    			</tr>			                    			
+						                    			</tr>
 						                    		</thead>
 						                    		<tbody>
 						                    			<tr ng-repeat="fareSheet in workPackage.marketFareSheet track by $index">
@@ -325,14 +325,14 @@
 						                    			</tr>
 						                    		</tbody>
 						                    	</table>
-						                    	
+
 						                    	<table ng-if="workPackage.waiverFares" class="sub-table">
 						                    		<thead>
 						                    			<tr><th  colspan="2"><center>Waiver Fare</center></th></tr>
 						                    			<tr class="sub-second-th">
 						                    				<th>Sheet</th>
 						                    				<th>Fare Type</th>
-						                    			</tr>			                    			
+						                    			</tr>
 						                    		</thead>
 						                    		<tbody>
 						                    			<tr ng-repeat="fareSheet in workPackage.addonFareSheet track by $index">
@@ -345,7 +345,7 @@
 						                    	</table>
 						                    </td>
 						                    <td>{{workPackage.createdDate | date:'medium'}}</td>
-						                    <td>{{workPackage.createdBy}}</td>						                    
+						                    <td>{{workPackage.createdBy}}</td>
 						                    <td>{{workPackage.lockedBy}}</td>
 						                    <td>{{workPackage.lockedSince | date:'medium'}}</td>
 						                    <td>{{workPackage.lastModifiedDate | date:'medium'}}</td>
@@ -369,11 +369,11 @@
 													<i class="fa fa-history"></i>History
 												</div>
 											</td>
-										</tr>										
-									</tbody>	
+										</tr>
+									</tbody>
 								</table>
 							</div>
-							
+
 							<div class="text-center">
 						        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
 						        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage"
@@ -394,7 +394,7 @@
 								      	<li class="next"><a href="#">Next</a></li>
 									</ul>
 								</div>
-							</div>								
+							</div>
 						</div>
 					</div>
 					<!-- end of table -->
