@@ -2875,8 +2875,10 @@
 							<div class="tab-pane" ng-class="{active:vm.currentTabMarketRules}">
 								<div class="action-btn-wrapper">
 				       				<div class="col-md-12 text-right no-pad">
-				       					<button ng-click="vm.addMarketRules()" class="btn btn-primary">Add</button>
+				       					<button ng-click="vm.downloadTemplate()" class="btn btn-primary">Download Market Rules Template</button>
+				     					<button ng-click="vm.addMarketRules()" class="btn btn-primary">Add</button>
 				       				</div>
+				       				
 				       			</div>
 				       			
 				       			<label class="full-ib md-bot-mar text-center empty" ng-if="!vm.workPackage.marketRulesData || vm.workPackage.marketRulesData.length == 0">
@@ -3408,7 +3410,6 @@
 							<div class="tab-pane" ng-class="{active:vm.currentTabAttachment}" ng-if="vm.workPackage.attachment">
 								<div class="action-btn-wrapper">
 				     				<div class="col-md-12 text-right no-pad">
-				     					<button ng-click="vm.downloadTemplate()" class="btn btn-primary">Download Market Rules Template</button>
 				     					<button ng-click="vm.addAttachment()" class="btn btn-primary">Add</button>
 				     				</div>
 				     			</div>
