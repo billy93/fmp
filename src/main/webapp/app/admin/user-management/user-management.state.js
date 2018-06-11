@@ -63,9 +63,6 @@
                                 resetKey: null, authorities: null
                             };
                         },
-                        reviewLevels: ['ReviewLevel', function(ReviewLevel) {
-                            return ReviewLevel.queryAll().$promise;
-                        }],
                         businessAreas: ['BusinessArea', function(BusinessArea) {
                             return BusinessArea.queryAll().$promise;
                         }]

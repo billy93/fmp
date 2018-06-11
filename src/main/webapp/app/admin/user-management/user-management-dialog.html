@@ -80,34 +80,33 @@
             <div class="input-group">
             	<input autocomplete="off" type="text" name="review_level" ng-model="vm.reviewLevel" class="form-control"
             		uib-typeahead="o as o.name for o in vm.reviewLevels | filter:{name:$viewValue} | limitTo:5" ng-required="vm.user.reviewLevels== undefined">
-            	<span class="input-group-addon add-agent">
-            		<i class="fa fa-plus" ng-click="vm.addReviewLevel()"></i>
+            	<span class="input-group-addon add-agent" ng-click="vm.addReviewLevel()">
+            		<i class="fa fa-plus"></i>
                 </span>
             </div>
            	<div class="multi-values">
-           		<label ng-repeat="reviewLevel in vm.user.reviewLevels  track by $index" ng-click="vm.removeReviewLevel($index)">{{reviewLevel}}<span class="delete"><i class="glyphicon glyphicon-remove-sign"></i></span></label>
+                <div class="agent-list-wrapper">
+                    <div class="agent-list" ng-repeat="reviewLevel in vm.user.reviewLevels  track by $index">
+                        <span>{{reviewLevel}}</span>
+                        <div class='remove-agent' ng-click="vm.removeReviewLevel($index)">
+                            <i class='fa fa-close'></i>
+                        </div>
+                    </div>
+                </div>
            	</div>
-           	
+
            	<div ng-show="editForm.review_level.$invalid">
 				<p class="help-block" ng-show="editForm.review_level.$error.required">
 					This field is required.</p>
 			</div>
         </div>
-        <div class="agent-list-wrapper mb1">
-           	<div class="agent-list" ng-repeat="reviewLevel in vm.user.reviewLevels">
-           		<span>{{reviewLevel}}</span>
-           		<div class='remove-agent' ng-click="vm.removeReviewLevel()">
-           			<i class='fa fa-close'></i>
-           		</div>
-           	</div>
-		</div>
 		<div class="form-group">
             <label class="control-label" for="field_businessArea">Business Area</label>
             <div class="input-group">
             	<input autocomplete="off" type="text" name="business_area" ng-model="vm.businessArea" class="form-control"
            			uib-typeahead="o as o.name for o in vm.businessAreas | filter:{name:$viewValue} | limitTo:5" ng-required="vm.user.businessAreas == undefined">
-            	<span class="input-group-addon add-agent">
-	            	<i class="fa fa-plus" ng-click="vm.addBusinessArea()"></i>
+            	<span class="input-group-addon add-agent" ng-click="vm.addBusinessArea()">
+	            	<i class="fa fa-plus"></i>
                 </span>
             </div>
            	<div class="agent-list-wrapper mb1">
@@ -117,20 +116,20 @@
 	           			<i class='fa fa-close'></i>
 	           		</div>
 	           	</div>
-			</div> 
+			</div>
            	<div ng-show="editForm.business_area.$invalid">
 				<p class="help-block" ng-show="editForm.business_area.$error.required">
 					This field is required.</p>
 			</div>
-        </div>  
+        </div>
         <div class="form-group">
-            <label class="control-label" for="field_department">Department</label>            
-			<select class="form-control" name="department" id="field_department" ng-model="vm.user.department" ng-options="x for x in vm.optionDepartment" required></select>   
-			
+            <label class="control-label" for="field_department">Department</label>
+			<select class="form-control" name="department" id="field_department" ng-model="vm.user.department" ng-options="x for x in vm.optionDepartment" required></select>
+
 			<div ng-show="editForm.department.$invalid">
 				<p class="help-block" ng-show="editForm.department.$error.required">
 					This field is required.</p>
-			</div>         
+			</div>
         </div>
         <div class="form-group">
 			<div class="checkbox-wrapper">
