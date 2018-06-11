@@ -27,8 +27,7 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 	@Override
 	public Page<WorkPackage> findCustom(WorkPackageFilter wpFilter, Pageable pageable) {
 		Query query = new Query(findByQuery(wpFilter)).with(pageable);	
-		log.debug("QUERY STRING PAGEABLE : {}", query.toString());
-		
+
 		List<WorkPackage> workPackages = mongoTemplate.find(query, WorkPackage.class);
 		
 		Page<WorkPackage> page = PageableExecutionUtils.getPage(
@@ -150,7 +149,6 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 	public List<WorkPackage> findCustom(WorkPackageFilter workPackageFilter) {
 		// TODO Auto-generated method stub
 		Query query = new Query(findByQuery(workPackageFilter));	
-		log.debug("QUERY STRING : {}", query.toString());
 		List<WorkPackage> workPackages = mongoTemplate.find(query, WorkPackage.class);
 
 		return workPackages;

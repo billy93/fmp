@@ -221,6 +221,7 @@
 											<th jh-sort-by="lockedSince" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Locked Since <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="lastModifiedDate" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Last Modified Date <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="lastModifiedBy" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Last Modified By <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="groupFare" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Group Fare<span class="glyphicon glyphicon-sort"></span></th>
 										</tr>
 									</thead>
 									<tbody ng-repeat="workPackage in vm.workPackages track by $index" >
@@ -350,6 +351,7 @@
 						                    <td>{{workPackage.lockedSince | date:'medium'}}</td>
 						                    <td>{{workPackage.lastModifiedDate | date:'medium'}}</td>
 						                    <td>{{workPackage.lastModifiedBy}}</td>
+						                    <td><input type="checkbox" disabled ng-model="workPackage.marketFareSheet[0].groupFares"/></td>
 										</tr>
 										<tr ng-show="vm.workPackageActionButton[$index]">
 											<td colspan="18" style="text-align: left !important; padding-left: 40px">
