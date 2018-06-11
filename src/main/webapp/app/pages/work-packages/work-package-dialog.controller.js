@@ -91,5 +91,29 @@
         function openCalendar (date) {
             vm.datePickerOpenStatus[date] = true;
         }
+        
+        vm.checkMarketRules = function(field){
+        	if(field == 'marketFares'){
+	        	if(vm.workPackage.marketFares){
+	        		vm.workPackage.addon = false;
+	        		vm.workPackage.marketRules = true;
+	        	}
+	        	else{
+	        		vm.workPackage.addon = true;
+	        		vm.workPackage.marketRules = false;
+	        	}
+        	} else if(field == 'addon'){
+            	if(vm.workPackage.addon){
+            		vm.workPackage.marketFares = false;
+            		vm.workPackage.marketRules = false;
+            	}
+            	else{
+            		vm.workPackage.marketFares = true;
+            		vm.workPackage.marketRules = true;
+            	}
+        	}
+        }
+        
+        
     }
 })();

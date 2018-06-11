@@ -1024,9 +1024,15 @@
 											</div>
 											<div class="pull-left w50 two-column">
 												<div class="form-group">
-													
+													<label>Version</label>
+													<select class="form-control" ng-model="workPackageSheet.version" ng-change="vm.changeVersion(workPackageSheet, workPackageSheet.version)" ng-init="vm.changeVersion(workPackageSheet, 'current')">
+														<option value='current'>Current</option>
+														<option ng-repeat="version in workPackageSheet.fareVersion track by $index" value="{{$index}}">
+															{{version.version}} - {{version.username}} - {{version.action}}
+														</option>
+													</select>
 												</div>
-											</div>		
+											</div>	
 										</div>
 									</div>	
 											
@@ -1103,9 +1109,9 @@
 										               		<th>Travel Complete Indicator</th>		
 														</tr>
 													</thead>
-													<tbody ng-repeat="fare in workPackageSheet.fares track by $index">
+													<tbody>
 														<!-- ng-click="vm.rowTableClick($event, $parent.$index+''+$index, 'addon')" -->
-														<tr role="row" class="datatable-row">
+														<tr role="row" class="datatable-row" ng-repeat="fare in workPackageSheet.currentFares track by $index" ng-class="{'poiv-none':workPackageSheet.version != 'current', 'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no']}">{{$index+1}}</td>
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'status', $event)" ng-class="{highlighted:fare.field['status']}">
 																<select class="form-control inside-table" name="addonFareStatus{{$index}}" ng-model="fare.status" id="field_status" 
@@ -1476,7 +1482,7 @@
 										                				ng-model="fare.travelCompleteIndicator"></select>
 									               			</td>
 														</tr>
-														<tr class="datatable-action{{$index}}" ng-show="vm.addonFaresActionButton[$parent.$index+''+$index]">
+														<!-- <tr class="datatable-action{{$index}}" ng-show="vm.addonFaresActionButton[$parent.$index+''+$index]">
 															<td colspan="18" class="">
 																<div class="btn btn-app" ng-click="vm.deleteFaresSelected(workPackageSheet, $index)">
 																	<i class="fa fa-trash"></i>Delete
@@ -1494,7 +1500,7 @@
 																	<i class="fa fa-stack-exchange"></i>Derived Fares
 																</div>
 															</td>
-														</tr>
+														</tr> -->
 													</tbody>
 												</table>
 											</div>
