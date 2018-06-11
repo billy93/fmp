@@ -2118,7 +2118,7 @@
 													</span>					                          	
 					                            </td>
 				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'discountSpecifiedAmount', $event)" ng-class="{highlighted:fare.field['discountSpecifiedAmount']}">
-				                                <input type="number" class="form-control" name="discountSpecifiedAmount{{$parent.$index}}{{$index}}"
+				                                <input type="text" class="form-control" name="discountSpecifiedAmount{{$parent.$index}}{{$index}}"
 				                                    ng-disabled="!vm.isEditable('discountSpecifiedAmount')"
 				                                    ng-required="vm.isRequired('discountSpecifiedAmount', fare)" 
 				                                    ng-class="{'must-fill': editForm.editFormDiscount.discountSpecifiedAmount{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
@@ -2363,38 +2363,36 @@
         					
         					<div class="tab-pane" ng-class="{active:vm.currentTabFilingInstruction}" ng-if="vm.workPackage.filingInstruction">
 					       		<div class="box-header"></div>
-									<div class="box-body mb1">
-										<div class="form-group">
-											<label>Comment</label>
-											<wysiwyg-edit content="vm.commentStringFillingInstruction" config="vm.editorConfig"></wysiwyg-edit>
-										</div>
-										<div class="clearfix">
-											<div class="pull-right">
-												<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()">Add</button>
-											</div>
-										</div>		
+								<div class="box-body mb1">
+									<div class="form-group">
+										<label>Comment</label>
+										<wysiwyg-edit content="vm.commentStringFillingInstruction" config="vm.editorConfig"></wysiwyg-edit>
 									</div>
-									<div class="box-detail box-comment">
-										<div class="box-body">
-							        		<div class="comment-container">
-							        			<div class="comment-wrapper">
-									    			<div class="comment-list" ng-repeat="filingInstructionData in vm.workPackage.filingInstructionData.slice().reverse() track by $index">
-												    	<div class="clearfix">
-												    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
-												    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'short'}}</div>
-												    	</div>
-												    	<label> 
-												    		<input type="checkbox" id="comment-message" name="comment-message" ng-model="filingInstructionData.isDeleted">
-												    		<span>{{filingInstructionData.isDeleted ? "Deleted" : "Delete"}}</span> 
-															<span ng-show="!filingInstructionData.isDeleted" data-ng-bind-html="trustAsHtml(filingInstructionData.comment)"></span>
-														</label>
-													</div>
-									    		</div>
-							        		</div>					        		
-								    	</div>
-									</div>							
-							    </div>		
-								
+									<div class="clearfix">
+										<div class="pull-right">
+											<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()">Add</button>
+										</div>
+									</div>		
+								</div>
+								<div class="box-detail box-comment">
+									<div class="box-body">
+						        		<div class="comment-container">
+						        			<div class="comment-wrapper">
+								    			<div class="comment-list" ng-repeat="filingInstructionData in vm.workPackage.filingInstructionData.slice().reverse() track by $index">
+											    	<div class="clearfix">
+											    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
+											    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'short'}}</div>
+											    	</div>
+											    	<label> 
+											    		<input type="checkbox" id="comment-message" name="comment-message" ng-model="filingInstructionData.isDeleted">
+											    		<span>{{filingInstructionData.isDeleted ? "Deleted" : "Delete"}}</span> 
+														<span ng-show="!filingInstructionData.isDeleted" data-ng-bind-html="trustAsHtml(filingInstructionData.comment)"></span>
+													</label>
+												</div>
+								    		</div>
+						        		</div>					        		
+							    	</div>
+								</div>	
 					        </div>
 					        
 					        <div class="tab-pane" ng-class="{active:vm.currentTabAttachment}" ng-if="vm.workPackage.attachment">
@@ -3635,10 +3633,10 @@
 															    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)">Delete Selected Rows</a>
 															    </li>
 															</ul>
-														</div>													
-														<button class="btn btn-default small btn-secondary">Import</button>
-														<button class="btn btn-default small btn-secondary">Export</button>
-														<button class="btn btn-default small btn-secondary">Publish</button>
+														</div>		
+														
+														<button class="btn btn-default small btn-secondary" ngf-select  ngf-change="vm.importFareWaiver($file, $index)">Import</button>
+														<button class="btn btn-default small btn-secondary" ng-click="vm.exportFaresWaiver($index)">Export</button>	
 														<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalAgent">Agents</button>
 														<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalRatesheet">Rate Sheet</button>
 													</div>
