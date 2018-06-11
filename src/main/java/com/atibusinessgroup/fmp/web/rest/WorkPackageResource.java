@@ -2024,13 +2024,13 @@ public class WorkPackageResource {
 						    		err1.setMessage("Status is required");
 						    		errors.add(err1);
 								}
-								if(fare.getTarcd() == null || fare.getTarcd().contentEquals("")) {
+								if(fare.getTariffNumber().getTarCd() == null || fare.getTariffNumber().getTarCd().contentEquals("")) {
 									//List Error
 						    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("TarCd is required");
 						    		errors.add(err1);
 								}
-								if(fare.getTarno() == null || fare.getTarno().contentEquals("")) {
+								if(fare.getTariffNumber().getTarNo() == null || fare.getTariffNumber().getTarNo().contentEquals("")) {
 									//List Error
 						    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("TarNo is required");
@@ -2110,13 +2110,13 @@ public class WorkPackageResource {
 									}
 								}
 							}else if(workPackage.getReviewLevel().contentEquals("Distribution")) {
-								if(fare.getTarcd() == null || fare.getTarcd().contentEquals("")) {
+								if(fare.getTariffNumber().getTarCd() == null || fare.getTariffNumber().getTarCd().contentEquals("")) {
 									//List Error
 						    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("TarCd is required");
 						    		errors.add(err1);
 								}
-								if(fare.getTarno() == null || fare.getTarno().contentEquals("")) {
+								if(fare.getTariffNumber().getTarNo() == null || fare.getTariffNumber().getTarNo().contentEquals("")) {
 									//List Error
 						    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("TarNo is required");
@@ -2308,13 +2308,13 @@ public class WorkPackageResource {
 									}
 								}
 							}else if(workPackage.getReviewLevel().contentEquals("Distribution")) {
-								if(fare.getTarno() == null || fare.getTarno().contentEquals("")) {
+								if(fare.getTariffNumber().getTarNo() == null || fare.getTariffNumber().getTarNo().contentEquals("")) {
 									//List Error
 						    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Tarno is required");
 						    		errors.add(err1);
 								}
-								if(fare.getTarcd() == null || fare.getTarcd().contentEquals("")) {
+								if(fare.getTariffNumber().getTarCd() == null || fare.getTariffNumber().getTarCd().contentEquals("")) {
 									//List Error
 						    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("TarCd is required");
