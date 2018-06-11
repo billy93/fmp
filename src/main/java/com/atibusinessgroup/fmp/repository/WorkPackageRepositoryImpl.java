@@ -3,6 +3,8 @@ package com.atibusinessgroup.fmp.repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,15 +14,31 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.repository.support.PageableExecutionUtils;
 
 import com.atibusinessgroup.fmp.domain.WorkPackage;
+import com.atibusinessgroup.fmp.service.WorkPackageService;
 import com.atibusinessgroup.fmp.web.rest.WorkPackageResource.WorkPackageFilter;
 
 public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAnyName {
+
+	  private final Logger log = LoggerFactory.getLogger(WorkPackageRepositoryImpl.class);
 
 	@Autowired
     MongoTemplate mongoTemplate;
 	
 	@Override
 	public Page<WorkPackage> findCustom(WorkPackageFilter wpFilter, Pageable pageable) {
+		Query query = new Query(findByQuery(wpFilter)).with(pageable);	
+		log.debug("QUERY STRING PAGEABLE : {}", query.toString());
+		
+		List<WorkPackage> workPackages = mongoTemplate.find(query, WorkPackage.class);
+		
+		Page<WorkPackage> page = PageableExecutionUtils.getPage(
+				workPackages, 
+				pageable, 
+                () -> mongoTemplate.count(query,  WorkPackage.class));
+		return page;
+	}
+
+	public Criteria findByQuery(WorkPackageFilter wpFilter){
 		// TODO Auto-generated method stub
 		
 		///// REVIEW LEVEL
@@ -123,25 +141,19 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 						new Criteria().orOperator(replaceCriteria, reuseCriteria) : 
 							wpFilter.status.replace ? replaceCriteria :
 								wpFilter.status.reuse ? reuseCriteria : new Criteria()
-//				replaceCriteria, 
-//				reuseCriteria
-		);
-//		Criteria criteriaAnd2Query = new Criteria().orOperator(replaceCriteria, reuseCriteria);
-//		Criteria criteriaQuery = new Criteria().orOperator(criteriaAnd1Query);
-//		Criteria reuseReplaceCriteria = new Criteria();
-//		if(wpFilter.status.replace && wpFilter.status.reuse) {
-//			reuseReplaceCriteria = new Criteria().orOperator(reuseCriteria, replaceCriteria);
-//		}
-//		criteriaAnd1Query.orOperator(criteriaAnd2Query);
-		Query query = new Query(criteriaAnd1Query).with(pageable);
+		);		
 		
+		return criteriaAnd1Query;
+	}
+	
+	@Override
+	public List<WorkPackage> findCustom(WorkPackageFilter workPackageFilter) {
+		// TODO Auto-generated method stub
+		Query query = new Query(findByQuery(workPackageFilter));	
+		log.debug("QUERY STRING : {}", query.toString());
 		List<WorkPackage> workPackages = mongoTemplate.find(query, WorkPackage.class);
-		
-		Page<WorkPackage> page = PageableExecutionUtils.getPage(
-				workPackages, 
-				pageable, 
-                () -> mongoTemplate.count(query,  WorkPackage.class));
-		return page;
+
+		return workPackages;
 	}
 
 }

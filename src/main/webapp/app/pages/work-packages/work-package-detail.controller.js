@@ -3767,12 +3767,11 @@
                       vm.workPackage.importIndex = index;
                       //send to backend
                       
-                      WorkPackage.importFares(vm.workPackage, onImportSuccess, onImportFailure);
+                      WorkPackage.importFaresAddon(vm.workPackage, onImportSuccess, onImportFailure);
                       
                       function onImportSuccess(result){
                   	  		alert('Import Success');
                   	  		vm.mapWorkpackage(result);
-                    	  	
                       }
                       
                       function onImportFailure(){
@@ -3871,13 +3870,7 @@
                       
                       function onImportSuccess(result){
                     	  	alert('Import Success');
-                    	  	vm.workPackage = result;
-                    	  	vm.workPackage.filingDate = DateUtils.convertDateTimeFromServer(vm.workPackage.filingDate);
-                    	  	vm.workPackage.createdDate = DateUtils.convertDateTimeFromServer(vm.workPackage.createdDate);
-                    	  	vm.workPackage.distributionDate = DateUtils.convertDateTimeFromServer(vm.workPackage.distributionDate);
-                         vm.workPackage.discExpiryDate = DateUtils.convertDateTimeFromServer(vm.workPackage.discExpiryDate);
-                         vm.workPackage.queuedDate = DateUtils.convertDateTimeFromServer(vm.workPackage.queuedDate);
-                         vm.workPackage.lockedSince = DateUtils.convertDateTimeFromServer(vm.workPackage.lockedSince);
+                    	  	vm.mapWorkpackage(result);
                       }
                       
                       function onImportFailure(){
@@ -3903,13 +3896,7 @@
                       
                       function onImportSuccess(result){
                     	  	alert('Import Success');
-                    	  	vm.workPackage = result;
-                    	  	vm.workPackage.filingDate = DateUtils.convertDateTimeFromServer(vm.workPackage.filingDate);
-                    	  	vm.workPackage.createdDate = DateUtils.convertDateTimeFromServer(vm.workPackage.createdDate);
-                    	  	vm.workPackage.distributionDate = DateUtils.convertDateTimeFromServer(vm.workPackage.distributionDate);
-                        // vm.workPackage.discExpiryDate = DateUtils.convertDateTimeFromServer(vm.workPackage.discExpiryDate);
-                        // vm.workPackage.queuedDate = DateUtils.convertDateTimeFromServer(vm.workPackage.queuedDate);
-                        // vm.workPackage.lockedSince = DateUtils.convertDateTimeFromServer(vm.workPackage.lockedSince);
+                    	  	vm.mapWorkpackage(result);
                       }
                       
                       function onImportFailure(){
@@ -3985,7 +3972,7 @@
     		  WorkPackage.exportFaresAddon(vm.workPackage, onExportSuccess, onExportFailure);
 	    	  function onExportSuccess(result){
 	    		  var fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-      			var templateFilename = "Workorder_Fare.xlsx";
+      			var templateFilename = "Workorder_Addon_Fare.xlsx";
       			var blob = b64toBlob(result.file, fileType);
       			FileSaver.saveAs(blob, templateFilename);
 	    	  }
@@ -3998,8 +3985,10 @@
 	       
       }
       
-      vm.exportFaresMarket = function(){
-	  	  WorkPackage.exportFaresMarket(vm.workPackage, onExportSuccess, onExportFailure);
+      vm.exportFaresMarket = function(index){
+    	  vm.workPackage.exportIndex = index;
+    	  WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
+    		  WorkPackage.exportFaresMarket(vm.workPackage, onExportSuccess, onExportFailure);
 	    	  function onExportSuccess(result){
 	    		  var fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 	  			var templateFilename = "Workorder_MarketFare.xlsx";
@@ -4009,19 +3998,27 @@
 	    	  function onExportFailure(){
 	    		  
 	    	  }    	  
+	       }, function onSaveError(){
+	    		alert('An error occured, please try again');
+	    	}); 
 	  }
       
-      vm.exportFaresDiscount = function(){
-	  	  WorkPackage.exportFaresDiscount(vm.workPackage, onExportSuccess, onExportFailure);
-	    	  function onExportSuccess(result){
-	    		  var fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-	  			var templateFilename = "Workorder_DiscountFare.xlsx";
-	  			var blob = b64toBlob(result.file, fileType);
-	  			FileSaver.saveAs(blob, templateFilename);
-	    	  }
-	    	  function onExportFailure(){
-	    		  
-	    	  }    	  
+      vm.exportFaresDiscount = function(index){
+    	  vm.workPackage.exportIndex = index;
+    	  WorkPackage.update(vm.workPackage, function onSaveSuccess(result){    		
+		  	  WorkPackage.exportFaresDiscount(vm.workPackage, onExportSuccess, onExportFailure);
+		    	  function onExportSuccess(result){
+		    		  var fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+		  			var templateFilename = "Workorder_DiscountFare.xlsx";
+		  			var blob = b64toBlob(result.file, fileType);
+		  			FileSaver.saveAs(blob, templateFilename);
+		    	  }
+		    	  function onExportFailure(){
+		    		  
+		    	  }    
+	    	   }, function onSaveError(){
+	    		alert('An error occured, please try again');
+	    	}); 
 	  }
       
       function b64toBlob(b64Data, contentType, sliceSize) {

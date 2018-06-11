@@ -9,84 +9,88 @@
     function WorkPackage ($resource, DateUtils) {
         var resourceUrl =  'api/work-packages/:id';
 
+        function transformResponse(data){
+        	if (data) {
+                data = angular.fromJson(data);
+                data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
+                data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+                data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
+                data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
+                data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
+                data.lockedSince = DateUtils.convertDateTimeFromServer(data.lockedSince);
+                data.saleDate = DateUtils.convertDateTimeFromServer(data.saleDate);
+                
+                if(data.fareSheet.length > 0){
+                	for(var x=0;x<data.fareSheet.length;x++){
+                		var fares = data.fareSheet[x].fares;
+                		for(var y=0;y<fares.length;y++){
+                    		if(fares[y] != null){
+                    			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
+                    			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
+                    			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
+                    			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
+                    			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+                    		}
+                		}
+                	}
+                }
+                
+                if(data.addonFareSheet.length > 0){
+                	for(var x=0;x<data.addonFareSheet.length;x++){
+                		var fares = data.addonFareSheet[x].fares;
+                		for(var y=0;y<fares.length;y++){
+                    		if(fares[y] != null){
+                    			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
+                    			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
+                    			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
+                    			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
+                    			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+                    		}
+                		}
+                	}
+                }
+                
+                if(data.marketFareSheet.length > 0){
+                	for(var x=0;x<data.marketFareSheet.length;x++){
+                		var fares = data.marketFareSheet[x].fares;
+                		for(var y=0;y<fares.length;y++){
+                    		if(fares[y] != null){
+                    			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
+                    			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
+                    			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
+                    			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
+                    			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+                    		}
+                		}
+                	}
+                }
+                
+                
+                if(data.discountFareSheet.length > 0){
+                	for(var x=0;x<data.discountFareSheet.length;x++){
+                		var fares = data.discountFareSheet[x].fares;
+                		for(var y=0;y<fares.length;y++){
+                    		if(fares[y] != null){
+                    			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
+                    			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
+                    			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
+                    			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
+                    			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+                    		}
+                		}
+                	}
+                }
+            }
+        	return data;
+        }
+        
         return $resource(resourceUrl, {}, {
             'query': { method: 'GET', isArray: true},
             'findDiscountDerivedFares': { method: 'POST', isArray: true, url:'api/work-packages/derived/findFares'},
             'get': {
                 method: 'GET',
                 transformResponse: function (data) {
-                    if (data) {
-                        data = angular.fromJson(data);
-                        data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
-                        data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
-                        data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
-                        data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
-                        data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
-                        data.lockedSince = DateUtils.convertDateTimeFromServer(data.lockedSince);
-                        data.saleDate = DateUtils.convertDateTimeFromServer(data.saleDate);
-                        
-                        if(data.fareSheet.length > 0){
-                        	for(var x=0;x<data.fareSheet.length;x++){
-                        		var fares = data.fareSheet[x].fares;
-                        		for(var y=0;y<fares.length;y++){
-	                        		if(fares[y] != null){
-	                        			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
-	                        			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
-	                        			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
-	                        			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
-	                        			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
-	                        		}
-                        		}
-                        	}
-                        }
-                        
-                        if(data.addonFareSheet.length > 0){
-                        	for(var x=0;x<data.addonFareSheet.length;x++){
-                        		var fares = data.addonFareSheet[x].fares;
-                        		for(var y=0;y<fares.length;y++){
-	                        		if(fares[y] != null){
-	                        			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
-	                        			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
-	                        			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
-	                        			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
-	                        			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
-	                        		}
-                        		}
-                        	}
-                        }
-                        
-                        if(data.marketFareSheet.length > 0){
-                        	for(var x=0;x<data.marketFareSheet.length;x++){
-                        		var fares = data.marketFareSheet[x].fares;
-                        		for(var y=0;y<fares.length;y++){
-	                        		if(fares[y] != null){
-	                        			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
-	                        			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
-	                        			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
-	                        			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
-	                        			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
-	                        		}
-                        		}
-                        	}
-                        }
-                        
-                        
-                        if(data.discountFareSheet.length > 0){
-                        	for(var x=0;x<data.discountFareSheet.length;x++){
-                        		var fares = data.discountFareSheet[x].fares;
-                        		for(var y=0;y<fares.length;y++){
-	                        		if(fares[y] != null){
-	                        			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
-	                        			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
-	                        			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
-	                        			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
-	                        			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
-	                        		}
-                        		}
-                        	}
-                        }
-                    }
-                    return data;
+                    return transformResponse(data);
                 }
             },
             'update': { method:'PUT' },
@@ -136,9 +140,11 @@
 	        'changeVersion': { method: 'POST', url:'api/work-packages/changeVersion'},	        
 	        'exportQueue': {method:'POST', url:'api/work-packages/exportQueue'},
 	        'importFares': { method: 'POST',  url:'api/work-packages/import-fares'},
+	        'importFaresAddon': { method: 'POST',  url:'api/work-packages/import-fares-addon'},
 	        'importFaresMarket': { method: 'POST',  url:'api/work-packages/import-fares-market'},
 	        'importFaresDiscount': { method: 'POST',  url:'api/work-packages/import-fares-discount'},
 	        'exportFares': { method: 'POST',  url:'api/work-packages/export-fares'},
+	        'exportFaresAddon': { method: 'POST',  url:'api/work-packages/export-fares-addon'},
 	        'exportFaresMarket': { method: 'POST',  url:'api/work-packages/export-fares-market'},
 	        'exportFaresDiscount': { method: 'POST',  url:'api/work-packages/export-fares-discount'},
 	        'exportDerivedFares': { method: 'POST',  url:'api/work-packages/derived/exportDerivedFares'},

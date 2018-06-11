@@ -87,4 +87,10 @@ public class WorkPackageService {
 	public Page<WorkPackage> findCustom(WorkPackageFilter wpFilter, Pageable pageable){
 		return workPackageRepository.findCustom(wpFilter, pageable);
 	}
+
+	public List<WorkPackage> findCustom(WorkPackageFilter workPackageFilter) {
+		// TODO Auto-generated method stub
+		log.debug("Export find work package : {}", workPackageFilter);
+		return workPackageRepository.findCustom(workPackageFilter);
+	}
 }

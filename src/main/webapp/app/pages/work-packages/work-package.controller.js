@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('WorkPackageController', WorkPackageController);
 
-    WorkPackageController.$inject = ['Principal', '$uibModal', '$state', '$stateParams', 'WorkPackage', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams'];
+    WorkPackageController.$inject = ['Principal', '$uibModal', '$state', '$stateParams', 'WorkPackage', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', 'FileSaver'];
 
-    function WorkPackageController(Principal, $uibModal, $state, $stateParams, WorkPackage, ParseLinks, AlertService, paginationConstants, pagingParams) {
+    function WorkPackageController(Principal, $uibModal, $state, $stateParams, WorkPackage, ParseLinks, AlertService, paginationConstants, pagingParams, FileSaver) {
         var vm = this;
         vm.reviewLevel = true;
         vm.woStatus = true;
@@ -50,7 +50,7 @@
 	    			market:true
 	    		},
 	    		status:{
-	    			new:true,
+	    			newStatus:true,
 	    			pending:true,
 	    			reviewing:true,
 	    			readyToRelease:true,
@@ -78,7 +78,7 @@
             	"reviewLevel.distribution": vm.workPackageFilter.reviewLevel.distribution,
             	"reviewLevel.routeManagement": vm.workPackageFilter.reviewLevel.routeManagement,
             	
-            	"status.newStatus": vm.workPackageFilter.status.new,
+            	"status.newStatus": vm.workPackageFilter.status.newStatus,
             	"status.pending": vm.workPackageFilter.status.pending,
             	"status.reviewing": vm.workPackageFilter.status.reviewing,
             	"status.readyToRelease": vm.workPackageFilter.status.readyToRelease,
@@ -288,8 +288,79 @@
 //        	loadPage(1);
         }
         
+        function b64toBlob(b64Data, contentType, sliceSize) {
+  		  contentType = contentType || '';
+  		  sliceSize = sliceSize || 512;
+
+  		  var byteCharacters = atob(b64Data);
+  		  var byteArrays = [];
+
+  		  for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+  		    var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+  		    var byteNumbers = new Array(slice.length);
+  		    for (var i = 0; i < slice.length; i++) {
+  		      byteNumbers[i] = slice.charCodeAt(i);
+  		    }
+
+  		    var byteArray = new Uint8Array(byteNumbers);
+
+  		    byteArrays.push(byteArray);
+  		  }
+
+  		  var blob = new Blob(byteArrays, {type: contentType});
+
+  		  return blob;
+  	}
+        
         vm.printExport = function(){
+        	var exportConfig = {
+        		workPackageFilter:vm.workPackageFilter,
+        		outputTo:'excel',
+        		gridLines:true,
+        		columnHeaders:true,
+        		onlySelectedRows:true
+        	};
         	
+        	console.log(exportConfig);
+        	WorkPackage.exportQueue(exportConfig, function onExportSuccess(result){
+//        		alert('Export Success');
+        		 var fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+       			var templateFilename = "Workorder_Queue.xlsx";
+       			var blob = b64toBlob(result.file, fileType);
+       			FileSaver.saveAs(blob, templateFilename);
+        	}, function onExportFailed(){
+        		
+        	});
+        	
+        	
+//        	$uibModal.open({
+//                templateUrl: 'app/pages/work-packages/work-package-reuse-replace-confirm-dialog.html',
+//                controller: 'WorkPackageReuseReplaceConfirmDialogController',
+//                controllerAs: 'vm',
+//                backdrop: 'static',
+//                size: 'lg',
+//                windowClass: 'full-page-modal',
+//                resolve: {
+//                	workPackage: function(){
+//                		return vm.workPackages[index];
+//                	},
+//                	 businessAreas: ['User', function(User) {
+//                         return User.getBusinessArea().$promise;
+//                     }],
+//                }
+//			}).result.then(function(workPackage) {
+//				WorkPackage.reuse(workPackage, onReuseSuccess, onReuseFailed);
+//	        	
+//				function onReuseSuccess(result){
+//	        		alert('Reuse Success');
+//	        		$state.go('work-package-detail', {id:result.id});
+//	        	}
+//	        	
+//	        	function onReuseFailed(error){
+//	        		alert("An error occured, please try again");
+//	        	}				
+//			});
         }
     }
 })();

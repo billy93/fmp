@@ -756,8 +756,7 @@
 										                				ng-maxlength="2"
 									                					maxlength="2"
 									                					ng-pattern="/^[a-zA-Z0-9]{1,2}$/"
-									                					
-										                				ng-keypress="vm.keypress($event, '^[a-zA-Z0-9]{1,2}$')"
+									                					ng-keypress="vm.keypress($event, '^[a-zA-Z0-9]{1,2}$')"
 										                				ng-class="{'must-fill': editForm.editFormATPCO.footnote{{$parent.$index}}{{$index}}.$error.required ||
 										                				editForm.editFormATPCO.footnote{{$parent.$index}}{{$index}}.$error.maxlength || 
 										                				editForm.editFormATPCO.footnote{{$parent.$index}}{{$index}}.$error.pattern
@@ -1073,8 +1072,8 @@
 																    </li>
 																</ul>
 															</div>													
-															<button class="btn btn-default small btn-secondary" ng-click="vm.importFareAddon($index)">Import</button>
-															<button class="btn btn-default small btn-secondary" ng-click="vm.exportFareAddon($index)">Export</button>
+															<button class="btn btn-default small btn-secondary" ngf-select ngf-change="vm.importFareAddon($file, $index)">Import</button>
+															<button class="btn btn-default small btn-secondary" ng-click="vm.exportFaresAddon($index)">Export</button>
 															<button class="btn btn-default small btn-secondary">Publish</button>
 															<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalAgent">Agents</button>
 															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()">Rate Sheet</button>
@@ -1274,7 +1273,13 @@
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'bucket', $event)" ng-class="{highlighted:fare.field['bucket']}">
 																<input type="text" class="form-control" ng-model="fare.bucket" name="addonFareBucket{$parent.$index}}{{$index}}"
 											           				ng-disabled="!vm.isEditable('addonFareBucket')"
-														            ng-class="{'must-fill': editForm.editFormATPCO.addonFareBucket{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+											           				ng-maxlength="8"
+								                					maxlength="8"
+								                					ng-pattern="/^[a-zA-Z0-9]{1,8}$/"
+								                					ng-keypress="vm.keypress($event, '^[a-zA-Z0-9]{1,8}$')"									                				
+														            ng-class="{'must-fill': editForm.editFormATPCO.addonFareBucket{{$parent.$index}}{{$index}}.$error.required 
+														            || editForm.editFormATPCO.addonFareBucket{{$parent.$index}}{{$index}}.$error.pattern 
+														            || editForm.editFormATPCO.addonFareBucket{{$parent.$index}}{{$index}}.$error.maxlength && fare.action != 'Canceled'}"	
 														            ng-required="vm.isRequired('addonFareBucket')" />
 															</td>
 										           			<td ng-click="vm.tdClick(workPackageSheet, fare, 'typeOfJourney', $event)" ng-class="{highlighted:fare.field['typeOfJourney']}">
@@ -1288,7 +1293,14 @@
 										           			</td>
 									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'footnote', $event)" ng-class="{highlighted:fare.field['footnote']}">
 									               				<input type="text" class="form-control" name="addonFareFootnote{{$parent.$index}}{{$index}}" id="field_footnote"
-															            ng-class="{'must-fill': editForm.editFormATPCO.addonFareFootnote{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+										               					ng-maxlength="2"
+									                					maxlength="2"
+									                					ng-pattern="/^[a-zA-Z0-9]{1,2}$/"
+									                					ng-keypress="vm.keypress($event, '^[a-zA-Z0-9]{1,2}$')"
+									                				
+															            ng-class="{'must-fill': editForm.editFormATPCO.addonFareFootnote{{$parent.$index}}{{$index}}.$error.required 
+															            || editForm.editFormATPCO.addonFareFootnote{{$parent.$index}}{{$index}}.$error.pattern 
+															            || editForm.editFormATPCO.addonFareFootnote{{$parent.$index}}{{$index}}.$error.maxlength  && fare.action != 'Canceled'}"																			            
 															            ng-disabled="!vm.isEditable('addonFareFootnote')"
 															            ng-required="vm.isRequired('addonFareFootnote')"
 											                    		ng-model="fare.footnote"/>
@@ -1298,13 +1310,23 @@
 															            ng-class="{'must-fill': editForm.editFormATPCO.addonFareZone{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 															            ng-disabled="!vm.isEditable('addonFareZone')"
 															            ng-required="vm.isRequired('addonFareZone')"
+															            ng-maxlength="3"
+									                					maxlength="3"
+									                					ng-pattern="/^[0-9]{1,3}$/"
+									                					ng-keypress="vm.keypress($event, '^[0-9]{1,3}$')"
 											                    		ng-model="fare.zone"/>
 									               			</td>
 									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'rtgno', $event)" ng-class="{highlighted:fare.field['rtgno']}">
 									               				<input type="text" class="form-control" name="addonFareRtgno{{$parent.$index}}{{$index}}" id="field_bookingClass"
 										                				ng-disabled="!vm.isEditable('addonFareRtgno')"
 										                				ng-required="vm.isRequired('addonFareRtgno')" 
-										                				ng-class="{'must-fill': editForm.editFormATPCO.addonFareRtgno{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+										                				ng-maxlength="4"
+									                					maxlength="4"
+									                					ng-pattern="/^[0-9]{1,4}$/"
+									                					ng-keypress="vm.keypress($event, '^[0-9]{1,4}$')"
+										                				ng-class="{'must-fill': editForm.editFormATPCO.addonFareRtgno{{$parent.$index}}{{$index}}.$error.required 
+										                				|| editForm.editFormATPCO.addonFareRtgno{{$parent.$index}}{{$index}}.$error.pattern
+										                				|| editForm.editFormATPCO.addonFareRtgno{{$parent.$index}}{{$index}}.$error.maxlength && fare.action != 'Canceled'}"																			            
 															            ng-model="fare.rtgno"/>
 									               			</td>
 									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'currency', $event)" ng-class="{highlighted:fare.field['currency']}">
@@ -1339,10 +1361,16 @@
 																	  </ui-select> -->
 									               			</td>
 									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'amount', $event)" ng-class="{highlighted:fare.field['amount']}">
-									               				<input type="text" class="form-control" name="addonFareAmount{{$parent.$index}}{{$index}}" id="field_amount"
+									               				<input type="number" class="form-control" name="addonFareAmount{{$parent.$index}}{{$index}}" id="field_amount"
 										                				ng-disabled="!vm.isEditable('addonFareAmount')"
 										                				ng-required="vm.isRequired('addonFareAmount')" 
-										                				ng-class="{'must-fill': editForm.editFormATPCO.addonFareAmount{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+										                				ng-maxlength="9"
+									                					maxlength="9"
+									                					ng-pattern="/^[0-9]{1,9}$/"
+									                					ng-keypress="vm.keypress($event, '^[0-9]{1,9}$')"
+										                				ng-class="{'must-fill': editForm.editFormATPCO.addonFareAmount{{$parent.$index}}{{$index}}.$error.required 
+										                				|| editForm.editFormATPCO.addonFareAmount{{$parent.$index}}{{$index}}.$error.maxlength
+										                				|| editForm.editFormATPCO.addonFareAmount{{$parent.$index}}{{$index}}.$error.pattern && fare.action != 'Canceled'}"																			            
 															            ng-model="fare.amount"/>
 									               			</td>
 									               			<td></td>
@@ -1359,6 +1387,7 @@
 											                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareTravelStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 															            ng-model="fare.travelStart" 
 															            datetime-picker="{{dateformat}}" 
+															            enable-time="false"
 															            is-open="vm.datePickerOpenStatus['addonFareTravelStartDate'+$parent.$index+''+$index]">
 																	<span class="input-group-addon disabled">
 																		<i ng-click="vm.openCalendar('addonFareTravelStartDate'+$parent.$index+''+$index)" class="fa fa-calendar"></i>
@@ -2499,9 +2528,8 @@
 															    </li>
 															</ul>
 														</div>													
-														<button class="btn btn-default small btn-secondary" ngf-select  ngf-change="vm.importFareMarket($file)">Import</button>
-														<button class="btn btn-default small btn-secondary">Export</button>
-														<button class="btn btn-default small btn-secondary">Publish</button>
+														<button class="btn btn-default small btn-secondary" ngf-select  ngf-change="vm.importFareMarket($file, $index)">Import</button>
+														<button class="btn btn-default small btn-secondary" ng-click="vm.exportFaresMarket($index)">Export</button>
 														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.agent()">Agents</button>
 														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()">Rate Sheet</button>
 													</div>
@@ -2514,6 +2542,7 @@
 													<tr>
 								                		<th>No</th>
 								                		<th>Status</th>
+								                		<th>Action</th>
 									                	<th>Carrier</th>		                	
 									                	<th>Origin</th>
 									                	<th>Dest</th>
@@ -2550,6 +2579,8 @@
 												             	ng-options="key as value for (key , value) in vm.status">
 															</select>	
 														</td>
+														<td ng-click="vm.tdClick(workPackageSheet, fare, 'action', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['action']}">{{fare.action}}</td>
+														
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'carrier', $event)" ng-class="{highlighted:fare.field['carrier']}">
 															<input type="text" class="form-control" name="marketFareCarrier{{$parent.$index}}{{$index}}" id="field_carrier"
 										                    		ng-model="fare.carrier"
