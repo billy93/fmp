@@ -32,9 +32,9 @@
         	vm.clearFilter();
         }
         
-        vm.loadAll();
+        vm.loadAll(false);
 
-        function loadAll(isQueryClick = false) {
+        function loadAll(isQueryClick) {
         	vm.queryParams.page = pagingParams.page - 1;
 			vm.queryParams.size= vm.itemsPerPage;
 			vm.queryParams.sort= sort();
@@ -102,7 +102,7 @@
         
         function resetFilter() {
         	vm.clearFilter();
-        	vm.loadAll();
+        	vm.loadAll(false);
         }
         
         function getDetails(routingQuery) {
