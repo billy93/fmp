@@ -19,10 +19,8 @@
 		vm.queryParams = queryParams;
 		vm.loadAll = loadAll;
 		vm.splitOrigDest = splitOrigDest;
-		vm.getOrigDest = getOrigDest;
-//		vm.checkRuleNoGA = checkRuleNoGA;
 		vm.generateGraph = generateGraph;
-		vm.graphdEnabled = false;
+		vm.graphDisabled = true;
 		vm.isDisabled = isDisabled;
 
 		// vm.getRules = getRules;
@@ -32,8 +30,6 @@
 
 		vm.reset = reset;
 		vm.page = 1;
-
-		vm.origDest = getOrigDest;
 
 		vm.datePickerOpenStatus = {};
 		vm.dateFormat = "yyyy-MM-dd";
@@ -101,7 +97,7 @@
 		vm.cabins = "?";
 
 		// vm.loadAll();
-
+		
 		function loadAll() {
 			vm.categoryRules = null;
 			vm.currentCompetitorMonitoring = null;
@@ -110,7 +106,7 @@
 			vm.queryParams.size = vm.itemsPerPage;
 
 //			vm.checkRuleNoGA();
-			vm.splitOrigDest(vm.origDest);
+			vm.splitOrigDest(vm.queryParams.origDest);
 			
 			CompetitorMonitoring.query(vm.queryParams, onSuccess, onError);
 			
@@ -120,7 +116,7 @@
 				vm.totalItems = headers('X-Total-Count');
 				vm.queryCount = vm.totalItems;
 				vm.compMonitoring = data;
-				vm.graphdEnabled = isDisabled();
+				vm.graphEnabled = isDisabled();
 			}
 
 			function onError(error) {
@@ -155,6 +151,8 @@
 
 		function reset() {
 			$('#container').hide();
+			$('#chartOptions').hide();
+			vm.compMonitoring = null;
 			vm.queryParams = {
 				carrier : null,
 				source : null,
@@ -194,7 +192,8 @@
 				includeConstructed : false,
 				appendResults : false,
 				biDirectional : false,
-				calculateTfc : false
+				calculateTfc : false,
+				origDest : null
 			}
 
 //			vm.loadAll();
@@ -212,11 +211,11 @@
 					entity : category
 				}
 			}).result.then(function() {
-				$state.go('afd-query', {}, {
+				$state.go('competitor-monitoring', {}, {
 					reload : false
 				});
 			}, function() {
-				$state.go('afd-query');
+				$state.go('competitor-monitoring');
 			});
 		}
 
@@ -228,11 +227,11 @@
 				backdrop : 'static',
 				size : 'md'
 			}).result.then(function() {
-				$state.go('afd-query', {}, {
+				$state.go('competitor-monitoring', {}, {
 					reload : false
 				});
 			}, function() {
-				$state.go('afd-query');
+				$state.go('competitor-monitoring');
 			});
 		}
 
@@ -258,21 +257,17 @@
 			});
 		}
 
-		function getOrigDest() {
-			if (vm.queryParams.origin != null
-					&& vm.queryParams.destination != null) {
-				return vm.queryParams.origin + "-" + vm.queryParams.destination
-			}
-		}
-
 		function splitOrigDest(origDest) {
-			origDest = origDest+""; //converting to string, otherwise got an error here...
-			var chr = origDest.indexOf("-");
-			var orig = origDest.substring(0, chr);
-			var dest = origDest.substring(chr + 1, origDest.length);
+			if(origDest != null && origDest.trim() != '') {
+				origDest = origDest+""; //converting to string, otherwise got an error here...
+				var chr = origDest.indexOf("-");
+				var orig = origDest.substring(0, chr);
+				var dest = origDest.substring(chr + 1, origDest.length);
 
-			vm.queryParams.origin = orig;
-			vm.queryParams.destination = dest;
+				vm.queryParams.origin = orig;
+				vm.queryParams.destination = dest;
+			}
+			
 		}
 
 		function checkRuleNoGA() {
@@ -286,336 +281,135 @@
 		
 		function isDisabled() {
 			if(vm.compMonitoring.length > 0) {
-				return true;
-			} else {
 				return false;
+			} else {
+				return true;
 			}
 		}
 
 		function generateGraph(data) {
 
-			$('#container').show();
-			var dec = 0.003
-			var categories = [ 'GA', 'SQ' ];
-			var seriesData = [ {
-				name : 'GA',
-				data : [ {
-					x : 0,
-					name : "Cab1",
-					color : 'rgba(0,0,255,0.1)',
-					high : 100000,
-					low : 100000 - (100000 * dec),
-
-				}, {
-					x : 0,
-					name : "Cab2",
-					color : 'rgba(0,255,0,0.1)',
-					high : 90000,
-					low : 90000 - (90000 * dec),
-				}, {
-					x : 0,
-					name : "Cab2",
-					color : 'rgba(0,255,0,0.1)',
-					high : 90010,
-					low : 90010 - (90010 * dec),
-				}, {
-					x : 0,
-					name : "Cab2",
-					color : 'rgba(0,255,0,0.1)',
-					high : 90050,
-					low : 90050 - (90050 * dec),
-				}, {
-					x : 0,
-					high : 95000,
-					low : 95000 - (90000 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 0,
-					high : 95000,
-					low : 95000 - (90000 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 0,
-					high : 94000,
-					low : 94000 - (94000 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 0,
-					high : 95100,
-					low : 95100 - (95100 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 0,
-					high : 95800,
-					low : 95800 - (95800 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 0,
-					high : 94700,
-					low : 94700 - (94700 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 0,
-					high : 95900,
-					low : 95900 - (95900 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 0,
-					high : 95950,
-					low : 95950 - (95950 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 0,
-					high : 95800,
-					low : 95800 - (95800 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 0,
-					high : 94700,
-					low : 94700 - (94700 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 0,
-					high : 95850,
-					low : 95850 - (95850 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 0,
-					high : 95980,
-					low : 95980 - (95980 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 0,
-					high : 95990,
-					low : 95990 - (95990 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 0,
-					high : 95995,
-					low : 95995 - (95995 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 0,
-					high : 95997,
-					low : 95997 - (95997 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 0,
-					high : 96000,
-					low : 96000 - (96000 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 0,
-					high : 96010,
-					low : 96010 - (96010 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 0,
-					high : 96020,
-					low : 96020 - (96020 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 0,
-					high : 96030,
-					low : 96030 - (96030 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 0,
-					high : 96040,
-					low : 96040 - (96040 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				} ]
-			}, {
-				name : 'sQ',
-				data : [ {
-					x : 1,
-					high : 92000,
-					low : 92000 - (92000 * dec),
-					name : "Cab3",
-					color : 'rgba(0,255,0,0.1)',
-				}, {
-					x : 1,
-					high : 93000,
-					low : 93000 - (93000 * dec),
-					name : "Cab3",
-					color : 'rgba(0,255,0,0.1)',
-				}, {
-					x : 1,
-					high : 95000,
-					low : 95000 - (90000 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 1,
-					high : 95000,
-					low : 95000 - (90000 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 1,
-					high : 95100,
-					low : 95100 - (95100 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 1,
-					high : 95800,
-					low : 95800 - (95800 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 1,
-					high : 95900,
-					low : 95900 - (95900 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 1,
-					high : 95950,
-					low : 95950 - (95950 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 1,
-					high : 95800,
-					low : 95800 - (95800 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 1,
-					high : 94700,
-					low : 94700 - (94700 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 1,
-					high : 95850,
-					low : 95850 - (95850 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 1,
-					high : 95980,
-					low : 95980 - (95980 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 1,
-					high : 95990,
-					low : 95990 - (95990 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 1,
-					high : 95995,
-					low : 95995 - (95995 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 1,
-					high : 95997,
-					low : 95997 - (95997 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 1,
-					high : 96000,
-					low : 96000 - (96000 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 1,
-					high : 96010,
-					low : 96010 - (96010 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 1,
-					high : 96020,
-					low : 96020 - (96020 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 1,
-					high : 96030,
-					low : 96030 - (96030 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				}, {
-					x : 1,
-					high : 96040,
-					low : 96040 - (96040 * dec),
-					name : "Cab3",
-					color : 'rgba(255,0,0,0.1)',
-				} ]
-			}, ];
-
-			var chartOptions = {
-				chart : {
-					renderTo : 'container',
-					type : 'columnrange',
-					zoomType : 'xy',
-					inverted : false,
-				},
-				credits : {
-					enabled : false
-				},
-				title : {
-					text : 'Price Comparator'
-				},
-				xAxis : {
-					type : 'category',
-					categories : categories,
-					gridLineWidth : 2
-				},
-				yAxis : {
-					type : 'logarithmic',
-					tickmarkPlacement : 'on',
-					title : {
-						text : 'Price'
-					}
-				},
-				tooltip : {
-					enabled : true
-				},
-				plotOptions : {
-					columnrange : {
-						stickyTracking : false,
-						grouping : false
-					}
-				},
-				legend : {
-					enabled : false
-				},
-				scrollbar : {
-					enabled : true
-				},
-				series : seriesData
-			};
-
-			var chart1 = new Highcharts.Chart(chartOptions);
-			chart1.redraw();
-
+				$('#container').show();
+				$('#chartOptions').show();
+				
+				$('#barThickness option[value="0.04"]').attr("selected",true);
+				$('#barOpacity option[value="0.1"]').attr("selected",true);
+			  	
+				var fares = data;
+			  
+			  
+			      var barThickness = $('#barThickness').val();;
+			      var barOpacity = $('#barOpacity').val();;
+			      
+			      var totalData = fares.length;
+			      var items = [];
+			      var dataGroup = [];
+			      var dataGraph = [];
+			    
+						for(var i=0;i<fares.length;i++) {
+							items.push(fares[i].carrierCode);
+						}
+			    
+			      var categories = Array.from(new Set(items));
+			    
+			      var catLogo = [];
+			      var catWidth = $('#container').width/categories.length;
+			      var cabColor = '';
+			    
+			      
+			    for(var j=0;j<categories.length;j++) {
+			      for(var k=0;k<fares.length;k++) {
+			    	  
+			        if(fares[k].carrierCode==categories[j]) {
+			          var amt = String(fares[k].baseAmount);
+			          
+			          
+			          if(fares[k].cabin == 'Y') {
+			        	  cabColor = 'rgba(255,0,0,'+barOpacity+')';
+			          } else if(fares[k].cabin == 'W') {
+			        	  cabColor = 'rgba(0,255,0,'+barOpacity+')';
+			          } else if(fares[k].cabin == 'F') {
+			        	  cabColor = 'rgba(0,0,255,'+barOpacity+')';
+			          } else if(fares[k].cabin == 'J') {
+			        	  cabColor = 'rgba(255,255,0,'+barOpacity+')';
+			          }
+			          var lowVal = parseFloat(String(amt))-(parseFloat(String(amt))*parseFloat(String(barThickness)));
+			           dataGraph.push({'x':j,'name':fares[k].cabin,'bookingClass':fares[k].bookingClass,'color':cabColor,'high':amt,'low':lowVal});
+			        }
+			    }
+			      var objCat = {'name':categories[j], 'data':dataGraph};
+			      dataGroup.push(objCat);
+			    }
+			
+			  var chartOptions = {
+			          chart : {
+			            renderTo : 'container',
+			            type : 'columnrange',
+			            zoomType : 'xy',
+			            inverted : false,
+			          },
+			          credits : {
+			            enabled : false
+			          },
+			          title : {
+			            text : ''
+			          },
+			          xAxis :
+			            [{
+			               type : 'category',
+			               categories : categories,
+			               gridLineWidth : 2,
+			            },{
+			              linkedTo: 0,
+			              type : 'category',
+			              categories : categories,
+			              opposite:true,
+			              labels: {
+			              useHTML: true,
+			              formatter: function() {
+//			              if(this.value == "GA")
+//			                  return '<img src="http://3.bp.blogspot.com/_UZImdYAiry8/SV9oVvC_WqI/AAAAAAAAOZI/vWKb9Pjuhl4/s400/Logo_garuda_indonesia.png" style="width:'+catWidth+'px; vertical-align: middle; height:50px;" />';
+//			              else
+//			                  return this.value;
+			          }
+			      }
+			            }],
+			
+			
+			          yAxis : {
+			            type : 'logarithmic',
+			            minorTickInterval: 0.1,
+			            tickmarkPlacement : 'on',
+			            title : {
+			              text : 'Price'
+			            }
+			          },
+			          tooltip : {
+			            enabled : true,
+			            useHTML: true,
+			            formatter: function() {
+			              return '<span>price : '+this.point.high+'</span> <br/> <span>cabin : '+this.point.name+'</span> </br> <span>class : '+this.point.bookingClass+'</span>';
+			
+			          }
+			          },
+			          plotOptions : {
+			            columnrange : {
+			              stickyTracking : false,
+			              grouping : false
+			            }
+			          },
+			          legend : {
+			            enabled : false
+			          },
+			          scrollbar : {
+			            enabled : true
+			          },
+			          series : dataGroup
+			        };
+			  
+	              var chart1 = new Highcharts.Chart(chartOptions);
+	              chart1.redraw();
+      
 		}
 
 	}
