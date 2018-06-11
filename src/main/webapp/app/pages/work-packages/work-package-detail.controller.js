@@ -2048,7 +2048,7 @@
 		    	WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
 		    		WorkPackage.passup(result, function(wp){
 		    			console.log(wp);
-		    			if(wp.validation != null){
+		    			if(wp.validation != null && ((wp.validation.errorsCount > 0) || (wp.validation.warningsCount > 0))){
 		    				vm.workPackage.validation = wp.validation;
 		    				alert('There is '+wp.validation.errorsCount+' error(s) and '+wp.validation.warningsCount+' warning(s)');		    				
 		    			}
@@ -2429,6 +2429,10 @@
           console.log($scope.editForm.editFormATPCO);
           vm.workPackage = data;
           vm.isSaving = false;
+          
+          if(data.validation != null && ((data.validation.errorsCount > 0) || (data.validation.warningsCount > 0))){
+				alert('There is '+data.validation.errorsCount+' error(s) and '+data.validation.warningsCount+' warning(s)');		    				
+		  }       
       }
 
       function onSaveError () {
@@ -4885,6 +4889,16 @@
     				return false;
     			}
     		}
+      }
+      
+      vm.changeVersion = function(workPackageSheet, index){    	  
+    	  workPackageSheet.version = index;
+    	  if(index == 'current'){
+    		  workPackageSheet.currentFares = workPackageSheet.fares;
+    	  }
+    	  else{
+    		  workPackageSheet.currentFares = workPackageSheet.fareVersion[index].fares;
+    	  }
       }
     }
 })();

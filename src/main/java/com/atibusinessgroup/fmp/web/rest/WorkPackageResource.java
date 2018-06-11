@@ -79,6 +79,7 @@ import com.atibusinessgroup.fmp.domain.WorkPackage.FilingInstruction;
 import com.atibusinessgroup.fmp.domain.WorkPackage.ImportFares;
 import com.atibusinessgroup.fmp.domain.WorkPackage.MarketRules;
 import com.atibusinessgroup.fmp.domain.WorkPackage.WorkPackageFareSheet;
+import com.atibusinessgroup.fmp.domain.WorkPackage.WorkPackageFareSheet.FareVersion;
 import com.atibusinessgroup.fmp.domain.WorkPackageFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageHistory;
 import com.atibusinessgroup.fmp.domain.WorkPackageHistoryData;
@@ -3677,6 +3678,15 @@ public class WorkPackageResource {
 	    		result.setStatus(Status.PENDING);
 	    		result.setLocked(false);
 	        }
+	        List<WorkPackageFareSheet> fareSheet = result.getFareSheet();
+	        for(WorkPackageFareSheet sheet : fareSheet) {
+	        	FareVersion fareVersion = new FareVersion();
+	        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+	        	fareVersion.action = "PASSUP";
+	        	fareVersion.fares = sheet.getFares();
+	        	fareVersion.version = sheet.fareVersion.size() + 1;
+	        	sheet.fareVersion.add(fareVersion);
+	        }
 	        workPackageService.save(result);  
 	        
 	        saveHistoryData(workPackage);
@@ -3773,69 +3783,18 @@ public class WorkPackageResource {
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
+    
     private void saveHistoryData(WorkPackage workPackage) {
 		// TODO Auto-generated method stub
-    		String woId = workPackage.getId();        
-        long count = workPackageHistoryDataRepository.countByWorkPackage(new ObjectId(woId));
-        count = count+1;
-        WorkPackageHistoryData wphd = new WorkPackageHistoryData(workPackage, String.valueOf(count));        
-        wphd.setWorkPackage(new ObjectId(woId));       
-        log.debug("REST request to save WorkPackage History Data : {}", wphd);
-        workPackageHistoryDataRepository.save(wphd);
+//    		String woId = workPackage.getId();        
+//        long count = workPackageHistoryDataRepository.countByWorkPackage(new ObjectId(woId));
+//        count = count+1;
+//        
+//        WorkPackageHistoryData wphd = new WorkPackageHistoryData(workPackage, String.valueOf(count));        
+//        wphd.setWorkPackage(new ObjectId(woId));       
+//        log.debug("REST request to save WorkPackage History Data : {}", wphd);
+//        workPackageHistoryDataRepository.save(wphd);
 
-//	    	if(workPackage.getFares() != null && workPackage.getFares().size() > 0) {	    		
-//	    		List<WorkPackageFare> fares = workPackageFareHistoryDataRepository.findAllByWorkPackageAndFareType(new ObjectId(wphd.getId()), null);
-//	    		for(WorkPackageFare fare : fares) {
-//	    			workPackageFareHistoryDataRepository.delete(fare.getId());
-//	    		}
-//	    		
-//	    		for(WorkPackageFare wpf : workPackage.getFares()) {
-//	    			WorkPackageFareHistoryData fareHistory = new WorkPackageFareHistoryData(wpf, wphd.getVersion());
-//	    			fareHistory.setWorkPackage(new ObjectId(wphd.getId()));
-//	    			workPackageFareHistoryDataRepository.save(fareHistory);
-//	    		}
-//	    	}
-    
-    	/*
-    	
-    	if(workPackage.getAddonFares() != null && workPackage.getAddonFares().size() > 0) {
-    		List<WorkPackageFare> fares = workPackageFareHistoryRepository.findAllByWorkPackageAndFareType(workPackage.getId(), "ADDON");
-    		for(WorkPackageFare fare : fares) {
-    			workPackageFareHistoryRepository.delete(fare.getId());
-    		}
-    		
-    		for(WorkPackageFare wpf : workPackage.getAddonFares()) {
-    			wpf.setWorkPackage(new ObjectId(workPackage.getId()));
-    			wpf.setFareType("ADDON");
-    			workPackageFareHistoryRepository.save(wpf);
-    		}
-    	}
-    	
-    	if(workPackage.getMarketFares() != null && workPackage.getMarketFares().size() > 0) {
-    		List<WorkPackageFare> fares = workPackageFareHistoryRepository.findAllByWorkPackageAndFareType(workPackage.getId(), "MARKET");
-    		for(WorkPackageFare fare : fares) {
-    			workPackageFareHistoryRepository.delete(fare.getId());
-    		}  
-    		for(WorkPackageFare wpf : workPackage.getMarketFares()) {
-    			wpf.setWorkPackage(new ObjectId(workPackage.getId()));
-    			wpf.setFareType("MARKET");
-    			workPackageFareHistoryRepository.save(wpf);
-    		}
-    	}
-    	
-    	if(workPackage.getDiscountFares() != null && workPackage.getDiscountFares().size() > 0) {
-    		System.out.println("DISCOUNT FARES SAVE");
-    		List<WorkPackageFare> fares = workPackageFareHistoryRepository.findAllByWorkPackageAndFareType(workPackage.getId(), "DISCOUNT");
-    		for(WorkPackageFare fare : fares) {
-    			workPackageFareHistoryRepository.delete(fare.getId());
-    		}       
-    		for(WorkPackageFare wpf : workPackage.getDiscountFares()) {
-    			wpf.setWorkPackage(new ObjectId(workPackage.getId()));
-    			wpf.setFareType("DISCOUNT");
-    			workPackageFareHistoryRepository.save(wpf);
-    		}
-    	}
-    	*/
 	}
 
 	/**
@@ -3863,6 +3822,16 @@ public class WorkPackageResource {
     		result.setReviewLevel("LSO");
     		result.setStatus(Status.PENDING);
     		result.setLocked(false);
+        }
+        
+        List<WorkPackageFareSheet> fareSheet = result.getFareSheet();
+        for(WorkPackageFareSheet sheet : fareSheet) {
+        	FareVersion fareVersion = new FareVersion();
+        	fareVersion.action = "PASSDOWN";
+        	fareVersion.fares = sheet.getFares();
+        	fareVersion.version = sheet.fareVersion.size() + 1;
+        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+        	sheet.fareVersion.add(fareVersion);
         }
         workPackageService.save(result);
         
