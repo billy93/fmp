@@ -3760,6 +3760,34 @@
           }
       };
       
+      vm.importFareWaiver = function ($file, index) {
+          if ($file) {
+              DataUtils.toBase64($file, function(base64Data) {
+                  $scope.$apply(function() {
+                      var testing = { 
+                    		  file : base64Data,
+                    		  fileContentType : $file.type
+                      };
+                      
+                      vm.workPackage.importFares = testing;
+                      vm.workPackage.importIndex = index;
+                      //send to backend
+                      
+                      WorkPackage.importFaresWaiver(vm.workPackage, onImportSuccess, onImportFailure);
+                      
+                      function onImportSuccess(result){
+                    	  	alert('Import Success');
+                    	  	vm.mapWorkpackage(result);
+                      }
+                      
+                      function onImportFailure(){
+                    	    alert('Import Failed');
+                      }
+                  });
+              });
+          }
+      };
+      
       vm.mapWorkpackage = function(result){
     	  data = result;
   	  	  data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
@@ -3924,6 +3952,24 @@
 	       
       }
       
+      vm.exportFaresWaiver = function(index){
+    	  vm.workPackage.exportIndex = index;
+    	  WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
+    		  WorkPackage.exportFaresWaiver(vm.workPackage, onExportSuccess, onExportFailure);
+	    	  function onExportSuccess(result){
+	    		  var fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+      			var templateFilename = "Workorder_Waiver_Fare.xlsx";
+      			var blob = b64toBlob(result.file, fileType);
+      			FileSaver.saveAs(blob, templateFilename);
+	    	  }
+	    	  function onExportFailure(error){
+	    		  console.log(error);
+	    	  }    	 
+	    	}, function onSaveError(){
+	    		alert('An error occured, please try again');
+	    	}); 
+	       
+      }
       vm.exportFaresAddon = function(index){
     	  /*
     	  $uibModal.open({

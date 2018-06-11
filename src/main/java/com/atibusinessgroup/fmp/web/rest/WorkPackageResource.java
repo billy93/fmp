@@ -415,6 +415,7 @@ public class WorkPackageResource {
 				    ImportHeader importHeader = new ImportHeader();
 				    importHeader.index = headerIndex;
 				    importHeader.name = element.getStringCellValue();
+	            	log.debug("ROW HEADER NAME : {}", importHeader.name);
 				    importHeaderList.put(headerIndex, importHeader);
 				    map.put(importHeader, new ArrayList<>());
 				    
@@ -971,81 +972,82 @@ public class WorkPackageResource {
                 		
                 	}
                 	else if(header.contentEquals("Curr")) {
+                		//log.debug("CURRENCY : {}", String.valueOf(o));
                 		fares.get(i).setCurrency(String.valueOf(o));
                 	}
-//                	else if(header.contentEquals("Specified Amount")) {
-//                		fares.get(i).setAmount(String.valueOf(o));
-//                	}
-//                	else if(header.contentEquals("PAX Type")) {
-//                		fares.get(i).setPassengerType(String.valueOf(o));
-//                	}
-//                	else if(header.contentEquals("Fare Type")) {
-//                		fares.get(i).setFareType(String.valueOf(o));
-//                	}
-//                	else if(header.contentEquals("Tkt Code")) {
-//                		fares.get(i).setTicketCode(String.valueOf(o));
-//                	}
-//                	else if(header.contentEquals("Tkt Des")) {
-//                		fares.get(i).setTicketDesignator(String.valueOf(o));
-//                	}
-//                	else if(header.contentEquals("Base Fare OW/RT")) {
-//                		fares.get(i).setTypeOfJourney(String.valueOf(o));
-//                	}
-//                	else if(header.contentEquals("Global")) {
-//                		fares.get(i).setGlobal(String.valueOf(o));
-//                	}
-//                	else if(header.contentEquals("Rtg No")) {
-//                		fares.get(i).setRtgno(String.valueOf(o));
-//                	}
-//                	else if(header.contentEquals("Rtg No Tarno")) {
-//                		fares.get(i).setRtgnoTarno(String.valueOf(o));
-//                	}
-//                	else if(header.contentEquals("New FareCls")) {
-//                		fares.get(i).setNewFareBasis(String.valueOf(o));
-//                	}
-//                	else if(header.contentEquals("New OW/RT")) {
-//                		fares.get(i).setNewTypeOfJourney(String.valueOf(o));
-//                	}
-//                	else if(header.contentEquals("New BkgCd")) {
-//                		fares.get(i).setNewBookingCode(String.valueOf(o));
-//                	}
+                	else if(header.contentEquals("Specified Amount")) {
+                		fares.get(i).setDiscountSpecifiedAmount(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("PAX Type")) {
+                		fares.get(i).setPassengerType(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Fare Type")) {
+                		fares.get(i).setFareType(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Tkt Code")) {
+                		fares.get(i).setTicketCode(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Tkt Des")) {
+                		fares.get(i).setTicketDesignator(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Base Fare OW/RT")) {
+                		fares.get(i).setTypeOfJourney(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Global")) {
+                		fares.get(i).setGlobal(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Rtg No")) {
+                		fares.get(i).setRtgno(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Rtg No Tarno")) {
+                		fares.get(i).setRtgnoTarno(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("New FareCls")) {
+                		fares.get(i).setNewFareBasis(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("New OW/RT")) {
+                		fares.get(i).setNewTypeOfJourney(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("New BkgCd")) {
+                		fares.get(i).setNewBookingCode(String.valueOf(o));
+                	}
 
-//                	else if(header.contentEquals("Travel Start")) {
-//                		if(o != null && !String.valueOf(o).contentEquals("")) {
-//	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
-//	                		fares.get(i).setTravelStart(toZonedDateTime(date1));
-//                		}
-//                	}
-//                	else if(header.contentEquals("Travel End")) {
-//                		if(o != null && !String.valueOf(o).contentEquals("")) {
-//	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
-//	                		fares.get(i).setTravelEnd(toZonedDateTime(date1));
-//                		}
-//                	}
-//                	else if(header.contentEquals("Sale Start")) {
-//                		if(o != null && !String.valueOf(o).contentEquals("")) {
-//	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
-//	                		fares.get(i).setSaleStart(toZonedDateTime(date1));
-//                		}
-//                	}
-//                	else if(header.contentEquals("Sale End")) {
-//                		if(o != null && !String.valueOf(o).contentEquals("")) {
-//	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
-//	                		fares.get(i).setSaleEnd(toZonedDateTime(date1));
-//                		}
-//                	}
-//                	else if(header.contentEquals("Comment")) {
-//                		fares.get(i).setComment(String.valueOf(o));
-//                	}
-//                	else if(header.contentEquals("Travel Complete")) {
-//                		if(o != null && !String.valueOf(o).contentEquals("")) {
-//	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
-//	                		fares.get(i).setTravelComplete(toZonedDateTime(date1));
-//                		}
-//                	}
-//                	else if(header.contentEquals("Travel Complete Indicator")) {
-//                		fares.get(i).setTravelCompleteIndicator(String.valueOf(o));
-//                	}
+                	else if(header.contentEquals("Travel Start")) {
+                		if(o != null && !String.valueOf(o).contentEquals("")) {
+	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+	                		fares.get(i).setTravelStart(toZonedDateTime(date1));
+                		}
+                	}
+                	else if(header.contentEquals("Travel End")) {
+                		if(o != null && !String.valueOf(o).contentEquals("")) {
+	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+	                		fares.get(i).setTravelEnd(toZonedDateTime(date1));
+                		}
+                	}
+                	else if(header.contentEquals("Sale Start")) {
+                		if(o != null && !String.valueOf(o).contentEquals("")) {
+	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+	                		fares.get(i).setSaleStart(toZonedDateTime(date1));
+                		}
+                	}
+                	else if(header.contentEquals("Sale End")) {
+                		if(o != null && !String.valueOf(o).contentEquals("")) {
+	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+	                		fares.get(i).setSaleEnd(toZonedDateTime(date1));
+                		}
+                	}
+                	else if(header.contentEquals("Comment")) {
+                		fares.get(i).setComment(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Travel Complete")) {
+                		if(o != null && !String.valueOf(o).contentEquals("")) {
+	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+	                		fares.get(i).setTravelComplete(toZonedDateTime(date1));
+                		}
+                	}
+                	else if(header.contentEquals("Travel Complete Indicator")) {
+                		fares.get(i).setTravelCompleteIndicator(String.valueOf(o));
+                	}
                 	i++;
                 }
             }
@@ -1060,6 +1062,120 @@ public class WorkPackageResource {
         return getWorkPackage(workPackage.getId());
     }
    
+    /**
+     * POST  /work-packages/import-fares : Import a new fares workPackage.
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/work-packages/import-fares-waiver")
+    @Timed
+    public ResponseEntity<WorkPackage> importFaresWaiverWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
+        log.debug("REST request to save importFaresWaiverWorkPackage : {}", workPackage);
+
+        try {
+            ImportFares importData = workPackage.getImportFares();
+            int importIndex = workPackage.getImportIndex();
+            LinkedHashMap<ImportHeader, List<Object>> mapValue = importExcel(importData.getFile());
+            
+            List<Object> rows = (List<Object>) getElementByIndex(mapValue, 0);
+            List<WorkPackageFare> fares = new ArrayList<>();
+            for(int i=0;i<rows.size();i++) {
+            	fares.add(new WorkPackageFare());
+            }
+            
+            for (Map.Entry<ImportHeader, List<Object>> entry : mapValue.entrySet()) {
+                ImportHeader key = entry.getKey();
+            	String header = key.name;
+                List<Object> value = entry.getValue();
+                
+                int i=0;
+                TariffNumber tfNumber = new TariffNumber();
+                for(Object o : value) {
+                	if(header.contentEquals("Type")) {
+                		fares.get(i).setWaiverType(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Full/Partial")) {
+                		fares.get(i).setWaiverFullPartial(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("PNR")) {
+                		fares.get(i).setWaiverPnr(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Tkt From")) {
+                		fares.get(i).setWaiverTktFrom(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Tkt To")) {
+                		fares.get(i).setWaiverTktTo(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Ori")) {
+                		fares.get(i).setWaiverOri(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Dest")) {
+                		fares.get(i).setWaiverDest(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Original Itinerary")) {
+                		fares.get(i).setWaiverOriginalItinerary(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("New Itinerary")) {
+                		fares.get(i).setWaiverNewItinerary(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Original Basic Fare")) {
+                		fares.get(i).setWaiverOriginalBasicFare(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("New Basic Fare")) {
+                		fares.get(i).setWaiverNewBasicFare(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Approved Fares")) {
+                		fares.get(i).setWaiverApprovedFare(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Fare Lost")) {
+                		fares.get(i).setWaiverFareLost(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Calculated PN")) {
+                		fares.get(i).setWaiverCalculatedPn(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Original PN")) {
+                		fares.get(i).setWaiverOriginalPn(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Approved PN")) {
+                		fares.get(i).setWaiverApprovedPn(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Penalty Lost %")) {
+                		fares.get(i).setWaiverPenaltyLostPercent(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Penalty Lost Amount")) {
+                		fares.get(i).setWaiverPenaltyLostAmount(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Currency")) {
+                		fares.get(i).setWaiverCurrency(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Total Pax")) {
+                		fares.get(i).setWaiverTotalPax(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Total Lost")) {
+                		fares.get(i).setWaiverTotalLost(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Approver")) {
+                		fares.get(i).setWaiverApprover(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Remark")) {
+                		fares.get(i).setWaiverRemark(String.valueOf(o));
+                	}
+                	i++;
+                }
+            }
+
+            workPackage.getWaiverFareSheet().get(importIndex).getFares().addAll(fares);
+            workPackage = workPackageService.save(workPackage);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+        return getWorkPackage(workPackage.getId());
+    }
+    
 
     public Attachment createWorkbook(String sheetName, LinkedHashMap<String, Object> data) {
     	
@@ -1189,6 +1305,80 @@ public class WorkPackageResource {
         }
     	
     	Attachment att = createWorkbook("Workorder Fare", data);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
+            .body(att);
+    }
+    
+    /**
+     * POST  /work-packages/export-fares-waiver : Export work package fares waiver
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/work-packages/export-fares-waiver")
+    @Timed
+    public ResponseEntity<Attachment> exportFaresWaiverWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
+    	log.debug("REST request to save exportFares : {}", workPackage.getExportIndex());
+    	
+    	LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+    	
+    	data.put("Type", new ArrayList<>());
+    	data.put("Full/Partial", new ArrayList<>());
+    	data.put("PNR", new ArrayList<>());
+    	data.put("Tkt From", new ArrayList<>());
+    	data.put("Tkt To", new ArrayList<>());
+    	data.put("Ori", new ArrayList<>());
+    	data.put("Dest", new ArrayList<>());
+    	data.put("Original Itinerary", new ArrayList<>());
+    	data.put("New Itinerary", new ArrayList<>());
+    	data.put("Original Basic Fare", new ArrayList<>());
+    	data.put("New Basic Fare", new ArrayList<>());
+    	data.put("Approved Fares", new ArrayList<>());
+    	data.put("Fare Lost", new ArrayList<>());
+    	data.put("Calculated PN", new ArrayList<>());
+    	data.put("Original PN", new ArrayList<>());
+    	data.put("Approved PN", new ArrayList<>());
+    	data.put("Penalty Lost %", new ArrayList<>());
+    	data.put("Penalty Lost Amount", new ArrayList<>());
+    	data.put("Currency", new ArrayList<>());
+    	data.put("Total Pax", new ArrayList<>());
+    	data.put("Total Lost", new ArrayList<>());
+    	data.put("Approver", new ArrayList<>());
+    	data.put("Remark", new ArrayList<>());
+    	
+    	WorkPackage wp = workPackageService.findOne(workPackage.getId());
+        List<WorkPackageFare> fares = wp.getWaiverFareSheet().get(workPackage.getExportIndex()).getFares();
+
+        DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy"); 
+        for(int i=0; i<fares.size(); i++) {
+        	putValue(data.get("Type"), fares.get(i).getWaiverType());
+        	putValue(data.get("Full/Partial"), fares.get(i).getWaiverFullPartial());
+        	putValue(data.get("PNR"), fares.get(i).getWaiverPnr());
+        	putValue(data.get("Tkt From"), fares.get(i).getWaiverTktFrom());
+        	putValue(data.get("Tkt To"), fares.get(i).getWaiverTktTo());
+        	putValue(data.get("Ori"), fares.get(i).getWaiverOri());
+        	putValue(data.get("Dest"), fares.get(i).getWaiverDest());
+        	putValue(data.get("Original Itinerary"), fares.get(i).getWaiverOriginalItinerary());
+        	putValue(data.get("New Itinerary"), fares.get(i).getWaiverNewItinerary());
+        	putValue(data.get("Original Basic Fare"), fares.get(i).getWaiverOriginalBasicFare());
+        	putValue(data.get("New Basic Fare"), fares.get(i).getWaiverNewBasicFare());
+        	putValue(data.get("Approved Fares"), fares.get(i).getWaiverApprovedFare());
+        	putValue(data.get("Fare Lost"), fares.get(i).getWaiverFareLost());
+        	putValue(data.get("Calculated PN"), fares.get(i).getWaiverCalculatedPn());
+        	putValue(data.get("Original PN"), fares.get(i).getWaiverOriginalPn());
+        	putValue(data.get("Approved PN"), fares.get(i).getWaiverApprovedPn());
+        	putValue(data.get("Penalty Lost %"), fares.get(i).getWaiverPenaltyLostPercent());
+        	putValue(data.get("Penalty Lost Amount"), fares.get(i).getWaiverPenaltyLostAmount());
+        	putValue(data.get("Currency"), fares.get(i).getWaiverCurrency());
+        	putValue(data.get("Total Pax"), fares.get(i).getWaiverTotalPax());
+        	putValue(data.get("Total Lost"), fares.get(i).getWaiverTotalLost());
+        	putValue(data.get("Approver"), fares.get(i).getWaiverApprover());
+        	putValue(data.get("Remark"), fares.get(i).getWaiverRemark());
+        }
+    	
+    	Attachment att = createWorkbook("Workorder Waiver Fare", data);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
             .body(att);
@@ -1415,7 +1605,7 @@ public class WorkPackageResource {
         	putValue(data.get("Base Tariff Code"), fares.get(i).getBaseTarcd());
         	putValue(data.get("Calc Type"), fares.get(i).getCalcType());
         	
-//        	putValue(data.get("% of Base Fare", new ArrayList<>());
+        	putValue(data.get("% of Base Fare"), null);
         	putValue(data.get("Curr"), fares.get(i).getCurrency());
         	putValue(data.get("Specified Amount"), fares.get(i).getDiscountSpecifiedAmount());
         	putValue(data.get("PAX Type"), fares.get(i).getPassengerType());
