@@ -2046,9 +2046,16 @@
 	  vm.passUp = function(){
 		    if (confirm("Are you sure to Pass up this workorder?")) {
 		    	WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
-		    		WorkPackage.passup(result, function(){
-		    			alert('Pass Up Success');
-		    			$state.go('work-package');
+		    		WorkPackage.passup(result, function(wp){
+		    			console.log(wp);
+		    			if(wp.validation != null){
+		    				vm.workPackage.validation = wp.validation;
+		    				alert('There is '+wp.validation.errorsCount+' error(s) and '+wp.validation.warningsCount+' warning(s)');		    				
+		    			}
+		    			else{
+			    			alert('Pass Up Success');
+			    			$state.go('work-package');
+		    			}
 		    		}, function(){
 		    			alert('Pass Up Failed');
 		    		});

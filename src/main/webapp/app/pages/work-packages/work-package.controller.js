@@ -158,9 +158,9 @@
     		vm.workPackageActionButton[idx] = !vm.workPackageActionButton[idx];
         }
 
-        vm.reuse = function(index){
-        	vm.workPackages[index].reuseReplaceConfig = {};
-        	if(vm.workPackages[index].status == 'NEW'){
+        vm.reuse = function(){
+        	vm.selectedRow.reuseReplaceConfig = {};
+        	if(vm.selectedRow.status == 'NEW'){
         		$uibModal.open({
                     templateUrl: 'app/pages/work-packages/work-package-reuse-replace-confirm-dialog.html',
                     controller: 'WorkPackageReuseReplaceConfirmDialogController',
@@ -170,7 +170,7 @@
                     windowClass: 'full-page-modal',
                     resolve: {
                     	workPackage: function(){
-                    		return vm.workPackages[index];
+                    		return vm.selectedRow;
                     	},
                     	 businessAreas: ['User', function(User) {
                              return User.getBusinessArea().$promise;
@@ -190,7 +190,7 @@
     			});
         	}
         	else{
-        		WorkPackage.reuse(vm.workPackages[index], onReuseSuccess, onReuseFailed);
+        		WorkPackage.reuse(vm.selectedRow, onReuseSuccess, onReuseFailed);
 
 				function onReuseSuccess(result){
 	        		alert('Reuse Success');
@@ -203,9 +203,9 @@
         	}
         }
 
-        vm.replace = function(index){
-        	vm.workPackages[index].reuseReplaceConfig = {};
-        	if(vm.workPackages[index].status == 'NEW'){
+        vm.replace = function(){
+        	vm.selectedRow.reuseReplaceConfig = {};
+        	if(vm.selectedRow.status == 'NEW'){
         		$uibModal.open({
                     templateUrl: 'app/pages/work-packages/work-package-reuse-replace-confirm-dialog.html',
                     controller: 'WorkPackageReuseReplaceConfirmDialogController',
@@ -215,13 +215,13 @@
                     windowClass: 'full-page-modal',
                     resolve: {
                     	workPackage: function(){
-                    		return vm.workPackages[index];
+                    		return vm.selectedRow;
                     	}
                     }
     			}).result.then(function(option) {
-    				vm.workPackages[index].reuseReplaceConfig.attachment = option.attachment;
+    				vm.selectedRow.reuseReplaceConfig.attachment = option.attachment;
 
-    				WorkPackage.replace(vm.workPackages[index], onReplaceSuccess, onReplceFailed);
+    				WorkPackage.replace(vm.selectedRow, onReplaceSuccess, onReplceFailed);
 
     	        	function onReplaceSuccess(result){
     	        		alert('Replace Success');
@@ -235,7 +235,7 @@
     			});
         	}
         	else{
-	        	WorkPackage.replace(vm.workPackages[index], onReplaceSuccess, onReplceFailed);
+	        	WorkPackage.replace(vm.selectedRow, onReplaceSuccess, onReplceFailed);
 
 	        	function onReplaceSuccess(result){
 	        		alert('Replace Success');
@@ -248,8 +248,8 @@
 	        	}
         	}
         }
-        vm.withdraw = function(index){
-        	WorkPackage.withdraw(vm.workPackages[index], onWithdrawSuccess, onWithdrawFailed);
+        vm.withdraw = function(){
+        	WorkPackage.withdraw(vm.selectedRow, onWithdrawSuccess, onWithdrawFailed);
 
         	function onWithdrawSuccess(result){
         		alert('Withdraw Success '+result.id);
@@ -262,8 +262,8 @@
         	}
         }
 
-        vm.showHistory = function(index){
-    		WorkPackage.history({id:vm.workPackages[index].id}, onSuccess, onError);
+        vm.showHistory = function(){
+    		WorkPackage.history({id:vm.selectedRow.id}, onSuccess, onError);
 
 			function onSuccess(history){
 				$uibModal.open({
@@ -290,12 +290,11 @@
 
         vm.refresh = function(){
         	loadAll();
-        	console.log(vm.workPackageFilter);
         }
 
         vm.unlock = function(wp){
-        	 vm.workPackages[wp].locked = false;
-	      	  WorkPackage.unlock(vm.workPackages[wp], onUnlockedSuccess, onUnlockedFailure);
+        	 vm.selectedRow.locked = false;
+	      	  WorkPackage.unlock(vm.selectedRow, onUnlockedSuccess, onUnlockedFailure);
 	      	  function onUnlockedSuccess (result) {
 	      		  alert('Work Package Successful Unlocked');
 	      	  }

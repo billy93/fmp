@@ -284,7 +284,6 @@
 						Workflow<i class="fa fa-caret-down"></i></button>
 						<ul class="dropdown-menu custom" role="menu">
 						    <li><a ng-click="vm.passUp()" 
-					        ng-class="{'poiv-none' : (vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'REGULAR') ? editForm.editFormATPCO.$invalid : false }" 
 					        ng-show="vm.workPackage.reviewLevel != 'HO' && vm.workPackage.reviewLevel != 'DISTRIBUTION' && vm.workPackage.reviewLevel != 'ROUTE_MANAGEMENT'">Pass Up</a></li>
 					        <li><a ng-click="vm.passDown()" 
 					        ng-show="vm.workPackage.reviewLevel != 'LSO'  && vm.workPackage.reviewLevel != 'ROUTE_MANAGEMENT' && vm.workPackage.reviewLevel != 'DISTRIBUTION'">Pass Down</a></li>
