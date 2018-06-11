@@ -346,7 +346,7 @@
 							    <li ng-if="vm.workPackage.filingDetails" ng-class="{active:vm.currentTabFilingDetail}"><a ng-click="vm.selectOtherTab('filingDetail')">Filling Details</a></li>
 							</ul>
 							
-							<div class="tab-content" >
+							<div class="tab-content">
 								<div class="tab-pane" id="tabAtpco{{$index}}" ng-class="{active:vm.currentTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.fareSheet track by $index">
 									<div class="pb1 mb1 bbgrey">
 										<div class="clearfix">
@@ -399,9 +399,11 @@
 											<div class="pull-left w50 two-column">
 												<div class="form-group">
 													<label>Version</label>
-													<select class="form-control">
-														<option>Select Version</option>
-														<option>Current</option>
+													<select class="form-control" ng-model="workPackageSheet.version" ng-change="vm.changeVersion(workPackageSheet, workPackageSheet.version)" ng-init="vm.changeVersion(workPackageSheet, 'current')">
+														<option value='current'>Current</option>
+														<option ng-repeat="version in workPackageSheet.fareVersion track by $index" value="{{$index}}">
+															{{version.version}} - {{version.username}} - {{version.action}}
+														</option>
 													</select>
 												</div>
 											</div>
@@ -522,8 +524,8 @@
 															</th>
 														</tr>
 													</thead>
-													<tbody ng-repeat="(key, fare) in workPackageSheet.fares track by $index" ng-click="vm.tbodyClick(workPackageSheet)">
-														<tr role="row" class="datatable-row" ng-class="{'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
+													<tbody>
+														<tr ng-click="vm.tbodyClick(workPackageSheet)" ng-repeat="(key, fare) in workPackageSheet.currentFares track by $index" role="row" class="datatable-row" ng-class="{'poiv-none':workPackageSheet.version != 'current', 'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
 															<!-- <td>
 																<input type="checkbox" ng-model="fare.selected" ng-change="optionToggled(workPackageSheet.fares)">
 															</td> -->
@@ -976,7 +978,7 @@
 									                    		ng-model="fare.ratesheetComment"/>
 									               			</td>
 														</tr>
-														<tr class="datatable-action{{$index}}" ng-show="vm.faresActionButton[$parent.$index+''+$index]">
+														<!-- <tr class="datatable-action{{$index}}" ng-show="vm.faresActionButton[$parent.$index+''+$index]">
 															<td colspan="18" class="">
 																<div class="btn btn-app" ng-click="vm.deleteFaresSelected('fares', workPackageSheet, $parent.$index, $index)">
 																	<i class="fa fa-trash"></i>Delete
@@ -994,7 +996,7 @@
 																	<i class="fa fa-stack-exchange"></i>Derived Fares
 																</div>
 															</td>
-														</tr>
+														</tr> -->
 													</tbody>
 												</table>
 											</div>

@@ -3,7 +3,9 @@ package com.atibusinessgroup.fmp.domain;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.data.annotation.Id;
@@ -363,6 +365,7 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 	public String getReplaceFrom() {
 		return replaceFrom;
 	}
+	
 
 	public void setReplaceFrom(String replaceFrom) {
 		this.replaceFrom = replaceFrom;
@@ -393,6 +396,8 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 	}
 
 	public static class WorkPackageFareSheet{
+		
+
     	@Field("sheet_number")
     	private int sheetNumber;
     	
@@ -467,9 +472,7 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
         @Field("discontinue_date")
         private String discontinueDate;
 
-        
-        
-        public String getDiscountApprovalReference() {
+		public String getDiscountApprovalReference() {
 			return discountApprovalReference;
 		}
 
@@ -645,7 +648,48 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 			this.accountCode = accountCode;
 		}
 		
+		@Field(value="fare_version")
+		public List<FareVersion> fareVersion = new ArrayList<>();
 		
+		public static class FareVersion{
+			public List<WorkPackageFare> fares = new ArrayList<>();
+			
+			public int version;
+			public String action;
+			public String username;
+			public List<WorkPackageFare> getFares() {
+				return fares;
+			}
+			public void setFares(List<WorkPackageFare> fares) {
+				this.fares = fares;
+			}
+			public int getVersion() {
+				return version;
+			}
+			public void setVersion(int version) {
+				this.version = version;
+			}
+			public String getAction() {
+				return action;
+			}
+			public void setAction(String action) {
+				this.action = action;
+			}
+			public String getUsername() {
+				return username;
+			}
+			public void setUsername(String username) {
+				this.username = username;
+			}
+		}
+		
+		public List<FareVersion> getFareVersion() {
+			return fareVersion;
+		}
+
+		public void setFareVersion(List<FareVersion> fareVersion) {
+			this.fareVersion = fareVersion;
+		}		
     }
     
     private List<FilingInstruction> filingInstructionData = new ArrayList<>();
