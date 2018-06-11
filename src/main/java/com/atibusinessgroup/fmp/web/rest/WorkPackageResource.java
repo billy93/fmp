@@ -3332,6 +3332,7 @@ public class WorkPackageResource {
     	public DistributionType distributionType;
     	public Type type;
     	public String approvalReference;
+    	public String createdTime;
     	
     	public static class ReviewLevel{
     		public boolean ho;
@@ -3504,6 +3505,15 @@ public class WorkPackageResource {
 			}
     	}
     	
+    	
+		public String getCreatedTime() {
+			return createdTime;
+		}
+
+		public void setCreatedTime(String createdTime) {
+			this.createdTime = createdTime;
+		}
+
 		public ReviewLevel getReviewLevel() {
 			return reviewLevel;
 		}

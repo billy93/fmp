@@ -88,6 +88,7 @@
 	    			discount:true,
 	    			waiver:true
 	    		},
+	    		createdTime:'10'
 	        };
         }
         vm.loadAll();
@@ -116,6 +117,7 @@
             	"type.waiver":vm.workPackageFilter.type.waiver,
 
             	"approvalReference": vm.workPackageFilter.approvalReference,
+            	"createdTime": vm.workPackageFilter.createdTime,
                 page: pagingParams.page - 1,
                 size: vm.itemsPerPage,
                 sort: sort()
