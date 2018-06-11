@@ -113,4 +113,82 @@ $(function(){
 		$(this).find('tbody').slideToggle(200);
 	});
 	
+//	range slider
+	$(document).on('change','.custom-range-slider',function(){
+		var _display = $(this).parents('.rangeslider-wrapper').find('.range-slider-time');
+		var _val = $(this).val();
+		if(_val == 1){
+			_display.text('1 Day');
+		}
+		else if(_val == 2){
+			_display.text('2 Days');
+		}
+		else if(_val == 3){
+			_display.text('3 Days');
+		}
+		else if(_val == 4){
+			_display.text('4 Days');
+		}
+		else if(_val == 5){
+			_display.text('5 Days');
+		}
+		else if(_val == 6){
+			_display.text('6 Days');
+		}
+		else if(_val == 7){
+			_display.text('1 Week');
+		}
+		else if(_val == 8){
+			_display.text('2 Weeks');
+		}
+		else if(_val == 9){
+			_display.text('3 Weeks');
+		}
+		else if(_val == 10){
+			_display.text('1 Month');
+		}
+		else if(_val == 11){
+			_display.text('2 Months');
+		}
+		else if(_val == 12){
+			_display.text('3 Months');
+		}
+		else if(_val == 13){
+			_display.text('4 Months');
+		}
+		else if(_val == 14){
+			_display.text('5 Months');
+		}
+		else if(_val == 15){
+			_display.text('6 Months');
+		}
+		else if(_val == 16){
+			_display.text('7 Months');
+		}
+		else if(_val == 17){
+			_display.text('8 Months');
+		}
+		else if(_val == 18){
+			_display.text('9 Months');
+		}
+		else if(_val == 19){
+			_display.text('10 Months');
+		}
+		else if(_val == 20){
+			_display.text('11 Months');
+		}
+		else if(_val == 21){
+			_display.text('1 Year');
+		}
+		else if(_val == 22){
+			_display.text('2 Years');
+		}
+		else if(_val == 23){
+			_display.text('3 Years');
+		}
+		else if(_val == 24){
+			_display.text('EveryTime');
+		}
+	});
+	
 });

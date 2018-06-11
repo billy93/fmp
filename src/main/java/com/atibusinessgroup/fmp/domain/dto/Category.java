@@ -1,13 +1,13 @@
 package com.atibusinessgroup.fmp.domain.dto;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class Category {
 	private int catNo;
 	private String catName;
 	private String type;
+	private String textFormat;
 	private List<CategoryAttribute> catAttributes = new ArrayList<>();
 	
 	public int getCatNo() {
@@ -42,6 +42,14 @@ public class Category {
 		this.catAttributes = catAttributes;
 	}
 
+	public String getTextFormat() {
+		return textFormat;
+	}
+
+	public void setTextFormat(String textFormat) {
+		this.textFormat = textFormat;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -49,6 +57,7 @@ public class Category {
 		result = prime * result + ((catAttributes == null) ? 0 : catAttributes.hashCode());
 		result = prime * result + ((catName == null) ? 0 : catName.hashCode());
 		result = prime * result + catNo;
+		result = prime * result + ((textFormat == null) ? 0 : textFormat.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
@@ -82,6 +91,13 @@ public class Category {
 		if (catNo != other.catNo) {
 			return false;
 		}
+		if (textFormat == null) {
+			if (other.textFormat != null) {
+				return false;
+			}
+		} else if (!textFormat.equals(other.textFormat)) {
+			return false;
+		}
 		if (type == null) {
 			if (other.type != null) {
 				return false;
@@ -94,7 +110,7 @@ public class Category {
 
 	@Override
 	public String toString() {
-		return "Category [catNo=" + catNo + ", catName=" + catName + ", type=" + type + ", catAttributes="
-				+ catAttributes + "]";
+		return "Category [catNo=" + catNo + ", catName=" + catName + ", type=" + type + ", textFormat=" + textFormat
+				+ ", catAttributes=" + catAttributes + "]";
 	}
 }

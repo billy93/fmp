@@ -307,7 +307,7 @@
 						<button class="btn btn-default small">Action <i class="fa fa-caret-down"></i></button>
 						<ul class="dropdown-menu custom" role="menu">
 						    <li>
-						    	<a>Save and Validate</a>
+						    	<a ng-click="vm.save(true)">Save and Validate</a>
 						    </li>
 						</ul>
 					</div>	
@@ -328,7 +328,7 @@
 						    </li>
 						</ul>
 					</div>												
-					<button class="btn btn-default small" ng-click="vm.save()">Save</button>
+					<button class="btn btn-default small" ng-click="vm.save(false)">Save</button>
 					<button class="btn btn-default small" ng-click="vm.close()">Close</button>
 				</div>
 			</div>
@@ -476,21 +476,13 @@
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Action
 																<div class="resize-div"></div>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tar No
-																<div class="resize-div" style="min-width: 200px;"></div>
-															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tar Cd
-																<div class="resize-div" style="min-width: 200px;"></div>
-															</th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tar No</th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tar Cd</th>
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Global
 																<div class="resize-div"></div>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Origin
-																<div class="resize-div" style="min-width: 200px;"></div>
-															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Dest
-																<div class="resize-div" style="min-width: 200px;"></div>
-															</th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Origin</th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Dest</th>
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Fare Cls
 																<div class="resize-div"></div>
 															</th>
@@ -510,9 +502,7 @@
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Rule No
 																<div class="resize-div"></div>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Curr
-																<div class="resize-div" style="min-width: 200px;"></div>
-															</th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Curr</th>
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Base Amt
 																<div class="resize-div"></div>
 															</th>
@@ -1866,8 +1856,8 @@
 						                        ng-disabled="!vm.isEditable('discountFareType')"></select>	 -->
 											<select class="form-control" name="discountFareType{{$index}}" ng-model="workPackageSheet.discountFareType" ng-class="{'must-fill': !editForm.editFormDiscount.discountFareType{{$index}}.$valid}"
 												ng-required="vm.isRequired('discountFareType')" ng-disabled="!vm.isEditable('discountFareType')">
-												<option ng-repeat="fare in vm.optionFare track by $index" value="{{fare.name}}">
-													{{fare.code}} | {{fare.name}}
+												<option ng-repeat="fare in vm.atpcoFareTypes track by $index" value="{{fare.typeCode}}">
+													{{fare.typeCode}}  {{fare.definition}}
 												</option>
 											</select>								      				
 						                </div>
@@ -2166,13 +2156,13 @@
 												  </ui-select> -->
 				                              </td>
 				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'fareType', $event)" ng-class="{highlighted:fare.field['fareType']}">
-				                                <select class="form-control" 
-				                                   name="discountFareFareType{{$parent.$index}}{{$index}}"
-				                                   ng-required="vm.isRequired('discountFareFareType')"
-				                                   ng-class="{'must-fill': !editForm.editFormDiscount.discountFareFareType{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"																			            
-				                                   ng-model="fare.fareType"
-				                                   ng-disabled="!vm.isEditable('discountFareFareType')"
-				                                   ng-options="key as value for (key , value) in vm.fareType"></select>
+				                                   <select class="form-control" name="discountFareFareType{{$parent.$index}}{{$index}}" ng-model="fare.fareType" 
+				                                   ng-class="{'must-fill': !editForm.editFormDiscount.discountFareFareType{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"
+														ng-required="vm.isRequired('discountFareFareType')" ng-disabled="!vm.isEditable('discountFareFareType')">
+														<option ng-repeat="fare in vm.atpcoFareTypes track by $index" value="{{fare.typeCode}}">
+															{{fare.typeCode}}  {{fare.definition}}
+														</option>
+													</select>
 				                              </td>
 				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'ticketCode', $event)" ng-class="{highlighted:fare.field['ticketCode']}">
 				                                <input type="text" class="form-control" name="discountTicketCode{{$parent.$index}}{{$index}}"

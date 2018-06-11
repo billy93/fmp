@@ -20,8 +20,8 @@
      * @param Clipboard
      * @returns
      */
-    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities', 'states', 'cityGroups', 'Currency'];
-    function WorkPackageDetailController($window, $sce, currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups, Currency) {
+    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities', 'states', 'cityGroups', 'Currency', 'atpcoFareTypes'];
+    function WorkPackageDetailController($window, $sce, currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups, Currency, atpcoFareTypes) {
     	var vm = this;
 
     	window.onbeforeunload = function () {
@@ -67,36 +67,9 @@
         vm.currencies = currencies;
         vm.indexSelectedTab = 0;
         $scope.dateformat = "yyyy-MM-dd";
-        vm.fareType = {};
-        vm.optionFare = [];
-        
-        for(var x=0;x<fareTypes.length;x++){
-        	if(vm.workPackage.targetDistribution=="ATPCO" && vm.workPackage.type=="DISCOUNT"){
-        		if(fareTypes[x].atpcoDiscount){
-        			vm.fareType[fareTypes[x].name] = fareTypes[x].code+" | "+fareTypes[x].name; 
-        		}
-        	}else{
-        		if(!fareTypes[x].atpcoDiscount){
-//        			vm.fareType[fareTypes[x].name] = fareTypes[x].name;
-        			vm.fareType[fareTypes[x].name] = fareTypes[x].code+" | "+fareTypes[x].name;
-        		}
-            	        		
-        	}
-        }
-             
-        for(var x=0;x<fareTypes.length;x++){
-        	if(vm.workPackage.targetDistribution=="ATPCO" && vm.workPackage.type=="DISCOUNT"){
-        		if(fareTypes[x].atpcoDiscount){
-        			vm.optionFare.push(fareTypes[x]); 
-        		}
-        	}else{
-        		if(!fareTypes[x].atpcoDiscount){
-        			vm.optionFare.push(fareTypes[x]);
-        		}
-            	        		
-        	}
-        }
-        
+        vm.optionFare = fareTypes;
+        vm.atpcoFareTypes = atpcoFareTypes;
+                      
         
         vm.businessArea = {};
         for(var x=0;x<businessAreas.length;x++){
@@ -2358,9 +2331,14 @@
 	    }
 	  }
 	  
-	  function save () {
+	  function save (isValidate) {
           vm.isSaving = true;
           if (vm.workPackage.id !== null) {
+        	  if(isValidate){
+        		  vm.workPackage.validate = true;
+        	  }else{
+        		  vm.workPackage.validate = false;
+        	  }
               WorkPackage.update(vm.workPackage, onSaveSuccess, onSaveError);
           } else {
               WorkPackage.save(vm.workPackage, onSaveSuccess, onSaveError);

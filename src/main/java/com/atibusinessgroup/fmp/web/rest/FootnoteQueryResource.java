@@ -182,7 +182,7 @@ public class FootnoteQueryResource {
 			}
 
 			if (dataTables.size() > 0) {
-				cat.setCatAttributes(atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), dataTables, CategoryType.FOOTNOTE));
+				cat.setCatAttributes(atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), dataTables, CategoryType.FOOTNOTE).getAttributes()	);
 			}
 
 			result.add(cat);

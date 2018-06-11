@@ -5,6 +5,7 @@ public class AfdQuery {
 	private String source;
 	private String sc;
 	private String tariffNo;
+	private String tariffCode;
 	private String carrierCode;
 	private String originCity;
 	private String originCountry;
@@ -553,6 +554,14 @@ public class AfdQuery {
 		this.gfsDate = gfsDate;
 	}
 
+	public String getTariffCode() {
+		return tariffCode;
+	}
+
+	public void setTariffCode(String tariffCode) {
+		this.tariffCode = tariffCode;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -615,6 +624,7 @@ public class AfdQuery {
 		result = prime * result + ((season == null) ? 0 : season.hashCode());
 		result = prime * result + (sellable ? 1231 : 1237);
 		result = prime * result + ((source == null) ? 0 : source.hashCode());
+		result = prime * result + ((tariffCode == null) ? 0 : tariffCode.hashCode());
 		result = prime * result + ((tariffNo == null) ? 0 : tariffNo.hashCode());
 		temp = Double.doubleToLongBits(taxes);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
@@ -958,6 +968,13 @@ public class AfdQuery {
 		} else if (!source.equals(other.source)) {
 			return false;
 		}
+		if (tariffCode == null) {
+			if (other.tariffCode != null) {
+				return false;
+			}
+		} else if (!tariffCode.equals(other.tariffCode)) {
+			return false;
+		}
 		if (tariffNo == null) {
 			if (other.tariffNo != null) {
 				return false;
@@ -1029,24 +1046,24 @@ public class AfdQuery {
 	@Override
 	public String toString() {
 		return "AfdQuery [atpcoFareId=" + atpcoFareId + ", source=" + source + ", sc=" + sc + ", tariffNo=" + tariffNo
-				+ ", carrierCode=" + carrierCode + ", originCity=" + originCity + ", originCountry=" + originCountry
-				+ ", destinationCity=" + destinationCity + ", destinationCountry=" + destinationCountry
-				+ ", fareClassCode=" + fareClassCode + ", bookingClass=" + bookingClass + ", cabin=" + cabin + ", owrt="
-				+ owrt + ", footnote=" + footnote + ", routingNo=" + routingNo + ", ruleNo=" + ruleNo
-				+ ", maximumPermittedMileage=" + maximumPermittedMileage + ", currencyCode=" + currencyCode
-				+ ", baseAmount=" + baseAmount + ", error=" + error + ", tfcCalculationDate=" + tfcCalculationDate
-				+ ", tfcFocusDate=" + tfcFocusDate + ", yqyr=" + yqyr + ", taxes=" + taxes + ", tfc=" + tfc + ", aif="
-				+ aif + ", itinerary=" + itinerary + ", overrideIndicator=" + overrideIndicator + ", effectiveDate="
-				+ effectiveDate + ", discontinueDate=" + discontinueDate + ", gfsReference=" + gfsReference
-				+ ", gfsDate=" + gfsDate + ", globalIndicator=" + globalIndicator + ", ruleFocusDate=" + ruleFocusDate
-				+ ", sellable=" + sellable + ", travelStartDate=" + travelStartDate + ", travelEndDate=" + travelEndDate
-				+ ", travelComplete=" + travelComplete + ", saleStartDate=" + saleStartDate + ", saleEndDate="
-				+ saleEndDate + ", resStartDate=" + resStartDate + ", resEndDate=" + resEndDate + ", minStay=" + minStay
-				+ ", maxStay=" + maxStay + ", advancePurchase=" + advancePurchase + ", dowIn=" + dowIn + ", dowOut="
-				+ dowOut + ", season=" + season + ", dayOfWeekType=" + dayOfWeekType + ", firstSeasonDate="
-				+ firstSeasonDate + ", lastSeasonDate=" + lastSeasonDate + ", travelDateRanges=" + travelDateRanges
-				+ ", fareType=" + fareType + ", paxType=" + paxType + ", wpId=" + wpId + ", groupFare=" + groupFare
-				+ ", refAmount=" + refAmount + ", refYqyr=" + refYqyr + ", refTaxes=" + refTaxes + ", refTfc=" + refTfc
-				+ ", refAif=" + refAif + "]";
+				+ ", tariffCode=" + tariffCode + ", carrierCode=" + carrierCode + ", originCity=" + originCity
+				+ ", originCountry=" + originCountry + ", destinationCity=" + destinationCity + ", destinationCountry="
+				+ destinationCountry + ", fareClassCode=" + fareClassCode + ", bookingClass=" + bookingClass
+				+ ", cabin=" + cabin + ", owrt=" + owrt + ", footnote=" + footnote + ", routingNo=" + routingNo
+				+ ", ruleNo=" + ruleNo + ", maximumPermittedMileage=" + maximumPermittedMileage + ", currencyCode="
+				+ currencyCode + ", baseAmount=" + baseAmount + ", error=" + error + ", tfcCalculationDate="
+				+ tfcCalculationDate + ", tfcFocusDate=" + tfcFocusDate + ", yqyr=" + yqyr + ", taxes=" + taxes
+				+ ", tfc=" + tfc + ", aif=" + aif + ", itinerary=" + itinerary + ", overrideIndicator="
+				+ overrideIndicator + ", effectiveDate=" + effectiveDate + ", discontinueDate=" + discontinueDate
+				+ ", gfsReference=" + gfsReference + ", gfsDate=" + gfsDate + ", globalIndicator=" + globalIndicator
+				+ ", ruleFocusDate=" + ruleFocusDate + ", sellable=" + sellable + ", travelStartDate=" + travelStartDate
+				+ ", travelEndDate=" + travelEndDate + ", travelComplete=" + travelComplete + ", saleStartDate="
+				+ saleStartDate + ", saleEndDate=" + saleEndDate + ", resStartDate=" + resStartDate + ", resEndDate="
+				+ resEndDate + ", minStay=" + minStay + ", maxStay=" + maxStay + ", advancePurchase=" + advancePurchase
+				+ ", dowIn=" + dowIn + ", dowOut=" + dowOut + ", season=" + season + ", dayOfWeekType=" + dayOfWeekType
+				+ ", firstSeasonDate=" + firstSeasonDate + ", lastSeasonDate=" + lastSeasonDate + ", travelDateRanges="
+				+ travelDateRanges + ", fareType=" + fareType + ", paxType=" + paxType + ", wpId=" + wpId
+				+ ", groupFare=" + groupFare + ", refAmount=" + refAmount + ", refYqyr=" + refYqyr + ", refTaxes="
+				+ refTaxes + ", refTfc=" + refTfc + ", refAif=" + refAif + "]";
 	}
 }

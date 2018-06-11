@@ -10,6 +10,7 @@
     function CategoryModalController($state, entity, $uibModalInstance) {
         var vm = this;
         vm.clear = clear;
+        vm.showCodedValue = false;
         
         vm.textTable996Tags = ['text_tbl_no_996', 'text_table_no_996', 'textTableNumber996'];
         

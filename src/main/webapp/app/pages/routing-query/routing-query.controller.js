@@ -26,18 +26,16 @@
         vm.dateFormat = "yyyy-MM-dd";
         vm.openCalendar = openCalendar;
         
-//        if($stateParams.size != null || $stateParams.size != undefined){
-//        	vm.itemsPerPage = $stateParams.size;
-//        }
-//        else{
-//        	vm.itemsPerPage = "10";
-//        }
+        if($stateParams.routingQueryFilter != null){
+        	vm.queryParams = $stateParams.routingQueryFilter;
+        } else {
+        	vm.clearFilter();
+        }
         
-        vm.clearFilter();
         vm.loadAll();
 
-        function loadAll () {
-        	vm.queryParams.page= pagingParams.page - 1;
+        function loadAll(isQueryClick = false) {
+        	vm.queryParams.page = pagingParams.page - 1;
 			vm.queryParams.size= vm.itemsPerPage;
 			vm.queryParams.sort= sort();
 			
@@ -60,6 +58,11 @@
             function onError(error) {
                 AlertService.error(error.data.message);
             }
+        	
+        	if(isQueryClick) {
+        		vm.page = 1;
+        		vm.transition();
+        	}
         }
 
         function loadPage(page) {
@@ -71,7 +74,8 @@
             $state.transitionTo($state.$current, {
                 page: vm.page,
                 sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
-                search: vm.currentSearch
+                search: vm.currentSearch,
+                routingQueryFilter : vm.queryParams
             });
         }
         
@@ -115,14 +119,6 @@
         	}, function(error) {
         		console.log(error);
         	});
-        }
-        
-        function showDetail() {
-        	
-        }
-        
-        function hideDetail() {
-        	
         }
     }
 })();

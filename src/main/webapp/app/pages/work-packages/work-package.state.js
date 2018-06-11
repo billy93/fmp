@@ -104,6 +104,9 @@
                 cityGroups: ['CityGroup', function(CityGroup) {
                     return CityGroup.getAll().$promise;
                 }],
+                atpcoFareTypes: ['AtpcoMasterFareType', function(AtpcoMasterFareType) {
+                    return AtpcoMasterFareType.getAll().$promise;
+                }],                
                 previousState: ["$state", function ($state) {
                     var currentStateData = {
                         name: $state.current.name || 'work-package',
@@ -191,6 +194,9 @@
                         fareTypes: ['FareType', function(FareType) {
                             return FareType.getAll().$promise;
                         }],
+                        atpcoFareTypes: ['AtpcoMasterFareType', function(AtpcoMasterFareType) {
+                            return AtpcoMasterFareType.getAll().$promise;
+                        }], 
                     }
                 }).result.then(function(workPackage) {
 	                	var params = {

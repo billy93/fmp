@@ -35,6 +35,7 @@
                 search: null,
                 size: null,
                 itemsPerPage: "10",
+                routingQueryFilter: null
             },
             resolve: {
                 pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
