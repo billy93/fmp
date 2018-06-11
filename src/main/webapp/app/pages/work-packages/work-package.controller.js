@@ -41,7 +41,7 @@
                 } else if(vm.users.reviewLevels[i] == "DISTRIBUTION"){
                     vm.workPackageFilter.reviewLevel.distribution = true;
                     vm.reviewLevelDISTRIBUTION = vm.users.reviewLevels[i];
-                } else if(vm.users.reviewLevels[i] == "ROUTE MANAGEMENT") {
+                } else if(vm.users.reviewLevels[i] == "ROUTE_MANAGEMENT") {
                     vm.workPackageFilter.reviewLevel.routeManagement = true;
                     vm.reviewLevelROUTEMANAGEMENT = vm.users.reviewLevels[i];
                 }
@@ -62,10 +62,10 @@
         else{
 	        vm.workPackageFilter = {
 	    		reviewLevel:{
-	    			ho:true,
-	    			lso:true,
-	    			distribution:true,
-	    			routeManagement:true
+	    			ho:false,
+	    			lso:false,
+	    			distribution:false,
+	    			routeManagement:false
 	    		},
 	    		distributionType:{
 	    			atpco:true,
@@ -333,7 +333,7 @@
 
   		  return blob;
         }
-        
+
         vm.printExport = function(){
         	var exportConfig = {
         		workPackageFilter:vm.workPackageFilter,
@@ -342,7 +342,7 @@
         		columnHeaders:true,
         		onlySelectedRows:true
         	};
-        	
+
         	console.log(exportConfig);
         	WorkPackage.exportQueue(exportConfig, function onExportSuccess(result){
 //        		alert('Export Success');
@@ -351,10 +351,10 @@
        			var blob = b64toBlob(result.file, fileType);
        			FileSaver.saveAs(blob, templateFilename);
         	}, function onExportFailed(){
-        		
+
         	});
-        	
-        	
+
+
 //        	$uibModal.open({
 //                templateUrl: 'app/pages/work-packages/work-package-reuse-replace-confirm-dialog.html',
 //                controller: 'WorkPackageReuseReplaceConfirmDialogController',
@@ -372,15 +372,15 @@
 //                }
 //			}).result.then(function(workPackage) {
 //				WorkPackage.reuse(workPackage, onReuseSuccess, onReuseFailed);
-//	        	
+//
 //				function onReuseSuccess(result){
 //	        		alert('Reuse Success');
 //	        		$state.go('work-package-detail', {id:result.id});
 //	        	}
-//	        	
+//
 //	        	function onReuseFailed(error){
 //	        		alert("An error occured, please try again");
-//	        	}				
+//	        	}
 //			});
 
         }

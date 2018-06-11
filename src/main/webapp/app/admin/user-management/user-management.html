@@ -20,7 +20,11 @@
 		            <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
 		                <th jh-sort-by="id"><span>ID</span><span class="glyphicon glyphicon-sort"></span></th>
 		                <th jh-sort-by="login"><span>Login</span> <span class="glyphicon glyphicon-sort"></span></th>
+                        <th><span>First Name</span></th>
+                        <th><span>Last Name</span></th>
 		                <th jh-sort-by="email"><span>Email</span> <span class="glyphicon glyphicon-sort"></span></th>
+                        <th><span>Review Level</span></th>
+                        <th><span>Business Area</span></th>
 		                <th></th>
 		                                <th><span>Profiles</span></th>                <th jh-sort-by="createdDate"><span>Created Date</span> <span class="glyphicon glyphicon-sort"></span></th>
 		                <th jh-sort-by="lastModifiedBy"><span>Last Modified By</span> <span class="glyphicon glyphicon-sort"></span></th>
@@ -32,14 +36,30 @@
 		            <tr ng-repeat="user in vm.users track by user.id">
 		                <td><a ui-sref="user-management-detail({login:user.login})">{{user.id}}</a></td>
 		                <td>{{user.login}}</td>
-		                <td>{{user.email}}</td>
-		                <td>
+                        <td>{{user.firstName}}</td>
+                        <td>{{user.lastName}}</td>
+                        <td>{{user.email}}</td>
+                        <td>
+                            <div class="agent-list-wrapper">
+                                <div class="agent-list" ng-repeat="reviewLevel in user.reviewLevels">
+                                    <span>{{reviewLevel}}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="agent-list-wrapper">
+                                <div class="agent-list" ng-repeat="businessArea in user.businessAreas">
+                                    <span>{{businessArea}}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
 		                    <button class="btn btn-danger btn-xs" ng-click="vm.setActive(user, true)" ng-show="!user.activated"
 		                           >Deactivated</button>
 		                    <button class="btn btn-success btn-xs" ng-click="vm.setActive(user, false)" ng-show="user.activated"
 		                            ng-disabled="vm.currentAccount.login === user.login">Activated</button>
 		                </td>
-		                
+
 		                <td>
 		                    <div ng-repeat="authority in user.authorities">
 		                        <span class="label label-info">{{ authority }}</span>
