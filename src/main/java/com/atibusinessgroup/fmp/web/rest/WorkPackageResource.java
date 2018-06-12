@@ -3414,23 +3414,25 @@ public class WorkPackageResource {
         	filter.setType(t);
         	
         	com.atibusinessgroup.fmp.domain.WorkPackageFilter.ReviewLevel rl = new WorkPackageFilter.ReviewLevel();
-        	/*User u = userRepository.findOne(SecurityUtils.getCurrentUserLogin().get());
-        	for(String reviewLevel : u.getReviewLevels()) {
-	        	if(reviewLevel.contentEquals("HO")) {
-	        		
-	        	} else if(reviewLevel.contentEquals("LSO")) {
-	        		
-	        	} else if(reviewLevel.contentEquals("DISTRIBUTION")) {
-	        		
-	        	} else if(reviewLevel.contentEquals("ROUTE MANAGEMENT")) {
-	        		
+        	rl.setDistribution(false);
+	    	rl.setHo(false);
+	    	rl.setLso(false);
+	    	rl.setRouteManagement(false); 
+        	Optional<User> userOptional = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
+        	if(userOptional.isPresent()) {
+            	User user = userOptional.get();
+	        	for(String reviewLevel : user.getReviewLevels()) {
+		        	if(reviewLevel.equals("LSO")) {
+		        		rl.setLso(true);
+		        	}else if(reviewLevel.equals("HO")) {
+		        		rl.setHo(true);
+		        	}else if(reviewLevel.equals("DISTRIBUTION")) {
+		        		rl.setDistribution(true);
+		        	}else if(reviewLevel.equals("ROUTE MANAGEMENT")) {
+		        		rl.setRouteManagement(true); 
+		        	}
 	        	}
-        		       	
-        	}*/
-        rl.setDistribution(false);
-    	rl.setHo(false);
-    	rl.setLso(false);
-    	rl.setRouteManagement(false); 
+        	}	        
         	filter.setReviewLevel(rl);
         	
         	filter.setApprovalReference(null);
