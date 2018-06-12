@@ -10,10 +10,10 @@ public class ProsDataFeedsRecord {
 	private String recordId;
 	private String originAirportCode;
 	private String destAirportCode;
-	private Object effectiveDate;
-	private Object discontinueDate;
-	private Object saleStartDate;
-	private Object saleEndDate;
+	private String effectiveDate;
+	private String discontinueDate;
+	private String saleStartDate;
+	private String saleEndDate;
 	private String bookingClass;
 	private String originCountry;
 	private String fareBasisGroup;
@@ -21,7 +21,7 @@ public class ProsDataFeedsRecord {
 	private String fareClassCode;
 	private String owrt;
 	private String fareSourceCode;
-	private double baseFareAmount;
+	private String baseFareAmount;
 	private String currencyCode;
 	private String iataFareFlag;
 	private String advancePurchase;
@@ -32,9 +32,9 @@ public class ProsDataFeedsRecord {
 	private String timeOfDays;
 	private String flightNumber;
 	private String flightFrequency;
-	private Object seasonStartDate;
-	private Object seasonEndDate;
-	private double endFareAmount;
+	private String seasonStartDate;
+	private String seasonEndDate;
+	private String endFareAmount;
 	private String fpsRecordLocator;
 	private String itineraryType;
 	private String airportConnection;
@@ -67,31 +67,31 @@ public class ProsDataFeedsRecord {
 		return effectiveDate;
 	}
 
-	public void setEffectiveDate(Object effectiveDate) {
+	public void setEffectiveDate(String effectiveDate) {
 		this.effectiveDate = effectiveDate;
 	}
 
-	public Object getDiscontinueDate() {
+	public String getDiscontinueDate() {
 		return discontinueDate;
 	}
 
-	public void setDiscontinueDate(Object discontinueDate) {
+	public void setDiscontinueDate(String discontinueDate) {
 		this.discontinueDate = discontinueDate;
 	}
 
-	public Object getSaleStartDate() {
+	public String getSaleStartDate() {
 		return saleStartDate;
 	}
 
-	public void setSaleStartDate(Object saleStartDate) {
+	public void setSaleStartDate(String saleStartDate) {
 		this.saleStartDate = saleStartDate;
 	}
 
-	public Object getSaleEndDate() {
+	public String getSaleEndDate() {
 		return saleEndDate;
 	}
 
-	public void setSaleEndDate(Object saleEndDate) {
+	public void setSaleEndDate(String saleEndDate) {
 		this.saleEndDate = saleEndDate;
 	}
 
@@ -151,11 +151,11 @@ public class ProsDataFeedsRecord {
 		this.fareSourceCode = fareSourceCode;
 	}
 
-	public double getBaseFareAmount() {
+	public String getBaseFareAmount() {
 		return baseFareAmount;
 	}
 
-	public void setBaseFareAmount(double baseFareAmount) {
+	public void setBaseFareAmount(String baseFareAmount) {
 		this.baseFareAmount = baseFareAmount;
 	}
 
@@ -243,23 +243,23 @@ public class ProsDataFeedsRecord {
 		return seasonStartDate;
 	}
 
-	public void setSeasonStartDate(Object seasonStartDate) {
+	public void setSeasonStartDate(String seasonStartDate) {
 		this.seasonStartDate = seasonStartDate;
 	}
 
-	public Object getSeasonEndDate() {
+	public String getSeasonEndDate() {
 		return seasonEndDate;
 	}
 
-	public void setSeasonEndDate(Object seasonEndDate) {
+	public void setSeasonEndDate(String seasonEndDate) {
 		this.seasonEndDate = seasonEndDate;
 	}
 
-	public double getEndFareAmount() {
+	public String getEndFareAmount() {
 		return endFareAmount;
 	}
 
-	public void setEndFareAmount(double endFareAmount) {
+	public void setEndFareAmount(String endFareAmount) {
 		this.endFareAmount = endFareAmount;
 	}
 
@@ -285,208 +285,6 @@ public class ProsDataFeedsRecord {
 
 	public void setAirportConnection(String airportConnection) {
 		this.airportConnection = airportConnection;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((advancePurchase == null) ? 0 : advancePurchase.hashCode());
-		result = prime * result + ((airportConnection == null) ? 0 : airportConnection.hashCode());
-		long temp;
-		temp = Double.doubleToLongBits(baseFareAmount);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + ((bookingClass == null) ? 0 : bookingClass.hashCode());
-		result = prime * result + ((carrier == null) ? 0 : carrier.hashCode());
-		result = prime * result + ((currencyCode == null) ? 0 : currencyCode.hashCode());
-		result = prime * result + ((destAirportCode == null) ? 0 : destAirportCode.hashCode());
-		result = prime * result + ((discontinueDate == null) ? 0 : discontinueDate.hashCode());
-		result = prime * result + ((effectiveDate == null) ? 0 : effectiveDate.hashCode());
-		temp = Double.doubleToLongBits(endFareAmount);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + ((fareBasisGroup == null) ? 0 : fareBasisGroup.hashCode());
-		result = prime * result + ((fareClassCode == null) ? 0 : fareClassCode.hashCode());
-		result = prime * result + ((fareSourceCode == null) ? 0 : fareSourceCode.hashCode());
-		result = prime * result + ((fareTypeCode == null) ? 0 : fareTypeCode.hashCode());
-		result = prime * result + ((flightFrequency == null) ? 0 : flightFrequency.hashCode());
-		result = prime * result + ((flightNumber == null) ? 0 : flightNumber.hashCode());
-		result = prime * result + ((fpsRecordLocator == null) ? 0 : fpsRecordLocator.hashCode());
-		result = prime * result + ((iataFareFlag == null) ? 0 : iataFareFlag.hashCode());
-		result = prime * result + ((itineraryType == null) ? 0 : itineraryType.hashCode());
-		result = prime * result + ((minStay == null) ? 0 : minStay.hashCode());
-		result = prime * result + ((originAirportCode == null) ? 0 : originAirportCode.hashCode());
-		result = prime * result + ((originCountry == null) ? 0 : originCountry.hashCode());
-		result = prime * result + ((owrt == null) ? 0 : owrt.hashCode());
-		result = prime * result + ((pointOfSales == null) ? 0 : pointOfSales.hashCode());
-		result = prime * result + ((recordId == null) ? 0 : recordId.hashCode());
-		result = prime * result + ((saleEndDate == null) ? 0 : saleEndDate.hashCode());
-		result = prime * result + ((saleStartDate == null) ? 0 : saleStartDate.hashCode());
-		result = prime * result + ((seasonEndDate == null) ? 0 : seasonEndDate.hashCode());
-		result = prime * result + ((seasonStartDate == null) ? 0 : seasonStartDate.hashCode());
-		result = prime * result + ((timeOfDays == null) ? 0 : timeOfDays.hashCode());
-		result = prime * result + ((useInCalculation == null) ? 0 : useInCalculation.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof ProsDataFeedsRecord))
-			return false;
-		ProsDataFeedsRecord other = (ProsDataFeedsRecord) obj;
-		if (advancePurchase == null) {
-			if (other.advancePurchase != null)
-				return false;
-		} else if (!advancePurchase.equals(other.advancePurchase))
-			return false;
-		if (airportConnection == null) {
-			if (other.airportConnection != null)
-				return false;
-		} else if (!airportConnection.equals(other.airportConnection))
-			return false;
-		if (Double.doubleToLongBits(baseFareAmount) != Double.doubleToLongBits(other.baseFareAmount))
-			return false;
-		if (bookingClass == null) {
-			if (other.bookingClass != null)
-				return false;
-		} else if (!bookingClass.equals(other.bookingClass))
-			return false;
-		if (carrier == null) {
-			if (other.carrier != null)
-				return false;
-		} else if (!carrier.equals(other.carrier))
-			return false;
-		if (currencyCode == null) {
-			if (other.currencyCode != null)
-				return false;
-		} else if (!currencyCode.equals(other.currencyCode))
-			return false;
-		if (destAirportCode == null) {
-			if (other.destAirportCode != null)
-				return false;
-		} else if (!destAirportCode.equals(other.destAirportCode))
-			return false;
-		if (discontinueDate == null) {
-			if (other.discontinueDate != null)
-				return false;
-		} else if (!discontinueDate.equals(other.discontinueDate))
-			return false;
-		if (effectiveDate == null) {
-			if (other.effectiveDate != null)
-				return false;
-		} else if (!effectiveDate.equals(other.effectiveDate))
-			return false;
-		if (Double.doubleToLongBits(endFareAmount) != Double.doubleToLongBits(other.endFareAmount))
-			return false;
-		if (fareBasisGroup == null) {
-			if (other.fareBasisGroup != null)
-				return false;
-		} else if (!fareBasisGroup.equals(other.fareBasisGroup))
-			return false;
-		if (fareClassCode == null) {
-			if (other.fareClassCode != null)
-				return false;
-		} else if (!fareClassCode.equals(other.fareClassCode))
-			return false;
-		if (fareSourceCode == null) {
-			if (other.fareSourceCode != null)
-				return false;
-		} else if (!fareSourceCode.equals(other.fareSourceCode))
-			return false;
-		if (fareTypeCode == null) {
-			if (other.fareTypeCode != null)
-				return false;
-		} else if (!fareTypeCode.equals(other.fareTypeCode))
-			return false;
-		if (flightFrequency == null) {
-			if (other.flightFrequency != null)
-				return false;
-		} else if (!flightFrequency.equals(other.flightFrequency))
-			return false;
-		if (flightNumber == null) {
-			if (other.flightNumber != null)
-				return false;
-		} else if (!flightNumber.equals(other.flightNumber))
-			return false;
-		if (fpsRecordLocator == null) {
-			if (other.fpsRecordLocator != null)
-				return false;
-		} else if (!fpsRecordLocator.equals(other.fpsRecordLocator))
-			return false;
-		if (iataFareFlag == null) {
-			if (other.iataFareFlag != null)
-				return false;
-		} else if (!iataFareFlag.equals(other.iataFareFlag))
-			return false;
-		if (itineraryType == null) {
-			if (other.itineraryType != null)
-				return false;
-		} else if (!itineraryType.equals(other.itineraryType))
-			return false;
-		if (minStay == null) {
-			if (other.minStay != null)
-				return false;
-		} else if (!minStay.equals(other.minStay))
-			return false;
-		if (originAirportCode == null) {
-			if (other.originAirportCode != null)
-				return false;
-		} else if (!originAirportCode.equals(other.originAirportCode))
-			return false;
-		if (originCountry == null) {
-			if (other.originCountry != null)
-				return false;
-		} else if (!originCountry.equals(other.originCountry))
-			return false;
-		if (owrt == null) {
-			if (other.owrt != null)
-				return false;
-		} else if (!owrt.equals(other.owrt))
-			return false;
-		if (pointOfSales == null) {
-			if (other.pointOfSales != null)
-				return false;
-		} else if (!pointOfSales.equals(other.pointOfSales))
-			return false;
-		if (recordId == null) {
-			if (other.recordId != null)
-				return false;
-		} else if (!recordId.equals(other.recordId))
-			return false;
-		if (saleEndDate == null) {
-			if (other.saleEndDate != null)
-				return false;
-		} else if (!saleEndDate.equals(other.saleEndDate))
-			return false;
-		if (saleStartDate == null) {
-			if (other.saleStartDate != null)
-				return false;
-		} else if (!saleStartDate.equals(other.saleStartDate))
-			return false;
-		if (seasonEndDate == null) {
-			if (other.seasonEndDate != null)
-				return false;
-		} else if (!seasonEndDate.equals(other.seasonEndDate))
-			return false;
-		if (seasonStartDate == null) {
-			if (other.seasonStartDate != null)
-				return false;
-		} else if (!seasonStartDate.equals(other.seasonStartDate))
-			return false;
-		if (timeOfDays == null) {
-			if (other.timeOfDays != null)
-				return false;
-		} else if (!timeOfDays.equals(other.timeOfDays))
-			return false;
-		if (useInCalculation == null) {
-			if (other.useInCalculation != null)
-				return false;
-		} else if (!useInCalculation.equals(other.useInCalculation))
-			return false;
-		return true;
 	}
 
 	@Override

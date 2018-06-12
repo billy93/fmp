@@ -61,15 +61,11 @@ public class ProsDatafeedResource {
 	 * @return the ResponseEntity with status 200 (OK) and the list of afdQueries in
 	 *         body
 	 */
-	@PostMapping("/afd-queries")
+	@PostMapping("/pros-datafeed")
 	@Timed
-	public ResponseEntity<List<AfdQuery>> getAllAfdQueries(@RequestBody AfdQueryParam param) {
-		log.debug("REST request to get a page of AfdQueries: {}", param);
-
-		Pageable pageable = new PageRequest(param.getPage(), param.getSize());
-		
-		
-		
+	public ResponseEntity<List<AfdQuery>> getProsDatafeed(@RequestBody String param) {
+		log.debug("REST request to get a page of getProsDatafeed: {}", param);
+			
 		List<AfdQuery> result = new ArrayList<>();
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
@@ -80,10 +76,10 @@ public class ProsDatafeedResource {
 	 *
 	 * @return the ResponseEntity with status 200 (OK) and the list of rules in body
 	 */
-	@GetMapping("/afd-queries/rules")
+	@GetMapping("/pros-datafeed")
 	@Timed
-	public ResponseEntity<String> getAfdQueryRules(AfdQuery afdQuery) {
-		log.debug("REST request to get AfdQueries rules: {}", afdQuery);
+	public ResponseEntity<String> generateProsDatafeed() {
+		log.debug("REST request to get getProsDatafeed rules: {}");
 		String result = prosDatafeedService.getFaresProsDatafeed();
 		
 		return new ResponseEntity<>(result, HttpStatus.OK);

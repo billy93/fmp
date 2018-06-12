@@ -4,8 +4,8 @@ public class ProsDataFeedsHeader {
 
 	private final String separator = " ";
 	private String recordId;
-	private Object StartDate;
-	private Object EndDate;
+	private String StartDate;
+	private String EndDate;
 	private String creationDate;
 
 	public String getRecordId() {
@@ -16,19 +16,19 @@ public class ProsDataFeedsHeader {
 		this.recordId = recordId;
 	}
 
-	public Object getStartDate() {
+	public String getStartDate() {
 		return StartDate;
 	}
 
-	public void setStartDate(Object startDate) {
+	public void setStartDate(String startDate) {
 		StartDate = startDate;
 	}
 
-	public Object getEndDate() {
+	public String getEndDate() {
 		return EndDate;
 	}
 
-	public void setEndDate(Object endDate) {
+	public void setEndDate(String endDate) {
 		EndDate = endDate;
 	}
 
