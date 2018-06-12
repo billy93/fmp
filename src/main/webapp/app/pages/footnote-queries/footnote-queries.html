@@ -49,7 +49,7 @@
 							</div>
 						</div>
 
-						<div class="col-md-6 no-lpad">
+						<div class="col-md-6 no-pad">
 							<div class="form-group">
 								<div class="custom-label semibold">Sale Date</div>
 								<div class="row no-mar">
@@ -69,7 +69,7 @@
 											name="saleDateTo" id="dtpSaleEnd"
 											ng-model="vm.queryParams.saleDateTo" placeholder="To" />
 									</div>
-									<div class="col-md-4 no-lpad">
+									<div class="col-md-4 no-pad">
 										<select class="form-control" name="saleOption" id="saleOpt"
 											ng-model="vm.queryParams.saleOpt">
 											<option value="1">Active In</option>
@@ -98,7 +98,7 @@
 											name="travelDateTo" id="dtpTravelEnd"
 											ng-model="vm.queryParams.travelDateTo" placeholder="To" />
 									</div>
-									<div class="col-md-4 no-lpad">
+									<div class="col-md-4 no-pad">
 										<select class="form-control" name="travelOption"
 											id="travelOpt" ng-model="vm.queryParams.travelOpt">
 											<option value="1">Active In</option>
@@ -127,7 +127,7 @@
 											<option value="C">C - Trip Commence</option>
 										</select>
 									</div>
-									<div class="col-md-4 no-lpad">
+									<div class="col-md-4 no-pad">
 										<select class="form-control" name="travelOption"
 											id="travelOpt" ng-model="vm.queryParams.travelOpt">
 											<option value="2">Exact Match</option>
@@ -136,14 +136,11 @@
 								</div>
 							</div>
 						</div>
-						<div class="pull-right col-md-6 no-lpad">
-							<div class="form-group">
-								<div class="pull-right query-button-wrapper">
-									<button type="reset" ng-click="vm.reset()"
-										class="btn btn-default small">Reset</button>
-									<button type="button" class="btn btn-default small"
-										ng-click="vm.loadAll()">Query</button>
-								</div>
+						
+						<div class="clearfix">
+							<div class="pull-right pv1">
+								<button type="button" class="btn btn-default small" ng-click="vm.loadAll()">Query</button>
+								<button type="reset" ng-click="vm.reset()" class="btn btn-default small">Reset</button>
 							</div>
 						</div>
 					</form>

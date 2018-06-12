@@ -5,7 +5,7 @@
 			<div class="filter-area">
 				<div class="clearfix">
 					<form name="queryForm" role="form" novalidate>
-						<div class="pull-left col-md-12 no-pad">
+						<div class="col-md-12 no-pad">
 							<div class="pull-left col-md-4 no-lpad">
 								<div class="form-group">	
 									<div class="custom-label semibold">Tar No</div>
@@ -39,7 +39,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="pull-left col-md-4 no-lpad">
+							<div class="pull-left col-md-4 no-pad">
 								<div class="form-group">	
 									<div class="custom-label semibold">Entry Point</div>
 									<input type="text" class="form-control" name="entrypoint" id="entrypoint" ng-model="vm.queryParams.entryPoint" uppercase />
@@ -49,30 +49,18 @@
 									<input type="text" class="form-control" name="exitpoint" id="exitpoint" ng-model="vm.queryParams.exitPoint" uppercase />
 								</div>
 							</div>
-<!-- 							<div class="pull-left col-md-2 no-lpad"> -->
-<!-- 								<div class="form-group">	 -->
-<!-- 									<div class="custom-label semibold">Additional Options</div> -->
-<!-- 										<div class="checkbox-wrapper"> -->
-<!-- 											<label> -->
-<!-- 												<input type="checkbox" name="showroutesmaps" ng-model="vm.queryParams.showRoutesMaps">  -->
-<!-- 												Show Routes Maps -->
-<!-- 											</label> -->
-<!-- 										</div> -->
-<!-- 									</div> -->
-<!-- 								</div> -->
-<!-- 							</div> -->
-							<div class="form-inline">
-								<div class="pull-right mt1">
-									<button type="button"
-										class="btn btn-default small pull-left"
+						</div>
+						<div class="clearfix">
+							<div class="pull-right pv1">
+								<button type="button"
+										class="btn btn-default small"
 										ng-click="vm.loadAll(true);">Query</button>
-									<button type="button"
-										class="btn btn-default small pull-left"
+								<button type="button"
+										class="btn btn-default small"
 										ng-click="vm.clearFilter();">Clear</button>
-									<button type="reset"
+								<button type="reset"
 										ng-click="vm.resetFilter();"
-										class="btn btn-default small pull-left">Reset</button>
-								</div>
+										class="btn btn-default small">Reset</button>
 							</div>
 						</div>
 					</form>
