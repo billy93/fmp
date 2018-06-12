@@ -53,7 +53,7 @@
             	   vm.workPackageFilter = $stateParams.workPackageFilter;
                }
                else{
-	   	   	        vm.workPackageFilter = {
+	   	   	      /*  vm.workPackageFilter = {
 	   	   	    		reviewLevel:{
 	   	   	    			ho:false,
 	   	   	    			lso:false,
@@ -82,27 +82,32 @@
 	   	   	    			waiver:true
 	   	   	    		},
 	   	   	    		createdTime:'10'
-	   	   	        };
+	   	   	        };*/
+            	   
+            	   WorkPackage.workPackagefilter({}, function onSuccess (response){
+            		   vm.workPackageFilter = response;
+            		   
+            		   for(var i=0; i<=vm.users.reviewLevels.length; i++){
+      		             //console.log(vm.users.reviewLevels[i]);
+      		             if(vm.users.reviewLevels[i] == "HO"){
+      		                 //vm.workPackageFilter.reviewLevel.ho = true;
+      		                 vm.reviewLevelHO = vm.users.reviewLevels[i];
+      		             } else if(vm.users.reviewLevels[i] == "LSO"){
+      		                 //vm.workPackageFilter.reviewLevel.lso = true;
+      		                 vm.reviewLevelLSO = vm.users.reviewLevels[i];
+      		             } else if(vm.users.reviewLevels[i] == "DISTRIBUTION"){
+      		                 //vm.workPackageFilter.reviewLevel.distribution = true;
+      		                 vm.reviewLevelDISTRIBUTION = vm.users.reviewLevels[i];
+      		             } else if(vm.users.reviewLevels[i] == "ROUTE_MANAGEMENT") {
+      		                 //vm.workPackageFilter.reviewLevel.routeManagement = true;
+      		                 vm.reviewLevelROUTEMANAGEMENT = vm.users.reviewLevels[i];
+      		             }
+      		          }
+       	   	        vm.loadAll();
+            	   }, function onError(error){});
 	   	   	        
-	   	   	      for(var i=0; i<=vm.users.reviewLevels.length; i++){
-		             //console.log(vm.users.reviewLevels[i]);
-		             if(vm.users.reviewLevels[i] == "HO"){
-		                 vm.workPackageFilter.reviewLevel.ho = true;
-		                 vm.reviewLevelHO = vm.users.reviewLevels[i];
-		             } else if(vm.users.reviewLevels[i] == "LSO"){
-		                 vm.workPackageFilter.reviewLevel.lso = true;
-		                 vm.reviewLevelLSO = vm.users.reviewLevels[i];
-		             } else if(vm.users.reviewLevels[i] == "DISTRIBUTION"){
-		                 vm.workPackageFilter.reviewLevel.distribution = true;
-		                 vm.reviewLevelDISTRIBUTION = vm.users.reviewLevels[i];
-		             } else if(vm.users.reviewLevels[i] == "ROUTE_MANAGEMENT") {
-		                 vm.workPackageFilter.reviewLevel.routeManagement = true;
-		                 vm.reviewLevelROUTEMANAGEMENT = vm.users.reviewLevels[i];
-		             }
-		          }
+	   	   	      
                }
-
-	   	        vm.loadAll();
         });
         
         function loadAll () {

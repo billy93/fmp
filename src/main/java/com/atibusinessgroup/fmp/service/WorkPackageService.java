@@ -9,9 +9,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.atibusinessgroup.fmp.domain.WorkPackage;
+import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
 import com.atibusinessgroup.fmp.domain.enumeration.Status;
 import com.atibusinessgroup.fmp.repository.WorkPackageRepository;
-import com.atibusinessgroup.fmp.web.rest.WorkPackageResource.WorkPackageFilter;
 
 
 /**
@@ -89,7 +89,6 @@ public class WorkPackageService {
 	}
 
 	public List<WorkPackage> findCustom(WorkPackageFilter workPackageFilter) {
-		// TODO Auto-generated method stub
 		log.debug("Export find work package : {}", workPackageFilter);
 		return workPackageRepository.findCustom(workPackageFilter);
 	}
