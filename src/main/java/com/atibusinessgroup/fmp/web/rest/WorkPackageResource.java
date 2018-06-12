@@ -3396,8 +3396,7 @@ public class WorkPackageResource {
         	
         	com.atibusinessgroup.fmp.domain.WorkPackageFilter.Status s = new WorkPackageFilter.Status();
         	s.setCompleted(true);
-        	s.setDistributed(true);
-        	s.setNewStatus(true);
+        	s.setDistributed(true);        	
         	s.setPending(true);
         	s.setReadyToRelease(true);
         	s.setReferred(true);
@@ -3405,6 +3404,8 @@ public class WorkPackageResource {
         	s.setReuse(true);
         	s.setReviewing(true);
         	s.setWithdrawn(true);
+        	s.setNewStatus(true);
+        	s.setDiscontinued(true);
         	filter.setStatus(s);
         	
         	com.atibusinessgroup.fmp.domain.WorkPackageFilter.Type t = new WorkPackageFilter.Type();
