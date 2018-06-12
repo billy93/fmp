@@ -368,7 +368,7 @@
 										            ng-model="workPackageSheet.approvalReference"
 													ng-disabled="!vm.isEditable('approvalReference')"
 													ng-required="vm.isRequired('approvalReference')">
-													<button ng-click="vm.generateTourCode()" ng-disabled="!vm.isEditable('approvalReference')">Generate Tour Code</button>
+													<button ng-click="vm.generateTourCode(workPackageSheet)" ng-disabled="!vm.isEditable('approvalReference')">Generate Tour Code</button>
 												</div>
 											</div>
 										</div>
@@ -1557,6 +1557,17 @@
 					     				</div>
 					     			</div>
 					     			
+					     			
+									
+									<div class="pull-left w50 two-column">
+						                <div class="form-group">
+						                  <label>Approval Reference</label>
+						                  <input type="text" name="attachmentApprovalReference{{$index}}" class="form-control" 
+						                  ng-model="vm.workPackage.attachmentApprovalReference">
+						                  <button ng-click="vm.generateTourCodeAttachment()">Generate Tour Code</button>
+						                </div>
+						              </div>
+						              
 					     			<div class="col-md-12">
 					     				<div class="text-center no-data" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">No Attachment Available</div>
 									

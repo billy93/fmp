@@ -705,6 +705,9 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     
     private List<MarketRules> marketRulesData = new ArrayList<>();
     
+    @Field("attachment_approval_reference")
+    private String atachmentApprovalReference;
+    
     private List<Attachment> attachmentData = new ArrayList<>();
     
     private List<String> agent = new ArrayList<>();
@@ -712,7 +715,15 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     private ImportFares importFares;
     
     
-    public boolean isMarketFares() {
+    public String getAtachmentApprovalReference() {
+		return atachmentApprovalReference;
+	}
+
+	public void setAtachmentApprovalReference(String atachmentApprovalReference) {
+		this.atachmentApprovalReference = atachmentApprovalReference;
+	}
+
+	public boolean isMarketFares() {
 		return marketFares;
 	}
 
