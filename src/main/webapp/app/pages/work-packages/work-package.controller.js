@@ -346,6 +346,14 @@
   		  return blob;
         }
 
+        vm.discontinue = function(){
+//        	console.log(vm.selectedRow);
+//        	alert('Discontinue');
+        	WorkPackage.discontinue(vm.selectedRow, function onSuccess(){
+        		alert("Work Package successfully discontinued");
+        	}, function onError(){});
+        }
+        
         vm.printExport = function(){
         	var exportConfig = {
         		workPackageFilter:vm.workPackageFilter,

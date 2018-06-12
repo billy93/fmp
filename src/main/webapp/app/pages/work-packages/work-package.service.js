@@ -160,7 +160,8 @@
 	        'exportRateSheetWaiver': { method: 'POST',  url:'api/work-packages/export-ratesheet-waiver'},
 	        'exportRateSheetExcelWaiver': { method: 'POST',  url:'api/work-packages/export-ratesheet-excel-waiver'},
 	        'exportRateSheetWordWaiver': { method: 'POST',  url:'api/work-packages/export-ratesheet-word-waiver'},
-	        'downloadMarketRules': { method: 'POST',  url:'api/work-packages/download-market-rules'}
+	        'downloadMarketRules': { method: 'POST',  url:'api/work-packages/download-market-rules'},
+	        'discontinue': { method: 'POST',  url:'api/work-packages/discontinue'},
         });
     }
 })();
