@@ -3666,8 +3666,8 @@ p {
   .dropdown .dropdown-menu {
     position: absolute;
     top: 100%;
-    right: 5px;
-    left: auto;
+    right: auto;
+    left: 0;
     z-index: 1000;
     display: none;
     float: left;
@@ -3685,6 +3685,9 @@ p {
     border-radius: 4px;
     -webkit-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
+    .dropdown .dropdown-menu.right-dropdown {
+      right: 5px;
+      left: auto; }
     .dropdown .dropdown-menu li a {
       padding: 7px 15px;
       font-size: 12px;
