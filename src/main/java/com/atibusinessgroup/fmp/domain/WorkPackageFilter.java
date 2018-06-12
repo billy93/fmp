@@ -132,9 +132,21 @@ public class WorkPackageFilter implements Serializable{
     	public boolean replace;
     	public boolean reuse;
     	public boolean referred;
+    	public boolean discontinued;
     	
     	public Status() {}
     	
+    	
+		public boolean isDiscontinued() {
+			return discontinued;
+		}
+
+
+		public void setDiscontinued(boolean discontinued) {
+			this.discontinued = discontinued;
+		}
+
+
 		public boolean isReferred() {
 			return referred;
 		}

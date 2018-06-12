@@ -231,6 +231,9 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		if(wpFilter.status.referred) {
 			status.add("REFERRED");
 		}
+		if(wpFilter.status.discontinued) {
+			status.add("DISCONTINUED");
+		}
 		
 		Criteria statusCriteria = Criteria.where("status").in(status);
 		//END STATUS

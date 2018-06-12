@@ -122,6 +122,7 @@
             	"status.readyToRelease": vm.workPackageFilter.status.readyToRelease,
             	"status.distributed": vm.workPackageFilter.status.distributed,
             	"status.withdrawn": vm.workPackageFilter.status.withdrawn,
+            	"status.discontinued": vm.workPackageFilter.status.discontinued,
             	"status.replace": vm.workPackageFilter.status.replace,
             	"status.reuse": vm.workPackageFilter.status.reuse,
             	"status.referred": vm.workPackageFilter.status.referred,
