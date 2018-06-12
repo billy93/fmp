@@ -2911,25 +2911,25 @@ public class WorkPackageResource {
 					    		err1.setMessage("Base Amt is required");
 					    		errors.add(err1);						    		
 							}
-							if(fare.getTravelStart() != null) {
+							if(fare.getTravelStart() == null) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Travel Start is required");
 					    		errors.add(err1);	
 							}
-							if(fare.getTravelEnd() != null) {
+							if(fare.getTravelEnd() == null) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Travel End is required");
 					    		errors.add(err1);	
 							}
-							if(fare.getSaleStart() != null) {
+							if(fare.getSaleStart() == null) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Sale Start is required");
 					    		errors.add(err1);	
 							}
-							if(fare.getSaleEnd() != null) {
+							if(fare.getSaleEnd() == null) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Sale End is required");
@@ -3025,25 +3025,25 @@ public class WorkPackageResource {
 					    		err1.setMessage("Base Amt is required");
 					    		errors.add(err1);						    		
 							}
-							if(fare.getTravelStart() != null) {
+							if(fare.getTravelStart() == null) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Travel Start is required");
 					    		errors.add(err1);	
 							}
-							if(fare.getTravelEnd() != null) {
+							if(fare.getTravelEnd() == null) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Travel End is required");
 					    		errors.add(err1);	
 							}
-							if(fare.getSaleStart() != null) {
+							if(fare.getSaleStart() == null) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Sale Start is required");
 					    		errors.add(err1);	
 							}
-							if(fare.getSaleEnd() != null) {
+							if(fare.getSaleEnd() == null) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Sale End is required");
@@ -3687,6 +3687,47 @@ public class WorkPackageResource {
 	        	fareVersion.version = sheet.fareVersion.size() + 1;
 	        	sheet.fareVersion.add(fareVersion);
 	        }
+	        
+	        List<WorkPackageFareSheet> addOnFareSheet = result.getAddonFareSheet();
+	        for(WorkPackageFareSheet sheet : addOnFareSheet) {
+	        	FareVersion fareVersion = new FareVersion();
+	        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+	        	fareVersion.action = "PASSUP";
+	        	fareVersion.fares = sheet.getFares();
+	        	fareVersion.version = sheet.fareVersion.size() + 1;
+	        	sheet.fareVersion.add(fareVersion);
+	        }
+	        
+	        List<WorkPackageFareSheet> discountFareSheet = result.getDiscountFareSheet();
+	        for(WorkPackageFareSheet sheet : discountFareSheet) {
+	        	FareVersion fareVersion = new FareVersion();
+	        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+	        	fareVersion.action = "PASSUP";
+	        	fareVersion.fares = sheet.getFares();
+	        	fareVersion.version = sheet.fareVersion.size() + 1;
+	        	sheet.fareVersion.add(fareVersion);
+	        }
+	        
+	        List<WorkPackageFareSheet> marketFareSheet = result.getMarketFareSheet();
+	        for(WorkPackageFareSheet sheet : marketFareSheet) {
+	        	FareVersion fareVersion = new FareVersion();
+	        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+	        	fareVersion.action = "PASSUP";
+	        	fareVersion.fares = sheet.getFares();
+	        	fareVersion.version = sheet.fareVersion.size() + 1;
+	        	sheet.fareVersion.add(fareVersion);
+	        }
+	        
+	        List<WorkPackageFareSheet> waiverFareSheet = result.getWaiverFareSheet();
+	        for(WorkPackageFareSheet sheet : waiverFareSheet) {
+	        	FareVersion fareVersion = new FareVersion();
+	        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+	        	fareVersion.action = "PASSUP";
+	        	fareVersion.fares = sheet.getFares();
+	        	fareVersion.version = sheet.fareVersion.size() + 1;
+	        	sheet.fareVersion.add(fareVersion);
+	        }
+	        
 	        workPackageService.save(result);  
 	        
 	        saveHistoryData(workPackage);
@@ -3831,6 +3872,46 @@ public class WorkPackageResource {
         	fareVersion.fares = sheet.getFares();
         	fareVersion.version = sheet.fareVersion.size() + 1;
         	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+        	sheet.fareVersion.add(fareVersion);
+        }
+        
+        List<WorkPackageFareSheet> addOnFareSheet = result.getAddonFareSheet();
+        for(WorkPackageFareSheet sheet : addOnFareSheet) {
+        	FareVersion fareVersion = new FareVersion();
+        	fareVersion.action = "PASSDOWN";
+        	fareVersion.fares = sheet.getFares();
+        	fareVersion.version = sheet.fareVersion.size() + 1;
+        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+        	sheet.fareVersion.add(fareVersion);
+        }
+               
+        List<WorkPackageFareSheet> discountFareSheet = result.getDiscountFareSheet();
+        for(WorkPackageFareSheet sheet : discountFareSheet) {
+        	FareVersion fareVersion = new FareVersion();
+        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+        	fareVersion.action = "PASSDOWN";
+        	fareVersion.fares = sheet.getFares();
+        	fareVersion.version = sheet.fareVersion.size() + 1;
+        	sheet.fareVersion.add(fareVersion);
+        }
+        
+        List<WorkPackageFareSheet> marketFareSheet = result.getMarketFareSheet();
+        for(WorkPackageFareSheet sheet : marketFareSheet) {
+        	FareVersion fareVersion = new FareVersion();
+        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+        	fareVersion.action = "PASSDOWN";
+        	fareVersion.fares = sheet.getFares();
+        	fareVersion.version = sheet.fareVersion.size() + 1;
+        	sheet.fareVersion.add(fareVersion);
+        }
+        
+        List<WorkPackageFareSheet> waiverFareSheet = result.getWaiverFareSheet();
+        for(WorkPackageFareSheet sheet : waiverFareSheet) {
+        	FareVersion fareVersion = new FareVersion();
+        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+        	fareVersion.action = "PASSDOWN";
+        	fareVersion.fares = sheet.getFares();
+        	fareVersion.version = sheet.fareVersion.size() + 1;
         	sheet.fareVersion.add(fareVersion);
         }
         workPackageService.save(result);

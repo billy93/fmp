@@ -1024,7 +1024,13 @@
 											</div>
 											<div class="pull-left w50 two-column">
 												<div class="form-group">
-													
+													<label>Version</label>
+													<select class="form-control" ng-model="workPackageSheet.version" ng-change="vm.changeVersion(workPackageSheet, workPackageSheet.version)" ng-init="vm.changeVersion(workPackageSheet, 'current')">
+														<option value='current'>Current</option>
+														<option ng-repeat="version in workPackageSheet.fareVersion track by $index" value="{{$index}}">
+															{{version.version}} - {{version.username}} - {{version.action}}
+														</option>
+													</select>
 												</div>
 											</div>		
 										</div>
@@ -1103,9 +1109,8 @@
 										               		<th>Travel Complete Indicator</th>		
 														</tr>
 													</thead>
-													<tbody ng-repeat="fare in workPackageSheet.fares track by $index">
-														<!-- ng-click="vm.rowTableClick($event, $parent.$index+''+$index, 'addon')" -->
-														<tr role="row" class="datatable-row">
+													<tbody >
+														<tr  ng-click="vm.tbodyClick(workPackageSheet)" ng-repeat="fare in workPackageSheet.currentFares track by $index" role="row" class="datatable-row" ng-class="{'poiv-none':workPackageSheet.version != 'current', 'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no']}">{{$index+1}}</td>
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'status', $event)" ng-class="{highlighted:fare.field['status']}">
 																<select class="form-control inside-table" name="addonFareStatus{{$index}}" ng-model="fare.status" id="field_status" 
@@ -1352,7 +1357,7 @@
 																	  </ui-select> -->
 									               			</td>
 									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'amount', $event)" ng-class="{highlighted:fare.field['amount']}">
-									               				<input type="number" class="form-control" name="addonFareAmount{{$parent.$index}}{{$index}}" id="field_amount"
+									               				<input type="text" class="form-control" name="addonFareAmount{{$parent.$index}}{{$index}}" id="field_amount"
 										                				ng-disabled="!vm.isEditable('addonFareAmount')"
 										                				ng-required="vm.isRequired('addonFareAmount')" 
 										                				ng-maxlength="9"
@@ -1836,14 +1841,16 @@
 						                </div>
 						              </div>
 						              <div class="pull-left w50 two-column">
-						                <div class="form-group">
-						                  <label>Version</label>
-						                  <select class="form-control">
-						                    <option>Select Version</option>
-						                    <option>Current</option>
-						                  </select>
-						                </div>
-						              </div>																						
+										<div class="form-group">
+											<label>Version</label>
+											<select class="form-control" ng-model="workPackageSheet.version" ng-change="vm.changeVersion(workPackageSheet, workPackageSheet.version)" ng-init="vm.changeVersion(workPackageSheet, 'current')">
+												<option value='current'>Current</option>
+												<option ng-repeat="version in workPackageSheet.fareVersion track by $index" value="{{$index}}">
+													{{version.version}} - {{version.username}} - {{version.action}}
+												</option>
+											</select>
+										</div>
+									 </div>																						
 						            </div>
 						            
 						            <div class="clearfix">
@@ -1950,9 +1957,8 @@
 				                              <th>Travel Complete Indicator</th>	
 						                    </tr>
 						                  </thead>
-						                  <tbody ng-repeat="fare in workPackageSheet.fares track by $index" >
-						                  <!-- ng-click="vm.rowTableClick($event, $index, 'discount')" -->
-						                    <tr role="row" class="datatable-row" >
+						                  <tbody>
+						                    <tr ng-click="vm.tbodyClick(workPackageSheet)" ng-repeat="fare in workPackageSheet.currentFares track by $index" role="row" class="datatable-row" ng-class="{'poiv-none':workPackageSheet.version != 'current', 'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
 						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no']}">{{$index+1}}</td>
 						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'status', $event)" ng-class="{highlighted:fare.field['status']}">
 						                        <select class="form-control inside-table" name="status{{$parent.$index}}{{$index}}" ng-model="fare.status" id="field_status" 
@@ -2483,12 +2489,14 @@
 										<div class="pull-left w50 two-column">
 											<div class="form-group">
 												<label>Version</label>
-												<select class="form-control">
-													<option>Select Version</option>
-													<option>Current</option>
+												<select class="form-control" ng-model="workPackageSheet.version" ng-change="vm.changeVersion(workPackageSheet, workPackageSheet.version)" ng-init="vm.changeVersion(workPackageSheet, 'current')">
+													<option value='current'>Current</option>
+													<option ng-repeat="version in workPackageSheet.fareVersion track by $index" value="{{$index}}">
+														{{version.version}} - {{version.username}} - {{version.action}}
+													</option>
 												</select>
 											</div>
-										</div>
+ 										</div>	
 										<div class="pull-left w50 two-column"></div>
 									</div>
 								</div>																						
@@ -2558,9 +2566,8 @@
 									               		<th>RateSheet Comment</th>	        		
 									                </tr>
 												</thead>
-												<tbody ng-repeat="fare in workPackageSheet.fares track by $index">
-												<!-- ng-click="vm.rowTableClick($event, $index, 'market')" -->
-													<tr>
+												<tbody>
+													<tr ng-click="vm.tbodyClick(workPackageSheet)" ng-repeat="fare in workPackageSheet.currentFares track by $index" role="row" class="datatable-row" ng-class="{'poiv-none':workPackageSheet.version != 'current', 'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no']}">{{$index+1}}</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'status', $event)" ng-class="{highlighted:fare.field['status']}">
 															<select class="form-control inside-table" name="marketFareStatus{{$parent.$index}}{{$index}}" ng-model="fare.status" id="field_status" 
@@ -2953,7 +2960,13 @@
 											</div>
 											<div class="pull-left w50 two-column">
 												<div class="form-group">
-													
+													<label>Version</label>
+													<select class="form-control" ng-model="workPackageSheet.version" ng-change="vm.changeVersion(workPackageSheet, workPackageSheet.version)" ng-init="vm.changeVersion(workPackageSheet, 'current')">
+														<option value='current'>Current</option>
+														<option ng-repeat="version in workPackageSheet.fareVersion track by $index" value="{{$index}}">
+															{{version.version}} - {{version.username}} - {{version.action}}
+														</option>
+													</select>
 												</div>
 											</div>		
 										</div>
@@ -3032,9 +3045,8 @@
 										               		<th>Travel Complete Indicator</th>		
 														</tr>
 													</thead>
-													<tbody ng-repeat="fare in workPackageSheet.fares track by $index">
-														<!-- ng-click="vm.rowTableClick($event, $parent.$index+''+$index, 'addon')" -->
-														<tr role="row" class="datatable-row">
+													<tbody>
+														<tr ng-click="vm.tbodyClick(workPackageSheet)" ng-repeat="fare in workPackageSheet.currentFares track by $index" role="row" class="datatable-row" ng-class="{'poiv-none':workPackageSheet.version != 'current', 'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no']}">{{$index+1}}</td>
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'status', $event)" ng-class="{highlighted:fare.field['status']}">
 																<select class="form-control inside-table" name="addonFareStatus{{$index}}" ng-model="fare.status" id="field_status" 
@@ -3562,12 +3574,14 @@
 										<div class="pull-left w50 two-column">
 											<div class="form-group">
 												<label>Version</label>
-												<select class="form-control">
-													<option>Select Version</option>
-													<option>Current</option>
+												<select class="form-control" ng-model="workPackageSheet.version" ng-change="vm.changeVersion(workPackageSheet, workPackageSheet.version)" ng-init="vm.changeVersion(workPackageSheet, 'current')">
+													<option value='current'>Current</option>
+													<option ng-repeat="version in workPackageSheet.fareVersion track by $index" value="{{$index}}">
+														{{version.version}} - {{version.username}} - {{version.action}}
+													</option>
 												</select>
 											</div>
-										</div>
+										 </div>	
 									</div>
 									<div class="clearfix">
 										<div class="pull-left w50 two-column">
@@ -3676,9 +3690,8 @@
 									               		<th>Remark</th>	        		        	       		
 									                </tr>
 												</thead>
-												<tbody ng-repeat="fare in vm.workPackage.waiverFareSheet[vm.selectedWaiverTab].fares track by $index">
-												<!-- ng-click="vm.rowTableClick($event, $index, 'waiver')" -->
-													<tr>
+												<tbody>
+													<tr ng-click="vm.tbodyClick(workPackageSheet)" ng-repeat="fare in workPackageSheet.currentFares track by $index" role="row" class="datatable-row" ng-class="{'poiv-none':workPackageSheet.version != 'current', 'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no']}">{{$index+1}}</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverType', $event)" ng-class="{highlighted:fare.field['waiverType']}">
 															<select class="form-control" ng-model="fare.waiverType" name="waiverType{{$parent.$index}}{{$index}}"
@@ -3720,15 +3733,16 @@
 															<!-- <input type="text" class="form-control" ng-model="fare.waiverOri" name="waiverOri{{$parent.$index}}{{$index}}"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverOri{{$parent.$index}}{{$index}}.$valid}"												         		
 						           							ng-disabled="!vm.isEditable('waiverOri')"
-											             	ng-required="vm.isRequired('waiverOri')"/> -->
+											             	ng-required="vm.isRequired('waiverOri')"/> -->											             	
 											             	<span class="input-group">
 																	<input type="text" class="form-control" name="waiverOri{{$parent.$index}}{{$index}}" id="field_carrier"
 											                    		ng-model="fare.waiverOri"
 											                    		ng-disabled="!vm.isEditable('waiverOri')"
+											                    		name="waiverOri{{$parent.$index}}{{$index}}"
 											                    		style="min-width:120px"
 											                    		ng-class="{'must-fill': !editForm.editFormWaiver.waiverOri{{$parent.$index}}{{$index}}.$valid}"												         		
 															            ng-required="vm.isRequired('waiverOri')"
-															            ng-focus="origin[$parent.$index][$index]=true" ng-blur="origin[$parent.$index][$index]=false; vm.checkCity(fare, 'origin');"/>
+															            ng-focus="origin[$parent.$index][$index]=true" ng-blur="origin[$parent.$index][$index]=false; vm.checkCity(fare, 'waiverOri');"/>
 																	<span class="input-group-addon disabled" ng-click="$event.stopPropagation(); vm.selectCity(fare, 'waiverOri')">
 																		<i class="fa fa-folder"></i>
 																	</span>
@@ -3742,11 +3756,12 @@
 											             	<span class="input-group">
 																	<input type="text" class="form-control" name="waiverDest{{$parent.$index}}{{$index}}" id="field_carrier"
 											                    		ng-model="fare.waiverDest"
+											                    		name="waiverDest{{$parent.$index}}{{$index}}"
 											                    		ng-disabled="!vm.isEditable('waiverDest')"
 											                    		style="min-width:120px"
 											                    		ng-class="{'must-fill': !editForm.editFormWaiver.waiverDest{{$parent.$index}}{{$index}}.$valid}"												         		
 															            ng-required="vm.isRequired('waiverDest')"
-															            ng-focus="destination[$parent.$index][$index]=true" ng-blur="destination[$parent.$index][$index]=false; vm.checkCity(fare, 'destination');"/>
+															            ng-focus="destination[$parent.$index][$index]=true" ng-blur="destination[$parent.$index][$index]=false; vm.checkCity(fare, 'waiverDest');"/>
 																	<span class="input-group-addon disabled" ng-click="$event.stopPropagation(); vm.selectCity(fare, 'waiverDest')">
 																		<i class="fa fa-folder"></i>
 																	</span>
