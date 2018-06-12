@@ -3274,9 +3274,9 @@ p {
       padding-left: 0; } }
 
 .form-group {
-  padding: 10px 0px;
+  padding: 5px 0px;
   position: relative;
-  margin-bottom: 10px; }
+  margin-bottom: 5px; }
   .form-group .custom-label {
     margin-bottom: 6px;
     font-size: 12px;
@@ -3666,7 +3666,8 @@ p {
   .dropdown .dropdown-menu {
     position: absolute;
     top: 100%;
-    left: 0;
+    right: 5px;
+    left: auto;
     z-index: 1000;
     display: none;
     float: left;
@@ -4622,7 +4623,7 @@ a:hover {
   padding-top: 70px; }
   .page-wrapper .page-content {
     margin-left: 100px;
-    padding: 20px 40px 120px;
+    padding: 20px 40px 200px;
     -webkit-transition: .3s all;
     -o-transition: .3s all;
     transition: .3s all; }

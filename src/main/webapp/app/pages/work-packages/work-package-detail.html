@@ -1032,7 +1032,7 @@
 														</option>
 													</select>
 												</div>
-											</div>		
+											</div>	
 										</div>
 									</div>	
 											
@@ -1109,8 +1109,8 @@
 										               		<th>Travel Complete Indicator</th>		
 														</tr>
 													</thead>
-													<tbody >
-														<tr  ng-click="vm.tbodyClick(workPackageSheet)" ng-repeat="fare in workPackageSheet.currentFares track by $index" role="row" class="datatable-row" ng-class="{'poiv-none':workPackageSheet.version != 'current', 'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
+													<tbody>
+														<tr role="row" class="datatable-row" ng-repeat="fare in workPackageSheet.currentFares track by $index" ng-class="{'poiv-none':workPackageSheet.version != 'current', 'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no']}">{{$index+1}}</td>
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'status', $event)" ng-class="{highlighted:fare.field['status']}">
 																<select class="form-control inside-table" name="addonFareStatus{{$index}}" ng-model="fare.status" id="field_status" 
@@ -1481,7 +1481,7 @@
 										                				ng-model="fare.travelCompleteIndicator"></select>
 									               			</td>
 														</tr>
-														<tr class="datatable-action{{$index}}" ng-show="vm.addonFaresActionButton[$parent.$index+''+$index]">
+														<!-- <tr class="datatable-action{{$index}}" ng-show="vm.addonFaresActionButton[$parent.$index+''+$index]">
 															<td colspan="18" class="">
 																<div class="btn btn-app" ng-click="vm.deleteFaresSelected(workPackageSheet, $index)">
 																	<i class="fa fa-trash"></i>Delete
@@ -1499,7 +1499,7 @@
 																	<i class="fa fa-stack-exchange"></i>Derived Fares
 																</div>
 															</td>
-														</tr>
+														</tr> -->
 													</tbody>
 												</table>
 											</div>

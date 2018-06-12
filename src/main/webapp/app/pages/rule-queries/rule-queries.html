@@ -23,8 +23,8 @@
 							<div class="filter-area">
 								<div class="clearfix">
 									<form name="queryForm" role="form" novalidate>
-										<div class="pull-left col-md-6 no-pad">
-											<div class="pull-left col-md-6 no-lpad">
+										<div class="col-md-6 no-pad">
+											<div class="col-md-6 no-lpad">
 												<div class="form-group">
 													<div class="custom-label semibold">Carrier</div>
 													<input type="text" class="form-control" name="carrier"
@@ -36,7 +36,7 @@
 														id="ruleNo" ng-model="vm.queryParams.ruleNo" uppercase />
 												</div>
 											</div>
-											<div class="pull-left col-md-6 no-lpad">
+											<div class="col-md-6 no-lpad">
 												<div class="form-group">
 													<div class="custom-label semibold">Rule Type</div>
 													<select class="form-control" name="type" id="catNo"
@@ -56,8 +56,8 @@
 											</div>
 										</div>
 
-										<div class="pull-left col-md-6 no-pad">
-											<div class="pull-left col-md-6 no-rpad">
+										<div class="col-md-6 no-pad">
+											<div class="col-md-6 no-rpad">
 												<div class="form-group">
 													<div class="custom-label semibold">Category</div>
 													<select class="form-control" name="category" id="catNo"
@@ -112,7 +112,7 @@
 
 
 											</div>
-											<div class="pull-left col-md-6 no-rpad">
+											<div class="col-md-6 no-rpad">
 												<div class="form-group">
 													<div class="custom-label semibold">Product Sub Type</div>
 													<select class="form-control" name="productSubType"
@@ -139,18 +139,19 @@
 														<option value="12">YEARLY PUBLIC</option>
 													</select>
 												</div>
-												<div class="form-inline">
-													<div class="pull-right mt1">
-														<button type="button"
-															class="btn btn-default small pull-left"
+											</div>
+											
+											<div class="clearfix">
+												<div class="pull-right pv1">
+													<button type="button"
+															class="btn btn-default small"
 															ng-click="vm.loadAll(); vm.hideDetail()">Query</button>
-														<button type="button"
-															class="btn btn-default small pull-left"
+													<button type="button"
+															class="btn btn-default small"
 															ng-click="vm.hideDetail(); vm.clearFilter();">Clear</button>
-														<button type="reset"
+													<button type="reset"
 															ng-click="vm.reset(); vm.hideDetail()"
-															class="btn btn-default small pull-left">Reset</button>
-													</div>
+															class="btn btn-default small">Reset</button>
 												</div>
 											</div>
 
@@ -413,7 +414,7 @@
 									<div class="box-body">
 										<div class="clearfix">
 											<div class="pull-right text-right">
-												<button class="btn btn-default small">Copy</button>
+												<button class="btn btn-secondary small">Copy</button>
 											</div>
 										</div>
 										<div class="table-wrapper">
@@ -466,12 +467,12 @@
 									<div class="box-body">
 										<div class="clearfix">
 											<div class="pull-right text-right">
-												<button type="button" class="btn btn-default small"
+												<button type="button" class="btn btn-secondary small"
 													ng-click="vm.loadAll(); vm.hideDetail()">Copy</button>
-												<button type="button" class="btn btn-default small"
+												<button type="button" class="btn btn-secondary small"
 													ng-click="vm.hideDetail(); vm.clearFilter();">Text</button>
 												<button type="reset" ng-click="vm.reset(); vm.hideDetail()"
-													class="btn btn-default small">Construction Details</button>
+													class="btn btn-secondary small">Construction Details</button>
 											</div>
 										</div>
 										<div class="table-wrapper">
