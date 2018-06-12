@@ -3354,6 +3354,8 @@ public class WorkPackageResource {
       
         if(initFilter.isPresent()) {
         	WorkPackageFilter temp = initFilter.get();
+        	filter.setLoginName(SecurityUtils.getCurrentUserLogin().get());
+        	filter.setId(temp.getId());
         	temp = packagefilterRepository.save(filter);  
         	filter = temp;
         }else {
@@ -3384,9 +3386,8 @@ public class WorkPackageResource {
         	 result = workPackagefilter.get();
         }
         else {
-        	WorkPackageFilter filter = new WorkPackageFilter();     
-        	
-        	
+        	WorkPackageFilter filter = new WorkPackageFilter();    
+        		
         	com.atibusinessgroup.fmp.domain.WorkPackageFilter.DistributionType dt = new WorkPackageFilter.DistributionType();
         	dt.setAtpco(true);
         	dt.setMarket(true);
@@ -3413,257 +3414,33 @@ public class WorkPackageResource {
         	filter.setType(t);
         	
         	com.atibusinessgroup.fmp.domain.WorkPackageFilter.ReviewLevel rl = new WorkPackageFilter.ReviewLevel();
-        	rl.setDistribution(false);
-        	rl.setHo(false);
-        	rl.setLso(false);
-        	rl.setRouteManagement(false);        	
+        	/*User u = userRepository.findOne(SecurityUtils.getCurrentUserLogin().get());
+        	for(String reviewLevel : u.getReviewLevels()) {
+	        	if(reviewLevel.contentEquals("HO")) {
+	        		
+	        	} else if(reviewLevel.contentEquals("LSO")) {
+	        		
+	        	} else if(reviewLevel.contentEquals("DISTRIBUTION")) {
+	        		
+	        	} else if(reviewLevel.contentEquals("ROUTE MANAGEMENT")) {
+	        		
+	        	}
+        		       	
+        	}*/
+        rl.setDistribution(false);
+    	rl.setHo(false);
+    	rl.setLso(false);
+    	rl.setRouteManagement(false); 
         	filter.setReviewLevel(rl);
         	
         	filter.setApprovalReference(null);
         	filter.setCreatedTime("10");
         	filter.setLoginName(SecurityUtils.getCurrentUserLogin().get());
-        	packagefilterRepository.save(filter);
+        	result = packagefilterRepository.save(filter);
         }
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(result));
     }
 
-  /*  public static class WorkPackageFilter{
-    	public ReviewLevel reviewLevel;
-    	public Status status;
-    	public DistributionType distributionType;
-    	public Type type;
-    	public String approvalReference;
-    	public String createdTime;
-    	
-    	public static class ReviewLevel{
-    		public boolean ho;
-    		public boolean lso;
-    		public boolean distribution;
-    		public boolean routeManagement;
-    		
-    		public ReviewLevel() {
-				// TODO Auto-generated constructor stub
-			}
-    		
-			public boolean isHo() {
-				return ho;
-			}
-			public void setHo(boolean ho) {
-				this.ho = ho;
-			}
-			public boolean isLso() {
-				return lso;
-			}
-			public void setLso(boolean lso) {
-				this.lso = lso;
-			}
-			public boolean isDistribution() {
-				return distribution;
-			}
-			public void setDistribution(boolean distribution) {
-				this.distribution = distribution;
-			}
-			public boolean isRouteManagement() {
-				return routeManagement;
-			}
-			public void setRouteManagement(boolean routeManagement) {
-				this.routeManagement = routeManagement;
-			}
-			@Override
-			public String toString() {
-				return "ReviewLevel [ho=" + ho + ", lso=" + lso + ", distribution=" + distribution
-						+ ", routeManagement=" + routeManagement + "]";
-			}
-    	}
-
-    	public static class Status{
-    		public boolean newStatus;
-    		public boolean distributed;
-    		public boolean reviewing;
-    		public boolean readyToRelease;
-    		public boolean pending;
-    		public boolean completed;
-    		public boolean withdrawn;
-        	public boolean replace;
-        	public boolean reuse;
-        	public boolean referred;
-        	
-        	public Status() {}
-        	
-			public boolean isReferred() {
-				return referred;
-			}
-			public void setReferred(boolean referred) {
-				this.referred = referred;
-			}
-			public boolean isWithdrawn() {
-				return withdrawn;
-			}
-			public void setWithdrawn(boolean withdrawn) {
-				this.withdrawn = withdrawn;
-			}
-			public boolean isNewStatus() {
-				return newStatus;
-			}
-			public void setNewStatus(boolean newStatus) {
-				this.newStatus = newStatus;
-			}
-			public boolean isDistributed() {
-				return distributed;
-			}
-			public void setDistributed(boolean distributed) {
-				this.distributed = distributed;
-			}
-			public boolean isReviewing() {
-				return reviewing;
-			}
-			public void setReviewing(boolean reviewing) {
-				this.reviewing = reviewing;
-			}
-			public boolean isReadyToRelease() {
-				return readyToRelease;
-			}
-			public void setReadyToRelease(boolean readyToRelease) {
-				this.readyToRelease = readyToRelease;
-			}
-			public boolean isPending() {
-				return pending;
-			}
-			public void setPending(boolean pending) {
-				this.pending = pending;
-			}
-			public boolean isCompleted() {
-				return completed;
-			}
-			public void setCompleted(boolean completed) {
-				this.completed = completed;
-			}
-			public boolean isReplace() {
-				return replace;
-			}
-			public void setReplace(boolean replace) {
-				this.replace = replace;
-			}
-			public boolean isReuse() {
-				return reuse;
-			}
-			public void setReuse(boolean reuse) {
-				this.reuse = reuse;
-			}
-    		
-    		
-    	}
-    	
-    	public static class DistributionType{
-    		public boolean atpco;
-    		public boolean market;
-    		public boolean waiver;
-    		
-    		public DistributionType() {}
-			public boolean isAtpco() {
-				return atpco;
-			}
-			public void setAtpco(boolean atpco) {
-				this.atpco = atpco;
-			}
-			public boolean isMarket() {
-				return market;
-			}
-			public void setMarket(boolean market) {
-				this.market = market;
-			}
-			public boolean isWaiver() {
-				return waiver;
-			}
-			public void setWaiver(boolean waiver) {
-				this.waiver = waiver;
-			}
-    	}
-    
-    	public static class Type{
-    		public boolean regular;
-    		public boolean discount;
-    		public boolean waiver;
-    		
-    		public Type() {}
-			public boolean isRegular() {
-				return regular;
-			}
-			public void setRegular(boolean regular) {
-				this.regular = regular;
-			}
-			public boolean isDiscount() {
-				return discount;
-			}
-			public void setDiscount(boolean discount) {
-				this.discount = discount;
-			}
-			public boolean isWaiver() {
-				return waiver;
-			}
-			public void setWaiver(boolean waiver) {
-				this.waiver = waiver;
-			}
-    	}
-    	
-    	
-		public String getCreatedTime() {
-			return createdTime;
-		}
-
-		public void setCreatedTime(String createdTime) {
-			this.createdTime = createdTime;
-		}
-
-		public ReviewLevel getReviewLevel() {
-			return reviewLevel;
-		}
-
-		public void setReviewLevel(ReviewLevel reviewLevel) {
-			this.reviewLevel = reviewLevel;
-		}
-
-		public Status getStatus() {
-			return status;
-		}
-
-		public void setStatus(Status status) {
-			this.status = status;
-		}
-
-		public DistributionType getDistributionType() {
-			return distributionType;
-		}
-
-		public void setDistributionType(DistributionType distributionType) {
-			this.distributionType = distributionType;
-		}
-
-		public Type getType() {
-			return type;
-		}
-
-		public void setType(Type type) {
-			this.type = type;
-		}
-		
-		public String getApprovalReference() {
-			return approvalReference;
-		}
-
-		public void setApprovalReference(String approvalReference) {
-			this.approvalReference = approvalReference;
-		}
-
-		@Override
-		public String toString() {
-			return "WorkPackageFilter [reviewLevel=" + reviewLevel + ", status=" + status + ", distributionType="
-					+ distributionType + ", type=" + type + ", approvalReference=" + approvalReference + "]";
-		}
-
-		
-    }
-    */
     /**
      * GET  /work-packages/:id : get the "id" workPackage.
      *

@@ -307,7 +307,7 @@
         }
 
         vm.refresh = function(){
-        	loadAll();
+        	vm.loadAll();
         }
 
         vm.unlock = function(wp){
