@@ -1014,7 +1014,7 @@
 	    }
         
         //GENERATE TOUR CODE
-        vm.generateTourCode = function(){
+        vm.generateTourCode = function(workPackageSheet){
         	$uibModal.open({
                 templateUrl: 'app/pages/work-packages/work-package-generate-tourcode-dialog.html',
                 controller: 'WorkPackageGenerateTourcodeDialogController',
@@ -1028,62 +1028,28 @@
                 	}
                 }
 			}).result.then(function(option) {
-				var findTab = false;
-	        	
-	        	if(!findTab){
-		        	for(var x=0;x<vm.currentTab.length;x++){
-		        		if(vm.currentTab[x]){
-		        			console.log('Active Fare Tab '+x);
-		        			findTab = true;
-		        			vm.workPackage.fareSheet[x].approvalReference = option.tourcode;		        			
-		        			break;
-		        		}
-		        	}
-	        	}
-	        	
-	        	if(!findTab){
-		        	for(var x=0;x<vm.currentAddonTab.length;x++){
-		        		if(vm.currentAddonTab[x]){
-		        			console.log('Active Addon Tab '+x);
-		        			findTab = true;
-		        			vm.workPackage.addonFareSheet[x].approvalReference = option.tourcode;		        			
-		        			break;
-		        		}
-		        	}
-	        	}
-	        	
-	        	if(!findTab){
-		        	for(var x=0;x<vm.currentDiscountTab.length;x++){
-		        		if(vm.currentDiscountTab[x]){
-		        			console.log('Active Discount Tab '+x);
-		        			findTab = true;
-		        			vm.workPackage.discountFareSheet[x].discountApprovalReference = option.tourcode;		        					        			
-		        			break;
-		        		}
-		        	}
-	        	}
-	        	
-	        	if(!findTab){
-		        	for(var x=0;x<vm.currentMarketTab.length;x++){
-		        		if(vm.currentMarketTab[x]){
-		        			console.log('Active Market Tab '+x);
-		        			findTab = true;
-		        			vm.workPackage.marketFareSheet[x].approvalReference = option.tourcode;		        					        					        			
-		        			break;
-		        		}
-		        	}
-	        	}
-	        	
-	        	if(!findTab){
-		        	for(var x=0;x<vm.currentWaiverTab.length;x++){
-		        		if(vm.currentWaiverTab[x]){
-		        			console.log('Active Waiver Tab '+x);
-		        			findTab = true;
-		        			vm.workPackage.waiverFareSheet[x].waiverApprovalReference = option.tourcode;		        					        					        			
-		        			break;
-		        		}
-		        	}
-	        	}
+				workPackageSheet.approvalReference = option.tourcode;		        			    			
+            }, function() {
+        			
+            });
+        };
+        
+        vm.generateTourCodeAttachment = function(){
+        	$uibModal.open({
+                templateUrl: 'app/pages/work-packages/work-package-generate-tourcode-dialog.html',
+                controller: 'WorkPackageGenerateTourcodeDialogController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full-page-modal',
+                resolve: {
+                	workPackage: function(){
+                		return vm.workPackage;
+                	}
+                }
+			}).result.then(function(option) {
+				vm.workPackage.attachmentApprovalReference = option.tourcode;		 
+				//workPackageSheet.approvalReference = option.tourcode;		        			    			
             }, function() {
         			
             });
