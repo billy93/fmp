@@ -231,6 +231,33 @@ public class WorkPackageResource {
     }
 
     /**
+     * POST  /work-packages/discontinue : Create a new workPackage.
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/work-packages/discontinue")
+    @Timed
+    public ResponseEntity<WorkPackage> discontinueWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
+        log.debug("REST request to discontinue WorkPackage : {}", workPackage);
+        
+        workPackage = workPackageService.findOne(workPackage.getId());
+        List<WorkPackageFareSheet> sheets = workPackage.getMarketFareSheet();
+        for(WorkPackageFareSheet sheet : sheets) {
+        	for(WorkPackageFare fare : sheet.getFares()) {
+        		fare.setSaleEnd(ZonedDateTime.now());
+        	}        			
+        }
+        workPackage.setStatus(Status.DISCONTINUED);
+        WorkPackage result = workPackageService.save(workPackage);
+        
+        return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+
+    /**
      * POST  /work-packages/reuse : Reuse a new workPackage.
      *
      * @param workPackage the workPackage to create
