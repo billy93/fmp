@@ -2,7 +2,6 @@ package com.atibusinessgroup.fmp.repository;
 
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +16,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.repository.support.PageableExecutionUtils;
 
 import com.atibusinessgroup.fmp.domain.WorkPackage;
-import com.atibusinessgroup.fmp.service.WorkPackageService;
-import com.atibusinessgroup.fmp.web.rest.WorkPackageResource.WorkPackageFilter;
+import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
+
 
 public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAnyName {
 
