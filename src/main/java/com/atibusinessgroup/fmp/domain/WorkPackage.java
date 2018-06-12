@@ -396,7 +396,7 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 	}
 
 	public static class WorkPackageFareSheet{
-		
+		private String version;
 
     	@Field("sheet_number")
     	private int sheetNumber;
@@ -471,6 +471,15 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 
         @Field("discontinue_date")
         private String discontinueDate;
+
+        
+		public String getVersion() {
+			return version;
+		}
+
+		public void setVersion(String version) {
+			this.version = version;
+		}
 
 		public String getDiscountApprovalReference() {
 			return discountApprovalReference;
