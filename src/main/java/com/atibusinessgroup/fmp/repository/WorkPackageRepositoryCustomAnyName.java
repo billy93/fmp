@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.atibusinessgroup.fmp.domain.WorkPackage;
-import com.atibusinessgroup.fmp.web.rest.WorkPackageResource.WorkPackageFilter;
+import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
 
 public interface WorkPackageRepositoryCustomAnyName {
 	

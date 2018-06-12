@@ -162,6 +162,7 @@
 	        'exportRateSheetWordWaiver': { method: 'POST',  url:'api/work-packages/export-ratesheet-word-waiver'},
 	        'downloadMarketRules': { method: 'POST',  url:'api/work-packages/download-market-rules'},
 	        'discontinue': { method: 'POST',  url:'api/work-packages/discontinue'},
+	        'workPackagefilter': { method: 'GET',  url:'api/workpackagefilters/byname'}
         });
     }
 })();

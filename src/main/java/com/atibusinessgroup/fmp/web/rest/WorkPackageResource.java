@@ -15,10 +15,8 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -81,8 +79,8 @@ import com.atibusinessgroup.fmp.domain.WorkPackage.MarketRules;
 import com.atibusinessgroup.fmp.domain.WorkPackage.WorkPackageFareSheet;
 import com.atibusinessgroup.fmp.domain.WorkPackage.WorkPackageFareSheet.FareVersion;
 import com.atibusinessgroup.fmp.domain.WorkPackageFare;
+import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
 import com.atibusinessgroup.fmp.domain.WorkPackageHistory;
-import com.atibusinessgroup.fmp.domain.WorkPackageHistoryData;
 import com.atibusinessgroup.fmp.domain.enumeration.Status;
 import com.atibusinessgroup.fmp.repository.ContractFMPRepository;
 import com.atibusinessgroup.fmp.repository.ContractFareFMPRepository;
@@ -93,6 +91,7 @@ import com.atibusinessgroup.fmp.repository.TariffNumberRepository;
 import com.atibusinessgroup.fmp.repository.UserRepository;
 import com.atibusinessgroup.fmp.repository.WorkPackageFareHistoryDataRepository;
 import com.atibusinessgroup.fmp.repository.WorkPackageHistoryDataRepository;
+import com.atibusinessgroup.fmp.repository.WorkPackagefilterRepository;
 import com.atibusinessgroup.fmp.security.SecurityUtils;
 import com.atibusinessgroup.fmp.service.BusinessAreaService;
 import com.atibusinessgroup.fmp.service.MailService;
@@ -150,10 +149,11 @@ public class WorkPackageResource {
     private final PriorityRepository priorityRepository;
     private final MailService mailService;
     private final TariffNumberRepository tariffNumberRepository;
+    private final WorkPackagefilterRepository packagefilterRepository;
     
     public WorkPackageResource(WorkPackageService workPackageService, WorkPackageFareService workPackageFareService, TargetDistributionService targetDistributionService, BusinessAreaService businessAreaService, ReviewLevelService reviewLevelService, UserService userService, UserRepository userRepository, WorkPackageHistoryService workPackageHistoryService,
     		ContractFMPRepository contractFMPRepository, FormRepository formRepository, WorkPackageHistoryDataRepository workPackageHistoryDataRepository,
-    		WorkPackageFareHistoryDataRepository workPackageFareHistoryDataRepository, ContractFareFMPRepository contractFareFMPRepository, CounterRepository counterRepository, PriorityRepository priorityRepository, MailService mailService, TariffNumberRepository tariffNumberRepository) {
+    		WorkPackageFareHistoryDataRepository workPackageFareHistoryDataRepository, ContractFareFMPRepository contractFareFMPRepository, CounterRepository counterRepository, PriorityRepository priorityRepository, MailService mailService, TariffNumberRepository tariffNumberRepository, WorkPackagefilterRepository packagefilterRepository) {
         this.workPackageService = workPackageService;
         this.workPackageFareService = workPackageFareService;
         this.targetDistributionService = targetDistributionService;
@@ -171,6 +171,7 @@ public class WorkPackageResource {
         this.priorityRepository = priorityRepository;
         this.mailService = mailService;
         this.tariffNumberRepository = tariffNumberRepository;
+        this.packagefilterRepository=  packagefilterRepository;
     }
 
     /**
@@ -3348,13 +3349,30 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<List<WorkPackage>> getAllWorkPackages(WorkPackageFilter filter, Pageable pageable) {
         log.debug("REST request to get a page of WorkPackages {}", filter);
+        
+        Optional<WorkPackageFilter> initFilter = packagefilterRepository.findOneByLoginName(SecurityUtils.getCurrentUserLogin().get());
+        if(initFilter.isPresent()) {
+        	List<WorkPackageFilter> filters = packagefilterRepository.findByLoginName(SecurityUtils.getCurrentUserLogin().get());
+        	if(filters.size() > 0 && !filters.isEmpty()) {
+        		for (WorkPackageFilter workPackageFilter : filters) {
+					if(!filter.equals(workPackageFilter)) {
+						filter.setLoginName(SecurityUtils.getCurrentUserLogin().get());
+				        packagefilterRepository.save(filter);
+					}
+				}
+        	}
+        }else {
+        	filter.setLoginName(SecurityUtils.getCurrentUserLogin().get());
+	        packagefilterRepository.save(filter);
+        }
+                
 //        Page<WorkPackage> page = workPackageService.findAllByOrderByLastModifiedDate(pageable);       
         Page<WorkPackage> page = workPackageService.findCustom(filter, pageable);       
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/work-packages");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
-    public static class WorkPackageFilter{
+  /*  public static class WorkPackageFilter{
     	public ReviewLevel reviewLevel;
     	public Status status;
     	public DistributionType distributionType;
@@ -3590,7 +3608,7 @@ public class WorkPackageResource {
 
 		
     }
-    
+    */
     /**
      * GET  /work-packages/:id : get the "id" workPackage.
      *
