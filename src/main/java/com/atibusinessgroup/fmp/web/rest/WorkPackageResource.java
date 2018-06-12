@@ -3324,16 +3324,11 @@ public class WorkPackageResource {
         log.debug("REST request to get a page of WorkPackages {}", filter);
         
         Optional<WorkPackageFilter> initFilter = packagefilterRepository.findOneByLoginName(SecurityUtils.getCurrentUserLogin().get());
+      
         if(initFilter.isPresent()) {
-        	List<WorkPackageFilter> filters = packagefilterRepository.findByLoginName(SecurityUtils.getCurrentUserLogin().get());
-        	if(filters.size() > 0 && !filters.isEmpty()) {
-        		for (WorkPackageFilter workPackageFilter : filters) {
-					if(!filter.equals(workPackageFilter)) {
-						filter.setLoginName(SecurityUtils.getCurrentUserLogin().get());
-				        packagefilterRepository.save(filter);
-					}
-				}
-        	}
+        	WorkPackageFilter temp = initFilter.get();
+        	temp = packagefilterRepository.save(filter);  
+        	filter = temp;
         }else {
         	filter.setLoginName(SecurityUtils.getCurrentUserLogin().get());
 	        packagefilterRepository.save(filter);
@@ -3343,6 +3338,66 @@ public class WorkPackageResource {
         Page<WorkPackage> page = workPackageService.findCustom(filter, pageable);       
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/work-packages");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+    
+    /**
+     * GET  /workPackagefilter/:id : get the "id" workPackagefilter.
+     *
+     * @param id the id of the workPackagefilter to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the workPackagefilter, or with status 404 (Not Found)
+     */
+    @GetMapping("/work-packages/byname")
+    @Timed
+    public ResponseEntity<WorkPackageFilter> getWorkPackageFilterbyLoginName() {
+    	String loginName = SecurityUtils.getCurrentUserLogin().get();
+        log.debug("REST request to get workPackagefilter : {}", loginName);
+        WorkPackageFilter result = null;
+        Optional<WorkPackageFilter> workPackagefilter = packagefilterRepository.findOneByLoginName(loginName);
+        if(workPackagefilter.isPresent()) {
+        	 result = workPackagefilter.get();
+        }
+        else {
+        	WorkPackageFilter filter = new WorkPackageFilter();     
+        	
+        	
+        	com.atibusinessgroup.fmp.domain.WorkPackageFilter.DistributionType dt = new WorkPackageFilter.DistributionType();
+        	dt.setAtpco(true);
+        	dt.setMarket(true);
+        	dt.setWaiver(true);
+        	filter.setDistributionType(dt);
+        	
+        	com.atibusinessgroup.fmp.domain.WorkPackageFilter.Status s = new WorkPackageFilter.Status();
+        	s.setCompleted(true);
+        	s.setDistributed(true);
+        	s.setNewStatus(true);
+        	s.setPending(true);
+        	s.setReadyToRelease(true);
+        	s.setReferred(true);
+        	s.setReplace(true);
+        	s.setReuse(true);
+        	s.setReviewing(true);
+        	s.setWithdrawn(true);
+        	filter.setStatus(s);
+        	
+        	com.atibusinessgroup.fmp.domain.WorkPackageFilter.Type t = new WorkPackageFilter.Type();
+        	t.setDiscount(true);
+        	t.setRegular(true);
+        	t.setWaiver(true);        	
+        	filter.setType(t);
+        	
+        	com.atibusinessgroup.fmp.domain.WorkPackageFilter.ReviewLevel rl = new WorkPackageFilter.ReviewLevel();
+        	rl.setDistribution(false);
+        	rl.setHo(false);
+        	rl.setLso(false);
+        	rl.setRouteManagement(false);        	
+        	filter.setReviewLevel(rl);
+        	
+        	filter.setApprovalReference(null);
+        	filter.setCreatedTime("10");
+        	filter.setLoginName(SecurityUtils.getCurrentUserLogin().get());
+        	packagefilterRepository.save(filter);
+        }
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(result));
     }
 
   /*  public static class WorkPackageFilter{

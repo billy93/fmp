@@ -138,7 +138,7 @@ public class WorkPackageFilterResource {
      *
      * @param id the id of the workPackagefilter to retrieve
      * @return the ResponseEntity with status 200 (OK) and with body the workPackagefilter, or with status 404 (Not Found)
-     */
+     *//*
     @GetMapping("/workpackagefilters/byname")
     @Timed
     public ResponseEntity<WorkPackageFilter> getWorkPackageFilterbyLoginName() {
@@ -150,7 +150,7 @@ public class WorkPackageFilterResource {
         	 result = workPackagefilter.get();
         }
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(result));
-    }
+    }*/
     
     
     /**
