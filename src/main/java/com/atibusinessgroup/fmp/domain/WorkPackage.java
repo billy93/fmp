@@ -118,7 +118,10 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     
     @Field("distribution_date")
     private ZonedDateTime distributionDate;
-
+        
+    @Field("queued_date")
+    private ZonedDateTime queuedDate;
+    
     @Field("filling_status")
     private Status fillingStatus;
 
@@ -172,14 +175,21 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     
     private Validation validation;
     private boolean validate;
-    
-    
+           
     public String getAttachmentApprovalReference() {
 		return attachmentApprovalReference;
 	}
 
 	public void setAttachmentApprovalReference(String attachmentApprovalReference) {
 		this.attachmentApprovalReference = attachmentApprovalReference;
+	}
+	
+    public ZonedDateTime getQueuedDate() {
+		return queuedDate;
+	}
+
+	public void setQueuedDate(ZonedDateTime queuedDate) {
+		this.queuedDate = queuedDate;
 	}
 
 	public int getImportIndex() {
@@ -428,9 +438,6 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
         @Field("discount_fare_type")
         private String discountFareType;
         
-        @Field("discount_approval_reference")
-        private String discountApprovalReference;
-        
         @Field("account_code")
         private String accountCode;
         //End Discount Fares
@@ -441,9 +448,6 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
         
         @Field("waiver_fare_type")
         private String waiverFareType;     
-        
-        @Field("waiver_approval_reference")
-        private String waiverApprovalReference;
         
         @Field("waiver_agent_name")
         private String waiverAgentName;    
@@ -489,29 +493,13 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 		public void setVersion(String version) {
 			this.version = version;
 		}
-
-		public String getDiscountApprovalReference() {
-			return discountApprovalReference;
-		}
-
-		public void setDiscountApprovalReference(String discountApprovalReference) {
-			this.discountApprovalReference = discountApprovalReference;
-		}
-
+		
 		public String getWaiverIocNumber() {
 			return waiverIocNumber;
 		}
 
 		public void setWaiverIocNumber(String waiverIocNumber) {
 			this.waiverIocNumber = waiverIocNumber;
-		}
-
-		public String getWaiverApprovalReference() {
-			return waiverApprovalReference;
-		}
-
-		public void setWaiverApprovalReference(String waiverApprovalReference) {
-			this.waiverApprovalReference = waiverApprovalReference;
 		}
 
 		public String getWaiverAgentName() {
