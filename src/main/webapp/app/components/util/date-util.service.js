@@ -20,10 +20,10 @@
 
         function convertDateTimeFromServer(date) {
             if (date) {
-//            	var d = new Date(date);
-//            	d.setTime(d.getTime() + d.getTimezoneOffset() * 60 * 1000 /* convert to UTC */ + (/* UTC+8 */ 7) * 60 * 60 * 1000);
-//            	return d;
-                return new Date(date);
+            	var d = new Date(date);
+            	d.setTime(d.getTime() + d.getTimezoneOffset() * 60 * 1000 /* convert to UTC */ + (/* UTC+8 */ 7) * 60 * 60 * 1000);
+            	return d;
+//                return new Date(date);
             } else {
                 return null;
             }

@@ -44,21 +44,31 @@ public class WorkPackageService {
         for(WorkPackageFareSheet sheet : workPackage.getFareSheet()) {
         	List<WorkPackageFare> fares = sheet.getFares();
         	for(WorkPackageFare fare : fares) {
-        		fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant(), ZoneId.systemDefault()));
-        		fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant(), ZoneId.systemDefault()));
-        		fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant(), ZoneId.systemDefault()));
-        		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
-        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getTravelStart() != null)
+        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getTravelEnd() != null)
+        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getSaleStart() != null)	            		
+        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getSaleEnd() != null)
+            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getTravelComplete() != null)
+	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
         	}
         }
         for(WorkPackageFareSheet sheet : workPackage.getAddonFareSheet()) {
         	List<WorkPackageFare> fares = sheet.getFares();
         	for(WorkPackageFare fare : fares) {
-        		fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant(), ZoneId.systemDefault()));
-        		fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant(), ZoneId.systemDefault()));
-        		fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant(), ZoneId.systemDefault()));
-        		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
-        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getTravelStart() != null)
+        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getTravelEnd() != null)
+        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getSaleStart() != null)	            		
+        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getSaleEnd() != null)
+            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getTravelComplete() != null)
+	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
         	}
         }
         for(WorkPackageFareSheet sheet : workPackage.getMarketFareSheet()) {
@@ -74,21 +84,31 @@ public class WorkPackageService {
         for(WorkPackageFareSheet sheet : workPackage.getDiscountFareSheet()) {
         	List<WorkPackageFare> fares = sheet.getFares();
         	for(WorkPackageFare fare : fares) {
-        		fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant(), ZoneId.systemDefault()));
-        		fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant(), ZoneId.systemDefault()));
-        		fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant(), ZoneId.systemDefault()));
-        		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
-        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getTravelStart() != null)
+        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getTravelEnd() != null)
+        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getSaleStart() != null)	            		
+        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getSaleEnd() != null)
+            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getTravelComplete() != null)
+	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
         	}
         }
         for(WorkPackageFareSheet sheet : workPackage.getWaiverFareSheet()) {
         	List<WorkPackageFare> fares = sheet.getFares();
         	for(WorkPackageFare fare : fares) {
-        		fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant(), ZoneId.systemDefault()));
-        		fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant(), ZoneId.systemDefault()));
-        		fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant(), ZoneId.systemDefault()));
-        		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
-        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getTravelStart() != null)
+        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getTravelEnd() != null)
+        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getSaleStart() != null)	            		
+        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getSaleEnd() != null)
+            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getTravelComplete() != null)
+	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
         	}
         }
         
