@@ -4595,10 +4595,19 @@
                   cities: ['City', function(City) {
                       return City.getAll().$promise;
                   }],
+                  cityGroup: ['CityGroup', function(CityGroup) {
+                      return CityGroup.getAll().$promise;
+                  }],
               }
 			}).result.then(function(option) {
-				if(option != null)
-					fare[field] = option.cityCode;
+				if(option != null){
+					if(option.type == 'city'){
+						fare[field] = option.cityCode;					
+					}
+					else if(option.type == 'cityGroup'){
+						fare[field] = option.code;	
+					}
+				}
           }, function() {
       			
           });
@@ -4788,6 +4797,12 @@
 	    	  var exist = false;
 	    	  for(var x=0;x<vm.cities.length;x++){
 	    		  if(vm.cities[x].cityCode.toUpperCase() == fare[field].toUpperCase()){
+	    			  exist = true;
+	    			  break;
+	    		  }
+	    	  }
+	    	  for(var x=0;x<vm.cityGroups.length;x++){
+	    		  if(vm.cityGroups[x].code.toUpperCase() == fare[field].toUpperCase()){
 	    			  exist = true;
 	    			  break;
 	    		  }
