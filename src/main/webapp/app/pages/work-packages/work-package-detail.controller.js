@@ -1014,7 +1014,7 @@
 	    }
         
         //GENERATE TOUR CODE
-        vm.generateTourCode = function(workPackageSheet){
+        vm.generateTourCode = function(workPackageSheet, type){
         	$uibModal.open({
                 templateUrl: 'app/pages/work-packages/work-package-generate-tourcode-dialog.html',
                 controller: 'WorkPackageGenerateTourcodeDialogController',
@@ -1028,7 +1028,7 @@
                 	}
                 }
 			}).result.then(function(option) {
-				workPackageSheet.approvalReference = option.tourcode;		        			    			
+				workPackageSheet.approvalReference = option.tourcode;	
             }, function() {
         			
             });
