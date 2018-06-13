@@ -69,7 +69,7 @@
         $scope.dateformat = "yyyy-MM-dd";
         vm.optionFare = fareTypes;
         vm.atpcoFareTypes = atpcoFareTypes;
-                      
+                           
         
         vm.businessArea = {};
         for(var x=0;x<businessAreas.length;x++){
@@ -215,13 +215,13 @@
         	},
         	{
         		name:"tarno",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["HO", "DISTRIBUTION"]
         	},
         	{
         		name:"tarcd",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["HO", "DISTRIBUTION"]
         	},
         	{
         		name:"origin",
@@ -235,43 +235,43 @@
         	},
         	{
         		name:"farebasis",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["HO", "DISTRIBUTION"]
         	},
         	{
         		name:"bookingClass",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:["HO"]
         	},
         	{
         		name:"cabin",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	{
         		name:"typeOfJourney",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	{
         		name:"footnote",
-        		editable:["HO", "Distribution"],
+        		editable:["HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"rtgno",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["DISTRIBUTION"]
         	},
         	{
         		name:"ruleno",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["DISTRIBUTION"]
         	},
         	{
         		name:"currency",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	{
         		name:"amount",
@@ -299,37 +299,37 @@
         	},
         	{
         		name:"travelStartDate",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"travelEndDate",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"saleStartDate",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"saleEndDate",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"comment",
-        		editable:["LSO", "HO", "Distribution", "Route Management"],
+        		editable:["LSO", "HO", "DISTRIBUTION", "ROUTE_MANAGEMENT"],
         		mandatory:[]
         	},
         	{
         		name:"travelComplete",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"travelIndicator",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
@@ -359,92 +359,92 @@
         	},
         	{
         		name:"addonFareTarno",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["DISTRIBUTION"]
         	},
         	{
         		name:"addonFareTarcd",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["DISTRIBUTION"]
         	},
         	{
         		name:"addonFareOrigin",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	{
         		name:"addonFareDestination",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	{
         		name:"addonFareBucket",
-        		editable:["HO", "Distribution"],
-        		mandatory:["Distribution"]
+        		editable:["HO", "DISTRIBUTION"],
+        		mandatory:["DISTRIBUTION"]
         	},
         	{
         		name:"addonFareTypeOfJourney",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO","Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO","DISTRIBUTION"]
         	},
         	{
         		name:"addonFareFootnote",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"addonFareZone",
-        		editable:["HO", "Distribution"],
-        		mandatory:["Distribution"]
+        		editable:["HO", "DISTRIBUTION"],
+        		mandatory:["DISTRIBUTION"]
         	},
         	{
         		name:"addonFareRtgno",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["DISTRIBUTION"]
         	},
         	{
         		name:"addonFareCurrency",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	{
         		name:"addonFareAmount",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:["LSO", "HO"]
         	},
         	{
         		name:"addonFareTravelStartDate",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"addonFareTravelEndDate",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"addonFareSaleStartDate",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"addonFareSaleEndDate",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"addonFareComment",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"addonFareTravelComplete",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"addonFareTravelIndicator",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	
@@ -466,8 +466,8 @@
         	},
         	{
         		name:"discountAccountCode",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	
         	//DISCOUNT FARE
@@ -478,45 +478,45 @@
         	},
         	{
         		name:"discountTariffCode",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["HO", "DISTRIBUTION"]
         	},
         	{
         		name:"discountLoc1Type",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	
         	{
         		name:"discountLoc1",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	{
         		name:"discountLoc2Type",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	
         	{
         		name:"discountLoc2",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	
         	{
         		name:"discountBaseFareBasis",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["HO", "DISTRIBUTION"]
         	},
         	{
         		name:"discountBaseRuleno",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountBaseTariffCode",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
@@ -526,7 +526,7 @@
         	},
         	{
         		name:"discountPercentageOfBaseFare",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[],
         		mandatoryExtraCondition:[
         			{
@@ -541,12 +541,12 @@
         	},
         	{
         		name:"discountFareCurrency",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountSpecifiedAmount",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[],
         		mandatoryExtraCondition:[
         			{
@@ -557,93 +557,93 @@
         	},
         	{
         		name:"discountPaxType",
-        		editable:["LSO", "HO",  "Distribution"],
-        		mandatory:["LSO", "HO",  "Distribution"]
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
+        		mandatory:["LSO", "HO",  "DISTRIBUTION"]
         	},
         	{
         		name:"discountFareFareType",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountTicketCode",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	
         	{
         		name:"discountTicketDesignator",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountBaseFareOwRt",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountGlobal",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountRtgno",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountRtgnoTarno",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountNewFarebasis",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountNewBaseFareOwRt",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountNewBookingCode",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountTravelStartDate",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountTravelEndDate",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountSaleStartDate",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountSaleEndDate",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountComment",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountTravelComplete",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountTravelCompleteIndicator",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	
