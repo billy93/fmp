@@ -4926,5 +4926,9 @@
     		  }
     	  }
       }
+      
+      vm.dateNgModelOpts = {
+    		  timezone : '+07:00'
+	  };
     }
 })();

@@ -1,5 +1,7 @@
 package com.atibusinessgroup.fmp.service;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -9,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.atibusinessgroup.fmp.domain.WorkPackage;
+import com.atibusinessgroup.fmp.domain.WorkPackage.WorkPackageFareSheet;
+import com.atibusinessgroup.fmp.domain.WorkPackageFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
 import com.atibusinessgroup.fmp.domain.enumeration.Status;
 import com.atibusinessgroup.fmp.repository.WorkPackageRepository;
@@ -36,6 +40,42 @@ public class WorkPackageService {
      */
     public WorkPackage save(WorkPackage workPackage) {
         log.debug("Request to save WorkPackage : {}", workPackage);
+        
+        for(WorkPackageFareSheet sheet : workPackage.getFareSheet()) {
+        	List<WorkPackageFare> fares = sheet.getFares();
+        	for(WorkPackageFare fare : fares) {
+        		fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant(), ZoneId.systemDefault()));
+        		fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant(), ZoneId.systemDefault()));
+        		fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant(), ZoneId.systemDefault()));
+        		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
+        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
+        	}
+        }
+        for(WorkPackageFareSheet sheet : workPackage.getAddonFareSheet()) {
+        	List<WorkPackageFare> fares = sheet.getFares();
+        	for(WorkPackageFare fare : fares) {
+        		fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant(), ZoneId.systemDefault()));
+        	}
+        }
+        for(WorkPackageFareSheet sheet : workPackage.getMarketFareSheet()) {
+        	List<WorkPackageFare> fares = sheet.getFares();
+        	for(WorkPackageFare fare : fares) {
+        		fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant(), ZoneId.systemDefault()));
+        	}
+        }
+        for(WorkPackageFareSheet sheet : workPackage.getDiscountFareSheet()) {
+        	List<WorkPackageFare> fares = sheet.getFares();
+        	for(WorkPackageFare fare : fares) {
+        		fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant(), ZoneId.systemDefault()));
+        	}
+        }
+        for(WorkPackageFareSheet sheet : workPackage.getWaiverFareSheet()) {
+        	List<WorkPackageFare> fares = sheet.getFares();
+        	for(WorkPackageFare fare : fares) {
+        		fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant(), ZoneId.systemDefault()));
+        	}
+        }
+        
         return workPackageRepository.save(workPackage);
     }
 

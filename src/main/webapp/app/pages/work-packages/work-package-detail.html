@@ -870,7 +870,7 @@
 																		name="travelStartDate{{$parent.$index}}{{$index}}" id="field_travelEndDate"
 										                				ng-disabled="!vm.isEditable('travelStartDate')"	
 										                				class="form-control input-date"					                				
-										                				ng-required="vm.isRequired('travelStartDate')"
+										                				ng-required="vm.isRequired('travelStartDate')"										           
 											                    		ng-class="{'must-fill': editForm.editFormATPCO.travelStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 															            ng-model="fare.travelStart" 
 															            datetime-picker="{{dateformat}}" 
