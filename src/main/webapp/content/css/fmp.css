@@ -1640,7 +1640,7 @@ button.ui-button::-moz-focus-inner {
   padding: 0; }
 
 .ui-datepicker {
-  width: 21em;
+  width: 23em;
   padding: .2em .2em 0;
   display: none; }
 
@@ -3666,8 +3666,8 @@ p {
   .dropdown .dropdown-menu {
     position: absolute;
     top: 100%;
-    right: 5px;
-    left: auto;
+    right: auto;
+    left: 0;
     z-index: 1000;
     display: none;
     float: left;
@@ -3685,6 +3685,9 @@ p {
     border-radius: 4px;
     -webkit-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
+    .dropdown .dropdown-menu.right-dropdown {
+      right: 5px;
+      left: auto; }
     .dropdown .dropdown-menu li a {
       padding: 7px 15px;
       font-size: 12px;
@@ -4505,6 +4508,17 @@ label.tree_label:after {
   background: #3c8dbc;
   color: #fff; }
 
+.additional-container {
+  width: 16.66667%;
+  padding: 5px 20px;
+  position: relative; }
+  .additional-container .additional-info {
+    float: none;
+    width: 100%;
+    min-width: auto;
+    margin: 0;
+    border-radius: 2px; }
+
 /* General Demo Style */
 body, html {
   font-size: 100%;
@@ -4598,7 +4612,7 @@ a:hover {
   padding: 28px 20px 20px;
   position: relative;
   width: 40%;
-  margin: 0 auto 30px;
+  margin: 0 auto 15px;
   background: rgba(252, 252, 252, 0.89);
   text-align: center; }
   .content-title h2 {
@@ -4623,7 +4637,7 @@ a:hover {
   padding-top: 70px; }
   .page-wrapper .page-content {
     margin-left: 100px;
-    padding: 20px 40px 200px;
+    padding: 0 40px 200px;
     -webkit-transition: .3s all;
     -o-transition: .3s all;
     transition: .3s all; }
