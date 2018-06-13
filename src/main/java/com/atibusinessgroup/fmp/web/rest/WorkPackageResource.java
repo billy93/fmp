@@ -3430,7 +3430,7 @@ public class WorkPackageResource {
 		        		rl.setHo(true);
 		        	}else if(reviewLevel.equals("DISTRIBUTION")) {
 		        		rl.setDistribution(true);
-		        	}else if(reviewLevel.equals("ROUTE MANAGEMENT")) {
+		        	}else if(reviewLevel.equals("ROUTE_MANAGEMENT")) {
 		        		rl.setRouteManagement(true); 
 		        	}
 	        	}
