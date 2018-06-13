@@ -143,6 +143,9 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     @Field("approval_reference")
     private String approvalReference;
 
+    @Field("attachment_approval_reference")
+    private String attachmentApprovalReference;
+    
     @Field("fare_sheet")
     private List<WorkPackageFareSheet> fareSheet;
     
@@ -171,7 +174,15 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     private boolean validate;
     
     
-    public int getImportIndex() {
+    public String getAttachmentApprovalReference() {
+		return attachmentApprovalReference;
+	}
+
+	public void setAttachmentApprovalReference(String attachmentApprovalReference) {
+		this.attachmentApprovalReference = attachmentApprovalReference;
+	}
+
+	public int getImportIndex() {
 		return importIndex;
 	}
 
@@ -703,23 +714,11 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     
     private List<MarketRules> marketRulesData = new ArrayList<>();
     
-    @Field("attachment_approval_reference")
-    private String atachmentApprovalReference;
-    
     private List<Attachment> attachmentData = new ArrayList<>();
     
     private List<String> agent = new ArrayList<>();
     
     private ImportFares importFares;
-    
-    
-    public String getAtachmentApprovalReference() {
-		return atachmentApprovalReference;
-	}
-
-	public void setAtachmentApprovalReference(String atachmentApprovalReference) {
-		this.atachmentApprovalReference = atachmentApprovalReference;
-	}
 
 	public boolean isMarketFares() {
 		return marketFares;
