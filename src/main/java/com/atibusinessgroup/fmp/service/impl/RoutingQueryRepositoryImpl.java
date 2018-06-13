@@ -1,12 +1,11 @@
 package com.atibusinessgroup.fmp.service.impl;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 
 import com.atibusinessgroup.fmp.service.RoutingQueryService;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.BasicDBObject;
 import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DBObject;
@@ -14,11 +13,11 @@ import com.atibusinessgroup.fmp.domain.RoutingQueryDetails;
 import com.atibusinessgroup.fmp.domain.RoutingQueryRestriction;
 import com.atibusinessgroup.fmp.domain.RoutingQueryTextRestriction;
 import com.atibusinessgroup.fmp.domain.RoutingQuery;
+import com.atibusinessgroup.fmp.domain.dto.RouteMapView;
 import com.atibusinessgroup.fmp.domain.dto.RoutingQueryParam;
 import com.atibusinessgroup.fmp.repository.RoutingqueryRepository;
 
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
-
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -52,6 +51,74 @@ import org.springframework.stereotype.Service;
 public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 
     private final Logger log = LoggerFactory.getLogger(RoutingQueryRepositoryImpl.class);
+    
+    public class RouteMap {
+    	private String routeName;
+    	private String routeCode;
+    	private String routeTag;
+    	private String nextRouteCode;
+    	private String altRouteCode;
+    	private Map<String, RouteMap> nextRouteCodeData = new HashMap<>();
+    	
+    	private String exitRoute;
+    	
+		public String getRouteName() {
+			return routeName;
+		}
+		public void setRouteName(String routeName) {
+			this.routeName = routeName;
+		}
+		public String getRouteCode() {
+			return routeCode;
+		}
+		public void setRouteCode(String routeCode) {
+			this.routeCode = routeCode;
+		}
+		public String getRouteTag() {
+			return routeTag;
+		}
+		public void setRouteTag(String routeTag) {
+			this.routeTag = routeTag;
+		}
+		public String getNextRouteCode() {
+			return nextRouteCode;
+		}
+		public void setNextRouteCode(String nextRouteCode) {
+			this.nextRouteCode = nextRouteCode;
+		}
+		public String getAltRouteCode() {
+			return altRouteCode;
+		}
+		public void setAltRouteCode(String altRouteCode) {
+			this.altRouteCode = altRouteCode;
+		}
+		public List<RouteMap> getNextRouteCodeData() {
+//			return nextRouteCodeData; 
+			return new ArrayList<RouteMap>(nextRouteCodeData.values());
+		}
+		public void setNextRouteCodeData(Map<String, RouteMap> nextRouteCodeData) {
+			this.nextRouteCodeData = nextRouteCodeData;
+		}
+		public String getExitRoute() {
+			return exitRoute;
+		}
+		public void setExitRoute(String exitRoute) {
+			this.exitRoute = exitRoute;
+		}
+		
+		@Override
+		public String toString() {
+			String routeNameJson = "";
+			String nextRouteDataJson = "\"child\":"+getNextRouteCodeData().toString();
+			
+			if(getRouteTag().equals("X")) {
+				routeNameJson = "\"name\":\""+exitRoute+"\"";
+			} else {
+				routeNameJson = "\"name\":\""+routeName+"\"";
+			}
+			return "{"+routeNameJson+","+nextRouteDataJson+"}";
+		} 
+    }
 
     @Autowired
     MongoTemplate mongoTemplate;
@@ -142,7 +209,7 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 	}
 
 	@Override
-	public ArrayList<ArrayList<String>> getRouteDetails(RoutingQuery routingquery) {
+	public String[][] getRouteDetails(RoutingQuery routingquery) {
 		return getDetails(routingquery.getBatchNumber(), routingquery.getLinkNo());
 	}
 	
@@ -157,99 +224,243 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 		return routingquery;
 	}
 	
-	private ArrayList<ArrayList<String>> getDetails(int batchNo, String linkNo) {
+	private String[][] getDetails(int batchNo, String linkNo) {
 		Query query = new Query(Criteria.where("batch_number").is(batchNo));
 		query.addCriteria(Criteria.where("link_no").is(linkNo));
 		List<RoutingQueryDetails> routingqueries = mongoTemplate.find(query, RoutingQueryDetails.class);
 		
-		Map<String, Map<String, String>> cityList = new HashMap<String, Map<String, String>>();
+		Map<String, RouteMap> cityList = new HashMap<String, RouteMap>();
 		Map<String, String> routeList = new HashMap<String, String>();
 		for (RoutingQueryDetails routingQueryDetails : routingqueries) {	
-			cityList.put(routingQueryDetails.getCityNo(), new HashMap<String, String>());
-			cityList.get(routingQueryDetails.getCityNo()).put("cityName", routingQueryDetails.getCityName());
-			cityList.get(routingQueryDetails.getCityNo()).put("cityTag", routingQueryDetails.getCityTag());
-			cityList.get(routingQueryDetails.getCityNo()).put("nextCity", routingQueryDetails.getNextCity());
-			cityList.get(routingQueryDetails.getCityNo()).put("alternateCity", routingQueryDetails.getAlternateCity());
+			cityList.put(routingQueryDetails.getCityNo(), new RouteMap());
+			cityList.get(routingQueryDetails.getCityNo()).setRouteName(routingQueryDetails.getCityName());
+			cityList.get(routingQueryDetails.getCityNo()).setRouteCode(routingQueryDetails.getCityNo());
+			cityList.get(routingQueryDetails.getCityNo()).setRouteTag(routingQueryDetails.getCityTag());
+			cityList.get(routingQueryDetails.getCityNo()).setNextRouteCode(routingQueryDetails.getNextCity());
+			cityList.get(routingQueryDetails.getCityNo()).setAltRouteCode(routingQueryDetails.getAlternateCity());
 		}
-		Map<String, Map<String, String>> sortCityList = cityList.entrySet().stream()
+		Map<String, RouteMap> sortCityList = cityList.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
                         (oldValue, newValue) -> oldValue, LinkedHashMap::new));
 		
-		for (Map.Entry<String, Map<String, String>> route : sortCityList.entrySet()) {
-			if(route.getValue().get("cityTag").equals("1")) {
-				String nextCityNo = route.getValue().get("nextCity");
-				String currentCityName = route.getValue().get("cityName");
+		for (Map.Entry<String, RouteMap> route : sortCityList.entrySet()) {
+			if(route.getValue().getRouteTag().equals("1")) {
+				String nextCityNo = route.getValue().getNextRouteCode();
+				String currentCityName = route.getValue().getRouteName();
 				if (routeList.containsKey(nextCityNo)) {
 					String lastCityData = routeList.get(nextCityNo);
 					routeList.put(nextCityNo, lastCityData+"/"+currentCityName);
 			    } else {
 			    	routeList.put(nextCityNo, currentCityName);
-			    }
+			    } 
 			}
 		}
 		
+		List<RouteMap> routeMapList = new ArrayList<>();
 		for (Map.Entry<String, String> route : routeList.entrySet()) {
-			String key = route.getKey();
-			String value = route.getValue();
-			value = value+"-"+getNextRoute(key, cityList);
-			routeList.put(key, value);
+			RouteMap routeMap = new RouteMap();
+			routeMap.setRouteName(route.getValue());
+			routeMap.setNextRouteCode(route.getKey());
+			routeMap.setRouteTag("1");
+			routeMap.setNextRouteCodeData(getViaRoutes(routeMap, cityList));
+			routeMapList.add(routeMap);
 		}
+//		log.debug("routeMapList "+routeMapList);
 		
-		Map<String, Integer> routeNumber = new HashMap<>();
-		int routeDistance = 0;
-		for (Map.Entry<String, String> route : routeList.entrySet()) {
-			String[] routeParts = route.getValue().split("-");
+		ObjectMapper mapper = new ObjectMapper();
+		Map<String, RouteMapView> routeViewList = new HashMap<>();
+		int index = 0;
+		for (RouteMap routeMap : routeMapList) {
+			try {
+				routeViewList.put("parent-"+index, mapper.readValue(routeMap.toString(), RouteMapView.class));
+			} catch (JsonParseException e) {
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			index++;
+		}
+		log.debug("routeViewList 1 "+routeViewList);
+		
+//		Map<String, RouteMapView> routeViewListNew = routeViewList.entrySet().stream().sorted(Map.Entry.comparingByKey()).
+//				collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+//                (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+//		routeViewList = routeViewListNew;
+//		routeViewList = calculateRowSpan(routeViewList); 
+//		log.debug("routeViewList 2 "+routeViewList);
+		
+		Map<String, RouteMapView> routeViewListNew = routeViewList.entrySet().stream().sorted(Map.Entry.comparingByKey()).
+						collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+		routeViewList = routeViewListNew;
+//		routeViewList = calculateRowSpan(routeViewList); 
+		routeViewList = getRouteMapView(routeViewList); 
+//		log.debug("routeViewList 2 "+routeViewList);
+		
+		List<String> routeViewString = new ArrayList<>();
+		for (Map.Entry<String, RouteMapView> routeMapViewData : routeViewList.entrySet()) {
+			routeViewString.add(routeMapViewData.getValue().getName());
+		}
+//		log.debug("routeViewString "+routeViewString);
+		
+		int rowCount = routeViewList.size();
+		int columnCount = 0;
+		for (Map.Entry<String, RouteMapView> route : routeViewList.entrySet()) {
+			String[] routeParts = route.getValue().getName().split("-");
+			if(columnCount < routeParts.length)
+				columnCount = routeParts.length;
+		}
+		log.debug("rowCount "+rowCount);
+		log.debug("columnCount "+columnCount);
+		
+		index = 0;
+		String routeMapTable[][] = new String[rowCount][columnCount];
+		for (Map.Entry<String, RouteMapView> route : routeViewList.entrySet()) {
+			String[] routeParts = route.getValue().getName().split("-");
+			int routePartIndex = 0;
+			for (String routePart : routeParts) {
+				routeMapTable[index][routePartIndex] = routePart;
+				routePartIndex++;
+			}
+			index++;
+		}
+		log.debug("routeMapTable "+routeMapTable);
+		
+//		return new ArrayList<RouteMapView>(routeViewList.values());
+		return routeMapTable;
+	}
+	
+	private Map<String, RouteMapView> calculateRowSpan(Map<String, RouteMapView> routeViewList) {
+		for (Map.Entry<String, RouteMapView> routeMapViewData : routeViewList.entrySet()) {
+			String currentKey = routeMapViewData.getKey();
+			RouteMapView currentRouteMap = routeMapViewData.getValue();
+			int rowSpan = 1;
 			int index = 0;
-			for (String part : routeParts) {
-				if ((routeNumber.containsKey(part) && routeNumber.get(part) < index) || !routeNumber.containsKey(part)) {
-					routeNumber.put(part, index);
+			for (RouteMapView child : currentRouteMap.getChild()) {
+				child = getChildRowSpan(child);
+				if(child.getRowSpan() > 1 || child.getChild().size() > 1) {
+					currentRouteMap.getChild().set(index, child);
+					rowSpan = rowSpan + child.getRowSpan();
 				}
 				index++;
 			}
-			
-			if(routeParts.length > routeDistance) {
-				routeDistance = routeParts.length;
+			if(rowSpan < currentRouteMap.getChild().size()) {
+				currentRouteMap.setRowSpan(currentRouteMap.getChild().size());
+			} else {
+				currentRouteMap.setRowSpan(rowSpan);
 			}
+			
+			routeViewList.put(currentKey, currentRouteMap);
 		}
 		
-		ArrayList<ArrayList<String>> routeMaps = new ArrayList<ArrayList<String>>();
-		int index = 0;
-		for (Map.Entry<String, String> route : routeList.entrySet()) {
-			routeMaps.add(new ArrayList<>());
-			for (int i = 0; i < routeDistance; i++) {
-				routeMaps.get(index).add("---");
-			}
-			
-			String[] routeParts = route.getValue().split("-");
-			for (String part : routeParts) {
-				routeMaps.get(index).set(routeNumber.get(part), part);
-			}
-			
-			index++;
-		}
-		
-		return routeMaps;
+		return routeViewList;
 	}
 	
-	private String getNextRoute(String cityNo, Map<String, Map<String, String>> cityList) {
-		String route = cityList.get(cityNo).get("cityName");
-		if(!cityList.get(cityNo).get("alternateCity").equals("")) {
-			route = route+"/"+getAlternateRoutes(cityList.get(cityNo).get("alternateCity"), cityList);
+	private RouteMapView getChildRowSpan(RouteMapView routeMapView) {
+		int rowSpan = 1;
+		int index = 0;
+		for (RouteMapView child : routeMapView.getChild()) {
+			child = getChildRowSpan(child);
+			if(child.getRowSpan() > 1 || child.getChild().size() > 1) { 
+				routeMapView.getChild().set(index, child);
+				rowSpan = rowSpan + child.getRowSpan();
+			}
+			index++;
+		}
+		routeMapView.setRowSpan(rowSpan);
+		return routeMapView;
+	}
+	
+	private Map<String, RouteMapView> getRouteMapView(Map<String, RouteMapView> routeViewList) {
+		String currentKey = "";
+		boolean flag = false;
+		boolean isDeleted = false;
+		for (Map.Entry<String, RouteMapView> routeMapViewData : routeViewList.entrySet()) {
+			currentKey = routeMapViewData.getKey();
+			RouteMapView routeMapView = routeMapViewData.getValue();
+			String oldName = routeMapView.getName();
+			if(routeMapView.getChild().size() > 1) {
+				int childIndex = 0;
+				for (RouteMapView childRouteMapView : routeMapView.getChild()) {
+					childRouteMapView.setName(oldName+"-"+childRouteMapView.getName());
+					routeViewList.put(currentKey+"-"+childIndex, childRouteMapView);
+					childIndex++;
+				}
+				flag = true;
+				isDeleted = true;
+				break;
+			} else if(routeMapView.getChild().size() == 1){
+				RouteMapView child = routeMapView.getChild().get(0);
+				child.setName(oldName+"-"+child.getName());
+				routeViewList.put(currentKey, child);
+				if(child.getChild().size() > 0) {
+					flag = true;
+					break;
+				}
+			}
 		}
 		
-		if(cityList.get(cityNo).get("cityTag").equals("")) {
-			route = route+"-"+getNextRoute(cityList.get(cityNo).get("nextCity"), cityList);
+		if(flag) {
+			if(isDeleted) routeViewList.remove(currentKey);
+			Map<String, RouteMapView> routeViewListNew = routeViewList.entrySet().stream().sorted(Map.Entry.comparingByKey()).
+					collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                    (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+			routeViewList = routeViewListNew;
+			routeViewList = getRouteMapView(routeViewList);
+		} 
+		
+		return routeViewList;
+	}
+	
+	private Map<String, RouteMap> getViaRoutes(RouteMap parent, Map<String, RouteMap> cityList) {
+		Map<String, RouteMap> route = new HashMap<>();
+		
+		String nextCityCode = parent.getNextRouteCode();
+		RouteMap nextRouteMap = cityList.get(nextCityCode);
+		if(nextRouteMap.getRouteTag().equals("")) {
+			String innerNextCityCode = nextRouteMap.getNextRouteCode();
+			if(!innerNextCityCode.equals("")) {
+				nextRouteMap.setNextRouteCodeData(getViaRoutes(nextRouteMap, cityList));
+			}
+			route.put(nextCityCode, nextRouteMap);
+			
+			String altCityCode = nextRouteMap.getAltRouteCode();
+			if(!altCityCode.equals("")) {
+				RouteMap altRouteMap = cityList.get(altCityCode);
+				if(nextRouteMap.getNextRouteCode().equals(altRouteMap.getNextRouteCode())) {
+					String oldRouteMapName = route.get(nextRouteMap.getRouteCode()).getRouteName();
+					route.get(nextRouteMap.getRouteCode()).setRouteName(oldRouteMapName+"/"+altRouteMap.getRouteName());
+				} else {
+					altRouteMap.setNextRouteCodeData(getViaRoutes(altRouteMap, cityList));
+					route.put(altCityCode, altRouteMap);
+				}
+			}
+		} else {
+			nextRouteMap.setExitRoute(getDestinyRoutes(nextRouteMap, cityList));
+			route.put(nextCityCode, nextRouteMap);
 		}
 		
 		return route;
 	}
 	
-	private String getAlternateRoutes(String cityNo, Map<String, Map<String, String>> cityList) {
+	private String getDestinyRoutes(RouteMap parent, Map<String, RouteMap> cityList) {
+		String cityNo = parent.getRouteCode();
+		String destinyRoutes = parent.getRouteName();
+		if(!cityList.get(cityNo).getAltRouteCode().equals("")) {
+			destinyRoutes = destinyRoutes+"/"+getAlternateRoutes(cityList.get(cityNo).getAltRouteCode(), cityList);
+		}
+		
+		return destinyRoutes;
+	}
+	
+	private String getAlternateRoutes(String cityNo, Map<String, RouteMap> cityList) {
 		String route = "";
-		route = cityList.get(cityNo).get("cityName");
-		if(!cityList.get(cityNo).get("alternateCity").equals("")) {
-			route = route+"/"+getAlternateRoutes(cityList.get(cityNo).get("alternateCity"), cityList);
+		route = cityList.get(cityNo).getRouteName();
+		if(!cityList.get(cityNo).getAltRouteCode().equals("")) {
+			route = route+"/"+getAlternateRoutes(cityList.get(cityNo).getAltRouteCode(), cityList);
 		}
 		
 		return route;

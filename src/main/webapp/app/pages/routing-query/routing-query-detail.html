@@ -81,7 +81,7 @@
 													  		<tbody>
 													  			<tr ng-repeat="details in vm.routingquery.details">
 													  				<td>{{$index + 1}}</td>
-													  				<td ng-repeat="detail in details" style="white-space:normal">
+													  				<td ng-repeat="detail in details track by $index" style="white-space:normal">
 													  					<div style="word-break:break-all; width: 10vw">{{detail}}</div>
 													  				</td>
 													  			</tr>
