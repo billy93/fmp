@@ -4140,6 +4140,45 @@ public class WorkPackageResource {
     }
     
     /**
+     * POST  /work-packages/complete : complete
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/work-packages/complete")
+    @Timed
+    public ResponseEntity<WorkPackage> completeWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
+        log.debug("REST request to complete WorkPackage : {}", workPackage);
+        if (workPackage.getId() == null) {
+            throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
+        }
+        
+        saveHistoryData(workPackage);
+        
+        //updateWorkPackage(workPackage);
+        
+        WorkPackage result = workPackageService.findOne(workPackage.getId());
+
+        result.setReviewLevel(result.getReviewLevel());
+        result.setDistributionReviewLevel(result.getDistributionReviewLevel());
+        result.setStatus(Status.DISTRIBUTED);
+		result.setLocked(false);
+		result.setQueuedDate(ZonedDateTime.now());
+        workPackageService.save(result);
+        
+        WorkPackageHistory history = new WorkPackageHistory();
+        history.setWorkPackage(new ObjectId(result.getId()));
+        history.setType("COMPLETE");
+        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        workPackageHistoryService.save(history);
+        
+        return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+    
+    /**
      * POST  /work-packages/createbatch : createbatch
      *
      * @param workPackage the workPackage to create

@@ -115,6 +115,9 @@
 	        'referback': {
 	    			method:'POST', url:'api/work-packages/referback'
 	        },
+	        'complete': {
+    			method:'POST', url:'api/work-packages/complete'
+	        },
 	        'createbatch': {
 	    			method:'POST', url:'api/work-packages/createbatch'
 	        },
