@@ -118,7 +118,10 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     
     @Field("distribution_date")
     private ZonedDateTime distributionDate;
-
+        
+    @Field("queued_date")
+    private ZonedDateTime queuedDate;
+    
     @Field("filling_status")
     private Status fillingStatus;
 
@@ -169,9 +172,17 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     
     private Validation validation;
     private boolean validate;
+           
     
-    
-    public int getImportIndex() {
+    public ZonedDateTime getQueuedDate() {
+		return queuedDate;
+	}
+
+	public void setQueuedDate(ZonedDateTime queuedDate) {
+		this.queuedDate = queuedDate;
+	}
+
+	public int getImportIndex() {
 		return importIndex;
 	}
 
