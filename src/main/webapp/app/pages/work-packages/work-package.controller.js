@@ -24,29 +24,7 @@
         vm.reviewLevelLSO = null;
         vm.reviewLevelDISTRIBUTION = null;
         vm.reviewLevelROUTEMANAGEMENT = null;
-
-        Principal.identity().then(function(account) {
-//            vm.loginInfo = copyAccount(account);
-        	vm.users = account;
-        	console.log(vm.users);
-
-            for(var i=0; i<=vm.users.reviewLevels.length; i++){
-                //console.log(vm.users.reviewLevels[i]);
-                if(vm.users.reviewLevels[i] == "HO"){
-                    vm.workPackageFilter.reviewLevel.ho = true;
-                    vm.reviewLevelHO = vm.users.reviewLevels[i];
-                } else if(vm.users.reviewLevels[i] == "LSO"){
-                    vm.workPackageFilter.reviewLevel.lso = true;
-                    vm.reviewLevelLSO = vm.users.reviewLevels[i];
-                } else if(vm.users.reviewLevels[i] == "DISTRIBUTION"){
-                    vm.workPackageFilter.reviewLevel.distribution = true;
-                    vm.reviewLevelDISTRIBUTION = vm.users.reviewLevels[i];
-                } else if(vm.users.reviewLevels[i] == "ROUTE_MANAGEMENT") {
-                    vm.workPackageFilter.reviewLevel.routeManagement = true;
-                    vm.reviewLevelROUTEMANAGEMENT = vm.users.reviewLevels[i];
-                }
-            }
-        });
+        vm.workPackageFilter =null;
 
         if($stateParams.size != null || $stateParams.size != undefined){
         	vm.itemsPerPage = $stateParams.size;
@@ -55,46 +33,52 @@
         	vm.itemsPerPage = "10";
         }
         vm.loadAll = loadAll;
-
-        if($stateParams.workPackageFilter != null){
-        	vm.workPackageFilter = $stateParams.workPackageFilter;
-        }
-        else{
-	        vm.workPackageFilter = {
-	    		reviewLevel:{
-	    			ho:false,
-	    			lso:false,
-	    			distribution:false,
-	    			routeManagement:false
-	    		},
-	    		distributionType:{
-	    			atpco:true,
-	    			market:true
-	    		},
-	    		status:{
-	    			newStatus:true,
-	    			pending:true,
-	    			reviewing:true,
-	    			readyToRelease:true,
-	    			distributed:true,
-	    			withdrawn:true,
-	    			discontinue:true,
-	    			referred:true,
-	    			replace:false,
-	    			reuse:false
-	    		},
-	    		type:{
-	    			regular:true,
-	    			discount:true,
-	    			waiver:true
-	    		},
-	    		createdTime:'10'
-	        };
-        }
-        vm.loadAll();
-
+   
+        Principal.identity().then(function(account) {
+        	   vm.users = account;
+               if($stateParams.workPackageFilter != null){
+            	   for(var i=0; i<=vm.users.reviewLevels.length; i++){
+  		             //console.log(vm.users.reviewLevels[i]);
+  		             if(vm.users.reviewLevels[i] == "HO"){
+  		                 vm.reviewLevelHO = vm.users.reviewLevels[i];
+  		             } else if(vm.users.reviewLevels[i] == "LSO"){
+  		                 vm.reviewLevelLSO = vm.users.reviewLevels[i];
+  		             } else if(vm.users.reviewLevels[i] == "DISTRIBUTION"){
+  		                 vm.reviewLevelDISTRIBUTION = vm.users.reviewLevels[i];
+  		             } else if(vm.users.reviewLevels[i] == "ROUTE_MANAGEMENT") {
+  		                 vm.reviewLevelROUTEMANAGEMENT = vm.users.reviewLevels[i];
+  		             }
+  		           }
+            	   vm.workPackageFilter = $stateParams.workPackageFilter;
+            	   vm.loadAll();
+               }
+               else {
+            	   WorkPackage.workPackagefilter({}, function onSuccess (response) {
+            		   vm.workPackageFilter = response;
+            		   for(var i=0; i<=vm.users.reviewLevels.length; i++){
+      		             //console.log(vm.users.reviewLevels[i]);
+      		             if(vm.users.reviewLevels[i] == "HO"){
+      		                 //vm.workPackageFilter.reviewLevel.ho = true;
+      		                 vm.reviewLevelHO = vm.users.reviewLevels[i];
+      		             } else if(vm.users.reviewLevels[i] == "LSO"){
+      		                 //vm.workPackageFilter.reviewLevel.lso = true;
+      		                 vm.reviewLevelLSO = vm.users.reviewLevels[i];
+      		             } else if(vm.users.reviewLevels[i] == "DISTRIBUTION"){
+      		                 //vm.workPackageFilter.reviewLevel.distribution = true;
+      		                 vm.reviewLevelDISTRIBUTION = vm.users.reviewLevels[i];
+      		             } else if(vm.users.reviewLevels[i] == "ROUTE_MANAGEMENT") {
+      		                 //vm.workPackageFilter.reviewLevel.routeManagement = true;
+      		                 vm.reviewLevelROUTEMANAGEMENT = vm.users.reviewLevels[i];
+      		             }
+      		          }
+            		   vm.loadAll();
+            	   }, function onError(error){});	   	   	        
+               }
+               
+        });
+        
+       
         function loadAll () {
-        	console.log("LOAD ALL");
             WorkPackage.query({
             	"reviewLevel.ho": vm.workPackageFilter.reviewLevel.ho,
             	"reviewLevel.lso": vm.workPackageFilter.reviewLevel.lso,
@@ -106,6 +90,7 @@
             	"status.readyToRelease": vm.workPackageFilter.status.readyToRelease,
             	"status.distributed": vm.workPackageFilter.status.distributed,
             	"status.withdrawn": vm.workPackageFilter.status.withdrawn,
+            	"status.discontinued": vm.workPackageFilter.status.discontinued,
             	"status.replace": vm.workPackageFilter.status.replace,
             	"status.reuse": vm.workPackageFilter.status.reuse,
             	"status.referred": vm.workPackageFilter.status.referred,
@@ -291,7 +276,7 @@
         }
 
         vm.refresh = function(){
-        	loadAll();
+        	vm.loadAll();
         }
 
         vm.unlock = function(wp){
@@ -335,6 +320,14 @@
   		  return blob;
         }
 
+        vm.discontinue = function(){
+//        	console.log(vm.selectedRow);
+//        	alert('Discontinue');
+        	WorkPackage.discontinue(vm.selectedRow, function onSuccess(){
+        		alert("Work Package successfully discontinued");
+        	}, function onError(){});
+        }
+        
         vm.printExport = function(){
         	var exportConfig = {
         		workPackageFilter:vm.workPackageFilter,

@@ -90,8 +90,8 @@ public class AfdQueryMapper {
 		if (cat05s != null) {
 			for (CategoryObject cat05o:cat05s) {
 				AtpcoRecord3Cat05 cat05 = (AtpcoRecord3Cat05) cat05o.getCategory();
-				Integer lp = TypeConverterUtil.convertStringToInt(cat05.getAdvencedReservationLastPeriod());
-				String advPur = lp != null ? lp.toString().concat(cat05.getAdvencedReservationLastUnit() != null ? cat05.getAdvencedReservationLastUnit() : "") : "";
+				Integer lp = TypeConverterUtil.convertStringToInt(cat05.getAdvancedReservationLastPeriod());
+				String advPur = lp != null ? lp.toString().concat(cat05.getAdvancedReservationLastUnit() != null ? cat05.getAdvancedReservationLastUnit() : "") : "";
 				result.setAdvancePurchase(advPur);
 			}
 		}

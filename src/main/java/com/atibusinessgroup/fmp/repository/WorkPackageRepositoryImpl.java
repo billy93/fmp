@@ -2,7 +2,6 @@ package com.atibusinessgroup.fmp.repository;
 
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +16,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.repository.support.PageableExecutionUtils;
 
 import com.atibusinessgroup.fmp.domain.WorkPackage;
-import com.atibusinessgroup.fmp.service.WorkPackageService;
-import com.atibusinessgroup.fmp.web.rest.WorkPackageResource.WorkPackageFilter;
+import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
+
 
 public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAnyName {
 
@@ -30,7 +29,6 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 	@Override
 	public Page<WorkPackage> findCustom(WorkPackageFilter wpFilter, Pageable pageable) {
 		Query query = new Query(findByQuery(wpFilter)).with(pageable);	
-
 		List<WorkPackage> workPackages = mongoTemplate.find(query, WorkPackage.class);
 		
 		Page<WorkPackage> page = PageableExecutionUtils.getPage(
@@ -231,6 +229,9 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		}
 		if(wpFilter.status.referred) {
 			status.add("REFERRED");
+		}
+		if(wpFilter.status.discontinued) {
+			status.add("DISCONTINUED");
 		}
 		
 		Criteria statusCriteria = Criteria.where("status").in(status);

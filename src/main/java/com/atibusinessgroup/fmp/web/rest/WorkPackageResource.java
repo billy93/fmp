@@ -15,10 +15,8 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -81,8 +79,8 @@ import com.atibusinessgroup.fmp.domain.WorkPackage.MarketRules;
 import com.atibusinessgroup.fmp.domain.WorkPackage.WorkPackageFareSheet;
 import com.atibusinessgroup.fmp.domain.WorkPackage.WorkPackageFareSheet.FareVersion;
 import com.atibusinessgroup.fmp.domain.WorkPackageFare;
+import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
 import com.atibusinessgroup.fmp.domain.WorkPackageHistory;
-import com.atibusinessgroup.fmp.domain.WorkPackageHistoryData;
 import com.atibusinessgroup.fmp.domain.enumeration.Status;
 import com.atibusinessgroup.fmp.repository.ContractFMPRepository;
 import com.atibusinessgroup.fmp.repository.ContractFareFMPRepository;
@@ -93,6 +91,7 @@ import com.atibusinessgroup.fmp.repository.TariffNumberRepository;
 import com.atibusinessgroup.fmp.repository.UserRepository;
 import com.atibusinessgroup.fmp.repository.WorkPackageFareHistoryDataRepository;
 import com.atibusinessgroup.fmp.repository.WorkPackageHistoryDataRepository;
+import com.atibusinessgroup.fmp.repository.WorkPackagefilterRepository;
 import com.atibusinessgroup.fmp.security.SecurityUtils;
 import com.atibusinessgroup.fmp.service.BusinessAreaService;
 import com.atibusinessgroup.fmp.service.MailService;
@@ -150,10 +149,11 @@ public class WorkPackageResource {
     private final PriorityRepository priorityRepository;
     private final MailService mailService;
     private final TariffNumberRepository tariffNumberRepository;
+    private final WorkPackagefilterRepository packagefilterRepository;
     
     public WorkPackageResource(WorkPackageService workPackageService, WorkPackageFareService workPackageFareService, TargetDistributionService targetDistributionService, BusinessAreaService businessAreaService, ReviewLevelService reviewLevelService, UserService userService, UserRepository userRepository, WorkPackageHistoryService workPackageHistoryService,
     		ContractFMPRepository contractFMPRepository, FormRepository formRepository, WorkPackageHistoryDataRepository workPackageHistoryDataRepository,
-    		WorkPackageFareHistoryDataRepository workPackageFareHistoryDataRepository, ContractFareFMPRepository contractFareFMPRepository, CounterRepository counterRepository, PriorityRepository priorityRepository, MailService mailService, TariffNumberRepository tariffNumberRepository) {
+    		WorkPackageFareHistoryDataRepository workPackageFareHistoryDataRepository, ContractFareFMPRepository contractFareFMPRepository, CounterRepository counterRepository, PriorityRepository priorityRepository, MailService mailService, TariffNumberRepository tariffNumberRepository, WorkPackagefilterRepository packagefilterRepository) {
         this.workPackageService = workPackageService;
         this.workPackageFareService = workPackageFareService;
         this.targetDistributionService = targetDistributionService;
@@ -171,6 +171,7 @@ public class WorkPackageResource {
         this.priorityRepository = priorityRepository;
         this.mailService = mailService;
         this.tariffNumberRepository = tariffNumberRepository;
+        this.packagefilterRepository=  packagefilterRepository;
     }
 
     /**
@@ -215,6 +216,7 @@ public class WorkPackageResource {
         }
         
         workPackage.setStatus(Status.NEW);
+        workPackage.setQueuedDate(ZonedDateTime.now());
         
         WorkPackage result = workPackageService.save(workPackage);
         
@@ -223,6 +225,33 @@ public class WorkPackageResource {
 //        history.setType("CREATE");
 //        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
 //        workPackageHistoryService.save(history);
+        
+        return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+
+    /**
+     * POST  /work-packages/discontinue : Create a new workPackage.
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/work-packages/discontinue")
+    @Timed
+    public ResponseEntity<WorkPackage> discontinueWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
+        log.debug("REST request to discontinue WorkPackage : {}", workPackage);
+        
+        workPackage = workPackageService.findOne(workPackage.getId());
+        List<WorkPackageFareSheet> sheets = workPackage.getMarketFareSheet();
+        for(WorkPackageFareSheet sheet : sheets) {
+        	for(WorkPackageFare fare : sheet.getFares()) {
+        		fare.setSaleEnd(ZonedDateTime.now());
+        	}        			
+        }
+        workPackage.setStatus(Status.DISCONTINUED);
+        WorkPackage result = workPackageService.save(workPackage);
         
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -2911,25 +2940,25 @@ public class WorkPackageResource {
 					    		err1.setMessage("Base Amt is required");
 					    		errors.add(err1);						    		
 							}
-							if(fare.getTravelStart() != null) {
+							if(fare.getTravelStart() == null) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Travel Start is required");
 					    		errors.add(err1);	
 							}
-							if(fare.getTravelEnd() != null) {
+							if(fare.getTravelEnd() == null) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Travel End is required");
 					    		errors.add(err1);	
 							}
-							if(fare.getSaleStart() != null) {
+							if(fare.getSaleStart() == null) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Sale Start is required");
 					    		errors.add(err1);	
 							}
-							if(fare.getSaleEnd() != null) {
+							if(fare.getSaleEnd() == null) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Sale End is required");
@@ -3025,25 +3054,25 @@ public class WorkPackageResource {
 					    		err1.setMessage("Base Amt is required");
 					    		errors.add(err1);						    		
 							}
-							if(fare.getTravelStart() != null) {
+							if(fare.getTravelStart() == null) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Travel Start is required");
 					    		errors.add(err1);	
 							}
-							if(fare.getTravelEnd() != null) {
+							if(fare.getTravelEnd() == null) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Travel End is required");
 					    		errors.add(err1);	
 							}
-							if(fare.getSaleStart() != null) {
+							if(fare.getSaleStart() == null) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Sale Start is required");
 					    		errors.add(err1);	
 							}
-							if(fare.getSaleEnd() != null) {
+							if(fare.getSaleEnd() == null) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Sale End is required");
@@ -3321,249 +3350,101 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<List<WorkPackage>> getAllWorkPackages(WorkPackageFilter filter, Pageable pageable) {
         log.debug("REST request to get a page of WorkPackages {}", filter);
+        
+        Optional<WorkPackageFilter> initFilter = packagefilterRepository.findOneByLoginName(SecurityUtils.getCurrentUserLogin().get());
+      
+        if(initFilter.isPresent()) {
+        	WorkPackageFilter temp = initFilter.get();
+        	filter.setLoginName(SecurityUtils.getCurrentUserLogin().get());
+        	filter.setId(temp.getId());
+        	temp = packagefilterRepository.save(filter);  
+        	filter = temp;
+        }else {
+        	filter.setLoginName(SecurityUtils.getCurrentUserLogin().get());
+	        packagefilterRepository.save(filter);
+        }
+                
 //        Page<WorkPackage> page = workPackageService.findAllByOrderByLastModifiedDate(pageable);       
         Page<WorkPackage> page = workPackageService.findCustom(filter, pageable);       
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/work-packages");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
-
-    public static class WorkPackageFilter{
-    	public ReviewLevel reviewLevel;
-    	public Status status;
-    	public DistributionType distributionType;
-    	public Type type;
-    	public String approvalReference;
-    	public String createdTime;
-    	
-    	public static class ReviewLevel{
-    		public boolean ho;
-    		public boolean lso;
-    		public boolean distribution;
-    		public boolean routeManagement;
-    		
-    		public ReviewLevel() {
-				// TODO Auto-generated constructor stub
-			}
-    		
-			public boolean isHo() {
-				return ho;
-			}
-			public void setHo(boolean ho) {
-				this.ho = ho;
-			}
-			public boolean isLso() {
-				return lso;
-			}
-			public void setLso(boolean lso) {
-				this.lso = lso;
-			}
-			public boolean isDistribution() {
-				return distribution;
-			}
-			public void setDistribution(boolean distribution) {
-				this.distribution = distribution;
-			}
-			public boolean isRouteManagement() {
-				return routeManagement;
-			}
-			public void setRouteManagement(boolean routeManagement) {
-				this.routeManagement = routeManagement;
-			}
-			@Override
-			public String toString() {
-				return "ReviewLevel [ho=" + ho + ", lso=" + lso + ", distribution=" + distribution
-						+ ", routeManagement=" + routeManagement + "]";
-			}
-    	}
-
-    	public static class Status{
-    		public boolean newStatus;
-    		public boolean distributed;
-    		public boolean reviewing;
-    		public boolean readyToRelease;
-    		public boolean pending;
-    		public boolean completed;
-    		public boolean withdrawn;
-        	public boolean replace;
-        	public boolean reuse;
-        	public boolean referred;
-        	
-        	public Status() {}
-        	
-			public boolean isReferred() {
-				return referred;
-			}
-			public void setReferred(boolean referred) {
-				this.referred = referred;
-			}
-			public boolean isWithdrawn() {
-				return withdrawn;
-			}
-			public void setWithdrawn(boolean withdrawn) {
-				this.withdrawn = withdrawn;
-			}
-			public boolean isNewStatus() {
-				return newStatus;
-			}
-			public void setNewStatus(boolean newStatus) {
-				this.newStatus = newStatus;
-			}
-			public boolean isDistributed() {
-				return distributed;
-			}
-			public void setDistributed(boolean distributed) {
-				this.distributed = distributed;
-			}
-			public boolean isReviewing() {
-				return reviewing;
-			}
-			public void setReviewing(boolean reviewing) {
-				this.reviewing = reviewing;
-			}
-			public boolean isReadyToRelease() {
-				return readyToRelease;
-			}
-			public void setReadyToRelease(boolean readyToRelease) {
-				this.readyToRelease = readyToRelease;
-			}
-			public boolean isPending() {
-				return pending;
-			}
-			public void setPending(boolean pending) {
-				this.pending = pending;
-			}
-			public boolean isCompleted() {
-				return completed;
-			}
-			public void setCompleted(boolean completed) {
-				this.completed = completed;
-			}
-			public boolean isReplace() {
-				return replace;
-			}
-			public void setReplace(boolean replace) {
-				this.replace = replace;
-			}
-			public boolean isReuse() {
-				return reuse;
-			}
-			public void setReuse(boolean reuse) {
-				this.reuse = reuse;
-			}
-    		
-    		
-    	}
-    	
-    	public static class DistributionType{
-    		public boolean atpco;
-    		public boolean market;
-    		public boolean waiver;
-    		
-    		public DistributionType() {}
-			public boolean isAtpco() {
-				return atpco;
-			}
-			public void setAtpco(boolean atpco) {
-				this.atpco = atpco;
-			}
-			public boolean isMarket() {
-				return market;
-			}
-			public void setMarket(boolean market) {
-				this.market = market;
-			}
-			public boolean isWaiver() {
-				return waiver;
-			}
-			public void setWaiver(boolean waiver) {
-				this.waiver = waiver;
-			}
-    	}
     
-    	public static class Type{
-    		public boolean regular;
-    		public boolean discount;
-    		public boolean waiver;
-    		
-    		public Type() {}
-			public boolean isRegular() {
-				return regular;
-			}
-			public void setRegular(boolean regular) {
-				this.regular = regular;
-			}
-			public boolean isDiscount() {
-				return discount;
-			}
-			public void setDiscount(boolean discount) {
-				this.discount = discount;
-			}
-			public boolean isWaiver() {
-				return waiver;
-			}
-			public void setWaiver(boolean waiver) {
-				this.waiver = waiver;
-			}
-    	}
-    	
-    	
-		public String getCreatedTime() {
-			return createdTime;
-		}
-
-		public void setCreatedTime(String createdTime) {
-			this.createdTime = createdTime;
-		}
-
-		public ReviewLevel getReviewLevel() {
-			return reviewLevel;
-		}
-
-		public void setReviewLevel(ReviewLevel reviewLevel) {
-			this.reviewLevel = reviewLevel;
-		}
-
-		public Status getStatus() {
-			return status;
-		}
-
-		public void setStatus(Status status) {
-			this.status = status;
-		}
-
-		public DistributionType getDistributionType() {
-			return distributionType;
-		}
-
-		public void setDistributionType(DistributionType distributionType) {
-			this.distributionType = distributionType;
-		}
-
-		public Type getType() {
-			return type;
-		}
-
-		public void setType(Type type) {
-			this.type = type;
-		}
-		
-		public String getApprovalReference() {
-			return approvalReference;
-		}
-
-		public void setApprovalReference(String approvalReference) {
-			this.approvalReference = approvalReference;
-		}
-
-		@Override
-		public String toString() {
-			return "WorkPackageFilter [reviewLevel=" + reviewLevel + ", status=" + status + ", distributionType="
-					+ distributionType + ", type=" + type + ", approvalReference=" + approvalReference + "]";
-		}
-
-		
+    /**
+     * GET  /workPackagefilter/:id : get the "id" workPackagefilter.
+     *
+     * @param id the id of the workPackagefilter to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the workPackagefilter, or with status 404 (Not Found)
+     */
+    @GetMapping("/work-packages/byname")
+    @Timed
+    public ResponseEntity<WorkPackageFilter> getWorkPackageFilterbyLoginName() {
+    	String loginName = SecurityUtils.getCurrentUserLogin().get();
+        log.debug("REST request to get workPackagefilter : {}", loginName);
+        WorkPackageFilter result = null;
+        Optional<WorkPackageFilter> workPackagefilter = packagefilterRepository.findOneByLoginName(loginName);
+        if(workPackagefilter.isPresent()) {
+        	 result = workPackagefilter.get();
+        }
+        else {
+        	WorkPackageFilter filter = new WorkPackageFilter();    
+        		
+        	com.atibusinessgroup.fmp.domain.WorkPackageFilter.DistributionType dt = new WorkPackageFilter.DistributionType();
+        	dt.setAtpco(true);
+        	dt.setMarket(true);
+        	dt.setWaiver(true);
+        	filter.setDistributionType(dt);
+        	
+        	com.atibusinessgroup.fmp.domain.WorkPackageFilter.Status s = new WorkPackageFilter.Status();
+        	s.setCompleted(true);
+        	s.setDistributed(true);        	
+        	s.setPending(true);
+        	s.setReadyToRelease(true);
+        	s.setReferred(true);
+        	s.setReplace(false);
+        	s.setReuse(false);
+        	s.setReviewing(true);
+        	s.setWithdrawn(true);
+        	s.setNewStatus(true);
+        	s.setDiscontinued(true);
+        	filter.setStatus(s);
+        	
+        	com.atibusinessgroup.fmp.domain.WorkPackageFilter.Type t = new WorkPackageFilter.Type();
+        	t.setDiscount(true);
+        	t.setRegular(true);
+        	t.setWaiver(true);        	
+        	filter.setType(t);
+        	
+        	com.atibusinessgroup.fmp.domain.WorkPackageFilter.ReviewLevel rl = new WorkPackageFilter.ReviewLevel();
+        	rl.setDistribution(false);
+	    	rl.setHo(false);
+	    	rl.setLso(false);
+	    	rl.setRouteManagement(false); 
+        	Optional<User> userOptional = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
+        	if(userOptional.isPresent()) {
+            	User user = userOptional.get();
+	        	for(String reviewLevel : user.getReviewLevels()) {
+		        	if(reviewLevel.equals("LSO")) {
+		        		rl.setLso(true);
+		        	}else if(reviewLevel.equals("HO")) {
+		        		rl.setHo(true);
+		        	}else if(reviewLevel.equals("DISTRIBUTION")) {
+		        		rl.setDistribution(true);
+		        	}else if(reviewLevel.equals("ROUTE MANAGEMENT")) {
+		        		rl.setRouteManagement(true); 
+		        	}
+	        	}
+        	}	        
+        	filter.setReviewLevel(rl);
+        	
+        	filter.setApprovalReference(null);
+        	filter.setCreatedTime("10");
+        	filter.setLoginName(SecurityUtils.getCurrentUserLogin().get());
+        	result = packagefilterRepository.save(filter);
+        }
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(result));
     }
-    
+
     /**
      * GET  /work-packages/:id : get the "id" workPackage.
      *
@@ -3687,6 +3568,47 @@ public class WorkPackageResource {
 	        	fareVersion.version = sheet.fareVersion.size() + 1;
 	        	sheet.fareVersion.add(fareVersion);
 	        }
+	        
+	        List<WorkPackageFareSheet> addOnFareSheet = result.getAddonFareSheet();
+	        for(WorkPackageFareSheet sheet : addOnFareSheet) {
+	        	FareVersion fareVersion = new FareVersion();
+	        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+	        	fareVersion.action = "PASSUP";
+	        	fareVersion.fares = sheet.getFares();
+	        	fareVersion.version = sheet.fareVersion.size() + 1;
+	        	sheet.fareVersion.add(fareVersion);
+	        }
+	        
+	        List<WorkPackageFareSheet> discountFareSheet = result.getDiscountFareSheet();
+	        for(WorkPackageFareSheet sheet : discountFareSheet) {
+	        	FareVersion fareVersion = new FareVersion();
+	        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+	        	fareVersion.action = "PASSUP";
+	        	fareVersion.fares = sheet.getFares();
+	        	fareVersion.version = sheet.fareVersion.size() + 1;
+	        	sheet.fareVersion.add(fareVersion);
+	        }
+	        
+	        List<WorkPackageFareSheet> marketFareSheet = result.getMarketFareSheet();
+	        for(WorkPackageFareSheet sheet : marketFareSheet) {
+	        	FareVersion fareVersion = new FareVersion();
+	        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+	        	fareVersion.action = "PASSUP";
+	        	fareVersion.fares = sheet.getFares();
+	        	fareVersion.version = sheet.fareVersion.size() + 1;
+	        	sheet.fareVersion.add(fareVersion);
+	        }
+	        
+	        List<WorkPackageFareSheet> waiverFareSheet = result.getWaiverFareSheet();
+	        for(WorkPackageFareSheet sheet : waiverFareSheet) {
+	        	FareVersion fareVersion = new FareVersion();
+	        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+	        	fareVersion.action = "PASSUP";
+	        	fareVersion.fares = sheet.getFares();
+	        	fareVersion.version = sheet.fareVersion.size() + 1;
+	        	sheet.fareVersion.add(fareVersion);
+	        }
+	        result.setQueuedDate(ZonedDateTime.now());
 	        workPackageService.save(result);  
 	        
 	        saveHistoryData(workPackage);
@@ -3745,6 +3667,7 @@ public class WorkPackageResource {
         
         WorkPackage result = workPackageService.findOne(workPackage.getId());
         result.setStatus(Status.WITHDRAWN);
+        result.setQueuedDate(ZonedDateTime.now());
         workPackageService.save(result);
         /*
         saveHistoryData(workPackage);
@@ -3833,6 +3756,47 @@ public class WorkPackageResource {
         	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
         	sheet.fareVersion.add(fareVersion);
         }
+        
+        List<WorkPackageFareSheet> addOnFareSheet = result.getAddonFareSheet();
+        for(WorkPackageFareSheet sheet : addOnFareSheet) {
+        	FareVersion fareVersion = new FareVersion();
+        	fareVersion.action = "PASSDOWN";
+        	fareVersion.fares = sheet.getFares();
+        	fareVersion.version = sheet.fareVersion.size() + 1;
+        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+        	sheet.fareVersion.add(fareVersion);
+        }
+               
+        List<WorkPackageFareSheet> discountFareSheet = result.getDiscountFareSheet();
+        for(WorkPackageFareSheet sheet : discountFareSheet) {
+        	FareVersion fareVersion = new FareVersion();
+        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+        	fareVersion.action = "PASSDOWN";
+        	fareVersion.fares = sheet.getFares();
+        	fareVersion.version = sheet.fareVersion.size() + 1;
+        	sheet.fareVersion.add(fareVersion);
+        }
+        
+        List<WorkPackageFareSheet> marketFareSheet = result.getMarketFareSheet();
+        for(WorkPackageFareSheet sheet : marketFareSheet) {
+        	FareVersion fareVersion = new FareVersion();
+        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+        	fareVersion.action = "PASSDOWN";
+        	fareVersion.fares = sheet.getFares();
+        	fareVersion.version = sheet.fareVersion.size() + 1;
+        	sheet.fareVersion.add(fareVersion);
+        }
+        
+        List<WorkPackageFareSheet> waiverFareSheet = result.getWaiverFareSheet();
+        for(WorkPackageFareSheet sheet : waiverFareSheet) {
+        	FareVersion fareVersion = new FareVersion();
+        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+        	fareVersion.action = "PASSDOWN";
+        	fareVersion.fares = sheet.getFares();
+        	fareVersion.version = sheet.fareVersion.size() + 1;
+        	sheet.fareVersion.add(fareVersion);
+        }
+        result.setQueuedDate(ZonedDateTime.now());
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -3875,6 +3839,7 @@ public class WorkPackageResource {
         }
 		result.setLocked(false);
         result.setStatus(Status.PENDING);
+        result.setQueuedDate(ZonedDateTime.now());
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -3929,6 +3894,7 @@ public class WorkPackageResource {
 //    		result.setLocked(false);
 //    		result.setStatus(Status.PENDING);        		
 //	    }
+        workPackage.setQueuedDate(ZonedDateTime.now());
         workPackageService.save(workPackage);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -4159,6 +4125,7 @@ public class WorkPackageResource {
         result.setDistributionReviewLevel(null);
         result.setStatus(Status.REFERRED);
 		result.setLocked(false);
+		result.setQueuedDate(ZonedDateTime.now());
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
