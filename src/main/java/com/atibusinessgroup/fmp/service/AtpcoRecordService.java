@@ -26,6 +26,7 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat08;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat09;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat11;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat12;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat13;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord3CategoryWithDataTable;
 import com.atibusinessgroup.fmp.domain.dto.CategoryAttribute;
 import com.atibusinessgroup.fmp.domain.dto.CategoryAttributeObject;
@@ -952,8 +953,48 @@ public class AtpcoRecordService {
 						result += "\tSURCHARGE TYPE: " + sc.getType() + "\n";
 					}
 				}
-				
+				boolean isNegativeAmount = false;
+				String charge = "";
+				if (cat12.getCharges_first_cur() != null && !cat12.getCharges_first_cur().isEmpty()) {
+					charge += cat12.getCharges_first_cur() + " ";
+				}
+				if (cat12.getCharges_first_amt() != null) {
+					charge += cat12.getCharges_first_amt().bigDecimalValue().doubleValue();
+				}
+				if (cat12.getSurcharge_appl() != null && !cat12.getSurcharge_appl().isEmpty()) {
+					String appl = AtpcoDataConverterUtil.convertSurchargeApplicationToName(cat12.getSurcharge_appl());
+					isNegativeAmount = AtpcoDataConverterUtil.checkSurchargeApplicationIsNegativeAmount(cat12.getSurcharge_appl());
+					
+					result += "\tSURCHARGE OF " + (isNegativeAmount ? "" : "- ") + charge + " APPLIES TO " + appl + "\n";
+				}
+				if (cat12.getRbd() != null && !cat12.getRbd().isEmpty()) {
+					result += "\tSURCHARGE APPLIES FOR TRAVEL IN RBD '" + cat12.getRbd() + "'\n";
+				}
+				if (!result.isEmpty()) {
+					result +='\n';
+				}
 				break;
+			case "013":
+				AtpcoRecord3Cat13 cat13 = (AtpcoRecord3Cat13) catObj;
+				String acc = "";
+				if (cat13.getAcc_trvl_sect_all() != null && cat13.getAcc_trvl_sect_all().contentEquals("X")) {
+					acc += "\tON ALL SECTORS\n";
+				}
+				if (cat13.getAcc_trvl_sect_out() != null && cat13.getAcc_trvl_sect_out().contentEquals("X")) {
+					acc += "\tON OUTBOUND JOURNEY\n";
+				}
+				if (cat13.getAcc_trvl_sect_one() != null && cat13.getAcc_trvl_sect_one().contentEquals("X")) {
+					acc += "\tON AT LEAST ONE SECTOR\n";
+				}
+				if (cat13.getAcc_trvl_cmpt() != null && cat13.getAcc_trvl_cmpt().contentEquals("X")) {
+					acc += "\tIN THE SAME COMPARTMENT\n";
+				}
+				if (cat13.getAcc_trvl_rule() != null && cat13.getAcc_trvl_rule().contentEquals("X")) {
+					acc += "\tFARE GOVERNED USING THE SAME RULE\n";
+				}
+				if (!acc.isEmpty()) {
+					result += "\tPASSENGER MUST BE ACCOMPANIED: \n";
+				}
 			}
 			
 		} catch (Exception e) {

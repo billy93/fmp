@@ -96,6 +96,50 @@ public class AtpcoDataConverterUtil {
 		return result;
 	}
 	
+	public static String convertSurchargeApplicationToName(String appl) {
+		String result = "";
+		
+		if (appl != null) {
+			switch(appl.trim()) {
+			case "A": 
+				result = "ANY PASSENGER";
+				break;
+			case "1": 
+			case "B": 
+				result = "CHILD/INFANT";
+				break;
+			case "2": 
+			case "C":
+				result = "ADULT/CHILD/INFANT";
+				break;
+			case "3": 
+			case "D":
+				result = "ADULT/CHILD/INFANT, BUT CHILD/INFANT ARE DISCOUNTED";
+				break;
+			case "4": 
+			case "E":
+				result = "ADULT";
+				break;
+			}
+		}
+		
+		return result;
+	}
+	
+	public static boolean checkSurchargeApplicationIsNegativeAmount(String appl) {
+		boolean result = false;
+		
+		if (appl != null) {
+			if (appl.trim().contentEquals("A") || appl.trim().contentEquals("B") || 
+					appl.trim().contentEquals("C") || appl.trim().contentEquals("D") ||
+					appl.trim().contentEquals("E")) {
+				result = true;
+			}
+		}
+		
+		return result;
+	}
+	
 	public static String convertFlightApplicationRelationshipIndicatorToName(String indicator) {
 		String result = "";
 		
@@ -194,6 +238,10 @@ public class AtpcoDataConverterUtil {
 			result += year;
 		} else {
 			result += "XXXX";
+		}
+		
+		if (result.contentEquals("XXXXXXXXX")) {
+			result = "";
 		}
 		
 		return result;
