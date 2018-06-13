@@ -285,13 +285,6 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 		}
 		log.debug("routeViewList 1 "+routeViewList);
 		
-//		Map<String, RouteMapView> routeViewListNew = routeViewList.entrySet().stream().sorted(Map.Entry.comparingByKey()).
-//				collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-//                (oldValue, newValue) -> oldValue, LinkedHashMap::new));
-//		routeViewList = routeViewListNew;
-//		routeViewList = calculateRowSpan(routeViewList); 
-//		log.debug("routeViewList 2 "+routeViewList);
-		
 		Map<String, RouteMapView> routeViewListNew = routeViewList.entrySet().stream().sorted(Map.Entry.comparingByKey()).
 						collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
                         (oldValue, newValue) -> oldValue, LinkedHashMap::new));
@@ -300,26 +293,23 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 		routeViewList = getRouteMapView(routeViewList); 
 //		log.debug("routeViewList 2 "+routeViewList);
 		
-		List<String> routeViewString = new ArrayList<>();
-		for (Map.Entry<String, RouteMapView> routeMapViewData : routeViewList.entrySet()) {
-			routeViewString.add(routeMapViewData.getValue().getName());
-		}
-//		log.debug("routeViewString "+routeViewString);
-		
+		List<String> routeViewStringList = new ArrayList<>();
 		int rowCount = routeViewList.size();
 		int columnCount = 0;
 		for (Map.Entry<String, RouteMapView> route : routeViewList.entrySet()) {
+			routeViewStringList.add(route.getValue().getName());
 			String[] routeParts = route.getValue().getName().split("-");
 			if(columnCount < routeParts.length)
 				columnCount = routeParts.length;
 		}
-		log.debug("rowCount "+rowCount);
-		log.debug("columnCount "+columnCount);
+		routeViewStringList.sort(String.CASE_INSENSITIVE_ORDER);
+//		log.debug("rowCount "+rowCount);
+//		log.debug("columnCount "+columnCount);
 		
 		index = 0;
 		String routeMapTable[][] = new String[rowCount][columnCount];
-		for (Map.Entry<String, RouteMapView> route : routeViewList.entrySet()) {
-			String[] routeParts = route.getValue().getName().split("-");
+		for (String routeViewString : routeViewStringList) {
+			String[] routeParts = routeViewString.split("-");
 			int routePartIndex = 0;
 			for (String routePart : routeParts) {
 				routeMapTable[index][routePartIndex] = routePart;
@@ -327,7 +317,7 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 			}
 			index++;
 		}
-		log.debug("routeMapTable "+routeMapTable);
+//		log.debug("routeMapTable "+routeMapTable);
 		
 //		return new ArrayList<RouteMapView>(routeViewList.values());
 		return routeMapTable;
@@ -429,14 +419,25 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 			
 			String altCityCode = nextRouteMap.getAltRouteCode();
 			if(!altCityCode.equals("")) {
-				RouteMap altRouteMap = cityList.get(altCityCode);
-				if(nextRouteMap.getNextRouteCode().equals(altRouteMap.getNextRouteCode())) {
-					String oldRouteMapName = route.get(nextRouteMap.getRouteCode()).getRouteName();
-					route.get(nextRouteMap.getRouteCode()).setRouteName(oldRouteMapName+"/"+altRouteMap.getRouteName());
-				} else {
-					altRouteMap.setNextRouteCodeData(getViaRoutes(altRouteMap, cityList));
-					route.put(altCityCode, altRouteMap);
+				boolean flag = true;
+				RouteMap altRouteMap = new RouteMap();
+				while (flag) {
+					altRouteMap = cityList.get(altCityCode);
+					if(nextRouteMap.getNextRouteCode().equals(altRouteMap.getNextRouteCode())) {
+						String oldRouteMapName = route.get(nextRouteMap.getRouteCode()).getRouteName();
+						route.get(nextRouteMap.getRouteCode()).setRouteName(oldRouteMapName+"/"+altRouteMap.getRouteName());
+						if(!altRouteMap.getAltRouteCode().equals("")) {
+							altCityCode = altRouteMap.getAltRouteCode();
+						} else {
+							flag = false;
+						}
+					} else {
+						altRouteMap.setNextRouteCodeData(getViaRoutes(altRouteMap, cityList));
+						route.put(altCityCode, altRouteMap);
+						flag = false;
+					}
 				}
+				
 			}
 		} else {
 			nextRouteMap.setExitRoute(getDestinyRoutes(nextRouteMap, cityList));
