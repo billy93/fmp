@@ -90,6 +90,9 @@
                     resolve: {
                         entity: ['CityGroup', function(CityGroup) {
                             return CityGroup.get({id : $stateParams.id}).$promise;
+                        }],
+                        cities: ['City', function(City) {
+                            return City.getAll().$promise;
                         }]
                     }
                 }).result.then(function() {
@@ -119,7 +122,10 @@
                                 description: null,
                                 id: null
                             };
-                        }
+                        },
+                        cities: ['City', function(City) {
+                            return City.getAll().$promise;
+                        }]
                     }
                 }).result.then(function() {
                     $state.go('city-group', null, { reload: 'city-group' });
@@ -144,6 +150,9 @@
                     resolve: {
                         entity: ['CityGroup', function(CityGroup) {
                             return CityGroup.get({id : $stateParams.id}).$promise;
+                        }],
+                        cities: ['City', function(City) {
+                            return City.getAll().$promise;
                         }]
                     }
                 }).result.then(function() {

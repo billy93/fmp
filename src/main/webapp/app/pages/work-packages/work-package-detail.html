@@ -587,6 +587,7 @@
 											                    		ng-model="fare.tariffNumber.tarCd"
 											                    		ng-disabled="!vm.isEditable('tarcd')"
 											                    		style="min-width:120px"
+											                    		uppercase
 											                    		ng-class="{'must-fill': editForm.editFormATPCO.tarcd{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('tarcd')"
 															            ng-focus="tarcd[$parent.$index][$index]=true" ng-blur="tarcd[$parent.$index][$index]=false; vm.checkTariff(fare, 'tariffNumber', 'tarCd');"/>
@@ -631,7 +632,8 @@
 																	<input type="text" class="form-control" name="origin{{$parent.$index}}{{$index}}" id="field_carrier"
 											                    		ng-model="fare.origin"
 											                    		ng-disabled="!vm.isEditable('origin')"
-											                    		style="min-width:120px; text-transform:uppercase"
+											                    		style="min-width:120px;"
+											                    		uppercase
 											                    		ng-class="{'must-fill': editForm.editFormATPCO.origin{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('origin')"
 															            ng-focus="origin[$parent.$index][$index]=true" ng-blur="origin[$parent.$index][$index]=false; vm.checkCity(fare, 'origin');"/>
@@ -667,7 +669,8 @@
 																	<input type="text" class="form-control" name="destination{{$parent.$index}}{{$index}}" id="field_carrier"
 											                    		ng-model="fare.destination"
 											                    		ng-disabled="!vm.isEditable('destination')"
-											                    		style="min-width:120px; text-transform:uppercase"
+											                    		style="min-width:120px;"
+											                    		uppercase
 											                    		ng-class="{'must-fill': editForm.editFormATPCO.destination{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('destination')"
 															            ng-focus="destination[$parent.$index][$index]=true" ng-blur="destination[$parent.$index][$index]=false; vm.checkCity(fare, 'destination');"/>
@@ -703,7 +706,7 @@
 																<input type="text" class="form-control" name="farebasis{{$parent.$index}}{{$index}}" id="field_farebasis"
 									                				ng-disabled="!vm.isEditable('farebasis')"
 									                				ng-required="vm.isRequired('farebasis') && fare.action != 'Canceled'" 
-									                				style="text-transform:uppercase"
+									                				uppercase
 									                				ng-pattern="/^[a-zA-Z0-9*]*$/"
 									                				ng-class="{'must-fill':editForm.editFormATPCO.farebasis{{$parent.$index}}{{$index}}.$error.required || 
 										                				editForm.editFormATPCO.farebasis{{$parent.$index}}{{$index}}.$error.maxlength || 
@@ -716,7 +719,7 @@
 																<input type="text" class="form-control" name="bookingClass{{$parent.$index}}{{$index}}" id="field_bookingClass"
 									                				ng-maxlength="2"
 									                				maxlength="2"
-									                				style="text-transform:uppercase"
+									                				uppercase
 									                				ng-pattern="/^[a-zA-Z]{1,2}$/"
 									                				ng-disabled="!vm.isEditable('bookingClass')"
 									                				ng-required="vm.isRequired('bookingClass')" 
@@ -794,6 +797,7 @@
 											                    		ng-model="fare.currency"
 											                    		ng-disabled="!vm.isEditable('currency')"
 											                    		style="min-width:120px"
+											                    		uppercase
 											                    		ng-class="{'must-fill': editForm.editFormATPCO.currency{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('currency')"
 															            ng-focus="currency[$parent.$index][$index]=true" ng-blur="currency[$parent.$index][$index]=false; vm.checkCurrency(fare, 'currency');"/>
