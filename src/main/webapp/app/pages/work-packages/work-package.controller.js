@@ -24,8 +24,7 @@
         vm.reviewLevelLSO = null;
         vm.reviewLevelDISTRIBUTION = null;
         vm.reviewLevelROUTEMANAGEMENT = null;
-
-       
+        vm.workPackageFilter =null;
 
         if($stateParams.size != null || $stateParams.size != undefined){
         	vm.itemsPerPage = $stateParams.size;
@@ -34,7 +33,7 @@
         	vm.itemsPerPage = "10";
         }
         vm.loadAll = loadAll;
-
+   
         Principal.identity().then(function(account) {
         	   vm.users = account;
                if($stateParams.workPackageFilter != null){
@@ -51,42 +50,11 @@
   		             }
   		           }
             	   vm.workPackageFilter = $stateParams.workPackageFilter;
+            	   vm.loadAll();
                }
-               else{
-	   	   	      /*  vm.workPackageFilter = {
-	   	   	    		reviewLevel:{
-	   	   	    			ho:false,
-	   	   	    			lso:false,
-	   	   	    			distribution:false,
-	   	   	    			routeManagement:false
-	   	   	    		},
-	   	   	    		distributionType:{
-	   	   	    			atpco:true,
-	   	   	    			market:true
-	   	   	    		},
-	   	   	    		status:{
-	   	   	    			newStatus:true,
-	   	   	    			pending:true,
-	   	   	    			reviewing:true,
-	   	   	    			readyToRelease:true,
-	   	   	    			distributed:true,
-	   	   	    			withdrawn:true,
-	   	   	    			discontinue:true,
-	   	   	    			referred:true,
-	   	   	    			replace:false,
-	   	   	    			reuse:false
-	   	   	    		},
-	   	   	    		type:{
-	   	   	    			regular:true,
-	   	   	    			discount:true,
-	   	   	    			waiver:true
-	   	   	    		},
-	   	   	    		createdTime:'10'
-	   	   	        };*/
-            	   
-            	   WorkPackage.workPackagefilter({}, function onSuccess (response){
+               else {
+            	   WorkPackage.workPackagefilter({}, function onSuccess (response) {
             		   vm.workPackageFilter = response;
-            		   
             		   for(var i=0; i<=vm.users.reviewLevels.length; i++){
       		             //console.log(vm.users.reviewLevels[i]);
       		             if(vm.users.reviewLevels[i] == "HO"){
@@ -103,13 +71,13 @@
       		                 vm.reviewLevelROUTEMANAGEMENT = vm.users.reviewLevels[i];
       		             }
       		          }
-       	   	        vm.loadAll();
-            	   }, function onError(error){});
-	   	   	        
-	   	   	      
+            		   vm.loadAll();
+            	   }, function onError(error){});	   	   	        
                }
+               
         });
         
+       
         function loadAll () {
             WorkPackage.query({
             	"reviewLevel.ho": vm.workPackageFilter.reviewLevel.ho,
