@@ -2267,6 +2267,18 @@
 		    }
 	  };
 	  
+	  vm.complete = function(){
+		    if (confirm("Are you sure to Complete this workorder?")) {
+		    		WorkPackage.complete(vm.workPackage, function(){
+		    			alert('Complete Success');
+		    			$state.go('work-package');
+		    		}, function(){
+		    			alert('Complete Failed');
+		    		});
+		    } else {
+		    }
+	  };
+	  
 	  vm.createBatches = function(){
 		  if (confirm("Are you sure to create Batches this workorder?")) {
 	    		WorkPackage.createbatch(vm.workPackage, function(wo){

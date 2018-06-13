@@ -297,8 +297,8 @@
 					        <li><a ng-click="vm.referback()" 
 					        ng-show="vm.workPackage.reviewLevel == 'DISTRIBUTION'"
 					        >Refer Back</a></li>
-					        <li><a ng-click="vm.referback()" 
-					        ng-show="vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.workPackage.status=='DISTRIBUTED' && vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'DISCOUNT '"
+					        <li><a ng-click="vm.complete()" 
+					        ng-show="vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'DISCOUNT'"
 					        >Complete</a></li>
 						</ul>
 					</div>
@@ -3822,7 +3822,7 @@
 															<input type="text" class="form-control" ng-model="fare.waiverCalculatedPn" name="waiverCalculatedPn{{$parent.$index}}{{$index}}"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverCalculatedPn{{$parent.$index}}{{$index}}.$valid}"												         		
 						           							ng-disabled="!vm.isEditable('waiverCalculatedPn')"
-											             	ng-required="vm.isRequired('waiverCalculatedPn')"/>
+											             	ng-required="vm.isRequired('waiverCalculatedPn')" ng-init="fare.waiverCalculatedPn = 'amount'"/>
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverOriginalPn', $event)" ng-class="{highlighted:fare.field['waiverOriginalPn']}">
 															<input type="text" class="form-control" ng-model="fare.waiverOriginalPn" name="waiverOriginalPn{{$parent.$index}}{{$index}}"
