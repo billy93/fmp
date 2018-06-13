@@ -1,0 +1,70 @@
+<div>
+    <h2>Data Feed Fare Basis Group Mappings</h2>
+    <jhi-alert></jhi-alert>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-4 no-padding-left">
+                <button class="btn btn-primary" ui-sref="data-feed-fare-basis-group-mapping.new" >
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span >
+                        Create new Data Feed Fare Basis Group Mapping
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+                <tr>
+                    <th><span>ID</span></th>
+                    <th><span>Origin City</span></th>
+                    <th><span>Origin Country</span></th>
+                    <th><span>Destination City</span></th>
+                    <th><span>Destination Country</span></th>
+                    <th><span>Rbd</span></th>
+                    <th><span>Fare Basis Code</span></th>
+                    <th><span>Fare Basis Group</span></th>
+                    <th><span>Priority</span></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="dataFeedFareBasisGroupMapping in vm.dataFeedFareBasisGroupMappings track by dataFeedFareBasisGroupMapping.id">
+                    <td><a ui-sref="data-feed-fare-basis-group-mapping-detail({id:dataFeedFareBasisGroupMapping.id})">{{dataFeedFareBasisGroupMapping.id}}</a></td>
+                    <td>{{dataFeedFareBasisGroupMapping.originCity}}</td>
+                    <td>{{dataFeedFareBasisGroupMapping.originCountry}}</td>
+                    <td>{{dataFeedFareBasisGroupMapping.destinationCity}}</td>
+                    <td>{{dataFeedFareBasisGroupMapping.destinationCountry}}</td>
+                    <td>{{dataFeedFareBasisGroupMapping.rbd}}</td>
+                    <td>{{dataFeedFareBasisGroupMapping.fareBasisCode}}</td>
+                    <td>{{dataFeedFareBasisGroupMapping.fareBasisGroup}}</td>
+                    <td>{{dataFeedFareBasisGroupMapping.priority}}</td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit"
+                                    ui-sref="data-feed-fare-basis-group-mapping-detail({id:dataFeedFareBasisGroupMapping.id})"
+                                    class="btn btn-info btn-sm">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                                <span class="hidden-sm-down"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="data-feed-fare-basis-group-mapping.edit({id:dataFeedFareBasisGroupMapping.id})"
+                                    class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="hidden-sm-down"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="data-feed-fare-basis-group-mapping.delete({id:dataFeedFareBasisGroupMapping.id})"
+                                    class="btn btn-danger btn-sm">
+                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                <span class="hidden-sm-down"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
