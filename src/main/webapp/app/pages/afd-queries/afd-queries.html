@@ -182,7 +182,7 @@
 											<input type="text" class="form-control" name="woId" id="woId" ng-model="vm.queryParams.woId" ng-disabled="true"/>
 										</div>
 									</div>
-									<div class="col-md-6 no-lpad">
+									<div class="col-md-6 no-pad">
 										<div class="form-group">
 											<div class="custom-label semibold">Tour Code</div>
 											<input type="text" class="form-control" name="tourCode" id="tourCode" ng-model="vm.queryParams.tourCode" ng-disabled="true"/>
@@ -255,7 +255,7 @@
 			</div>
 		</div>
 		
-		<div class="table-wrapper" ng-if="vm.afdQueries">
+		<div class="table-wrapper mb2" ng-if="vm.afdQueries">
 			<div class="datatable-wrapper form-inline">
 				<div class="clearfix">
 					<div class="pull-left w50">
@@ -464,16 +464,23 @@
 		</div>
 		
 		<div class="additional-info-wrapper" ng-if="vm.categoryRules">
-     		<div class="additional-info" ng-click="vm.showCategoryDetail(cat)" ng-class="{'lightyellow': cat.catAttributes.length > 0 && cat.type.includes('F'), 'yellow': cat.catAttributes.length > 0 && cat.type.includes('R'), 'blue': cat.catAttributes.length > 0 && cat.type == 'G'}" ng-repeat="cat in vm.categoryRules track by cat.catNo">
-        		{{cat.catNo}} {{cat.catName}} <span ng-if="cat.catAttributes.length > 0">({{cat.type}})</span>
-      		</div>
-      		<div class="additional-info action dropdown custom" ng-click="vm.actionClicked = !vm.actionClicked">
-      			Action <i class="fa fa-caret-down pull-right"></i>
-      			<div class="action-wrapper" ng-if="vm.actionClicked">
-      				<a ng-click="vm.showLegend()">Show Legend</a>
-      				<a ng-click="vm.viewFullText()">View Full Text</a>
-      			</div>
-      		</div>
+			<div class="clearfix">
+				<div class="pull-left ph5px additional-container" ng-repeat="cat in vm.categoryRules track by cat.catNo">
+					<div class="additional-info" ng-click="vm.showCategoryDetail(cat)" ng-class="{'lightyellow': cat.catAttributes.length > 0 && cat.type.includes('F'), 'yellow': cat.catAttributes.length > 0 && cat.type.includes('R'), 'blue': cat.catAttributes.length > 0 && cat.type == 'G'}">
+	        			{{cat.catNo}} {{cat.catName}} <span ng-if="cat.catAttributes.length > 0">({{cat.type}})</span>
+		      		</div>
+		      		
+				</div>
+				<div class="pull-left ph5px additional-container">
+					<div class="additional-info action dropdown custom" ng-click="vm.actionClicked = !vm.actionClicked">
+		      			Action <i class="fa fa-caret-down pull-right"></i>
+		      			<div class="action-wrapper" ng-if="vm.actionClicked">
+		      				<a ng-click="vm.showLegend()">Show Legend</a>
+		      				<a ng-click="vm.viewFullText()">View Full Text</a>
+		      			</div>
+		      		</div>
+	      		</div>
+			</div>
    		</div>
    		
 		<div class="text-center" ng-if="vm.afdQueries">
