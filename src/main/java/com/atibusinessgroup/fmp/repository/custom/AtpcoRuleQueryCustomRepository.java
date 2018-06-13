@@ -1,4 +1,4 @@
-package com.atibusinessgroup.fmp.resository.custom;
+package com.atibusinessgroup.fmp.repository.custom;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 
@@ -16,45 +16,37 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperationContext;
 import org.springframework.data.mongodb.core.aggregation.LimitOperation;
-import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.SkipOperation;
 import org.springframework.data.mongodb.core.aggregation.SortOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-import com.atibusinessgroup.fmp.constant.CollectionName;
-import com.atibusinessgroup.fmp.domain.atpco.AtpcoFootnoteRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
-import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByCatNo;
-import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByFtntCxrTarNo;
-import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByRuleNoCxrTarNo;
-import com.atibusinessgroup.fmp.domain.dto.FootnoteQuery;
-import com.atibusinessgroup.fmp.domain.dto.FootnoteQueryParam;
 import com.atibusinessgroup.fmp.domain.dto.RuleQueryParam;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
 @Service
-public class AtpcoFootnoteQueryCustomRepository {
+public class AtpcoRuleQueryCustomRepository {
 
 	@Autowired
 	MongoTemplate mongoTemplate;
 	
-	public List<AtpcoFootnoteRecord2> getListFtntRecord2(String recordId) {
-		List<AtpcoFootnoteRecord2> result = new ArrayList<>();
+	public List<AtpcoRecord2> getListRecord2ById(String recordId, String catNo) {
+		List<AtpcoRecord2> result = new ArrayList<>();
 		Query query = new Query();
 		query.addCriteria(Criteria.where("record_id").is(recordId));
-		result = mongoTemplate.find(query, AtpcoFootnoteRecord2.class);
+		result = mongoTemplate.find(query, AtpcoRecord2.class);
 		return result;
 	}
 
-	public Page<AtpcoFootnoteRecord2> findByFootnoteQueryParam(FootnoteQueryParam param, Pageable pageable) {
+	public Page<AtpcoRecord2> findByRuleQueryParam(RuleQueryParam param, Pageable pageable) {
 
 		try {
 
-			List<AggregationOperation> aggregationOperations = getAggregationFootnoteQuery(param);
+			List<AggregationOperation> aggregationOperations = getAggregationRuleQuery(param);
 
 			Aggregation aggregation = newAggregation(aggregationOperations);
 
@@ -66,11 +58,11 @@ public class AtpcoFootnoteQueryCustomRepository {
 
 			Aggregation aggregationPagination = newAggregation(aggregationOperations);
 
-			List<AtpcoFootnoteRecord2> result = mongoTemplate
-					.aggregate(aggregationPagination, "atpco_footnote_record_2", AtpcoFootnoteRecord2.class).getMappedResults();
+			List<AtpcoRecord2> result = mongoTemplate
+					.aggregate(aggregationPagination, "atpco_record_2", AtpcoRecord2.class).getMappedResults();
 
 			return new PageImpl<>(result, pageable, mongoTemplate
-					.aggregate(aggregation, "atpco_footnote_record_2", AtpcoFootnoteRecord2.class).getMappedResults().size());
+					.aggregate(aggregation, "atpco_record_2", AtpcoRecord2.class).getMappedResults().size());
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -78,7 +70,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 		}
 	}
 
-	public List<AggregationOperation> getAggregationFootnoteQuery(FootnoteQueryParam param) {
+	public List<AggregationOperation> getAggregationRuleQuery(RuleQueryParam param) {
 		List<AggregationOperation> aggregationOperations = new ArrayList<>();
 
 		aggregationOperations.add(new AggregationOperation() {
@@ -93,25 +85,16 @@ public class AtpcoFootnoteQueryCustomRepository {
 					and.add(new BasicDBObject("cxr_code", param.getCxr()));
 				}
 
-				if (param.getTarNo()!= null && !param.getTarNo().isEmpty()) {
-					and.add(new BasicDBObject("fare_tar_no", param.getTarNo()));
+				if (param.getRuleTarNo() != null && !param.getRuleTarNo().isEmpty()) {
+					and.add(new BasicDBObject("rule_tar_no", param.getRuleTarNo()));
 				}
 
-				if (param.getFtnt() != null && !param.getFtnt().isEmpty()) {
-					and.add(new BasicDBObject("ftnt", param.getFtnt()));
+				if (param.getRuleNo() != null && !param.getRuleNo().isEmpty()) {
+					and.add(new BasicDBObject("rule_no", param.getRuleNo()));
 				}
 				
 				if (param.getCatNo() != null && !param.getCatNo().isEmpty()) {
-					if(param.getCatNo().equalsIgnoreCase("comb")) {
-						String[] comb = {"014","015"};
-								
-						and.add(new BasicDBObject("cat_no", new BasicDBObject("$in", comb)));
-						
-						System.out.println(and.toString());
-					} else {
-						and.add(new BasicDBObject("cat_no", param.getCatNo()));
-					}
-					
+					and.add(new BasicDBObject("cat_no", param.getCatNo()));
 				}
 
 				if (and.size() > 0) {
@@ -127,7 +110,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 		return aggregationOperations;
 	}
 
-	public Page<AtpcoFootnoteRecord2GroupByFtntCxrTarNo> groupingFootnoteQuery(FootnoteQueryParam param, Pageable pageable) {
+	public Page<AtpcoRecord2GroupByRuleNoCxrTarNo> groupingRuleQuery(RuleQueryParam param, Pageable pageable) {
 
 		List<AggregationOperation> aggregationOperations = getAggregationGrouping(param);
 		
@@ -141,18 +124,18 @@ public class AtpcoFootnoteQueryCustomRepository {
 
 		Aggregation aggregationPagination = newAggregation(aggregationOperations);
 
-		SortOperation sort = new SortOperation(new Sort(Direction.ASC, "ftnt"));
+		SortOperation sort = new SortOperation(new Sort(Direction.ASC, "rule_no"));
 		aggregationOperations.add(sort);
 
-		List<AtpcoFootnoteRecord2GroupByFtntCxrTarNo> result = mongoTemplate.aggregate(aggregationPagination, "atpco_footnote_record_2", AtpcoFootnoteRecord2GroupByFtntCxrTarNo.class).getMappedResults();
+		List<AtpcoRecord2GroupByRuleNoCxrTarNo> result = mongoTemplate.aggregate(aggregationPagination, "atpco_record_2", AtpcoRecord2GroupByRuleNoCxrTarNo.class).getMappedResults();
 		
-		return new PageImpl<>(result, pageable, mongoTemplate.aggregate(aggregation, "atpco_footnote_record_2", AtpcoFootnoteRecord2GroupByFtntCxrTarNo.class).getMappedResults().size());
+		return new PageImpl<>(result, pageable, mongoTemplate.aggregate(aggregation, "atpco_record_2", AtpcoRecord2GroupByRuleNoCxrTarNo.class).getMappedResults().size());
 	}
 
-	public List<AggregationOperation> getAggregationGrouping(FootnoteQueryParam param) {
+	public List<AggregationOperation> getAggregationGrouping(RuleQueryParam param) {
 
 		List<AggregationOperation> aggregationOperations = new ArrayList<>();
-		aggregationOperations = getAggregationFootnoteQuery(param);
+		aggregationOperations = getAggregationRuleQuery(param);
 		
 
 		aggregationOperations.add(new AggregationOperation() {
@@ -161,9 +144,10 @@ public class AtpcoFootnoteQueryCustomRepository {
 				BasicDBObject group = new BasicDBObject();
 				BasicDBObject groupId = new BasicDBObject();
 				BasicDBObject groupList = new BasicDBObject();
-				groupList.put("ftnt", "$ftnt");
+				groupList.put("rule_no", "$rule_no");
 				groupList.put("cxr_code", "$cxr_code");
-				groupList.put("fare_tar_no", "$fare_tar_no");
+				groupList.put("rule_tar_no", "$rule_tar_no");
+//				groupList.put("cat_no", "$cat_no");
 				groupId.append("_id", groupList);
 				group.append("$group", groupId);
 				return group;
@@ -180,35 +164,6 @@ public class AtpcoFootnoteQueryCustomRepository {
 		});
 
 		return aggregationOperations;
-	}
-	
-	public List<AtpcoFootnoteRecord2GroupByCatNo> groupFootnoteByRecordId(String recordId) {
-		
-		List<AggregationOperation> aggregationOperations = new ArrayList<>();
-		
-		MatchOperation match = new MatchOperation(new Criteria("record_id").is(recordId));
-		aggregationOperations.add(match);
-		
-		aggregationOperations.add(new AggregationOperation() {
-			@Override
-			public DBObject toDBObject(AggregationOperationContext context) {
-				BasicDBObject group = new BasicDBObject();
-				BasicDBObject query = new BasicDBObject();
-				query.append("_id", "$cat_no");
-				query.append("record_2", new BasicDBObject("$push", "$$ROOT"));
-				group.append("$group", query);
-				return group;
-			}
-		});
-		
-		SortOperation sort = new SortOperation(new Sort(Direction.ASC, "_id"));
-		aggregationOperations.add(sort);
-		
-		Aggregation aggregation = newAggregation(aggregationOperations);
-		
-		List<AtpcoFootnoteRecord2GroupByCatNo> result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_FOOTNOTE_RECORD_2, AtpcoFootnoteRecord2GroupByCatNo.class).getMappedResults();
-		
-		return result;
 	}
 
 }

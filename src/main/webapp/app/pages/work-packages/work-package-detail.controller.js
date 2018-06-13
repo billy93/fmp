@@ -1014,7 +1014,7 @@
 	    }
         
         //GENERATE TOUR CODE
-        vm.generateTourCode = function(){
+        vm.generateTourCode = function(workPackageSheet){
         	$uibModal.open({
                 templateUrl: 'app/pages/work-packages/work-package-generate-tourcode-dialog.html',
                 controller: 'WorkPackageGenerateTourcodeDialogController',
@@ -1028,62 +1028,28 @@
                 	}
                 }
 			}).result.then(function(option) {
-				var findTab = false;
-	        	
-	        	if(!findTab){
-		        	for(var x=0;x<vm.currentTab.length;x++){
-		        		if(vm.currentTab[x]){
-		        			console.log('Active Fare Tab '+x);
-		        			findTab = true;
-		        			vm.workPackage.fareSheet[x].approvalReference = option.tourcode;		        			
-		        			break;
-		        		}
-		        	}
-	        	}
-	        	
-	        	if(!findTab){
-		        	for(var x=0;x<vm.currentAddonTab.length;x++){
-		        		if(vm.currentAddonTab[x]){
-		        			console.log('Active Addon Tab '+x);
-		        			findTab = true;
-		        			vm.workPackage.addonFareSheet[x].approvalReference = option.tourcode;		        			
-		        			break;
-		        		}
-		        	}
-	        	}
-	        	
-	        	if(!findTab){
-		        	for(var x=0;x<vm.currentDiscountTab.length;x++){
-		        		if(vm.currentDiscountTab[x]){
-		        			console.log('Active Discount Tab '+x);
-		        			findTab = true;
-		        			vm.workPackage.discountFareSheet[x].discountApprovalReference = option.tourcode;		        					        			
-		        			break;
-		        		}
-		        	}
-	        	}
-	        	
-	        	if(!findTab){
-		        	for(var x=0;x<vm.currentMarketTab.length;x++){
-		        		if(vm.currentMarketTab[x]){
-		        			console.log('Active Market Tab '+x);
-		        			findTab = true;
-		        			vm.workPackage.marketFareSheet[x].approvalReference = option.tourcode;		        					        					        			
-		        			break;
-		        		}
-		        	}
-	        	}
-	        	
-	        	if(!findTab){
-		        	for(var x=0;x<vm.currentWaiverTab.length;x++){
-		        		if(vm.currentWaiverTab[x]){
-		        			console.log('Active Waiver Tab '+x);
-		        			findTab = true;
-		        			vm.workPackage.waiverFareSheet[x].waiverApprovalReference = option.tourcode;		        					        					        			
-		        			break;
-		        		}
-		        	}
-	        	}
+				workPackageSheet.approvalReference = option.tourcode;		        			    			
+            }, function() {
+        			
+            });
+        };
+        
+        vm.generateTourCodeAttachment = function(){
+        	$uibModal.open({
+                templateUrl: 'app/pages/work-packages/work-package-generate-tourcode-dialog.html',
+                controller: 'WorkPackageGenerateTourcodeDialogController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full-page-modal',
+                resolve: {
+                	workPackage: function(){
+                		return vm.workPackage;
+                	}
+                }
+			}).result.then(function(option) {
+				vm.workPackage.attachmentApprovalReference = option.tourcode;		 
+				//workPackageSheet.approvalReference = option.tourcode;		        			    			
             }, function() {
         			
             });
@@ -2046,9 +2012,16 @@
 	  vm.passUp = function(){
 		    if (confirm("Are you sure to Pass up this workorder?")) {
 		    	WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
-		    		WorkPackage.passup(result, function(){
-		    			alert('Pass Up Success');
-		    			$state.go('work-package');
+		    		WorkPackage.passup(result, function(wp){
+		    			console.log(wp);
+		    			if(wp.validation != null && ((wp.validation.errorsCount > 0) || (wp.validation.warningsCount > 0))){
+		    				vm.workPackage.validation = wp.validation;
+		    				alert('There is '+wp.validation.errorsCount+' error(s) and '+wp.validation.warningsCount+' warning(s)');		    				
+		    			}
+		    			else{
+			    			alert('Pass Up Success');
+			    			$state.go('work-package');
+		    			}
 		    		}, function(){
 		    			alert('Pass Up Failed');
 		    		});
@@ -2418,10 +2391,45 @@
           		}
           	}
           }
-          
-          console.log($scope.editForm.editFormATPCO);
           vm.workPackage = data;
           vm.isSaving = false;
+          
+          if(data.validation != null && ((data.validation.errorsCount > 0) || (data.validation.warningsCount > 0))){
+				alert('There is '+data.validation.errorsCount+' error(s) and '+data.validation.warningsCount+' warning(s)');		    				
+		  }       
+          
+          
+          
+          if(vm.workPackage.fareSheet.length > 0){
+            	for(var x=0;x<vm.workPackage.fareSheet.length;x++){
+            		vm.changeVersion(vm.workPackage.fareSheet[x], vm.workPackage.fareSheet[x].version); 
+            	}
+            }
+            
+            if(vm.workPackage.addonFareSheet.length > 0){
+            	for(var x=0;x<vm.workPackage.addonFareSheet.length;x++){
+            		vm.changeVersion(vm.workPackage.addonFareSheet[x], vm.workPackage.addonFareSheet[x].version); 
+            	}
+            }
+            
+            if(vm.workPackage.marketFareSheet.length > 0){
+            	for(var x=0;x<vm.workPackage.marketFareSheet.length;x++){
+            		vm.changeVersion(vm.workPackage.marketFareSheet[x], vm.workPackage.marketFareSheet[x].version);                	
+            	}
+            }
+            
+            
+            if(vm.workPackage.discountFareSheet.length > 0){
+            	for(var x=0;x<vm.workPackage.discountFareSheet.length;x++){
+            		vm.changeVersion(vm.workPackage.discountFareSheet[x], vm.workPackage.discountFareSheet[x].version);
+            	}
+            }
+            
+            if(vm.workPackage.waiverFareSheet.length > 0){
+            	for(var x=0;x<vm.workPackage.waiverFareSheet.length;x++){
+            		vm.changeVersion(vm.workPackage.waiverFareSheet[x], vm.workPackage.waiverFareSheet[x].version);
+            	}
+            }
       }
 
       function onSaveError () {
@@ -3760,6 +3768,34 @@
           }
       };
       
+      vm.importFareWaiver = function ($file, index) {
+          if ($file) {
+              DataUtils.toBase64($file, function(base64Data) {
+                  $scope.$apply(function() {
+                      var testing = { 
+                    		  file : base64Data,
+                    		  fileContentType : $file.type
+                      };
+                      
+                      vm.workPackage.importFares = testing;
+                      vm.workPackage.importIndex = index;
+                      //send to backend
+                      
+                      WorkPackage.importFaresWaiver(vm.workPackage, onImportSuccess, onImportFailure);
+                      
+                      function onImportSuccess(result){
+                    	  	alert('Import Success');
+                    	  	vm.mapWorkpackage(result);
+                      }
+                      
+                      function onImportFailure(){
+                    	    alert('Import Failed');
+                      }
+                  });
+              });
+          }
+      };
+      
       vm.mapWorkpackage = function(result){
     	  data = result;
   	  	  data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
@@ -3924,6 +3960,24 @@
 	       
       }
       
+      vm.exportFaresWaiver = function(index){
+    	  vm.workPackage.exportIndex = index;
+    	  WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
+    		  WorkPackage.exportFaresWaiver(vm.workPackage, onExportSuccess, onExportFailure);
+	    	  function onExportSuccess(result){
+	    		  var fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+      			var templateFilename = "Workorder_Waiver_Fare.xlsx";
+      			var blob = b64toBlob(result.file, fileType);
+      			FileSaver.saveAs(blob, templateFilename);
+	    	  }
+	    	  function onExportFailure(error){
+	    		  console.log(error);
+	    	  }    	 
+	    	}, function onSaveError(){
+	    		alert('An error occured, please try again');
+	    	}); 
+	       
+      }
       vm.exportFaresAddon = function(index){
     	  /*
     	  $uibModal.open({
@@ -4832,6 +4886,18 @@
     				return false;
     			}
     		}
+      }
+      
+      vm.changeVersion = function(workPackageSheet, index){    	  
+    	  workPackageSheet.version = index;
+    	  if(index == 'current'){
+    		  workPackageSheet.currentFares = workPackageSheet.fares;
+    	  }
+    	  else{
+    		  if(index != null){
+    			  workPackageSheet.currentFares = workPackageSheet.fareVersion[index].fares;
+    		  }
+    	  }
       }
     }
 })();

@@ -2,6 +2,7 @@ package com.atibusinessgroup.fmp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.atibusinessgroup.fmp.domain.RoutingQuery;
+import com.atibusinessgroup.fmp.domain.dto.RouteMapView;
 import com.atibusinessgroup.fmp.domain.dto.RoutingQueryParam;
 import com.atibusinessgroup.fmp.service.RoutingQueryService;
 import com.atibusinessgroup.fmp.web.rest.errors.BadRequestAlertException;
@@ -126,10 +127,10 @@ public class RoutingQueryResource {
 	 */
 	@GetMapping("/routingqueries/details")
 	@Timed
-	public ResponseEntity<ArrayList<ArrayList<String>>> getRouteDetails(RoutingQuery routingquery) {
+	public ResponseEntity<String[][]> getRouteDetails(RoutingQuery routingquery) {
 		log.debug("REST request to routing query details: {}", routingquery);
 
-		ArrayList<ArrayList<String>> routeDetails = routingQueryService.getRouteDetails(routingquery);
+		String[][] routeDetails = routingQueryService.getRouteDetails(routingquery);
 
 		return new ResponseEntity<>(routeDetails, HttpStatus.OK);
 	}

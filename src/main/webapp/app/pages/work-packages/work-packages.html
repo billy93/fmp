@@ -17,19 +17,19 @@
 										<div class="custom-label semibold">Review Level</div>
 										<div class="checkbox-wrapper">
 											<label>
-												<input type="checkbox" ng-disabled="vm.workPackageFilter.reviewLevel.lso!=true && vm.reviewLevelLSO==null" ng-model="vm.workPackageFilter.reviewLevel.lso">
+												<input type="checkbox" ng-disabled="vm.reviewLevelLSO==null" ng-model="vm.workPackageFilter.reviewLevel.lso">
 												LSO
 											</label>
 											<label>
-												<input type="checkbox" ng-disabled="vm.workPackageFilter.reviewLevel.ho!=true && vm.reviewLevelHO==null" ng-model="vm.workPackageFilter.reviewLevel.ho">
+												<input type="checkbox" ng-disabled="vm.reviewLevelHO==null" ng-model="vm.workPackageFilter.reviewLevel.ho">
 												HO
 											</label>
 											<label>
-												<input type="checkbox" ng-disabled="vm.workPackageFilter.reviewLevel.distribution!=true && vm.reviewLevelDISTRIBUTION==null" ng-model="vm.workPackageFilter.reviewLevel.distribution">
+												<input type="checkbox" ng-disabled="vm.reviewLevelDISTRIBUTION==null" ng-model="vm.workPackageFilter.reviewLevel.distribution">
 												Distribution
 											</label>
 											<label>
-												<input type="checkbox" ng-disabled="vm.workPackageFilter.reviewLevel.routeManagement!=true && vm.reviewLevelROUTEMANAGEMENT==null" ng-model="vm.workPackageFilter.reviewLevel.routeManagement">
+												<input type="checkbox" ng-disabled="vm.reviewLevelROUTEMANAGEMENT==null" ng-model="vm.workPackageFilter.reviewLevel.routeManagement">
 												Route Management
 											</label>
 										</div>
@@ -76,7 +76,7 @@
 											<div class="pull-left multi-option-checkbox">
 												<div class="checkbox-wrapper">
 													<label>
-														<input type="checkbox" ng-model="vm.workPackageFilter.status.new">
+														<input type="checkbox" ng-model="vm.workPackageFilter.status.newStatus">
 														New
 													</label>
 													<label>
@@ -108,7 +108,7 @@
 														Referred
 													</label>
 													<label>
-														<input type="checkbox" ng-model="vm.workPackageFilter.status.discontinue">
+														<input type="checkbox" ng-model="vm.workPackageFilter.status.discontinued">
 														Discontinued
 													</label>
 												</div>
@@ -139,7 +139,7 @@
 													<div class="custom-label semibold">Created Time</div>
 													<div class="clearfix">
 														<div class="pull-left ph5px">
-															<input type="range" class="custom-range-slider" name="" value="10" min="1" max="24">
+															<input type="range" class="custom-range-slider" name="" value="10" min="1" max="24" ng-model="vm.workPackageFilter.createdTime">
 														</div>
 														<div class="pull-left ph5px">
 															<div class="range-slider-time">1 Month</div>
@@ -171,7 +171,7 @@
 										</label>
 									</div>
 								</div>
-								<div class="pull-right w50">
+								<div>
 									<div class="clearfix">
 										<div class="pull-right datatable-button">
 											<div class="button-group dropdown custom">
@@ -190,7 +190,28 @@
 											</div>
 											<button class="btn btn-default small" ng-click="vm.refresh()">Refresh</button>
 											<button class="btn btn-default small" ng-click="vm.printExport()">Print/Export</button>
-											<button class="btn btn-default small">Discontinue</button>
+											<button class="btn btn-default small fa fa-unlock" ng-click="vm.unlock()" ng-disabled="vm.selectedRow == null || !vm.selectedRow.locked"> Unlock</button>
+											<button class="btn btn-default small fa fa-recycle" ng-click="vm.reuse()" ng-disabled="vm.selectedRow == null"> Reuse</button>
+											<button class="btn btn-default small fa fa-reply" ng-click="vm.replace()" ng-disabled="vm.selectedRow == null && vm.selectedRow.targetDistribution != 'ATPCO'"> Replace</button>
+											<button class="btn btn-default small fa fa-ban" ng-click="vm.withdraw()" ng-disabled="vm.selectedRow == null"> Withdraw</button>
+											<button class="btn btn-default small fa fa-history" ng-click="vm.showHistory()" ng-disabled="vm.selectedRow == null"> Histroy</button>
+											<!-- <div class="btn btn-app" ng-click="vm.unlock($index)" ng-if="workPackage.locked">
+													<i class="fa fa-unlock"></i>Unlock
+												</div>
+												<div class="btn btn-app" ng-click="vm.reuse($index)">
+													<i class="fa fa-recycle"></i>Reuse
+												</div>
+												<div class="btn btn-app" ng-click="vm.replace($index)" ng-show="workPackage.targetDistribution != 'ATPCO'">
+													<i class="fa fa-reply"></i>Replace
+												</div>
+												<div class="btn btn-app" ng-click="vm.withdraw($index)">
+													<i class="fa fa-ban"></i>Withdraw
+												</div>
+												<div class="btn btn-app" ng-click="vm.showHistory($index)">
+													<i class="fa fa-history"></i>History
+												</div> -->
+												
+											<button class="btn btn-default small" ng-click="vm.discontinue()" ng-disabled="vm.selectedRow == null || (vm.selectedRow.targetDistribution != 'MARKET' || vm.selectedRow.status != 'DISTRIBUTED')">Discontinue</button>
 										</div>
 									</div>
 								</div>
@@ -221,10 +242,13 @@
 											<th jh-sort-by="lockedSince" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Locked Since <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="lastModifiedDate" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Last Modified Date <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="lastModifiedBy" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Last Modified By <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="groupFare" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Group Fare<span class="glyphicon glyphicon-sort"></span></th>
 										</tr>
 									</thead>
-									<tbody ng-repeat="workPackage in vm.workPackages track by $index" >
-										<tr role="row" class="datatable-row"
+									<tbody>
+										<tr  ng-repeat="workPackage in vm.workPackages track by $index"  
+										    role="row" class="datatable-row"
+											ng-class="{selected: workPackage === vm.selectedRow}"
 											ng-click="vm.rowSelected($index, workPackage)">
 											<td class="text-right" ng-class="{selected: workPackage === vm.selectedRow, locked: workPackage.locked}">
 						                        <div class="btn-group edit-btn entities flex-btn-group-container">
@@ -350,8 +374,9 @@
 						                    <td>{{workPackage.lockedSince | date:'medium'}}</td>
 						                    <td>{{workPackage.lastModifiedDate | date:'medium'}}</td>
 						                    <td>{{workPackage.lastModifiedBy}}</td>
+						                    <td><input type="checkbox" disabled ng-model="workPackage.marketFareSheet[0].groupFares"/></td>
 										</tr>
-										<tr ng-show="vm.workPackageActionButton[$index]">
+										<!-- <tr ng-show="vm.workPackageActionButton[$index]">
 											<td colspan="18" style="text-align: left !important; padding-left: 40px">
 												<div class="btn btn-app" ng-click="vm.unlock($index)" ng-if="workPackage.locked">
 													<i class="fa fa-unlock"></i>Unlock
@@ -369,7 +394,7 @@
 													<i class="fa fa-history"></i>History
 												</div>
 											</td>
-										</tr>
+										</tr> -->
 									</tbody>
 								</table>
 							</div>

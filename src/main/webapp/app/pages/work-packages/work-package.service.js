@@ -143,10 +143,12 @@
 	        'importFaresAddon': { method: 'POST',  url:'api/work-packages/import-fares-addon'},
 	        'importFaresMarket': { method: 'POST',  url:'api/work-packages/import-fares-market'},
 	        'importFaresDiscount': { method: 'POST',  url:'api/work-packages/import-fares-discount'},
+	        'importFaresWaiver': { method: 'POST',  url:'api/work-packages/import-fares-waiver'},	        
 	        'exportFares': { method: 'POST',  url:'api/work-packages/export-fares'},
 	        'exportFaresAddon': { method: 'POST',  url:'api/work-packages/export-fares-addon'},
 	        'exportFaresMarket': { method: 'POST',  url:'api/work-packages/export-fares-market'},
 	        'exportFaresDiscount': { method: 'POST',  url:'api/work-packages/export-fares-discount'},
+	        'exportFaresWaiver': { method: 'POST',  url:'api/work-packages/export-fares-waiver'},
 	        'exportDerivedFares': { method: 'POST',  url:'api/work-packages/derived/exportDerivedFares'},
 	        'publish' : { method: 'POST',  url:'api/work-packages/market/publish'},
 	        'exportRateSheet': { method: 'POST',  url:'api/work-packages/export-ratesheet'},
@@ -158,7 +160,9 @@
 	        'exportRateSheetWaiver': { method: 'POST',  url:'api/work-packages/export-ratesheet-waiver'},
 	        'exportRateSheetExcelWaiver': { method: 'POST',  url:'api/work-packages/export-ratesheet-excel-waiver'},
 	        'exportRateSheetWordWaiver': { method: 'POST',  url:'api/work-packages/export-ratesheet-word-waiver'},
-	        'downloadMarketRules': { method: 'POST',  url:'api/work-packages/download-market-rules'}
+	        'downloadMarketRules': { method: 'POST',  url:'api/work-packages/download-market-rules'},
+	        'workPackagefilter': { method: 'GET',  url:'api/work-packages/byname'},
+	        'discontinue': { method: 'POST',  url:'api/work-packages/discontinue'}
         });
     }
 })();

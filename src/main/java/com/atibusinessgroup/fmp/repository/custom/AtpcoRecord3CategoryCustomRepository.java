@@ -1,4 +1,4 @@
-package com.atibusinessgroup.fmp.resository.custom;
+package com.atibusinessgroup.fmp.repository.custom;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 

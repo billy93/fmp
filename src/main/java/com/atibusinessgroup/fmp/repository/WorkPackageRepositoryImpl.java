@@ -1,5 +1,7 @@
 package com.atibusinessgroup.fmp.repository;
 
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +16,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.repository.support.PageableExecutionUtils;
 
 import com.atibusinessgroup.fmp.domain.WorkPackage;
-import com.atibusinessgroup.fmp.service.WorkPackageService;
-import com.atibusinessgroup.fmp.web.rest.WorkPackageResource.WorkPackageFilter;
+import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
+
 
 public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAnyName {
 
@@ -27,8 +29,7 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 	@Override
 	public Page<WorkPackage> findCustom(WorkPackageFilter wpFilter, Pageable pageable) {
 		Query query = new Query(findByQuery(wpFilter)).with(pageable);	
-		log.debug("QUERY STRING PAGEABLE : {}", query.toString());
-		
+
 		List<WorkPackage> workPackages = mongoTemplate.find(query, WorkPackage.class);
 		
 		Page<WorkPackage> page = PageableExecutionUtils.getPage(
@@ -41,6 +42,152 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 	public Criteria findByQuery(WorkPackageFilter wpFilter){
 		// TODO Auto-generated method stub
 		
+		String createdTime = wpFilter.getCreatedTime();
+		Criteria createdTimeCriteria = null;
+		if(createdTime.contentEquals("1")) {
+			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+			ZonedDateTime searchTime = today.minus(1, ChronoUnit.DAYS);		
+			today = today.plus(1, ChronoUnit.DAYS);
+			createdTimeCriteria = Criteria.where("created_date").gte(searchTime).lte(today);
+		}
+		else if(createdTime.contentEquals("2")) {
+			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+			ZonedDateTime searchTime = today.minus(2, ChronoUnit.DAYS);		
+			today = today.plus(1, ChronoUnit.DAYS);
+			createdTimeCriteria = Criteria.where("created_date").gte(searchTime).lte(today);
+		}
+		else if(createdTime.contentEquals("3")) {
+			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+			ZonedDateTime searchTime = today.minus(3, ChronoUnit.DAYS);		
+			today = today.plus(1, ChronoUnit.DAYS);
+			createdTimeCriteria = Criteria.where("created_date").gte(searchTime).lte(today);
+		}
+		else if(createdTime.contentEquals("4")) {
+			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+			ZonedDateTime searchTime = today.minus(4, ChronoUnit.DAYS);		
+			today = today.plus(1, ChronoUnit.DAYS);
+			createdTimeCriteria = Criteria.where("created_date").gte(searchTime).lte(today);
+		}
+		else if(createdTime.contentEquals("5")) {
+			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+			ZonedDateTime searchTime = today.minus(5, ChronoUnit.DAYS);		
+			today = today.plus(1, ChronoUnit.DAYS);
+			createdTimeCriteria = Criteria.where("created_date").gte(searchTime).lte(today);
+		}
+		else if(createdTime.contentEquals("6")) {
+			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+			ZonedDateTime searchTime = today.minus(6, ChronoUnit.DAYS);		
+			today = today.plus(1, ChronoUnit.DAYS);
+			createdTimeCriteria = Criteria.where("created_date").gte(searchTime).lte(today);
+		}
+		else if(createdTime.contentEquals("7")) {
+			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+			ZonedDateTime searchTime = today.minus(1, ChronoUnit.WEEKS);		
+			today = today.plus(1, ChronoUnit.DAYS);
+			createdTimeCriteria = Criteria.where("created_date").gte(searchTime).lte(today);
+		}
+		else if(createdTime.contentEquals("8")) {
+			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+			ZonedDateTime searchTime = today.minus(2, ChronoUnit.WEEKS);	
+			today = today.plus(1, ChronoUnit.DAYS);
+			createdTimeCriteria = Criteria.where("created_date").gte(searchTime).lte(today);
+		}
+		else if(createdTime.contentEquals("9")) {
+			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+			ZonedDateTime searchTime = today.minus(3, ChronoUnit.WEEKS);	
+			today = today.plus(1, ChronoUnit.DAYS);
+			createdTimeCriteria = Criteria.where("created_date").gte(searchTime).lte(today);
+		}
+		else if(createdTime.contentEquals("10")) {
+			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+			ZonedDateTime searchTime = today.minus(1, ChronoUnit.MONTHS);	
+			today = today.plus(1, ChronoUnit.DAYS);
+			createdTimeCriteria = Criteria.where("created_date").gte(searchTime).lte(today);
+		}
+		else if(createdTime.contentEquals("11")) {
+			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+			ZonedDateTime searchTime = today.minus(2, ChronoUnit.MONTHS);	
+			today = today.plus(1, ChronoUnit.DAYS);
+			createdTimeCriteria = Criteria.where("created_date").gte(searchTime).lte(today);
+		}
+		else if(createdTime.contentEquals("12")) {
+			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+			ZonedDateTime searchTime = today.minus(3, ChronoUnit.MONTHS);	
+			today = today.plus(1, ChronoUnit.DAYS);
+			createdTimeCriteria = Criteria.where("created_date").gte(searchTime).lte(today);
+		}
+		else if(createdTime.contentEquals("13")) {
+			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+			ZonedDateTime searchTime = today.minus(4, ChronoUnit.MONTHS);	
+			today = today.plus(1, ChronoUnit.DAYS);
+			createdTimeCriteria = Criteria.where("created_date").gte(searchTime).lte(today);
+		}
+		else if(createdTime.contentEquals("14")) {
+			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+			ZonedDateTime searchTime = today.minus(5, ChronoUnit.MONTHS);	
+			today = today.plus(1, ChronoUnit.DAYS);
+			createdTimeCriteria = Criteria.where("created_date").gte(searchTime).lte(today);
+		}
+		else if(createdTime.contentEquals("15")) {
+			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+			ZonedDateTime searchTime = today.minus(6, ChronoUnit.MONTHS);	
+			today = today.plus(1, ChronoUnit.DAYS);
+			createdTimeCriteria = Criteria.where("created_date").gte(searchTime).lte(today);
+		}
+		else if(createdTime.contentEquals("16")) {
+			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+			ZonedDateTime searchTime = today.minus(7, ChronoUnit.MONTHS);	
+			today = today.plus(1, ChronoUnit.DAYS);
+			createdTimeCriteria = Criteria.where("created_date").gte(searchTime).lte(today);
+		}
+		else if(createdTime.contentEquals("17")) {
+			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+			ZonedDateTime searchTime = today.minus(8, ChronoUnit.MONTHS);	
+			today = today.plus(1, ChronoUnit.DAYS);
+			createdTimeCriteria = Criteria.where("created_date").gte(searchTime).lte(today);
+		}
+		else if(createdTime.contentEquals("18")) {
+			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+			ZonedDateTime searchTime = today.minus(9, ChronoUnit.MONTHS);	
+			today = today.plus(1, ChronoUnit.DAYS);
+			createdTimeCriteria = Criteria.where("created_date").gte(searchTime).lte(today);
+		}
+		else if(createdTime.contentEquals("19")) {
+			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+			ZonedDateTime searchTime = today.minus(10, ChronoUnit.MONTHS);	
+			today = today.plus(1, ChronoUnit.DAYS);
+			createdTimeCriteria = Criteria.where("created_date").gte(searchTime).lte(today);
+		}
+		else if(createdTime.contentEquals("20")) {
+			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+			ZonedDateTime searchTime = today.minus(11, ChronoUnit.MONTHS);	
+			today = today.plus(1, ChronoUnit.DAYS);
+			createdTimeCriteria = Criteria.where("created_date").gte(searchTime).lte(today);
+		}
+		else if(createdTime.contentEquals("21")) {
+			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+			ZonedDateTime searchTime = today.minus(1, ChronoUnit.YEARS);	
+			today = today.plus(1, ChronoUnit.DAYS);
+			createdTimeCriteria = Criteria.where("created_date").gte(searchTime).lte(today);
+		}
+		else if(createdTime.contentEquals("22")) {
+			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+			ZonedDateTime searchTime = today.minus(2, ChronoUnit.YEARS);	
+			today = today.plus(1, ChronoUnit.DAYS);
+			createdTimeCriteria = Criteria.where("created_date").gte(searchTime).lte(today);
+		}
+		else if(createdTime.contentEquals("23")) {
+			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+			ZonedDateTime searchTime = today.minus(3, ChronoUnit.YEARS);	
+			today = today.plus(1, ChronoUnit.DAYS);
+			createdTimeCriteria = Criteria.where("created_date").gte(searchTime).lte(today);
+		}
+		else if(createdTime.contentEquals("24")) {
+			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+//			ZonedDateTime searchTime = today.minus(3, ChronoUnit.YEARS);	
+			today = today.plus(1, ChronoUnit.DAYS);
+			createdTimeCriteria = Criteria.where("created_date").lte(today);
+		}
 		///// REVIEW LEVEL
 		List<String> reviewLevels = new ArrayList<>();
 		if(wpFilter.getReviewLevel().ho) {
@@ -83,6 +230,9 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		}
 		if(wpFilter.status.referred) {
 			status.add("REFERRED");
+		}
+		if(wpFilter.status.discontinued) {
+			status.add("DISCONTINUED");
 		}
 		
 		Criteria statusCriteria = Criteria.where("status").in(status);
@@ -131,6 +281,7 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		
 		Criteria wpidCriteria = Criteria.where("wpid").ne(null);
 		Criteria criteriaAnd1Query = new Criteria().andOperator(
+				createdTimeCriteria,
 				wpidCriteria,
 				reviewLevels.size() > 0 ? reviewLevelCriteria : new Criteria(),
 				status.size() > 0 ? statusCriteria : new Criteria(),
@@ -150,7 +301,6 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 	public List<WorkPackage> findCustom(WorkPackageFilter workPackageFilter) {
 		// TODO Auto-generated method stub
 		Query query = new Query(findByQuery(workPackageFilter));	
-		log.debug("QUERY STRING : {}", query.toString());
 		List<WorkPackage> workPackages = mongoTemplate.find(query, WorkPackage.class);
 
 		return workPackages;
