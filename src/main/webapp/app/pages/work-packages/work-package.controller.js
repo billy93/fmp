@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('WorkPackageController', WorkPackageController);
 
-    WorkPackageController.$inject = ['Principal', '$uibModal', '$state', '$stateParams', 'WorkPackage', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', 'FileSaver'];
+    WorkPackageController.$inject = ['Principal', '$uibModal', '$state', '$stateParams', 'WorkPackage', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', 'FileSaver', 'DateUtils'];
 
-    function WorkPackageController(Principal, $uibModal, $state, $stateParams, WorkPackage, ParseLinks, AlertService, paginationConstants, pagingParams, FileSaver) {
+    function WorkPackageController(Principal, $uibModal, $state, $stateParams, WorkPackage, ParseLinks, AlertService, paginationConstants, pagingParams, FileSaver, DateUtils) {
         var vm = this;
         vm.reviewLevel = true;
         vm.woStatus = true;
@@ -77,7 +77,6 @@
                
         });
         
-       
         function loadAll () {
             WorkPackage.query({
             	"reviewLevel.ho": vm.workPackageFilter.reviewLevel.ho,
@@ -115,11 +114,12 @@
                 return result;
             }
             function onSuccess(data, headers) {
-            	    vm.links = ParseLinks.parse(headers('link'));
+            	vm.links = ParseLinks.parse(headers('link'));
                 vm.totalItems = headers('X-Total-Count');
                 vm.queryCount = vm.totalItems;
                 vm.workPackages = data;
                 vm.page = pagingParams.page;
+                vm.timezone = headers('timezone');
             }
             function onError(error) {
                 AlertService.error(error.data.message);
