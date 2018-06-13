@@ -20,12 +20,19 @@
 
         function convertDateTimeFromServer(date) {
             if (date) {
-                return new Date(date);
+            	var date = new Date(date).setTime(d.getTime() + d.getTimezoneOffset() * 60 * 1000 /* convert to UTC */ + (/* UTC+8 */ 7) * 60 * 60 * 1000);
+            	return date;
+//                return new Date(date);
             } else {
                 return null;
             }
         }
 
+        function toTimeZone(time, zone) {
+            var format = 'YYYY/MM/DD HH:mm:ss ZZ';
+            return moment(time, format).tz(zone).format(format);
+        }
+        
         function convertLocalDateFromServer(date) {
             if (date) {
                 var dateString = date.split('-');
