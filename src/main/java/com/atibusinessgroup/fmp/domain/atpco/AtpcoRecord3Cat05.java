@@ -35,31 +35,31 @@ public class AtpcoRecord3Cat05 {
     private String advancedReservationFirstTimeOfDay;
 
 	@Field("adv_rsvn_first_period")
-    private String advencedReservationFirstPeriod;;
+    private String advancedReservationFirstPeriod;;
 
 	@Field("adv_rsvn_first_unit")
-    private String advencedReservationFirstUnit;
+    private String advancedReservationFirstUnit;
 	
 	@Field("time_of_day")
-    private String advencedReservationLastTimeOfDay;
+    private String advancedReservationLastTimeOfDay;
 
 	@Field("adv_rsvn_last_period")
-    private String advencedReservationLastPeriod;
+    private String advancedReservationLastPeriod;
 
 	@Field("adv_rsvn_unit")
-    private String advencedReservationLastUnit;
+	private String advancedReservationLastUnit;
 
 	@Field("adv_rsvn_tsi")
-    private String advencedReservationTsi;
+    private String advancedReservationTsi;
 
 	@Field("adv_rsvn_perm")
-    private String advencedReservationPerm;
+    private String advancedReservationPerm;
 
 	@Field("adv_rsvn_tktd")
-    private String advencedReservationTktd;
+    private String advancedReservationTktd;
 
 	@Field("adv_rsvn_stand")
-    private String advencedReservationStandby;
+    private String advancedReservationStandby;
 
 	@Field("confirmed_sector")
     private String confirmedSector;
@@ -71,34 +71,34 @@ public class AtpcoRecord3Cat05 {
     private String confirmedEachSector;
 
 	@Field("adv_tktg_time_of_day")
-    private String advencedTiketingTimeOfDay;
+    private String advancedTicketingTimeOfDay;
 
 	@Field("adv_tktg_period")
-    private String advencedTiketingPeriod;
+    private String advancedTicketingPeriod;
 
 	@Field("adv_tktg_unit_period")
-    private String advencedTiketingUnit1;
+    private String advancedTicketingUnit1;
 
 	@Field("adv_tktg_opt")
-    private String advencedTiketingOption;
+    private String advancedTicketingOption;
 	
 	@Field("adv_tktg_dept")
-    private String advencedTicketingBeforeDeparture;
+    private String advancedTicketingBeforeDeparture;
 
 	@Field("adv_tktg_unit_dept")
-	private String advencedTicketingUnit2;
+	private String advancedTicketingUnit2;
 
 	@Field("adv_tktg_tsi")
-    private String advencedTicketingTsi;
+    private String advancedTicketingTsi;
 
 	@Field("adv_tktg_both")
-    private String advencedTicketingBoth;
+    private String advancedTicketingBoth;
 
 	@Field("adv_tktg_exc")
-    private String advencedTicketingExc;
+    private String advancedTicketingExc;
 
 	@Field("adv_tktg_unit_exc")
-    private String advencedTicketingUnit3;
+    private String advancedTicketingUnit3;
 
 	@Field("waiver_rsvn_date")
     private Object waiverReservationDate;
@@ -187,76 +187,76 @@ public class AtpcoRecord3Cat05 {
 		this.advancedReservationFirstTimeOfDay = advancedReservationFirstTimeOfDay;
 	}
 
-	public String getAdvencedReservationFirstPeriod() {
-		return advencedReservationFirstPeriod;
+	public String getAdvancedReservationFirstPeriod() {
+		return advancedReservationFirstPeriod;
 	}
 
-	public void setAdvencedReservationFirstPeriod(String advencedReservationFirstPeriod) {
-		this.advencedReservationFirstPeriod = advencedReservationFirstPeriod;
+	public void setadvancedReservationFirstPeriod(String advancedReservationFirstPeriod) {
+		this.advancedReservationFirstPeriod = advancedReservationFirstPeriod;
 	}
 
-	public String getAdvencedReservationFirstUnit() {
-		return advencedReservationFirstUnit;
+	public String getAdvancedReservationFirstUnit() {
+		return advancedReservationFirstUnit;
 	}
 
-	public void setAdvencedReservationFirstUnit(String advencedReservationFirstUnit) {
-		this.advencedReservationFirstUnit = advencedReservationFirstUnit;
+	public void setadvancedReservationFirstUnit(String advancedReservationFirstUnit) {
+		this.advancedReservationFirstUnit = advancedReservationFirstUnit;
 	}
 
-	public String getAdvencedReservationLastTimeOfDay() {
-		return advencedReservationLastTimeOfDay;
+	public String getAdvancedReservationLastTimeOfDay() {
+		return advancedReservationLastTimeOfDay;
 	}
 
-	public void setAdvencedReservationLastTimeOfDay(String advencedReservationLastTimeOfDay) {
-		this.advencedReservationLastTimeOfDay = advencedReservationLastTimeOfDay;
+	public void setadvancedReservationLastTimeOfDay(String advancedReservationLastTimeOfDay) {
+		this.advancedReservationLastTimeOfDay = advancedReservationLastTimeOfDay;
 	}
 
-	public String getAdvencedReservationLastPeriod() {
-		return advencedReservationLastPeriod;
+	public String getAdvancedReservationLastPeriod() {
+		return advancedReservationLastPeriod;
 	}
 
-	public void setAdvencedReservationLastPeriod(String advencedReservationLastPeriod) {
-		this.advencedReservationLastPeriod = advencedReservationLastPeriod;
+	public void setadvancedReservationLastPeriod(String advancedReservationLastPeriod) {
+		this.advancedReservationLastPeriod = advancedReservationLastPeriod;
 	}
 
-	public String getAdvencedReservationLastUnit() {
-		return advencedReservationLastUnit;
+	public String getAdvancedReservationLastUnit() {
+		return advancedReservationLastUnit;
 	}
 
-	public void setAdvencedReservationLastUnit(String advencedReservationLastUnit) {
-		this.advencedReservationLastUnit = advencedReservationLastUnit;
+	public void setadvancedReservationLastUnit(String advancedReservationLastUnit) {
+		this.advancedReservationLastUnit = advancedReservationLastUnit;
 	}
 
-	public String getAdvencedReservationTsi() {
-		return advencedReservationTsi;
+	public String getAdvancedReservationTsi() {
+		return advancedReservationTsi;
 	}
 
-	public void setAdvencedReservationTsi(String advencedReservationTsi) {
-		this.advencedReservationTsi = advencedReservationTsi;
+	public void setadvancedReservationTsi(String advancedReservationTsi) {
+		this.advancedReservationTsi = advancedReservationTsi;
 	}
 
-	public String getAdvencedReservationPerm() {
-		return advencedReservationPerm;
+	public String getAdvancedReservationPerm() {
+		return advancedReservationPerm;
 	}
 
-	public void setAdvencedReservationPerm(String advencedReservationPerm) {
-		this.advencedReservationPerm = advencedReservationPerm;
+	public void setadvancedReservationPerm(String advancedReservationPerm) {
+		this.advancedReservationPerm = advancedReservationPerm;
 	}
 
-	public String getAdvencedReservationTktd() {
-		return advencedReservationTktd;
+	public String getAdvancedReservationTktd() {
+		return advancedReservationTktd;
 	}
 
-	public void setAdvencedReservationTktd(String advencedReservationTktd) {
-		this.advencedReservationTktd = advencedReservationTktd;
+	public void setadvancedReservationTktd(String advancedReservationTktd) {
+		this.advancedReservationTktd = advancedReservationTktd;
 	}
 
-	public String getAdvencedReservationStandby() {
-		return advencedReservationStandby;
+	public String getAdvancedReservationStandby() {
+		return advancedReservationStandby;
 	}
 
-	public void setAdvencedReservationStandby(String advencedReservationStandby) {
-		this.advencedReservationStandby = advencedReservationStandby;
+	public void setadvancedReservationStandby(String advancedReservationStandby) {
+		this.advancedReservationStandby = advancedReservationStandby;
 	}
 
 	public String getConfirmedSector() {
@@ -283,84 +283,84 @@ public class AtpcoRecord3Cat05 {
 		this.confirmedEachSector = confirmedEachSector;
 	}
 
-	public String getAdvencedTiketingTimeOfDay() {
-		return advencedTiketingTimeOfDay;
+	public String getAdvancedTicketingTimeOfDay() {
+		return advancedTicketingTimeOfDay;
 	}
 
-	public void setAdvencedTiketingTimeOfDay(String advencedTiketingTimeOfDay) {
-		this.advencedTiketingTimeOfDay = advencedTiketingTimeOfDay;
+	public void setadvancedTicketingTimeOfDay(String advancedTicketingTimeOfDay) {
+		this.advancedTicketingTimeOfDay = advancedTicketingTimeOfDay;
 	}
 
-	public String getAdvencedTiketingPeriod() {
-		return advencedTiketingPeriod;
+	public String getAdvancedTicketingPeriod() {
+		return advancedTicketingPeriod;
 	}
 
-	public void setAdvencedTiketingPeriod(String advencedTiketingPeriod) {
-		this.advencedTiketingPeriod = advencedTiketingPeriod;
+	public void setadvancedTicketingPeriod(String advancedTicketingPeriod) {
+		this.advancedTicketingPeriod = advancedTicketingPeriod;
 	}
 
-	public String getAdvencedTiketingUnit1() {
-		return advencedTiketingUnit1;
+	public String getAdvancedTicketingUnit1() {
+		return advancedTicketingUnit1;
 	}
 
-	public void setAdvencedTiketingUnit1(String advencedTiketingUnit1) {
-		this.advencedTiketingUnit1 = advencedTiketingUnit1;
+	public void setadvancedTicketingUnit1(String advancedTicketingUnit1) {
+		this.advancedTicketingUnit1 = advancedTicketingUnit1;
 	}
 
-	public String getAdvencedTiketingOption() {
-		return advencedTiketingOption;
+	public String getAdvancedTicketingOption() {
+		return advancedTicketingOption;
 	}
 
-	public void setAdvencedTiketingOption(String advencedTiketingOption) {
-		this.advencedTiketingOption = advencedTiketingOption;
+	public void setadvancedTicketingOption(String advancedTicketingOption) {
+		this.advancedTicketingOption = advancedTicketingOption;
 	}
 
-	public String getAdvencedTicketingBeforeDeparture() {
-		return advencedTicketingBeforeDeparture;
+	public String getAdvancedTicketingBeforeDeparture() {
+		return advancedTicketingBeforeDeparture;
 	}
 
-	public void setAdvencedTicketingBeforeDeparture(String advencedTicketingBeforeDeparture) {
-		this.advencedTicketingBeforeDeparture = advencedTicketingBeforeDeparture;
+	public void setadvancedTicketingBeforeDeparture(String advancedTicketingBeforeDeparture) {
+		this.advancedTicketingBeforeDeparture = advancedTicketingBeforeDeparture;
 	}
 
-	public String getAdvencedTicketingUnit2() {
-		return advencedTicketingUnit2;
+	public String getAdvancedTicketingUnit2() {
+		return advancedTicketingUnit2;
 	}
 
-	public void setAdvencedTicketingUnit2(String advencedTicketingUnit2) {
-		this.advencedTicketingUnit2 = advencedTicketingUnit2;
+	public void setadvancedTicketingUnit2(String advancedTicketingUnit2) {
+		this.advancedTicketingUnit2 = advancedTicketingUnit2;
 	}
 
-	public String getAdvencedTicketingTsi() {
-		return advencedTicketingTsi;
+	public String getAdvancedTicketingTsi() {
+		return advancedTicketingTsi;
 	}
 
-	public void setAdvencedTicketingTsi(String advencedTicketingTsi) {
-		this.advencedTicketingTsi = advencedTicketingTsi;
+	public void setadvancedTicketingTsi(String advancedTicketingTsi) {
+		this.advancedTicketingTsi = advancedTicketingTsi;
 	}
 
-	public String getAdvencedTicketingBoth() {
-		return advencedTicketingBoth;
+	public String getAdvancedTicketingBoth() {
+		return advancedTicketingBoth;
 	}
 
-	public void setAdvencedTicketingBoth(String advencedTicketingBoth) {
-		this.advencedTicketingBoth = advencedTicketingBoth;
+	public void setadvancedTicketingBoth(String advancedTicketingBoth) {
+		this.advancedTicketingBoth = advancedTicketingBoth;
 	}
 
-	public String getAdvencedTicketingExc() {
-		return advencedTicketingExc;
+	public String getAdvancedTicketingExc() {
+		return advancedTicketingExc;
 	}
 
-	public void setAdvencedTicketingExc(String advencedTicketingExc) {
-		this.advencedTicketingExc = advencedTicketingExc;
+	public void setadvancedTicketingExc(String advancedTicketingExc) {
+		this.advancedTicketingExc = advancedTicketingExc;
 	}
 
-	public String getAdvencedTicketingUnit3() {
-		return advencedTicketingUnit3;
+	public String getAdvancedTicketingUnit3() {
+		return advancedTicketingUnit3;
 	}
 
-	public void setAdvencedTicketingUnit3(String advencedTicketingUnit3) {
-		this.advencedTicketingUnit3 = advencedTicketingUnit3;
+	public void setadvancedTicketingUnit3(String advancedTicketingUnit3) {
+		this.advancedTicketingUnit3 = advancedTicketingUnit3;
 	}
 
 	public Object getWaiverReservationDate() {
@@ -411,29 +411,29 @@ public class AtpcoRecord3Cat05 {
 		result = prime * result
 				+ ((advancedReservationFirstTimeOfDay == null) ? 0 : advancedReservationFirstTimeOfDay.hashCode());
 		result = prime * result
-				+ ((advencedReservationFirstPeriod == null) ? 0 : advencedReservationFirstPeriod.hashCode());
+				+ ((advancedReservationFirstPeriod == null) ? 0 : advancedReservationFirstPeriod.hashCode());
 		result = prime * result
-				+ ((advencedReservationFirstUnit == null) ? 0 : advencedReservationFirstUnit.hashCode());
+				+ ((advancedReservationFirstUnit == null) ? 0 : advancedReservationFirstUnit.hashCode());
 		result = prime * result
-				+ ((advencedReservationLastPeriod == null) ? 0 : advencedReservationLastPeriod.hashCode());
+				+ ((advancedReservationLastPeriod == null) ? 0 : advancedReservationLastPeriod.hashCode());
 		result = prime * result
-				+ ((advencedReservationLastTimeOfDay == null) ? 0 : advencedReservationLastTimeOfDay.hashCode());
-		result = prime * result + ((advencedReservationLastUnit == null) ? 0 : advencedReservationLastUnit.hashCode());
-		result = prime * result + ((advencedReservationPerm == null) ? 0 : advencedReservationPerm.hashCode());
-		result = prime * result + ((advencedReservationStandby == null) ? 0 : advencedReservationStandby.hashCode());
-		result = prime * result + ((advencedReservationTktd == null) ? 0 : advencedReservationTktd.hashCode());
-		result = prime * result + ((advencedReservationTsi == null) ? 0 : advencedReservationTsi.hashCode());
+				+ ((advancedReservationLastTimeOfDay == null) ? 0 : advancedReservationLastTimeOfDay.hashCode());
+		result = prime * result + ((advancedReservationLastUnit == null) ? 0 : advancedReservationLastUnit.hashCode());
+		result = prime * result + ((advancedReservationPerm == null) ? 0 : advancedReservationPerm.hashCode());
+		result = prime * result + ((advancedReservationStandby == null) ? 0 : advancedReservationStandby.hashCode());
+		result = prime * result + ((advancedReservationTktd == null) ? 0 : advancedReservationTktd.hashCode());
+		result = prime * result + ((advancedReservationTsi == null) ? 0 : advancedReservationTsi.hashCode());
 		result = prime * result
-				+ ((advencedTicketingBeforeDeparture == null) ? 0 : advencedTicketingBeforeDeparture.hashCode());
-		result = prime * result + ((advencedTicketingBoth == null) ? 0 : advencedTicketingBoth.hashCode());
-		result = prime * result + ((advencedTicketingExc == null) ? 0 : advencedTicketingExc.hashCode());
-		result = prime * result + ((advencedTicketingTsi == null) ? 0 : advencedTicketingTsi.hashCode());
-		result = prime * result + ((advencedTicketingUnit2 == null) ? 0 : advencedTicketingUnit2.hashCode());
-		result = prime * result + ((advencedTicketingUnit3 == null) ? 0 : advencedTicketingUnit3.hashCode());
-		result = prime * result + ((advencedTiketingOption == null) ? 0 : advencedTiketingOption.hashCode());
-		result = prime * result + ((advencedTiketingPeriod == null) ? 0 : advencedTiketingPeriod.hashCode());
-		result = prime * result + ((advencedTiketingTimeOfDay == null) ? 0 : advencedTiketingTimeOfDay.hashCode());
-		result = prime * result + ((advencedTiketingUnit1 == null) ? 0 : advencedTiketingUnit1.hashCode());
+				+ ((advancedTicketingBeforeDeparture == null) ? 0 : advancedTicketingBeforeDeparture.hashCode());
+		result = prime * result + ((advancedTicketingBoth == null) ? 0 : advancedTicketingBoth.hashCode());
+		result = prime * result + ((advancedTicketingExc == null) ? 0 : advancedTicketingExc.hashCode());
+		result = prime * result + ((advancedTicketingTsi == null) ? 0 : advancedTicketingTsi.hashCode());
+		result = prime * result + ((advancedTicketingUnit2 == null) ? 0 : advancedTicketingUnit2.hashCode());
+		result = prime * result + ((advancedTicketingUnit3 == null) ? 0 : advancedTicketingUnit3.hashCode());
+		result = prime * result + ((advancedTicketingOption == null) ? 0 : advancedTicketingOption.hashCode());
+		result = prime * result + ((advancedTicketingPeriod == null) ? 0 : advancedTicketingPeriod.hashCode());
+		result = prime * result + ((advancedTicketingTimeOfDay == null) ? 0 : advancedTicketingTimeOfDay.hashCode());
+		result = prime * result + ((advancedTicketingUnit1 == null) ? 0 : advancedTicketingUnit1.hashCode());
 		result = prime * result + ((categoryNumber == null) ? 0 : categoryNumber.hashCode());
 		result = prime * result + ((confirmedEachSector == null) ? 0 : confirmedEachSector.hashCode());
 		result = prime * result + ((confirmedGeoTable995 == null) ? 0 : confirmedGeoTable995.hashCode());
@@ -471,100 +471,100 @@ public class AtpcoRecord3Cat05 {
 				return false;
 		} else if (!advancedReservationFirstTimeOfDay.equals(other.advancedReservationFirstTimeOfDay))
 			return false;
-		if (advencedReservationFirstPeriod == null) {
-			if (other.advencedReservationFirstPeriod != null)
+		if (advancedReservationFirstPeriod == null) {
+			if (other.advancedReservationFirstPeriod != null)
 				return false;
-		} else if (!advencedReservationFirstPeriod.equals(other.advencedReservationFirstPeriod))
+		} else if (!advancedReservationFirstPeriod.equals(other.advancedReservationFirstPeriod))
 			return false;
-		if (advencedReservationFirstUnit == null) {
-			if (other.advencedReservationFirstUnit != null)
+		if (advancedReservationFirstUnit == null) {
+			if (other.advancedReservationFirstUnit != null)
 				return false;
-		} else if (!advencedReservationFirstUnit.equals(other.advencedReservationFirstUnit))
+		} else if (!advancedReservationFirstUnit.equals(other.advancedReservationFirstUnit))
 			return false;
-		if (advencedReservationLastPeriod == null) {
-			if (other.advencedReservationLastPeriod != null)
+		if (advancedReservationLastPeriod == null) {
+			if (other.advancedReservationLastPeriod != null)
 				return false;
-		} else if (!advencedReservationLastPeriod.equals(other.advencedReservationLastPeriod))
+		} else if (!advancedReservationLastPeriod.equals(other.advancedReservationLastPeriod))
 			return false;
-		if (advencedReservationLastTimeOfDay == null) {
-			if (other.advencedReservationLastTimeOfDay != null)
+		if (advancedReservationLastTimeOfDay == null) {
+			if (other.advancedReservationLastTimeOfDay != null)
 				return false;
-		} else if (!advencedReservationLastTimeOfDay.equals(other.advencedReservationLastTimeOfDay))
+		} else if (!advancedReservationLastTimeOfDay.equals(other.advancedReservationLastTimeOfDay))
 			return false;
-		if (advencedReservationLastUnit == null) {
-			if (other.advencedReservationLastUnit != null)
+		if (advancedReservationLastUnit == null) {
+			if (other.advancedReservationLastUnit != null)
 				return false;
-		} else if (!advencedReservationLastUnit.equals(other.advencedReservationLastUnit))
+		} else if (!advancedReservationLastUnit.equals(other.advancedReservationLastUnit))
 			return false;
-		if (advencedReservationPerm == null) {
-			if (other.advencedReservationPerm != null)
+		if (advancedReservationPerm == null) {
+			if (other.advancedReservationPerm != null)
 				return false;
-		} else if (!advencedReservationPerm.equals(other.advencedReservationPerm))
+		} else if (!advancedReservationPerm.equals(other.advancedReservationPerm))
 			return false;
-		if (advencedReservationStandby == null) {
-			if (other.advencedReservationStandby != null)
+		if (advancedReservationStandby == null) {
+			if (other.advancedReservationStandby != null)
 				return false;
-		} else if (!advencedReservationStandby.equals(other.advencedReservationStandby))
+		} else if (!advancedReservationStandby.equals(other.advancedReservationStandby))
 			return false;
-		if (advencedReservationTktd == null) {
-			if (other.advencedReservationTktd != null)
+		if (advancedReservationTktd == null) {
+			if (other.advancedReservationTktd != null)
 				return false;
-		} else if (!advencedReservationTktd.equals(other.advencedReservationTktd))
+		} else if (!advancedReservationTktd.equals(other.advancedReservationTktd))
 			return false;
-		if (advencedReservationTsi == null) {
-			if (other.advencedReservationTsi != null)
+		if (advancedReservationTsi == null) {
+			if (other.advancedReservationTsi != null)
 				return false;
-		} else if (!advencedReservationTsi.equals(other.advencedReservationTsi))
+		} else if (!advancedReservationTsi.equals(other.advancedReservationTsi))
 			return false;
-		if (advencedTicketingBeforeDeparture == null) {
-			if (other.advencedTicketingBeforeDeparture != null)
+		if (advancedTicketingBeforeDeparture == null) {
+			if (other.advancedTicketingBeforeDeparture != null)
 				return false;
-		} else if (!advencedTicketingBeforeDeparture.equals(other.advencedTicketingBeforeDeparture))
+		} else if (!advancedTicketingBeforeDeparture.equals(other.advancedTicketingBeforeDeparture))
 			return false;
-		if (advencedTicketingBoth == null) {
-			if (other.advencedTicketingBoth != null)
+		if (advancedTicketingBoth == null) {
+			if (other.advancedTicketingBoth != null)
 				return false;
-		} else if (!advencedTicketingBoth.equals(other.advencedTicketingBoth))
+		} else if (!advancedTicketingBoth.equals(other.advancedTicketingBoth))
 			return false;
-		if (advencedTicketingExc == null) {
-			if (other.advencedTicketingExc != null)
+		if (advancedTicketingExc == null) {
+			if (other.advancedTicketingExc != null)
 				return false;
-		} else if (!advencedTicketingExc.equals(other.advencedTicketingExc))
+		} else if (!advancedTicketingExc.equals(other.advancedTicketingExc))
 			return false;
-		if (advencedTicketingTsi == null) {
-			if (other.advencedTicketingTsi != null)
+		if (advancedTicketingTsi == null) {
+			if (other.advancedTicketingTsi != null)
 				return false;
-		} else if (!advencedTicketingTsi.equals(other.advencedTicketingTsi))
+		} else if (!advancedTicketingTsi.equals(other.advancedTicketingTsi))
 			return false;
-		if (advencedTicketingUnit2 == null) {
-			if (other.advencedTicketingUnit2 != null)
+		if (advancedTicketingUnit2 == null) {
+			if (other.advancedTicketingUnit2 != null)
 				return false;
-		} else if (!advencedTicketingUnit2.equals(other.advencedTicketingUnit2))
+		} else if (!advancedTicketingUnit2.equals(other.advancedTicketingUnit2))
 			return false;
-		if (advencedTicketingUnit3 == null) {
-			if (other.advencedTicketingUnit3 != null)
+		if (advancedTicketingUnit3 == null) {
+			if (other.advancedTicketingUnit3 != null)
 				return false;
-		} else if (!advencedTicketingUnit3.equals(other.advencedTicketingUnit3))
+		} else if (!advancedTicketingUnit3.equals(other.advancedTicketingUnit3))
 			return false;
-		if (advencedTiketingOption == null) {
-			if (other.advencedTiketingOption != null)
+		if (advancedTicketingOption == null) {
+			if (other.advancedTicketingOption != null)
 				return false;
-		} else if (!advencedTiketingOption.equals(other.advencedTiketingOption))
+		} else if (!advancedTicketingOption.equals(other.advancedTicketingOption))
 			return false;
-		if (advencedTiketingPeriod == null) {
-			if (other.advencedTiketingPeriod != null)
+		if (advancedTicketingPeriod == null) {
+			if (other.advancedTicketingPeriod != null)
 				return false;
-		} else if (!advencedTiketingPeriod.equals(other.advencedTiketingPeriod))
+		} else if (!advancedTicketingPeriod.equals(other.advancedTicketingPeriod))
 			return false;
-		if (advencedTiketingTimeOfDay == null) {
-			if (other.advencedTiketingTimeOfDay != null)
+		if (advancedTicketingTimeOfDay == null) {
+			if (other.advancedTicketingTimeOfDay != null)
 				return false;
-		} else if (!advencedTiketingTimeOfDay.equals(other.advencedTiketingTimeOfDay))
+		} else if (!advancedTicketingTimeOfDay.equals(other.advancedTicketingTimeOfDay))
 			return false;
-		if (advencedTiketingUnit1 == null) {
-			if (other.advencedTiketingUnit1 != null)
+		if (advancedTicketingUnit1 == null) {
+			if (other.advancedTicketingUnit1 != null)
 				return false;
-		} else if (!advencedTiketingUnit1.equals(other.advencedTiketingUnit1))
+		} else if (!advancedTicketingUnit1.equals(other.advancedTicketingUnit1))
 			return false;
 		if (categoryNumber == null) {
 			if (other.categoryNumber != null)
@@ -650,21 +650,21 @@ public class AtpcoRecord3Cat05 {
 				+ ", recordSequence=" + recordSequence + ", recordType=" + recordType + ", action=" + action
 				+ ", categoryNumber=" + categoryNumber + ", tableNumber=" + tableNumber
 				+ ", advancedReservationFirstTimeOfDay=" + advancedReservationFirstTimeOfDay
-				+ ", advencedReservationFirstPeriod=" + advencedReservationFirstPeriod
-				+ ", advencedReservationFirstUnit=" + advencedReservationFirstUnit
-				+ ", advencedReservationLastTimeOfDay=" + advencedReservationLastTimeOfDay
-				+ ", advencedReservationLastPeriod=" + advencedReservationLastPeriod + ", advencedReservationLastUnit="
-				+ advencedReservationLastUnit + ", advencedReservationTsi=" + advencedReservationTsi
-				+ ", advencedReservationPerm=" + advencedReservationPerm + ", advencedReservationTktd="
-				+ advencedReservationTktd + ", advencedReservationStandby=" + advencedReservationStandby
+				+ ", advancedReservationFirstPeriod=" + advancedReservationFirstPeriod
+				+ ", advancedReservationFirstUnit=" + advancedReservationFirstUnit
+				+ ", advancedReservationLastTimeOfDay=" + advancedReservationLastTimeOfDay
+				+ ", advancedReservationLastPeriod=" + advancedReservationLastPeriod + ", advancedReservationLastUnit="
+				+ advancedReservationLastUnit + ", advancedReservationTsi=" + advancedReservationTsi
+				+ ", advancedReservationPerm=" + advancedReservationPerm + ", advancedReservationTktd="
+				+ advancedReservationTktd + ", advancedReservationStandby=" + advancedReservationStandby
 				+ ", confirmedSector=" + confirmedSector + ", confirmedGeoTable995=" + confirmedGeoTable995
-				+ ", confirmedEachSector=" + confirmedEachSector + ", advencedTiketingTimeOfDay="
-				+ advencedTiketingTimeOfDay + ", advencedTiketingPeriod=" + advencedTiketingPeriod
-				+ ", advencedTiketingUnit1=" + advencedTiketingUnit1 + ", advencedTiketingOption="
-				+ advencedTiketingOption + ", advencedTicketingBeforeDeparture=" + advencedTicketingBeforeDeparture
-				+ ", advencedTicketingUnit2=" + advencedTicketingUnit2 + ", advencedTicketingTsi="
-				+ advencedTicketingTsi + ", advencedTicketingBoth=" + advencedTicketingBoth + ", advencedTicketingExc="
-				+ advencedTicketingExc + ", advencedTicketingUnit3=" + advencedTicketingUnit3
+				+ ", confirmedEachSector=" + confirmedEachSector + ", advancedTicketingTimeOfDay="
+				+ advancedTicketingTimeOfDay + ", advancedTicketingPeriod=" + advancedTicketingPeriod
+				+ ", advancedTicketingUnit1=" + advancedTicketingUnit1 + ", advancedTicketingOption="
+				+ advancedTicketingOption + ", advancedTicketingBeforeDeparture=" + advancedTicketingBeforeDeparture
+				+ ", advancedTicketingUnit2=" + advancedTicketingUnit2 + ", advancedTicketingTsi="
+				+ advancedTicketingTsi + ", advancedTicketingBoth=" + advancedTicketingBoth + ", advancedTicketingExc="
+				+ advancedTicketingExc + ", advancedTicketingUnit3=" + advancedTicketingUnit3
 				+ ", waiverReservationDate=" + waiverReservationDate + ", waiverTktdDate=" + waiverTktdDate
 				+ ", dateTableNumber994=" + dateTableNumber994 + ", textTableNumber996=" + textTableNumber996
 				+ ", unavail=" + unavail + "]";
