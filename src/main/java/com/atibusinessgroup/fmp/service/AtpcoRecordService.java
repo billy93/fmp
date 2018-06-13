@@ -37,7 +37,7 @@ import com.atibusinessgroup.fmp.domain.dto.FlightTable;
 import com.atibusinessgroup.fmp.domain.dto.Record3ReflectionObject;
 import com.atibusinessgroup.fmp.domain.dto.TextTable;
 import com.atibusinessgroup.fmp.repository.SurchargeCodeRepository;
-import com.atibusinessgroup.fmp.resository.custom.AtpcoRecord3CategoryCustomRepository;
+import com.atibusinessgroup.fmp.repository.custom.AtpcoRecord3CategoryCustomRepository;
 import com.atibusinessgroup.fmp.service.util.AtpcoDataConverterUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
