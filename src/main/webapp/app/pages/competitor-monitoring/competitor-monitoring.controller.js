@@ -24,6 +24,7 @@
 		vm.isDisabled = isDisabled;
 
 		// vm.getRules = getRules;
+		vm.getChartData = getChartData;
 		vm.showCategoryDetail = showCategoryDetail;
 		vm.showLegend = showLegend;
 		vm.viewFullText = viewFullText;
@@ -103,7 +104,7 @@
 			vm.currentCompetitorMonitoring = null;
 
 			vm.queryParams.page = vm.page - 1;
-			vm.queryParams.size = vm.itemsPerPage;
+        	vm.queryParams.size = vm.itemsPerPage;
 
 //			vm.checkRuleNoGA();
 			vm.splitOrigDest(vm.queryParams.origDest);
@@ -140,6 +141,18 @@
 					console.log(error);
 				});
 			}
+		}
+		
+		function getChartData() {
+				vm.queryParams.page = 0;
+				vm.queryParams.size = vm.totalItems;
+				CompetitorMonitoring.getChartData(vm.queryParams, function(data) {
+//				console.log(data);
+					vm.generateGraph(data);
+				}, function(error) {
+					console.log(error);
+				});
+			
 		}
 
 		function openCalendar(e, date) {
@@ -192,8 +205,7 @@
 				includeConstructed : false,
 				appendResults : false,
 				biDirectional : false,
-				calculateTfc : false,
-				origDest : null
+				calculateTfc : false
 			}
 
 //			vm.loadAll();
@@ -269,15 +281,6 @@
 			}
 			
 		}
-
-		function checkRuleNoGA() {
-			if (vm.queryParams.ruleNo != null) {
-				if (vm.queryParams.carrierCode == null) {
-					vm.queryParams.carrierCode = 'GA';
-					console.log('masuk sini gak ???');
-				}
-			}
-		}
 		
 		function isDisabled() {
 			if(vm.compMonitoring.length > 0) {
@@ -297,7 +300,6 @@
 			  	
 				var fares = data;
 			  
-			  
 			      var barThickness = $('#barThickness').val();;
 			      var barOpacity = $('#barOpacity').val();;
 			      
@@ -310,7 +312,7 @@
 							items.push(fares[i].carrierCode);
 						}
 			    
-			      var categories = Array.from(new Set(items));
+						var categories = Array.from(new Set(items));
 			    
 			      var catLogo = [];
 			      var catWidth = $('#container').width/categories.length;
@@ -321,7 +323,7 @@
 			      for(var k=0;k<fares.length;k++) {
 			    	  
 			        if(fares[k].carrierCode==categories[j]) {
-			          var amt = String(fares[k].baseAmount);
+			          var amt = String(fares[k].amount);
 			          
 			          
 			          if(fares[k].cabin == 'Y') {
@@ -333,14 +335,21 @@
 			          } else if(fares[k].cabin == 'J') {
 			        	  cabColor = 'rgba(255,255,0,'+barOpacity+')';
 			          }
-			          var lowVal = parseFloat(String(amt))-(parseFloat(String(amt))*parseFloat(String(barThickness)));
-			           dataGraph.push({'x':j,'name':fares[k].cabin,'bookingClass':fares[k].bookingClass,'color':cabColor,'high':amt,'low':lowVal});
+			          
+			          if(fares[k].cabin != undefined || fares[k].cabin != null) {
+			        	  var lowVal = parseFloat(String(amt))-(parseFloat(String(amt))*parseFloat(String(barThickness)));
+				           dataGraph.push({'x':j,'name':fares[k].cabin,'bookingClass':fares[k].bookingClass,'color':cabColor,'high':amt,'low':lowVal});
+			          }
 			        }
 			    }
 			      var objCat = {'name':categories[j], 'data':dataGraph};
 			      dataGroup.push(objCat);
 			    }
 			
+
+			  console.log(dataGroup);
+			  
+			  
 			  var chartOptions = {
 			          chart : {
 			            renderTo : 'container',

@@ -5,56 +5,59 @@
 			<div class="filter-area">
 				<div class="clearfix">
 					<form name="queryForm" role="form" novalidate>
-					
-						<div class="col-md-3">
-							<div class="form-group">
-								<div class="custom-label semibold">Carrier</div>
-								<input type="text" class="form-control" name="carrier"
+						<div class="pull-left col-md-3 no-pad">
+							<div class="pull-left col-md-7 no-pad">
+								<div class="form-group">
+									<div class="custom-label semibold">Carrier</div>
+									<input type="text" class="form-control" name="carrier"
 										id="carrier" ng-model="vm.queryParams.carrier" uppercase />
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Origin Destination</div>
+									<input type="text" class="form-control" name="origdest"
+										id="origdest" ng-model="vm.queryParams.origdest" uppercase />
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">OW/RT</div>
+									<select class="form-control" name="owrt" id="owrt"
+										ng-model="vm.queryParams.owrt">
+										<option value="{{value.key}}"
+											ng-repeat="value in vm.owrts track by $index">{{value.value}}</option>
+									</select>
+								</div>
 							</div>
-							<div class="form-group">
-								<div class="custom-label semibold">Origin Destination</div>
-								<input type="text" class="form-control" name="origdest"
-									id="origdest" ng-model="vm.queryParams.origdest" uppercase />
-							</div>
-							<div class="form-group">
-								<div class="custom-label semibold">OW/RT</div>
-								<select class="form-control" name="owrt" id="owrt"
-									ng-model="vm.queryParams.owrt">
-									<option value="{{value.key}}"
-										ng-repeat="value in vm.owrts track by $index">{{value.value}}</option>
-								</select>
+						</div>
+
+						<div class="pull-left col-md-3 no-pad">
+							<div class="col-md-7 no-lpad">
+								<div class="form-group">
+									<div class="custom-label semibold">Rule No</div>
+									<input type="text" class="form-control" name="ruleNo"
+										id="ruleNo" ng-model="vm.queryParams.ruleNo" maxlength="4"
+										uppercase />
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Source</div>
+									<select class="form-control" name="gaFareType" id="gaFareType"
+										ng-disabled="vm.queryParams.source != 'M'"
+										ng-model="vm.queryParams.gaFareType">
+										<option value="{{value}}"
+											ng-repeat="value in vm.gaFareTypes track by $index">{{value}}</option>
+									</select>
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">FBC</div>
+									<input type="text" class="form-control" name="fareBasis"
+										id="fareBasis" ng-model="vm.queryParams.fareBasis" />
+								</div>
 							</div>
 						</div>
 						
-						<div class="col-md-3">
+						<div class="pull-left col-md-3 no-lpad">
 							<div class="form-group">
-								<div class="custom-label semibold">Rule No</div>
-								<input type="text" class="form-control" name="ruleNo"
-									id="ruleNo" ng-model="vm.queryParams.ruleNo" maxlength="4"
-									uppercase />
-							</div>
-							<div class="form-group">
-								<div class="custom-label semibold">Source</div>
-								<select class="form-control" name="gaFareType" id="gaFareType"
-									ng-disabled="vm.queryParams.source != 'M'"
-									ng-model="vm.queryParams.gaFareType">
-									<option value="{{value}}"
-										ng-repeat="value in vm.gaFareTypes track by $index">{{value}}</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<div class="custom-label semibold">FBC</div>
-								<input type="text" class="form-control" name="fareBasis"
-									id="fareBasis" ng-model="vm.queryParams.fareBasis" />
-							</div>
-						</div>
-						
-						<div class="col-md-3">
-							<div class="form-group mb0">
 								<div class="custom-label semibold">Travel Date</div>
 								<div class="row no-mar">
-									<div class="col-md-4 no-lpad mb5px">
+									<div class="col-md-4 no-lpad">
 										<input type="text" class="form-control"
 											ng-click="vm.openCalendar($event, 'travelDateFrom')"
 											ng-disabled="true"
@@ -63,7 +66,7 @@
 											name="travelDateFrom" id="datepicker"
 											ng-model="vm.queryParams.travelDateFrom" placeholder="From" />
 									</div>
-									<div class="col-md-4 no-lpad mb5px">
+									<div class="col-md-4 no-lpad">
 										<input type="text" class="form-control"
 											ng-click="vm.openCalendar($event, 'travelDateTo')"
 											ng-disabled="true"
@@ -72,7 +75,7 @@
 											name="travelDateTo" id="datepicker"
 											ng-model="vm.queryParams.travelDateTo" placeholder="To" />
 									</div>
-									<div class="col-md-4 no-lpad mb5px">
+									<div class="col-md-4 no-lpad">
 										<select class="form-control" name="travelDateOption"
 											id="travelDateOption"
 											ng-init="vm.queryParams.travelDateOption = vm.dateOptions[0].key"
@@ -83,10 +86,10 @@
 									</div>
 								</div>
 							</div>
-							<div class="form-group mb0">
+							<div class="form-group">
 								<div class="custom-label semibold">Sale Date</div>
 								<div class="row no-mar">
-									<div class="col-md-4 no-lpad mb5px">
+									<div class="col-md-4 no-lpad">
 										<input type="text" class="form-control"
 											ng-click="vm.openCalendar($event, 'saleDateFrom')"
 											ng-disabled="true"
@@ -95,7 +98,7 @@
 											name="saleDateFrom" id="datepicker"
 											ng-model="vm.queryParams.saleDateFrom" placeholder="From" />
 									</div>
-									<div class="col-md-4 no-lpad mb5px">
+									<div class="col-md-4 no-lpad">
 										<input type="text" class="form-control"
 											ng-click="vm.openCalendar($event, 'saleDateTo')"
 											ng-disabled="true"
@@ -104,7 +107,7 @@
 											name="saleDateTo" id="datepicker"
 											ng-model="vm.queryParams.saleDateTo" placeholder="To" />
 									</div>
-									<div class="col-md-4 no-lpad mb5px">
+									<div class="col-md-4 no-lpad">
 										<select class="form-control" name="saleDateOption"
 											id="saleDateOption"
 											ng-init="vm.queryParams.saleDateOption = vm.dateOptions[0].key"
@@ -116,7 +119,7 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<div class="col-md-6 no-lpad">
+								<div class="pull-left col-md-6 no-lpad">
 									<div class="checkbox-wrapper">
 										<label> <input type="checkbox"
 											name="includeConstructed"
@@ -131,42 +134,21 @@
 							</div>
 						</div>
 
-						<div class="col-md-3">
-							<div class="form-group">
-								<div class="custom-label semibold">GA Rule No</div>
-								<input type="text" class="form-control" name="ruleNo"
-									id="ruleNo" ng-model="vm.queryParams.ruleNo" maxlength="4"
-									uppercase />
-							</div>
-							<div class="form-group">
-								<div class="custom-label semibold">GA Source</div>
-								<select class="form-control" name="gaFareType" id="gaFareType"
-									ng-disabled="vm.queryParams.source != 'M'"
-									ng-model="vm.queryParams.gaFareType">
-									<option value="{{value}}"
-										ng-repeat="value in vm.gaFareTypes track by $index">{{value}}</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<div class="custom-label semibold">GA FBC</div>
-								<input type="text" class="form-control" name="fareBasis"
-									id="fareBasis" ng-model="vm.queryParams.fareBasis" />
+
+						<div class="pull-right col-md-3 no-lpad">
+							<div class="col-md-12 no-lpad">
+								<div class="clearfix form-group">
+									<div class="pull-right query-button-wrapper">
+										<button type="reset" ng-click="vm.reset()"
+											class="btn btn-default small pull-right">Reset</button>
+										<button type="button" class="btn btn-default small pull-right"
+											ng-click="vm.getChartData()" ng-disabled="vm.compMonitoring.length == 0 || vm.compMonitoring.length == null">Generate Graph</button>
+										<button type="button" class="btn btn-default small pull-right"
+											ng-click="vm.loadAll()">Query</button>
+									</div>
+								</div>
 							</div>
 						</div>
-						
-						<div class="col-md-12 clearfix">
-							<div class="pull-right pv1">
-								<button type="reset" ng-click="vm.reset()"
-									class="btn btn-default small mb1">Reset</button>
-								<button type="button" class="btn btn-default small mb1"
-									ng-click="vm.generateGraph(vm.compMonitoring)"
-									ng-disabled="vm.compMonitoring.length == 0 || vm.compMonitoring.length == null">Generate
-									Chart</button>
-								<button type="button" class="btn btn-default small mb1"
-									ng-click="vm.loadAll()">Query</button>
-							</div>
-						</div>
-						
 					</form>
 				</div>
 			</div>
@@ -221,9 +203,8 @@
 								<td><span ng-if="afdQuery.saleEndDate != 'indef'">{{afdQuery.saleEndDate
 										| date:'ddMMMyyyy'}}</span></td>
 								<td>{{afdQuery.cabin}}</td>
-
-								<td><span ng-if="afdQuery.owrt =
-								= '1'">OW</span><span
+								<td>{{afdQuery.bookingClass}}</td>
+								<td><span ng-if="afdQuery.owrt == '1'">OW</span><span
 									ng-if="afdQuery.owrt == '2'">RT</span><span
 									ng-if="afdQuery.owrt == '3'">OO</span></td>
 								<td>{{afdQuery.ruleNo}}</td>
@@ -262,17 +243,19 @@
 		<!--    		</div> -->
 
 		<div class="text-center" ng-if="vm.compMonitoring">
-		<label> total items : {{vm.queryCount}}</label>
-		<br />
-		<br />
+			<jhi-item-count page="vm.page" total="vm.queryCount"
+				items-per-page="vm.itemsPerPage"></jhi-item-count>
+			<uib-pagination class="pagination-sm" total-items="vm.totalItems"
+				items-per-page="vm.itemsPerPage" ng-model="vm.page"
+				ng-change="vm.loadAll()"></uib-pagination>
+			<br/>
+		<br/>
 		
 		<div id="chartOptions" class="form-inline" hidden="hidden">
            
-           <div class="form-group"
-					style="margin-left:10px; margin-bottom:10px; !important">
+           <div class="form-group" style="margin-left:10px; margin-bottom:10px; !important">
             <label for="barThickness">Bar Thickness : </label>
-            <select class="form-control" id="barThickness"
-						style="width:100px;">
+            <select class="form-control" id="barThickness" style="width:100px;">
               <option value="0.01">1</option>
               <option value="0.02">2</option>
               <option value="0.03">3</option>
@@ -286,11 +269,9 @@
             </select>
           </div> 
 
-          <div class="form-group"
-					style="margin-left:10px; margin-bottom:10px; !important">
+          <div class="form-group" style="margin-left:10px; margin-bottom:10px; !important">
             <label for="barOpacity">Bar Opacity : </label>
-            <select class="form-control" id="barOpacity"
-						style="width:100px;">
+            <select class="form-control" id="barOpacity" style="width:100px;">
               <option value="0.06">1</option>
               <option value="0.07">2</option>
               <option value="0.08">3</option>
@@ -304,12 +285,13 @@
             </select>
           </div> 
           
-           <div class="form-group"
-					style="margin-left:10px; margin-bottom:10px; !important">
-         	 <button type="button" class="btn btn-default small pull-right"
-						ng-click="vm.generateGraph(vm.compMonitoring)">Re-Generate</button>
-											</div>
+          <div class="form-group" style="margin-left:10px; margin-bottom:10px; !important">
+          
+            <button type="button" class="btn btn-default small" ng-click="vm.generateGraph(vm.compMonitoring)">Re-Generate</button>
+            </div>
         </div>
+      
+										
 <!-- 			<jhi-item-count page="vm.page" total="vm.queryCount" -->
 <!-- 				items-per-page="vm.itemsPerPage"></jhi-item-count> -->
 <!-- 			<uib-pagination class="pagination-sm" total-items="vm.totalItems" -->
@@ -317,7 +299,6 @@
 <!-- 				ng-change="vm.loadAll()"></uib-pagination> -->
 		</div>
 		
-		<div id="container" class="col-md-12 no-pad" style="height:600px;"
-			hidden="hidden"></div>
+		<div id="container" class="col-md-12 no-pad" style="height:600px;" hidden="hidden"></div>
 	</div>
 </div>
