@@ -4616,6 +4616,9 @@
                   cities: ['City', function(City) {
                       return City.getAll().$promise;
                   }],
+                  cityGroup: ['CityGroup', function(CityGroup) {
+                      return null;
+                  }],
               }
 			}).result.then(function(option) {
 				if(option != null){
