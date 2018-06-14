@@ -82,7 +82,7 @@
       			</div>
 						
 			</uib-tab>
-			<uib-tab heading="City Group" ng-click="vm.selectTab('cityGroup')">
+			<uib-tab heading="City Group" ng-click="vm.selectTab('cityGroup')" ng-if="vm.cityGroup != null">
 				<div class="clearfix mb1 mt2">
 		      		<div class="pull-left ph5px w25">      					
 						<div class="form-group">
@@ -103,6 +103,9 @@
 												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">
 										            City Group Code
 												</th>
+												<th>
+													Description
+												</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -111,6 +114,9 @@
 											class="datatable-row" ng-repeat="cityGroup in (vm.filteredCities = (vm.cityGroup | filter:vm.option.searchCityGroup)) track by $index">
 												<td>
 													{{cityGroup.code}}
+												</td>
+												<td>
+													{{cityGroup.description}}
 												</td>
 											</tr>
 										</tbody>
