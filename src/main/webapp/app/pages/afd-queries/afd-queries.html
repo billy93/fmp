@@ -419,19 +419,19 @@
 			                    <td></td>
 			                    <td></td>
 			                    <td></td>
-			                    <td><span ng-if="afdQuery.effectiveDate != 'indef'">{{afdQuery.effectiveDate | date:'ddMMMyyyy'}}</span></td>
-			                	<td><span ng-if="afdQuery.discontinueDate != 'indef'">{{afdQuery.discontinueDate | date:'ddMMMyyyy'}}</span></td>
-			                	<td><span ng-if="afdQuery.gfsDate != undefined && afdQuery.gfsDate != null">{{afdQuery.gfsDate | date:'ddMMMyyyy'}} - {{afdQuery.gfsReference}}</span></td>
+			                    <td><span ng-if="afdQuery.effectiveDate != 'indef'">{{afdQuery.effectiveDate | date:'ddMMMyyyy':vm.timezone}}</span></td>
+			                	<td><span ng-if="afdQuery.discontinueDate != 'indef'">{{afdQuery.discontinueDate | date:'ddMMMyyyy':vm.timezone}}</span></td>
+			                	<td><span ng-if="afdQuery.gfsDate != undefined && afdQuery.gfsDate != null">{{afdQuery.gfsDate | date:'ddMMMyyyy':vm.timezone}} - {{afdQuery.gfsReference}}</span></td>
 			                	<td>{{afdQuery.globalIndicator}}</td>
-			                	<td><span ng-if="afdQuery.ruleFocusDate != 'indef'">{{afdQuery.ruleFocusDate | date:'ddMMMyyyy'}}</span></td>
+			                	<td><span ng-if="afdQuery.ruleFocusDate != 'indef'">{{afdQuery.ruleFocusDate | date:'ddMMMyyyy':vm.timezone}}</span></td>
 			                	<td></td>
-			                	<td><span ng-if="afdQuery.travelStartDate != 'indef'">{{afdQuery.travelStartDate | date:'ddMMMyyyy'}}</span></td>
-			                	<td><span ng-if="afdQuery.travelEndDate != 'indef'">{{afdQuery.travelEndDate | date:'ddMMMyyyy'}}</span></td>
-			                	<td><span ng-if="afdQuery.travelComplete != 'indef'">{{afdQuery.travelComplete | date:'ddMMMyyyy'}}</span></td>
-			                	<td><span ng-if="afdQuery.saleStartDate != 'indef'">{{afdQuery.saleStartDate | date:'ddMMMyyyy'}}</span></td>
-			                	<td><span ng-if="afdQuery.saleEndDate != 'indef'">{{afdQuery.saleEndDate | date:'ddMMMyyyy'}}</span></td>
-			                	<td><span ng-if="afdQuery.resStartDate != 'indef'">{{afdQuery.resStartDate | date:'ddMMMyyyy'}}</span></td>
-			                	<td><span ng-if="afdQuery.resEndDate != 'indef'">{{afdQuery.resEndDate | date:'ddMMMyyyy'}}</span></td>
+			                	<td><span ng-if="afdQuery.travelStartDate != 'indef'">{{afdQuery.travelStartDate | date:'ddMMMyyyy':vm.timezone}}</span></td>
+			                	<td><span ng-if="afdQuery.travelEndDate != 'indef'">{{afdQuery.travelEndDate | date:'ddMMMyyyy':vm.timezone}}</span></td>
+			                	<td><span ng-if="afdQuery.travelComplete != 'indef'">{{afdQuery.travelComplete | date:'ddMMMyyyy':vm.timezone}}</span></td>
+			                	<td><span ng-if="afdQuery.saleStartDate != 'indef'">{{afdQuery.saleStartDate | date:'ddMMMyyyy':vm.timezone}}</span></td>
+			                	<td><span ng-if="afdQuery.saleEndDate != 'indef'">{{afdQuery.saleEndDate | date:'ddMMMyyyy':vm.timezone}}</span></td>
+			                	<td><span ng-if="afdQuery.resStartDate != 'indef'">{{afdQuery.resStartDate | date:'ddMMMyyyy':vm.timezone}}</span></td>
+			                	<td><span ng-if="afdQuery.resEndDate != 'indef'">{{afdQuery.resEndDate | date:'ddMMMyyyy':vm.timezone}}</span></td>
 			                	<td>{{afdQuery.minStay}}</td>
 			                	<td>{{afdQuery.maxStay}}</td>
 			                	<td>{{afdQuery.advancePurchase}}</td>
@@ -441,8 +441,8 @@
 			                	<td>{{afdQuery.firstSeasonDate}}</td>
 			                	<td>{{afdQuery.lastSeasonDate}}</td>
 			                	<td>
-			                		<span ng-if="afdQuery.travelStartDate == 'indef'">XXXXXXXX</span><span ng-if="afdQuery.travelStartDate != 'indef'">{{afdQuery.travelStartDate | date:'ddMMMyyyy'}}</span>
-			                		<span ng-if="afdQuery.travelEndDate == 'indef'">-XXXXXXXX</span><span ng-if="afdQuery.travelEndDate != undefined && afdQuery.travelEndDate != null && afdQuery.travelEndDate != 'indef'">-{{afdQuery.travelEndDate | date:'ddMMMyyyy'}}</span>
+			                		<span ng-if="afdQuery.travelStartDate == 'indef'">XXXXXXXX</span><span ng-if="afdQuery.travelStartDate != 'indef'">{{afdQuery.travelStartDate | date:'ddMMMyyyy':vm.timezone}}</span>
+			                		<span ng-if="afdQuery.travelEndDate == 'indef'">-XXXXXXXX</span><span ng-if="afdQuery.travelEndDate != undefined && afdQuery.travelEndDate != null && afdQuery.travelEndDate != 'indef'">-{{afdQuery.travelEndDate | date:'ddMMMyyyy':vm.timezone}}</span>
 			                	</td>
 			               		<td>{{afdQuery.fareType}}</td>
 			                	<td>{{afdQuery.paxType}}</td>

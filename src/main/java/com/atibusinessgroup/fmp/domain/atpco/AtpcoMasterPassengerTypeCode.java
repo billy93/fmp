@@ -1,4 +1,4 @@
-package com.atibusinessgroup.fmp.domain;
+package com.atibusinessgroup.fmp.domain.atpco;
 
 import java.io.Serializable;
 
@@ -6,19 +6,22 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-@Document(collection = "m_surcharge_codes")
-public class SurchargeCode implements Serializable {
+/**
+ * A Passenger Type Code Master.
+ */
+@Document(collection = "m_ptc_codes")
+public class AtpcoMasterPassengerTypeCode implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     private String id;
 
-    @Field("code")
+    @Field("ptc")
     private String code;
-    
-    @Field("surcharge_type")
-    private String type;
+
+    @Field("description")
+    private String name;
 
 	public String getId() {
 		return id;
@@ -36,12 +39,12 @@ public class SurchargeCode implements Serializable {
 		this.code = code;
 	}
 
-	public String getType() {
-		return type;
+	public String getName() {
+		return name;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override
@@ -63,7 +66,7 @@ public class SurchargeCode implements Serializable {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		SurchargeCode other = (SurchargeCode) obj;
+		AtpcoMasterPassengerTypeCode other = (AtpcoMasterPassengerTypeCode) obj;
 		if (id == null) {
 			if (other.id != null) {
 				return false;
@@ -76,6 +79,6 @@ public class SurchargeCode implements Serializable {
 
 	@Override
 	public String toString() {
-		return "SurchargeCode [id=" + id + ", code=" + code + ", type=" + type + "]";
+		return "AtpcoMasterPassengerTypeCode [id=" + id + ", code=" + code + ", name=" + name + "]";
 	}
 }

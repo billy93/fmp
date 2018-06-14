@@ -1,8 +1,10 @@
 package com.atibusinessgroup.fmp.domain;
 
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterPassengerTypeCode;
+
 public class SecondaryPassengerType {
 
-	private Passenger passengerType;
+	private AtpcoMasterPassengerTypeCode passengerType;
 	private CurrencyAmount addOnCurrencyAmount;
 	private Boolean applyFirst;
 	private String increaseDecrease;
@@ -12,11 +14,11 @@ public class SecondaryPassengerType {
 	private CurrencyAmount currencyAmount1;
 	private CurrencyAmount currencyAmount2;
 
-	public Passenger getPassengerType() {
+	public AtpcoMasterPassengerTypeCode getPassengerType() {
 		return passengerType;
 	}
 
-	public void setPassengerType(Passenger passengerType) {
+	public void setPassengerType(AtpcoMasterPassengerTypeCode passengerType) {
 		this.passengerType = passengerType;
 	}
 

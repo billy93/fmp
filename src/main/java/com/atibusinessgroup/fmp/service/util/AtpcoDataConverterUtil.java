@@ -16,7 +16,7 @@ public class AtpcoDataConverterUtil {
 
 		if (type != null) {
 			if (type.contentEquals(CategoryType.RULE)) {
-				result = "RULE";
+				result = "FARE";
 			} else if (type.contentEquals(CategoryType.FOOTNOTE)) {
 				result = "FOOTNOTE";
 			} else if (type.contentEquals(CategoryType.GENERAL_RULE)) {
@@ -179,6 +179,144 @@ public class AtpcoDataConverterUtil {
 		return result;
 	}
 	
+	public static String convertTicketAndReservationRestrictionToName(String restriction) {
+		String result = "";
+		
+		switch (restriction) {
+		case "X":
+			result = "TICKET IS NONREFUNDABLE";
+			break;
+		case "N":
+			result = "RESERVATIONS CANNOT BE CHANGED";
+			break;
+		case "B":
+			result = "TICKET IS NONREFUNDABLE AND RESERVATIONS CANNOT BE CHANGED";
+			break;
+		}
+				
+		return result;
+	}
+
+	public static String convertChargesApplicationToName(String appl) {
+		String result = "";
+		
+		switch (appl) {
+		case "1":
+			result = "PENALTY ANYTIME";
+			break;
+		case "2":
+			result = "PENALTY BEFORE DEPARTURE";
+			break;
+		case "3":
+			result = "PENALTY AFTER DEPARTURE";
+			break;
+		case "4":
+			result = "PENALTY ANYTIME. CHILD'S CHARGE CAN BE DISCOUNTED";
+			break;
+		case "5":
+			result = "PENALTY BEFORE DEPARTURE. CHILD'S CHARGE CAN BE DISCOUNTED";
+			break;
+		case "6":
+			result = "PENALTY AFTER DEPARTURE. CHILD'S CHARGE CAN BE DISCOUNTED";
+			break;
+		}
+				
+		return result;
+	}
+
+	public static String convertEndorsementTicketLocationToName(String location) {
+		String result = "";
+		
+		switch (location) {
+		case "1":
+			result = "FORM OF PAYMENT BOX FOR ORIGINAL TICKET";
+			break;
+		case "2":
+			result = "ENDORSEMENT BOX FOR ORIGINAL TICKET";
+			break;
+		case "3":
+			result = "FORM OF PAYMENT BOX FOR REISSUED TICKET";
+			break;
+		case "4":
+			result = "ENDORSEMENT BOX FOR REISSUED TICKET";
+			break;
+		case "5":
+			result = "FORM OF PAYMENT BOX FOR BOTH ORIGINAL AND REISSUED TICKET";
+			break;
+		case "6":
+			result = "ENDORSEMENT BOX FOR BOTH ORIGINAL AND REISSUED TICKET";
+			break;
+		}
+				
+		return result;
+	}
+
+	public static String convertAddonConstructionToName(String construction) {
+		String result = "";
+		
+		switch (construction) {
+		case "Y":
+			result = "THE FARE MAY BE USED FOR ADD-ON CONSTRUCTION";
+			break;
+		case "R":
+			result = "THE FARE MUST ONLY BE USED FOR ADD-ON CONSTRUCTION AND SHOULD NOT BE DISPLAYED OR SOLD IN ITS SPECIFIED FARE MARKET";
+			break;
+		case "N":
+			result = "THE FARE MAY NOT BE USED FOR ADD-ON CONSTRUCTION";
+			break;
+		case "":
+			result = "THE FARE MAY BE USED FOR ANY PURPOSE (WITHIN THE CONFINES OF THE REMAINDER OF THE FIELDS IN THE RECORD)";
+			break;
+		}
+		
+		return result;
+	}
+
+	public static String convertFareCalculationCodeIndicatorToName(String indicator) {
+		String result = "";
+		
+		switch (indicator) {
+		case "C":
+			result = "CALCULATED";
+			break;
+		case "S":
+			result = "SPECIFIED";
+			break;
+		case "A":
+			result = "ADDING CALCULATED TO SPECIFIED";
+			break;
+		case "M":
+			result = "SUBTRACTING SPECIFIED FROM CALCULATED";
+			break;
+		case "B":
+			result = "ADDING SPECIFIED TO BASE AMOUNT THEN CALCULATE ON THAT RESULT";
+			break;
+		case "G":
+			result = "SUBTRACTING SPECIFIED FROM BASE AMOUNT THEN CALCULATE ON THAT RESULT";
+			break;
+		case "H":
+			result = "USING THE HIGHER OF THE FOLLOWING EQUATION: CALCULATED COMPARED TO SPECIFIED, CALCULATED COMPARED TO FARE COMPARISON, CALCULATED COMPARED TO BOTH, SPECIFIED AND FARE COMPARISON";
+			break;
+		case "L":
+			result = "USING THE LOWER OF THE FOLLOWING EQUATION: CALCULATED COMPARED TO SPECIFIED, CALCULATED COMPARED TO FARE COMPARISON, CALCULATED COMPARED TO BOTH, SPECIFIED AND FARE COMPARISON";
+			break;
+		case "D":
+			result = "DOUBLING THE CALCULATE TO CREATE A TAG 2 FARE";
+			break;
+		case "E":
+			result = "SPECIFIED RATE PER 100 MILES (TICKETED POINT MILEAGE)";
+			break;
+		case "F":
+			result = "SPECIFIED RATE PER 100 MILES (NON-STOP SECTOR MILES)";
+			break;
+		case "K":
+			result = "SPECIFIED AMOUNT IN A CURRENCY OTHER THAN THE CURRENCY OF COUNTRY OF ORIGIN";
+			break;
+		}
+		
+		return result;
+	}
+	
 	public static String convertSeparatedDateIntoTextDate(String day, String month, String year) {
 		String result = "";
 		
@@ -244,7 +382,7 @@ public class AtpcoDataConverterUtil {
 			result = "";
 		}
 		
-		return result;
+		return result.toUpperCase();
 	}
 	
 	public static String convertDateObjectToText(Object dateObj) {
@@ -262,7 +400,7 @@ public class AtpcoDataConverterUtil {
 			}
 		}
 		
-		return result;
+		return result.toUpperCase();
 	}
 	
 	public static String convertFlightTableToText(FlightTable flightTable986l) {
