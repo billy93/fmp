@@ -21,7 +21,7 @@
 						</div>
 						<div class="box-body" 
 						ng-class="{'poiv-none' : (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
-						&& vm.workPackage.status=='DISTRIBUTED') || vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 } " >
+						&& vm.workPackage.status=='DISTRIBUTED') || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') } " >
 							<div class="clearfix">
 								<div class="pull-left w50 two-column">
 									<div class="form-group">
@@ -227,7 +227,7 @@
 							        	</div>
 									</div>
 
-									<div ng-class="{active:vm.currentTabInterofficeComment, 'poiv-none' : vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 }" class="tab-pane" id="inter-office">
+									<div ng-class="{active:vm.currentTabInterofficeComment, 'poiv-none' : vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT' }" class="tab-pane" id="inter-office">
 										<div class="form-group">
 											<wysiwyg-edit content="vm.ioString" config="vm.editorConfig"></wysiwyg-edit>
 										</div> 
@@ -251,7 +251,7 @@
 							        	</div>
 									</div>
 									
-									<div ng-class="{active:vm.currentTabRatesheetComment, 'poiv-none' : vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1}" class="tab-pane" id="rate-sheet-comment">
+									<div ng-class="{active:vm.currentTabRatesheetComment, 'poiv-none' : vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT'}" class="tab-pane" id="rate-sheet-comment">
 										<div class="box-body">
 											<div class="form-group">
 												<label>Rate Sheet Comment</label>
@@ -277,7 +277,7 @@
 		<div class="panel-body">
 			<div class="clearfix mb1">
 				<div class="pull-right" ng-class="{'poiv-none' : (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
-						&& vm.workPackage.status=='DISTRIBUTED') || vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 }">
+						&& vm.workPackage.status=='DISTRIBUTED') || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}">
 					<button class="btn btn-default small" ng-click="vm.resendApprove()" ng-if="vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.user.reviewLevels.indexOf('HO') > -1">Generate IN</button>
 					<button class="btn btn-default small" ng-click="vm.viewRecipients()" ng-if="vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.user.reviewLevels.indexOf('HO') > -1">View IN Recipients</button>
 					<div class="button-group dropdown custom">
@@ -422,7 +422,7 @@
 													<div class="clearfix">
 														<div class="pull-right datatable-button">
 															<div class="button-group dropdown custom">
-																<button class="btn btn-default small btn-secondary" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1">Edit <i class="fa fa-caret-down"></i></button>
+																<button class="btn btn-default small btn-secondary" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT'">Edit <i class="fa fa-caret-down"></i></button>
 																<ul class="dropdown-menu custom" role="menu">
 																    <li>
 																    	<a ng-click="vm.clearSelection(workPackageSheet)">Clear Selection</a>
@@ -449,12 +449,12 @@
 																    </li>
 																</ul>
 															</div>													
-															<button class="btn btn-default small btn-secondary" ngf-select  ngf-change="vm.importFare($file, $index)" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1">Import</button>
-															<button class="btn btn-default small btn-secondary" ng-click="vm.exportFares($index)" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1">Export</button>
+															<button class="btn btn-default small btn-secondary" ngf-select  ngf-change="vm.importFare($file, $index)" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT'">Import</button>
+															<button class="btn btn-default small btn-secondary" ng-click="vm.exportFares($index)" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT'">Export</button>
 															<!-- <button class="btn btn-default small btn-secondary">Publish</button> -->
-															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.agent()" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1">Agents</button>
-															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1">Rate Sheet</button> 
-															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.routemap()" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1">Route Map</button> 
+															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.agent()" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT' ">Agents</button>
+															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT'">Rate Sheet</button> 
+															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.routemap()" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT'">Route Map</button> 
 														</div>
 													</div>																						
 												</div>
@@ -1052,7 +1052,7 @@
 													<div class="clearfix">
 														<div class="pull-right datatable-button">
 															<div class="button-group dropdown custom">
-																<button class="btn btn-default small btn-secondary" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1">Edit <i class="fa fa-caret-down"></i></button>
+																<button class="btn btn-default small btn-secondary" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT'">Edit <i class="fa fa-caret-down"></i></button>
 																<ul class="dropdown-menu custom" role="menu">
 																	<li>
 																    	<a ng-click="vm.clearSelection(workPackageSheet)">Clear Selection</a>
@@ -1077,11 +1077,11 @@
 																    </li>
 																</ul>
 															</div>													
-															<button class="btn btn-default small btn-secondary" ngf-select ngf-change="vm.importFareAddon($file, $index)" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1">Import</button>
-															<button class="btn btn-default small btn-secondary" ng-click="vm.exportFaresAddon($index)" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1">Export</button>
+															<button class="btn btn-default small btn-secondary" ngf-select ngf-change="vm.importFareAddon($file, $index)" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT'">Import</button>
+															<button class="btn btn-default small btn-secondary" ng-click="vm.exportFaresAddon($index)" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT'">Export</button>
 															<button class="btn btn-default small btn-secondary" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1">Publish</button>
-															<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalAgent" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1">Agents</button>
-															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1">Rate Sheet</button>
+															<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalAgent" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT'">Agents</button>
+															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT'">Rate Sheet</button>
 														</div>
 													</div>																						
 												</div>
@@ -1533,7 +1533,10 @@
 										</div>
 										<div class="clearfix">
 											<div class="pull-right">
-												<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()">Add</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.deleteCommentFillingInstruction($index)">Delete Comment</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.collapseCommentFillingInstruction()">Collapse Deleted Comment</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.expandCommentFillingInstruction()">Expand Deleted Comment</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()">Add Comment</button>
 											</div>
 										</div>		
 									</div>
@@ -1541,15 +1544,14 @@
 										<div class="box-body">
 							        		<div class="comment-container">
 							        			<div class="comment-wrapper">
-									    			<div class="comment-list" ng-repeat="filingInstructionData in vm.workPackage.filingInstructionData.slice().reverse() track by $index">
+									    			<div class="comment-list" ng-repeat="filingInstructionData in vm.viewCommentFillingInstruction.slice().reverse() track by $index">
 												    	<div class="clearfix">
 												    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
 												    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'short'}}</div>
 												    	</div>
 												    	<label> 
-												    		<input type="checkbox" id="comment-message" name="comment-message" ng-model="filingInstructionData.isDeleted">
-												    		<span>{{filingInstructionData.isDeleted ? "Deleted" : "Delete"}}</span> 
-															<span ng-show="!filingInstructionData.isDeleted" data-ng-bind-html="trustAsHtml(filingInstructionData.comment)"></span>
+												    		<input type="checkbox" id="comment-message" name="comment-message" ng-model="filingInstructionData.isDeleted" disabled>
+															<span data-ng-bind-html="trustAsHtml(filingInstructionData.comment)"></span>
 														</label>
 													</div>
 									    		</div>

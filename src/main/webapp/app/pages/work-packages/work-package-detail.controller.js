@@ -4137,24 +4137,59 @@
      };
       
       
+     
+      vm.viewCommentFillingInstruction = loadCommentFI();
+      function loadCommentFI() {
+    	  vm.viewCommentFillingInstruction =[];
+    	  for(var l = 0;l < vm.workPackage.filingInstructionData.length ; l++){
+    		  if(!vm.workPackage.filingInstructionData[l].isDeleted){
+    			  vm.viewCommentFillingInstruction.push(vm.workPackage.filingInstructionData[l]);
+    		  }
+    	  }
+    	  return vm.viewCommentFillingInstruction = vm.viewCommentFillingInstruction;
+      }
+      
+      vm.expandCommentFillingInstruction = function(){
+    	  vm.viewCommentFillingInstruction =[];
+    	  for(var l = 0;l < vm.workPackage.filingInstructionData.length ; l++){
+    		vm.viewCommentFillingInstruction.push(vm.workPackage.filingInstructionData[l]);
+    	  }
+      }
+      
+      vm.collapseCommentFillingInstruction = function(){
+    	  vm.viewCommentFillingInstruction =[];
+    	  for(var l = 0;l < vm.workPackage.filingInstructionData.length ; l++){
+    		  if(!vm.workPackage.filingInstructionData[l].isDeleted){
+    			  vm.viewCommentFillingInstruction.push(vm.workPackage.filingInstructionData[l]);
+    		  }
+    	  }
+      }
       vm.addCommentFillingInstruction = function() {
- 	  	 	if (vm.commentStringFillingInstruction != null) {
+	  	 	if (vm.commentStringFillingInstruction != null) {
 	 	  		 if (vm.workPackage.filingInstructionData == null) {
 	 	      		vm.workPackage.filingInstructionData = [];
 	 	  		 }
 	 	    	  
 	 	  		 vm.workPackage.filingInstructionData.push({ 
-	     	  		status:"PENDING", tarno:"", cxr:"GA", comment:vm.commentStringFillingInstruction, file:"", fileContentType:"", isDeleted:false
+	     	  		status:"PENDING", tarno:"", cxr:"GA", comment:vm.commentStringFillingInstruction, file:"", fileContentType:"", isDeleted:false, username :vm.user.login,
+	     	  		createdTime :new Date()
 	 	  		 });
-	 	  		 
 	 	  		 vm.save();
 	 	  		 vm.commentStringFillingInstruction = null;
-	 	  		$(document).ready(function(){
+	 	  		
+	 	  		 
+	 	  		
+	 	  		 $(document).ready(function(){
 	                var _width = $('.comment-wrapper').outerWidth();
 		              $('.comment-list').css({ 'width': 'calc(100% + ' + _width+ 'px)' });
 		        });
- 	  	 	}
-       }
+	  	 	}
+	  	 	loadCommentFI();
+     }
+     
+      vm.deleteCommentFillingInstruction = function(index){
+    	 console.log("delete"+$index);
+      }
       
       vm.removeFiling = function(filing){
 	   		var index = vm.workPackage.filingInstructionData.indexOf(filing); 
