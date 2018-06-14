@@ -1343,6 +1343,20 @@ public class AtpcoRecordService {
 				if (!codeind.isEmpty()) {
 					result += "\tTHE RESULTING FARE IS CREATED BY " + codeind;
 				}
+				if (cat25.getFare_calc_mileage_percent() != null && !cat25.getFare_calc_mileage_percent().isEmpty() && !cat25.getFare_calc_mileage_percent().contentEquals("0000000")) {
+					result += cat25.getFare_calc_mileage_percent() + "% OF THE BASE FARE MENTIONED BELOW";
+				}
+				String fcamount = "";
+				if (cat25.getFare_calc_fare_amt_1() != null && cat25.getFare_calc_fare_amt_1().doubleValue() != 0.0) {
+					if (cat25.getFare_calc_fare_cur_1() != null && !cat25.getFare_calc_fare_cur_1().isEmpty()) {
+						fcamount += cat25.getFare_calc_fare_cur_1() + " ";
+					}
+					
+					fcamount += cat25.getFare_calc_fare_amt_1().doubleValue();
+				}
+				if (!fcamount.isEmpty()) {
+					result += "\t" + fcamount + "\n";
+				}
 				break;
 			}
 		} catch (Exception e) {
