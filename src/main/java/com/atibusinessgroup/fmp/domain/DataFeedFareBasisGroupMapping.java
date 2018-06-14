@@ -7,19 +7,17 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.validation.constraints.NotNull;
-
 /**
- * A RMDataFeeds.
+ * A DataFeedFareBasisGroupMapping.
  */
-@Document(collection = "fare_basis_data_feeds")
+@Document(collection = "data_feed_fare_basis_group_mapping")
 public class DataFeedFareBasisGroupMapping implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     private String id;
-    
+
     @Field("origin_city")
     private String originCity;
 
@@ -35,88 +33,130 @@ public class DataFeedFareBasisGroupMapping implements Serializable {
     @Field("rbd")
     private String rbd;
 
-    @Field("fare_code")
+    @Field("fare_basis_code")
     private String fareBasisCode;
 
-    @Field("fare_group")
+    @Field("fare_basis_group")
     private String fareBasisGroup;
 
     @Field("priority")
-    private String priority;  
+    private String priority;
 
-	public String getId() {
-		return id;
-	}
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    public String getId() {
+        return id;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public String getOriginCity() {
-		return originCity;
-	}
+    public String getOriginCity() {
+        return originCity;
+    }
 
-	public void setOriginCity(String originCity) {
-		this.originCity = originCity;
-	}
+    public DataFeedFareBasisGroupMapping originCity(String originCity) {
+        this.originCity = originCity;
+        return this;
+    }
 
-	public String getOriginCountry() {
-		return originCountry;
-	}
+    public void setOriginCity(String originCity) {
+        this.originCity = originCity;
+    }
 
-	public void setOriginCountry(String originCountry) {
-		this.originCountry = originCountry;
-	}
+    public String getOriginCountry() {
+        return originCountry;
+    }
 
-	public String getDestinationCity() {
-		return destinationCity;
-	}
+    public DataFeedFareBasisGroupMapping originCountry(String originCountry) {
+        this.originCountry = originCountry;
+        return this;
+    }
 
-	public void setDestinationCity(String destinationCity) {
-		this.destinationCity = destinationCity;
-	}
+    public void setOriginCountry(String originCountry) {
+        this.originCountry = originCountry;
+    }
 
-	public String getDestinationCountry() {
-		return destinationCountry;
-	}
+    public String getDestinationCity() {
+        return destinationCity;
+    }
 
-	public void setDestinationCountry(String destinationCountry) {
-		this.destinationCountry = destinationCountry;
-	}
+    public DataFeedFareBasisGroupMapping destinationCity(String destinationCity) {
+        this.destinationCity = destinationCity;
+        return this;
+    }
 
-	public String getRbd() {
-		return rbd;
-	}
+    public void setDestinationCity(String destinationCity) {
+        this.destinationCity = destinationCity;
+    }
 
-	public void setRbd(String rbd) {
-		this.rbd = rbd;
-	}
+    public String getDestinationCountry() {
+        return destinationCountry;
+    }
 
-	public String getFareBasisCode() {
-		return fareBasisCode;
-	}
+    public DataFeedFareBasisGroupMapping destinationCountry(String destinationCountry) {
+        this.destinationCountry = destinationCountry;
+        return this;
+    }
 
-	public void setFareBasisCode(String fareBasisCode) {
-		this.fareBasisCode = fareBasisCode;
-	}
+    public void setDestinationCountry(String destinationCountry) {
+        this.destinationCountry = destinationCountry;
+    }
 
-	public String getFareBasisGroup() {
-		return fareBasisGroup;
-	}
+    public String getRbd() {
+        return rbd;
+    }
 
-	public void setFareBasisGroup(String fareBasisGroup) {
-		this.fareBasisGroup = fareBasisGroup;
-	}
+    public DataFeedFareBasisGroupMapping rbd(String rbd) {
+        this.rbd = rbd;
+        return this;
+    }
 
-	public String getPriority() {
-		return priority;
-	}
+    public void setRbd(String rbd) {
+        this.rbd = rbd;
+    }
 
-	public void setPriority(String priority) {
-		this.priority = priority;
-	}
+    public String getFareBasisCode() {
+        return fareBasisCode;
+    }
 
-	@Override
+    public DataFeedFareBasisGroupMapping fareBasisCode(String fareBasisCode) {
+        this.fareBasisCode = fareBasisCode;
+        return this;
+    }
+
+    public void setFareBasisCode(String fareBasisCode) {
+        this.fareBasisCode = fareBasisCode;
+    }
+
+    public String getFareBasisGroup() {
+        return fareBasisGroup;
+    }
+
+    public DataFeedFareBasisGroupMapping fareBasisGroup(String fareBasisGroup) {
+        this.fareBasisGroup = fareBasisGroup;
+        return this;
+    }
+
+    public void setFareBasisGroup(String fareBasisGroup) {
+        this.fareBasisGroup = fareBasisGroup;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public DataFeedFareBasisGroupMapping priority(String priority) {
+        this.priority = priority;
+        return this;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -124,11 +164,11 @@ public class DataFeedFareBasisGroupMapping implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        DataFeedFareBasisGroupMapping rMDataFeeds = (DataFeedFareBasisGroupMapping) o;
-        if (rMDataFeeds.getId() == null || getId() == null) {
+        DataFeedFareBasisGroupMapping dataFeedFareBasisGroupMapping = (DataFeedFareBasisGroupMapping) o;
+        if (dataFeedFareBasisGroupMapping.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), rMDataFeeds.getId());
+        return Objects.equals(getId(), dataFeedFareBasisGroupMapping.getId());
     }
 
     @Override
@@ -137,11 +177,17 @@ public class DataFeedFareBasisGroupMapping implements Serializable {
     }
 
     @Override
-	public String toString() {
-		return "DataFeedFareBasisGroupMapping [id=" + id + ", originCity=" + originCity + ", originCountry="
-				+ originCountry + ", destinationCity=" + destinationCity + ", destinationCountry=" + destinationCountry
-				+ ", rbd=" + rbd + ", fareBasisCode=" + fareBasisCode + ", fareBasisGroup=" + fareBasisGroup
-				+ ", priority=" + priority + "]";
-	}
-	
+    public String toString() {
+        return "DataFeedFareBasisGroupMapping{" +
+            "id=" + getId() +
+            ", originCity='" + getOriginCity() + "'" +
+            ", originCountry='" + getOriginCountry() + "'" +
+            ", destinationCity='" + getDestinationCity() + "'" +
+            ", destinationCountry='" + getDestinationCountry() + "'" +
+            ", rbd='" + getRbd() + "'" +
+            ", fareBasisCode='" + getFareBasisCode() + "'" +
+            ", fareBasisGroup='" + getFareBasisGroup() + "'" +
+            ", priority='" + getPriority() + "'" +
+            "}";
+    }
 }

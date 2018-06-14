@@ -52,7 +52,7 @@
 								</div>
 							</div>
 						</div>
-
+						
 						<div class="pull-left col-md-3 no-lpad">
 							<div class="form-group">
 								<div class="custom-label semibold">Travel Date</div>
@@ -142,9 +142,7 @@
 										<button type="reset" ng-click="vm.reset()"
 											class="btn btn-default small pull-right">Reset</button>
 										<button type="button" class="btn btn-default small pull-right"
-											ng-click="vm.generateGraph(vm.compMonitoring)"
-											ng-disabled="vm.compMonitoring.length == 0 || vm.compMonitoring.length == null">Generate
-											Chart</button>
+											ng-click="vm.getChartData()" ng-disabled="vm.compMonitoring.length == 0 || vm.compMonitoring.length == null">Generate Graph</button>
 										<button type="button" class="btn btn-default small pull-right"
 											ng-click="vm.loadAll()">Query</button>
 									</div>
@@ -205,9 +203,8 @@
 								<td><span ng-if="afdQuery.saleEndDate != 'indef'">{{afdQuery.saleEndDate
 										| date:'ddMMMyyyy'}}</span></td>
 								<td>{{afdQuery.cabin}}</td>
-
-								<td><span ng-if="afdQuery.owrt =
-								= '1'">OW</span><span
+								<td>{{afdQuery.bookingClass}}</td>
+								<td><span ng-if="afdQuery.owrt == '1'">OW</span><span
 									ng-if="afdQuery.owrt == '2'">RT</span><span
 									ng-if="afdQuery.owrt == '3'">OO</span></td>
 								<td>{{afdQuery.ruleNo}}</td>
@@ -246,17 +243,19 @@
 		<!--    		</div> -->
 
 		<div class="text-center" ng-if="vm.compMonitoring">
-		<label> total items : {{vm.queryCount}}</label>
-		<br />
-		<br />
+			<jhi-item-count page="vm.page" total="vm.queryCount"
+				items-per-page="vm.itemsPerPage"></jhi-item-count>
+			<uib-pagination class="pagination-sm" total-items="vm.totalItems"
+				items-per-page="vm.itemsPerPage" ng-model="vm.page"
+				ng-change="vm.loadAll()"></uib-pagination>
+			<br/>
+		<br/>
 		
 		<div id="chartOptions" class="form-inline" hidden="hidden">
            
-           <div class="form-group"
-					style="margin-left:10px; margin-bottom:10px; !important">
+           <div class="form-group" style="margin-left:10px; margin-bottom:10px; !important">
             <label for="barThickness">Bar Thickness : </label>
-            <select class="form-control" id="barThickness"
-						style="width:100px;">
+            <select class="form-control" id="barThickness" style="width:100px;">
               <option value="0.01">1</option>
               <option value="0.02">2</option>
               <option value="0.03">3</option>
@@ -270,11 +269,9 @@
             </select>
           </div> 
 
-          <div class="form-group"
-					style="margin-left:10px; margin-bottom:10px; !important">
+          <div class="form-group" style="margin-left:10px; margin-bottom:10px; !important">
             <label for="barOpacity">Bar Opacity : </label>
-            <select class="form-control" id="barOpacity"
-						style="width:100px;">
+            <select class="form-control" id="barOpacity" style="width:100px;">
               <option value="0.06">1</option>
               <option value="0.07">2</option>
               <option value="0.08">3</option>
@@ -288,12 +285,13 @@
             </select>
           </div> 
           
-           <div class="form-group"
-					style="margin-left:10px; margin-bottom:10px; !important">
-         	 <button type="button" class="btn btn-default small pull-right"
-						ng-click="vm.generateGraph(vm.compMonitoring)">Re-Generate</button>
-											</div>
+          <div class="form-group" style="margin-left:10px; margin-bottom:10px; !important">
+          
+            <button type="button" class="btn btn-default small" ng-click="vm.generateGraph(vm.compMonitoring)">Re-Generate</button>
+            </div>
         </div>
+      
+										
 <!-- 			<jhi-item-count page="vm.page" total="vm.queryCount" -->
 <!-- 				items-per-page="vm.itemsPerPage"></jhi-item-count> -->
 <!-- 			<uib-pagination class="pagination-sm" total-items="vm.totalItems" -->
@@ -301,7 +299,6 @@
 <!-- 				ng-change="vm.loadAll()"></uib-pagination> -->
 		</div>
 		
-		<div id="container" class="col-md-12 no-pad" style="height:600px;"
-			hidden="hidden"></div>
+		<div id="container" class="col-md-12 no-pad" style="height:600px;" hidden="hidden"></div>
 	</div>
 </div>

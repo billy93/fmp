@@ -1,0 +1,61 @@
+<div>
+	<h2>City Codes to Airport Codes</h2>
+	<jhi-alert></jhi-alert>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-xs-4 no-padding-left">
+				<button class="btn btn-primary"
+					ui-sref="city-codes-to-airport-codes.new">
+					<span class="glyphicon glyphicon-plus"></span> <span> Create
+						new City Codes to Airport Codes </span>
+				</button>
+			</div>
+		</div>
+	</div>
+	<br />
+	<div class="table-responsive">
+		<table class="jh-table table table-striped">
+			<thead>
+				<tr>
+					<th><span>ID</span></th>
+					<th><span>City Code</span></th>
+					<th><span>Airport Code</span></th>
+					<th><span>Country</span></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr
+					ng-repeat="airportMapingDataFeeds in vm.airportMapingDataFeeds track by airportMapingDataFeeds.id">
+					<td><a
+						ui-sref="city-codes-to-airport-codes-detail({id:airportMapingDataFeeds.id})">{{airportMapingDataFeeds.id}}</a></td>
+					<td>{{airportMapingDataFeeds.cityCode}}</td>
+					<td>{{airportMapingDataFeeds.airportCode}}</td>
+					<td>{{airportMapingDataFeeds.countryCode}}</td>
+					<td class="text-right">
+						<div class="btn-group flex-btn-group-container">
+							<button type="submit"
+								ui-sref="city-codes-to-airport-codes-detail({id:airportMapingDataFeeds.id})"
+								class="btn btn-info btn-sm">
+								<span class="glyphicon glyphicon-eye-open"></span> <span
+									class="hidden-sm-down"></span>
+							</button>
+							<button type="submit"
+								ui-sref="city-codes-to-airport-codes.edit({id:airportMapingDataFeeds.id})"
+								class="btn btn-primary btn-sm">
+								<span class="glyphicon glyphicon-pencil"></span> <span
+									class="hidden-sm-down"></span>
+							</button>
+							<button type="submit"
+								ui-sref="city-codes-to-airport-codes.delete({id:airportMapingDataFeeds.id})"
+								class="btn btn-danger btn-sm">
+								<span class="glyphicon glyphicon-remove-circle"></span> <span
+									class="hidden-sm-down"></span>
+							</button>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

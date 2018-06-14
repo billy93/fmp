@@ -29,7 +29,7 @@
                     squash: true
                 },
                 sort: {
-                    value: 'last_modified_date,desc',
+                    value: 'queued_date,desc',
                     squash: true
                 },
                 size: null,
