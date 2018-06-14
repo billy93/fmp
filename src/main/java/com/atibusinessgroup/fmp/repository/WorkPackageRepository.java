@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import com.atibusinessgroup.fmp.domain.WorkPackage;
 import com.atibusinessgroup.fmp.domain.enumeration.Status;
-import com.atibusinessgroup.fmp.web.rest.WorkPackageResource.WorkPackageFilter;
 
 /**
  * Spring Data MongoDB repository for the WorkPackage entity.

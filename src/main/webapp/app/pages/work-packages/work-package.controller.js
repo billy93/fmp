@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('WorkPackageController', WorkPackageController);
 
-    WorkPackageController.$inject = ['Principal', '$uibModal', '$state', '$stateParams', 'WorkPackage', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', 'FileSaver'];
+    WorkPackageController.$inject = ['Principal', '$uibModal', '$state', '$stateParams', 'WorkPackage', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', 'FileSaver', 'DateUtils'];
 
-    function WorkPackageController(Principal, $uibModal, $state, $stateParams, WorkPackage, ParseLinks, AlertService, paginationConstants, pagingParams, FileSaver) {
+    function WorkPackageController(Principal, $uibModal, $state, $stateParams, WorkPackage, ParseLinks, AlertService, paginationConstants, pagingParams, FileSaver, DateUtils) {
         var vm = this;
         vm.reviewLevel = true;
         vm.woStatus = true;
@@ -24,29 +24,7 @@
         vm.reviewLevelLSO = null;
         vm.reviewLevelDISTRIBUTION = null;
         vm.reviewLevelROUTEMANAGEMENT = null;
-
-        Principal.identity().then(function(account) {
-//            vm.loginInfo = copyAccount(account);
-        	vm.users = account;
-        	console.log(vm.users);
-
-            for(var i=0; i<=vm.users.reviewLevels.length; i++){
-                //console.log(vm.users.reviewLevels[i]);
-                if(vm.users.reviewLevels[i] == "HO"){
-                    vm.workPackageFilter.reviewLevel.ho = true;
-                    vm.reviewLevelHO = vm.users.reviewLevels[i];
-                } else if(vm.users.reviewLevels[i] == "LSO"){
-                    vm.workPackageFilter.reviewLevel.lso = true;
-                    vm.reviewLevelLSO = vm.users.reviewLevels[i];
-                } else if(vm.users.reviewLevels[i] == "DISTRIBUTION"){
-                    vm.workPackageFilter.reviewLevel.distribution = true;
-                    vm.reviewLevelDISTRIBUTION = vm.users.reviewLevels[i];
-                } else if(vm.users.reviewLevels[i] == "ROUTE MANAGEMENT") {
-                    vm.workPackageFilter.reviewLevel.routeManagement = true;
-                    vm.reviewLevelROUTEMANAGEMENT = vm.users.reviewLevels[i];
-                }
-            }
-        });
+        vm.workPackageFilter =null;
 
         if($stateParams.size != null || $stateParams.size != undefined){
         	vm.itemsPerPage = $stateParams.size;
@@ -55,45 +33,51 @@
         	vm.itemsPerPage = "10";
         }
         vm.loadAll = loadAll;
-
-        if($stateParams.workPackageFilter != null){
-        	vm.workPackageFilter = $stateParams.workPackageFilter;
-        }
-        else{
-	        vm.workPackageFilter = {
-	    		reviewLevel:{
-	    			ho:true,
-	    			lso:true,
-	    			distribution:true,
-	    			routeManagement:true
-	    		},
-	    		distributionType:{
-	    			atpco:true,
-	    			market:true
-	    		},
-	    		status:{
-	    			newStatus:true,
-	    			pending:true,
-	    			reviewing:true,
-	    			readyToRelease:true,
-	    			distributed:true,
-	    			withdrawn:true,
-	    			discontinue:true,
-	    			referred:true,
-	    			replace:false,
-	    			reuse:false
-	    		},
-	    		type:{
-	    			regular:true,
-	    			discount:true,
-	    			waiver:true
-	    		},
-	        };
-        }
-        vm.loadAll();
-
+   
+        Principal.identity().then(function(account) {
+        	   vm.users = account;
+               if($stateParams.workPackageFilter != null){
+            	   for(var i=0; i<=vm.users.reviewLevels.length; i++){
+  		             //console.log(vm.users.reviewLevels[i]);
+  		             if(vm.users.reviewLevels[i] == "HO"){
+  		                 vm.reviewLevelHO = vm.users.reviewLevels[i];
+  		             } else if(vm.users.reviewLevels[i] == "LSO"){
+  		                 vm.reviewLevelLSO = vm.users.reviewLevels[i];
+  		             } else if(vm.users.reviewLevels[i] == "DISTRIBUTION"){
+  		                 vm.reviewLevelDISTRIBUTION = vm.users.reviewLevels[i];
+  		             } else if(vm.users.reviewLevels[i] == "ROUTE_MANAGEMENT") {
+  		                 vm.reviewLevelROUTEMANAGEMENT = vm.users.reviewLevels[i];
+  		             }
+  		           }
+            	   vm.workPackageFilter = $stateParams.workPackageFilter;
+            	   vm.loadAll();
+               }
+               else {
+            	   WorkPackage.workPackagefilter({}, function onSuccess (response) {
+            		   vm.workPackageFilter = response;
+            		   for(var i=0; i<=vm.users.reviewLevels.length; i++){
+      		             //console.log(vm.users.reviewLevels[i]);
+      		             if(vm.users.reviewLevels[i] == "HO"){
+      		                 //vm.workPackageFilter.reviewLevel.ho = true;
+      		                 vm.reviewLevelHO = vm.users.reviewLevels[i];
+      		             } else if(vm.users.reviewLevels[i] == "LSO"){
+      		                 //vm.workPackageFilter.reviewLevel.lso = true;
+      		                 vm.reviewLevelLSO = vm.users.reviewLevels[i];
+      		             } else if(vm.users.reviewLevels[i] == "DISTRIBUTION"){
+      		                 //vm.workPackageFilter.reviewLevel.distribution = true;
+      		                 vm.reviewLevelDISTRIBUTION = vm.users.reviewLevels[i];
+      		             } else if(vm.users.reviewLevels[i] == "ROUTE_MANAGEMENT") {
+      		                 //vm.workPackageFilter.reviewLevel.routeManagement = true;
+      		                 vm.reviewLevelROUTEMANAGEMENT = vm.users.reviewLevels[i];
+      		             }
+      		          }
+            		   vm.loadAll();
+            	   }, function onError(error){});	   	   	        
+               }
+               
+        });
+        
         function loadAll () {
-        	console.log("LOAD ALL");
             WorkPackage.query({
             	"reviewLevel.ho": vm.workPackageFilter.reviewLevel.ho,
             	"reviewLevel.lso": vm.workPackageFilter.reviewLevel.lso,
@@ -105,6 +89,7 @@
             	"status.readyToRelease": vm.workPackageFilter.status.readyToRelease,
             	"status.distributed": vm.workPackageFilter.status.distributed,
             	"status.withdrawn": vm.workPackageFilter.status.withdrawn,
+            	"status.discontinued": vm.workPackageFilter.status.discontinued,
             	"status.replace": vm.workPackageFilter.status.replace,
             	"status.reuse": vm.workPackageFilter.status.reuse,
             	"status.referred": vm.workPackageFilter.status.referred,
@@ -116,6 +101,7 @@
             	"type.waiver":vm.workPackageFilter.type.waiver,
 
             	"approvalReference": vm.workPackageFilter.approvalReference,
+            	"createdTime": vm.workPackageFilter.createdTime,
                 page: pagingParams.page - 1,
                 size: vm.itemsPerPage,
                 sort: sort()
@@ -128,11 +114,12 @@
                 return result;
             }
             function onSuccess(data, headers) {
-            	    vm.links = ParseLinks.parse(headers('link'));
+            	vm.links = ParseLinks.parse(headers('link'));
                 vm.totalItems = headers('X-Total-Count');
                 vm.queryCount = vm.totalItems;
                 vm.workPackages = data;
                 vm.page = pagingParams.page;
+                vm.timezone = headers('timezone');
             }
             function onError(error) {
                 AlertService.error(error.data.message);
@@ -158,9 +145,9 @@
     		vm.workPackageActionButton[idx] = !vm.workPackageActionButton[idx];
         }
 
-        vm.reuse = function(index){
-        	vm.workPackages[index].reuseReplaceConfig = {};
-        	if(vm.workPackages[index].status == 'NEW'){
+        vm.reuse = function(){
+        	vm.selectedRow.reuseReplaceConfig = {};
+        	if(vm.selectedRow.status == 'NEW'){
         		$uibModal.open({
                     templateUrl: 'app/pages/work-packages/work-package-reuse-replace-confirm-dialog.html',
                     controller: 'WorkPackageReuseReplaceConfirmDialogController',
@@ -170,7 +157,7 @@
                     windowClass: 'full-page-modal',
                     resolve: {
                     	workPackage: function(){
-                    		return vm.workPackages[index];
+                    		return vm.selectedRow;
                     	},
                     	 businessAreas: ['User', function(User) {
                              return User.getBusinessArea().$promise;
@@ -190,7 +177,7 @@
     			});
         	}
         	else{
-        		WorkPackage.reuse(vm.workPackages[index], onReuseSuccess, onReuseFailed);
+        		WorkPackage.reuse(vm.selectedRow, onReuseSuccess, onReuseFailed);
 
 				function onReuseSuccess(result){
 	        		alert('Reuse Success');
@@ -203,9 +190,9 @@
         	}
         }
 
-        vm.replace = function(index){
-        	vm.workPackages[index].reuseReplaceConfig = {};
-        	if(vm.workPackages[index].status == 'NEW'){
+        vm.replace = function(){
+        	vm.selectedRow.reuseReplaceConfig = {};
+        	if(vm.selectedRow.status == 'NEW'){
         		$uibModal.open({
                     templateUrl: 'app/pages/work-packages/work-package-reuse-replace-confirm-dialog.html',
                     controller: 'WorkPackageReuseReplaceConfirmDialogController',
@@ -215,13 +202,13 @@
                     windowClass: 'full-page-modal',
                     resolve: {
                     	workPackage: function(){
-                    		return vm.workPackages[index];
+                    		return vm.selectedRow;
                     	}
                     }
     			}).result.then(function(option) {
-    				vm.workPackages[index].reuseReplaceConfig.attachment = option.attachment;
+    				vm.selectedRow.reuseReplaceConfig.attachment = option.attachment;
 
-    				WorkPackage.replace(vm.workPackages[index], onReplaceSuccess, onReplceFailed);
+    				WorkPackage.replace(vm.selectedRow, onReplaceSuccess, onReplceFailed);
 
     	        	function onReplaceSuccess(result){
     	        		alert('Replace Success');
@@ -235,7 +222,7 @@
     			});
         	}
         	else{
-	        	WorkPackage.replace(vm.workPackages[index], onReplaceSuccess, onReplceFailed);
+	        	WorkPackage.replace(vm.selectedRow, onReplaceSuccess, onReplceFailed);
 
 	        	function onReplaceSuccess(result){
 	        		alert('Replace Success');
@@ -248,8 +235,8 @@
 	        	}
         	}
         }
-        vm.withdraw = function(index){
-        	WorkPackage.withdraw(vm.workPackages[index], onWithdrawSuccess, onWithdrawFailed);
+        vm.withdraw = function(){
+        	WorkPackage.withdraw(vm.selectedRow, onWithdrawSuccess, onWithdrawFailed);
 
         	function onWithdrawSuccess(result){
         		alert('Withdraw Success '+result.id);
@@ -262,8 +249,8 @@
         	}
         }
 
-        vm.showHistory = function(index){
-    		WorkPackage.history({id:vm.workPackages[index].id}, onSuccess, onError);
+        vm.showHistory = function(){
+    		WorkPackage.history({id:vm.selectedRow.id}, onSuccess, onError);
 
 			function onSuccess(history){
 				$uibModal.open({
@@ -289,13 +276,12 @@
         }
 
         vm.refresh = function(){
-        	loadAll();
-        	console.log(vm.workPackageFilter);
+        	vm.loadAll();
         }
 
         vm.unlock = function(wp){
-        	 vm.workPackages[wp].locked = false;
-	      	  WorkPackage.unlock(vm.workPackages[wp], onUnlockedSuccess, onUnlockedFailure);
+        	 vm.selectedRow.locked = false;
+	      	  WorkPackage.unlock(vm.selectedRow, onUnlockedSuccess, onUnlockedFailure);
 	      	  function onUnlockedSuccess (result) {
 	      		  alert('Work Package Successful Unlocked');
 	      	  }
@@ -333,6 +319,14 @@
 
   		  return blob;
         }
+
+        vm.discontinue = function(){
+//        	console.log(vm.selectedRow);
+//        	alert('Discontinue');
+        	WorkPackage.discontinue(vm.selectedRow, function onSuccess(){
+        		alert("Work Package successfully discontinued");
+        	}, function onError(){});
+        }
         
         vm.printExport = function(){
         	var exportConfig = {
@@ -342,7 +336,7 @@
         		columnHeaders:true,
         		onlySelectedRows:true
         	};
-        	
+
         	console.log(exportConfig);
         	WorkPackage.exportQueue(exportConfig, function onExportSuccess(result){
 //        		alert('Export Success');
@@ -351,10 +345,10 @@
        			var blob = b64toBlob(result.file, fileType);
        			FileSaver.saveAs(blob, templateFilename);
         	}, function onExportFailed(){
-        		
+
         	});
-        	
-        	
+
+
 //        	$uibModal.open({
 //                templateUrl: 'app/pages/work-packages/work-package-reuse-replace-confirm-dialog.html',
 //                controller: 'WorkPackageReuseReplaceConfirmDialogController',
@@ -372,15 +366,15 @@
 //                }
 //			}).result.then(function(workPackage) {
 //				WorkPackage.reuse(workPackage, onReuseSuccess, onReuseFailed);
-//	        	
+//
 //				function onReuseSuccess(result){
 //	        		alert('Reuse Success');
 //	        		$state.go('work-package-detail', {id:result.id});
 //	        	}
-//	        	
+//
 //	        	function onReuseFailed(error){
 //	        		alert("An error occured, please try again");
-//	        	}				
+//	        	}
 //			});
 
         }

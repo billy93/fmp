@@ -67,11 +67,11 @@ body {
 }
 
 .additional-info-wrapper .additional-info.action .action-wrapper {
-	position: absolute;
+    position: absolute;
     top: 100%;
-    left: 0;
-    width: 100%;
-	border: 1px solid #ababab;
+    left: -1px;
+    width: calc(100% + 2px);
+    border: 1px solid #000000;
     border-top: none;
 }
 
@@ -106,7 +106,7 @@ body {
 }
 
 .additional-info-wrapper .additional-info.blue {
-	background: #6ec9ff;
+	background: #b4e3ff;
 	color: #000;
 	border-color: #000;
 	cursor: pointer;
@@ -135,7 +135,7 @@ th .glyphicon {
 	background: #d0d0d0;
 }
 
-.table.category td pre {
+pre.transparent {
     text-align: left;
     background: transparent;
     border: none;
@@ -145,6 +145,14 @@ th .glyphicon {
 .dropdown .dropdown-menu li a[disabled] {
 	opacity: 0.6;
     cursor: not-allowed;
+}
+
+label i {
+	font-size: 13px !important;
+}
+
+.category-header {
+	
 }
 
 /* ==========================================================================

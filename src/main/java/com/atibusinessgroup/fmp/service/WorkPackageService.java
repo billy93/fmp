@@ -1,5 +1,7 @@
 package com.atibusinessgroup.fmp.service;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -9,9 +11,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.atibusinessgroup.fmp.domain.WorkPackage;
+import com.atibusinessgroup.fmp.domain.WorkPackage.WorkPackageFareSheet;
+import com.atibusinessgroup.fmp.domain.WorkPackageFare;
+import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
 import com.atibusinessgroup.fmp.domain.enumeration.Status;
 import com.atibusinessgroup.fmp.repository.WorkPackageRepository;
-import com.atibusinessgroup.fmp.web.rest.WorkPackageResource.WorkPackageFilter;
 
 
 /**
@@ -36,6 +40,83 @@ public class WorkPackageService {
      */
     public WorkPackage save(WorkPackage workPackage) {
         log.debug("Request to save WorkPackage : {}", workPackage);
+        
+        for(WorkPackageFareSheet sheet : workPackage.getFareSheet()) {
+        	List<WorkPackageFare> fares = sheet.getFares();
+        	for(WorkPackageFare fare : fares) {
+        		if(fare.getTravelStart() != null)
+        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getTravelEnd() != null)
+        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getSaleStart() != null)	            		
+        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getSaleEnd() != null)
+            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getTravelComplete() != null)
+	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
+        	}
+        }
+        for(WorkPackageFareSheet sheet : workPackage.getAddonFareSheet()) {
+        	List<WorkPackageFare> fares = sheet.getFares();
+        	for(WorkPackageFare fare : fares) {
+        		if(fare.getTravelStart() != null)
+        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getTravelEnd() != null)
+        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getSaleStart() != null)	            		
+        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getSaleEnd() != null)
+            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getTravelComplete() != null)
+	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
+        	}
+        }
+        for(WorkPackageFareSheet sheet : workPackage.getMarketFareSheet()) {
+        	List<WorkPackageFare> fares = sheet.getFares();
+        	for(WorkPackageFare fare : fares) {
+        		if(fare.getTravelStart() != null)
+        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getTravelEnd() != null)
+        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getSaleStart() != null)	            		
+        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getSaleEnd() != null)
+            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getTravelComplete() != null)
+	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
+        	}
+        }
+        for(WorkPackageFareSheet sheet : workPackage.getDiscountFareSheet()) {
+        	List<WorkPackageFare> fares = sheet.getFares();
+        	for(WorkPackageFare fare : fares) {
+        		if(fare.getTravelStart() != null)
+        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getTravelEnd() != null)
+        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getSaleStart() != null)	            		
+        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getSaleEnd() != null)
+            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getTravelComplete() != null)
+	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
+        	}
+        }
+        for(WorkPackageFareSheet sheet : workPackage.getWaiverFareSheet()) {
+        	List<WorkPackageFare> fares = sheet.getFares();
+        	for(WorkPackageFare fare : fares) {
+        		if(fare.getTravelStart() != null)
+        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getTravelEnd() != null)
+        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getSaleStart() != null)	            		
+        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getSaleEnd() != null)
+            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getTravelComplete() != null)
+	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
+        	}
+        }
+        
         return workPackageRepository.save(workPackage);
     }
 
@@ -89,7 +170,6 @@ public class WorkPackageService {
 	}
 
 	public List<WorkPackage> findCustom(WorkPackageFilter workPackageFilter) {
-		// TODO Auto-generated method stub
 		log.debug("Export find work package : {}", workPackageFilter);
 		return workPackageRepository.findCustom(workPackageFilter);
 	}

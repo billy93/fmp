@@ -4,6 +4,11 @@
 	}
 </style>
 			<!-- table panel -->
+			<div class="content-title">
+				<h2>Work Order Queue</h2>
+				<p>My Business Area: <span>JKT</span></p>
+				<jhi-alert></jhi-alert>
+			</div>
 			<div class="panel">
 				<div class="panel-body">
 
@@ -17,19 +22,19 @@
 										<div class="custom-label semibold">Review Level</div>
 										<div class="checkbox-wrapper">
 											<label>
-												<input type="checkbox" ng-disabled="vm.workPackageFilter.reviewLevel.lso!=true && vm.reviewLevelLSO==null" ng-model="vm.workPackageFilter.reviewLevel.lso">
+												<input type="checkbox" ng-disabled="vm.reviewLevelLSO==null" ng-model="vm.workPackageFilter.reviewLevel.lso">
 												LSO
 											</label>
 											<label>
-												<input type="checkbox" ng-disabled="vm.workPackageFilter.reviewLevel.ho!=true && vm.reviewLevelHO==null" ng-model="vm.workPackageFilter.reviewLevel.ho">
+												<input type="checkbox" ng-disabled="vm.reviewLevelHO==null" ng-model="vm.workPackageFilter.reviewLevel.ho">
 												HO
 											</label>
 											<label>
-												<input type="checkbox" ng-disabled="vm.workPackageFilter.reviewLevel.distribution!=true && vm.reviewLevelDISTRIBUTION==null" ng-model="vm.workPackageFilter.reviewLevel.distribution">
+												<input type="checkbox" ng-disabled="vm.reviewLevelDISTRIBUTION==null" ng-model="vm.workPackageFilter.reviewLevel.distribution">
 												Distribution
 											</label>
 											<label>
-												<input type="checkbox" ng-disabled="vm.workPackageFilter.reviewLevel.routeManagement!=true && vm.reviewLevelROUTEMANAGEMENT==null" ng-model="vm.workPackageFilter.reviewLevel.routeManagement">
+												<input type="checkbox" ng-disabled="vm.reviewLevelROUTEMANAGEMENT==null" ng-model="vm.workPackageFilter.reviewLevel.routeManagement">
 												Route Management
 											</label>
 										</div>
@@ -76,7 +81,7 @@
 											<div class="pull-left multi-option-checkbox">
 												<div class="checkbox-wrapper">
 													<label>
-														<input type="checkbox" ng-model="vm.workPackageFilter.status.new">
+														<input type="checkbox" ng-model="vm.workPackageFilter.status.newStatus">
 														New
 													</label>
 													<label>
@@ -108,7 +113,7 @@
 														Referred
 													</label>
 													<label>
-														<input type="checkbox" ng-model="vm.workPackageFilter.status.discontinue">
+														<input type="checkbox" ng-model="vm.workPackageFilter.status.discontinued">
 														Discontinued
 													</label>
 												</div>
@@ -139,7 +144,7 @@
 													<div class="custom-label semibold">Created Time</div>
 													<div class="clearfix">
 														<div class="pull-left ph5px">
-															<input type="range" class="custom-range-slider" name="" value="10" min="1" max="24">
+															<input type="range" class="custom-range-slider" name="" value="10" min="1" max="24" ng-model="vm.workPackageFilter.createdTime">
 														</div>
 														<div class="pull-left ph5px">
 															<div class="range-slider-time">1 Month</div>
@@ -171,7 +176,7 @@
 										</label>
 									</div>
 								</div>
-								<div class="pull-right w50">
+								<div>
 									<div class="clearfix">
 										<div class="pull-right datatable-button">
 											<div class="button-group dropdown custom">
@@ -190,7 +195,28 @@
 											</div>
 											<button class="btn btn-default small" ng-click="vm.refresh()">Refresh</button>
 											<button class="btn btn-default small" ng-click="vm.printExport()">Print/Export</button>
-											<button class="btn btn-default small">Discontinue</button>
+											<button class="btn btn-default small fa fa-unlock" ng-click="vm.unlock()" ng-disabled="vm.selectedRow == null || !vm.selectedRow.locked"> Unlock</button>
+											<button class="btn btn-default small fa fa-recycle" ng-click="vm.reuse()" ng-disabled="vm.selectedRow == null"> Reuse</button>
+											<button class="btn btn-default small fa fa-reply" ng-click="vm.replace()" ng-disabled="vm.selectedRow == null && vm.selectedRow.targetDistribution != 'ATPCO'"> Replace</button>
+											<button class="btn btn-default small fa fa-ban" ng-click="vm.withdraw()" ng-disabled="vm.selectedRow == null"> Withdraw</button>
+											<button class="btn btn-default small fa fa-history" ng-click="vm.showHistory()" ng-disabled="vm.selectedRow == null"> Histroy</button>
+											<!-- <div class="btn btn-app" ng-click="vm.unlock($index)" ng-if="workPackage.locked">
+													<i class="fa fa-unlock"></i>Unlock
+												</div>
+												<div class="btn btn-app" ng-click="vm.reuse($index)">
+													<i class="fa fa-recycle"></i>Reuse
+												</div>
+												<div class="btn btn-app" ng-click="vm.replace($index)" ng-show="workPackage.targetDistribution != 'ATPCO'">
+													<i class="fa fa-reply"></i>Replace
+												</div>
+												<div class="btn btn-app" ng-click="vm.withdraw($index)">
+													<i class="fa fa-ban"></i>Withdraw
+												</div>
+												<div class="btn btn-app" ng-click="vm.showHistory($index)">
+													<i class="fa fa-history"></i>History
+												</div> -->
+												
+											<button class="btn btn-default small" ng-click="vm.discontinue()" ng-disabled="vm.selectedRow == null || (vm.selectedRow.targetDistribution != 'MARKET' || vm.selectedRow.status != 'DISTRIBUTED')">Discontinue</button>
 										</div>
 									</div>
 								</div>
@@ -201,31 +227,33 @@
 										<tr role="row" jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
 											<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Action</th>
 											<th class="sorting_asc" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" aria-sort="ascending">No</th>
-											<th jh-sort-by="type" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">WO Type <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="targetDistribution" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Distribution Type <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="reviewLevel" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Review Level <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="status" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Status <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="wpid" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">WO ID <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="name" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">WO Name <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="businessArea" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Business Area <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="reviewLevel" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Review Level <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="approvalReference" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Approval Reference <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="fareType" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Fare Types <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="priority" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Priority <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="reuseFrom" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Reuse from <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="replaceFrom" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Replace from <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="priority" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Priority <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="filingDate" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Filing Date <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="distributionDate" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Distribution Date <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="fareType" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Fare Types <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="targetDistribution" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Distribution Type <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="queuedDate" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Queued Date<span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="createdDate" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Created Date <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="createdBy" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Created By <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="lockedBy" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Locked By <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="lockedSince" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Locked Since <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="type" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">WO Type <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="approvalReference" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Approval Reference <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="lastModifiedDate" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Last Modified Date <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="lastModifiedBy" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Last Modified By <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="groupFare" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Group Fare<span class="glyphicon glyphicon-sort"></span></th>
 										</tr>
 									</thead>
-									<tbody ng-repeat="workPackage in vm.workPackages track by $index" >
-										<tr role="row" class="datatable-row"
+									<tbody>
+										<tr  ng-repeat="workPackage in vm.workPackages track by $index"  
+										    role="row" class="datatable-row"
+											ng-class="{selected: workPackage === vm.selectedRow}"
 											ng-click="vm.rowSelected($index, workPackage)">
 											<td class="text-right" ng-class="{selected: workPackage === vm.selectedRow, locked: workPackage.locked}">
 						                        <div class="btn-group edit-btn entities flex-btn-group-container">
@@ -237,39 +265,11 @@
 						                        </div>
 						                    </td>
 						                    <td><a ui-sref="work-package-detail({id:workPackage.id})">{{$index+1}}</a></td>
-						                    <td>{{workPackage.type}}</td>
-						                    <td>{{workPackage.targetDistribution}}</td>
+						                    <td>{{workPackage.reviewLevel}}</td>
 						                    <td>{{workPackage.status}}</td>
 						                    <td>{{workPackage.wpid}}</td>
 						                    <td>{{workPackage.name}}</td>
 						                    <td>{{workPackage.businessArea}}</td>
-						                    <td>{{workPackage.reviewLevel}}</td>
-						                    <td>
-						                    	<div>
-							                    	<table ng-if="workPackage.specifiedFares" class="sub-table">
-							                    		<thead>
-							                    			<tr><th  colspan="2"><center>Fare</center></th></tr>
-							                    			<tr class="sub-second-th">
-							                    				<th>Sheet</th>
-							                    				<th>Tour Code</th>
-							                    			</tr>
-							                    		</thead>
-							                    		<tbody>
-							                    			<tr ng-repeat="fareSheet in workPackage.fareSheet track by $index">
-							                    				<td>{{$index+1}}</td>
-							                    				<td>
-							                    					{{fareSheet.approvalReference}}
-							                    				</td>
-							                    			</tr>
-							                    		</tbody>
-							                    	</table>
-						                    	</div>
-						                    </td>
-						                    <td>{{workPackage.reuseFrom}}</td>
-						                    <td>{{workPackage.replaceFrom}}</td>
-						                    <td>{{workPackage.priority}}</td>
-						                    <td>{{workPackage.filingDate | date:'ddMMMyyyy'}}</td>
-						                    <td>{{workPackage.distributionDate | date:'ddMMMyyyy'}}</td>
 						                    <td>
 						                    	<div>
 							                    	<table ng-if="workPackage.specifiedFares" class="sub-table">
@@ -345,15 +345,43 @@
 						                    		</tbody>
 						                    	</table>
 						                    </td>
+						                    <td>{{workPackage.priority}}</td>
+						                    <td>{{workPackage.reuseFrom}}</td>
+						                    <td>{{workPackage.replaceFrom}}</td>
+						                    <td>{{workPackage.filingDate | date:'ddMMMyyyy'}}</td>
+						                    <td>{{workPackage.targetDistribution}}</td>
+						                    <td>{{workPackage.queuedDate | date:'medium'}}</td>
 						                    <td>{{workPackage.createdDate | date:'medium'}}</td>
 						                    <td>{{workPackage.createdBy}}</td>
 						                    <td>{{workPackage.lockedBy}}</td>
 						                    <td>{{workPackage.lockedSince | date:'medium'}}</td>
+						                    <td>{{workPackage.type}}</td>
+						                    <td>
+						                    	<div>
+							                    	<table ng-if="workPackage.specifiedFares" class="sub-table">
+							                    		<thead>
+							                    			<tr><th  colspan="2"><center>Fare</center></th></tr>
+							                    			<tr class="sub-second-th">
+							                    				<th>Sheet</th>
+							                    				<th>Tour Code</th>
+							                    			</tr>
+							                    		</thead>
+							                    		<tbody>
+							                    			<tr ng-repeat="fareSheet in workPackage.fareSheet track by $index">
+							                    				<td>{{$index+1}}</td>
+							                    				<td>
+							                    					{{fareSheet.approvalReference}}
+							                    				</td>
+							                    			</tr>
+							                    		</tbody>
+							                    	</table>
+						                    	</div>
+						                    </td>
 						                    <td>{{workPackage.lastModifiedDate | date:'medium'}}</td>
 						                    <td>{{workPackage.lastModifiedBy}}</td>
 						                    <td><input type="checkbox" disabled ng-model="workPackage.marketFareSheet[0].groupFares"/></td>
 										</tr>
-										<tr ng-show="vm.workPackageActionButton[$index]">
+										<!-- <tr ng-show="vm.workPackageActionButton[$index]">
 											<td colspan="18" style="text-align: left !important; padding-left: 40px">
 												<div class="btn btn-app" ng-click="vm.unlock($index)" ng-if="workPackage.locked">
 													<i class="fa fa-unlock"></i>Unlock
@@ -371,7 +399,7 @@
 													<i class="fa fa-history"></i>History
 												</div>
 											</td>
-										</tr>
+										</tr> -->
 									</tbody>
 								</table>
 							</div>

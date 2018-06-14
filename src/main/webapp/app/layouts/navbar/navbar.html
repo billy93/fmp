@@ -8,13 +8,13 @@
 					<i class="fa fa-home"></i>
 				</a>
 			</div>
-	
+
 			<!-- search  -->
 			<div class="search-wrap">
 				<i class="fa fa-search"></i>
 				<input type="text" placeholder="Search" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search'" value="" name="keywords" id="keywords" maxlength="60">
-			</div>	
-	
+			</div>
+
 			<!-- left menu -->
 			<!-- left menu -->
 		<ul>
@@ -33,7 +33,7 @@
 		    </li>
 		    <li class="menu-list has-sub">
 		    	<a>
-		    		<i class="fa fa-list-alt"></i><span>AFD Query</span>
+		    		<i class="fa fa-list-alt"></i><span>Query</span>
 		    	</a>
 		    	<div class="sub-menu">
 		    		<ul>
@@ -54,7 +54,7 @@
 		    		    </li>
 		    		</ul>
 		    	</div>
-		    	<div class="tooltip">AFD Query</div>
+		    	<div class="tooltip">Query</div>
 		    </li>
 		    <li class="menu-list has-sub">
 		    	<a>
@@ -111,9 +111,9 @@
 		    		    <li>
 		    		    	<a ui-sref="passenger" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Passenger </a>
 		    		    </li>
-		    		    <li>
-		    		    	<a ui-sref="review-level" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Review Level </a>
-		    		    </li>
+		    		    <!--<li>-->
+		    		    	<!--<a ui-sref="review-level" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Review Level </a>-->
+		    		    <!--</li>-->
 		    		    <li>
 		    		    	<a ui-sref="state" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> State </a>
 		    		    </li>
@@ -149,10 +149,10 @@
 		    	</div>
 		    	<div class="tooltip">ATPCO Entities</div>
 		    </li>
-		</ul>					
+		</ul>
 		</nav>
 	</div>
-	
+
 	<div class="content-header">
 		<div class="clearfix">
 			<a class="sidebar-toggle pull-left showLeftPush" id="show" data-toggle="push-menu">
@@ -161,7 +161,7 @@
 			    <span class="icon-bar"></span>
 			    <span class="icon-bar"></span>
 			</a>
-			
+
 	      	<div class="pull-right">
 	            <ul class="top-right-nav">
 	                <li>
@@ -219,6 +219,12 @@
                                 <a ui-sref="atpco-master-fare-matrix" ng-click="vm.collapseNavbar()">
                                     <span class="glyphicon glyphicon-asterisk"></span>&nbsp;
                                     <span>Atpco Master Fare Matrix</span>
+                                </a>
+                            </li>
+<li ui-sref-active="active">
+                                <a ui-sref="data-feed-fare-basis-group-mapping" ng-click="vm.collapseNavbar()">
+                                    <span class="glyphicon glyphicon-asterisk"></span>&nbsp;
+                                    <span>Data Feed Fare Basis Group Mapping</span>
                                 </a>
                             </li>
 <!--                         jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->

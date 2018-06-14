@@ -186,8 +186,24 @@
         }
         
         function selectAll() {
-        	for (var i = 0; i < vm.afdQueries.length; i++) {
-        		vm.selectedRows[i] = vm.afdQueries[i];
+        	vm.allSelected = false;
+        	var isEmpty = true;
+        	
+        	for (var i = 0; i < vm.selectedRows.length; i++) {
+    			if (vm.selectedRows[i] != null) {
+    				isEmpty = false;
+    			}
+    		}
+        	
+        	if (isEmpty) {
+        		for (var i = 0; i < vm.afdQueries.length; i++) {
+            		vm.selectedRows[i] = vm.afdQueries[i];
+            	}
+        		vm.allSelected = true;
+        	} else {
+        		for (var i = 0; i < vm.selectedRows.length; i++) {
+        			vm.selectedRows[i] = null;
+        		}
         	}
         }
         
@@ -223,7 +239,6 @@
                 controllerAs: 'vm',
                 backdrop: 'static',
                 size: 'lg',
-                windowClass: 'full',
                 resolve: {
                     entity: category
                 }

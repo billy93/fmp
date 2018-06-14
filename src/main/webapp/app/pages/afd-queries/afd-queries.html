@@ -182,7 +182,7 @@
 											<input type="text" class="form-control" name="woId" id="woId" ng-model="vm.queryParams.woId" ng-disabled="true"/>
 										</div>
 									</div>
-									<div class="col-md-6 no-lpad">
+									<div class="col-md-6 no-pad">
 										<div class="form-group">
 											<div class="custom-label semibold">Tour Code</div>
 											<input type="text" class="form-control" name="tourCode" id="tourCode" ng-model="vm.queryParams.tourCode" ng-disabled="true"/>
@@ -190,7 +190,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="col-md-4 no-lpad">
+							<div class="col-md-4 no-pad">
 								<div class="form-group">
 									<div class="custom-label semibold">Pax Type</div>
 									<select class="form-control" name="paxType" id="paxType" ng-model="vm.queryParams.paxType" ng-disabled="true">
@@ -221,34 +221,32 @@
 								</div>
 							</div>
 							<div class="col-md-12 no-lpad">
-								<div class="clearfix">
-									<div class="pull-left">
-										<div class="form-group">
-											<div class="custom-label semibold">Additional Options</div>
-											<div class="checkbox-wrapper">
-												<label>
-													<input type="checkbox" name="includeConstructed" ng-model="vm.queryParams.includeConstructed" ng-disabled="true"> 
-													Include Constructed
-												</label>
-												<label>
-													<input type="checkbox" name="appendResults" ng-model="vm.queryParams.appendResults" ng-disabled="true"> 
-													Append Results
-												</label>
-												<label>
-													<input type="checkbox" name="biDirectional" ng-model="vm.queryParams.biDirectional" ng-disabled="true"> 
-													Bi-directional
-												</label>
-												<label>
-													<input type="checkbox" name="calculateTfc" ng-model="vm.queryParams.calculateTfc" ng-disabled="true"> 
-													Calculate TFC
-												</label>
-											</div>
-										</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Additional Options</div>
+									<div class="checkbox-wrapper">
+										<label>
+											<input type="checkbox" name="includeConstructed" ng-model="vm.queryParams.includeConstructed" ng-disabled="true"> 
+											Include Constructed
+										</label>
+										<label>
+											<input type="checkbox" name="appendResults" ng-model="vm.queryParams.appendResults" ng-disabled="true"> 
+											Append Results
+										</label>
+										<label>
+											<input type="checkbox" name="biDirectional" ng-model="vm.queryParams.biDirectional" ng-disabled="true"> 
+											Bi-directional
+										</label>
+										<label>
+											<input type="checkbox" name="calculateTfc" ng-model="vm.queryParams.calculateTfc" ng-disabled="true"> 
+											Calculate TFC
+										</label>
 									</div>
-									<div class="pull-right query-button-wrapper">
-										<button type="button" class="btn btn-default small pull-right" ng-click="vm.loadAll()">Query</button>
-										<button type="reset" ng-click="vm.reset()" class="btn btn-default small pull-right">Reset</button>
-									</div>
+								</div>
+							</div>
+							<div class="clearfix">
+								<div class="pull-right pv1">
+									<button type="button" class="btn btn-default small" ng-click="vm.loadAll()">Query</button>
+									<button type="reset" ng-click="vm.reset()" class="btn btn-default small">Reset</button>
 								</div>
 							</div>
 						</div>
@@ -257,7 +255,7 @@
 			</div>
 		</div>
 		
-		<div class="table-wrapper" ng-if="vm.afdQueries">
+		<div class="table-wrapper mb2" ng-if="vm.afdQueries">
 			<div class="datatable-wrapper form-inline">
 				<div class="clearfix">
 					<div class="pull-left w50">
@@ -277,7 +275,7 @@
 							<div class="pull-right datatable-button">
 								<div class="button-group dropdown custom">
 									<button class="btn btn-default small">Action <i class="fa fa-caret-down"></i></button>
-									<ul class="dropdown-menu custom" role="menu">
+									<ul class="dropdown-menu custom right-dropdown" role="menu">
 									    <li>
 									    	<a ng-click="" ng-disabled="true">TFC Override Parameters</a>
 									    </li>
@@ -466,16 +464,23 @@
 		</div>
 		
 		<div class="additional-info-wrapper" ng-if="vm.categoryRules">
-     		<div class="additional-info" ng-click="vm.showCategoryDetail(cat)" ng-class="{'lightyellow': cat.catAttributes.length > 0 && cat.type.includes('F'), 'yellow': cat.catAttributes.length > 0 && cat.type.includes('R'), 'blue': cat.catAttributes.length > 0 && cat.type == 'G'}" ng-repeat="cat in vm.categoryRules track by cat.catNo">
-        		{{cat.catNo}} {{cat.catName}} <span ng-if="cat.catAttributes.length > 0">({{cat.type}})</span>
-      		</div>
-      		<div class="additional-info action dropdown custom" ng-click="vm.actionClicked = !vm.actionClicked">
-      			Action <i class="fa fa-caret-down pull-right"></i>
-      			<div class="action-wrapper" ng-if="vm.actionClicked">
-      				<a ng-click="vm.showLegend()">Show Legend</a>
-      				<a ng-click="vm.viewFullText()">View Full Text</a>
-      			</div>
-      		</div>
+			<div class="clearfix">
+				<div class="pull-left ph5px additional-container" ng-repeat="cat in vm.categoryRules track by cat.catNo">
+					<div class="additional-info" ng-click="vm.showCategoryDetail(cat)" ng-class="{'lightyellow': cat.catAttributes.length > 0 && cat.type.includes('F'), 'yellow': cat.catAttributes.length > 0 && cat.type.includes('R'), 'blue': cat.catAttributes.length > 0 && cat.type == 'G'}">
+	        			{{cat.catNo}} {{cat.catName}} <span ng-if="cat.catAttributes.length > 0">({{cat.type}})</span>
+		      		</div>
+		      		
+				</div>
+				<div class="pull-left ph5px additional-container">
+					<div class="additional-info action dropdown custom" ng-click="vm.actionClicked = !vm.actionClicked">
+		      			Action <i class="fa fa-caret-down pull-right"></i>
+		      			<div class="action-wrapper" ng-if="vm.actionClicked">
+		      				<a ng-click="vm.showLegend()">Show Legend</a>
+		      				<a ng-click="vm.viewFullText()">View Full Text</a>
+		      			</div>
+		      		</div>
+	      		</div>
+			</div>
    		</div>
    		
 		<div class="text-center" ng-if="vm.afdQueries">
