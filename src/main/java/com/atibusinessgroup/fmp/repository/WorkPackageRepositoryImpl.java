@@ -276,7 +276,6 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		//BUSINESS AREA 
 		List<String> businessArea = new ArrayList<>();
 		User u = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
-		log.debug("USER : {}", u);
 		businessArea.addAll(u.getBusinessAreas());
 		if(businessArea.isEmpty()) {
 			businessArea.add(null);
