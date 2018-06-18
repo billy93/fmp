@@ -4222,8 +4222,17 @@
       }
       
       vm.tempFIC = [];
-      vm.selectCommentFillingInstruction = function(data){
-     	vm.tempFIC.push(data);
+      vm.selectCommentFillingInstruction = function(data, index){
+    	  if(vm.tempFIC.indexOf(data) < 0){
+    		  vm.tempFIC.push(data);
+    	  }else{
+    		  for(var x = 0; x<vm.tempFIC.length; x++){
+    			  if(vm.tempFIC.indexOf(data) > -1){
+        			  vm.tempFIC.splice(vm.tempFIC.indexOf(data),1);    				  
+    			  }
+    		  }
+    		  
+    	  }
        }
       
       vm.removeFiling = function(filing){
