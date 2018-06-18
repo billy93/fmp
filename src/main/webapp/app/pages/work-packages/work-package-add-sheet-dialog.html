@@ -14,8 +14,9 @@
 			<div class="box-body">
 				<div class="form-group">
 					<label>Work Sheet Fares Type *</label>
-					<select class="form-control must-fill" name="sheetType" ng-model="vm.option.type"
+					<select class="form-control" name="sheetType" ng-model="vm.option.type"
 					ng-class="{'must-fill':vm.option.type==null || vm.option.type==''}"
+					ng-disabled='vm.sheet != null'
 				                  ng-options="type as type for type in vm.types track by type">
 				          </select>
 				</div>
