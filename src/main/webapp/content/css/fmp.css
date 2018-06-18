@@ -4519,6 +4519,9 @@ label.tree_label:after {
     margin: 0;
     border-radius: 2px; }
 
+.comment-list.FIclicked {
+  background-color: rgba(255, 204, 85, 0.4) !important; }
+
 /* General Demo Style */
 body, html {
   font-size: 100%;
@@ -4634,7 +4637,7 @@ a:hover {
 
 .page-wrapper {
   float: left;
-  padding-top: 70px; }
+  padding-top: 55px; }
   .page-wrapper .page-content {
     margin-left: 100px;
     padding: 0 40px 200px;
