@@ -1547,7 +1547,7 @@
 										<div class="box-body">
 							        		<div class="comment-container">
 							        			<div class="comment-wrapper">
-									    			<div ng-click="vm.selectCommentFillingInstruction(filingInstructionData, $index)" ng-class="{'FIclicked': vm.tempFIC.indexOf(filingInstructionData) > -1}" class="comment-list" ng-repeat="filingInstructionData in vm.viewCommentFillingInstruction.slice().reverse() track by $index">
+									    			<div ng-click="vm.selectCommentFillingInstruction(filingInstructionData)" ng-class="{'FIclicked': vm.tempFIC.indexOf(filingInstructionData) > -1}" class="comment-list" ng-repeat="filingInstructionData in vm.viewCommentFillingInstruction.slice().reverse() track by $index">
 												    	<div class="clearfix">
 												    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
 												    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'short'}}</div>
@@ -2415,7 +2415,7 @@
 									<div class="box-body">
 						        		<div class="comment-container">
 						        			<div class="comment-wrapper">
-								    			<div ng-click="vm.selectCommentFillingInstruction(filingInstructionData)" class="comment-list FIclicked" ng-repeat="filingInstructionData in vm.viewCommentFillingInstruction.slice().reverse() track by $index">
+								    			<div ng-click="vm.selectCommentFillingInstruction(filingInstructionData)" ng-class="{'FIclicked': vm.tempFIC.indexOf(filingInstructionData) > -1}" class="comment-list FIclicked" ng-repeat="filingInstructionData in vm.viewCommentFillingInstruction.slice().reverse() track by $index">
 											    	<div class="clearfix">
 											    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
 											    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'short'}}</div>
@@ -3803,7 +3803,7 @@
 									<div class="box-body">
 						        		<div class="comment-container">
 						        			<div class="comment-wrapper">
-								    			<div ng-click="vm.selectCommentFillingInstruction(filingInstructionData)" class="comment-list FIclicked" ng-repeat="filingInstructionData in vm.viewCommentFillingInstruction.slice().reverse() track by $index">
+								    			<div ng-click="vm.selectCommentFillingInstruction(filingInstructionData)" ng-class="{'FIclicked': vm.tempFIC.indexOf(filingInstructionData) > -1}" class="comment-list FIclicked" ng-repeat="filingInstructionData in vm.viewCommentFillingInstruction.slice().reverse() track by $index">
 											    	<div class="clearfix">
 											    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
 											    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'short'}}</div>
