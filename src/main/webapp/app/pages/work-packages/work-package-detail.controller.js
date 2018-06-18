@@ -5024,7 +5024,6 @@
 					 for(var x=0;x<vm.cities.length;x++){
 			    		  if(vm.cities[x].countryCode.toUpperCase() == fare[field].toUpperCase()){
 			    			  exist = true;
-			    			  console.log("exist: "+exist)
 			    			  break;
 			    		  }
 			    	  }
@@ -5037,8 +5036,6 @@
 			    	  }
 				}else if(type== 'A'){
 					 for(var x=0;x<vm.areas.length;x++){
-						 console.log(vm.areas[x]);
-						 console.log(fare[field]);
 			    		  if(vm.areas[x].code == fare[field]){
 			    			  exist = true;
 			    			  break;

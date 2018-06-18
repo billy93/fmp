@@ -1882,15 +1882,10 @@
 						              <div class="pull-left w50 two-column">
 						                <div class="form-group">
 						                  <label>Fare Type</label>
-						                  <!-- <select class="form-control" name="discountFareType{{$index}}" ng-model="workPackageSheet.discountFareType" 
-						                        ng-class="{'must-fill': !editForm.editFormDiscount.discountFareType{{$index}}.$valid}"
-						                        ng-options="key as value for (key , value) in vm.fareType"
-						                        ng-required="vm.isRequired('discountFareType')"
-						                        ng-disabled="!vm.isEditable('discountFareType')"></select>	 -->
-											<select class="form-control" name="discountFareType{{$index}}" ng-model="workPackageSheet.discountFareType" ng-class="{'must-fill': !editForm.editFormDiscount.discountFareType{{$index}}.$valid}"
+											<select class="form-control" name="discountFareType{{$index}}" ng-model="workPackageSheet.fareType" ng-class="{'must-fill': !editForm.editFormDiscount.discountFareType{{$index}}.$valid}"
 												ng-required="vm.isRequired('discountFareType')" ng-disabled="!vm.isEditable('discountFareType')">
-												<option ng-repeat="fare in vm.atpcoFareTypes track by $index" value="{{fare.typeCode}}">
-													{{fare.typeCode}}  {{fare.definition}}
+												<option ng-repeat="fare in vm.optionFare track by $index" value="{{fare.name}}">
+													{{fare.code}} | {{fare.name}}
 												</option>
 											</select>								      				
 						                </div>
