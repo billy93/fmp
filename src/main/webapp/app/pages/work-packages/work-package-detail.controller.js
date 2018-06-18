@@ -4197,7 +4197,7 @@
       }
       
       vm.tempFIC = [];
-      vm.selectCommentFillingInstruction = function(data, index){
+      vm.selectCommentFillingInstruction = function(data){
     	  if(vm.tempFIC.indexOf(data) < 0){
     		  vm.tempFIC.push(data);
     	  }else{
