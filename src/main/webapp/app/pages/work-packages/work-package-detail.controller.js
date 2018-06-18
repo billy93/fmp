@@ -1436,6 +1436,8 @@
 	        			
 	        			var index = vm.workPackage.fareSheet.indexOf(x);
 	        			vm.workPackage.fareSheet.push(angular.copy(vm.workPackage.fareSheet[x]));
+	        			alert('Sheet Copied');
+
 	        			break;
 	        		}
 	        	}
@@ -1449,6 +1451,8 @@
 	        			
 	        			var index = vm.workPackage.addonFareSheet.indexOf(x);
 	        			vm.workPackage.addonFareSheet.push(angular.copy(vm.workPackage.addonFareSheet[x]));
+	        			alert('Sheet Copied');
+
 	        			break;
 	        		}
 	        	}
@@ -1462,10 +1466,27 @@
 	        			
 	        			var index = vm.workPackage.marketFareSheet.indexOf(x);
 	        			vm.workPackage.marketFareSheet.push(angular.copy(vm.workPackage.marketFareSheet[x]));
+	        			alert('Sheet Copied');
+
 	        			break;
 	        		}
 	        	}
         	}
+        	
+        	if(!findTab){
+	        	for(var x=0;x<vm.currentWaiverTab.length;x++){
+	        		if(vm.currentWaiverTab[x]){
+	        			console.log('Active Waiver Tab '+x);
+	        			findTab = true;
+	        			
+	        			var index = vm.workPackage.waiverFareSheet.indexOf(x);
+	        			vm.workPackage.waiverFareSheet.push(angular.copy(vm.workPackage.marketFareSheet[x]));
+	        			alert('Sheet Copied');
+	        			break;
+	        		}
+	        	}
+        	}
+        	
         	
         	if(!findTab){
         		alert('Sheet cannot be copied');
@@ -1487,6 +1508,10 @@
         	}
         };
         //END SHEET FUNCTION
+        
+        vm.pasteSheet = function(){
+        	alert('Paste Sheet');
+        };
         
         vm.faresActionButton = [];
         vm.addonFaresActionButton = [];
