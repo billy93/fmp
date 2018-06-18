@@ -1547,7 +1547,7 @@
 										<div class="box-body">
 							        		<div class="comment-container">
 							        			<div class="comment-wrapper">
-									    			<div ng-click="vm.selectCommentFillingInstruction(filingInstructionData)" class="comment-list FIclicked" ng-repeat="filingInstructionData in vm.viewCommentFillingInstruction.slice().reverse() track by $index">
+									    			<div ng-click="vm.selectCommentFillingInstruction(filingInstructionData, $index)" ng-class="{'FIclicked': vm.tempFIC.indexOf(filingInstructionData) > -1}" class="comment-list" ng-repeat="filingInstructionData in vm.viewCommentFillingInstruction.slice().reverse() track by $index">
 												    	<div class="clearfix">
 												    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
 												    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'short'}}</div>
@@ -2855,6 +2855,7 @@
 											                    		ng-model="fare.origin"
 											                    		ng-disabled="!vm.isEditable('marketFareOrigin')"
 											                    		style="min-width:120px"
+											                    		uppercase
 											                    		ng-class="{'must-fill': editForm.editFormMarket.marketFareOrigin{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('marketFareOrigin') && fare.action != 'Canceled'"
 															            ng-focus="origin[$parent.$index][$index]=true" ng-blur="origin[$parent.$index][$index]=false; vm.checkCity(fare, 'origin');"/>
@@ -2888,6 +2889,7 @@
 										                    		ng-model="fare.destination"
 										                    		ng-disabled="!vm.isEditable('marketFareDestination')"
 										                    		style="min-width:120px"
+										                    		uppercase
 										                    		ng-class="{'must-fill': editForm.editFormMarket.marketFareDestination{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 														            ng-required="vm.isRequired('marketFareDestination') && fare.action != 'Canceled'"
 														            ng-focus="destination[$parent.$index][$index]=true" ng-blur="destination[$parent.$index][$index]=false; vm.checkCity(fare, 'destination');"/>

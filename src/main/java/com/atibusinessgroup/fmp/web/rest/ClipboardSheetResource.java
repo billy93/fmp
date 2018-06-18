@@ -150,6 +150,20 @@ public class ClipboardSheetResource {
         ClipboardSheet clipboard = clipboardSheetService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(clipboard));
     }
+    
+    /**
+     * GET  /clipboard-sheets/findByCurrentUsername : get the "id" clipboard sheets.
+     *
+     * @param id the id of the clipboard to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the clipboard, or with status 404 (Not Found)
+     */
+    @GetMapping("/clipboard-sheets/findByCurrentUsername")
+    @Timed
+    public ResponseEntity<ClipboardSheet> findClipboardSheetByCurrentUsername() {
+        log.debug("REST request to get ClipboardSheet by current username: {}", SecurityUtils.getCurrentUserLogin().get());
+        ClipboardSheet clipboard = clipboardSheetService.findOneByUsername(SecurityUtils.getCurrentUserLogin().get());
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(clipboard));
+    }
 
     /**
      * DELETE  /clipboards/:id : delete the "id" clipboard.

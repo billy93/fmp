@@ -316,6 +316,24 @@ public class AtpcoDataConverterUtil {
 		
 		return result;
 	}
+
+	public static String convertOwrtToName(String owrt) {
+		String result = "";
+		
+		switch (owrt) {
+		case "1":
+			result = "One Way";
+			break;
+		case "2":
+			result = "Round Trip";
+			break;
+		case "3":
+			result = "One Way Fare That May Not Be Doubled";
+			break;
+		}
+		
+		return result;
+	}
 	
 	public static String convertSeparatedDateIntoTextDate(String day, String month, String year) {
 		String result = "";

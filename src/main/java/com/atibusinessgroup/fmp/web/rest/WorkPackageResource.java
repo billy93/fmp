@@ -220,11 +220,11 @@ public class WorkPackageResource {
         
         WorkPackage result = workPackageService.save(workPackage);
         
-//        WorkPackageHistory history = new WorkPackageHistory();
-//        history.setWorkPackage(new ObjectId(result.getId()));
-//        history.setType("CREATE");
-//        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
-//        workPackageHistoryService.save(history);
+        WorkPackageHistory history = new WorkPackageHistory();
+        history.setWorkPackage(new ObjectId(result.getId()));
+        history.setType("CREATE");
+        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        workPackageHistoryService.save(history);
         
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -252,6 +252,12 @@ public class WorkPackageResource {
         }
         workPackage.setStatus(Status.DISCONTINUED);
         WorkPackage result = workPackageService.save(workPackage);
+        
+        WorkPackageHistory history = new WorkPackageHistory();
+        history.setWorkPackage(new ObjectId(result.getId()));
+        history.setType("DISCONTINUED");
+        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        workPackageHistoryService.save(history);
         
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -316,6 +322,12 @@ public class WorkPackageResource {
         }
         WorkPackage result = workPackageService.save(wp);
         
+        WorkPackageHistory history = new WorkPackageHistory();
+        history.setWorkPackage(new ObjectId(result.getId()));
+        history.setType("REUSE");
+        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        workPackageHistoryService.save(history);
+        
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -374,6 +386,12 @@ public class WorkPackageResource {
         	}
         }
         WorkPackage result = workPackageService.save(wp);
+        
+        WorkPackageHistory history = new WorkPackageHistory();
+        history.setWorkPackage(new ObjectId(result.getId()));
+        history.setType("REPLACE");
+        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        workPackageHistoryService.save(history);
         
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -3701,6 +3719,12 @@ public class WorkPackageResource {
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
         */
+        
+        WorkPackageHistory history = new WorkPackageHistory();
+        history.setWorkPackage(new ObjectId(result.getId()));
+        history.setType("WITHDRAW");
+        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        workPackageHistoryService.save(history);
         
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
