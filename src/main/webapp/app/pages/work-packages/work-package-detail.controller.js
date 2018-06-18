@@ -4187,15 +4187,25 @@
 	  	 	loadCommentFI();
      }
      
-      vm.deleteCommentFillingInstruction = function(index){
-    	 console.log("delete"+$index);
+      vm.deleteCommentFillingInstruction = function(){
+    	 for(var l=0; l<vm.tempFIC.length; l++){
+    		 vm.tempFIC[l].isDeleted = true;
+    	 }
+    	 vm.save();
+    	 vm.tempFIC = [];
+    	 loadCommentFI();
       }
+      
+      vm.tempFIC = [];
+      vm.selectCommentFillingInstruction = function(data){
+     	vm.tempFIC.push(data);
+       }
       
       vm.removeFiling = function(filing){
 	   		var index = vm.workPackage.filingInstructionData.indexOf(filing); 
 	   		console.log(filing.isDeleted);
 	   };
-      
+	         
       vm.addInterOffice = function(){
  	  	 if(vm.ioString != null){
  	    	  if(vm.workPackage.interofficeComment == null){
