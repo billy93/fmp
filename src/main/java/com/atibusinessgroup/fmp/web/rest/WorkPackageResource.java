@@ -2064,6 +2064,7 @@ public class WorkPackageResource {
 		int warningsCount = 0;
 		List<WorkPackage.Validation.Tab> tabs = new ArrayList<WorkPackage.Validation.Tab>();
 		
+				
 		//Validasi Fare
 		for(WorkPackageFareSheet wpfs : workPackage.getFareSheet()) {
 			WorkPackage.Validation.Tab tab1 = new WorkPackage.Validation.Tab();
@@ -2227,7 +2228,7 @@ public class WorkPackageResource {
 						    		errors.add(err1);
 								}
 							}
-						}else if(workPackage.getReviewLevel().contentEquals("Distribution")) {
+						}else if(workPackage.getReviewLevel().toUpperCase().contentEquals("DISTRIBUTION")) {
 							if(fare.getTariffNumber().getTarCd() == null || fare.getTariffNumber().getTarCd().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
@@ -2425,7 +2426,7 @@ public class WorkPackageResource {
 						    		errors.add(err1);
 								}
 							}
-						}else if(workPackage.getReviewLevel().contentEquals("Distribution")) {
+						}else if(workPackage.getReviewLevel().toUpperCase().contentEquals("DISTRIBUTION")) {
 							if(fare.getTariffNumber().getTarNo() == null || fare.getTariffNumber().getTarNo().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
@@ -2793,7 +2794,7 @@ public class WorkPackageResource {
 						    		errors.add(err1);
 								}
 							}
-						}else if(workPackage.getReviewLevel().contentEquals("Distribution")) {
+						}else if(workPackage.getReviewLevel().toUpperCase().contentEquals("DISTRIBUTION")) {
 							if(fare.getTarcd()== null || fare.getTarcd().contentEquals("")) {									
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
