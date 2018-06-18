@@ -5010,31 +5010,32 @@
     	  }
       }
       
-      vm.checkLoc = function(fare, field){
+      vm.checkLoc = function(fare, field, type){
     	  if(fare[field] != null || fare[field] != ''){
 	    	  var exist = false;
-	    	  if(fare.loc1Type == 'C'){
+	    	  if(type== 'C'){
 	    		  for(var x=0;x<vm.cities.length;x++){
 		    		  if(vm.cities[x].cityCode.toUpperCase() == fare[field].toUpperCase()){
 		    			  exist = true;
 		    			  break;
 		    		  }
 		    	  }				
-				}else if(fare.loc1Type == 'N'){
+				}else if(type== 'N'){
 					 for(var x=0;x<vm.cities.length;x++){
 			    		  if(vm.cities[x].countryCode.toUpperCase() == fare[field].toUpperCase()){
 			    			  exist = true;
+			    			  console.log("exist: "+exist)
 			    			  break;
 			    		  }
 			    	  }
-				}else if(fare.loc1Type == 'S'){
+				}else if(type== 'S'){
 					 for(var x=0;x<vm.states.length;x++){
 			    		  if(vm.states[x].code.toUpperCase() == fare[field].toUpperCase()){
 			    			  exist = true;
 			    			  break;
 			    		  }
 			    	  }
-				}else if(fare.loc1Type == 'A'){
+				}else if(type== 'A'){
 					 for(var x=0;x<vm.areas.length;x++){
 						 console.log(vm.areas[x]);
 						 console.log(fare[field]);
@@ -5043,7 +5044,7 @@
 			    			  break;
 			    		  }
 			    	  }
-				}else if(fare.loc1Type == 'G'){
+				}else if(type== 'G'){
 					 for(var x=0;x<vm.cityGroups.length;x++){
 			    		  if(vm.cityGroups[x].code.toUpperCase() == fare[field].toUpperCase()){
 			    			  exist = true;
@@ -5053,15 +5054,15 @@
 				}		    	 
 	    	  
 	    	  if(!exist){
-	    		  if(fare.loc1Type == 'C'){
+	    		  if(type== 'C'){
 	    		  alert("City code '"+fare[field]+"' is invalid. Please select a correct code");
-	    		  }else if(fare.loc1Type == 'N'){
+	    		  }else if(type== 'N'){
 	    		  alert("Country code '"+fare[field]+"' is invalid. Please select a correct code");
-	    		  }else if(fare.loc1Type == 'S'){
+	    		  }else if(type== 'S'){
 	    		  alert("State code '"+fare[field]+"' is invalid. Please select a correct code");
-	    		  }else if(fare.loc1Type == 'A'){
+	    		  }else if(type== 'A'){
 	    		  alert("Area code '"+fare[field]+"' is invalid. Please select a correct code");
-	    		  }else if(fare.loc1Type == 'G'){
+	    		  }else if(type== 'G'){
 	    		  alert("City Group code '"+fare[field]+"' is invalid. Please select a correct code");
 	    		  }
 	    		  fare[field] = null;
