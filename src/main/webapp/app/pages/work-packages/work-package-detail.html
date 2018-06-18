@@ -20,8 +20,7 @@
 							Details 
 						</div>
 						<div class="box-body" 
-						ng-class="{'poiv-none' : (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
-						&& vm.workPackage.status=='DISTRIBUTED') || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') } " >
+						ng-class="{'poiv-none' : (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED') || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') } " >
 							<div class="clearfix">
 								<div class="pull-left w50 two-column">
 									<div class="form-group">
@@ -200,8 +199,7 @@
 								    <li ng-class="{active:vm.currentTabInterofficeComment}"><a ng-click="vm.selectCommentTab('interofficeComment')">Inter Office</a></li>
 								    <li ng-class="{active:vm.currentTabRatesheetComment}"><a ng-click="vm.selectCommentTab('ratesheetComment')">Rate Sheet Comment</a></li>
 								</ul>
-								<div class="tab-content" ng-class="{'poiv-none' : vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
-						&& vm.workPackage.status=='DISTRIBUTED' }">
+								<div class="tab-content">
 									<div ng-class="{active:vm.currentTabComment}" class="tab-pane" id="comment">																		
 										<div class="form-group">
 											<wysiwyg-edit content="vm.commentString" config="vm.editorConfig"></wysiwyg-edit>
@@ -227,7 +225,8 @@
 							        	</div>
 									</div>
 
-									<div ng-class="{active:vm.currentTabInterofficeComment, 'poiv-none' : vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT' }" class="tab-pane" id="inter-office">
+									<div ng-class="{active:vm.currentTabInterofficeComment, 'poiv-none' : (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') 
+											|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO'&& vm.workPackage.status=='DISTRIBUTED') }" class="tab-pane" id="inter-office">
 										<div class="form-group">
 											<wysiwyg-edit content="vm.ioString" config="vm.editorConfig"></wysiwyg-edit>
 										</div> 
@@ -2670,10 +2669,10 @@
 						    <li ng-if="vm.workPackage.attachment" ng-class="{active:vm.currentTabAttachment}"><a ng-click="vm.selectOtherTab('attachment')">Attachment</a></li>
 							<li ng-if="vm.workPackage.filingInstruction" ng-class="{active:vm.currentTabFilingInstruction}"><a ng-click="vm.selectOtherTab('filingInstruction')">Filing Instruction</a></li>					          
 						</ul>
-						<div class="tab-content" ng-class="{'poiv-none' : vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
-						&& vm.workPackage.status=='DISTRIBUTED' }">
+						<div class="tab-content" >
 							<div class="tab-pane" ng-class="{active:vm.currentMarketTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.marketFareSheet track by $index">
-								<div class="pb1 mb1 bbgrey">
+								<div class="pb1 mb1 bbgrey" ng-class="{'poiv-none' : vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
+						&& vm.workPackage.status=='DISTRIBUTED' }">
 									<div class="clearfix">
 										<div class="pull-left w50 two-column">
 											<div class="form-group">
@@ -2700,16 +2699,7 @@
 									<div class="clearfix">
 										<div class="pull-left w50 two-column">
 											<div class="form-group">
-												<label>Fare Type</label>
-												
-												<!-- <select 
-							      				class="form-control" 
-							      				name="marketFareType{{$parent.$index}}{{$index}}"
-							      				ng-model="workPackageSheet.fareType" 
-							      				ng-class="{'must-fill': !editForm.editFormMarket.marketFareType{{$parent.$index}}{{$index}}.$valid}"
-							      				ng-options="key as value for (key , value) in vm.fareType"
-							      				ng-required="vm.isRequired('marketFareType')"
-							      				ng-disabled="!vm.isEditable('marketFareType')"></select> -->	
+												<label>Fare Type</label>												
 							      				<select class="form-control" name="marketFareType{{$parent.$index}}{{$index}}" ng-model="workPackageSheet.fareType" ng-class="{'must-fill': !editForm.editFormMarket.marketFareType{{$parent.$index}}{{$index}}.$valid}"
 												ng-required="vm.isRequired('marketFareType')" ng-disabled="!vm.isEditable('marketFareType')">
 												<option ng-repeat="fare in vm.optionFare track by $index" value="{{fare.name}}">
@@ -2746,7 +2736,8 @@
 								<div class="table-wrapper">
 									<div class="datatable-wrapper form-inline">
 										<div class="clearfix">
-											<div class="pull-left">
+											<div class="pull-left" ng-class="{'poiv-none' : vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
+						&& vm.workPackage.status=='DISTRIBUTED' }">
 												<div class="clearfix">
 													<div class="pull-right datatable-button">
 														<div class="button-group dropdown custom">
@@ -2808,8 +2799,8 @@
 									               		<th>RateSheet Comment</th>	        		
 									                </tr>
 												</thead>
-												<tbody>
-													<tr ng-click="vm.tbodyClick(workPackageSheet)" ng-repeat="fare in workPackageSheet.currentFares track by $index" role="row" class="datatable-row" ng-class="{'poiv-none':workPackageSheet.version != 'current', 'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
+												<tbody ng-class="{'poiv-none' : vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO'&& vm.workPackage.status=='DISTRIBUTED' }">
+													<tr ng-click="vm.tbodyClick(workPackageSheet)" ng-repeat="fare in workPackageSheet.currentFares track by $index" role="row" class="datatable-row" ng-class="{'poiv-none': (workPackageSheet.version != 'current', 'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no']}">{{$index+1}}</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'status', $event)" ng-class="{highlighted:fare.field['status']}">
 															<select class="form-control inside-table" name="marketFareStatus{{$parent.$index}}{{$index}}" ng-model="fare.status" id="field_status" 
@@ -2842,25 +2833,6 @@
 																		<i class="fa fa-folder"></i>
 																	</span>
 																</span>
-															<!-- <ui-select ng-model="fare.origin" theme="select2" class="form-control"
-																name="marketFareOrigin{{$parent.$index}}{{$index}}"
-																ng-required="vm.isRequired('marketFareOrigin') && fare.action != 'Canceled'"  
-																ng-disabled="!vm.isEditable('marketFareOrigin')"
-																
-																ng-class="{'must-fill': editForm.editFormMarket.marketFareOrigin{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-										                    	>
-															    <ui-select-match placeholder="Origin">{{$select.selected.value.cityCode}}</ui-select-match>
-																 <ui-select-choices style="min-width:300px" repeat="value.value.cityCode as (key, value) in vm.cities | filter: { value: { cityCode: $select.search }}">
-															      <div ng-bind-html="value.value.cityCode | highlight: $select.search"></div>
-															      <small>
-															        City Code : {{value.value.cityCode}}
-															        City Name : {{value.value.cityName}}
-															        Country Code : {{value.value.countryCode}}
-															        Country Name : {{value.value.countryName}}
-															        
-															      </small>
-															    </ui-select-choices>
-															  </ui-select> -->
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'destination', $event)" ng-class="{highlighted:fare.field['destination']}">
 															<span class="input-group">
@@ -2876,24 +2848,6 @@
 																	<i class="fa fa-folder"></i>
 																</span>
 															</span>
-															<!-- <ui-select ng-model="fare.destination" theme="select2" class="form-control"
-																name="marketFareDestination{{$parent.$index}}{{$index}}"
-																ng-required="vm.isRequired('marketFareDestination') && fare.action != 'Canceled'"  
-																ng-disabled="!vm.isEditable('marketFareDestination')"
-																
-																ng-class="{'must-fill': editForm.editFormMarket.marketFareDestination{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-											                    	>
-															    <ui-select-match placeholder="Destination">{{$select.selected.value.cityCode}}</ui-select-match>
-																 <ui-select-choices style="min-width:300px" repeat="value.value.cityCode as (key, value) in vm.cities | filter: { value: { cityCode: $select.search }}">
-															      <div ng-bind-html="value.value.cityCode | highlight: $select.search"></div>
-															      <small>
-															        City Code : {{value.value.cityCode}}
-															        City Name : {{value.value.cityName}}
-															        Country Code : {{value.value.countryCode}}
-															        Country Name : {{value.value.countryName}}
-															      </small>
-															    </ui-select-choices>
-															  </ui-select> -->
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'fareBasis', $event)" ng-class="{highlighted:fare.field['fareBasis']}">
 															<input type="text" class="form-control" name="marketFareFarebasis{{$parent.$index}}{{$index}}" id="field_farebasis"
