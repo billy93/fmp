@@ -327,6 +327,9 @@
 						    <li>
 						    	<a ng-click="vm.copySheet()">Copy</a>
 						    </li>
+						    <li>
+						    	<a ng-click="vm.pasteSheet()">Paste</a>
+						    </li>
 						</ul>
 					</div>												
 					<button class="btn btn-default small" ng-click="vm.save(false)">Save</button>
@@ -1533,7 +1536,7 @@
 										</div>
 										<div class="clearfix">
 											<div class="pull-right">
-												<button class="btn btn-default small btn-secondary" ng-click="vm.deleteCommentFillingInstruction($index)">Delete Comment</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.deleteCommentFillingInstruction()">Delete Comment</button>
 												<button class="btn btn-default small btn-secondary" ng-click="vm.collapseCommentFillingInstruction()">Collapse Deleted Comment</button>
 												<button class="btn btn-default small btn-secondary" ng-click="vm.expandCommentFillingInstruction()">Expand Deleted Comment</button>
 												<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()">Add Comment</button>
@@ -1544,7 +1547,7 @@
 										<div class="box-body">
 							        		<div class="comment-container">
 							        			<div class="comment-wrapper">
-									    			<div class="comment-list" ng-repeat="filingInstructionData in vm.viewCommentFillingInstruction.slice().reverse() track by $index">
+									    			<div ng-click="vm.selectCommentFillingInstruction(filingInstructionData)" class="comment-list FIclicked" ng-repeat="filingInstructionData in vm.viewCommentFillingInstruction.slice().reverse() track by $index">
 												    	<div class="clearfix">
 												    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
 												    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'short'}}</div>
@@ -2401,7 +2404,10 @@
 									</div>
 									<div class="clearfix">
 										<div class="pull-right">
-											<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()">Add</button>
+											<button class="btn btn-default small btn-secondary" ng-click="vm.deleteCommentFillingInstruction()">Delete Comment</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.collapseCommentFillingInstruction()">Collapse Deleted Comment</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.expandCommentFillingInstruction()">Expand Deleted Comment</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()">Add Comment</button>
 										</div>
 									</div>		
 								</div>
@@ -2409,15 +2415,14 @@
 									<div class="box-body">
 						        		<div class="comment-container">
 						        			<div class="comment-wrapper">
-								    			<div class="comment-list" ng-repeat="filingInstructionData in vm.workPackage.filingInstructionData.slice().reverse() track by $index">
+								    			<div ng-click="vm.selectCommentFillingInstruction(filingInstructionData)" class="comment-list FIclicked" ng-repeat="filingInstructionData in vm.viewCommentFillingInstruction.slice().reverse() track by $index">
 											    	<div class="clearfix">
 											    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
 											    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'short'}}</div>
 											    	</div>
 											    	<label> 
-											    		<input type="checkbox" id="comment-message" name="comment-message" ng-model="filingInstructionData.isDeleted">
-											    		<span>{{filingInstructionData.isDeleted ? "Deleted" : "Delete"}}</span> 
-														<span ng-show="!filingInstructionData.isDeleted" data-ng-bind-html="trustAsHtml(filingInstructionData.comment)"></span>
+											    		<input type="checkbox" id="comment-message" name="comment-message" ng-model="filingInstructionData.isDeleted" disabled>
+														<span data-ng-bind-html="trustAsHtml(filingInstructionData.comment)"></span>
 													</label>
 												</div>
 								    		</div>
@@ -3781,11 +3786,14 @@
 								<div class="box-body mb1">
 									<div class="form-group">
 										<label>Comment</label>
-										<wysiwyg-edit content="vm.commentStringFillingInstruction" config="vm.editorConfig"></wysiwyg-edit>
+									`	<wysiwyg-edit content="vm.commentStringFillingInstruction" config="vm.editorConfig"></wysiwyg-edit>
 									</div>
 									<div class="clearfix">
 										<div class="pull-right">
-											<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()">Add</button>
+											<button class="btn btn-default small btn-secondary" ng-click="vm.deleteCommentFillingInstruction()">Delete Comment</button>
+											<button class="btn btn-default small btn-secondary" ng-click="vm.collapseCommentFillingInstruction()">Collapse Deleted Comment</button>
+											<button class="btn btn-default small btn-secondary" ng-click="vm.expandCommentFillingInstruction()">Expand Deleted Comment</button>
+											<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()">Add Comment</button>
 										</div>
 									</div>		
 								</div>
@@ -3793,15 +3801,14 @@
 									<div class="box-body">
 						        		<div class="comment-container">
 						        			<div class="comment-wrapper">
-								    			<div class="comment-list" ng-repeat="filingInstructionData in vm.workPackage.filingInstructionData.slice().reverse() track by $index">
+								    			<div ng-click="vm.selectCommentFillingInstruction(filingInstructionData)" class="comment-list FIclicked" ng-repeat="filingInstructionData in vm.viewCommentFillingInstruction.slice().reverse() track by $index">
 											    	<div class="clearfix">
 											    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
 											    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'short'}}</div>
 											    	</div>
 											    	<label> 
-											    		<input type="checkbox" id="comment-message" name="comment-message" ng-model="filingInstructionData.isDeleted">
-											    		<span>{{filingInstructionData.isDeleted ? "Deleted" : "Delete"}}</span> 
-														<span ng-show="!filingInstructionData.isDeleted" data-ng-bind-html="trustAsHtml(filingInstructionData.comment)"></span>
+											    		<input type="checkbox" id="comment-message" name="comment-message" ng-model="filingInstructionData.isDeleted" disabled>
+														<span data-ng-bind-html="trustAsHtml(filingInstructionData.comment)"></span>
 													</label>
 												</div>
 								    		</div>

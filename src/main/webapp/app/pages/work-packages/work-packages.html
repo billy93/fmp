@@ -234,9 +234,9 @@
 											<th jh-sort-by="businessArea" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Business Area <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="fareType" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Fare Types <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="priority" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Priority <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="filingDate" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Filing Date <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="reuseFrom" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Reuse from <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="replaceFrom" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Replace from <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="filingDate" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Filing Date <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="targetDistribution" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Distribution Type <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="queuedDate" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Queued Date<span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="createdDate" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Created Date <span class="glyphicon glyphicon-sort"></span></th>
@@ -346,9 +346,9 @@
 						                    	</table>
 						                    </td>
 						                    <td>{{workPackage.priority}}</td>
+						                    <td>{{workPackage.filingDate | date:'ddMMMyyyy'}}</td>
 						                    <td>{{workPackage.reuseFrom}}</td>
 						                    <td>{{workPackage.replaceFrom}}</td>
-						                    <td>{{workPackage.filingDate | date:'ddMMMyyyy'}}</td>
 						                    <td>{{workPackage.targetDistribution}}</td>
 						                    <td>{{workPackage.queuedDate | date:'medium'}}</td>
 						                    <td>{{workPackage.createdDate | date:'medium'}}</td>

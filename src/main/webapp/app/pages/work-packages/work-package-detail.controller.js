@@ -1436,6 +1436,8 @@
 	        			
 	        			var index = vm.workPackage.fareSheet.indexOf(x);
 	        			vm.workPackage.fareSheet.push(angular.copy(vm.workPackage.fareSheet[x]));
+	        			alert('Sheet Copied');
+
 	        			break;
 	        		}
 	        	}
@@ -1449,6 +1451,8 @@
 	        			
 	        			var index = vm.workPackage.addonFareSheet.indexOf(x);
 	        			vm.workPackage.addonFareSheet.push(angular.copy(vm.workPackage.addonFareSheet[x]));
+	        			alert('Sheet Copied');
+
 	        			break;
 	        		}
 	        	}
@@ -1462,10 +1466,27 @@
 	        			
 	        			var index = vm.workPackage.marketFareSheet.indexOf(x);
 	        			vm.workPackage.marketFareSheet.push(angular.copy(vm.workPackage.marketFareSheet[x]));
+	        			alert('Sheet Copied');
+
 	        			break;
 	        		}
 	        	}
         	}
+        	
+        	if(!findTab){
+	        	for(var x=0;x<vm.currentWaiverTab.length;x++){
+	        		if(vm.currentWaiverTab[x]){
+	        			console.log('Active Waiver Tab '+x);
+	        			findTab = true;
+	        			
+	        			var index = vm.workPackage.waiverFareSheet.indexOf(x);
+	        			vm.workPackage.waiverFareSheet.push(angular.copy(vm.workPackage.marketFareSheet[x]));
+	        			alert('Sheet Copied');
+	        			break;
+	        		}
+	        	}
+        	}
+        	
         	
         	if(!findTab){
         		alert('Sheet cannot be copied');
@@ -1487,6 +1508,10 @@
         	}
         };
         //END SHEET FUNCTION
+        
+        vm.pasteSheet = function(){
+        	alert('Paste Sheet');
+        };
         
         vm.faresActionButton = [];
         vm.addonFaresActionButton = [];
@@ -4187,15 +4212,25 @@
 	  	 	loadCommentFI();
      }
      
-      vm.deleteCommentFillingInstruction = function(index){
-    	 console.log("delete"+$index);
+      vm.deleteCommentFillingInstruction = function(){
+    	 for(var l=0; l<vm.tempFIC.length; l++){
+    		 vm.tempFIC[l].isDeleted = true;
+    	 }
+    	 vm.save();
+    	 vm.tempFIC = [];
+    	 loadCommentFI();
       }
+      
+      vm.tempFIC = [];
+      vm.selectCommentFillingInstruction = function(data){
+     	vm.tempFIC.push(data);
+       }
       
       vm.removeFiling = function(filing){
 	   		var index = vm.workPackage.filingInstructionData.indexOf(filing); 
 	   		console.log(filing.isDeleted);
 	   };
-      
+	         
       vm.addInterOffice = function(){
  	  	 if(vm.ioString != null){
  	    	  if(vm.workPackage.interofficeComment == null){
