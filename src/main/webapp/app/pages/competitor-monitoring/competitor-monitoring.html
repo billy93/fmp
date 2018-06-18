@@ -1,3 +1,7 @@
+<div class="content-title">
+	<h2>Competitor Monitoring</h2>
+	<jhi-alert></jhi-alert>
+</div>
 <div class="panel">
 	<div class="panel-body">
 		<div class="filter-hero">
@@ -6,7 +10,7 @@
 				<div class="clearfix">
 					<form name="queryForm" role="form" novalidate>
 					
-						<div class="col-md-3">
+						<div class="col-md-4">
 							<div class="form-group">
 								<div class="custom-label semibold">Carrier</div>
 								<input type="text" class="form-control" name="carrier"
@@ -27,7 +31,7 @@
 							</div>
 						</div>
 						
-						<div class="col-md-3">
+						<div class="col-md-4">
 							<div class="form-group">
 								<div class="custom-label semibold">Rule No</div>
 								<input type="text" class="form-control" name="ruleNo"
@@ -50,7 +54,7 @@
 							</div>
 						</div>
 						
-						<div class="col-md-3">
+						<div class="col-md-4">
 							<div class="form-group mb0">
 								<div class="custom-label semibold">Travel Date</div>
 								<div class="row no-mar">
@@ -130,30 +134,7 @@
 								</div>
 							</div>
 						</div>
-
-						<div class="col-md-3">
-							<div class="form-group">
-								<div class="custom-label semibold">GA Rule No</div>
-								<input type="text" class="form-control" name="ruleNo"
-									id="ruleNo" ng-model="vm.queryParams.ruleNo" maxlength="4"
-									uppercase />
-							</div>
-							<div class="form-group">
-								<div class="custom-label semibold">GA Source</div>
-								<select class="form-control" name="gaFareType" id="gaFareType"
-									ng-disabled="vm.queryParams.source != 'M'"
-									ng-model="vm.queryParams.gaFareType">
-									<option value="{{value}}"
-										ng-repeat="value in vm.gaFareTypes track by $index">{{value}}</option>
-								</select>
-							</div>
-							<div class="form-group">
-								<div class="custom-label semibold">GA FBC</div>
-								<input type="text" class="form-control" name="fareBasis"
-									id="fareBasis" ng-model="vm.queryParams.fareBasis" />
-							</div>
-						</div>
-						
+					
 						<div class="col-md-12 clearfix">
 							<div class="pull-right pv1">
 								<button type="reset" ng-click="vm.reset()"

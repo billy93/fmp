@@ -1,3 +1,8 @@
+<div class="content-title">
+	<h2>Rule Query</h2>
+	<jhi-alert></jhi-alert>
+</div>
+
 <div class="box-body bbgrey">
 	<div class="clearfix tab-body">
 		<ul class="clearfix nav-responsive nav nav-tabs"
@@ -258,12 +263,15 @@
 
 								<div class="additional-info-wrapper" id="ruleCategories"
 									hidden="hidden">
-									<div class="additional-info"
-										ng-click="vm.showCategoryDetail(cat)"
-										ng-class="{'yellow': cat.catAttributes.length > 0 && cat.type != 'G', 'blue': cat.catAttributes.length > 0 && cat.type == 'G'}"
-										ng-repeat="cat in vm.ruleQueryCategories2 track by cat.catNo">
-										{{cat.catNo}} {{cat.catName}} <span
-											ng-if="cat.catAttributes.length > 0">({{cat.type}})</span>
+									<div class="clearfix">
+										<div class="pull-left ph5px additional-container" ng-repeat="cat in vm.ruleQueryCategories2 track by cat.catNo">
+											<div class="additional-info"
+												ng-click="vm.showCategoryDetail(cat)"
+												ng-class="{'yellow': cat.catAttributes.length > 0 && cat.type != 'G', 'blue': cat.catAttributes.length > 0 && cat.type == 'G'}">
+												{{cat.catNo}} {{cat.catName}} <span
+													ng-if="cat.catAttributes.length > 0">({{cat.type}})</span>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>

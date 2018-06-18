@@ -1,3 +1,7 @@
+<div class="content-title">
+	<h2>AFD Query</h2>
+	<jhi-alert></jhi-alert>
+</div>
 <div class="panel">
 	<div class="panel-body">
 		<div class="filter-hero">
@@ -469,7 +473,6 @@
 					<div class="additional-info" ng-click="vm.showCategoryDetail(cat)" ng-class="{'lightyellow': cat.catAttributes.length > 0 && cat.type.includes('F'), 'yellow': cat.catAttributes.length > 0 && cat.type.includes('R'), 'blue': cat.catAttributes.length > 0 && cat.type == 'G'}">
 	        			{{cat.catNo}} {{cat.catName}} <span ng-if="cat.catAttributes.length > 0">({{cat.type}})</span>
 		      		</div>
-		      		
 				</div>
 				<div class="pull-left ph5px additional-container">
 					<div class="additional-info action dropdown custom" ng-click="vm.actionClicked = !vm.actionClicked">

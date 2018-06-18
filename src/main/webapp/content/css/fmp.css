@@ -4519,6 +4519,9 @@ label.tree_label:after {
     margin: 0;
     border-radius: 2px; }
 
+.comment-list.FIclicked {
+  background-color: rgba(255, 204, 85, 0.4) !important; }
+
 /* General Demo Style */
 body, html {
   font-size: 100%;
