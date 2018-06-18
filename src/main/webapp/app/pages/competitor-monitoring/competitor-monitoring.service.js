@@ -21,7 +21,8 @@
                 }
             },
             'update': { method:'PUT' },
-            'getRules': { method: 'GET', url:'api/competitor-monitoring/rules', isArray: true }
+            'getRules': { method: 'GET', url:'api/competitor-monitoring/rules', isArray: true },
+            'getChartData': { method: 'GET', url:'api/competitor-monitoring/chart', isArray: true }
         });
     }
 })();

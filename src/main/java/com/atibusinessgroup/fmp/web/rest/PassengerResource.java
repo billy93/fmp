@@ -1,13 +1,10 @@
 package com.atibusinessgroup.fmp.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.atibusinessgroup.fmp.domain.Passenger;
-import com.atibusinessgroup.fmp.domain.Priority;
-import com.atibusinessgroup.fmp.repository.PassengerRepository;
-import com.atibusinessgroup.fmp.web.rest.errors.BadRequestAlertException;
-import com.atibusinessgroup.fmp.web.rest.util.HeaderUtil;
-import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -15,13 +12,23 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterPassengerTypeCode;
+import com.atibusinessgroup.fmp.repository.PassengerRepository;
+import com.atibusinessgroup.fmp.web.rest.errors.BadRequestAlertException;
+import com.atibusinessgroup.fmp.web.rest.util.HeaderUtil;
+import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
+import com.codahale.metrics.annotation.Timed;
 
-import java.util.List;
-import java.util.Optional;
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing Passenger.
@@ -49,12 +56,12 @@ public class PassengerResource {
      */
     @PostMapping("/passengers")
     @Timed
-    public ResponseEntity<Passenger> createPassenger(@RequestBody Passenger passenger) throws URISyntaxException {
+    public ResponseEntity<AtpcoMasterPassengerTypeCode> createPassenger(@RequestBody AtpcoMasterPassengerTypeCode passenger) throws URISyntaxException {
         log.debug("REST request to save Passenger : {}", passenger);
         if (passenger.getId() != null) {
             throw new BadRequestAlertException("A new passenger cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Passenger result = passengerRepository.save(passenger);
+        AtpcoMasterPassengerTypeCode result = passengerRepository.save(passenger);
         return ResponseEntity.created(new URI("/api/passengers/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -71,12 +78,12 @@ public class PassengerResource {
      */
     @PutMapping("/passengers")
     @Timed
-    public ResponseEntity<Passenger> updatePassenger(@RequestBody Passenger passenger) throws URISyntaxException {
+    public ResponseEntity<AtpcoMasterPassengerTypeCode> updatePassenger(@RequestBody AtpcoMasterPassengerTypeCode passenger) throws URISyntaxException {
         log.debug("REST request to update Passenger : {}", passenger);
         if (passenger.getId() == null) {
             return createPassenger(passenger);
         }
-        Passenger result = passengerRepository.save(passenger);
+        AtpcoMasterPassengerTypeCode result = passengerRepository.save(passenger);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, passenger.getId().toString()))
             .body(result);
@@ -90,9 +97,9 @@ public class PassengerResource {
      */
     @GetMapping("/passengers")
     @Timed
-    public ResponseEntity<List<Passenger>> getAllPassengers(Pageable pageable) {
+    public ResponseEntity<List<AtpcoMasterPassengerTypeCode>> getAllPassengers(Pageable pageable) {
         log.debug("REST request to get a page of Passengers");
-        Page<Passenger> page = passengerRepository.findAll(pageable);
+        Page<AtpcoMasterPassengerTypeCode> page = passengerRepository.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/passengers");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -105,9 +112,9 @@ public class PassengerResource {
      */
     @GetMapping("/passengers/{id}")
     @Timed
-    public ResponseEntity<Passenger> getPassenger(@PathVariable String id) {
+    public ResponseEntity<AtpcoMasterPassengerTypeCode> getPassenger(@PathVariable String id) {
         log.debug("REST request to get Passenger : {}", id);
-        Passenger passenger = passengerRepository.findOne(id);
+        AtpcoMasterPassengerTypeCode passenger = passengerRepository.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(passenger));
     }
     
@@ -119,9 +126,9 @@ public class PassengerResource {
      */
     @GetMapping("/passengers/getAll")
     @Timed
-    public ResponseEntity<List<Passenger>> getAllPassengers() {
+    public ResponseEntity<List<AtpcoMasterPassengerTypeCode>> getAllPassengers() {
     	log.debug("REST request to get a page of Priorities");
-        List<Passenger> page = passengerRepository.findAll();
+        List<AtpcoMasterPassengerTypeCode> page = passengerRepository.findAll();
 //        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/fare-types");
         return new ResponseEntity<>(page, null, HttpStatus.OK);
     }

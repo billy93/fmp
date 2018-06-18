@@ -11,6 +11,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * A Fare.
@@ -182,6 +183,7 @@ public class WorkPackageFare implements Serializable {
     private String cabinClass;
     
     @Field("travel_start")
+    @DateTimeFormat(iso= DateTimeFormat.ISO.DATE)
     private ZonedDateTime travelStart;
     
     @Field("travel_end")

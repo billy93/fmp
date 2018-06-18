@@ -14,7 +14,8 @@ import org.springframework.stereotype.Service;
 
 import com.atibusinessgroup.fmp.constant.CategoryType;
 import com.atibusinessgroup.fmp.constant.CollectionName;
-import com.atibusinessgroup.fmp.domain.SurchargeCode;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterPassengerTypeCode;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterSurchargeCode;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat01;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat02;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat03;
@@ -27,6 +28,14 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat09;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat11;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat12;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat13;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat14;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat15;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat16;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat17;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat18;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat19;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat23;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat25;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord3CategoryWithDataTable;
 import com.atibusinessgroup.fmp.domain.dto.CategoryAttribute;
 import com.atibusinessgroup.fmp.domain.dto.CategoryAttributeObject;
@@ -37,6 +46,7 @@ import com.atibusinessgroup.fmp.domain.dto.DateTable;
 import com.atibusinessgroup.fmp.domain.dto.FlightTable;
 import com.atibusinessgroup.fmp.domain.dto.Record3ReflectionObject;
 import com.atibusinessgroup.fmp.domain.dto.TextTable;
+import com.atibusinessgroup.fmp.repository.PassengerRepository;
 import com.atibusinessgroup.fmp.repository.SurchargeCodeRepository;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoRecord3CategoryCustomRepository;
 import com.atibusinessgroup.fmp.service.util.AtpcoDataConverterUtil;
@@ -49,12 +59,14 @@ public class AtpcoRecordService {
 	
 	private final AtpcoRecord3CategoryCustomRepository atpcoRecord3CategoryCustomRepository;
 	private final SurchargeCodeRepository surchargeCodeRepository;
+	private final PassengerRepository passengerRepository;
 	private final MongoTemplate mongoTemplate;
 
 	public AtpcoRecordService(AtpcoRecord3CategoryCustomRepository atpcoRecord3CategoryCustomRepository, SurchargeCodeRepository surchargeCodeRepository,
-			MongoTemplate mongoTemplate) {
+			PassengerRepository passengerRepository, MongoTemplate mongoTemplate) {
 		this.atpcoRecord3CategoryCustomRepository = atpcoRecord3CategoryCustomRepository;
 		this.surchargeCodeRepository = surchargeCodeRepository;
+		this.passengerRepository = passengerRepository;
 		this.mongoTemplate = mongoTemplate;
 	}
 
@@ -948,9 +960,9 @@ public class AtpcoRecordService {
 					result += "\tAPPLICABLE DAYS: " + days + "\n";
 				}
 				if (cat12.getSur_type() != null && !cat12.getSur_type().isEmpty()) {
-					SurchargeCode sc = surchargeCodeRepository.findOneByCode(cat12.getSur_type().trim());
-					if (sc != null) {
-						result += "\tSURCHARGE TYPE: " + sc.getType() + "\n";
+					AtpcoMasterSurchargeCode sc = surchargeCodeRepository.findOneByCode(cat12.getSur_type().trim());
+					if (sc != null && sc.getType() != null) {
+						result += "\tSURCHARGE TYPE: " + sc.getType().toUpperCase() + "\n";
 					}
 				}
 				boolean isNegativeAmount = false;
@@ -995,8 +1007,358 @@ public class AtpcoRecordService {
 				if (!acc.isEmpty()) {
 					result += "\tPASSENGER MUST BE ACCOMPANIED: \n";
 				}
+				String psg = "";
+				if (cat13.getAppl() != null) {
+					if (cat13.getAppl().contentEquals("X")) {
+						psg += "\tACCOMPANYING PASSENGER MUST NOT BE ";
+					} else {
+						psg += "\tACCOMPANYING PASSENGER MUST BE ";
+					}
+				}
+				if (cat13.getPsgr_type() != null && !cat13.getPsgr_type().isEmpty()) {
+					AtpcoMasterPassengerTypeCode ptc = passengerRepository.findOneByCode(cat13.getPsgr_type().trim());
+					if (ptc != null && ptc.getName() != null) {
+						psg += ptc.getName().toUpperCase() + " ";
+					}
+				}
+				String age = "";
+				if (cat13.getPsgr_age_min() != null && !cat13.getPsgr_age_min().isEmpty()) {
+					age += "MINIMUM OF " + cat13.getPsgr_age_min() + " YEARS";
+				}
+				if (cat13.getPsgr_age_max() != null && !cat13.getPsgr_age_max().isEmpty()) {
+					if (!age.isEmpty()) {
+						age += " AND ";
+					}
+					age += "MAXIMUM OF " + cat13.getPsgr_age_max() + " YEARS";
+				}
+				if (!age.isEmpty()) {
+					result += "\t" + psg + age + "\n";
+				}
+				if (!result.isEmpty()) {
+					result += "\n";
+				}
+				break;
+			case "014":
+				AtpcoRecord3Cat14 cat14 = (AtpcoRecord3Cat14) catObj;
+				String comm = AtpcoDataConverterUtil.convertDateObjectToText(cat14.getTravel_dates_comm());
+				String exp = AtpcoDataConverterUtil.convertDateObjectToText(cat14.getTravel_dates_exp());
+				String date = "";
+				if (!comm.isEmpty() && !comm.contentEquals("XXXXXXXXX")) {
+					date += " ON/AFTER " + comm;
+				}
+				if (!exp.isEmpty() && !exp.contentEquals("XXXXXXXXX")) {
+					if (!date.isEmpty()) {
+						date += " AND";
+					}
+					date += " ON/BEFORE " + exp;
+				}
+				if (!date.isEmpty()) {
+					result += "\tVALID FOR TRAVEL COMMENCING" + date + "\n\n";
+				}
+				break;
+			case "015":
+				AtpcoRecord3Cat15 cat15 = (AtpcoRecord3Cat15) catObj;
+				String resstart = AtpcoDataConverterUtil.convertDateObjectToText(cat15.getSales_dates_earliest_res());
+				String resend = AtpcoDataConverterUtil.convertDateObjectToText(cat15.getSales_dates_latest_res());
+				String resdate = "";
+				if (!resstart.isEmpty() && !resstart.contentEquals("XXXXXXXXX")) {
+					resdate += " ON/AFTER " + resstart;
+				}
+				if (!resend.isEmpty() && !resend.contentEquals("XXXXXXXXX")) {
+					if (!resdate.isEmpty()) {
+						resdate += " AND";
+					}
+					resdate += " ON/BEFORE " + resend;
+				}
+				if (!resdate.isEmpty()) {
+					result += "\tRESERVATION MUST BE" + resdate + "\n";
+				}
+				String tktstart = AtpcoDataConverterUtil.convertDateObjectToText(cat15.getSales_dates_earliest_tktg());
+				String tktend = AtpcoDataConverterUtil.convertDateObjectToText(cat15.getSales_dates_latest_tktg());
+				String tktdate = "";
+				if (!tktstart.isEmpty() && !tktstart.contentEquals("XXXXXXXXX")) {
+					tktdate += " ON/AFTER " + tktstart;
+				}
+				if (!tktend.isEmpty() && !tktend.contentEquals("XXXXXXXXX")) {
+					if (!tktdate.isEmpty()) {
+						tktdate += " AND";
+					}
+					tktdate += " ON/BEFORE " + tktend;
+				}
+				if (!tktdate.isEmpty()) {
+					result += "\tTICKETING MUST BE" + tktdate + "\n";
+				}
+				if (cat15.getCxr_gds_sale() != null) {
+					if (cat15.getCxr_gds_sale().contentEquals("C")) {
+						if (cat15.getCxr_gds_oth() != null && !cat15.getCxr_gds_oth().isEmpty()) {
+							result += "\tTICKETS MUST BE SOLD BY GDS " + cat15.getCxr_gds_oth() + "\n"; 
+						}
+					} else if (cat15.getCxr_gds_sale().contentEquals("X")) {
+						if (cat15.getCxr_gds_oth() != null && !cat15.getCxr_gds_oth().isEmpty()) {
+							result += "\tTICKETS MUST BE SOLD BY AIRLINE " + cat15.getCxr_gds_oth() + "\n"; 
+						}
+					}
+				}
+//				String locale = "";
+//				for (AtpcoRecord3Cat15Locale loc:cat15.getLocale()) {
+//					if (loc.getAppl() != null && !loc.getAppl().isEmpty()) {
+//						if (loc.getAppl().contentEquals("Y")) {
+//							locale += "\tTICKETS MAY ONLY BE SOLD: \n";
+//						} else if (loc.getAppl().contentEquals("N")) {
+//							locale += "\tTICKETS MAY NOT BE SOLD: \n";
+//						}
+//					}
+//				}
+				if (!result.isEmpty()) {
+					result += "\n";
+				}
+				break;
+			case "016":
+				AtpcoRecord3Cat16 cat16 = (AtpcoRecord3Cat16) catObj;
+				if (cat16.getAppl_vol() != null && !cat16.getAppl_vol().isEmpty()) {
+					if (cat16.getAppl_vol().contentEquals("X")) {
+						result += "\tTHE FOLLOWING RESULTS APPLIES FOR VOLUNTARY CHANGES\n";
+					}
+				}
+				if (cat16.getAppl_inv() != null && !cat16.getAppl_inv().isEmpty()) {
+					if (cat16.getAppl_inv().contentEquals("X")) {
+						result += "\tTHE FOLLOWING RESULTS APPLIES FOR INVOLUNTARY CHANGES\n";
+					}
+				}
+				if (cat16.getAppl_canx() != null && !cat16.getAppl_canx().isEmpty()) {
+					if (cat16.getAppl_canx().contentEquals("X")) {
+						result += "\tTHE FOLLOWING RESULTS APPLIES FOR CANCELLATIONS AND REFUNDS\n";
+					}
+				}
+				String tkrnrf = AtpcoDataConverterUtil.convertTicketAndReservationRestrictionToName(cat16.getTkt_nrf());
+				if (!tkrnrf.isEmpty()) {
+					result += "\t" + tkrnrf + "\n";
+				}
+				String penalties = "";
+				if (cat16.getAppl_canx() != null && !cat16.getAppl_canx().isEmpty()) {
+					if (cat16.getAppl_canx().contentEquals("X")) {
+						penalties += "\t\tCANCELLATION\n";
+					}
+				}
+				if (cat16.getPenalties_fail() != null && !cat16.getPenalties_fail().isEmpty()) {
+					if (cat16.getPenalties_fail().contentEquals("X")) {
+						penalties += "\t\tFAILURE TO USE CONFIRMED SPACES\n";
+					}
+				}
+				if (cat16.getPenalties_chrg() != null && !cat16.getPenalties_chrg().isEmpty()) {
+					if (cat16.getPenalties_chrg().contentEquals("X")) {
+						penalties += "\t\tCHANGE OF ITINERARY REQUIRING REISSUE OF TICKET\n";
+					}
+				}
+				if (cat16.getPenalties_rep() != null && !cat16.getPenalties_rep().isEmpty()) {
+					if (cat16.getPenalties_rep().contentEquals("X")) {
+						penalties += "\t\tREPLACEMENT OF LAST TICKET/EXCHANGE ORDER\n";
+					}
+				}
+				if (cat16.getPenalties_chgn() != null && !cat16.getPenalties_chgn().isEmpty()) {
+					if (cat16.getPenalties_chgn().contentEquals("X")) {
+						penalties += "\t\tCHANGE NOT REQUIRING REISSUE\n";
+					}
+				}
+				if (cat16.getPenalties_tkt() != null && !cat16.getPenalties_tkt().isEmpty()) {
+					if (cat16.getPenalties_tkt().contentEquals("X")) {
+						penalties += "\t\tTICKET REFUND\n";
+					}
+				}
+				if (cat16.getPenalties_pta() != null && !cat16.getPenalties_pta().isEmpty()) {
+					if (cat16.getPenalties_pta().contentEquals("X")) {
+						penalties += "\t\tUNTICKETD PTA'S\n";
+					}
+				}
+				if (!penalties.isEmpty()) {
+					result += "\tPENALTY APPLIES FOR THE FOLLOWING: \n" + penalties;
+				}
+				String chargesText = "";
+				String chargesappl = AtpcoDataConverterUtil.convertChargesApplicationToName(cat16.getCharges_appl());
+				if (!chargesappl.isEmpty()) {
+					chargesText += chargesappl + " ";
+				}
+				String charges = "";
+				if (cat16.getCharges_cur_1() != null && !cat16.getCharges_cur_1().isEmpty()) {
+					charges += cat16.getCharges_cur_1() + " ";
+				}
+				if (cat16.getCharges_amt_1() != null && cat16.getCharges_amt_1().bigDecimalValue().doubleValue() != 0.0) {
+					charges += cat16.getCharges_amt_1().bigDecimalValue().doubleValue();
+				}
+				if (cat16.getCharges_percent() != null && !cat16.getCharges_percent().isEmpty() && !cat16.getCharges_percent().contentEquals("0000000")) {
+					if (!charges.isEmpty()) {
+						charges += " OR " + cat16.getCharges_percent() + "%";
+					} else {
+						charges += cat16.getCharges_percent() + "%";
+					}
+				}
+				if (cat16.getCharges_h_l() != null && !cat16.getCharges_h_l().isEmpty()) {
+					if (cat16.getCharges_h_l().contentEquals("H")) {
+						charges += ", WHICHEVER IS HIGHER";
+					} else if (cat16.getCharges_h_l().contentEquals("L")) {
+						charges += ", WHICHEVER IS LOWER";
+					}
+				}
+				if (!charges.isEmpty()) {
+					chargesText += "IS " + charges;
+				}
+				if (!chargesText.isEmpty()) {
+					result += "\t" + chargesText + "\n";
+				}
+				String waiver = "";
+				if (cat16.getWaiver_death_of_passenger() != null && !cat16.getWaiver_death_of_passenger().isEmpty()) {
+					if (cat16.getWaiver_death_of_passenger().contentEquals("X")) {
+						waiver += "\t\tDEATH OF PASSENGER\n";
+					}
+				}
+				if (cat16.getWaiver_illness_of_passenger() != null && !cat16.getWaiver_illness_of_passenger().isEmpty()) {
+					if (cat16.getWaiver_illness_of_passenger().contentEquals("X")) {
+						waiver += "\t\tILLNESS OF PASSENGER\n";
+					}
+				}
+				if (cat16.getWaiver_death_of_immediate_family_member() != null && !cat16.getWaiver_death_of_immediate_family_member().isEmpty()) {
+					if (cat16.getWaiver_death_of_immediate_family_member().contentEquals("X")) {
+						waiver += "\t\tDEATH OF IMMEDIATE FAMILY MEMBER\n";
+					}
+				}
+				if (cat16.getWaiver_illness_of_immediate_family_member() != null && !cat16.getWaiver_illness_of_immediate_family_member().isEmpty()) {
+					if (cat16.getWaiver_illness_of_immediate_family_member().contentEquals("X")) {
+						waiver += "\t\tILLNESS OF IMMEDIATE FAMILY MEMBER\n";
+					}
+				}
+				if (cat16.getWaiver_schedule_change() != null && !cat16.getWaiver_schedule_change().isEmpty()) {
+					if (cat16.getWaiver_schedule_change().contentEquals("X")) {
+						waiver += "\t\tSCHEDULE CHANGE\n";
+					}
+				}
+				if (cat16.getWaiver_ticket_upgrade() != null && !cat16.getWaiver_ticket_upgrade().isEmpty()) {
+					if (cat16.getWaiver_ticket_upgrade().contentEquals("X")) {
+						waiver += "\t\tTICKET UPGRADE\n";
+					}
+				}
+				if (!waiver.isEmpty()) {
+					result += "\tPENALTY WAIVED IN THE FOLLOWING CASES: \n" + waiver;
+				}
+				if(!result.isEmpty()) {
+					result += "\n";
+				}
+				break;
+			case "017":
+				AtpcoRecord3Cat17 cat17 = (AtpcoRecord3Cat17) catObj;
+				if (cat17.getNo_hip() != null && !cat17.getNo_hip().isEmpty()) {
+					if (cat17.getNo_hip().contentEquals("X")) {
+						result += "\tHIGHER INTERMEDIATE POINT IS NOT PERMITTED\n";
+					}
+				}
+				if (!result.isEmpty()) {
+					result += "\n";
+				}
+				break;
+			case "018": 
+				AtpcoRecord3Cat18 cat18 = (AtpcoRecord3Cat18) catObj;
+				if (cat18.getTicket_endorsement_text() != null && !cat18.getTicket_endorsement_text().isEmpty()) {
+					result += "\t" + cat18.getTicket_endorsement_text() + "\n";
+				}
+				String ticketloc = AtpcoDataConverterUtil.convertEndorsementTicketLocationToName(cat18.getTkt_loc());
+				if (!ticketloc.isEmpty()) {
+					result += "\tENDORSEMENT TEXT MUST APPEAR ON THE " + ticketloc + "\n";
+				}
+				if (!result.isEmpty()) {
+					result += "\n";
+				}
+				break;
+			case "019":
+				AtpcoRecord3Cat19 cat19 = (AtpcoRecord3Cat19) catObj;
+				String fbrpsg19 = "";
+				if (cat19.getFbr_passenger_type() != null && !cat19.getFbr_passenger_type().isEmpty()) {
+					AtpcoMasterPassengerTypeCode ptc = passengerRepository.findOneByCode(cat19.getFbr_passenger_type().trim());
+					if (ptc != null && ptc.getName() != null) {
+						fbrpsg19 += ptc.getName().toUpperCase();
+					}
+				}
+				if (!fbrpsg19.isEmpty()) {
+					result += "\tTHE FOLLOWING APPLIES FOR PASSENGER TYPE " + fbrpsg19;
+				}
+				String initialfbrage19 = "";
+				String fbrage19 = "";
+				if (cat19.getFbr_age_min() != null && !cat19.getFbr_age_min().isEmpty()) {
+					fbrage19 += cat19.getFbr_age_min();
+					initialfbrage19 = "ABOVE ";
+				}
+				if (cat19.getFbr_age_max() != null && !cat19.getFbr_age_max().isEmpty()) {
+					if (!fbrage19.isEmpty()) {
+						fbrage19 += " - ";
+						initialfbrage19 = "FROM ";
+					}
+					fbrage19 += cat19.getFbr_age_max();
+					if (initialfbrage19.isEmpty()) {
+						initialfbrage19 = "UNDER ";
+					}
+				}
+				
+				if (!fbrage19.isEmpty()) {
+					result += " AGE " + initialfbrage19 + fbrage19 + "\n";
+				}
+				if (cat19.getFbr_percent() != null && !cat19.getFbr_percent().isEmpty() && !cat19.getFbr_percent().contentEquals("0000000")) {
+					result += "\t" + cat19.getFbr_percent() + "% OF THE ADULT FARE\n";
+				}
+				if (cat19.getFbr_ticketing_code() != null && !cat19.getFbr_ticketing_code().isEmpty()) {
+					result += "\tBASE FARE FARE CODE PLUS " + cat19.getFbr_ticketing_code() + "\n";
+				}
+				if (cat19.getFbr_ticket_designator() != null && !cat19.getFbr_ticket_designator().isEmpty()) {
+					result += "\tBASE FARE FARE CODE PLUS " + cat19.getFbr_ticket_designator() + "\n";
+				}
+				if (!result.isEmpty()) {
+					result += "\n";
+				}
+				break;
+			case "020":
+				break;
+			case "021":
+				break;
+			case "022":
+				break;
+			case "023":
+				AtpcoRecord3Cat23 cat23 = (AtpcoRecord3Cat23) catObj;
+				String addonconst = AtpcoDataConverterUtil.convertAddonConstructionToName(cat23.getAdd_on_constr());
+				if (!addonconst.isEmpty()) {
+					result += "\t" + addonconst + "\n\n";
+				}
+				break;
+			case "025":
+				AtpcoRecord3Cat25 cat25 = (AtpcoRecord3Cat25) catObj;
+				if (cat25.getPsgr_type() != null && !cat25.getPsgr_type().isEmpty()) {
+					AtpcoMasterPassengerTypeCode ptc = passengerRepository.findOneByCode(cat25.getPsgr_type().trim());
+					if (ptc != null && ptc.getName() != null) {
+						result += "\tTHE FOLLOWING CONDITIONS APPLY FOR PASSENGER TYPE " + ptc.getName().toUpperCase() + "\n";
+					}
+				}
+				if (cat25.getFare_calc_mileage_min() != null && !cat25.getFare_calc_mileage_min().isEmpty()) {
+					result += "\tMINIMUM MILEAGE: " + cat25.getFare_calc_mileage_min() + "\n";
+				}
+				if (cat25.getFare_calc_mileage_max() != null && !cat25.getFare_calc_mileage_max().isEmpty()) {
+					result += "\tMAXIMUM MILEAGE: " + cat25.getFare_calc_mileage_max() + "\n";
+				}
+				String codeind = AtpcoDataConverterUtil.convertFareCalculationCodeIndicatorToName(cat25.getFare_calc_mileage_find());
+				if (!codeind.isEmpty()) {
+					result += "\tTHE RESULTING FARE IS CREATED BY " + codeind;
+				}
+				if (cat25.getFare_calc_mileage_percent() != null && !cat25.getFare_calc_mileage_percent().isEmpty() && !cat25.getFare_calc_mileage_percent().contentEquals("0000000")) {
+					result += cat25.getFare_calc_mileage_percent() + "% OF THE BASE FARE MENTIONED BELOW";
+				}
+				String fcamount = "";
+				if (cat25.getFare_calc_fare_amt_1() != null && cat25.getFare_calc_fare_amt_1().doubleValue() != 0.0) {
+					if (cat25.getFare_calc_fare_cur_1() != null && !cat25.getFare_calc_fare_cur_1().isEmpty()) {
+						fcamount += cat25.getFare_calc_fare_cur_1() + " ";
+					}
+					
+					fcamount += cat25.getFare_calc_fare_amt_1().doubleValue();
+				}
+				if (!fcamount.isEmpty()) {
+					result += "\t" + fcamount + "\n";
+				}
+				break;
 			}
-			
 		} catch (Exception e) {
 			result = e.getMessage().toUpperCase();
 		}

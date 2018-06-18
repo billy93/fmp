@@ -1,7 +1,8 @@
 package com.atibusinessgroup.fmp.repository;
 
-import com.atibusinessgroup.fmp.domain.Passenger;
 import org.springframework.stereotype.Repository;
+
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterPassengerTypeCode;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
@@ -10,6 +11,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface PassengerRepository extends MongoRepository<Passenger, String> {
+public interface PassengerRepository extends MongoRepository<AtpcoMasterPassengerTypeCode, String> {
+
+	AtpcoMasterPassengerTypeCode findOneByCode(String ptc);
 
 }
