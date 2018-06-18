@@ -3,6 +3,7 @@ package com.atibusinessgroup.fmp.repository.custom;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import com.atibusinessgroup.fmp.constant.CollectionName;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByRuleNoCxrTarNo;
 import com.atibusinessgroup.fmp.domain.dto.RuleQueryParam;
+import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Basic;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
@@ -59,11 +61,20 @@ public class AtpcoRuleQueryCustomRepository {
 			
 		} else {
 			
-			return groupingRuleQuery(param, pageable);
+			return groupingAllQuery(param, pageable);
 			
 		}
 		
 		return null;
+	}
+
+	
+	public List<AtpcoRecord2> getListRecord2ById(String recordId, String catNo) {
+		List<AtpcoRecord2> result = new ArrayList<>();
+		Query query = new Query();
+		query.addCriteria(Criteria.where("record_id").is(recordId));
+		result = mongoTemplate.find(query, AtpcoRecord2.class);
+		return result;
 	}
 	
 	public Page<AtpcoRecord2> findByRuleType(RuleQueryParam param, Pageable pageable) {
@@ -81,14 +92,6 @@ public class AtpcoRuleQueryCustomRepository {
 				.aggregate(aggregation, "atpco_record_2", AtpcoRecord2.class).getMappedResults().size());
 	}
 	
-	
-	public List<AtpcoRecord2> getListRecord2ById(String recordId, String catNo) {
-		List<AtpcoRecord2> result = new ArrayList<>();
-		Query query = new Query();
-		query.addCriteria(Criteria.where("record_id").is(recordId));
-		result = mongoTemplate.find(query, AtpcoRecord2.class);
-		return result;
-	}
 
 	public Page<AtpcoRecord2> findByRuleQueryParam(RuleQueryParam param, Pageable pageable) {
 
@@ -166,76 +169,91 @@ public class AtpcoRuleQueryCustomRepository {
 		return aggregationOperations;
 	}
 	
-	public List<AggregationOperation> getAggregationGeneralRuleQuery(RuleQueryParam param) {
-		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+	//All Type
+	public Page<AtpcoRecord2GroupByRuleNoCxrTarNo> groupingAllQuery(RuleQueryParam param, Pageable pageable) {
+		
+		List<AggregationOperation> aggregationOperations = getAggregationGroupingAllType(param);
+		
+		
+		Aggregation aggregation = newAggregation(aggregationOperations);
 
+		SkipOperation skip = new SkipOperation(pageable.getPageNumber() * pageable.getPageSize());
+		aggregationOperations.add(skip);
+
+		LimitOperation limit = new LimitOperation(pageable.getPageSize());
+		aggregationOperations.add(limit);
+
+		Aggregation aggregationPagination = newAggregation(aggregationOperations);
+
+		List<AtpcoRecord2GroupByRuleNoCxrTarNo> result = mongoTemplate.aggregate(aggregationPagination, "atpco_record_2", AtpcoRecord2GroupByRuleNoCxrTarNo.class).getMappedResults();
+		
+		return new PageImpl<>(result, pageable, mongoTemplate.aggregate(aggregation, "atpco_record_2", AtpcoRecord2GroupByRuleNoCxrTarNo.class).getMappedResults().size());
+	}
+	
+	public List<AggregationOperation> getAggregationGroupingAllType(RuleQueryParam param) {
+
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
+		aggregationOperations = getAggregationRuleQuery(param);
+		
 		aggregationOperations.add(new AggregationOperation() {
 			@Override
 			public DBObject toDBObject(AggregationOperationContext context) {
-				BasicDBObject match = new BasicDBObject();
-				BasicDBObject andQuery = new BasicDBObject();
+				BasicDBObject group = new BasicDBObject();
+				BasicDBObject groupId = new BasicDBObject();
+				BasicDBObject groupList = new BasicDBObject();
+				groupList.put("rule_no", "$rule_no");
+				groupList.put("cxr_code", "$cxr_code");
+				groupList.put("rule_tar_no", "$rule_tar_no");
+				groupId.append("_id", groupList);
+				group.append("$group", groupId);
+				return group;
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
 
-				List<BasicDBObject> and = new ArrayList<>();
-
-				if (param.getCxr() != null && !param.getCxr().isEmpty()) {
-					and.add(new BasicDBObject("cxr_code", param.getCxr()));
-				} else {
-					and.add(new BasicDBObject("cxr_code", new BasicDBObject("$ne", "")));
-				}
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
 				
-				if (param.getRuleNo() != null && !param.getRuleNo().isEmpty()) {
-					and.add(new BasicDBObject("rule_no", param.getRuleNo()));
-				} else {
-					and.add(new BasicDBObject("rule_no", new BasicDBObject("$ne", "")));
-				}
-
-				if (param.getRuleTarNo() != null && !param.getRuleTarNo().isEmpty()) {
-					and.add(new BasicDBObject("rule_tar_no", param.getRuleTarNo()));
-				} else {
-					and.add(new BasicDBObject("rule_tar_no", new BasicDBObject("$ne", "")));
-				}
+				BasicDBObject lookupRec0 = new BasicDBObject();
+				BasicDBObject lookupRec8 = new BasicDBObject();
+				BasicDBObject projection = new BasicDBObject();
 				
-				if (param.getCatNo() != null && !param.getCatNo().isEmpty()) {
-					and.add(new BasicDBObject("cat_no", param.getCatNo()));
-				} else {
-					and.add(new BasicDBObject("cat_no", new BasicDBObject("$ne", "")));
-				}
+				lookupRec0.append("", "");
+				
+				return null;
+			}
+			
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
 
-				if (and.size() > 0) {
-					andQuery.append("$and", and);
-				}
-
-				match.append("$match", andQuery);
-
-				return match;
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject replace = new BasicDBObject();
+				replace.append("$replaceRoot", new BasicDBObject().append("newRoot", "$_id"));
+				return replace;
 			}
 		});
 
 		return aggregationOperations;
-	}
-	
-	//All Type
-	public Page<AtpcoRecord2GroupByRuleNoCxrTarNo> groupingAllQuery(RuleQueryParam param, Pageable pageable) {
-//		List<AtpcoRecord2GroupByRuleNoCxrTarNo> allQuery = new ArrayList<>();
-		int totalRule = (int)groupingRuleQuery(param, pageable).getTotalElements();
-		int totalGeneralRule = (int)groupingGeneralRuleQuery(param, pageable).getTotalElements();
-		int totalFareByRule = (int)groupingFareByRuleQuery(param, pageable).getTotalElements();
-		
-		int total = totalRule+totalGeneralRule+totalFareByRule;
-		
-		System.out.println("total data :: "+total);
-		
-		List<AtpcoRecord2GroupByRuleNoCxrTarNo> ruleQuery = groupingRuleQuery(param, pageable).getContent();
-		List<AtpcoRecord2GroupByRuleNoCxrTarNo> generalRuleQuery = groupingGeneralRuleQuery(param, pageable).getContent();
-		List<AtpcoRecord2GroupByRuleNoCxrTarNo> fareByRuleQuery = groupingFareByRuleQuery(param, pageable).getContent();
-		
-		return groupingRuleQuery(param, pageable);
 	}
 
 	//Rule Type
 	public Page<AtpcoRecord2GroupByRuleNoCxrTarNo> groupingRuleQuery(RuleQueryParam param, Pageable pageable) {
 
 		List<AggregationOperation> aggregationOperations = getAggregationGrouping(param);
+		
 		
 		Aggregation aggregation = newAggregation(aggregationOperations);
 
@@ -285,6 +303,7 @@ public class AtpcoRuleQueryCustomRepository {
 
 		List<AggregationOperation> aggregationOperations = getAggregationGrouping(param);
 		
+		
 		Aggregation aggregation = newAggregation(aggregationOperations);
 
 		SkipOperation skip = new SkipOperation(pageable.getPageNumber() * pageable.getPageSize());
@@ -306,9 +325,9 @@ public class AtpcoRuleQueryCustomRepository {
 	public List<AggregationOperation> getAggregationGrouping(RuleQueryParam param) {
 
 		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
 		aggregationOperations = getAggregationRuleQuery(param);
 		
-
 		aggregationOperations.add(new AggregationOperation() {
 			@Override
 			public DBObject toDBObject(AggregationOperationContext context) {
@@ -318,7 +337,6 @@ public class AtpcoRuleQueryCustomRepository {
 				groupList.put("rule_no", "$rule_no");
 				groupList.put("cxr_code", "$cxr_code");
 				groupList.put("rule_tar_no", "$rule_tar_no");
-//				groupList.put("cat_no", "$cat_no");
 				groupId.append("_id", groupList);
 				group.append("$group", groupId);
 				return group;
