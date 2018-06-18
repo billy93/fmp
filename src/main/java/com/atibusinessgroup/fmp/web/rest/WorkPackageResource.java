@@ -2064,7 +2064,96 @@ public class WorkPackageResource {
 		int warningsCount = 0;
 		List<WorkPackage.Validation.Tab> tabs = new ArrayList<WorkPackage.Validation.Tab>();
 		
-				
+		//Validasi Header
+		WorkPackage.Validation.Tab tabHeader = new WorkPackage.Validation.Tab();
+		tabHeader.setName("HEADER");
+		List<WorkPackage.Validation.Tab.Error> errorHeader = new ArrayList<>();
+		
+		if(workPackage.getTargetDistribution().toUpperCase().contentEquals("ATPCO")) {
+			if(workPackage.getReviewLevel().toUpperCase().contentEquals("LSO")) {
+				if(workPackage.getSaleDate() == null) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Sale start date is required");
+		    		errorHeader.add(err1);
+				}
+				if(workPackage.getBusinessArea() == null || workPackage.getBusinessArea().contentEquals("")) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Business area is required");
+		    		errorHeader.add(err1);
+				}
+				if(workPackage.getName() == null || workPackage.getName().contentEquals("")) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Name is required");
+		    		errorHeader.add(err1);
+				}
+			}else if(workPackage.getReviewLevel().toUpperCase().contentEquals("HO")) {
+				if(workPackage.getSaleDate() == null) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Sale start date is required");
+		    		errorHeader.add(err1);
+				}
+				if(workPackage.getBusinessArea() == null || workPackage.getBusinessArea().contentEquals("")) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Business area is required");
+		    		errorHeader.add(err1);
+				}
+				if(workPackage.getName() == null || workPackage.getName().contentEquals("")) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Name is required");
+		    		errorHeader.add(err1);
+				}
+				if(workPackage.getFilingDate() == null) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Filing date is required");
+		    		errorHeader.add(err1);
+				}
+				if(workPackage.getInterofficeComment() == null || workPackage.getInterofficeComment().size() < 1) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("IN is required");
+		    		errorHeader.add(err1);
+				}
+			}
+			
+			tabHeader.setError(errorHeader);
+			
+			errorsCount += errorHeader.size();
+	    	if(errorHeader.size() > 0 || errorHeader.size() > 0) {
+	    		tabs.add(tabHeader);
+	    	}
+			
+		}else if(workPackage.getTargetDistribution().toUpperCase().contentEquals("MARKET")) {
+			if(workPackage.getReviewLevel().toUpperCase().contentEquals("LSO")) {
+				if(workPackage.getName() == null || workPackage.getName().contentEquals("")) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Name is required");
+		    		errorHeader.add(err1);
+				}		
+			}else if(workPackage.getReviewLevel().toUpperCase().contentEquals("HO")) {
+				if(workPackage.getName() == null || workPackage.getName().contentEquals("")) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Name is required");
+		    		errorHeader.add(err1);
+				}
+				if(workPackage.getDistributionDate() == null) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Name is required");
+		    		errorHeader.add(err1);
+				}
+				if(workPackage.getInterofficeComment() == null || workPackage.getInterofficeComment().size() < 1) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("IN is required");
+		    		errorHeader.add(err1);
+				}
+			}
+			
+			tabHeader.setError(errorHeader);
+			
+			errorsCount += errorHeader.size();
+	    	if(errorHeader.size() > 0 || errorHeader.size() > 0) {
+	    		tabs.add(tabHeader);
+	    	}
+		}
+					
 		//Validasi Fare
 		for(WorkPackageFareSheet wpfs : workPackage.getFareSheet()) {
 			WorkPackage.Validation.Tab tab1 = new WorkPackage.Validation.Tab();
