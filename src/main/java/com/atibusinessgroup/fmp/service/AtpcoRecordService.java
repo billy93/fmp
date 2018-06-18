@@ -16,6 +16,7 @@ import com.atibusinessgroup.fmp.constant.CategoryType;
 import com.atibusinessgroup.fmp.constant.CollectionName;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterPassengerTypeCode;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterSurchargeCode;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterTourTypeCode;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat01;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat02;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat03;
@@ -36,7 +37,11 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat18;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat19;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat23;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat25;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat26;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat27;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat50;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord3CategoryWithDataTable;
+import com.atibusinessgroup.fmp.domain.dto.BaseFareTable;
 import com.atibusinessgroup.fmp.domain.dto.CategoryAttribute;
 import com.atibusinessgroup.fmp.domain.dto.CategoryAttributeObject;
 import com.atibusinessgroup.fmp.domain.dto.CategoryObject;
@@ -48,6 +53,7 @@ import com.atibusinessgroup.fmp.domain.dto.Record3ReflectionObject;
 import com.atibusinessgroup.fmp.domain.dto.TextTable;
 import com.atibusinessgroup.fmp.repository.PassengerRepository;
 import com.atibusinessgroup.fmp.repository.SurchargeCodeRepository;
+import com.atibusinessgroup.fmp.repository.TourTypeCodeRepository;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoRecord3CategoryCustomRepository;
 import com.atibusinessgroup.fmp.service.util.AtpcoDataConverterUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -59,13 +65,15 @@ public class AtpcoRecordService {
 	
 	private final AtpcoRecord3CategoryCustomRepository atpcoRecord3CategoryCustomRepository;
 	private final SurchargeCodeRepository surchargeCodeRepository;
+	private final TourTypeCodeRepository tourTypeCodeRepository;
 	private final PassengerRepository passengerRepository;
 	private final MongoTemplate mongoTemplate;
 
 	public AtpcoRecordService(AtpcoRecord3CategoryCustomRepository atpcoRecord3CategoryCustomRepository, SurchargeCodeRepository surchargeCodeRepository,
-			PassengerRepository passengerRepository, MongoTemplate mongoTemplate) {
+			TourTypeCodeRepository tourTypeCodeRepository, PassengerRepository passengerRepository, MongoTemplate mongoTemplate) {
 		this.atpcoRecord3CategoryCustomRepository = atpcoRecord3CategoryCustomRepository;
 		this.surchargeCodeRepository = surchargeCodeRepository;
+		this.tourTypeCodeRepository = tourTypeCodeRepository;
 		this.passengerRepository = passengerRepository;
 		this.mongoTemplate = mongoTemplate;
 	}
@@ -1356,6 +1364,157 @@ public class AtpcoRecordService {
 				}
 				if (!fcamount.isEmpty()) {
 					result += "\t" + fcamount + "\n";
+				}
+				if (cat25.getResulting_fare_owrt() != null && !cat25.getResulting_fare_owrt().isEmpty()) {
+					String owrt = AtpcoDataConverterUtil.convertOwrtToName(cat25.getResulting_fare_owrt());
+					if (!owrt.isEmpty()) {
+						result += "\tOW/RT: " + owrt + "\n"; 
+					}
+				}
+				if (cat25.getResulting_fare_global() != null && !cat25.getResulting_fare_global().isEmpty()) {
+					result += "\tGLOBAL: " + cat25.getResulting_fare_global() + "\n";
+				}
+				if (cat25.getResulting_fare_routing_tarrif() != null && !cat25.getResulting_fare_routing_tarrif().isEmpty()) {
+					result += "\tROUTING TARIFF: " + cat25.getResulting_fare_routing_tarrif() + "\n";
+				}
+				if (cat25.getResulting_fare_routing_number() != null && !cat25.getResulting_fare_routing_number().isEmpty()) {
+					result += "\tROUTING NUMBER: " + cat25.getResulting_fare_routing_number() + "\n";
+				}
+				if (cat25.getResulting_fare_fare_class() != null && !cat25.getResulting_fare_fare_class().isEmpty()) {
+					result += "\tFARE CLASS: " + cat25.getResulting_fare_fare_class() + "\n";
+				}
+				if (cat25.getResulting_fare_type_fare() != null && !cat25.getResulting_fare_type_fare().isEmpty()) {
+					result += "\tFARE TYPE: " + cat25.getResulting_fare_type_fare() + "\n";
+				}
+				if (cat25.getResulting_fare_type_season() != null && !cat25.getResulting_fare_type_season().isEmpty()) {
+					result += "\tSEASON: " + cat25.getResulting_fare_type_season() + "\n";
+				}
+				if (cat25.getResulting_fare_type_day_of_week() != null && !cat25.getResulting_fare_type_day_of_week().isEmpty()) {
+					result += "\tDAY OF WEEK: " + cat25.getResulting_fare_type_day_of_week() + "\n";
+				}
+				if (cat25.getResulting_fare_disc_cat() != null && !cat25.getResulting_fare_disc_cat().isEmpty()) {
+					result += "\tDIS CAT: " + cat25.getResulting_fare_disc_cat() + "\n";
+				}
+				if (cat25.getResulting_fare_prime_rbd_1() != null && !cat25.getResulting_fare_prime_rbd_1().isEmpty()) {
+					result += "\tPRIME RBD: " + cat25.getResulting_fare_prime_rbd_1() + "\n";
+				}
+				if (cat25.getResulting_fare_ticketing_code() != null && !cat25.getResulting_fare_ticketing_code().isEmpty()) {
+					result += "\tTICKETING CODE: " + cat25.getResulting_fare_ticketing_code() + "\n";
+				}
+				if (cat25.getResulting_fare_ticket_designator() != null && !cat25.getResulting_fare_ticket_designator().isEmpty()) {
+					result += "\tTICKET DESIGNATOR: " + cat25.getResulting_fare_ticket_designator() + "\n";
+				}
+				if (cat25.getResulting_fare_ticket_designator() != null && !cat25.getResulting_fare_ticket_designator().isEmpty()) {
+					result += "\tTICKET DESIGNATOR: " + cat25.getResulting_fare_ticket_designator() + "\n";
+				}
+				if (cat25.getBase_tbl_no_989() != null && !cat25.getBase_tbl_no_989().isEmpty() && !cat25.getBase_tbl_no_989().contentEquals("00000000")) {
+					BaseFareTable bft = atpcoRecord3CategoryCustomRepository.findRecord3BaseFareTable(cat25.getBase_tbl_no_989());
+					if (bft != null) {
+						String bf = "";
+						if (bft.getOwrt() != null && !bft.getOwrt().isEmpty()) {
+							String owrt = AtpcoDataConverterUtil.convertOwrtToName(bft.getOwrt());
+							if (!owrt.isEmpty()) {
+								bf += "\t\tOW/RT: " + owrt + "\n";
+							}
+						}
+						if (bft.getGlobal() != null && !bft.getGlobal().isEmpty()) {
+							bf += "\t\tGLOBAL: " + bft.getGlobal() + "\n"; 
+						}
+						if (bft.getCarrierCode() != null && !bft.getCarrierCode().isEmpty()) {
+							bf += "\t\tCARRIER CODE: " + bft.getCarrierCode() + "\n"; 
+						}
+						if (bft.getPubCalc() != null && !bft.getPubCalc().isEmpty()) {
+							bf += "\t\tPUB/CALC: " + bft.getPubCalc() + "\n"; 
+						}
+						if (bft.getRuleTariff() != null && !bft.getRuleTariff().isEmpty()) {
+							bf += "\t\tRULE TARIFF: " + bft.getRuleTariff() + "\n"; 
+						}
+						if (bft.getRuleNo() != null && !bft.getRuleNo().isEmpty()) {
+							bf += "\t\tRULE NO: " + bft.getRuleNo() + "\n"; 
+						}
+						if (bft.getFareClass() != null && !bft.getFareClass().isEmpty()) {
+							bf += "\t\tFARE CLASS: " + bft.getFareClass() + "\n"; 
+						}
+						if (bft.getFareType() != null && !bft.getFareType().isEmpty()) {
+							bf += "\t\tFARE TYPE: " + bft.getFareType() + "\n"; 
+						}
+						if (bft.getPassengerType() != null && !bft.getPassengerType().isEmpty()) {
+							bf += "\t\tPASSENGER TYPE: " + bft.getPassengerType() + "\n"; 
+						}
+						if (bft.getSeasonType() != null && !bft.getSeasonType().isEmpty()) {
+							bf += "\t\tSEASON TYPE: " + bft.getSeasonType() + "\n"; 
+						}
+						if (bft.getDayType() != null && !bft.getDayType().isEmpty()) {
+							bf += "\t\tDAY TYPE: " + bft.getDayType() + "\n"; 
+						}
+						if (bft.getPricingCategoryType() != null && !bft.getPricingCategoryType().isEmpty()) {
+							bf += "\t\tPRICING CATEGORY TYPE: " + bft.getPricingCategoryType() + "\n"; 
+						}
+						if (bft.getRoutingNo() != null && !bft.getRoutingNo().isEmpty()) {
+							bf += "\t\tROUTING NO: " + bft.getRoutingNo() + "\n"; 
+						}
+						if (bft.getFootnote() != null && !bft.getFootnote().isEmpty()) {
+							bf += "\t\tFOOTNOTE: " + bft.getFootnote() + "\n"; 
+						}
+						if (bft.getRbd() != null && !bft.getRbd().isEmpty()) {
+							bf += "\t\tRBD: " + bft.getRbd() + "\n"; 
+						}
+						if (bft.getCurrency() != null && !bft.getCurrency().isEmpty()) {
+							bf += "\t\tCURRENCY: " + bft.getCurrency() + "\n"; 
+						}
+						if (bft.getMinFare() != null && bft.getMinFare().getLow() != 0) {
+							bf += "\t\tMIN FARE: " + bft.getMinFare().getLow() + "\n"; 
+						}
+						if (bft.getMaxFare() != null && bft.getMaxFare().getLow() != 0) {
+							bf += "\t\tMAX FARE: " + bft.getMaxFare().getLow() + "\n"; 
+						}
+						if (!bf.isEmpty()) {
+							result += "\n\tBASE FARE TABLE\n" + bf + "\n";
+						}
+					}
+				}
+				break;
+			case "026":
+				AtpcoRecord3Cat26 cat26 = (AtpcoRecord3Cat26) catObj;
+				String group = "";
+				if (cat26.getSize_min() != null && !cat26.getSize_min().isEmpty()) {
+					group += "\tMINIMUM GROUP SIZE: " + cat26.getSize_min() + "\n";
+				}
+				if (cat26.getSize_max() != null && !cat26.getSize_max().isEmpty()) {
+					group += "\tMAXIMUM GROUP SIZE: " + cat26.getSize_max() + "\n";
+				}
+				if (group.isEmpty()) {
+					result += group + "\n";
+				}
+				break;
+			case "027":
+				AtpcoRecord3Cat27 cat27 = (AtpcoRecord3Cat27) catObj;
+				String tour = "";
+				if (cat27.getType() != null && !cat27.getType().isEmpty()) {
+					AtpcoMasterTourTypeCode tourType = tourTypeCodeRepository.findOneByCode(cat27.getType().trim());
+					tour += "\tTOUR TYPE: " + cat27.getType() + " - " + tourType.getTourType() + "\n";
+				}
+				if (cat27.getTour_no() != null && !cat27.getTour_no().isEmpty()) {
+					tour += "\tTOUR NO: " + cat27.getTour_no() + "\n";
+				}
+				if (!tour.isEmpty()) {
+					result += tour + "\n";
+				}
+				break;
+			case "028":
+				break;
+			case "029":
+				break;
+			case "031":
+				break;
+			case "033":
+				break;
+			case "035":
+				break;
+			case "050":
+				AtpcoRecord3Cat50 cat50 = (AtpcoRecord3Cat50) catObj;
+				if (cat50.getApplication_title() != null && !cat50.getApplication_title().isEmpty()) {
+					result += "\tAPPLICATION TITLE: " + cat50.getApplication_title() + "\n\n";
 				}
 				break;
 			}
