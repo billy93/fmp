@@ -21,6 +21,16 @@
                 }
             },
             'update': { method:'PUT' },
+            'findByCurrentUsername': {
+                method: 'GET',
+                transformResponse: function (data) {
+                    if (data) {
+                        data = angular.fromJson(data);
+                    }
+                    return data;
+                },
+                url:'api/clipboard-sheets/findByCurrentUsername'
+            },
             'copy': { method: 'PUT', url:'api/clipboard-sheets/copy' }
         });
     }

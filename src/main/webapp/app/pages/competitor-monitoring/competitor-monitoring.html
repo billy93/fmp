@@ -1,3 +1,7 @@
+<div class="content-title">
+	<h2>Competitor Monitoring</h2>
+	<jhi-alert></jhi-alert>
+</div>
 <div class="panel">
 	<div class="panel-body">
 		<div class="filter-hero">
@@ -5,56 +9,52 @@
 			<div class="filter-area">
 				<div class="clearfix">
 					<form name="queryForm" role="form" novalidate>
-						<div class="pull-left col-md-3 no-pad">
-							<div class="pull-left col-md-7 no-pad">
-								<div class="form-group">
-									<div class="custom-label semibold">Carrier</div>
-									<input type="text" class="form-control" name="carrier"
-										id="carrier" ng-model="vm.queryParams.carrier" uppercase />
-								</div>
-								<div class="form-group">
-									<div class="custom-label semibold">Origin Destination</div>
-									<input type="text" class="form-control" name="origdest"
-										id="origdest" ng-model="vm.queryParams.origdest" uppercase />
-								</div>
-								<div class="form-group">
-									<div class="custom-label semibold">OW/RT</div>
-									<select class="form-control" name="owrt" id="owrt"
-										ng-model="vm.queryParams.owrt">
-										<option value="{{value.key}}"
-											ng-repeat="value in vm.owrts track by $index">{{value.value}}</option>
-									</select>
-								</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<div class="custom-label semibold">Carrier</div>
+								<input type="text" class="form-control" name="carrier"
+								id="carrier" ng-model="vm.queryParams.carrier" uppercase />
 							</div>
-						</div>
-
-						<div class="pull-left col-md-3 no-pad">
-							<div class="col-md-7 no-lpad">
-								<div class="form-group">
-									<div class="custom-label semibold">Rule No</div>
-									<input type="text" class="form-control" name="ruleNo"
-										id="ruleNo" ng-model="vm.queryParams.ruleNo" maxlength="4"
-										uppercase />
-								</div>
-								<div class="form-group">
-									<div class="custom-label semibold">Source</div>
-									<select class="form-control" name="gaFareType" id="gaFareType"
-										ng-disabled="vm.queryParams.source != 'M'"
-										ng-model="vm.queryParams.gaFareType">
-										<option value="{{value}}"
-											ng-repeat="value in vm.gaFareTypes track by $index">{{value}}</option>
-									</select>
-								</div>
-								<div class="form-group">
-									<div class="custom-label semibold">FBC</div>
-									<input type="text" class="form-control" name="fareBasis"
-										id="fareBasis" ng-model="vm.queryParams.fareBasis" />
-								</div>
+							<div class="form-group">
+								<div class="custom-label semibold">Origin Destination</div>
+								<input type="text" class="form-control" name="origdest"
+									id="origdest" ng-model="vm.queryParams.origdest" uppercase />
+							</div>
+							<div class="form-group">
+								<div class="custom-label semibold">OW/RT</div>
+								<select class="form-control" name="owrt" id="owrt"
+									ng-model="vm.queryParams.owrt">
+									<option value="{{value.key}}"
+										ng-repeat="value in vm.owrts track by $index">{{value.value}}</option>
+								</select>
 							</div>
 						</div>
 						
-						<div class="pull-left col-md-3 no-lpad">
+						<div class="col-md-4">
 							<div class="form-group">
+								<div class="custom-label semibold">Rule No</div>
+								<input type="text" class="form-control" name="ruleNo"
+									id="ruleNo" ng-model="vm.queryParams.ruleNo" maxlength="4"
+									uppercase />
+							</div>
+							<div class="form-group">
+								<div class="custom-label semibold">Source</div>
+								<select class="form-control" name="gaFareType" id="gaFareType"
+									ng-disabled="vm.queryParams.source != 'M'"
+									ng-model="vm.queryParams.gaFareType">
+									<option value="{{value}}"
+										ng-repeat="value in vm.gaFareTypes track by $index">{{value}}</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<div class="custom-label semibold">FBC</div>
+								<input type="text" class="form-control" name="fareBasis"
+									id="fareBasis" ng-model="vm.queryParams.fareBasis" />
+							</div>
+						</div>
+						
+						<div class="col-md-4">
+							<div class="form-group mb0">
 								<div class="custom-label semibold">Travel Date</div>
 								<div class="row no-mar">
 									<div class="col-md-4 no-lpad">
@@ -133,20 +133,16 @@
 								</div>
 							</div>
 						</div>
-
-
-						<div class="pull-right col-md-3 no-lpad">
-							<div class="col-md-12 no-lpad">
-								<div class="clearfix form-group">
-									<div class="pull-right query-button-wrapper">
-										<button type="reset" ng-click="vm.reset()"
-											class="btn btn-default small pull-right">Reset</button>
-										<button type="button" class="btn btn-default small pull-right"
-											ng-click="vm.getChartData()" ng-disabled="vm.compMonitoring.length == 0 || vm.compMonitoring.length == null">Generate Graph</button>
-										<button type="button" class="btn btn-default small pull-right"
-											ng-click="vm.loadAll()">Query</button>
-									</div>
-								</div>
+						<div class="col-md-12 clearfix">
+							<div class="pull-right pv1">
+								<button type="reset" ng-click="vm.reset()"
+									class="btn btn-default small mb1">Reset</button>
+								<button type="button" class="btn btn-default small mb1"
+									ng-click="vm.generateGraph(vm.compMonitoring)"
+									ng-disabled="vm.compMonitoring.length == 0 || vm.compMonitoring.length == null">Generate
+									Chart</button>
+								<button type="button" class="btn btn-default small mb1"
+									ng-click="vm.loadAll()">Query</button>
 							</div>
 						</div>
 					</form>
