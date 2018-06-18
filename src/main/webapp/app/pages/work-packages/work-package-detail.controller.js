@@ -1127,6 +1127,39 @@
         		vm.workPackage.filingInstruction = true;
         		vm.selectOtherTab('filingInstruction');
         	}
+        	
+        	
+
+            if(vm.workPackage.fareSheet.length > 0){
+              	for(var x=0;x<vm.workPackage.fareSheet.length;x++){
+              		vm.changeVersion(vm.workPackage.fareSheet[x], 'current'); 
+              	}
+              }
+              
+              if(vm.workPackage.addonFareSheet.length > 0){
+              	for(var x=0;x<vm.workPackage.addonFareSheet.length;x++){
+              		vm.changeVersion(vm.workPackage.addonFareSheet[x], 'current'); 
+              	}
+              }
+              
+              if(vm.workPackage.marketFareSheet.length > 0){
+              	for(var x=0;x<vm.workPackage.marketFareSheet.length;x++){
+              		vm.changeVersion(vm.workPackage.marketFareSheet[x], 'current');                	
+              	}
+              }
+              
+              
+              if(vm.workPackage.discountFareSheet.length > 0){
+              	for(var x=0;x<vm.workPackage.discountFareSheet.length;x++){
+              		vm.changeVersion(vm.workPackage.discountFareSheet[x], 'current');
+              	}
+              }
+              
+              if(vm.workPackage.waiverFareSheet.length > 0){
+              	for(var x=0;x<vm.workPackage.waiverFareSheet.length;x++){
+              		vm.changeVersion(vm.workPackage.waiverFareSheet[x], 'current');
+              	}
+              }
         };
         
         vm.removeTab = function(){
@@ -5079,6 +5112,9 @@
       vm.changeVersion = function(workPackageSheet, index){    	  
     	  workPackageSheet.version = index;
     	  if(index == 'current'){
+    		  if(workPackageSheet.fares == null){
+    			  workPackageSheet.fares = [];
+    		  }
     		  workPackageSheet.currentFares = workPackageSheet.fares;
     	  }
     	  else{
