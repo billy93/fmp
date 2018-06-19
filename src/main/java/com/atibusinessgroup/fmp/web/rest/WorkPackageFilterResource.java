@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
-import com.atibusinessgroup.fmp.repository.WorkPackagefilterRepository;
+import com.atibusinessgroup.fmp.repository.WorkPackageFilterRepository;
 import com.atibusinessgroup.fmp.security.SecurityUtils;
 import com.atibusinessgroup.fmp.web.rest.errors.BadRequestAlertException;
 import com.atibusinessgroup.fmp.web.rest.util.HeaderUtil;
@@ -42,9 +42,9 @@ public class WorkPackageFilterResource {
 
     private static final String ENTITY_NAME = "work_package_filter";
 
-    private final WorkPackagefilterRepository workPackagefilterRepository;
+    private final WorkPackageFilterRepository workPackagefilterRepository;
 
-    public WorkPackageFilterResource(WorkPackagefilterRepository workPackagefilterRepository) {
+    public WorkPackageFilterResource(WorkPackageFilterRepository workPackagefilterRepository) {
         this.workPackagefilterRepository = workPackagefilterRepository;
     }
 
