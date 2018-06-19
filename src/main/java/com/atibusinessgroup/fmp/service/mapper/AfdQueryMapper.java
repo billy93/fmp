@@ -67,7 +67,7 @@ public class AfdQueryMapper {
 			for (AtpcoRecord1FareClassInformation fci:record1.getFareClassInformation()) {
 				String rbds = "";
 				for (String rbd:fci.getRbd()) {
-					if (rbd != null && !rbd.isEmpty()) {
+					if (rbd != null && !rbd.trim().isEmpty()) {
 						rbds += rbd + ", ";
 					}
 				}
@@ -78,9 +78,11 @@ public class AfdQueryMapper {
 			result.setSeason(record1.getSeasonType());
 			result.setFareType(record1.getFareType());
 			
-			if (result.getFareType() != null && !result.getFareType().isEmpty()) {
-				AtpcoMasterFareMatrix fareMatrix = atpcoMasterFareMatrixService.findOneByFareTypeCode(result.getFareType());
-				result.setCabin(fareMatrix.getCabinCode());
+			if (result.getFareType() != null && !result.getFareType().trim().isEmpty()) {
+				AtpcoMasterFareMatrix fareMatrix = atpcoMasterFareMatrixService.findOneByFareTypeCode(result.getFareType().trim());
+				if (fareMatrix != null) {
+					result.setCabin(fareMatrix.getCabinCode());
+				}
 			}
 		}
 		

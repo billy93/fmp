@@ -48,4 +48,6 @@ public class CollectionName {
 	public final static String ATPCO_RECORD_BASE_FARE_TABLE_989 = "atpco_record_base_fare_table_989";
 	public final static String ATPCO_RECORD_DATE_TABLE_994 = "atpco_record_date_table_994";
 	public final static String ATPCO_RECORD_TEXT_TABLE_996 = "atpco_record_text_table_996";
+	
+	public final static String ATPCO_CCF_PARCITY = "atpco_ccf_parcity";
 }

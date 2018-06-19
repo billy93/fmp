@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.atibusinessgroup.fmp.constant.CategoryType;
 import com.atibusinessgroup.fmp.constant.CollectionName;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoCcfParcity;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterPassengerTypeCode;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterSurchargeCode;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterTourTypeCode;
@@ -51,10 +52,10 @@ import com.atibusinessgroup.fmp.domain.dto.DateTable;
 import com.atibusinessgroup.fmp.domain.dto.FlightTable;
 import com.atibusinessgroup.fmp.domain.dto.Record3ReflectionObject;
 import com.atibusinessgroup.fmp.domain.dto.TextTable;
-import com.atibusinessgroup.fmp.repository.AtpcoCcfParcityRepository;
 import com.atibusinessgroup.fmp.repository.PassengerRepository;
 import com.atibusinessgroup.fmp.repository.SurchargeCodeRepository;
 import com.atibusinessgroup.fmp.repository.TourTypeCodeRepository;
+import com.atibusinessgroup.fmp.repository.custom.AtpcoCcfParcityCustomRepository;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoRecord3CategoryCustomRepository;
 import com.atibusinessgroup.fmp.service.util.AtpcoDataConverterUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -64,16 +65,16 @@ import com.mongodb.DBObject;
 @Service
 public class AtpcoRecordService {
 	
-	private final AtpcoCcfParcityRepository atpcoCcfParcityRepository;
+	private final AtpcoCcfParcityCustomRepository atpcoCcfParcityCustomRepository;
 	private final AtpcoRecord3CategoryCustomRepository atpcoRecord3CategoryCustomRepository;
 	private final SurchargeCodeRepository surchargeCodeRepository;
 	private final TourTypeCodeRepository tourTypeCodeRepository;
 	private final PassengerRepository passengerRepository;
 	private final MongoTemplate mongoTemplate;
 
-	public AtpcoRecordService(AtpcoCcfParcityRepository atpcoCcfParcityRepository, AtpcoRecord3CategoryCustomRepository atpcoRecord3CategoryCustomRepository, SurchargeCodeRepository surchargeCodeRepository,
+	public AtpcoRecordService(AtpcoCcfParcityCustomRepository atpcoCcfParcityCustomRepository, AtpcoRecord3CategoryCustomRepository atpcoRecord3CategoryCustomRepository, SurchargeCodeRepository surchargeCodeRepository,
 			TourTypeCodeRepository tourTypeCodeRepository, PassengerRepository passengerRepository, MongoTemplate mongoTemplate) {
-		this.atpcoCcfParcityRepository = atpcoCcfParcityRepository;
+		this.atpcoCcfParcityCustomRepository = atpcoCcfParcityCustomRepository;
 		this.atpcoRecord3CategoryCustomRepository = atpcoRecord3CategoryCustomRepository;
 		this.surchargeCodeRepository = surchargeCodeRepository;
 		this.tourTypeCodeRepository = tourTypeCodeRepository;
@@ -138,7 +139,7 @@ public class AtpcoRecordService {
 		if (compareEffectiveDiscontinueDates(focusDate, rEffectiveDate, rDiscontinueDate) && compareRoutingNo(fRoutingNo, rRoutingNo) && compareOwrt(fOwrt, rOwrt)
 				&& compareFootnote(fFootnote, rFootnote) && compareGeoSpec(fGeoType1, fGeoLoc1, fGeoType2, fGeoLoc2, rGeoType1, rGeoLoc1, rGeoType2, rGeoLoc2)) {
 			match = true;
-			// System.out.println("Matched");
+			 System.out.println("Matched");
 		}
 
 		return match;
@@ -158,7 +159,7 @@ public class AtpcoRecordService {
 				&& compareFareType(fFareType, rFareType) && compareSeasonType(fSeasonType, rSeasonType)
 				&& compareDayOfWeekType(fDayOfWeekType, rDayOfWeekType)) {
 			match = true;
-			// System.out.println("Matched");
+			 System.out.println("Matched");
 		}
 
 		return match;
@@ -175,7 +176,7 @@ public class AtpcoRecordService {
 			match = true;
 		}
 		
-//		System.out.println("Routing No: " + frn + ", " + rrn + ", " + match);
+		System.out.println("Routing No: " + frn + ", " + rrn + ", " + match);
 		
 		return match;
 	}
@@ -203,7 +204,7 @@ public class AtpcoRecordService {
 			match = true;
 		}
 		
-//		System.out.println("Fare Class: " + fFareClass + ", " + rFareClass + ", " + match);
+		System.out.println("Fare Class: " + fFareClass + ", " + rFareClass + ", " + match);
 		
 		return match;
 	}
@@ -212,14 +213,14 @@ public class AtpcoRecordService {
 		boolean match = false;
 
 		if (fFareType != null && rFareType != null) {
-			if (rFareType.isEmpty() || fFareType.contentEquals(rFareType)) {
+			if (rFareType.trim().isEmpty() || fFareType.contentEquals(rFareType)) {
 				match = true;
 			}
 		} else {
 			match = true;
 		}
 
-//		System.out.println("Fare Type: " + fFareType + ", " + rFareType + ", " + match);
+		System.out.println("Fare Type: " + fFareType + ", " + rFareType + ", " + match);
 		
 		return match;
 	}
@@ -228,12 +229,12 @@ public class AtpcoRecordService {
 		boolean match = false;
 		
 		if (fSeasonType != null && rSeasonType != null) {
-			if (rSeasonType.isEmpty() || fSeasonType.contentEquals(rSeasonType)) {
+			if (rSeasonType.trim().isEmpty() || fSeasonType.contentEquals(rSeasonType)) {
 				match = true;
 			}
 		} 
 		
-//		System.out.println("Season Type: " + fSeasonType + ", " + rSeasonType + ", " + match);
+		System.out.println("Season Type: " + fSeasonType + ", " + rSeasonType + ", " + match);
 		
 		return match;
 	}
@@ -242,14 +243,14 @@ public class AtpcoRecordService {
 		boolean match = false;
 
 		if (fDayOfWeekType != null && rDayOfWeekType != null) {
-			if (rDayOfWeekType.isEmpty() || fDayOfWeekType.contentEquals(rDayOfWeekType)) {
+			if (rDayOfWeekType.trim().isEmpty() || fDayOfWeekType.contentEquals(rDayOfWeekType)) {
 				match = true;
 			}
 		} else {
 			match = true;
 		}
 		
-//		System.out.println("DOW Type: " + fDayOfWeekType + ", " + rDayOfWeekType + ", " + match);
+		System.out.println("DOW Type: " + fDayOfWeekType + ", " + rDayOfWeekType + ", " + match);
 		
 		return match;
 	}
@@ -258,14 +259,14 @@ public class AtpcoRecordService {
 		boolean match = false;
 
 		if (fowrt != null && rowrt != null) {
-			if (rowrt.isEmpty() || fowrt.contentEquals(rowrt)) {
+			if (rowrt.trim().isEmpty() || fowrt.contentEquals(rowrt)) {
 				match = true;
 			}
 		} else {
 			match = true;
 		}
 		
-//		System.out.println("OW/RT: " + fowrt + ", " + rowrt + ", " + match);
+		System.out.println("OW/RT: " + fowrt + ", " + rowrt + ", " + match);
 		
 		return match;
 	}
@@ -274,14 +275,14 @@ public class AtpcoRecordService {
 		boolean match = false;
 
 		if (ffnt != null && rfnt != null) {
-			if (rfnt.isEmpty() || ffnt.contentEquals(rfnt)) {
+			if (rfnt.trim().isEmpty() || ffnt.contentEquals(rfnt)) {
 				match = true;
 			}
 		} else {
 			match = true;
 		}
 		
-//		System.out.println("Ftnt: " + ffnt + ", " + rfnt + ", " + match);
+		System.out.println("Ftnt: " + ffnt + ", " + rfnt + ", " + match);
 		
 		return match;
 	}
@@ -332,28 +333,34 @@ public class AtpcoRecordService {
 			}
 		}
 		
-		System.out.println("Effective discontinue date : " + focusDate + ", " + effective + ", " + discontinue);
+		System.out.println("Effective discontinue date : " + focusDate + ", " + effective + ", " + discontinue + ", " + match);
 		
 		return match;
 	}
 	
 	public boolean compareGeoSpec(String ft1, String fl1, String ft2, String fl2, String rt1, String rl1, String rt2,
 			String rl2) {
-		boolean match = true;
+		boolean match = false;
 		
-		ft1 = "C";
-		fl1 = "JKT";
+//		ft1 = "C";
+//		fl1 = "JKT";
+//		
+//		ft2 = "C";
+//		fl2 = "BKK";
+//		
+//		rt1 = "A";
+//		rl1 = "1";
+//		
+//		rt2 = "A";
+//		rl2 = "2";
 		
-		ft2 = "C";
-		fl2 = "BKK";
+		if (compareLocations(ft1, fl1, rt1, rl1) || compareLocations(ft1, fl1, rt2, rl2)) {
+			match = true;
+		} else if (compareLocations(ft2, fl2, rt1, rl1) || compareLocations(ft2, fl2, rt2, rl2)) {
+			match = true;
+		}
 		
-		rt1 = "C";
-		rl1 = "JKT";
-		
-		rt2 = "C";
-		rl2 = "BKK";
-		
-//		System.out.println("GeoSpec: (" + ft1 + ", " + fl1 + ") (" + ft2 + ", " + fl2 + ") | (" + rt1 + ", " + rl1 + ") (" + rt2 + ", " + rl2 + ")" + match);
+		System.out.println("GeoSpec: (" + ft1 + ", " + fl1 + ") (" + ft2 + ", " + fl2 + ") | (" + rt1 + ", " + rl1 + ") (" + rt2 + ", " + rl2 + ") " + match);
 		
 		return match;
 	}
@@ -361,6 +368,24 @@ public class AtpcoRecordService {
 	public boolean compareLocations(String t1, String l1, String t2, String l2) {
 		boolean match = false;
 		
+		if (t1 != null && !t1.trim().isEmpty() && t2 != null && !t2.trim().isEmpty() &&
+				l1 != null && !l1.trim().isEmpty() && l2 != null && !l2.trim().isEmpty()) {
+			t1 = t1.trim();
+			t2 = t2.trim();
+			l1 = l1.trim();
+			l2 = l2.trim();
+			
+			if (t1.contentEquals(t2) && l1.contentEquals(l2)) {
+				match = true;
+			} else {
+				AtpcoCcfParcity par = atpcoCcfParcityCustomRepository.findOneByTypesAndLocations(t1, l1, t2, l2);
+				if (par != null) {
+					match = true;
+				}
+			}
+		} else {
+			match = true;
+		}
 		
 		return match;
 	}

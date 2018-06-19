@@ -145,9 +145,11 @@ public class AfdQueryResource {
         	for (AtpcoRecord1 record1:a1fare.getAtpcoRecord1()) {
         		boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afare.getOriginCity(), "C", afare.getDestinationCity(), afare.getOwrt(), afare.getRoutingNo(), afare.getFootnote(), focusDate,
         				record1.getGeoType1(), record1.getGeoLoc1(), record1.getGeoType2(), record1.getGeoLoc2(), record1.getOwrt(), record1.getRoutingNo(), record1.getFootnote(), record1.getEffectiveDateObject(), record1.getDiscontinueDateObject());
-        	
+        		
         		if (matched) {
         			matchedRecord1 = record1;
+        			log.debug("MATCH FOUND " + afare.getFareClassCode());
+        			log.debug(matchedRecord1.toString());
         			break;
         		}
         	}
