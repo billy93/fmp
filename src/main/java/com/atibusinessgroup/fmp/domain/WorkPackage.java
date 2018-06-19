@@ -1496,4 +1496,9 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 		this.distributionReviewLevel = distributionReviewLevel;
 	}
 	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return this.getCreatedDate().toString();
+	}
 }
