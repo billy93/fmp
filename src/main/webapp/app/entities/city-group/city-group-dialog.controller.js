@@ -5,15 +5,27 @@
         .module('fmpApp')
         .controller('CityGroupDialogController', CityGroupDialogController);
 
-    CityGroupDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'CityGroup'];
+    CityGroupDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'CityGroup', 'cities'];
 
-    function CityGroupDialogController ($timeout, $scope, $stateParams, $uibModalInstance, entity, CityGroup) {
+    function CityGroupDialogController ($timeout, $scope, $stateParams, $uibModalInstance, entity, CityGroup, cities) {
         var vm = this;
 
         vm.cityGroup = entity;
         vm.clear = clear;
         vm.save = save;
-
+        vm.cities = cities;
+        
+        vm.addCities = function(){
+        	if(vm.cityGroup.cities == null){
+                vm.cityGroup.cities = [];
+        	}
+        	 vm.cityGroup.cities.push(vm.selectCity);
+        }
+        
+        vm.removeCities = function(city){
+        	var index = vm.selectedCities.indexOf(city);
+        	 vm.cityGroup.cities.splice(index, 1); 
+        }
         $timeout(function (){
             angular.element('.form-group:eq(1)>input').focus();
         });

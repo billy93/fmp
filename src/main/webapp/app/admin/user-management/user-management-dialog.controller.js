@@ -75,6 +75,15 @@
         		if (vm.user.businessAreas.indexOf(vm.businessArea.name) == -1) {
         			vm.user.businessAreas.push(vm.businessArea.name);
         		}
+        		
+        		if(vm.businessArea.name == "ALL"){
+        			vm.user.businessAreas = [];
+        			for(var l = 0; l < vm.businessAreas.length; l++){
+        				if(vm.businessAreas[l].name != "ALL"){
+        					vm.user.businessAreas.push(vm.businessAreas[l].name);
+        				}
+        			}
+        		}
 
         		vm.businessArea = null;
         	}

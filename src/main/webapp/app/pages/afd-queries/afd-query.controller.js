@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('AfdQueryController', AfdQueryController);
 
-    AfdQueryController.$inject = ['$state', 'AfdQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', 'tariffNumbers', 'cities', '$uibModal', 'Clipboard'];
+    AfdQueryController.$inject = ['$state', 'AfdQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', 'tariffNumbers', 'cities', '$uibModal', 'Clipboard', 'Timezone'];
 
-    function AfdQueryController($state, AfdQuery, ParseLinks, AlertService, paginationConstants, queryParams, tariffNumbers, cities, $uibModal, Clipboard ) {
+    function AfdQueryController($state, AfdQuery, ParseLinks, AlertService, paginationConstants, queryParams, tariffNumbers, cities, $uibModal, Clipboard, Timezone) {
 
         var vm = this;
         vm.loadPage = loadPage;
@@ -24,6 +24,7 @@
         vm.viewFullText = viewFullText;
         vm.showErrorModal = showErrorModal;
         vm.selectedRows = [];
+        vm.timezone = Timezone.GMT7;
         
         vm.reset = reset;
         vm.page = 1;
@@ -186,8 +187,24 @@
         }
         
         function selectAll() {
-        	for (var i = 0; i < vm.afdQueries.length; i++) {
-        		vm.selectedRows[i] = vm.afdQueries[i];
+        	vm.allSelected = false;
+        	var isEmpty = true;
+        	
+        	for (var i = 0; i < vm.selectedRows.length; i++) {
+    			if (vm.selectedRows[i] != null) {
+    				isEmpty = false;
+    			}
+    		}
+        	
+        	if (isEmpty) {
+        		for (var i = 0; i < vm.afdQueries.length; i++) {
+            		vm.selectedRows[i] = vm.afdQueries[i];
+            	}
+        		vm.allSelected = true;
+        	} else {
+        		for (var i = 0; i < vm.selectedRows.length; i++) {
+        			vm.selectedRows[i] = null;
+        		}
         	}
         }
         
@@ -223,7 +240,6 @@
                 controllerAs: 'vm',
                 backdrop: 'static',
                 size: 'lg',
-                windowClass: 'full',
                 resolve: {
                     entity: category
                 }

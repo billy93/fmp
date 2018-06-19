@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -24,6 +25,9 @@ public class CityGroup implements Serializable {
     @Field("description")
     private String description;
 
+    @Field("cities")
+    private List<City> cities;
+    
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public String getId() {
         return id;
@@ -58,9 +62,19 @@ public class CityGroup implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+    
+    
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
-    @Override
+    public List<City> getCities() {
+		return cities;
+	}
+
+	public void setCities(List<City> cities) {
+		this.cities = cities;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

@@ -1,3 +1,7 @@
+<div class="content-title">
+	<h2>AFD Query</h2>
+	<jhi-alert></jhi-alert>
+</div>
 <div class="panel">
 	<div class="panel-body">
 		<div class="filter-hero">
@@ -182,7 +186,7 @@
 											<input type="text" class="form-control" name="woId" id="woId" ng-model="vm.queryParams.woId" ng-disabled="true"/>
 										</div>
 									</div>
-									<div class="col-md-6 no-lpad">
+									<div class="col-md-6 no-pad">
 										<div class="form-group">
 											<div class="custom-label semibold">Tour Code</div>
 											<input type="text" class="form-control" name="tourCode" id="tourCode" ng-model="vm.queryParams.tourCode" ng-disabled="true"/>
@@ -255,7 +259,7 @@
 			</div>
 		</div>
 		
-		<div class="table-wrapper" ng-if="vm.afdQueries">
+		<div class="table-wrapper mb2" ng-if="vm.afdQueries">
 			<div class="datatable-wrapper form-inline">
 				<div class="clearfix">
 					<div class="pull-left w50">
@@ -419,19 +423,19 @@
 			                    <td></td>
 			                    <td></td>
 			                    <td></td>
-			                    <td><span ng-if="afdQuery.effectiveDate != 'indef'">{{afdQuery.effectiveDate | date:'ddMMMyyyy'}}</span></td>
-			                	<td><span ng-if="afdQuery.discontinueDate != 'indef'">{{afdQuery.discontinueDate | date:'ddMMMyyyy'}}</span></td>
-			                	<td><span ng-if="afdQuery.gfsDate != undefined && afdQuery.gfsDate != null">{{afdQuery.gfsDate | date:'ddMMMyyyy'}} - {{afdQuery.gfsReference}}</span></td>
+			                    <td><span ng-if="afdQuery.effectiveDate != 'indef'">{{afdQuery.effectiveDate | date:'ddMMMyyyy':vm.timezone}}</span></td>
+			                	<td><span ng-if="afdQuery.discontinueDate != 'indef'">{{afdQuery.discontinueDate | date:'ddMMMyyyy':vm.timezone}}</span></td>
+			                	<td><span ng-if="afdQuery.gfsDate != undefined && afdQuery.gfsDate != null">{{afdQuery.gfsDate | date:'ddMMMyyyy':vm.timezone}} - {{afdQuery.gfsReference}}</span></td>
 			                	<td>{{afdQuery.globalIndicator}}</td>
-			                	<td><span ng-if="afdQuery.ruleFocusDate != 'indef'">{{afdQuery.ruleFocusDate | date:'ddMMMyyyy'}}</span></td>
+			                	<td><span ng-if="afdQuery.ruleFocusDate != 'indef'">{{afdQuery.ruleFocusDate | date:'ddMMMyyyy':vm.timezone}}</span></td>
 			                	<td></td>
-			                	<td><span ng-if="afdQuery.travelStartDate != 'indef'">{{afdQuery.travelStartDate | date:'ddMMMyyyy'}}</span></td>
-			                	<td><span ng-if="afdQuery.travelEndDate != 'indef'">{{afdQuery.travelEndDate | date:'ddMMMyyyy'}}</span></td>
-			                	<td><span ng-if="afdQuery.travelComplete != 'indef'">{{afdQuery.travelComplete | date:'ddMMMyyyy'}}</span></td>
-			                	<td><span ng-if="afdQuery.saleStartDate != 'indef'">{{afdQuery.saleStartDate | date:'ddMMMyyyy'}}</span></td>
-			                	<td><span ng-if="afdQuery.saleEndDate != 'indef'">{{afdQuery.saleEndDate | date:'ddMMMyyyy'}}</span></td>
-			                	<td><span ng-if="afdQuery.resStartDate != 'indef'">{{afdQuery.resStartDate | date:'ddMMMyyyy'}}</span></td>
-			                	<td><span ng-if="afdQuery.resEndDate != 'indef'">{{afdQuery.resEndDate | date:'ddMMMyyyy'}}</span></td>
+			                	<td><span ng-if="afdQuery.travelStartDate != 'indef'">{{afdQuery.travelStartDate | date:'ddMMMyyyy':vm.timezone}}</span></td>
+			                	<td><span ng-if="afdQuery.travelEndDate != 'indef'">{{afdQuery.travelEndDate | date:'ddMMMyyyy':vm.timezone}}</span></td>
+			                	<td><span ng-if="afdQuery.travelComplete != 'indef'">{{afdQuery.travelComplete | date:'ddMMMyyyy':vm.timezone}}</span></td>
+			                	<td><span ng-if="afdQuery.saleStartDate != 'indef'">{{afdQuery.saleStartDate | date:'ddMMMyyyy':vm.timezone}}</span></td>
+			                	<td><span ng-if="afdQuery.saleEndDate != 'indef'">{{afdQuery.saleEndDate | date:'ddMMMyyyy':vm.timezone}}</span></td>
+			                	<td><span ng-if="afdQuery.resStartDate != 'indef'">{{afdQuery.resStartDate | date:'ddMMMyyyy':vm.timezone}}</span></td>
+			                	<td><span ng-if="afdQuery.resEndDate != 'indef'">{{afdQuery.resEndDate | date:'ddMMMyyyy':vm.timezone}}</span></td>
 			                	<td>{{afdQuery.minStay}}</td>
 			                	<td>{{afdQuery.maxStay}}</td>
 			                	<td>{{afdQuery.advancePurchase}}</td>
@@ -441,8 +445,8 @@
 			                	<td>{{afdQuery.firstSeasonDate}}</td>
 			                	<td>{{afdQuery.lastSeasonDate}}</td>
 			                	<td>
-			                		<span ng-if="afdQuery.travelStartDate == 'indef'">XXXXXXXX</span><span ng-if="afdQuery.travelStartDate != 'indef'">{{afdQuery.travelStartDate | date:'ddMMMyyyy'}}</span>
-			                		<span ng-if="afdQuery.travelEndDate == 'indef'">-XXXXXXXX</span><span ng-if="afdQuery.travelEndDate != undefined && afdQuery.travelEndDate != null && afdQuery.travelEndDate != 'indef'">-{{afdQuery.travelEndDate | date:'ddMMMyyyy'}}</span>
+			                		<span ng-if="afdQuery.travelStartDate == 'indef'">XXXXXXXX</span><span ng-if="afdQuery.travelStartDate != 'indef'">{{afdQuery.travelStartDate | date:'ddMMMyyyy':vm.timezone}}</span>
+			                		<span ng-if="afdQuery.travelEndDate == 'indef'">-XXXXXXXX</span><span ng-if="afdQuery.travelEndDate != undefined && afdQuery.travelEndDate != null && afdQuery.travelEndDate != 'indef'">-{{afdQuery.travelEndDate | date:'ddMMMyyyy':vm.timezone}}</span>
 			                	</td>
 			               		<td>{{afdQuery.fareType}}</td>
 			                	<td>{{afdQuery.paxType}}</td>
@@ -464,16 +468,22 @@
 		</div>
 		
 		<div class="additional-info-wrapper" ng-if="vm.categoryRules">
-     		<div class="additional-info" ng-click="vm.showCategoryDetail(cat)" ng-class="{'lightyellow': cat.catAttributes.length > 0 && cat.type.includes('F'), 'yellow': cat.catAttributes.length > 0 && cat.type.includes('R'), 'blue': cat.catAttributes.length > 0 && cat.type == 'G'}" ng-repeat="cat in vm.categoryRules track by cat.catNo">
-        		{{cat.catNo}} {{cat.catName}} <span ng-if="cat.catAttributes.length > 0">({{cat.type}})</span>
-      		</div>
-      		<div class="additional-info action dropdown custom" ng-click="vm.actionClicked = !vm.actionClicked">
-      			Action <i class="fa fa-caret-down pull-right"></i>
-      			<div class="action-wrapper" ng-if="vm.actionClicked">
-      				<a ng-click="vm.showLegend()">Show Legend</a>
-      				<a ng-click="vm.viewFullText()">View Full Text</a>
-      			</div>
-      		</div>
+			<div class="clearfix">
+				<div class="pull-left ph5px additional-container" ng-repeat="cat in vm.categoryRules track by cat.catNo">
+					<div class="additional-info" ng-click="vm.showCategoryDetail(cat)" ng-class="{'lightyellow': cat.catAttributes.length > 0 && cat.type.includes('F'), 'yellow': cat.catAttributes.length > 0 && cat.type.includes('R'), 'blue': cat.catAttributes.length > 0 && cat.type == 'G'}">
+	        			{{cat.catNo}} {{cat.catName}} <span ng-if="cat.catAttributes.length > 0">({{cat.type}})</span>
+		      		</div>
+				</div>
+				<div class="pull-left ph5px additional-container">
+					<div class="additional-info action dropdown custom" ng-click="vm.actionClicked = !vm.actionClicked">
+		      			Action <i class="fa fa-caret-down pull-right"></i>
+		      			<div class="action-wrapper" ng-if="vm.actionClicked">
+		      				<a ng-click="vm.showLegend()">Show Legend</a>
+		      				<a ng-click="vm.viewFullText()">View Full Text</a>
+		      			</div>
+		      		</div>
+	      		</div>
+			</div>
    		</div>
    		
 		<div class="text-center" ng-if="vm.afdQueries">

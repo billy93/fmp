@@ -6,10 +6,10 @@
 <div class="modal-body">
 	<div class="panel">
 		<div class="panel-body">
-			<pre>{{vm.category.textFormat}}</pre>
+			<pre class="transparent">{{vm.category.textFormat}}</pre>
 			<div class="clearfix">
 				<div class="col-md-12 text-center">
-					<label ng-click="vm.showCodedValue = !vm.showCodedValue" style="font-weight: normal">View details &nbsp;<i class="fa fa-caret-down pull-right"></i></label>
+					<label ng-click="vm.showCodedValue = !vm.showCodedValue" style="font-weight: normal">View coded value &nbsp;<i class="fa fa-caret-down pull-right"></i></label>
 				</div>
 			</div>
 			
@@ -31,9 +31,9 @@
 				                <tr ng-repeat="catAtts in vm.category.catAttributes" ng-init="parentIndex = $index">
 				                	<td>{{parentIndex + 1}}</td>
 				                	<td>{{catAtts.type}}</td>
-				                	<td>{{catAtts.relationship}} <span ng-if="catAtts.relationship == '='">Then</span><span ng-if="catAtts.relationship == ':'">If</span><span ng-if="catAtts.relationship == '&'">And</span><span ng-if="catAtts.relationship == '/'">Or</span><span ng-if="catAtts.relationship == '*'">Else</span></td>
+				                	<td>{{catAtts.relationship}}</td>
 				                    <td ng-repeat="att in catAtts.attributes">
-				                    	<span ng-if="vm.checkPreElement(att.key, att.value)"><pre>{{att.value}}</pre></span>
+				                    	<span ng-if="vm.checkPreElement(att.key, att.value)"><pre class="transparent">{{att.value}}</pre></span>
 				                    	<span ng-if="att.key != 'id' && !vm.checkPreElement(att.key)">{{att.value}}</span>	
 				                    </td>
 			                    </tr>
@@ -42,7 +42,7 @@
 					</div>
 				</div>
 			</div>
-			<button type="submit" class="btn btn-info" ng-click="vm.clear()">
+			<button type="submit" class="btn btn-back" ng-click="vm.clear()">
 		        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Close</span>
 		    </button>
 		</div>

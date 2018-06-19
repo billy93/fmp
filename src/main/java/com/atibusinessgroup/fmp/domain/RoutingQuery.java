@@ -2,6 +2,9 @@ package com.atibusinessgroup.fmp.domain;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
+
+import com.atibusinessgroup.fmp.domain.dto.RouteMapView;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
@@ -59,7 +62,7 @@ public class RoutingQuery implements Serializable {
     @Field("unt_pt")
     private String untPt;
     
-    private ArrayList<ArrayList<String>> details;
+    private String[][] details;
     private List<RoutingQueryRestriction> restrictions;
     private List<RoutingQueryTextRestriction> texts;
 
@@ -236,11 +239,11 @@ public class RoutingQuery implements Serializable {
         this.untPt = untPt;
     }
 
-    public ArrayList<ArrayList<String>> getDetails() {
+    public String[][] getDetails() {
 		return details;
 	}
 
-	public void setDetails(ArrayList<ArrayList<String>> details) {
+	public void setDetails(String[][] details) {
 		this.details = details;
 	}
 

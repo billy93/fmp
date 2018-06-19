@@ -9,6 +9,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterPassengerTypeCode;
+
 @Document(collection = "addOn")
 public class AddOn implements Serializable {
 
@@ -87,7 +89,7 @@ public class AddOn implements Serializable {
 	private String fareBasisCode;
 	
 	@Field("passengerType")
-	private Passenger passengerType;
+	private AtpcoMasterPassengerTypeCode passengerType;
 
 	@Field("secondaryPassengerType")
 	private List<SecondaryPassengerType> secondaryPassengerType;
@@ -189,11 +191,11 @@ public class AddOn implements Serializable {
 		this.discontinueDate = discontinueDate;
 	}
 
-	public Passenger getPassengerType() {
+	public AtpcoMasterPassengerTypeCode getPassengerType() {
 		return passengerType;
 	}
 
-	public void setPassengerType(Passenger passengerType) {
+	public void setPassengerType(AtpcoMasterPassengerTypeCode passengerType) {
 		this.passengerType = passengerType;
 	}
 

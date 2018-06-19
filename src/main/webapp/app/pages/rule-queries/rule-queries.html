@@ -1,3 +1,8 @@
+<div class="content-title">
+	<h2>Rule Query</h2>
+	<jhi-alert></jhi-alert>
+</div>
+
 <div class="box-body bbgrey">
 	<div class="clearfix tab-body">
 		<ul class="clearfix nav-responsive nav nav-tabs"
@@ -23,138 +28,119 @@
 							<div class="filter-area">
 								<div class="clearfix">
 									<form name="queryForm" role="form" novalidate>
-										<div class="col-md-6 no-pad">
-											<div class="col-md-6 no-lpad">
-												<div class="form-group">
-													<div class="custom-label semibold">Carrier</div>
-													<input type="text" class="form-control" name="carrier"
-														id="cxr" ng-model="vm.queryParams.cxr" uppercase />
-												</div>
-												<div class="form-group">
-													<div class="custom-label semibold">Rule Number</div>
-													<input type="text" class="form-control" name="ruleNumber"
-														id="ruleNo" ng-model="vm.queryParams.ruleNo" uppercase />
-												</div>
+										<div class="pull-left col-md-4 no-lpad">
+											<div class="form-group">
+												<div class="custom-label semibold">Carrier</div>
+												<input type="text" class="form-control" name="carrier"
+													id="cxr" ng-model="vm.queryParams.cxr" uppercase />
 											</div>
-											<div class="col-md-6 no-lpad">
-												<div class="form-group">
-													<div class="custom-label semibold">Rule Type</div>
-													<select class="form-control" name="type" id="catNo"
-														ng-model="vm.queryParams.type">
-														<option value="">All</option>
-														<option value="1">Fare By Rule</option>
-														<option value="2">General Rule</option>
-														<option value="3">Rule</option>
-													</select>
-												</div>
-												<div class="form-group">
-													<div class="custom-label semibold">Tariff</div>
-													<input type="text" class="form-control" name="tariff"
-														id="ruleTarNo" ng-model="vm.queryParams.ruleTarNo"
-														uppercase />
-												</div>
+											<div class="form-group">
+												<div class="custom-label semibold">Rule Number</div>
+												<input type="text" class="form-control" name="ruleNumber"
+													id="ruleNo" ng-model="vm.queryParams.ruleNo" uppercase />
+											</div>
+											<div class="form-group">
+												<div class="custom-label semibold">Rule Type</div>
+												<select class="form-control" name="type" id="catNo"
+													ng-model="vm.queryParams.type">
+													<option value="">All</option>
+													<option value="1">Fare By Rule</option>
+													<option value="2">General Rule</option>
+													<option value="3">Rule</option>
+												</select>
 											</div>
 										</div>
 
-										<div class="col-md-6 no-pad">
-											<div class="col-md-6 no-rpad">
-												<div class="form-group">
-													<div class="custom-label semibold">Category</div>
-													<select class="form-control" name="category" id="catNo"
-														ng-model="vm.queryParams.catNo">
-														<option value="">All</option>
-														<option value="001">01 - Eligibility</option>
-														<option value="002">02 - Day/Time</option>
-														<option value="003">03 - Season App</option>
-														<option value="004">04 - Flight App</option>
-														<option value="005">05 - Adv Bkg</option>
-														<option value="006">06 - Min Stay</option>
-														<option value="007">07 - Max Stay</option>
-														<option value="008">08 - Stopovers</option>
-														<option value="009">09 - Transfers</option>
-														<option value="010">10 - Comb'ty</option>
-														<option value="011">11 - Blackouts</option>
-														<option value="012">12 - Surcharges</option>
-														<option value="013">13 - Accmp Tvl</option>
-														<option value="014">14 - Tvl Rest</option>
-														<option value="015">15 - Sale Rest</option>
-														<option value="016">16 - Penalties</option>
-														<option value="017">17 - Hi Int Pt</option>
-														<option value="018">18 - Tkt Endorse</option>
-														<option value="019">19 - Child Disc</option>
-														<option value="020">20 - Tour Disc</option>
-														<option value="021">21 - Agents Disc</option>
-														<option value="022">22 - Other Disc</option>
-														<option value="023">23 - Misc Tags</option>
-														<option value="026">26 - Groups</option>
-														<option value="027">27 - Tours</option>
-														<option value="028">28 - Visit Cntry</option>
-														<option value="029">29 - Deposits</option>
-														<option value="031">31 - Vol Chgs</option>
-														<option value="033">33 - Vol Refunds</option>
-														<option value="035">35 - Neg Fares</option>
-														<option value="050">50 - Rule App</option>
-													</select>
-												</div>
-												<div class="form-group">
-													<div class="custom-label semibold">Fare Group</div>
-													<select class="form-control" name="fareGroup" id="fGroup"
-														ng-model="vm.queryParams.fareGroup">
-														<option value="">All</option>
-														<option value="A">A - BEST PRICE</option>
-														<option value="B">B - ECONOMY AFFORDABLE</option>
-														<option value="C">C - ECONOMY FLEXIBLE</option>
-														<option value="D">D - BUSINESS FLEXIBLE</option>
-														<option value="E">E - GLOBAL</option>
-														<option value="F">F - ECONOMY GLOBAL</option>
-													</select>
-												</div>
 
+										<div class="pull-left col-md-4 no-lpad">
+											<div class="form-group">
+												<div class="custom-label semibold">Tariff Number</div>
+												<input type="text" class="form-control" name="tariff"
+													id="ruleTarNo" ng-model="vm.queryParams.ruleTarNo"
+													uppercase />
+											</div>
+											<div class="form-group">
 
+												<div class="custom-label semibold">Category</div>
+												<select class="form-control" name="category" id="catNo"
+													ng-model="vm.queryParams.catNo">
+													<option value="">All</option>
+													<option value="001">01 - Eligibility</option>
+													<option value="002">02 - Day/Time</option>
+													<option value="003">03 - Season App</option>
+													<option value="004">04 - Flight App</option>
+													<option value="005">05 - Adv Bkg</option>
+													<option value="006">06 - Min Stay</option>
+													<option value="007">07 - Max Stay</option>
+													<option value="008">08 - Stopovers</option>
+													<option value="009">09 - Transfers</option>
+													<option value="010">10 - Comb'ty</option>
+													<option value="011">11 - Blackouts</option>
+													<option value="012">12 - Surcharges</option>
+													<option value="013">13 - Accmp Tvl</option>
+													<option value="014">14 - Tvl Rest</option>
+													<option value="015">15 - Sale Rest</option>
+													<option value="016">16 - Penalties</option>
+													<option value="017">17 - Hi Int Pt</option>
+													<option value="018">18 - Tkt Endorse</option>
+													<option value="019">19 - Child Disc</option>
+													<option value="020">20 - Tour Disc</option>
+													<option value="021">21 - Agents Disc</option>
+													<option value="022">22 - Other Disc</option>
+													<option value="023">23 - Misc Tags</option>
+													<option value="026">26 - Groups</option>
+													<option value="027">27 - Tours</option>
+													<option value="028">28 - Visit Cntry</option>
+													<option value="029">29 - Deposits</option>
+													<option value="031">31 - Vol Chgs</option>
+													<option value="033">33 - Vol Refunds</option>
+													<option value="035">35 - Neg Fares</option>
+													<option value="050">50 - Rule App</option>
+												</select>
 											</div>
-											<div class="col-md-6 no-rpad">
-												<div class="form-group">
-													<div class="custom-label semibold">Product Sub Type</div>
-													<select class="form-control" name="productSubType"
-														id="prodSubType" ng-model="vm.queryParams.productSubType">
-														<option value="">All</option>
-													</select>
-												</div>
-												<div class="form-group">
-													<div class="custom-label semibold">Product Type</div>
-													<select class="form-control" name="productType"
-														id="prodType" ng-model="vm.queryParams.productType">
-														<option value="">All</option>
-														<option value="1">ADHOC PRIVATE</option>
-														<option value="2">ADHOC PUBLIC</option>
-														<option value="3">CODESHARE PRIVATE</option>
-														<option value="4">CODESHARE PUBLIC</option>
-														<option value="5">CORPORATE PRIVATE</option>
-														<option value="6">CORPORATE PUBLIC</option>
-														<option value="7">PROMO PRIVATE</option>
-														<option value="8">PROMO PUBLIC</option>
-														<option value="9">SPA PRIVATE</option>
-														<option value="10">SPA PUBLIC</option>
-														<option value="11">YEARLY PRIVATE</option>
-														<option value="12">YEARLY PUBLIC</option>
-													</select>
-												</div>
+											<div class="form-group">
+												<div class="custom-label semibold">Fare Group</div>
+												<select class="form-control" name="fareGroup" id="fGroup"
+													ng-model="vm.queryParams.fareGroup">
+													<option value="">All</option>
+													<option value="A">A - BEST PRICE</option>
+													<option value="B">B - ECONOMY AFFORDABLE</option>
+													<option value="C">C - ECONOMY FLEXIBLE</option>
+													<option value="D">D - BUSINESS FLEXIBLE</option>
+													<option value="E">E - GLOBAL</option>
+													<option value="F">F - ECONOMY GLOBAL</option>
+												</select>
 											</div>
-											
-											<div class="clearfix">
-												<div class="pull-right pv1">
+										</div>
+
+										<div class="pull-right col-md-4 no-rpad">
+											<div class="form-group">
+												<div class="custom-label semibold">Additional Options</div>
+												<div class="checkbox-wrapper">
+													<label> <input type="checkbox"
+														name="includeConstructed"
+														ng-model="vm.queryParams.includeConstructed"
+														ng-disabled="true"> Include Constructed
+													</label>
+												</div>
+												<br/>
+												<button type="button"
+														class="btn btn-default small pull-left"
+														ng-click="" disabled="disabled">Generate Derived Fares</button>
+												<br/>
+												<br/>
+												<div class="form-group mt1">
 													<button type="button"
-															class="btn btn-default small"
-															ng-click="vm.loadAll(); vm.hideDetail()">Query</button>
+														class="btn btn-default small pull-left"
+														ng-click="vm.loadAll(); vm.hideDetail()">Query</button>
 													<button type="button"
-															class="btn btn-default small"
-															ng-click="vm.hideDetail(); vm.clearFilter();">Clear</button>
-													<button type="reset"
-															ng-click="vm.reset(); vm.hideDetail()"
-															class="btn btn-default small">Reset</button>
+														class="btn btn-default small pull-left"
+														ng-click="vm.hideDetail(); vm.clearFilter();">Clear</button>
+													<button type="reset" ng-click="vm.reset(); vm.hideDetail()"
+														class="btn btn-default small pull-left">Reset</button>
 												</div>
+												
 											</div>
-
 										</div>
 									</form>
 								</div>
@@ -177,7 +163,7 @@
 										</thead>
 										<tbody>
 											<tr ng-repeat="ruleQuery in vm.ruleQueries"
-												ng-click="vm.selectedRow = ruleQuery; vm.getRules(ruleQuery); vm.getRules2(ruleQuery); vm.showDetail()"
+												ng-click="vm.selectedRow = ruleQuery; vm.showDetail(); vm.getRules(ruleQuery); vm.getRules2(ruleQuery);"
 												ng-class="{'selected': vm.selectedRow == ruleQuery}">
 												<td>{{$index + 1}}</td>
 												<td>{{ruleQuery.cxr}}</td>
@@ -258,12 +244,15 @@
 
 								<div class="additional-info-wrapper" id="ruleCategories"
 									hidden="hidden">
-									<div class="additional-info"
-										ng-click="vm.showCategoryDetail(cat)"
-										ng-class="{'yellow': cat.catAttributes.length > 0 && cat.type != 'G', 'blue': cat.catAttributes.length > 0 && cat.type == 'G'}"
-										ng-repeat="cat in vm.ruleQueryCategories2 track by cat.catNo">
-										{{cat.catNo}} {{cat.catName}} <span
-											ng-if="cat.catAttributes.length > 0">({{cat.type}})</span>
+									<div class="clearfix">
+										<div class="pull-left ph5px additional-container" ng-repeat="cat in vm.ruleQueryCategories2 track by cat.catNo">
+											<div class="additional-info"
+												ng-click="vm.showCategoryDetail(cat)"
+												ng-class="{'yellow': cat.catAttributes.length > 0 && cat.type != 'G', 'blue': cat.catAttributes.length > 0 && cat.type == 'G'}">
+												{{cat.catNo}} {{cat.catName}} <span
+													ng-if="cat.catAttributes.length > 0">({{cat.type}})</span>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -274,6 +263,9 @@
 		</div>
 
 
+		
+		
+		
 		<!-- Fare Class -->
 		<div ng-class="{active:vm.tab2}" class="tab-pane" id="fare">
 			<div class="panel">
@@ -288,7 +280,8 @@
 											<div class="pull-left ph5px w50">
 												<div class="panel panel-default mb0"
 													style="background-color: transparent !important; border-color: #f5f5f5">
-													<div class="panel-heading" style="background-color: #f5f5f5">
+													<div class="panel-heading"
+														style="background-color: #f5f5f5">
 														<h3 class="panel-title">Generic Filters</h3>
 													</div>
 													<div class="panel-body" style="height: 273px;">
@@ -300,8 +293,9 @@
 															</div>
 															<div class="form-group">
 																<div class="custom-label semibold">Rule Number</div>
-																<input type="text" class="form-control" name="ruleNumber"
-																	id="ruleNo" ng-model="vm.queryParams.ruleNo" uppercase />
+																<input type="text" class="form-control"
+																	name="ruleNumber" id="ruleNo"
+																	ng-model="vm.queryParams.ruleNo" uppercase />
 															</div>
 														</div>
 														<div class="pull-left col-md-6 no-lpad">
@@ -323,7 +317,8 @@
 											<div class="pull-left ph5px w25">
 												<div class="panel panel-default mb0"
 													style="background-color: transparent !important; border-color: #f5f5f5;">
-													<div class="panel-heading" style="background-color: #f5f5f5">
+													<div class="panel-heading"
+														style="background-color: #f5f5f5">
 														<h3 class="panel-title">Advanced Filters</h3>
 													</div>
 													<div class="panel-body"
@@ -354,7 +349,8 @@
 											<div class="pull-left ph5px w25">
 												<div class="panel panel-default mb0"
 													style="background-color: transparent !important; border-color: #f5f5f5;">
-													<div class="panel-heading" style="background-color: #f5f5f5">
+													<div class="panel-heading"
+														style="background-color: #f5f5f5">
 														<h3 class="panel-title">Allocated Filters</h3>
 													</div>
 													<div class="panel-body"
@@ -364,7 +360,8 @@
 																<div class="custom-label semibold">Sales Country
 																	Group</div>
 																<select class="form-control" name="salesCountryGroup"
-																	id="scGroup" ng-model="vm.queryParams.salesCountryGroup">
+																	id="scGroup"
+																	ng-model="vm.queryParams.salesCountryGroup">
 																	<option value="">All</option>
 																</select>
 															</div>
@@ -376,9 +373,11 @@
 																</select>
 															</div>
 															<div class="form-group">
-																<div class="custom-label semibold">Product Sub Type</div>
+																<div class="custom-label semibold">Product Sub
+																	Type</div>
 																<select class="form-control" name="productSubType"
-																	id="prodSubType" ng-model="vm.queryParams.productSubType">
+																	id="prodSubType"
+																	ng-model="vm.queryParams.productSubType">
 																	<option value="">All</option>
 																</select>
 															</div>
@@ -387,26 +386,24 @@
 												</div>
 											</div>
 										</div>
-										
+
 										<div class="clearfix mb1">
 											<div class="pull-right text-right">
-												<button type="button"
-													class="btn btn-default small"
+												<button type="button" class="btn btn-default small"
 													ng-click="vm.loadAll(); vm.hideDetail()">Query</button>
-												<button type="button"
-													class="btn btn-default small"
+												<button type="button" class="btn btn-default small"
 													ng-click="vm.hideDetail(); vm.clearFilter();">Clear</button>
 												<button type="reset" ng-click="vm.reset(); vm.hideDetail()"
 													class="btn btn-default small">Reset</button>
 											</div>
 										</div>
-										
-										
+
+
 									</form>
 								</div>
 							</div>
 						</div>
-						
+
 						<div class="clearfix mb1">
 							<div class="pull-left ph5px w60">
 								<div class="box-detail">
@@ -414,7 +411,7 @@
 									<div class="box-body">
 										<div class="clearfix">
 											<div class="pull-right text-right">
-												<button class="btn btn-secondary small">Copy</button>
+												<button class="btn btn-default small">Copy</button>
 											</div>
 										</div>
 										<div class="table-wrapper">
@@ -453,8 +450,9 @@
 												<jhi-item-count page="vm.page" total="vm.queryCount"
 													items-per-page="vm.itemsPerPage"></jhi-item-count>
 												<uib-pagination class="pagination-sm"
-													total-items="vm.totalItems" items-per-page="vm.itemsPerPage"
-													ng-model="vm.page" ng-change="vm.loadAll()"></uib-pagination>
+													total-items="vm.totalItems"
+													items-per-page="vm.itemsPerPage" ng-model="vm.page"
+													ng-change="vm.loadAll()"></uib-pagination>
 											</div>
 										</div>
 									</div>
@@ -467,12 +465,12 @@
 									<div class="box-body">
 										<div class="clearfix">
 											<div class="pull-right text-right">
-												<button type="button" class="btn btn-secondary small"
+												<button type="button" class="btn btn-default small"
 													ng-click="vm.loadAll(); vm.hideDetail()">Copy</button>
-												<button type="button" class="btn btn-secondary small"
+												<button type="button" class="btn btn-default small"
 													ng-click="vm.hideDetail(); vm.clearFilter();">Text</button>
 												<button type="reset" ng-click="vm.reset(); vm.hideDetail()"
-													class="btn btn-secondary small">Construction Details</button>
+													class="btn btn-default small">Construction Details</button>
 											</div>
 										</div>
 										<div class="table-wrapper">
@@ -503,16 +501,17 @@
 												<jhi-item-count page="vm.page" total="vm.queryCount"
 													items-per-page="vm.itemsPerPage"></jhi-item-count>
 												<uib-pagination class="pagination-sm"
-													total-items="vm.totalItems" items-per-page="vm.itemsPerPage"
-													ng-model="vm.page" ng-change="vm.loadAll()"></uib-pagination>
+													total-items="vm.totalItems"
+													items-per-page="vm.itemsPerPage" ng-model="vm.page"
+													ng-change="vm.loadAll()"></uib-pagination>
 											</div>
 										</div>
 									</div>
 								</div>
-								
+
 							</div>
 						</div>
-						
+
 						<div class="box-detail box-comment">
 							<div class="box-header">Details Of Selected Fare Classes</div>
 							<div class="box-body">
@@ -594,6 +593,204 @@
 
 		<!-- REC 8 -->
 		<div ng-class="{active:vm.tab3}" class="tab-pane" id="rec8">
-			kocong bang..!</div>
+			<div class="panel">
+				<div class="panel" id="ruleQueryTabContent">
+					<div class="panel-body">
+						<div class="filter-hero">
+							<div class="filter-label semibold show">Hide Filter</div>
+							<div class="filter-area">
+								<div class="clearfix">
+									<form name="queryForm" role="form" novalidate>
+										<div class="pull-left col-md-4 no-lpad">
+											<div class="form-group">
+												<div class="custom-label semibold">Carrier</div>
+												<input type="text" class="form-control" name="cxrRec8"
+													id="cxrRec8" ng-model="vm.queryParams.cxr" uppercase />
+											</div>
+											<div class="form-group">
+												<div class="custom-label semibold">Rule Number</div>
+												<input type="text" class="form-control" name="ruleNoRec8"
+													id="ruleNoRec8" ng-model="vm.queryParams.ruleNo" uppercase />
+											</div>
+										</div>
+
+
+										<div class="pull-left col-md-4 no-lpad">
+											<div class="form-group">
+												<div class="custom-label semibold">Tariff</div>
+												<input type="text" class="form-control" name="tarNoRec8"
+													id="tarNoRec8" ng-model="vm.queryParams.ruleTarNo"
+													uppercase />
+											</div>
+											
+											<div class="form-group">
+												<div class="custom-label semibold">Account Code</div>
+												<input type="text" class="form-control" name="accCodeRec8"
+													id="accCodeRec8" ng-model="vm.queryParams.accountCode" uppercase />
+											</div>
+											
+										</div>
+
+										<div class="pull-right col-md-4 no-rpad">
+											<div class="form-group">
+												<div class="custom-label semibold">Additional Options</div>
+												<div class="checkbox-wrapper">
+													<label> <input type="checkbox"
+														name="includeConstructed"
+														ng-model="vm.queryParams.includeConstructed"
+														ng-disabled="true"> Include Constructed
+													</label>
+												</div>
+												<br/>
+												<br/>
+												<div class="form-group mt1">
+													<button type="button"
+														class="btn btn-default small pull-left"
+														ng-click="vm.loadAll(); vm.hideDetail()">Query</button>
+													<button type="button"
+														class="btn btn-default small pull-left"
+														ng-click="vm.hideDetail(); vm.clearFilter();">Clear</button>
+													<button type="reset" ng-click="vm.reset(); vm.hideDetail()"
+														class="btn btn-default small pull-left">Reset</button>
+												</div>
+												
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+
+						<div class="table-wrapper">
+							<div class="datatable-wrapper form-inline">
+								<div class="table-responsive">
+									<table class="table table-striped table-bordered datatable">
+										<thead>
+											<tr>
+												<th>No</th>
+												<th>CXR</th>
+												<th>TAR NO</th>
+												<th>TAR CD</th>
+												<th>DESCRIPTION</th>
+												<th>RULE NO</th>
+												<th>CAT 35</th>
+												<th>PAX TYPE</th>
+												<th>ACCOUNT CODE</th>
+												<th>GLOBAL</th>
+												<th>LOC 1</th>
+												<th>LOC 2</th>
+												<th>EFFECTIVE DATE</th>
+												<th>DISCONTINUE DATE</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="rec8 in vm.record8"
+												ng-click="vm.selectedRow = rec8;"
+												ng-class="{'selected': vm.selectedRow == rec8">
+												<td>{{$index + 1}}</td>
+												<td>{{ruleQuery.cxr}}</td>
+												<td>{{ruleQuery.tarNo}}</td>
+												<td>{{ruleQuery.tarCd}}</td>
+												<td>{{ruleQuery.desc}}</td>
+												<td>{{ruleQuery.ruleNo}}</td>
+												<td>{{ruleQuery.cat35}}</td>
+												<td>{{ruleQuery.paxType}}</td>
+												<td>{{ruleQuery.accountCode}}</td>
+												<td>{{ruleQuery.global}}</td>
+												<td>{{ruleQuery.loc1}}</td>
+												<td>{{ruleQuery.loc2}}</td>
+												<td><span ng-if="rq.effectiveDateObject=='indef'"></span><span
+													ng-if="rq.effectiveDateObject!='indef'">{{rq.effectiveDateObject
+														| date:'medium'}}</span></td>
+												<td><span ng-if="rq.discontinueDateObject=='indef'"></span><span
+													ng-if="rq.discontinueDateObject!='indef'">{{rq.discontinueDateObject
+														| date:'medium'}}</span></td>
+											</tr>
+											<!-- 							<tr ng-if="vm.selectedRow == afdQuery.atpcoFareId"> -->
+											<!-- 								<div></div> -->
+											<!-- 							</tr> -->
+										</tbody>
+									</table>
+								</div>
+								<div class="text-center">
+									<jhi-item-count page="vm.page" total="vm.queryCount"
+										items-per-page="vm.itemsPerPage"></jhi-item-count>
+									<uib-pagination class="pagination-sm"
+										total-items="vm.totalItems" items-per-page="vm.itemsPerPage"
+										ng-model="vm.page" ng-change="vm.loadRec8()"></uib-pagination>
+								</div>
+							</div>
+						</div>
+
+						<div class="table-wrapper">
+							<div class="datatable-wrapper form-inline">
+								<div class="table-responsive">
+									<table class="table table-striped table-bordered datatable"
+										id="tblDetail" hidden="hidden">
+										<thead>
+											<tr>
+												<th>NO</th>
+												<th>CAT NO</th>
+												<th>SEQ NO</th>
+												<th>LOC 1 TYPE</th>
+												<th>LOC 1</th>
+												<th>LOC 2 TYPE</th>
+												<th>LOC 2</th>
+												<th>FARE BASIS</th>
+												<th>FARE TYPE</th>
+												<th>SSN</th>
+												<th>DOW</th>
+												<th>OWRT</th>
+												<th>RTG NO</th>
+												<th>FTNT</th>
+												<th>EFFECTIVE DATE</th>
+												<th>DISCONTINUE DATE</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="rq in vm.ruleQueryCategories">
+												<td>{{$index + 1}}</td>
+												<td>{{rq.catNo}}</td>
+												<td>{{rq.sequenceNo}}</td>
+												<td>{{rq.geoType1}}</td>
+												<td>{{rq.geoLoc1}}</td>
+												<td>{{rq.geoType2}}</td>
+												<td>{{rq.geoLoc2}}</td>
+												<td>{{rq.fareClass}}</td>
+												<td>{{rq.fareType}}</td>
+												<td>{{rq.seasonType}}</td>
+												<td>{{rq.dayOfWeekType}}</td>
+												<td>{{rq.owrt}}</td>
+												<td>{{rq.routingNo}}</td>
+												<td>{{rq.footnote}}</td>
+												<td>{{rq.effectiveDateObject | date:'medium'}}</td>
+												<td><span ng-if="rq.discontinueDateObject=='indef'"></span><span
+													ng-if="rq.discontinueDateObject!='indef'">{{rq.discontinueDateObject
+														| date:'medium'}}</span></td>
+
+											</tr>
+											<!-- 							<tr ng-if="vm.selectedRow == afdQuery.atpcoFareId"> -->
+											<!-- 								<div></div> -->
+											<!-- 							</tr> -->
+										</tbody>
+									</table>
+								</div>
+
+								<div class="additional-info-wrapper" id="ruleCategories"
+									hidden="hidden">
+									<div class="additional-info"
+										ng-click="vm.showCategoryDetail(cat)"
+										ng-class="{'yellow': cat.catAttributes.length > 0 && cat.type != 'G', 'blue': cat.catAttributes.length > 0 && cat.type == 'G'}"
+										ng-repeat="cat in vm.ruleQueryCategories2 track by cat.catNo">
+										{{cat.catNo}} {{cat.catName}} <span
+											ng-if="cat.catAttributes.length > 0">({{cat.type}})</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>

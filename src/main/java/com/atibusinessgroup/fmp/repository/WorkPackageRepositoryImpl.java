@@ -15,8 +15,10 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.repository.support.PageableExecutionUtils;
 
+import com.atibusinessgroup.fmp.domain.User;
 import com.atibusinessgroup.fmp.domain.WorkPackage;
 import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
+import com.atibusinessgroup.fmp.security.SecurityUtils;
 
 
 public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAnyName {
@@ -26,10 +28,12 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 	@Autowired
     MongoTemplate mongoTemplate;
 	
+	@Autowired
+    private UserRepository userRepository;
+	
 	@Override
 	public Page<WorkPackage> findCustom(WorkPackageFilter wpFilter, Pageable pageable) {
 		Query query = new Query(findByQuery(wpFilter)).with(pageable);	
-
 		List<WorkPackage> workPackages = mongoTemplate.find(query, WorkPackage.class);
 		
 		Page<WorkPackage> page = PageableExecutionUtils.getPage(
@@ -202,6 +206,10 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		if(wpFilter.getReviewLevel().routeManagement) {
 			reviewLevels.add("ROUTE_MANAGEMENT");
 		}
+		
+		if(reviewLevels.isEmpty()) {
+			reviewLevels.add(null);
+		}
 		Criteria reviewLevelCriteria = Criteria.where("review_level").in(reviewLevels);
 		///// END REVIEW LEVEL
 		
@@ -234,7 +242,9 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		if(wpFilter.status.discontinued) {
 			status.add("DISCONTINUED");
 		}
-		
+		if(status.isEmpty()) {
+			status.add(null);
+		}
 		Criteria statusCriteria = Criteria.where("status").in(status);
 		//END STATUS
 		
@@ -263,6 +273,15 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		Criteria typesCriteria = Criteria.where("type").in(types);
 		//END TYPES
 		
+		//BUSINESS AREA 
+		List<String> businessArea = new ArrayList<>();
+		User u = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
+		businessArea.addAll(u.getBusinessAreas());
+		if(businessArea.isEmpty()) {
+			businessArea.add(null);
+		}
+		Criteria businessAreaCriteria = Criteria.where("business_area").in(businessArea);
+		//END BUSINESS AREA
 		
 		Criteria approvalReference = new Criteria();
 		if(wpFilter.getApprovalReference() != null && !wpFilter.getApprovalReference().contentEquals("")) {
@@ -287,6 +306,7 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 				status.size() > 0 ? statusCriteria : new Criteria(),
 				distributionTypes.size() > 0 ?	distributionTypesCriteria : new Criteria(),
 				types.size() > 0 ? typesCriteria : new Criteria(),
+				businessArea.size() > 0 ? businessAreaCriteria : new Criteria(),
 				approvalReference,
 				wpFilter.status.replace && wpFilter.status.reuse ? 
 						new Criteria().orOperator(replaceCriteria, reuseCriteria) : 

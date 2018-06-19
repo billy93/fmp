@@ -20,8 +20,8 @@
      * @param Clipboard
      * @returns
      */
-    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities', 'states', 'cityGroups', 'Currency', 'atpcoFareTypes'];
-    function WorkPackageDetailController($window, $sce, currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups, Currency, atpcoFareTypes) {
+    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber','tariffNumberAddOn', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities', 'states', 'cityGroups', 'Currency', 'atpcoFareTypes', 'ClipboardSheet'];
+    function WorkPackageDetailController($window, $sce, currencies,tariffNumber,tariffNumberAddOn, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups, Currency, atpcoFareTypes, ClipboardSheet) {
     	var vm = this;
 
     	window.onbeforeunload = function () {
@@ -59,6 +59,7 @@
         vm.account = null;
         vm.workPackage = entity;
         vm.tariffNumber = tariffNumber;
+        vm.tariffNumberAddOn = tariffNumberAddOn;
         vm.cities = cities;
         vm.states = states;
         vm.cityGroups = cityGroups;
@@ -69,7 +70,7 @@
         $scope.dateformat = "yyyy-MM-dd";
         vm.optionFare = fareTypes;
         vm.atpcoFareTypes = atpcoFareTypes;
-                      
+                           
         
         vm.businessArea = {};
         for(var x=0;x<businessAreas.length;x++){
@@ -215,13 +216,13 @@
         	},
         	{
         		name:"tarno",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["HO", "DISTRIBUTION"]
         	},
         	{
         		name:"tarcd",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["HO", "DISTRIBUTION"]
         	},
         	{
         		name:"origin",
@@ -235,43 +236,43 @@
         	},
         	{
         		name:"farebasis",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["HO", "DISTRIBUTION"]
         	},
         	{
         		name:"bookingClass",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:["HO"]
         	},
         	{
         		name:"cabin",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	{
         		name:"typeOfJourney",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	{
         		name:"footnote",
-        		editable:["HO", "Distribution"],
+        		editable:["HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"rtgno",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["DISTRIBUTION"]
         	},
         	{
         		name:"ruleno",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["DISTRIBUTION"]
         	},
         	{
         		name:"currency",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	{
         		name:"amount",
@@ -299,37 +300,37 @@
         	},
         	{
         		name:"travelStartDate",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"travelEndDate",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"saleStartDate",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"saleEndDate",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"comment",
-        		editable:["LSO", "HO", "Distribution", "Route Management"],
+        		editable:["LSO", "HO", "DISTRIBUTION", "ROUTE_MANAGEMENT"],
         		mandatory:[]
         	},
         	{
         		name:"travelComplete",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"travelIndicator",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
@@ -359,92 +360,92 @@
         	},
         	{
         		name:"addonFareTarno",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["DISTRIBUTION"]
         	},
         	{
         		name:"addonFareTarcd",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["DISTRIBUTION"]
         	},
         	{
         		name:"addonFareOrigin",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	{
         		name:"addonFareDestination",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	{
         		name:"addonFareBucket",
-        		editable:["HO", "Distribution"],
-        		mandatory:["Distribution"]
+        		editable:["HO", "DISTRIBUTION"],
+        		mandatory:["DISTRIBUTION"]
         	},
         	{
         		name:"addonFareTypeOfJourney",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO","Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO","DISTRIBUTION"]
         	},
         	{
         		name:"addonFareFootnote",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"addonFareZone",
-        		editable:["HO", "Distribution"],
-        		mandatory:["Distribution"]
+        		editable:["HO", "DISTRIBUTION"],
+        		mandatory:["DISTRIBUTION"]
         	},
         	{
         		name:"addonFareRtgno",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["DISTRIBUTION"]
         	},
         	{
         		name:"addonFareCurrency",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	{
         		name:"addonFareAmount",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:["LSO", "HO"]
         	},
         	{
         		name:"addonFareTravelStartDate",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"addonFareTravelEndDate",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"addonFareSaleStartDate",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"addonFareSaleEndDate",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"addonFareComment",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"addonFareTravelComplete",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"addonFareTravelIndicator",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	
@@ -466,8 +467,8 @@
         	},
         	{
         		name:"discountAccountCode",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	
         	//DISCOUNT FARE
@@ -478,45 +479,45 @@
         	},
         	{
         		name:"discountTariffCode",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["HO", "DISTRIBUTION"]
         	},
         	{
         		name:"discountLoc1Type",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	
         	{
         		name:"discountLoc1",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	{
         		name:"discountLoc2Type",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	
         	{
         		name:"discountLoc2",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	
         	{
         		name:"discountBaseFareBasis",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["HO", "DISTRIBUTION"]
         	},
         	{
         		name:"discountBaseRuleno",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountBaseTariffCode",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
@@ -526,7 +527,7 @@
         	},
         	{
         		name:"discountPercentageOfBaseFare",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[],
         		mandatoryExtraCondition:[
         			{
@@ -541,12 +542,12 @@
         	},
         	{
         		name:"discountFareCurrency",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountSpecifiedAmount",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[],
         		mandatoryExtraCondition:[
         			{
@@ -557,93 +558,93 @@
         	},
         	{
         		name:"discountPaxType",
-        		editable:["LSO", "HO",  "Distribution"],
-        		mandatory:["LSO", "HO",  "Distribution"]
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
+        		mandatory:["LSO", "HO",  "DISTRIBUTION"]
         	},
         	{
         		name:"discountFareFareType",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountTicketCode",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	
         	{
         		name:"discountTicketDesignator",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountBaseFareOwRt",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountGlobal",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountRtgno",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountRtgnoTarno",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountNewFarebasis",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountNewBaseFareOwRt",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountNewBookingCode",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountTravelStartDate",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountTravelEndDate",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountSaleStartDate",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountSaleEndDate",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountComment",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountTravelComplete",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountTravelCompleteIndicator",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	
@@ -1014,7 +1015,7 @@
 	    }
         
         //GENERATE TOUR CODE
-        vm.generateTourCode = function(workPackageSheet){
+        vm.generateTourCode = function(workPackageSheet, type){
         	$uibModal.open({
                 templateUrl: 'app/pages/work-packages/work-package-generate-tourcode-dialog.html',
                 controller: 'WorkPackageGenerateTourcodeDialogController',
@@ -1028,7 +1029,7 @@
                 	}
                 }
 			}).result.then(function(option) {
-				workPackageSheet.approvalReference = option.tourcode;		        			    			
+				workPackageSheet.approvalReference = option.tourcode;	
             }, function() {
         			
             });
@@ -1090,30 +1091,33 @@
         	}
         };
         
-        vm.addTab = function(option){
+        vm.addTab = function(option, fares){
         	if(option.type == 'Fares'){
+        		if(!vm.workPackage.specifiedFares){
+        			vm.workPackage.fareSheet = [];
+        		}
         		vm.workPackage.specifiedFares = true;
-        		vm.workPackage.fareSheet.push({specifiedFaresName:option.name, fareType:option.fareType, fares:[]});
+        		vm.workPackage.fareSheet.push({specifiedFaresName:option.name, fareType:option.fareType, fares:fares});
         		vm.selectTab(vm.workPackage.fareSheet.length-1);
         	}
         	else if(option.type == 'Market Fares'){
         		vm.workPackage.marketFares = true;
-        		vm.workPackage.marketFareSheet.push({marketFaresName:option.name, marketFareType:option.fareType});
+        		vm.workPackage.marketFareSheet.push({marketFaresName:option.name, fareType:option.fareType, fares:fares});
         		vm.selectMarketTab(vm.workPackage.marketFareSheet.length-1);
         	}
         	else if(option.type == 'Waiver Fares'){
         		vm.workPackage.waiverFares = true;
-        		vm.workPackage.waiverFareSheet.push({waiverFaresName:option.name, waiverFareType:option.fareType});
+        		vm.workPackage.waiverFareSheet.push({waiverFaresName:option.name, waiverFareType:option.fareType, fares:fares});
         		vm.selectWaiverTab(vm.workPackage.waiverFareSheet.length-1);
         	}
         	else if(option.type == 'Discount Fares'){
-        		vm.workPackage.discountFares = true;
-        		vm.workPackage.discountFareSheet.push({discountFaresName:option.name, discountFareType:option.fareType});
+        		vm.workPackage.discount = true;
+        		vm.workPackage.discountFareSheet.push({discountFaresName:option.name, discountFareType:option.fareType, fares:fares});
         		vm.selectDiscountTab(vm.workPackage.discountFareSheet.length-1);
         	}
         	else if(option.type == 'Add-Ons'){
         		vm.workPackage.addon = true;
-        		vm.workPackage.addonFareSheet.push({addonFaresName:option.name});
+        		vm.workPackage.addonFareSheet.push({addonFaresName:option.name, fares:fares});
         		vm.selectAddonTab(vm.workPackage.addonFareSheet.length-1);
         	}
         	else if(option.type == 'Attachment'){
@@ -1124,6 +1128,39 @@
         		vm.workPackage.filingInstruction = true;
         		vm.selectOtherTab('filingInstruction');
         	}
+        	
+        	
+
+            if(vm.workPackage.fareSheet.length > 0){
+              	for(var x=0;x<vm.workPackage.fareSheet.length;x++){
+              		vm.changeVersion(vm.workPackage.fareSheet[x], 'current'); 
+              	}
+              }
+              
+              if(vm.workPackage.addonFareSheet.length > 0){
+              	for(var x=0;x<vm.workPackage.addonFareSheet.length;x++){
+              		vm.changeVersion(vm.workPackage.addonFareSheet[x], 'current'); 
+              	}
+              }
+              
+              if(vm.workPackage.marketFareSheet.length > 0){
+              	for(var x=0;x<vm.workPackage.marketFareSheet.length;x++){
+              		vm.changeVersion(vm.workPackage.marketFareSheet[x], 'current');                	
+              	}
+              }
+              
+              
+              if(vm.workPackage.discountFareSheet.length > 0){
+              	for(var x=0;x<vm.workPackage.discountFareSheet.length;x++){
+              		vm.changeVersion(vm.workPackage.discountFareSheet[x], 'current');
+              	}
+              }
+              
+              if(vm.workPackage.waiverFareSheet.length > 0){
+              	for(var x=0;x<vm.workPackage.waiverFareSheet.length;x++){
+              		vm.changeVersion(vm.workPackage.waiverFareSheet[x], 'current');
+              	}
+              }
         };
         
         vm.removeTab = function(){
@@ -1258,10 +1295,20 @@
         if(vm.workPackage.discount){
         	vm.currentDiscountTab[0] = true;
         }
+        
+//        vm.selectTab = function(index){
+//        	vm.resetTab(); 
+//        	if(vm.workPackage.fareSheet.length > 0){
+//        		vm.currentTab[index] = true;
+//        	}
+//        };
         vm.selectDiscountTab = function(index){
-        	vm.resetTab();        	
-        	vm.currentDiscountTab[index] = true;
-        	vm.selectedDiscountTab = index;
+        	vm.resetTab();    
+        	if(vm.workPackage.discountFareSheet.length > 0){
+        		vm.currentDiscountTab[index] = true;
+        	}
+//        	vm.currentDiscountTab[index] = true;
+//        	vm.selectedDiscountTab = index;
         };
         
         vm.addDiscountTab = function(){
@@ -1413,13 +1460,14 @@
                     fareTypes: ['FareType', function(FareType) {
                         return FareType.getAll().$promise;
                     }],
+                    sheet: function(){
+                    	return null;
+                    }
                 }
 			}).result.then(function(option) {
-				console.log(option);
 				vm.addTab(option);
-
-//				GlobalService.sayHello();
-//			    GlobalService.boxHeader();
+				
+				
             }, function() {
         			
             });
@@ -1427,7 +1475,9 @@
         
         vm.copySheet = function(){
         	var findTab = false;
-        	
+        	var clipboardSheet = {
+    			//sheet: angular.copy(vm.workPackage.fareSheet[x])
+    		};
         	if(!findTab){
 	        	for(var x=0;x<vm.currentTab.length;x++){
 	        		if(vm.currentTab[x]){
@@ -1435,7 +1485,12 @@
 	        			findTab = true;
 	        			
 	        			var index = vm.workPackage.fareSheet.indexOf(x);
-	        			vm.workPackage.fareSheet.push(angular.copy(vm.workPackage.fareSheet[x]));
+//	        			vm.workPackage.fareSheet.push(angular.copy(vm.workPackage.fareSheet[x]));
+	        			console.log(vm.workPackage.fareSheet[x]);
+	        			if(vm.workPackage.fareSheet[x].fares != undefined && vm.workPackage.fareSheet[x].fares.length > 0){
+		        			clipboardSheet.sheet = angular.copy(vm.workPackage.fareSheet[x]);
+		        			clipboardSheet.type = "fares";
+	        			}
 	        			break;
 	        		}
 	        	}
@@ -1448,7 +1503,11 @@
 	        			findTab = true;
 	        			
 	        			var index = vm.workPackage.addonFareSheet.indexOf(x);
-	        			vm.workPackage.addonFareSheet.push(angular.copy(vm.workPackage.addonFareSheet[x]));
+//	        			vm.workPackage.addonFareSheet.push(angular.copy(vm.workPackage.addonFareSheet[x]));
+	        			if(vm.workPackage.addonFareSheet[x].fares.length > 0){
+		        			clipboardSheet.sheet = angular.copy(vm.workPackage.addonFareSheet[x]);
+		        			clipboardSheet.type = "addon";
+	        			}
 	        			break;
 	        		}
 	        	}
@@ -1461,14 +1520,65 @@
 	        			findTab = true;
 	        			
 	        			var index = vm.workPackage.marketFareSheet.indexOf(x);
-	        			vm.workPackage.marketFareSheet.push(angular.copy(vm.workPackage.marketFareSheet[x]));
+//	        			vm.workPackage.marketFareSheet.push(angular.copy(vm.workPackage.marketFareSheet[x]));
+	        			if(vm.workPackage.marketFareSheet[x].fares.length > 0){
+		        			clipboardSheet.sheet = angular.copy(vm.workPackage.marketFareSheet[x]);
+		        			clipboardSheet.type = "market";
+	        			}
 	        			break;
 	        		}
 	        	}
         	}
         	
         	if(!findTab){
+	        	for(var x=0;x<vm.currentDiscountTab.length;x++){
+	        		if(vm.currentDiscountTab[x]){
+	        			console.log('Active Discount Tab '+x);
+	        			findTab = true;
+	        			
+	        			var index = vm.workPackage.discountFareSheet.indexOf(x);
+//	        			vm.workPackage.discountFareSheet.push(angular.copy(vm.workPackage.discountFareSheet[x]));
+	        			if(vm.workPackage.discountFareSheet[x].fares.length > 0){			        		
+		        			clipboardSheet.sheet = angular.copy(vm.workPackage.discountFareSheet[x]);
+		        			clipboardSheet.type = "discount";
+	        			}
+	        			break;
+	        		}
+	        	}
+        	}
+        	
+        	if(!findTab){
+	        	for(var x=0;x<vm.currentWaiverTab.length;x++){
+	        		if(vm.currentWaiverTab[x]){
+	        			console.log('Active Waiver Tab '+x);
+	        			findTab = true;
+	        			
+	        			var index = vm.workPackage.waiverFareSheet.indexOf(x);
+//	        			vm.workPackage.waiverFareSheet.push(angular.copy(vm.workPackage.waiverFareSheet[x]));
+	        			if(vm.workPackage.waiverFareSheet[x].fares.length > 0){		
+		        			clipboardSheet.sheet = angular.copy(vm.workPackage.waiverFareSheet[x]);
+		        			clipboardSheet.type = "waiver";
+	        			}
+	        			break;
+	        		}
+	        	}
+        	}
+        	
+        	
+        	if(!findTab){
         		alert('Sheet cannot be copied');
+        	}
+        	else{
+        		if(clipboardSheet.sheet != null){
+	    			ClipboardSheet.copy(clipboardSheet, function(result){
+	    				alert('Sheet copied');
+	    			}, function(error){
+	    				alert('Error occured');
+	    			});
+        		}
+        		else{
+        			alert('Sheet cannot be copied');
+        		}
         	}
         };
         
@@ -1478,15 +1588,41 @@
         		alert('Sheet cannot be deleted');
         	}
         	else{
-        		console.log(angular.element("#tabAtpco0"));
-        		
-//        		var result = document.getElementsByName("editFormATPCO");
-//        		console.log(result);
-//        		console.log(result[0].children[0].children[0].children[0].children[1].children[0].classList);
-//        		result[0].children[0].children[0].children[0].children[1].children[0].classList.add('active');
+        		alert('Sheet deleted');
         	}
         };
         //END SHEET FUNCTION
+        
+        vm.pasteSheet = function(){
+//        	alert('Paste Sheet');
+        	$uibModal.open({
+                templateUrl: 'app/pages/work-packages/work-package-add-sheet-dialog.html',
+                controller: 'WorkPackageAddSheetDialogController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full-page-modal',
+                resolve: {
+                	workPackage: function(){
+                		return vm.workPackage;
+                	},
+                    fareTypes: ['FareType', function(FareType) {
+                        return FareType.getAll().$promise;
+                    }],
+                    sheet: function(){
+                    	return ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
+                    }
+                }
+			}).result.then(function(option) {
+				var clipboardSheet = ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
+				clipboardSheet.then(function(result){
+					vm.addTab(option, result.sheet.fares);
+					alert('Paste Sheet Success');
+				});
+            }, function() {
+        			
+            });
+        };
         
         vm.faresActionButton = [];
         vm.addonFaresActionButton = [];
@@ -1620,7 +1756,8 @@
         }
         
  	    //Specific Fares Function
- 	    vm.addFares = function(fareSheet){ 	    	
+ 	    vm.addFares = function(fareSheet){ 	 
+ 	    	console.log("ADD FARES");
  	    	if(fareSheet.fares == null){
  	    		fareSheet.fares = [];
        	  	}
@@ -2127,17 +2264,19 @@
 	  vm.approve = function(){
 		  var validated = true;
 		  var cekStatus = "";
+		  var counterApprove = false;
 		  
 //		  console.log("REGULAR");
 		  if(vm.workPackage.fareSheet != null && vm.workPackage.fareSheet.length > 0){
 			  for(var x=0;x<vm.workPackage.fareSheet.length;x++){
 				  if(vm.workPackage.fareSheet[x].fares != null && vm.workPackage.fareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.fareSheet[x].fares.length;y++){
-						  if(vm.workPackage.fareSheet[x].fares[y].status != "APPROVED"){
+						  if(vm.workPackage.fareSheet[x].fares[y].status == "APPROVED"){
+							  counterApprove =true;
+						  }
+						  if(vm.workPackage.fareSheet[x].fares[y].status == "" || vm.workPackage.fareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.fareSheet[x].fares[y].status;
 							  validated = false;
-//							  console.log("X : "+x+" | Y : "+y);
-//							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
 							  break;
 						  }
 					  }
@@ -2150,11 +2289,12 @@
 			  for(var x=0;x<vm.workPackage.discountFareSheet.length;x++){
 				  if(vm.workPackage.discountFareSheet[x].fares != null && vm.workPackage.discountFareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.discountFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.discountFareSheet[x].fares[y].status != "APPROVED"){
+						  if(vm.workPackage.discountFareSheet[x].fares[y].status == "APPROVED"){
+							  counterApprove =true;
+						  }
+						  if(vm.workPackage.discountFareSheet[x].fares[y].status == "" || vm.workPackage.discountFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.discountFareSheet[x].fares[y].status;
 							  validated = false;
-//							  console.log("X : "+x+" | Y : "+y);
-//							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
 							  break;
 						  }
 					  }
@@ -2167,11 +2307,12 @@
 			  for(var x=0;x<vm.workPackage.addonFareSheet.length;x++){
 				  if(vm.workPackage.addonFareSheet[x].fares != null && vm.workPackage.addonFareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.addonFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.addonFareSheet[x].fares[y].status != "APPROVED"){
+						  if(vm.workPackage.addonFareSheet[x].fares[y].status == "APPROVED"){
+							  counterApprove =true;
+						  }
+						  if(vm.workPackage.addonFareSheet[x].fares[y].status == "" || vm.workPackage.addonFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.addonFareSheet[x].fares[y].status;
 							  validated = false;
-//							  console.log("X : "+x+" | Y : "+y);
-//							  console.log(vm.workPackage.addonFareSheet[x].fares[y].status);
 							  break;
 						  }
 					  }
@@ -2184,11 +2325,12 @@
 			  for(var x=0;x<vm.workPackage.marketFareSheet.length;x++){
 				  if(vm.workPackage.marketFareSheet[x].fares != null && vm.workPackage.marketFareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.marketFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.marketFareSheet[x].fares[y].status != "APPROVED"){
+						  if(vm.workPackage.marketFareSheet[x].fares[y].status == "APPROVED"){
+							  counterApprove =true;
+						  }
+						  if(vm.workPackage.marketFareSheet[x].fares[y].status == "" || vm.workPackage.marketFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.marketFareSheet[x].fares[y].status;
 							  validated = false;
-//							  console.log("X : "+x+" | Y : "+y);
-//							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
 							  break;
 						  }
 					  }
@@ -2201,11 +2343,12 @@
 			  for(var x=0;x<vm.workPackage.waiverFareSheet.length;x++){
 				  if(vm.workPackage.waiverFareSheet[x].fares != null && vm.workPackage.waiverFareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.waiverFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.waiverFareSheet[x].fares[y].status != "APPROVED"){
+						  if(vm.workPackage.waiverFareSheet[x].fares[y].status == "APPROVED"){
+							  counterApprove =true;
+						  }
+						  if(vm.workPackage.waiverFareSheet[x].fares[y].status == "" || vm.workPackage.waiverFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.waiverFareSheet[x].fares[y].status;
 							  validated = false;
-//							  console.log("X : "+x+" | Y : "+y);
-//							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
 							  break;
 						  }
 					  }
@@ -2262,6 +2405,18 @@
 		    			$state.go('work-package');
 		    		}, function(){
 		    			alert('Refer Back Failed');
+		    		});
+		    } else {
+		    }
+	  };
+	  
+	  vm.complete = function(){
+		    if (confirm("Are you sure to Complete this workorder?")) {
+		    		WorkPackage.complete(vm.workPackage, function(){
+		    			alert('Complete Success');
+		    			$state.go('work-package');
+		    		}, function(){
+		    			alert('Complete Failed');
 		    		});
 		    } else {
 		    }
@@ -4125,30 +4280,84 @@
      };
       
       
+     
+      vm.viewCommentFillingInstruction = loadCommentFI();
+      function loadCommentFI() {
+    	  vm.viewCommentFillingInstruction =[];
+    	  for(var l = 0;l < vm.workPackage.filingInstructionData.length ; l++){
+    		  if(!vm.workPackage.filingInstructionData[l].isDeleted){
+    			  vm.viewCommentFillingInstruction.push(vm.workPackage.filingInstructionData[l]);
+    		  }
+    	  }
+    	  return vm.viewCommentFillingInstruction = vm.viewCommentFillingInstruction;
+      }
+      
+      vm.expandCommentFillingInstruction = function(){
+    	  vm.viewCommentFillingInstruction =[];
+    	  for(var l = 0;l < vm.workPackage.filingInstructionData.length ; l++){
+    		vm.viewCommentFillingInstruction.push(vm.workPackage.filingInstructionData[l]);
+    	  }
+      }
+      
+      vm.collapseCommentFillingInstruction = function(){
+    	  vm.viewCommentFillingInstruction =[];
+    	  for(var l = 0;l < vm.workPackage.filingInstructionData.length ; l++){
+    		  if(!vm.workPackage.filingInstructionData[l].isDeleted){
+    			  vm.viewCommentFillingInstruction.push(vm.workPackage.filingInstructionData[l]);
+    		  }
+    	  }
+      }
       vm.addCommentFillingInstruction = function() {
- 	  	 	if (vm.commentStringFillingInstruction != null) {
+	  	 	if (vm.commentStringFillingInstruction != null) {
 	 	  		 if (vm.workPackage.filingInstructionData == null) {
 	 	      		vm.workPackage.filingInstructionData = [];
 	 	  		 }
 	 	    	  
 	 	  		 vm.workPackage.filingInstructionData.push({ 
-	     	  		status:"PENDING", tarno:"", cxr:"GA", comment:vm.commentStringFillingInstruction, file:"", fileContentType:"", isDeleted:false
+	     	  		status:"PENDING", tarno:"", cxr:"GA", comment:vm.commentStringFillingInstruction, file:"", fileContentType:"", isDeleted:false, username :vm.user.login,
+	     	  		createdTime :new Date()
 	 	  		 });
-	 	  		 
 	 	  		 vm.save();
 	 	  		 vm.commentStringFillingInstruction = null;
-	 	  		$(document).ready(function(){
+	 	  		
+	 	  		 
+	 	  		
+	 	  		 $(document).ready(function(){
 	                var _width = $('.comment-wrapper').outerWidth();
 		              $('.comment-list').css({ 'width': 'calc(100% + ' + _width+ 'px)' });
 		        });
- 	  	 	}
+	  	 	}
+	  	 	loadCommentFI();
+     }
+     
+      vm.deleteCommentFillingInstruction = function(){
+    	 for(var l=0; l<vm.tempFIC.length; l++){
+    		 vm.tempFIC[l].isDeleted = true;
+    	 }
+    	 vm.save();
+    	 vm.tempFIC = [];
+    	 loadCommentFI();
+      }
+      
+      vm.tempFIC = [];
+      vm.selectCommentFillingInstruction = function(data){
+    	  if(vm.tempFIC.indexOf(data) < 0){
+    		  vm.tempFIC.push(data);
+    	  }else{
+    		  for(var x = 0; x<vm.tempFIC.length; x++){
+    			  if(vm.tempFIC.indexOf(data) > -1){
+        			  vm.tempFIC.splice(vm.tempFIC.indexOf(data),1);    				  
+    			  }
+    		  }
+    		  
+    	  }
        }
       
       vm.removeFiling = function(filing){
 	   		var index = vm.workPackage.filingInstructionData.indexOf(filing); 
 	   		console.log(filing.isDeleted);
 	   };
-      
+	         
       vm.addInterOffice = function(){
  	  	 if(vm.ioString != null){
  	    	  if(vm.workPackage.interofficeComment == null){
@@ -4557,6 +4766,33 @@
                   tariffNumber: ['TariffNumber', function(TariffNumber) {
                       return TariffNumber.getAll().$promise;
                   }],
+                  AddOn : false,
+              }
+			}).result.then(function(option) {
+				if(option != null){
+					fare[field] = option;
+				}
+          }, function() {
+      			
+          });
+      }
+      
+      vm.selectTariffAddOn = function(fare, field){
+    	  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-select-tariff-dialog.html',
+              controller: 'WorkPackageSelectTariffDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              windowClass: 'full-page-modal',
+              resolve: {
+	              	fare: function(){
+	              		return fare;
+	              	},
+                  tariffNumber: ['TariffNumberAddOn', function(TariffNumberAddOn) {
+                      return TariffNumberAddOn.getAll().$promise;
+                  }],
+                  AddOn : true,
               }
 			}).result.then(function(option) {
 				if(option != null){
@@ -4583,10 +4819,19 @@
                   cities: ['City', function(City) {
                       return City.getAll().$promise;
                   }],
+                  cityGroup: ['CityGroup', function(CityGroup) {
+                      return CityGroup.getAll().$promise;
+                  }],
               }
 			}).result.then(function(option) {
-				if(option != null)
-					fare[field] = option.cityCode;
+				if(option != null){
+					if(option.type == 'city'){
+						fare[field] = option.cityCode;					
+					}
+					else if(option.type == 'cityGroup'){
+						fare[field] = option.code;	
+					}
+				}
           }, function() {
       			
           });
@@ -4606,6 +4851,9 @@
 	              	},
                   cities: ['City', function(City) {
                       return City.getAll().$promise;
+                  }],
+                  cityGroup: ['CityGroup', function(CityGroup) {
+                      return null;
                   }],
               }
 			}).result.then(function(option) {
@@ -4772,10 +5020,17 @@
       }
       
       vm.checkCity = function(fare, field){
-    	  if(fare[field] != null || fare[field] != ''){
+    	  if(fare[field] != null && fare[field] != '' && fare[field] != undefined){
 	    	  var exist = false;
 	    	  for(var x=0;x<vm.cities.length;x++){
+	    		  
 	    		  if(vm.cities[x].cityCode.toUpperCase() == fare[field].toUpperCase()){
+	    			  exist = true;
+	    			  break;
+	    		  }
+	    	  }
+	    	  for(var x=0;x<vm.cityGroups.length;x++){
+	    		  if(vm.cityGroups[x].code.toUpperCase() == fare[field].toUpperCase()){
 	    			  exist = true;
 	    			  break;
 	    		  }
@@ -4789,40 +5044,38 @@
     	  }
       }
       
-      vm.checkLoc = function(fare, field){
+      vm.checkLoc = function(fare, field, type){
     	  if(fare[field] != null || fare[field] != ''){
 	    	  var exist = false;
-	    	  if(fare.loc1Type == 'C'){
+	    	  if(type== 'C'){
 	    		  for(var x=0;x<vm.cities.length;x++){
 		    		  if(vm.cities[x].cityCode.toUpperCase() == fare[field].toUpperCase()){
 		    			  exist = true;
 		    			  break;
 		    		  }
 		    	  }				
-				}else if(fare.loc1Type == 'N'){
+				}else if(type== 'N'){
 					 for(var x=0;x<vm.cities.length;x++){
 			    		  if(vm.cities[x].countryCode.toUpperCase() == fare[field].toUpperCase()){
 			    			  exist = true;
 			    			  break;
 			    		  }
 			    	  }
-				}else if(fare.loc1Type == 'S'){
+				}else if(type== 'S'){
 					 for(var x=0;x<vm.states.length;x++){
 			    		  if(vm.states[x].code.toUpperCase() == fare[field].toUpperCase()){
 			    			  exist = true;
 			    			  break;
 			    		  }
 			    	  }
-				}else if(fare.loc1Type == 'A'){
+				}else if(type== 'A'){
 					 for(var x=0;x<vm.areas.length;x++){
-						 console.log(vm.areas[x]);
-						 console.log(fare[field]);
 			    		  if(vm.areas[x].code == fare[field]){
 			    			  exist = true;
 			    			  break;
 			    		  }
 			    	  }
-				}else if(fare.loc1Type == 'G'){
+				}else if(type== 'G'){
 					 for(var x=0;x<vm.cityGroups.length;x++){
 			    		  if(vm.cityGroups[x].code.toUpperCase() == fare[field].toUpperCase()){
 			    			  exist = true;
@@ -4832,15 +5085,15 @@
 				}		    	 
 	    	  
 	    	  if(!exist){
-	    		  if(fare.loc1Type == 'C'){
+	    		  if(type== 'C'){
 	    		  alert("City code '"+fare[field]+"' is invalid. Please select a correct code");
-	    		  }else if(fare.loc1Type == 'N'){
+	    		  }else if(type== 'N'){
 	    		  alert("Country code '"+fare[field]+"' is invalid. Please select a correct code");
-	    		  }else if(fare.loc1Type == 'S'){
+	    		  }else if(type== 'S'){
 	    		  alert("State code '"+fare[field]+"' is invalid. Please select a correct code");
-	    		  }else if(fare.loc1Type == 'A'){
+	    		  }else if(type== 'A'){
 	    		  alert("Area code '"+fare[field]+"' is invalid. Please select a correct code");
-	    		  }else if(fare.loc1Type == 'G'){
+	    		  }else if(type== 'G'){
 	    		  alert("City Group code '"+fare[field]+"' is invalid. Please select a correct code");
 	    		  }
 	    		  fare[field] = null;
@@ -4851,7 +5104,7 @@
           
       vm.checkTariff = function(fare, field, inputField){
     	  var tariff = null;
-    	  if(fare[field][inputField] != undefined){
+    	  if(fare[field][inputField] != undefined && fare[field][inputField] != null && fare[field][inputField] != ""){
 	    	  var exist = false;
 	    	  for(var x=0;x<vm.tariffNumber.length;x++){	   
 	    		  if(vm.tariffNumber[x][inputField] == fare[field][inputField]){
@@ -4891,6 +5144,9 @@
       vm.changeVersion = function(workPackageSheet, index){    	  
     	  workPackageSheet.version = index;
     	  if(index == 'current'){
+    		  if(workPackageSheet.fares == null){
+    			  workPackageSheet.fares = [];
+    		  }
     		  workPackageSheet.currentFares = workPackageSheet.fares;
     	  }
     	  else{
@@ -4899,5 +5155,9 @@
     		  }
     	  }
       }
+      
+      vm.dateNgModelOpts = {
+    		  timezone : '+07:00'
+	  };
     }
 })();

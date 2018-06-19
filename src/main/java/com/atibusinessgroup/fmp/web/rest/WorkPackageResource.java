@@ -216,14 +216,15 @@ public class WorkPackageResource {
         }
         
         workPackage.setStatus(Status.NEW);
+        workPackage.setQueuedDate(ZonedDateTime.now());
         
         WorkPackage result = workPackageService.save(workPackage);
         
-//        WorkPackageHistory history = new WorkPackageHistory();
-//        history.setWorkPackage(new ObjectId(result.getId()));
-//        history.setType("CREATE");
-//        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
-//        workPackageHistoryService.save(history);
+        WorkPackageHistory history = new WorkPackageHistory();
+        history.setWorkPackage(new ObjectId(result.getId()));
+        history.setType("CREATE");
+        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        workPackageHistoryService.save(history);
         
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -251,6 +252,12 @@ public class WorkPackageResource {
         }
         workPackage.setStatus(Status.DISCONTINUED);
         WorkPackage result = workPackageService.save(workPackage);
+        
+        WorkPackageHistory history = new WorkPackageHistory();
+        history.setWorkPackage(new ObjectId(result.getId()));
+        history.setType("DISCONTINUED");
+        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        workPackageHistoryService.save(history);
         
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -315,6 +322,12 @@ public class WorkPackageResource {
         }
         WorkPackage result = workPackageService.save(wp);
         
+        WorkPackageHistory history = new WorkPackageHistory();
+        history.setWorkPackage(new ObjectId(result.getId()));
+        history.setType("REUSE");
+        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        workPackageHistoryService.save(history);
+        
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -373,6 +386,12 @@ public class WorkPackageResource {
         	}
         }
         WorkPackage result = workPackageService.save(wp);
+        
+        WorkPackageHistory history = new WorkPackageHistory();
+        history.setWorkPackage(new ObjectId(result.getId()));
+        history.setType("REPLACE");
+        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        workPackageHistoryService.save(history);
         
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -2045,6 +2064,96 @@ public class WorkPackageResource {
 		int warningsCount = 0;
 		List<WorkPackage.Validation.Tab> tabs = new ArrayList<WorkPackage.Validation.Tab>();
 		
+		//Validasi Header
+		WorkPackage.Validation.Tab tabHeader = new WorkPackage.Validation.Tab();
+		tabHeader.setName("HEADER");
+		List<WorkPackage.Validation.Tab.Error> errorHeader = new ArrayList<>();
+		
+		if(workPackage.getTargetDistribution().toUpperCase().contentEquals("ATPCO")) {
+			if(workPackage.getReviewLevel().toUpperCase().contentEquals("LSO")) {
+				if(workPackage.getSaleDate() == null) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Sale start date is required");
+		    		errorHeader.add(err1);
+				}
+				if(workPackage.getBusinessArea() == null || workPackage.getBusinessArea().contentEquals("")) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Business area is required");
+		    		errorHeader.add(err1);
+				}
+				if(workPackage.getName() == null || workPackage.getName().contentEquals("")) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Name is required");
+		    		errorHeader.add(err1);
+				}
+			}else if(workPackage.getReviewLevel().toUpperCase().contentEquals("HO")) {
+				if(workPackage.getSaleDate() == null) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Sale start date is required");
+		    		errorHeader.add(err1);
+				}
+				if(workPackage.getBusinessArea() == null || workPackage.getBusinessArea().contentEquals("")) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Business area is required");
+		    		errorHeader.add(err1);
+				}
+				if(workPackage.getName() == null || workPackage.getName().contentEquals("")) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Name is required");
+		    		errorHeader.add(err1);
+				}
+				if(workPackage.getFilingDate() == null) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Filing date is required");
+		    		errorHeader.add(err1);
+				}
+				if(workPackage.getInterofficeComment() == null || workPackage.getInterofficeComment().size() < 1) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("IN is required");
+		    		errorHeader.add(err1);
+				}
+			}
+			
+			tabHeader.setError(errorHeader);
+			
+			errorsCount += errorHeader.size();
+	    	if(errorHeader.size() > 0 || errorHeader.size() > 0) {
+	    		tabs.add(tabHeader);
+	    	}
+			
+		}else if(workPackage.getTargetDistribution().toUpperCase().contentEquals("MARKET")) {
+			if(workPackage.getReviewLevel().toUpperCase().contentEquals("LSO")) {
+				if(workPackage.getName() == null || workPackage.getName().contentEquals("")) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Name is required");
+		    		errorHeader.add(err1);
+				}		
+			}else if(workPackage.getReviewLevel().toUpperCase().contentEquals("HO")) {
+				if(workPackage.getName() == null || workPackage.getName().contentEquals("")) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Name is required");
+		    		errorHeader.add(err1);
+				}
+				if(workPackage.getDistributionDate() == null) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Name is required");
+		    		errorHeader.add(err1);
+				}
+				if(workPackage.getInterofficeComment() == null || workPackage.getInterofficeComment().size() < 1) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("IN is required");
+		    		errorHeader.add(err1);
+				}
+			}
+			
+			tabHeader.setError(errorHeader);
+			
+			errorsCount += errorHeader.size();
+	    	if(errorHeader.size() > 0 || errorHeader.size() > 0) {
+	    		tabs.add(tabHeader);
+	    	}
+		}
+					
 		//Validasi Fare
 		for(WorkPackageFareSheet wpfs : workPackage.getFareSheet()) {
 			WorkPackage.Validation.Tab tab1 = new WorkPackage.Validation.Tab();
@@ -2208,7 +2317,7 @@ public class WorkPackageResource {
 						    		errors.add(err1);
 								}
 							}
-						}else if(workPackage.getReviewLevel().contentEquals("Distribution")) {
+						}else if(workPackage.getReviewLevel().toUpperCase().contentEquals("DISTRIBUTION")) {
 							if(fare.getTariffNumber().getTarCd() == null || fare.getTariffNumber().getTarCd().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
@@ -2406,7 +2515,7 @@ public class WorkPackageResource {
 						    		errors.add(err1);
 								}
 							}
-						}else if(workPackage.getReviewLevel().contentEquals("Distribution")) {
+						}else if(workPackage.getReviewLevel().toUpperCase().contentEquals("DISTRIBUTION")) {
 							if(fare.getTariffNumber().getTarNo() == null || fare.getTariffNumber().getTarNo().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
@@ -2774,7 +2883,7 @@ public class WorkPackageResource {
 						    		errors.add(err1);
 								}
 							}
-						}else if(workPackage.getReviewLevel().contentEquals("Distribution")) {
+						}else if(workPackage.getReviewLevel().toUpperCase().contentEquals("DISTRIBUTION")) {
 							if(fare.getTarcd()== null || fare.getTarcd().contentEquals("")) {									
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
@@ -3400,8 +3509,8 @@ public class WorkPackageResource {
         	s.setPending(true);
         	s.setReadyToRelease(true);
         	s.setReferred(true);
-        	s.setReplace(true);
-        	s.setReuse(true);
+        	s.setReplace(false);
+        	s.setReuse(false);
         	s.setReviewing(true);
         	s.setWithdrawn(true);
         	s.setNewStatus(true);
@@ -3429,7 +3538,7 @@ public class WorkPackageResource {
 		        		rl.setHo(true);
 		        	}else if(reviewLevel.equals("DISTRIBUTION")) {
 		        		rl.setDistribution(true);
-		        	}else if(reviewLevel.equals("ROUTE MANAGEMENT")) {
+		        	}else if(reviewLevel.equals("ROUTE_MANAGEMENT")) {
 		        		rl.setRouteManagement(true); 
 		        	}
 	        	}
@@ -3607,7 +3716,7 @@ public class WorkPackageResource {
 	        	fareVersion.version = sheet.fareVersion.size() + 1;
 	        	sheet.fareVersion.add(fareVersion);
 	        }
-	        
+	        result.setQueuedDate(ZonedDateTime.now());
 	        workPackageService.save(result);  
 	        
 	        saveHistoryData(workPackage);
@@ -3666,6 +3775,7 @@ public class WorkPackageResource {
         
         WorkPackage result = workPackageService.findOne(workPackage.getId());
         result.setStatus(Status.WITHDRAWN);
+        result.setQueuedDate(ZonedDateTime.now());
         workPackageService.save(result);
         /*
         saveHistoryData(workPackage);
@@ -3699,6 +3809,12 @@ public class WorkPackageResource {
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
         */
+        
+        WorkPackageHistory history = new WorkPackageHistory();
+        history.setWorkPackage(new ObjectId(result.getId()));
+        history.setType("WITHDRAW");
+        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        workPackageHistoryService.save(history);
         
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -3794,6 +3910,7 @@ public class WorkPackageResource {
         	fareVersion.version = sheet.fareVersion.size() + 1;
         	sheet.fareVersion.add(fareVersion);
         }
+        result.setQueuedDate(ZonedDateTime.now());
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -3836,6 +3953,7 @@ public class WorkPackageResource {
         }
 		result.setLocked(false);
         result.setStatus(Status.PENDING);
+        result.setQueuedDate(ZonedDateTime.now());
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -3890,6 +4008,7 @@ public class WorkPackageResource {
 //    		result.setLocked(false);
 //    		result.setStatus(Status.PENDING);        		
 //	    }
+        workPackage.setQueuedDate(ZonedDateTime.now());
         workPackageService.save(workPackage);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -4120,11 +4239,51 @@ public class WorkPackageResource {
         result.setDistributionReviewLevel(null);
         result.setStatus(Status.REFERRED);
 		result.setLocked(false);
+		result.setQueuedDate(ZonedDateTime.now());
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
         history.setWorkPackage(new ObjectId(result.getId()));
         history.setType("REFERBACK");
+        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        workPackageHistoryService.save(history);
+        
+        return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
+    
+    /**
+     * POST  /work-packages/complete : complete
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/work-packages/complete")
+    @Timed
+    public ResponseEntity<WorkPackage> completeWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
+        log.debug("REST request to complete WorkPackage : {}", workPackage);
+        if (workPackage.getId() == null) {
+            throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
+        }
+        
+        saveHistoryData(workPackage);
+        
+        //updateWorkPackage(workPackage);
+        
+        WorkPackage result = workPackageService.findOne(workPackage.getId());
+
+        result.setReviewLevel(result.getReviewLevel());
+        result.setDistributionReviewLevel(result.getDistributionReviewLevel());
+        result.setStatus(Status.DISTRIBUTED);
+		result.setLocked(false);
+		result.setQueuedDate(ZonedDateTime.now());
+        workPackageService.save(result);
+        
+        WorkPackageHistory history = new WorkPackageHistory();
+        history.setWorkPackage(new ObjectId(result.getId()));
+        history.setType("COMPLETE");
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
         

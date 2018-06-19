@@ -33,7 +33,7 @@
 		    </li>
 		    <li class="menu-list has-sub">
 		    	<a>
-		    		<i class="fa fa-list-alt"></i><span>AFD Query</span>
+		    		<i class="fa fa-list-alt"></i><span>Query</span>
 		    	</a>
 		    	<div class="sub-menu">
 		    		<ul>
@@ -54,7 +54,7 @@
 		    		    </li>
 		    		</ul>
 		    	</div>
-		    	<div class="tooltip">AFD Query</div>
+		    	<div class="tooltip">Query</div>
 		    </li>
 		    <li class="menu-list has-sub">
 		    	<a>
@@ -122,6 +122,9 @@
 		    		    </li>
 		    		    <li>
 		    		    	<a ui-sref="tariff-number" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Tariff Number </a>
+		    		    </li>
+		    		    <li>
+		    		    	<a ui-sref="tariff-number-add-on" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Tariff Number AddOn</a>
 		    		    </li>
 		    		    <li>
 		    		    	<a ui-sref="user-management" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> User Management </a>
@@ -219,6 +222,12 @@
                                 <a ui-sref="atpco-master-fare-matrix" ng-click="vm.collapseNavbar()">
                                     <span class="glyphicon glyphicon-asterisk"></span>&nbsp;
                                     <span>Atpco Master Fare Matrix</span>
+                                </a>
+                            </li>
+<li ui-sref-active="active">
+                                <a ui-sref="data-feed-fare-basis-group-mapping" ng-click="vm.collapseNavbar()">
+                                    <span class="glyphicon glyphicon-asterisk"></span>&nbsp;
+                                    <span>Data Feed Fare Basis Group Mapping</span>
                                 </a>
                             </li>
 <!--                         jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->

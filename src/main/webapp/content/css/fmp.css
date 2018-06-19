@@ -1640,7 +1640,7 @@ button.ui-button::-moz-focus-inner {
   padding: 0; }
 
 .ui-datepicker {
-  width: 21em;
+  width: 23em;
   padding: .2em .2em 0;
   display: none; }
 
@@ -4508,6 +4508,20 @@ label.tree_label:after {
   background: #3c8dbc;
   color: #fff; }
 
+.additional-container {
+  width: 16.66667%;
+  padding: 5px 20px;
+  position: relative; }
+  .additional-container .additional-info {
+    float: none;
+    width: 100%;
+    min-width: auto;
+    margin: 0;
+    border-radius: 2px; }
+
+.comment-list.FIclicked {
+  background-color: rgba(255, 204, 85, 0.4) !important; }
+
 /* General Demo Style */
 body, html {
   font-size: 100%;
@@ -4601,7 +4615,7 @@ a:hover {
   padding: 28px 20px 20px;
   position: relative;
   width: 40%;
-  margin: 0 auto 30px;
+  margin: 0 auto 15px;
   background: rgba(252, 252, 252, 0.89);
   text-align: center; }
   .content-title h2 {
@@ -4623,10 +4637,10 @@ a:hover {
 
 .page-wrapper {
   float: left;
-  padding-top: 70px; }
+  padding-top: 55px; }
   .page-wrapper .page-content {
     margin-left: 100px;
-    padding: 20px 40px 200px;
+    padding: 0 40px 200px;
     -webkit-transition: .3s all;
     -o-transition: .3s all;
     transition: .3s all; }

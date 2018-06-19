@@ -1,0 +1,43 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "originCity",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "originCountry",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "destinationCity",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "destinationCountry",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "rbd",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "fareBasisCode",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "fareBasisGroup",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "priority",
+            "fieldType": "String"
+        }
+    ],
+    "dto": "no",
+    "service": "serviceClass",
+    "entityTableName": "data_feed_fare_basis_group_mapping",
+    "jpaMetamodelFiltering": false,
+    "pagination": "no"
+}

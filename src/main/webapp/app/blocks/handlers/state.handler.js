@@ -17,7 +17,7 @@
         function initialize() {
             $rootScope.VERSION = VERSION;
             $rootScope.isAuthenticated = Principal.isAuthenticated;
-            
+            $rootScope.timezone = "+0700";
             $rootScope.exceptionStatesName = [
             	'requestReset',
             	'finishReset'

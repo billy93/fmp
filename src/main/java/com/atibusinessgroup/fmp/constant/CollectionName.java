@@ -2,6 +2,7 @@ package com.atibusinessgroup.fmp.constant;
 
 public class CollectionName {
 	public final static String ATPCO_FARE = "atpco_fare";
+	public final static String ATPCO_RECORD_0 = "atpco_record_0";
 	public final static String ATPCO_RECORD_1 = "atpco_record_1";
 	public final static String ATPCO_RECORD_2 = "atpco_record_2";
 	public final static String ATPCO_RECORD_3_CAT_001 = "atpco_record_3_cat_001";
@@ -43,6 +44,8 @@ public class CollectionName {
 	public final static String ATPCO_FOOTNOTE_RECORD_3_CAT_014 = "atpco_footnote_record_3_cat_014";
 	public final static String ATPCO_FOOTNOTE_RECORD_3_CAT_015 = "atpco_footnote_record_3_cat_015";
 	
+	public final static String ATPCO_RECORD_FLIGHT_TABLE_986 = "atpco_record_flight_table_986";
+	public final static String ATPCO_RECORD_BASE_FARE_TABLE_989 = "atpco_record_base_fare_table_989";
 	public final static String ATPCO_RECORD_DATE_TABLE_994 = "atpco_record_date_table_994";
 	public final static String ATPCO_RECORD_TEXT_TABLE_996 = "atpco_record_text_table_996";
 }

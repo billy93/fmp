@@ -20,17 +20,23 @@
         vm.getRules2 = getRules2;
         vm.reset = reset;
         vm.page = 1;
+        vm.hideDetail = hideDetail;
         vm.showCategoryDetail = showCategoryDetail;
-        
+        vm.clearFilter = clearFilter;
+        vm.showDetail = showDetail;
         vm.getTab = getTab;
+        
         
         vm.datePickerOpenStatus = {};
         vm.dateFormat = "yyyy-MM-dd";
         vm.openCalendar = openCalendar;
+        vm.loadRec8 = loadRec8;
 
         function loadAll () {
         	vm.queryParams.page = vm.page - 1;
         	vm.queryParams.size = vm.itemsPerPage;
+        	
+        	console.log(vm.queryParams);
         	
         	RuleQuery.query(vm.queryParams, onSuccess, onError);
         	
@@ -54,6 +60,7 @@
         function getRules(ruleQuery) {
         	RuleQuery.getRules(ruleQuery, function(data) {
         		vm.ruleQueryCategories = data;
+        		console.log(data);
         	}, function(error) {
         		console.log(error);
         	});
@@ -72,7 +79,7 @@
         	$("#tblDetail").show();
         	$("#tblDetail").focus();
         	$("#tblDetail").css("display","block");
-        	$("#tblDetail").css("height","440px");
+        	$("#tblDetail").css("max-height","440px");
         	$("#ruleCategories").show();
         	
         }
@@ -95,6 +102,8 @@
         function openCalendar (e, date) {
         	e.preventDefault();
             e.stopPropagation();
+            
+            cosole.log("date :: "+date);
             
             vm.datePickerOpenStatus[date] = true;
         }
@@ -124,8 +133,9 @@
         		type: null,
         		src: null,
         		cat: null,
-        		catNo: null
-        	}
+        		catNo: null,
+        		accountCode: null,
+        	};
         	
         	vm.clearFilter();
         	vm.ruleQueries = null;
@@ -149,6 +159,11 @@
             }, function() {
                 $state.go('rule-query');
             });
+        }
+        
+        
+        function loadRec8() {
+        	
         }
     }
 })();
