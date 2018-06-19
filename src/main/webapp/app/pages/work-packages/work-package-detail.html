@@ -20,8 +20,7 @@
 							Details 
 						</div>
 						<div class="box-body" 
-						ng-class="{'poiv-none' : (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
-						&& vm.workPackage.status=='DISTRIBUTED') || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') } " >
+						ng-class="{'poiv-none' : (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED') || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') } " >
 							<div class="clearfix">
 								<div class="pull-left w50 two-column">
 									<div class="form-group">
@@ -130,7 +129,7 @@
 										<input type="text" name="expPax" class="form-control"name="name" id="field_expRev"
                     						ng-model="vm.workPackage.expRev" />
 									</div>
-									<div class="form-group">
+									<div class="form-group" ng-if="vm.workPackage.targetDistribution != 'MARKET'">
 										<label for="field_saleDate">Sale Start Date</label>
 										<div class="input-group">
 											<input id="field_saleDate" type="text" 
@@ -166,25 +165,6 @@
 											</span>
 										</div>
 									</div>
-									
-									<!-- <div class="form-group">
-										<label for="field_distributionDate">Distribution Date</label>
-										<div class="input-group">
-											<input type="text" id="field_distributionDate" name="distributionDate" class="form-control" ng-disabled="vm.isFieldDisable('distributionDate')" datetime-picker="{{dateformat}}" ng-model="vm.workPackage.distributionDate" is-open="vm.datePickerOpenStatus.distributionDate">
-											<span class="input-group-addon disabled">
-												<i class="fa fa-calendar" ng-click="vm.openCalendar('distributionDate')" ng-disabled="vm.isFieldDisable('distributionDate')"></i>
-											</span>
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="field_discExpiryDate">Disc/Expiry Date</label>
-										<div class="input-group">
-											<input type="text" id="field_discExpiryDate" name="discExpiryDate" class="form-control" datetime-picker="{{dateformat}}" ng-model="vm.workPackage.discExpiryDate" is-open="vm.datePickerOpenStatus.discExpiryDate"/>
-											<span class="input-group-addon disabled">
-												<i class="fa fa-calendar" ng-click="vm.openCalendar('discExpiryDate')" ng-disabled="true"></i>
-											</span>
-										</div>
-									</div> -->
 								</div>
 							</div>
 						</div>
@@ -200,8 +180,7 @@
 								    <li ng-class="{active:vm.currentTabInterofficeComment}"><a ng-click="vm.selectCommentTab('interofficeComment')">Inter Office</a></li>
 								    <li ng-class="{active:vm.currentTabRatesheetComment}"><a ng-click="vm.selectCommentTab('ratesheetComment')">Rate Sheet Comment</a></li>
 								</ul>
-								<div class="tab-content" ng-class="{'poiv-none' : vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
-						&& vm.workPackage.status=='DISTRIBUTED' }">
+								<div class="tab-content">
 									<div ng-class="{active:vm.currentTabComment}" class="tab-pane" id="comment">																		
 										<div class="form-group">
 											<wysiwyg-edit content="vm.commentString" config="vm.editorConfig"></wysiwyg-edit>
@@ -227,7 +206,8 @@
 							        	</div>
 									</div>
 
-									<div ng-class="{active:vm.currentTabInterofficeComment, 'poiv-none' : vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT' }" class="tab-pane" id="inter-office">
+									<div ng-class="{active:vm.currentTabInterofficeComment, 'poiv-none' : (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') 
+											|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO'&& vm.workPackage.status=='DISTRIBUTED') }" class="tab-pane" id="inter-office">
 										<div class="form-group">
 											<wysiwyg-edit content="vm.ioString" config="vm.editorConfig"></wysiwyg-edit>
 										</div> 
@@ -319,7 +299,7 @@
 						    	<a ng-click="vm.addSheet()" data-toggle="modal" data-target="#addNewsheet">Add</a>
 						    </li>
 						    <li>
-						    	<a ng-click="vm.removeSheet()">Remove</a>
+						    	<a ng-click="vm.removeSheet()" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'">Remove</a>
 						    </li>
 						    <!-- <li>
 						    	<a href="#">Rename</a>
@@ -328,7 +308,7 @@
 						    	<a ng-click="vm.copySheet()">Copy</a>
 						    </li>
 						    <li>
-						    	<a ng-click="vm.pasteSheet()">Paste</a>
+						    	<a ng-click="vm.pasteSheet()" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'">Paste</a>
 						    </li>
 						</ul>
 					</div>												
@@ -433,14 +413,17 @@
 																    <li>
 																    	<a ng-click="vm.fillDown(workPackageSheet)">Fill Down</a>
 																    </li>	
+																     <li>
+															    		<a ng-click="vm.searchReplace(workPackageSheet)">Search/Replace</a>
+															   		 </li>
 																    <li>
-																    	<a ng-click="vm.addFares(workPackageSheet)">Add Rows</a>
+																    	<a ng-click="vm.addFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Add Rows</a>
 																    </li>
 																    <li>
-																    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)">Duplicate Selected Rows</a>
+																    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Duplicate Selected Rows</a>
 																    </li>
 																    <li>
-																    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)">Delete Selected Rows</a>
+																    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Delete Selected Rows</a>
 																    </li>
 																     														   
 																    
@@ -463,7 +446,7 @@
 												</div>
 											</div>
 											<div class="table-responsive">
-												<table class="table table-stripped table-bordered datatable" jq-slider>
+												<table class="table table-stripped table-bordered datatable" jq-slider ng-init="vm.sort(workPackageSheet, '#')">
 													<thead>
 														<tr role="row">
 															<!-- <th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">
@@ -477,66 +460,70 @@
 																</div>															
 															</th> -->
 															<th class="sorting_asc" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" aria-sort="ascending">No</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Status</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Carrier
+															<th class="sorting_asc" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" aria-sort="ascending"># <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, '#')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Status <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'status')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Carrier <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'carrier')"></span>
 																<div class="resize-div"></div>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Action
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Action <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'action')"></span>
 																<div class="resize-div"></div>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tar No</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tar Cd</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Global
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tar No <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'tariffNumber.tarNo')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tar Cd <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'tariffNumber.tarCd')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Global <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'tariffNumber.global')"></span>
 																<div class="resize-div"></div>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Origin</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Dest</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Fare Cls
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Origin <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'origin')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Dest <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'destination')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Fare Cls <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'fareBasis')"></span>
 																<div class="resize-div"></div>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Bkg Cls
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Bkg Cls <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'bookingClass')"></span>
 																<div class="resize-div"></div>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Cabin
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Cabin <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'cabin')"></span>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">OW/RT
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">OW/RT <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'typeOfJourney')"></span>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Ftnt
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Ftnt <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'footnote')"></span>
 																<div class="resize-div"></div>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Rtg No
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Rtg No <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'rtgno')"></span>
 																<div class="resize-div"></div>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Rule No
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Rule No <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'ruleno')"></span>
 																<div class="resize-div"></div>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Curr</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Base Amt
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Curr <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'currency')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Base Amt <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'amount')"></span>
 																<div class="resize-div"></div>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Target Aif
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Target Aif <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'aif')"></span>
 																<div class="resize-div"></div>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Travel Start</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Travel End</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Sale Start</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Sale End</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Comment
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Travel Start <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelStart')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Travel End <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelEnd')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Sale Start <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'saleStart')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Sale End <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'saleEnd')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Comment <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'comment')"></span>
 																<div class="resize-div" style="min-width: 200px;"></div>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Travel Complete</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Travel Complete Indicator</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Ratesheet Comment
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Travel Complete <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelComplete')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Travel Complete Indicator <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelCompleteIndicator')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Ratesheet Comment <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'ratesheetComment')"></span>
 																<div class="resize-div" style="min-width: 200px;"></div>
 															</th>
 														</tr>
 													</thead>
 													<tbody>
-														<tr ng-click="vm.tbodyClick(workPackageSheet)" ng-repeat="(key, fare) in workPackageSheet.currentFares track by $index" role="row" class="datatable-row" ng-class="{'poiv-none':workPackageSheet.version != 'current', 'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
+														<tr ng-click="vm.tbodyClick(workPackageSheet)" ng-repeat="(key, fare) in workPackageSheet.currentFares track by $index" role="row" class="datatable-row" ng-class="{'poiv-none':workPackageSheet.version != 'current', 'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}" ng-init="
+															fare.no == null || fare.no == undefined ? 
+															fare.no = $index+1 : fare.no = fare.no">
 															<!-- <td>
 																<input type="checkbox" ng-model="fare.selected" ng-change="optionToggled(workPackageSheet.fares)">
 															</td> -->
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['no']}" >{{$index+1}}</td>
+															<td>{{$index+1}}</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['no']}" >{{fare.no}}</td>
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'status', $event)" ng-class="{highlighted:fare.field['status']}">
 																<select class="form-control inside-table" name="status{{$parent.$index}}{{$index}}" ng-model="fare.status" id="field_status" 
 																	ng-class="{'must-fill': !editForm.editFormATPCO.status{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"												         		
@@ -756,6 +743,7 @@
 									               				<input type="text" class="form-control" name="footnote{{$parent.$index}}{{$index}}" id="field_footnote"
 										                				ng-maxlength="2"
 									                					maxlength="2"
+									                					uppercase
 									                					ng-pattern="/^[a-zA-Z0-9]{1,2}$/"
 									                					ng-keypress="vm.keypress($event, '^[a-zA-Z0-9]{1,2}$')"
 										                				ng-class="{'must-fill': editForm.editFormATPCO.footnote{{$parent.$index}}{{$index}}.$error.required ||
@@ -1064,13 +1052,16 @@
 																    	<a ng-click="vm.fillDown(workPackageSheet)">Fill Down</a>
 																    </li>	
 																    <li>
-																    	<a ng-click="vm.addFares(workPackageSheet)">Add Rows</a>
+															    		<a ng-click="vm.searchReplace(workPackageSheet)">Search/Replace</a>
+															   		</li>
+																    <li>
+																    	<a ng-click="vm.addFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Add Rows</a>
 																    </li>
 																    <li>
-																    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)">Duplicate Selected Rows</a>
+																    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Duplicate Selected Rows</a>
 																    </li>
 																    <li>
-																    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)">Delete Selected Rows</a>
+																    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Delete Selected Rows</a>
 																    </li>
 																    <li>
 																    	<a href="#">Paste</a>
@@ -1130,17 +1121,6 @@
 													             	ng-required="vm.isRequired('addonFareStatus')"
 													             	ng-options="key as value for (key , value) in vm.status">
 																</select>
-																<!-- <span ng-if="vm.isFieldEditable( 'addonFareStatus')">
-																	<select class="form-control inside-table" name="addonFareStatus{{$index}}" ng-model="fare.status" id="field_status" 
-																		ng-class="{'must-fill': !editForm.editFormATPCO.addonFareStatus{{$index}}.$valid && fare.action != 'Canceled'}"												         		
-									           							ng-disabled="vm.isFieldDisable('addonFareStatus')"
-														             	ng-required="vm.checkRequiredField('addonFareStatus')"
-														             	ng-options="key as value for (key , value) in vm.status">
-																	</select>
-																	<span class="form-control inside-table" ng-if="!vm.isFieldEditable( 'addonFareStatus')">
-											           					{{fare.status}}
-											           				</span>
-																</span> -->
 															</td>
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'carrier', $event)" ng-class="{highlighted:fare.field['carrier']}">
 																<input type="text" class="form-control" name="addonFareCarrier{{$index}}" id="field_carrier"
@@ -1159,25 +1139,10 @@
 											                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareTarno{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('addonFareTarno')"
 															            ng-focus="tarno[$parent.$index][$index]=true" ng-blur="tarno[$parent.$index][$index]=false; vm.checkTariff(fare, 'tariffNumber', 'tarNo');"/>
-																	<span class="input-group-addon disabled" ng-click="$event.stopPropagation(); vm.selectTariff(fare, 'tariffNumber')">
+																	<span class="input-group-addon disabled" ng-click="$event.stopPropagation(); vm.selectTariffAddOn(fare, 'tariffNumber')">
 																		<i class="fa fa-folder"></i>
 																	</span>
 																</span>
-																<!-- <ui-select ng-model="fare.tariffNumber" name="addonFareTarno{{$parent.$index}}{{$index}}" theme="select2" title="Tarif Number"  class="form-control"
-																	ng-required="vm.isRequired('addonFareTarno')"  
-																	ng-disabled="!vm.isEditable('addonFareTarno')"
-																	ng-class="{'must-fill': editForm.editFormATPCO.addonFareTarno{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-										                    	>
-															    <ui-select-match placeholder="TarNo">{{$select.selected.tarNo == null ? $select.selected.value.tarNo : $select.selected.tarNo}}</ui-select-match>
-																 <ui-select-choices style="min-width:300px" repeat="value.value as (key, value) in vm.tariffNumber | filter: { value: { tarNo: $select.search }}">
-															      <div ng-bind-html="value.value.tarNo | highlight: $select.search"></div>
-															      <small>
-															        TarNo : {{value.value.tarNo}}
-															        TarCd : {{value.value.tarCd}}
-															        Global : {{value.value.global}}
-															      </small>
-															    </ui-select-choices>
-															  </ui-select> -->
 															</td>
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'tarcd', $event)" ng-class="{highlighted:fare.field['tarcd']}">
 																<span class="input-group">
@@ -1188,27 +1153,10 @@
 												                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareTarcd{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 																            ng-required="vm.isRequired('addonFareTarcd') && fare.action != 'Canceled'"
 																            ng-focus="tarcd[$parent.$index][$index]=true" ng-blur="tarcd[$parent.$index][$index]=false; vm.checkTariff(fare, 'tariffNumber', 'tarCd');"/>
-																		<span class="input-group-addon disabled" ng-click="$event.stopPropagation(); vm.selectTariff(fare, 'tariffNumber')">
+																		<span class="input-group-addon disabled" ng-click="$event.stopPropagation(); vm.selectTariffAddOn(fare, 'tariffNumber')">
 																			<i class="fa fa-folder"></i>
 																		</span>
 																	</span>
-																<!-- <ui-select ng-model="fare.tariffNumber" theme="select2" class="form-control"
-																name="addonFareTarcd{{$parent.$index}}{{$index}}"
-																ng-required="vm.isRequired('addonFareTarcd') && fare.action != 'Canceled'"  
-																ng-disabled="!vm.isEditable('addonFareTarcd')"
-																
-																ng-class="{'must-fill': editForm.editFormATPCO.addonFareTarcd{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-											                    	>
-																    <ui-select-match placeholder="TarCd">{{$select.selected.tarCd == null ? $select.selected.value.tarCd : $select.selected.tarCd}}</ui-select-match>
-																	 <ui-select-choices style="min-width:300px" repeat="value.value as (key, value) in vm.tariffNumber | filter: { value: { tarCd: $select.search }}">
-																      <div ng-bind-html="value.value.tarCd | highlight: $select.search"></div>
-																      <small>
-																        TarNo : {{value.value.tarNo}}
-																        TarCd : {{value.value.tarCd}}
-																        Global : {{value.value.global}}
-																      </small>
-																    </ui-select-choices>
-																  </ui-select> -->
 															</td>
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'global', $event)" ng-class="{highlighted:fare.field['global']}">{{fare.tariffNumber.global}}</td>
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'origin', $event)" ng-class="{highlighted:fare.field['origin']}">
@@ -1224,25 +1172,6 @@
 																			<i class="fa fa-folder"></i>
 																		</span>
 																	</span>
-																<!-- <ui-select ng-model="fare.origin" theme="select2" class="form-control"
-																name="addonFareOrigin{{$parent.$index}}{{$index}}"
-																ng-required="vm.isRequired('addonFareOrigin') && fare.action != 'Canceled'"  
-																ng-disabled="!vm.isEditable('addonFareOrigin')"
-																
-																ng-class="{'must-fill': editForm.editFormATPCO.addonFareOrigin{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-											                    	>
-																    <ui-select-match placeholder="Origin">{{$select.selected.value.cityCode}}</ui-select-match>
-																	 <ui-select-choices style="min-width:300px" repeat="value.value.cityCode as (key, value) in vm.cities | filter: { value: { cityCode: $select.search }}">
-																      <div ng-bind-html="value.value.cityCode | highlight: $select.search"></div>
-																      <small>
-																        City Code : {{value.value.cityCode}}
-																        City Name : {{value.value.cityName}}
-																        Country Code : {{value.value.countryCode}}
-																        Country Name : {{value.value.countryName}}
-																        
-																      </small>
-																    </ui-select-choices>
-																  </ui-select> -->
 															</td>
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'destination', $event)" ng-class="{highlighted:fare.field['destination']}">
 																<span class="input-group">
@@ -1257,25 +1186,6 @@
 																		<i class="fa fa-folder"></i>
 																	</span>
 																</span>
-																<!-- <ui-select ng-model="fare.destination" theme="select2"class="form-control"
-																name="addonFareDestination{{$parent.$index}}{{$index}}"
-																ng-required="vm.isRequired('addonFareDestination') && fare.action != 'Canceled'"  
-																ng-disabled="!vm.isEditable('addonFareDestination')"
-																
-																ng-class="{'must-fill': editForm.editFormATPCO.addonFareDestination{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-											                    	>
-																    <ui-select-match placeholder="Destination">{{$select.selected.value.cityCode}}</ui-select-match>
-																	 <ui-select-choices style="min-width:300px" repeat="value.value.cityCode as (key, value) in vm.cities | filter: { value: { cityCode: $select.search }}">
-																      <div ng-bind-html="value.value.cityCode | highlight: $select.search"></div>
-																      <small>
-																        City Code : {{value.value.cityCode}}
-																        City Name : {{value.value.cityName}}
-																        Country Code : {{value.value.countryCode}}
-																        Country Name : {{value.value.countryName}}
-																        
-																      </small>
-																    </ui-select-choices>
-																  </ui-select> -->
 															</td>
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'bucket', $event)" ng-class="{highlighted:fare.field['bucket']}">
 																<input type="text" class="form-control" ng-model="fare.bucket" name="addonFareBucket{$parent.$index}}{{$index}}"
@@ -1882,15 +1792,10 @@
 						              <div class="pull-left w50 two-column">
 						                <div class="form-group">
 						                  <label>Fare Type</label>
-						                  <!-- <select class="form-control" name="discountFareType{{$index}}" ng-model="workPackageSheet.discountFareType" 
-						                        ng-class="{'must-fill': !editForm.editFormDiscount.discountFareType{{$index}}.$valid}"
-						                        ng-options="key as value for (key , value) in vm.fareType"
-						                        ng-required="vm.isRequired('discountFareType')"
-						                        ng-disabled="!vm.isEditable('discountFareType')"></select>	 -->
-											<select class="form-control" name="discountFareType{{$index}}" ng-model="workPackageSheet.discountFareType" ng-class="{'must-fill': !editForm.editFormDiscount.discountFareType{{$index}}.$valid}"
+											<select class="form-control" name="discountFareType{{$index}}" ng-model="workPackageSheet.fareType" ng-class="{'must-fill': !editForm.editFormDiscount.discountFareType{{$index}}.$valid}"
 												ng-required="vm.isRequired('discountFareType')" ng-disabled="!vm.isEditable('discountFareType')">
-												<option ng-repeat="fare in vm.atpcoFareTypes track by $index" value="{{fare.typeCode}}">
-													{{fare.typeCode}}  {{fare.definition}}
+												<option ng-repeat="fare in vm.optionFare track by $index" value="{{fare.name}}">
+													{{fare.code}} | {{fare.name}}
 												</option>
 											</select>								      				
 						                </div>
@@ -1918,13 +1823,16 @@
 												    	<a ng-click="vm.fillDown(workPackageSheet)">Fill Down</a>
 												    </li>	
 												    <li>
-												    	<a ng-click="vm.addFares(workPackageSheet)">Add Rows</a>
+											    		<a ng-click="vm.searchReplace(workPackageSheet)">Search/Replace</a>
+											   		</li>
+												    <li>
+												    	<a ng-click="vm.addFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Add Rows</a>
 												    </li>
 												    <li>
-												    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)">Duplicate Selected Rows</a>
+												    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Duplicate Selected Rows</a>
 												    </li>
 												    <li>
-												    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)">Delete Selected Rows</a>
+												    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Delete Selected Rows</a>
 												    </li>
 												     														   
 												    
@@ -2000,22 +1908,6 @@
 						                                    ng-required="vm.isRequired('discountTariffCode') && fare.action != 'Canceled'" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountTariffCode{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
 						                                      ng-model="fare.tarcd"/>	
-						                                      
-						                       <!--  <ui-select ng-model="fare.tarcd" theme="select2" class="form-control"
-						                            name="tarcd{{$parent.$index}}{{$index}}"
-						                            ng-required="vm.isRequired('discountTariffCode') && fare.action != 'Canceled'"  
-						                            ng-disabled="!vm.isEditable('discountTariffCode')"
-						                            ng-class="{'must-fill': editForm.editFormDiscount.tarcd{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}">
-						                            <ui-select-match placeholder="TarCd">{{$select.selected.tarCd == null ? $select.selected.value.tarCd : $select.selected.tarCd}}</ui-select-match>
-						                            <ui-select-choices style="min-width:300px" repeat="value.value as (key, value) in vm.tariffNumber | filter: { value: { tarCd: $select.search }}">
-						                                  <div ng-bind-html="value.value.tarCd | highlight: $select.search"></div>
-						                                  <small>
-						                                    TarNo : {{value.value.tarNo}}
-						                                    TarCd : {{value.value.tarCd}}
-						                                    Global : {{value.value.global}}
-						                                  </small>
-						                              </ui-select-choices>
-						                          </ui-select> -->
 						                      </td>																
 						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'loc1Type', $event)" ng-class="{highlighted:fare.field['loc1Type']}">
 						                       	 <select class="form-control" 
@@ -2036,7 +1928,7 @@
 								                    		ng-class="{'must-fill': editForm.editFormDiscount.discountLoc1{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 												            ng-required="vm.isRequired('discountLoc1') && fare.action != 'Canceled'"
 												            ng-focus="discountLoc1[$parent.$index][$index]=true" 
-												            ng-blur="discountLoc1[$parent.$index][$index]=false; vm.checkLoc(fare, 'loc1');"/>
+												            ng-blur="discountLoc1[$parent.$index][$index]=false; vm.checkLoc(fare, 'loc1', fare.loc1Type);"/>
 														<span ng-if="fare.loc1Type == 'C' || fare.loc1Type == 'N'" class="input-group-addon disabled" ng-click="$event.stopPropagation(); vm.selectCityATPCODiscount(fare, 'loc1')">
 															<i class="fa fa-folder"></i>
 														</span>
@@ -2068,7 +1960,7 @@
 								                    		ng-class="{'must-fill': editForm.editFormDiscount.discountLoc2{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 												            ng-required="vm.isRequired('discountLoc2') && fare.action != 'Canceled'"
 												            ng-focus="discountLoc2[$parent.$index][$index]=true" 
-												            ng-blur="discountLoc2[$parent.$index][$index]=false; vm.checkLoc(fare, 'loc2');"/>
+												            ng-blur="discountLoc2[$parent.$index][$index]=false; vm.checkLoc(fare, 'loc2', fare.loc2Type);"/>
 														<span ng-if="fare.loc2Type == 'C' || fare.loc2Type == 'N'" class="input-group-addon disabled" ng-click="$event.stopPropagation(); vm.selectCityATPCODiscount(fare, 'loc2')">
 															<i class="fa fa-folder"></i>
 														</span>
@@ -2691,10 +2583,10 @@
 						    <li ng-if="vm.workPackage.attachment" ng-class="{active:vm.currentTabAttachment}"><a ng-click="vm.selectOtherTab('attachment')">Attachment</a></li>
 							<li ng-if="vm.workPackage.filingInstruction" ng-class="{active:vm.currentTabFilingInstruction}"><a ng-click="vm.selectOtherTab('filingInstruction')">Filing Instruction</a></li>					          
 						</ul>
-						<div class="tab-content" ng-class="{'poiv-none' : vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
-						&& vm.workPackage.status=='DISTRIBUTED' }">
+						<div class="tab-content" >
 							<div class="tab-pane" ng-class="{active:vm.currentMarketTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.marketFareSheet track by $index">
-								<div class="pb1 mb1 bbgrey">
+								<div class="pb1 mb1 bbgrey" ng-class="{'poiv-none' : vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
+						&& vm.workPackage.status=='DISTRIBUTED' }">
 									<div class="clearfix">
 										<div class="pull-left w50 two-column">
 											<div class="form-group">
@@ -2721,16 +2613,7 @@
 									<div class="clearfix">
 										<div class="pull-left w50 two-column">
 											<div class="form-group">
-												<label>Fare Type</label>
-												
-												<!-- <select 
-							      				class="form-control" 
-							      				name="marketFareType{{$parent.$index}}{{$index}}"
-							      				ng-model="workPackageSheet.fareType" 
-							      				ng-class="{'must-fill': !editForm.editFormMarket.marketFareType{{$parent.$index}}{{$index}}.$valid}"
-							      				ng-options="key as value for (key , value) in vm.fareType"
-							      				ng-required="vm.isRequired('marketFareType')"
-							      				ng-disabled="!vm.isEditable('marketFareType')"></select> -->	
+												<label>Fare Type</label>												
 							      				<select class="form-control" name="marketFareType{{$parent.$index}}{{$index}}" ng-model="workPackageSheet.fareType" ng-class="{'must-fill': !editForm.editFormMarket.marketFareType{{$parent.$index}}{{$index}}.$valid}"
 												ng-required="vm.isRequired('marketFareType')" ng-disabled="!vm.isEditable('marketFareType')">
 												<option ng-repeat="fare in vm.optionFare track by $index" value="{{fare.name}}">
@@ -2767,7 +2650,8 @@
 								<div class="table-wrapper">
 									<div class="datatable-wrapper form-inline">
 										<div class="clearfix">
-											<div class="pull-left">
+											<div class="pull-left" ng-class="{'poiv-none' : vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
+						&& vm.workPackage.status=='DISTRIBUTED' }">
 												<div class="clearfix">
 													<div class="pull-right datatable-button">
 														<div class="button-group dropdown custom">
@@ -2780,13 +2664,16 @@
 															    	<a ng-click="vm.fillDown(workPackageSheet)">Fill Down</a>
 															    </li>	
 															    <li>
-															    	<a ng-click="vm.addFares(workPackageSheet)">Add Rows</a>
+														    		<a ng-click="vm.searchReplace(workPackageSheet)">Search/Replace</a>
+														   		</li>
+															    <li>
+															    	<a ng-click="vm.addFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Add Rows</a>
 															    </li>
 															    <li>
-															    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)">Duplicate Selected Rows</a>
+															    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Duplicate Selected Rows</a>
 															    </li>
 															    <li>
-															    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)">Delete Selected Rows</a>
+															    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Delete Selected Rows</a>
 															    </li>
 															</ul>
 														</div>													
@@ -2829,8 +2716,8 @@
 									               		<th>RateSheet Comment</th>	        		
 									                </tr>
 												</thead>
-												<tbody>
-													<tr ng-click="vm.tbodyClick(workPackageSheet)" ng-repeat="fare in workPackageSheet.currentFares track by $index" role="row" class="datatable-row" ng-class="{'poiv-none':workPackageSheet.version != 'current', 'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
+												<tbody ng-class="{'poiv-none' : vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO'&& vm.workPackage.status=='DISTRIBUTED' }">
+													<tr ng-click="vm.tbodyClick(workPackageSheet)" ng-repeat="fare in workPackageSheet.currentFares track by $index" role="row" class="datatable-row" ng-class="{'poiv-none': (workPackageSheet.version != 'current', 'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no']}">{{$index+1}}</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'status', $event)" ng-class="{highlighted:fare.field['status']}">
 															<select class="form-control inside-table" name="marketFareStatus{{$parent.$index}}{{$index}}" ng-model="fare.status" id="field_status" 
@@ -2863,25 +2750,6 @@
 																		<i class="fa fa-folder"></i>
 																	</span>
 																</span>
-															<!-- <ui-select ng-model="fare.origin" theme="select2" class="form-control"
-																name="marketFareOrigin{{$parent.$index}}{{$index}}"
-																ng-required="vm.isRequired('marketFareOrigin') && fare.action != 'Canceled'"  
-																ng-disabled="!vm.isEditable('marketFareOrigin')"
-																
-																ng-class="{'must-fill': editForm.editFormMarket.marketFareOrigin{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-										                    	>
-															    <ui-select-match placeholder="Origin">{{$select.selected.value.cityCode}}</ui-select-match>
-																 <ui-select-choices style="min-width:300px" repeat="value.value.cityCode as (key, value) in vm.cities | filter: { value: { cityCode: $select.search }}">
-															      <div ng-bind-html="value.value.cityCode | highlight: $select.search"></div>
-															      <small>
-															        City Code : {{value.value.cityCode}}
-															        City Name : {{value.value.cityName}}
-															        Country Code : {{value.value.countryCode}}
-															        Country Name : {{value.value.countryName}}
-															        
-															      </small>
-															    </ui-select-choices>
-															  </ui-select> -->
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'destination', $event)" ng-class="{highlighted:fare.field['destination']}">
 															<span class="input-group">
@@ -2897,24 +2765,6 @@
 																	<i class="fa fa-folder"></i>
 																</span>
 															</span>
-															<!-- <ui-select ng-model="fare.destination" theme="select2" class="form-control"
-																name="marketFareDestination{{$parent.$index}}{{$index}}"
-																ng-required="vm.isRequired('marketFareDestination') && fare.action != 'Canceled'"  
-																ng-disabled="!vm.isEditable('marketFareDestination')"
-																
-																ng-class="{'must-fill': editForm.editFormMarket.marketFareDestination{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
-											                    	>
-															    <ui-select-match placeholder="Destination">{{$select.selected.value.cityCode}}</ui-select-match>
-																 <ui-select-choices style="min-width:300px" repeat="value.value.cityCode as (key, value) in vm.cities | filter: { value: { cityCode: $select.search }}">
-															      <div ng-bind-html="value.value.cityCode | highlight: $select.search"></div>
-															      <small>
-															        City Code : {{value.value.cityCode}}
-															        City Name : {{value.value.cityName}}
-															        Country Code : {{value.value.countryCode}}
-															        Country Name : {{value.value.countryName}}
-															      </small>
-															    </ui-select-choices>
-															  </ui-select> -->
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'fareBasis', $event)" ng-class="{highlighted:fare.field['fareBasis']}">
 															<input type="text" class="form-control" name="marketFareFarebasis{{$parent.$index}}{{$index}}" id="field_farebasis"
@@ -3254,13 +3104,16 @@
 																    	<a ng-click="vm.fillDown(workPackageSheet)">Fill Down</a>
 																    </li>	
 																    <li>
-																    	<a ng-click="vm.addFares(workPackageSheet)">Add Rows</a>
+															    		<a ng-click="vm.searchReplace(workPackageSheet)">Search/Replace</a>
+															   		</li>
+																    <li>
+																    	<a ng-click="vm.addFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Add Rows</a>
 																    </li>
 																    <li>
-																    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)">Duplicate Selected Rows</a>
+																    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Duplicate Selected Rows</a>
 																    </li>
 																    <li>
-																    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)">Delete Selected Rows</a>
+																    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Delete Selected Rows</a>
 																    </li>
 																    <li>
 																    	<a href="#">Paste</a>
@@ -3950,13 +3803,16 @@
 															    	<a ng-click="vm.fillDown(workPackageSheet)">Fill Down</a>
 															    </li>	
 															    <li>
-															    	<a ng-click="vm.addFares(workPackageSheet)">Add Rows</a>
+															    	<a ng-click="vm.searchReplace(workPackageSheet)">Search/Replace</a>
 															    </li>
 															    <li>
-															    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)">Duplicate Selected Rows</a>
+															    	<a ng-click="vm.addFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Add Rows</a>
 															    </li>
 															    <li>
-															    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)">Delete Selected Rows</a>
+															    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Duplicate Selected Rows</a>
+															    </li>
+															    <li>
+															    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Delete Selected Rows</a>
 															    </li>
 															</ul>
 														</div>		

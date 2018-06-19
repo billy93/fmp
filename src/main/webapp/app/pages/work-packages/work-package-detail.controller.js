@@ -20,8 +20,8 @@
      * @param Clipboard
      * @returns
      */
-    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities', 'states', 'cityGroups', 'Currency', 'atpcoFareTypes', 'ClipboardSheet'];
-    function WorkPackageDetailController($window, $sce, currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups, Currency, atpcoFareTypes, ClipboardSheet) {
+    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber','tariffNumberAddOn', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities', 'states', 'cityGroups', 'Currency', 'atpcoFareTypes', 'ClipboardSheet'];
+    function WorkPackageDetailController($window, $sce, currencies,tariffNumber,tariffNumberAddOn, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups, Currency, atpcoFareTypes, ClipboardSheet) {
     	var vm = this;
 
     	window.onbeforeunload = function () {
@@ -59,6 +59,7 @@
         vm.account = null;
         vm.workPackage = entity;
         vm.tariffNumber = tariffNumber;
+        vm.tariffNumberAddOn = tariffNumberAddOn;
         vm.cities = cities;
         vm.states = states;
         vm.cityGroups = cityGroups;
@@ -1582,45 +1583,49 @@
         };
         
         vm.removeSheet = function(){
-        	var removed = vm.removeTab();
-        	if(!removed){
-        		alert('Sheet cannot be deleted');
-        	}
-        	else{
-        		alert('Sheet deleted');
+        	if(vm.workPackage.reviewLevel != 'DISTRIBUTION'){
+	        	var removed = vm.removeTab();
+	        	if(!removed){
+	        		alert('Sheet cannot be deleted');
+	        	}
+	        	else{
+	        		alert('Sheet deleted');
+	        	}
         	}
         };
         //END SHEET FUNCTION
         
         vm.pasteSheet = function(){
 //        	alert('Paste Sheet');
-        	$uibModal.open({
-                templateUrl: 'app/pages/work-packages/work-package-add-sheet-dialog.html',
-                controller: 'WorkPackageAddSheetDialogController',
-                controllerAs: 'vm',
-                backdrop: 'static',
-                size: 'lg',
-                windowClass: 'full-page-modal',
-                resolve: {
-                	workPackage: function(){
-                		return vm.workPackage;
-                	},
-                    fareTypes: ['FareType', function(FareType) {
-                        return FareType.getAll().$promise;
-                    }],
-                    sheet: function(){
-                    	return ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
-                    }
-                }
-			}).result.then(function(option) {
-				var clipboardSheet = ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
-				clipboardSheet.then(function(result){
-					vm.addTab(option, result.sheet.fares);
-					alert('Paste Sheet Success');
-				});
-            }, function() {
-        			
-            });
+        	if(vm.workPackage.reviewLevel != 'DISTRIBUTION'){
+	        	$uibModal.open({
+	                templateUrl: 'app/pages/work-packages/work-package-add-sheet-dialog.html',
+	                controller: 'WorkPackageAddSheetDialogController',
+	                controllerAs: 'vm',
+	                backdrop: 'static',
+	                size: 'lg',
+	                windowClass: 'full-page-modal',
+	                resolve: {
+	                	workPackage: function(){
+	                		return vm.workPackage;
+	                	},
+	                    fareTypes: ['FareType', function(FareType) {
+	                        return FareType.getAll().$promise;
+	                    }],
+	                    sheet: function(){
+	                    	return ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
+	                    }
+	                }
+				}).result.then(function(option) {
+					var clipboardSheet = ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
+					clipboardSheet.then(function(result){
+						vm.addTab(option, result.sheet.fares);
+						alert('Paste Sheet Success');
+					});
+	            }, function() {
+	        			
+	            });
+        	}
         };
         
         vm.faresActionButton = [];
@@ -1762,13 +1767,86 @@
        	  	}
  	    	
     		fareSheet.fares.push({
+    			no:fareSheet.fares.length+1,
     			status:"PENDING",
     			action:"New",
   	 	      	carrier:"GA"
     		});
  	    }
  	    
- 	    vm.searchReplace = function(fareSheet){
+ 	   function getDescendantProp (obj, desc) {
+ 		  var arr = desc.split('.');
+ 		  while (arr.length && (obj = obj[arr.shift()]));
+ 		  return obj;
+ 		}
+ 	   
+ 	   function sortBy(field, type) {
+ 		   if(type == 'asc'){
+	 		    return function(a, b) {
+	 		    	if(getDescendantProp(a, field) === null){
+ 			          return -1;
+ 			        }
+ 			        else if(getDescendantProp(b, field) === null){
+ 			          return 1;
+ 			        }
+ 			        else if (getDescendantProp(a, field) > getDescendantProp(b, field)) {
+	 		            return 1;
+	 		        } else if (getDescendantProp(a, field) < getDescendantProp(b, field)) {
+	 		            return -1;
+	 		        }
+	 		    	
+	 		        return 1;
+	 		    };
+ 		   } else if(type='desc'){
+ 			  return function(a, b) {
+ 				  	if(getDescendantProp(a, field) === null){
+ 			          return 1;
+ 			        }
+ 			        else if(getDescendantProp(b, field) === null){
+ 			          return -1;
+ 			        }
+ 			        else if (getDescendantProp(a, field) > getDescendantProp(b, field)) {
+	 		            return -1;
+	 		        } else if (getDescendantProp(a, field) < getDescendantProp(b, field)) {
+	 		            return 1;
+	 		        }
+	 		        return 1;
+	 		    };
+ 		   }
+ 		}
+ 	  
+ 	    vm.sort = function(workPackageSheet, field){
+ 	    	if(workPackageSheet.sort == undefined){
+ 	 	    	workPackageSheet.sort = []; 	 	    		
+ 	    	}
+ 	    	if(workPackageSheet.sort[field] == undefined){
+ 	    		workPackageSheet.sort[field] = {asc:true}; 	    	
+ 	    	}
+ 	    	else{
+ 	    		workPackageSheet.sort[field].asc = !workPackageSheet.sort[field].asc;
+ 	    	} 	    
+ 	    	
+ 	    	workPackageSheet.currentSort = {field:field, asc:workPackageSheet.sort[field].asc};
+
+ 	    	if(field == '#'){
+ 	    		if(workPackageSheet.sort[field].asc){ 
+ 	    			workPackageSheet.fares.sort(sortBy('no', 'asc'));
+ 	    		}
+ 	    		else{
+ 	    			workPackageSheet.fares.sort(sortBy('no', 'desc'));
+ 	    		}
+ 	    	}
+ 	    	else{
+ 	    		if(workPackageSheet.sort[field].asc){ 	    			
+ 	    			workPackageSheet.fares.sort(sortBy(field, 'asc'));
+ 	    		}
+ 	    		else{
+ 	    			workPackageSheet.fares.sort(sortBy(field, 'desc')); 
+ 	    		}
+ 	    	}
+ 	    }
+ 	    
+ 	    vm.searchReplace = function(fareSheet, filter){
  	    	$uibModal.open({
 	            templateUrl: 'app/pages/work-packages/work-package-search-replace-dialog.html',
 	            controller: 'WorkPackageSearchReplaceDialogController',
@@ -1777,11 +1855,35 @@
 	            size: 'lg',
 	            windowClass: 'full-page-modal',
 	            resolve: {
+	            	fareSheet: function(){
+	            		return fareSheet;
+	            	},
+	            	filter: function(){
+	            		if(filter != null)
+	            			return filter;
+	            		return null;
+	            	}
 //	                entity: result.$promise,
 //	                fareSelected: vm.selectedFareDiscount
 	            }
- 	    	}).result.then(function(workPackage) {
-        	    
+ 	    	}).result.then(function(workPackageFareFilter) {
+        	    if(workPackageFareFilter.find){
+        	    	var event = {shiftKey:true};
+        	    	
+        	    	if(workPackageFareFilter.andor == 'and'){
+        	    		for(var i=0; i < fareSheet.fares.length; i++){
+//        	    			if(){
+//        	    				
+//        	    			}
+        	    			vm.tdClick(fareSheet, fareSheet.fares[i], 'no', event);
+        	    		}
+        	    	}
+        	    	else if(workPackageFareFilter.andor == 'or'){
+        	    		
+        	    	}
+        	    	
+        	    	vm.searchReplace(fareSheet, workPackageFareFilter);
+        	    }
             }, function() {
         			
             });
@@ -2480,8 +2582,9 @@
           data.saleDate = DateUtils.convertDateTimeFromServer(data.saleDate);
           
           if(data.fareSheet.length > 0){
-          	for(var x=0;x<data.fareSheet.length;x++){
+          	for(var x=0;x<data.fareSheet.length;x++){          		
           		var fares = data.fareSheet[x].fares;
+          		
           		for(var y=0;y<fares.length;y++){
               		if(fares[y] != null){
               			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
@@ -4668,6 +4771,7 @@
     			  if(selected){
 //    				  console.log("SELECTED : "+selected);
     				  var copiedFare = angular.copy(workPackageSheet.fares[x]);
+    				  copiedFare.no = workPackageSheet.fares.length+1;
     				  copiedFare.status = "PENDING";
     				  copiedFare.field = null;
     				  workPackageSheet.fares.push(copiedFare);
@@ -4675,6 +4779,8 @@
 //    			  console.log("X : "+x);
     		  }
     	  }
+    	  
+//    	  vm.sort(workPackageSheet, '#');
       }
       
       
@@ -4712,7 +4818,30 @@
     			  }
     		  }
     	  }
-      }
+    	  
+    	  //reset number
+    	  workPackageSheet.fares.sort(sortBy('no', 'asc'));
+    	  for(var i=0;i<workPackageSheet.fares.length; i++){
+    		  workPackageSheet.fares[i].no = i+1;
+    	  }
+    	  
+    	  if(workPackageSheet.currentSort.field == '#'){
+    		  if(workPackageSheet.currentSort.asc){
+        		  workPackageSheet.fares.sort(sortBy('no', 'asc'));
+    		  }
+    		  else{
+        		  workPackageSheet.fares.sort(sortBy('no', 'desc'));
+    		  }
+    	  }
+    	  else{
+    		  if(workPackageSheet.currentSort.asc){
+    			  workPackageSheet.fares.sort(sortBy(workPackageSheet.currentSort.field, 'asc'));
+    		  }
+    		  else{
+    			  workPackageSheet.fares.sort(sortBy(workPackageSheet.currentSort.field, 'desc'));    			  
+    		  }
+    	  }
+      }      
       
       vm.tbodyClick = function(workPackageSheet){
 //    	  for(var x=0;x<workPackageSheet.fares.length;x++){
@@ -4759,6 +4888,33 @@
                   tariffNumber: ['TariffNumber', function(TariffNumber) {
                       return TariffNumber.getAll().$promise;
                   }],
+                  AddOn : false,
+              }
+			}).result.then(function(option) {
+				if(option != null){
+					fare[field] = option;
+				}
+          }, function() {
+      			
+          });
+      }
+      
+      vm.selectTariffAddOn = function(fare, field){
+    	  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-select-tariff-dialog.html',
+              controller: 'WorkPackageSelectTariffDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              windowClass: 'full-page-modal',
+              resolve: {
+	              	fare: function(){
+	              		return fare;
+	              	},
+                  tariffNumber: ['TariffNumberAddOn', function(TariffNumberAddOn) {
+                      return TariffNumberAddOn.getAll().$promise;
+                  }],
+                  AddOn : true,
               }
 			}).result.then(function(option) {
 				if(option != null){
@@ -5010,40 +5166,38 @@
     	  }
       }
       
-      vm.checkLoc = function(fare, field){
+      vm.checkLoc = function(fare, field, type){
     	  if(fare[field] != null || fare[field] != ''){
 	    	  var exist = false;
-	    	  if(fare.loc1Type == 'C'){
+	    	  if(type== 'C'){
 	    		  for(var x=0;x<vm.cities.length;x++){
 		    		  if(vm.cities[x].cityCode.toUpperCase() == fare[field].toUpperCase()){
 		    			  exist = true;
 		    			  break;
 		    		  }
 		    	  }				
-				}else if(fare.loc1Type == 'N'){
+				}else if(type== 'N'){
 					 for(var x=0;x<vm.cities.length;x++){
 			    		  if(vm.cities[x].countryCode.toUpperCase() == fare[field].toUpperCase()){
 			    			  exist = true;
 			    			  break;
 			    		  }
 			    	  }
-				}else if(fare.loc1Type == 'S'){
+				}else if(type== 'S'){
 					 for(var x=0;x<vm.states.length;x++){
 			    		  if(vm.states[x].code.toUpperCase() == fare[field].toUpperCase()){
 			    			  exist = true;
 			    			  break;
 			    		  }
 			    	  }
-				}else if(fare.loc1Type == 'A'){
+				}else if(type== 'A'){
 					 for(var x=0;x<vm.areas.length;x++){
-						 console.log(vm.areas[x]);
-						 console.log(fare[field]);
 			    		  if(vm.areas[x].code == fare[field]){
 			    			  exist = true;
 			    			  break;
 			    		  }
 			    	  }
-				}else if(fare.loc1Type == 'G'){
+				}else if(type== 'G'){
 					 for(var x=0;x<vm.cityGroups.length;x++){
 			    		  if(vm.cityGroups[x].code.toUpperCase() == fare[field].toUpperCase()){
 			    			  exist = true;
@@ -5053,15 +5207,15 @@
 				}		    	 
 	    	  
 	    	  if(!exist){
-	    		  if(fare.loc1Type == 'C'){
+	    		  if(type== 'C'){
 	    		  alert("City code '"+fare[field]+"' is invalid. Please select a correct code");
-	    		  }else if(fare.loc1Type == 'N'){
+	    		  }else if(type== 'N'){
 	    		  alert("Country code '"+fare[field]+"' is invalid. Please select a correct code");
-	    		  }else if(fare.loc1Type == 'S'){
+	    		  }else if(type== 'S'){
 	    		  alert("State code '"+fare[field]+"' is invalid. Please select a correct code");
-	    		  }else if(fare.loc1Type == 'A'){
+	    		  }else if(type== 'A'){
 	    		  alert("Area code '"+fare[field]+"' is invalid. Please select a correct code");
-	    		  }else if(fare.loc1Type == 'G'){
+	    		  }else if(type== 'G'){
 	    		  alert("City Group code '"+fare[field]+"' is invalid. Please select a correct code");
 	    		  }
 	    		  fare[field] = null;
