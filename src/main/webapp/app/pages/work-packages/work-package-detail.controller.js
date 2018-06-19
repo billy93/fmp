@@ -1869,98 +1869,99 @@
         	    if(workPackageFareFilter.find){
         	    	var event = {shiftKey:true};
         	    	
-        	    	if(workPackageFareFilter.andor == 'and'){
-        	    		
-        	    	}
-        	    	else if(workPackageFareFilter.andor == 'or'){
-        	    		var find = false;
-        	    		var index = 0;
-        	    		if(workPackageFareFilter.index != null){
-        	    			index = workPackageFareFilter.index;
-        	    		}
-        	    		for(var i = index; i < fareSheet.fares.length; i++){
-        	    			if(fareSheet.fares[i].field == null || fareSheet.fares[i].field == undefined){
-    	    					fareSheet.fares[i].field = {};
-    	    		    	}
-        	    			
-        	    			fareSheet.fares[i].field['no'] =  false;
-        	    			if(workPackageFareFilter.no.check){
-        	    				if(fareSheet.fares[i].no == workPackageFareFilter.no.search){
-	        	    				find = true;
-	        	    				fareSheet.fares[i].field['no'] =  true;
-	        	    				workPackageFareFilter.index = i;
-	        	    			}
+    	    		var find = false;
+    	    		var index = 0;
+    	    		if(workPackageFareFilter.index != null){
+    	    			index = workPackageFareFilter.index;
+    	    		}
+    	    		for(var i = index; i < fareSheet.fares.length; i++){
+    	    			if(fareSheet.fares[i].field == null || fareSheet.fares[i].field == undefined){
+	    					fareSheet.fares[i].field = {};
+	    		    	}
+    	    			
+    	    			fareSheet.fares[i].field['no'] =  false;
+    	    			if(workPackageFareFilter.no.check){
+    	    				if(fareSheet.fares[i].no == workPackageFareFilter.no.search){
+        	    				find = true;
+        	    				fareSheet.fares[i].field['no'] =  true;
+        	    				workPackageFareFilter.index = i;
         	    			}
-        	    		}
-        	    		if(!find){
+    	    			}
+    	    		}
+    	    		if(!find){
+    	    			if(workPackageFareFilter.message == null){
     	    				workPackageFareFilter.message = "No Matches found, continue search at the beginning?";
-        	    		}
-        	    	}
+    	    			}
+    	    		}
+        	    	
         	    	
         	    	vm.searchReplace(fareSheet, workPackageFareFilter);
         	    }
         	    else if(workPackageFareFilter.replace){
-        	    	if(workPackageFareFilter.andor == 'and'){
-        	    		
-        	    	}
-        	    	else if(workPackageFareFilter.andor == 'or'){
-        	    		
-        	    		var index = 0;
+    	    		var index = 0;
+    	    		if(!workPackageFareFilter.replaceAll){
         	    		if(workPackageFareFilter.index != null){
         	    			index = workPackageFareFilter.index;
         	    		}
-        	    		for(var i = index; i < fareSheet.fares.length; i++){
-        	    			var find = false;
-        	    			
-        	    			if(fareSheet.fares[i].field == null || fareSheet.fares[i].field == undefined){
-    	    					fareSheet.fares[i].field = {};
-    	    		    	}
-        	    			
-        	    			fareSheet.fares[i].field['no'] =  false;
-        	    			if(workPackageFareFilter.no.check){
-        	    				if(fareSheet.fares[i].no == workPackageFareFilter.no.search){
+    	    		}
+    	    		for(var i = index; i < fareSheet.fares.length; i++){
+    	    			var find = false;
+    	    			
+    	    			if(fareSheet.fares[i].field == null || fareSheet.fares[i].field == undefined){
+	    					fareSheet.fares[i].field = {};
+	    		    	}
+    	    			
+    	    			fareSheet.fares[i].field['no'] =  false;
+    	    			if(workPackageFareFilter.no.check){
+    	    				if(fareSheet.fares[i].no == workPackageFareFilter.no.search){
+        	    				find = true;
+        	    				
+        	    				if(!workPackageFareFilter.replaceAll){
+        	    					fareSheet.fares[i].field['no'] =  true;
+        	    				}
+        	    				workPackageFareFilter.index = i;
+        	    			}
+    	    			}
+    	    			
+    	    			if(!find){
+        	    			if(workPackageFareFilter.status.check){
+        	    				if(fareSheet.fares[i].status == workPackageFareFilter.status.search){
 	        	    				find = true;
-	        	    				fareSheet.fares[i].field['no'] =  true;
+	        	    				
+	        	    				if(!workPackageFareFilter.replaceAll){
+	        	    					fareSheet.fares[i].field['no'] =  true;
+	        	    				}
 	        	    				workPackageFareFilter.index = i;
 	        	    			}
         	    			}
-        	    			
-        	    			if(!find){
-	        	    			if(workPackageFareFilter.status.check){
-	        	    				if(fareSheet.fares[i].status == workPackageFareFilter.status.search){
-		        	    				find = true;
-		        	    				fareSheet.fares[i].field['no'] =  true;
-		        	    				workPackageFareFilter.index = i;
-		        	    			}
-	        	    			}
-        	    			}
-        	    			
-        	    			if(find){
-        	    				//replace
-        	    				if(workPackageFareFilter.status.replace.check){
-        	    					fareSheet.fares[i]['status'] = workPackageFareFilter.status.replace.value;
-        	    				}
-        	    				
-        	    				if(!workPackageFareFilter.replaceAll){
-        	    					if((i+1) == fareSheet.fares.length){
-        	    						workPackageFareFilter.index = 0;
-        	    					}
-        	    					break;
-        	    				}
-        	    				else{
-        	    					if((i+1) == fareSheet.fares.length){
-        	    						workPackageFareFilter.index = 0;
-        	    					}
-        	    				}
-        	    			}
-        	    		}
-        	    		if(!find){
-    	    				workPackageFareFilter.message = "No Matches found, continue search at the beginning?";
-        	    		}
-        	    		
-        	    		
-            	    	vm.searchReplace(fareSheet, workPackageFareFilter);
-        	    	}
+    	    			}
+    	    			
+    	    			if(find){
+    	    				//replace
+    	    				if(workPackageFareFilter.status.replace.check){
+    	    					fareSheet.fares[i]['status'] = workPackageFareFilter.status.replace.value;
+    	    				}
+    	    				
+    	    				if(!workPackageFareFilter.replaceAll){
+    	    					if((i+1) == fareSheet.fares.length){
+    	    						workPackageFareFilter.index = 0;
+    	    					}
+    	    					break;
+    	    				}
+    	    				else{
+    	    					if((i+1) == fareSheet.fares.length){
+    	    						workPackageFareFilter.index = 0;
+    	    					}
+    	    				}
+    	    			}
+    	    		}
+    	    		if(!find){
+	    				workPackageFareFilter.message = "No Matches found, continue search at the beginning?";
+    	    		}
+    	    		
+    	    		
+        	    	vm.searchReplace(fareSheet, workPackageFareFilter);
+        	    	
         	    }
             }, function() {
         			
@@ -2640,6 +2641,9 @@
         	  }else{
         		  vm.workPackage.validate = false;
         	  }
+        	  
+        	  console.log("CREATED DATE");
+        	  console.log(vm.workPackage.createdDate);
               WorkPackage.update(vm.workPackage, onSaveSuccess, onSaveError);
           } else {
               WorkPackage.save(vm.workPackage, onSaveSuccess, onSaveError);

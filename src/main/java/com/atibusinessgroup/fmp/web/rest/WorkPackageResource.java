@@ -1880,14 +1880,14 @@ public class WorkPackageResource {
     @PutMapping("/work-packages")
     @Timed
     public ResponseEntity<WorkPackage> updateWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
-        log.debug("REST request to update WorkPackage : {}", workPackage);
+        log.debug("REST request to update WorkPackage : {}", workPackage.toString());
         
         boolean isWorkPackageNew = false;
         
         if (workPackage.getId() == null) {
             return createWorkPackage(workPackage);
         }
-        
+
     	if(workPackage.getWpid() == null) {
     		isWorkPackageNew = true;
     		
