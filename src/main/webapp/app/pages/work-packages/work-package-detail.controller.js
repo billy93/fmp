@@ -2264,17 +2264,19 @@
 	  vm.approve = function(){
 		  var validated = true;
 		  var cekStatus = "";
+		  var counterApprove = false;
 		  
 //		  console.log("REGULAR");
 		  if(vm.workPackage.fareSheet != null && vm.workPackage.fareSheet.length > 0){
 			  for(var x=0;x<vm.workPackage.fareSheet.length;x++){
 				  if(vm.workPackage.fareSheet[x].fares != null && vm.workPackage.fareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.fareSheet[x].fares.length;y++){
-						  if(vm.workPackage.fareSheet[x].fares[y].status != "APPROVED"){
+						  if(vm.workPackage.fareSheet[x].fares[y].status == "APPROVED"){
+							  counterApprove =true;
+						  }
+						  if(vm.workPackage.fareSheet[x].fares[y].status == "" || vm.workPackage.fareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.fareSheet[x].fares[y].status;
 							  validated = false;
-//							  console.log("X : "+x+" | Y : "+y);
-//							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
 							  break;
 						  }
 					  }
@@ -2287,11 +2289,12 @@
 			  for(var x=0;x<vm.workPackage.discountFareSheet.length;x++){
 				  if(vm.workPackage.discountFareSheet[x].fares != null && vm.workPackage.discountFareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.discountFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.discountFareSheet[x].fares[y].status != "APPROVED"){
+						  if(vm.workPackage.discountFareSheet[x].fares[y].status == "APPROVED"){
+							  counterApprove =true;
+						  }
+						  if(vm.workPackage.discountFareSheet[x].fares[y].status == "" || vm.workPackage.discountFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.discountFareSheet[x].fares[y].status;
 							  validated = false;
-//							  console.log("X : "+x+" | Y : "+y);
-//							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
 							  break;
 						  }
 					  }
@@ -2304,11 +2307,12 @@
 			  for(var x=0;x<vm.workPackage.addonFareSheet.length;x++){
 				  if(vm.workPackage.addonFareSheet[x].fares != null && vm.workPackage.addonFareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.addonFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.addonFareSheet[x].fares[y].status != "APPROVED"){
+						  if(vm.workPackage.addonFareSheet[x].fares[y].status == "APPROVED"){
+							  counterApprove =true;
+						  }
+						  if(vm.workPackage.addonFareSheet[x].fares[y].status == "" || vm.workPackage.addonFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.addonFareSheet[x].fares[y].status;
 							  validated = false;
-//							  console.log("X : "+x+" | Y : "+y);
-//							  console.log(vm.workPackage.addonFareSheet[x].fares[y].status);
 							  break;
 						  }
 					  }
@@ -2321,11 +2325,12 @@
 			  for(var x=0;x<vm.workPackage.marketFareSheet.length;x++){
 				  if(vm.workPackage.marketFareSheet[x].fares != null && vm.workPackage.marketFareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.marketFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.marketFareSheet[x].fares[y].status != "APPROVED"){
+						  if(vm.workPackage.marketFareSheet[x].fares[y].status == "APPROVED"){
+							  counterApprove =true;
+						  }
+						  if(vm.workPackage.marketFareSheet[x].fares[y].status == "" || vm.workPackage.marketFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.marketFareSheet[x].fares[y].status;
 							  validated = false;
-//							  console.log("X : "+x+" | Y : "+y);
-//							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
 							  break;
 						  }
 					  }
@@ -2338,11 +2343,12 @@
 			  for(var x=0;x<vm.workPackage.waiverFareSheet.length;x++){
 				  if(vm.workPackage.waiverFareSheet[x].fares != null && vm.workPackage.waiverFareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.waiverFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.waiverFareSheet[x].fares[y].status != "APPROVED"){
+						  if(vm.workPackage.waiverFareSheet[x].fares[y].status == "APPROVED"){
+							  counterApprove =true;
+						  }
+						  if(vm.workPackage.waiverFareSheet[x].fares[y].status == "" || vm.workPackage.waiverFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.waiverFareSheet[x].fares[y].status;
 							  validated = false;
-//							  console.log("X : "+x+" | Y : "+y);
-//							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
 							  break;
 						  }
 					  }
