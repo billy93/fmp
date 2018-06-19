@@ -27,9 +27,6 @@ public class AtpcoRecord1 {
 	@Field("record_batch")
     private String recordBatch;
 	
-	@Field("record_sequence")
-    private int recordSequence;
-	
 	@Field("rec_type")
     private int recordType;
 	
@@ -149,14 +146,6 @@ public class AtpcoRecord1 {
 
 	public void setRecordBatch(String recordBatch) {
 		this.recordBatch = recordBatch;
-	}
-
-	public int getRecordSequence() {
-		return recordSequence;
-	}
-
-	public void setRecordSequence(int recordSequence) {
-		this.recordSequence = recordSequence;
 	}
 
 	public int getRecordType() {
@@ -402,7 +391,6 @@ public class AtpcoRecord1 {
 		result = prime * result + ((recordBatch == null) ? 0 : recordBatch.hashCode());
 		result = prime * result + ((recordId == null) ? 0 : recordId.hashCode());
 		result = prime * result + ((recordIdMap == null) ? 0 : recordIdMap.hashCode());
-		result = prime * result + recordSequence;
 		result = prime * result + recordType;
 		result = prime * result + ((routingNo == null) ? 0 : routingNo.hashCode());
 		result = prime * result + ((ruleNo == null) ? 0 : ruleNo.hashCode());
@@ -588,9 +576,6 @@ public class AtpcoRecord1 {
 		} else if (!recordIdMap.equals(other.recordIdMap)) {
 			return false;
 		}
-		if (recordSequence != other.recordSequence) {
-			return false;
-		}
 		if (recordType != other.recordType) {
 			return false;
 		}
@@ -656,7 +641,7 @@ public class AtpcoRecord1 {
 	@Override
 	public String toString() {
 		return "AtpcoRecord1 [id=" + id + ", ruleType=" + ruleType + ", recordId=" + recordId + ", recordIdMap="
-				+ recordIdMap + ", recordBatch=" + recordBatch + ", recordSequence=" + recordSequence + ", recordType="
+				+ recordIdMap + ", recordBatch=" + recordBatch + ", recordType="
 				+ recordType + ", action=" + action + ", ruleTariffNo=" + ruleTariffNo + ", carrierCode=" + carrierCode
 				+ ", ruleNo=" + ruleNo + ", fareClassCode=" + fareClassCode + ", mcn=" + mcn + ", sequenceNo="
 				+ sequenceNo + ", geoType1=" + geoType1 + ", geoLoc1=" + geoLoc1 + ", geoType2=" + geoType2

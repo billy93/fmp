@@ -1,6 +1,7 @@
 package com.atibusinessgroup.fmp.web.rest;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -133,12 +134,16 @@ public class AfdQueryResource {
 
         List<AfdQuery> result = new ArrayList<>();
         
+        Date focusDate = null;
+        
         for (AtpcoFareAfdQueryWithRecords a1fare:a1fares) {
         	AtpcoFare afare = a1fare.getAtpcoFare();
         	AtpcoRecord1 matchedRecord1 = null;
         	
+        	focusDate = atpcoRecordService.resolveFocusDate(param.getEffectiveDateTo(), afare.getTariffEffectiveDateObject(), afare.getDiscontinueDateObject());
+        	
         	for (AtpcoRecord1 record1:a1fare.getAtpcoRecord1()) {
-        		boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afare.getOriginCity(), "C", afare.getDestinationCity(), afare.getOwrt(), afare.getRoutingNo(), afare.getFootnote(), afare.getTariffEffectiveDateObject(), afare.getDiscontinueDateObject(),
+        		boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afare.getOriginCity(), "C", afare.getDestinationCity(), afare.getOwrt(), afare.getRoutingNo(), afare.getFootnote(), focusDate,
         				record1.getGeoType1(), record1.getGeoLoc1(), record1.getGeoType2(), record1.getGeoLoc2(), record1.getOwrt(), record1.getRoutingNo(), record1.getFootnote(), record1.getEffectiveDateObject(), record1.getDiscontinueDateObject());
         	
         		if (matched) {
@@ -161,7 +166,7 @@ public class AfdQueryResource {
         		for (AtpcoRecord2GroupByCatNo arecord2:a1fare.getAtpcoRecord2()) {
                 	if (arecord2.getCatNo().contentEquals(entry.getKey())) {
                 		for (AtpcoRecord2 record2:arecord2.getRecords2()) {
-                			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afare.getOriginCity(), "C", afare.getDestinationCity(), afare.getFareClassCode(), afare.getFareType(), matchedRecord1 != null ? matchedRecord1.getSeasonType() : null, matchedRecord1 != null ? matchedRecord1.getDayOfWeekType() : null, afare.getOwrt(), afare.getRoutingNo(), afare.getFootnote(), afare.getEffectiveDateObject(), afare.getDiscontinueDateObject(),
+                			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afare.getOriginCity(), "C", afare.getDestinationCity(), afare.getFareClassCode(), afare.getFareType(), matchedRecord1 != null ? matchedRecord1.getSeasonType() : null, matchedRecord1 != null ? matchedRecord1.getDayOfWeekType() : null, afare.getOwrt(), afare.getRoutingNo(), afare.getFootnote(), focusDate,
                 					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getFareClass(), record2.getFareType(), record2.getSeasonType(), record2.getDayOfWeekType(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
                         	
                     		if (matched) {
@@ -204,7 +209,7 @@ public class AfdQueryResource {
             	for (AtpcoFootnoteRecord2GroupByCatNo arecord2:a1fare.getFootnoteRecord()) {
                 	if (arecord2.getCatNo().contentEquals(entry.getKey())) {
                 		for (AtpcoFootnoteRecord2 record2:arecord2.getRecords2()) {
-                			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afare.getOriginCity(), "C", afare.getDestinationCity(), afare.getOwrt(), afare.getRoutingNo(), afare.getFootnote(), afare.getEffectiveDateObject(), afare.getDiscontinueDateObject(),
+                			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afare.getOriginCity(), "C", afare.getDestinationCity(), afare.getOwrt(), afare.getRoutingNo(), afare.getFootnote(), focusDate,
                 					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
                         	
                     		if (matched) {
@@ -230,7 +235,7 @@ public class AfdQueryResource {
         	}
         	
         	AfdQuery afdQuery = afdQueryMapper.convertAtpcoFare(afare, matchedRecord1, cat03s, cat05s, cat06s, cat07s, cat14s, cat15s, 
-        			footnote14s, footnote15s, param.getEffectiveDateFrom(), param.getEffectiveDateTo());
+        			footnote14s, footnote15s, focusDate);
         	
         	result.add(afdQuery);
         }
@@ -265,7 +270,7 @@ public class AfdQueryResource {
         	all : for (AtpcoRecord2GroupByCatNo arecord2:arecords2) {
             	if (arecord2.getCatNo().contentEquals(entry.getKey())) {
             		for (AtpcoRecord2 record2:arecord2.getRecords2()) {
-            			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afdQuery.getOriginCity(), "C", afdQuery.getDestinationCity(), afdQuery.getFareClassCode(), afdQuery.getFareType(), afdQuery.getSeason(), afdQuery.getDayOfWeekType(), afdQuery.getOwrt(), afdQuery.getRoutingNo(), afdQuery.getFootnote(), afdQuery.getEffectiveDate(), afdQuery.getDiscontinueDate(),
+            			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afdQuery.getOriginCity(), "C", afdQuery.getDestinationCity(), afdQuery.getFareClassCode(), afdQuery.getFareType(), afdQuery.getSeason(), afdQuery.getDayOfWeekType(), afdQuery.getOwrt(), afdQuery.getRoutingNo(), afdQuery.getFootnote(), afdQuery.getFocusDate(),
             					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getFareClass(), record2.getFareType(), record2.getSeasonType(), record2.getDayOfWeekType(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
                     	
                 		if (matched) {
@@ -279,7 +284,7 @@ public class AfdQueryResource {
         	all : for (AtpcoFootnoteRecord2GroupByCatNo frecord2:frecords2) {
             	if (frecord2.getCatNo().contentEquals(entry.getKey())) {
             		for (AtpcoFootnoteRecord2 record2:frecord2.getRecords2()) {
-            			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afdQuery.getOriginCity(), "C", afdQuery.getDestinationCity(), afdQuery.getOwrt(), afdQuery.getRoutingNo(), afdQuery.getFootnote(), afdQuery.getEffectiveDate(), afdQuery.getDiscontinueDate(),
+            			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afdQuery.getOriginCity(), "C", afdQuery.getDestinationCity(), afdQuery.getOwrt(), afdQuery.getRoutingNo(), afdQuery.getFootnote(), afdQuery.getFocusDate(),
             					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
                     	
                 		if (matched) {
@@ -333,7 +338,7 @@ public class AfdQueryResource {
         		all : for (AtpcoRecord2GroupByCatNo grecord2:generalRecords2) {
                 	if (grecord2.getCatNo().contentEquals(entry.getKey())) {
                 		for (AtpcoRecord2 record2:grecord2.getRecords2()) {
-                			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afdQuery.getOriginCity(), "C", afdQuery.getDestinationCity(), afdQuery.getFareClassCode(), afdQuery.getFareType(), afdQuery.getSeason(), afdQuery.getDayOfWeekType(), afdQuery.getOwrt(), afdQuery.getRoutingNo(), afdQuery.getFootnote(), afdQuery.getEffectiveDate(), afdQuery.getDiscontinueDate(),
+                			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afdQuery.getOriginCity(), "C", afdQuery.getDestinationCity(), afdQuery.getFareClassCode(), afdQuery.getFareType(), afdQuery.getSeason(), afdQuery.getDayOfWeekType(), afdQuery.getOwrt(), afdQuery.getRoutingNo(), afdQuery.getFootnote(), afdQuery.getFocusDate(),
                 					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getFareClass(), record2.getFareType(), record2.getSeasonType(), record2.getDayOfWeekType(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
                         	
                     		if (matched) {

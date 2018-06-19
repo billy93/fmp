@@ -31,7 +31,7 @@ public class AfdQueryMapper {
 	}
 	
 	public AfdQuery convertAtpcoFare(AtpcoFare afare, AtpcoRecord1 record1, List<CategoryObject> cat03s, List<CategoryObject> cat05s, List<CategoryObject> cat06s, List<CategoryObject> cat07s, 
-			List<CategoryObject> cat14s, List<CategoryObject> cat15s, List<CategoryObject> footnote14s, List<CategoryObject> footnote15s, Date queryDateFrom, Date queryDateTo) {
+			List<CategoryObject> cat14s, List<CategoryObject> cat15s, List<CategoryObject> footnote14s, List<CategoryObject> footnote15s, Date focusDate) {
 
 		AfdQuery result = new AfdQuery();
 		
@@ -153,24 +153,7 @@ public class AfdQueryMapper {
 			}
 		}
 		
-		//Rule Focus Date
-//		Date ruleFocusDate = null;
-//		Date effDate = DateUtil.convertObjectToDate(result.getEffectiveDate());
-//		Date discDate = DateUtil.convertObjectToDate(result.getDiscontinueDate());
-//		
-//		if (queryDateFrom != null && queryDateTo != null) {
-//			
-//		}
-//		
-//		if (queryDateFrom == null && queryDateTo == null) {
-//			ruleFocusDate = new Date();
-//		} else {
-//			if (queryDateFrom != null && queryDateTo == null) {
-//				
-//			}
-//		}
-		
-//		result.setRuleFocusDate(ruleFocusDate);
+		result.setFocusDate(focusDate);
 		
 		return result;
 	}
