@@ -1870,19 +1870,99 @@
         	    if(workPackageFareFilter.find){
         	    	var event = {shiftKey:true};
         	    	
-        	    	if(workPackageFareFilter.andor == 'and'){
-        	    		for(var i=0; i < fareSheet.fares.length; i++){
-//        	    			if(){
-//        	    				
-//        	    			}
-        	    			vm.tdClick(fareSheet, fareSheet.fares[i], 'no', event);
-        	    		}
-        	    	}
-        	    	else if(workPackageFareFilter.andor == 'or'){
-        	    		
-        	    	}
+    	    		var find = false;
+    	    		var index = 0;
+    	    		if(workPackageFareFilter.index != null){
+    	    			index = workPackageFareFilter.index;
+    	    		}
+    	    		for(var i = index; i < fareSheet.fares.length; i++){
+    	    			if(fareSheet.fares[i].field == null || fareSheet.fares[i].field == undefined){
+	    					fareSheet.fares[i].field = {};
+	    		    	}
+    	    			
+    	    			fareSheet.fares[i].field['no'] =  false;
+    	    			if(workPackageFareFilter.no.check){
+    	    				if(fareSheet.fares[i].no == workPackageFareFilter.no.search){
+        	    				find = true;
+        	    				fareSheet.fares[i].field['no'] =  true;
+        	    				workPackageFareFilter.index = i;
+        	    			}
+    	    			}
+    	    		}
+    	    		if(!find){
+    	    			if(workPackageFareFilter.message == null){
+    	    				workPackageFareFilter.message = "No Matches found, continue search at the beginning?";
+    	    			}
+    	    		}
+        	    	
         	    	
         	    	vm.searchReplace(fareSheet, workPackageFareFilter);
+        	    }
+        	    else if(workPackageFareFilter.replace){
+    	    		var index = 0;
+    	    		if(!workPackageFareFilter.replaceAll){
+        	    		if(workPackageFareFilter.index != null){
+        	    			index = workPackageFareFilter.index;
+        	    		}
+    	    		}
+    	    		for(var i = index; i < fareSheet.fares.length; i++){
+    	    			var find = false;
+    	    			
+    	    			if(fareSheet.fares[i].field == null || fareSheet.fares[i].field == undefined){
+	    					fareSheet.fares[i].field = {};
+	    		    	}
+    	    			
+    	    			fareSheet.fares[i].field['no'] =  false;
+    	    			if(workPackageFareFilter.no.check){
+    	    				if(fareSheet.fares[i].no == workPackageFareFilter.no.search){
+        	    				find = true;
+        	    				
+        	    				if(!workPackageFareFilter.replaceAll){
+        	    					fareSheet.fares[i].field['no'] =  true;
+        	    				}
+        	    				workPackageFareFilter.index = i;
+        	    			}
+    	    			}
+    	    			
+    	    			if(!find){
+        	    			if(workPackageFareFilter.status.check){
+        	    				if(fareSheet.fares[i].status == workPackageFareFilter.status.search){
+	        	    				find = true;
+	        	    				
+	        	    				if(!workPackageFareFilter.replaceAll){
+	        	    					fareSheet.fares[i].field['no'] =  true;
+	        	    				}
+	        	    				workPackageFareFilter.index = i;
+	        	    			}
+        	    			}
+    	    			}
+    	    			
+    	    			if(find){
+    	    				//replace
+    	    				if(workPackageFareFilter.status.replace.check){
+    	    					fareSheet.fares[i]['status'] = workPackageFareFilter.status.replace.value;
+    	    				}
+    	    				
+    	    				if(!workPackageFareFilter.replaceAll){
+    	    					if((i+1) == fareSheet.fares.length){
+    	    						workPackageFareFilter.index = 0;
+    	    					}
+    	    					break;
+    	    				}
+    	    				else{
+    	    					if((i+1) == fareSheet.fares.length){
+    	    						workPackageFareFilter.index = 0;
+    	    					}
+    	    				}
+    	    			}
+    	    		}
+    	    		if(!find){
+	    				workPackageFareFilter.message = "No Matches found, continue search at the beginning?";
+    	    		}
+    	    		
+    	    		
+        	    	vm.searchReplace(fareSheet, workPackageFareFilter);
+        	    	
         	    }
             }, function() {
         			
@@ -2365,17 +2445,19 @@
 	  vm.approve = function(){
 		  var validated = true;
 		  var cekStatus = "";
+		  var counterApprove = false;
 		  
 //		  console.log("REGULAR");
 		  if(vm.workPackage.fareSheet != null && vm.workPackage.fareSheet.length > 0){
 			  for(var x=0;x<vm.workPackage.fareSheet.length;x++){
 				  if(vm.workPackage.fareSheet[x].fares != null && vm.workPackage.fareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.fareSheet[x].fares.length;y++){
-						  if(vm.workPackage.fareSheet[x].fares[y].status != "APPROVED"){
+						  if(vm.workPackage.fareSheet[x].fares[y].status == "APPROVED"){
+							  counterApprove =true;
+						  }
+						  if(vm.workPackage.fareSheet[x].fares[y].status == "" || vm.workPackage.fareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.fareSheet[x].fares[y].status;
 							  validated = false;
-//							  console.log("X : "+x+" | Y : "+y);
-//							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
 							  break;
 						  }
 					  }
@@ -2388,11 +2470,12 @@
 			  for(var x=0;x<vm.workPackage.discountFareSheet.length;x++){
 				  if(vm.workPackage.discountFareSheet[x].fares != null && vm.workPackage.discountFareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.discountFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.discountFareSheet[x].fares[y].status != "APPROVED"){
+						  if(vm.workPackage.discountFareSheet[x].fares[y].status == "APPROVED"){
+							  counterApprove =true;
+						  }
+						  if(vm.workPackage.discountFareSheet[x].fares[y].status == "" || vm.workPackage.discountFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.discountFareSheet[x].fares[y].status;
 							  validated = false;
-//							  console.log("X : "+x+" | Y : "+y);
-//							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
 							  break;
 						  }
 					  }
@@ -2405,11 +2488,12 @@
 			  for(var x=0;x<vm.workPackage.addonFareSheet.length;x++){
 				  if(vm.workPackage.addonFareSheet[x].fares != null && vm.workPackage.addonFareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.addonFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.addonFareSheet[x].fares[y].status != "APPROVED"){
+						  if(vm.workPackage.addonFareSheet[x].fares[y].status == "APPROVED"){
+							  counterApprove =true;
+						  }
+						  if(vm.workPackage.addonFareSheet[x].fares[y].status == "" || vm.workPackage.addonFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.addonFareSheet[x].fares[y].status;
 							  validated = false;
-//							  console.log("X : "+x+" | Y : "+y);
-//							  console.log(vm.workPackage.addonFareSheet[x].fares[y].status);
 							  break;
 						  }
 					  }
@@ -2422,11 +2506,12 @@
 			  for(var x=0;x<vm.workPackage.marketFareSheet.length;x++){
 				  if(vm.workPackage.marketFareSheet[x].fares != null && vm.workPackage.marketFareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.marketFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.marketFareSheet[x].fares[y].status != "APPROVED"){
+						  if(vm.workPackage.marketFareSheet[x].fares[y].status == "APPROVED"){
+							  counterApprove =true;
+						  }
+						  if(vm.workPackage.marketFareSheet[x].fares[y].status == "" || vm.workPackage.marketFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.marketFareSheet[x].fares[y].status;
 							  validated = false;
-//							  console.log("X : "+x+" | Y : "+y);
-//							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
 							  break;
 						  }
 					  }
@@ -2439,11 +2524,12 @@
 			  for(var x=0;x<vm.workPackage.waiverFareSheet.length;x++){
 				  if(vm.workPackage.waiverFareSheet[x].fares != null && vm.workPackage.waiverFareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.waiverFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.waiverFareSheet[x].fares[y].status != "APPROVED"){
+						  if(vm.workPackage.waiverFareSheet[x].fares[y].status == "APPROVED"){
+							  counterApprove =true;
+						  }
+						  if(vm.workPackage.waiverFareSheet[x].fares[y].status == "" || vm.workPackage.waiverFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.waiverFareSheet[x].fares[y].status;
 							  validated = false;
-//							  console.log("X : "+x+" | Y : "+y);
-//							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
 							  break;
 						  }
 					  }
@@ -2562,6 +2648,9 @@
         	  }else{
         		  vm.workPackage.validate = false;
         	  }
+        	  
+        	  console.log("CREATED DATE");
+        	  console.log(vm.workPackage.createdDate);
               WorkPackage.update(vm.workPackage, onSaveSuccess, onSaveError);
           } else {
               WorkPackage.save(vm.workPackage, onSaveSuccess, onSaveError);

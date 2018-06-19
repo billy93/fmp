@@ -77,6 +77,7 @@
                
         });
         
+       
         function loadAll () {
             WorkPackage.query({
             	"reviewLevel.ho": vm.workPackageFilter.reviewLevel.ho,

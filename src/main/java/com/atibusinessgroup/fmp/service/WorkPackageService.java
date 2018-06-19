@@ -39,7 +39,7 @@ public class WorkPackageService {
      * @return the persisted entity
      */
     public WorkPackage save(WorkPackage workPackage) {
-        log.debug("Request to save WorkPackage : {}", workPackage);
+        log.debug("Request to save WorkPackage : {}", workPackage.toString());
         
         for(WorkPackageFareSheet sheet : workPackage.getFareSheet()) {
         	List<WorkPackageFare> fares = sheet.getFares();
@@ -116,7 +116,6 @@ public class WorkPackageService {
 	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
         	}
         }
-        
         return workPackageRepository.save(workPackage);
     }
 
