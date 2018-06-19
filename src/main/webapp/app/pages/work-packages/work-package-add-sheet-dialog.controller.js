@@ -25,21 +25,20 @@
         	});
         }
         
-
-        if(vm.workPackage.type == 'REGULAR' && vm.workPackage.targetDistribution == 'MARKET'){
-        	 vm.types = ["Market Fares", "Add-Ons"];
+        if(vm.workPackage.reviewLevel != 'DISTRIBUTION'){
+	        if(vm.workPackage.type == 'REGULAR' && vm.workPackage.targetDistribution == 'MARKET'){
+	        	 vm.types = ["Market Fares", "Add-Ons"];
+	        }
+	        else if(vm.workPackage.type == 'DISCOUNT'){
+	        	 vm.types = ["Discount Fares"];
+	        }
+	        else if(vm.workPackage.type == 'REGULAR'){
+	        	 vm.types = ["Fares", "Add-Ons"];        	 
+	        }
+	        else if(vm.workPackage.type == 'WAIVER'){
+	        	 vm.types = ["Waiver Fares"];
+	        }
         }
-        else if(vm.workPackage.type == 'DISCOUNT'){
-        	 vm.types = ["Discount Fares"];
-        }
-        else if(vm.workPackage.type == 'REGULAR'){
-        	 vm.types = ["Fares", "Add-Ons"];
-        	 
-        }
-        else if(vm.workPackage.type == 'WAIVER'){
-        	 vm.types = ["Waiver Fares"];
-        }
-        
         if(!vm.workPackage.attachment){
          	vm.types.push("Attachment");
          }

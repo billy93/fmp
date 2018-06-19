@@ -1,5 +1,8 @@
 package com.atibusinessgroup.fmp.domain.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.data.mongodb.core.mapping.Field;
 
 public class AtpcoRecord1FareClassInformation {
@@ -34,29 +37,8 @@ public class AtpcoRecord1FareClassInformation {
 	@Field("date_tbl_no_994")
     private String dateTableNo994;
 	
-	@Field("rbd_1")
-    private String rbd1;
-	
-	@Field("rbd_2")
-    private String rbd2;
-	
-	@Field("rbd_3")
-    private String rbd3;
-	
-	@Field("rbd_4")
-    private String rbd4;
-	
-	@Field("rbd_5")
-    private String rbd5;
-	
-	@Field("rbd_6")
-    private String rbd6;
-	
-	@Field("rbd_7")
-    private String rbd7;
-	
-	@Field("rbd_8")
-    private String rbd8;
+	@Field("rbd")
+    private List<String> rbd = new ArrayList<>();
 	
 	@Field("carrier_tbl_990")
     private String carrierTableNo990;
@@ -147,68 +129,12 @@ public class AtpcoRecord1FareClassInformation {
 		this.dateTableNo994 = dateTableNo994;
 	}
 
-	public String getRbd1() {
-		return rbd1;
+	public List<String> getRbd() {
+		return rbd;
 	}
 
-	public void setRbd1(String rbd1) {
-		this.rbd1 = rbd1;
-	}
-
-	public String getRbd2() {
-		return rbd2;
-	}
-
-	public void setRbd2(String rbd2) {
-		this.rbd2 = rbd2;
-	}
-
-	public String getRbd3() {
-		return rbd3;
-	}
-
-	public void setRbd3(String rbd3) {
-		this.rbd3 = rbd3;
-	}
-
-	public String getRbd4() {
-		return rbd4;
-	}
-
-	public void setRbd4(String rbd4) {
-		this.rbd4 = rbd4;
-	}
-
-	public String getRbd5() {
-		return rbd5;
-	}
-
-	public void setRbd5(String rbd5) {
-		this.rbd5 = rbd5;
-	}
-
-	public String getRbd6() {
-		return rbd6;
-	}
-
-	public void setRbd6(String rbd6) {
-		this.rbd6 = rbd6;
-	}
-
-	public String getRbd7() {
-		return rbd7;
-	}
-
-	public void setRbd7(String rbd7) {
-		this.rbd7 = rbd7;
-	}
-
-	public String getRbd8() {
-		return rbd8;
-	}
-
-	public void setRbd8(String rbd8) {
-		this.rbd8 = rbd8;
+	public void setRbd(List<String> rbd) {
+		this.rbd = rbd;
 	}
 
 	public String getCarrierTableNo990() {
@@ -247,14 +173,7 @@ public class AtpcoRecord1FareClassInformation {
 		result = prime * result + ((passengerMaxAge == null) ? 0 : passengerMaxAge.hashCode());
 		result = prime * result + ((passengerMinAge == null) ? 0 : passengerMinAge.hashCode());
 		result = prime * result + ((passengerType == null) ? 0 : passengerType.hashCode());
-		result = prime * result + ((rbd1 == null) ? 0 : rbd1.hashCode());
-		result = prime * result + ((rbd2 == null) ? 0 : rbd2.hashCode());
-		result = prime * result + ((rbd3 == null) ? 0 : rbd3.hashCode());
-		result = prime * result + ((rbd4 == null) ? 0 : rbd4.hashCode());
-		result = prime * result + ((rbd5 == null) ? 0 : rbd5.hashCode());
-		result = prime * result + ((rbd6 == null) ? 0 : rbd6.hashCode());
-		result = prime * result + ((rbd7 == null) ? 0 : rbd7.hashCode());
-		result = prime * result + ((rbd8 == null) ? 0 : rbd8.hashCode());
+		result = prime * result + ((rbd == null) ? 0 : rbd.hashCode());
 		result = prime * result + ((rbdTableNo999 == null) ? 0 : rbdTableNo999.hashCode());
 		result = prime * result + ((ticketDesignator == null) ? 0 : ticketDesignator.hashCode());
 		result = prime * result + ((ticketDesignatorModifier == null) ? 0 : ticketDesignatorModifier.hashCode());
@@ -331,60 +250,11 @@ public class AtpcoRecord1FareClassInformation {
 		} else if (!passengerType.equals(other.passengerType)) {
 			return false;
 		}
-		if (rbd1 == null) {
-			if (other.rbd1 != null) {
+		if (rbd == null) {
+			if (other.rbd != null) {
 				return false;
 			}
-		} else if (!rbd1.equals(other.rbd1)) {
-			return false;
-		}
-		if (rbd2 == null) {
-			if (other.rbd2 != null) {
-				return false;
-			}
-		} else if (!rbd2.equals(other.rbd2)) {
-			return false;
-		}
-		if (rbd3 == null) {
-			if (other.rbd3 != null) {
-				return false;
-			}
-		} else if (!rbd3.equals(other.rbd3)) {
-			return false;
-		}
-		if (rbd4 == null) {
-			if (other.rbd4 != null) {
-				return false;
-			}
-		} else if (!rbd4.equals(other.rbd4)) {
-			return false;
-		}
-		if (rbd5 == null) {
-			if (other.rbd5 != null) {
-				return false;
-			}
-		} else if (!rbd5.equals(other.rbd5)) {
-			return false;
-		}
-		if (rbd6 == null) {
-			if (other.rbd6 != null) {
-				return false;
-			}
-		} else if (!rbd6.equals(other.rbd6)) {
-			return false;
-		}
-		if (rbd7 == null) {
-			if (other.rbd7 != null) {
-				return false;
-			}
-		} else if (!rbd7.equals(other.rbd7)) {
-			return false;
-		}
-		if (rbd8 == null) {
-			if (other.rbd8 != null) {
-				return false;
-			}
-		} else if (!rbd8.equals(other.rbd8)) {
+		} else if (!rbd.equals(other.rbd)) {
 			return false;
 		}
 		if (rbdTableNo999 == null) {
@@ -431,9 +301,7 @@ public class AtpcoRecord1FareClassInformation {
 				+ ticketingCode + ", ticketingCodeModifier=" + ticketingCodeModifier + ", ticketDesignator="
 				+ ticketDesignator + ", ticketDesignatorModifier=" + ticketDesignatorModifier + ", passengerType="
 				+ passengerType + ", passengerMinAge=" + passengerMinAge + ", passengerMaxAge=" + passengerMaxAge
-				+ ", filler=" + filler + ", dateTableNo994=" + dateTableNo994 + ", rbd1=" + rbd1 + ", rbd2=" + rbd2
-				+ ", rbd3=" + rbd3 + ", rbd4=" + rbd4 + ", rbd5=" + rbd5 + ", rbd6=" + rbd6 + ", rbd7=" + rbd7
-				+ ", rbd8=" + rbd8 + ", carrierTableNo990=" + carrierTableNo990 + ", rbdTableNo999=" + rbdTableNo999
-				+ ", commercialName=" + commercialName + "]";
+				+ ", filler=" + filler + ", dateTableNo994=" + dateTableNo994 + ", rbd=" + rbd + ", carrierTableNo990="
+				+ carrierTableNo990 + ", rbdTableNo999=" + rbdTableNo999 + ", commercialName=" + commercialName + "]";
 	}
 }

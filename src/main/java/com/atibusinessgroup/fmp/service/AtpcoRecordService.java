@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -52,6 +51,7 @@ import com.atibusinessgroup.fmp.domain.dto.DateTable;
 import com.atibusinessgroup.fmp.domain.dto.FlightTable;
 import com.atibusinessgroup.fmp.domain.dto.Record3ReflectionObject;
 import com.atibusinessgroup.fmp.domain.dto.TextTable;
+import com.atibusinessgroup.fmp.repository.AtpcoCcfParcityRepository;
 import com.atibusinessgroup.fmp.repository.PassengerRepository;
 import com.atibusinessgroup.fmp.repository.SurchargeCodeRepository;
 import com.atibusinessgroup.fmp.repository.TourTypeCodeRepository;
@@ -59,20 +59,21 @@ import com.atibusinessgroup.fmp.repository.custom.AtpcoRecord3CategoryCustomRepo
 import com.atibusinessgroup.fmp.service.util.AtpcoDataConverterUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
 @Service
 public class AtpcoRecordService {
 	
+	private final AtpcoCcfParcityRepository atpcoCcfParcityRepository;
 	private final AtpcoRecord3CategoryCustomRepository atpcoRecord3CategoryCustomRepository;
 	private final SurchargeCodeRepository surchargeCodeRepository;
 	private final TourTypeCodeRepository tourTypeCodeRepository;
 	private final PassengerRepository passengerRepository;
 	private final MongoTemplate mongoTemplate;
 
-	public AtpcoRecordService(AtpcoRecord3CategoryCustomRepository atpcoRecord3CategoryCustomRepository, SurchargeCodeRepository surchargeCodeRepository,
+	public AtpcoRecordService(AtpcoCcfParcityRepository atpcoCcfParcityRepository, AtpcoRecord3CategoryCustomRepository atpcoRecord3CategoryCustomRepository, SurchargeCodeRepository surchargeCodeRepository,
 			TourTypeCodeRepository tourTypeCodeRepository, PassengerRepository passengerRepository, MongoTemplate mongoTemplate) {
+		this.atpcoCcfParcityRepository = atpcoCcfParcityRepository;
 		this.atpcoRecord3CategoryCustomRepository = atpcoRecord3CategoryCustomRepository;
 		this.surchargeCodeRepository = surchargeCodeRepository;
 		this.tourTypeCodeRepository = tourTypeCodeRepository;
@@ -80,14 +81,62 @@ public class AtpcoRecordService {
 		this.mongoTemplate = mongoTemplate;
 	}
 
+	public Date resolveFocusDate(Date paramFrom, Object effective, Object discontinue) {
+		Date date = null;
+		
+		if (paramFrom == null) {
+			paramFrom = new Date();
+		}
+		
+		if (effective != null && discontinue != null) {
+			Date effDate = null;
+			
+			if (!effective.toString().contentEquals("indef")) {
+				try {
+					effDate = (Date) effective;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (effDate != null) {
+				if (discontinue.toString().contentEquals("indef")) {
+					if (paramFrom.after(effDate) || paramFrom.equals(effDate)) {
+						date = paramFrom;
+					} else {
+						date = effDate;
+					}
+				} else {
+					Date discDate = null;
+					
+					try {
+						discDate = (Date) discontinue;
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					
+					if (discDate != null) {
+						if ((paramFrom.after(effDate) || paramFrom.equals(effDate)) && (paramFrom.before(discDate) || paramFrom.equals(discDate))) {
+							date = paramFrom;
+						} else if (paramFrom.after(discDate) || paramFrom.equals(discDate)) {
+							date = discDate;
+						}
+					}
+				}
+			}
+		}
+		
+		return date;
+	}
+	
 	public boolean compareMatchingFareAndRecord(String fGeoType1, String fGeoLoc1, String fGeoType2, String fGeoLoc2,
-			String fOwrt, String fRoutingNo, String fFootnote, Object fEffectiveDate, Object fDiscontinueDate,
+			String fOwrt, String fRoutingNo, String fFootnote, Object focusDate,
 			String rGeoType1, String rGeoLoc1, String rGeoType2, String rGeoLoc2, String rOwrt, String rRoutingNo,
 			String rFootnote, Object rEffectiveDate, Object rDiscontinueDate) {
 		boolean match = false;
 
-		if (compareRoutingNo(fRoutingNo, rRoutingNo) && compareOwrt(fOwrt, rOwrt)
-				&& compareFootnote(fFootnote, rFootnote)) {
+		if (compareEffectiveDiscontinueDates(focusDate, rEffectiveDate, rDiscontinueDate) && compareRoutingNo(fRoutingNo, rRoutingNo) && compareOwrt(fOwrt, rOwrt)
+				&& compareFootnote(fFootnote, rFootnote) && compareGeoSpec(fGeoType1, fGeoLoc1, fGeoType2, fGeoLoc2, rGeoType1, rGeoLoc1, rGeoType2, rGeoLoc2)) {
 			match = true;
 			// System.out.println("Matched");
 		}
@@ -97,14 +146,14 @@ public class AtpcoRecordService {
 
 	public boolean compareMatchingFareAndRecord(String fGeoType1, String fGeoLoc1, String fGeoType2, String fGeoLoc2,
 			String fFareClass, String fFareType, String fSeasonType, String fDayOfWeekType, String fOwrt,
-			String fRoutingNo, String fFootnote, Object fEffectiveDate, Object fDiscontinueDate, String rGeoType1,
+			String fRoutingNo, String fFootnote, Object focusDate, String rGeoType1,
 			String rGeoLoc1, String rGeoType2, String rGeoLoc2, String rFareClass, String rFareType, String rSeasonType,
 			String rDayOfWeekType, String rOwrt, String rRoutingNo, String rFootnote, Object rEffectiveDate,
 			Object rDiscontinueDate) {
 		boolean match = false;
 
 		if (compareMatchingFareAndRecord(fGeoType1, fGeoLoc1, fGeoType2, fGeoLoc2, fOwrt, fRoutingNo, fFootnote,
-				fEffectiveDate, fDiscontinueDate, rGeoType1, rGeoLoc1, rGeoType2, rGeoLoc2, rOwrt, rRoutingNo,
+				focusDate, rGeoType1, rGeoLoc1, rGeoType2, rGeoLoc2, rOwrt, rRoutingNo,
 				rFootnote, rEffectiveDate, rDiscontinueDate) && compareFareClass(fFareClass, rFareClass)
 				&& compareFareType(fFareType, rFareType) && compareSeasonType(fSeasonType, rSeasonType)
 				&& compareDayOfWeekType(fDayOfWeekType, rDayOfWeekType)) {
@@ -237,11 +286,81 @@ public class AtpcoRecordService {
 		return match;
 	}
 
+	public boolean compareEffectiveDiscontinueDates(Object focusDate, Object effective, Object discontinue) {
+		boolean match = false;
+		
+		if (effective != null && discontinue != null) {
+			Date focus = null, eff = null, disc = null;
+			
+			try {
+				focus = (Date) focusDate;
+			} catch (Exception e) {
+			}
+			
+			if (focus != null) {
+				if (effective.toString().contentEquals("indef") && discontinue.toString().contentEquals("indef")) {
+					match = true;
+				} else {
+					if (!effective.toString().contentEquals("indef")) {
+						try {
+							eff = (Date) effective;
+						} catch (Exception e) {
+						}
+					}
+					
+					if (!discontinue.toString().contentEquals("indef")) {
+						try {
+							disc = (Date) discontinue;
+						} catch (Exception e) {
+						}
+					}
+					
+					if (eff != null && disc != null) {
+						if ((focus.after(eff) || focus.equals(eff)) && (focus.before(disc) || focus.equals(disc))) {
+							match = true;
+						}
+					} else if (eff != null && disc == null) {
+						if (focus.after(eff) || focus.equals(eff)) {
+							match = true;
+						}
+					} else if (eff == null && disc != null) {
+						if (focus.before(disc) || focus.equals(disc)) {
+							match = true;
+						}
+					}
+				}
+			}
+		}
+		
+		System.out.println("Effective discontinue date : " + focusDate + ", " + effective + ", " + discontinue);
+		
+		return match;
+	}
+	
 	public boolean compareGeoSpec(String ft1, String fl1, String ft2, String fl2, String rt1, String rl1, String rt2,
 			String rl2) {
 		boolean match = true;
 		
-//		System.out.println("GeoSpec: (" + ft1 + ", " + fl1 + ") (" + ft2 + ", " + fl2 + ") (" + rt1 + ", " + rl1 + ") (" + rt2 + ", " + rl2 + ")" + match);
+		ft1 = "C";
+		fl1 = "JKT";
+		
+		ft2 = "C";
+		fl2 = "BKK";
+		
+		rt1 = "C";
+		rl1 = "JKT";
+		
+		rt2 = "C";
+		rl2 = "BKK";
+		
+//		System.out.println("GeoSpec: (" + ft1 + ", " + fl1 + ") (" + ft2 + ", " + fl2 + ") | (" + rt1 + ", " + rl1 + ") (" + rt2 + ", " + rl2 + ")" + match);
+		
+		return match;
+	}
+	
+	public boolean compareLocations(String t1, String l1, String t2, String l2) {
+		boolean match = false;
+		
 		
 		return match;
 	}
