@@ -47,7 +47,7 @@ public class WorkPackageFare implements Serializable {
     @Id
     private String id;
 
-    private String no;
+    private int no;
     
     @Field("status")
     private String status;
@@ -351,11 +351,11 @@ public class WorkPackageFare implements Serializable {
 
 	
 	
-	public String getNo() {
+	public int getNo() {
 		return no;
 	}
 
-	public void setNo(String no) {
+	public void setNo(int no) {
 		this.no = no;
 	}
 
