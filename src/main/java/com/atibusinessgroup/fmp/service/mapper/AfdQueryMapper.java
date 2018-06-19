@@ -65,7 +65,13 @@ public class AfdQueryMapper {
 		//AtpcoRecord1 attributes
 		if (record1 != null) {
 			for (AtpcoRecord1FareClassInformation fci:record1.getFareClassInformation()) {
-				result.setBookingClass(fci.getRbd1());
+				String rbds = "";
+				for (String rbd:fci.getRbd()) {
+					if (rbd != null && !rbd.isEmpty()) {
+						rbds += rbd + ", ";
+					}
+				}
+				result.setBookingClass(!rbds.isEmpty() ? rbds.substring(0, rbds.length() - 2) : "");
 				result.setPaxType(fci.getPassengerType());
 			}
 			
