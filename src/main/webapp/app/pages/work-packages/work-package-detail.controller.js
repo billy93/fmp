@@ -1782,7 +1782,6 @@
  	   
  	   function sortBy(field, type) {
  		   if(type == 'asc'){
- 			   console.log('ASC '+field);
 	 		    return function(a, b) {
 	 		    	if(getDescendantProp(a, field) === null){
  			          return -1;
@@ -1821,12 +1820,14 @@
  	 	    	workPackageSheet.sort = []; 	 	    		
  	    	}
  	    	if(workPackageSheet.sort[field] == undefined){
- 	    		workPackageSheet.sort[field] = {asc:false}; 	    	
+ 	    		workPackageSheet.sort[field] = {asc:true}; 	    	
  	    	}
  	    	else{
  	    		workPackageSheet.sort[field].asc = !workPackageSheet.sort[field].asc;
  	    	} 	    
  	    	
+ 	    	workPackageSheet.currentSort = {field:field, asc:workPackageSheet.sort[field].asc};
+
  	    	if(field == '#'){
  	    		if(workPackageSheet.sort[field].asc){ 
  	    			workPackageSheet.fares.sort(sortBy('no', 'asc'));
@@ -4770,6 +4771,7 @@
     			  if(selected){
 //    				  console.log("SELECTED : "+selected);
     				  var copiedFare = angular.copy(workPackageSheet.fares[x]);
+    				  copiedFare.no = workPackageSheet.fares.length+1;
     				  copiedFare.status = "PENDING";
     				  copiedFare.field = null;
     				  workPackageSheet.fares.push(copiedFare);
@@ -4777,6 +4779,8 @@
 //    			  console.log("X : "+x);
     		  }
     	  }
+    	  
+//    	  vm.sort(workPackageSheet, '#');
       }
       
       
@@ -4814,7 +4818,30 @@
     			  }
     		  }
     	  }
-      }
+    	  
+    	  //reset number
+    	  workPackageSheet.fares.sort(sortBy('no', 'asc'));
+    	  for(var i=0;i<workPackageSheet.fares.length; i++){
+    		  workPackageSheet.fares[i].no = i+1;
+    	  }
+    	  
+    	  if(workPackageSheet.currentSort.field == '#'){
+    		  if(workPackageSheet.currentSort.asc){
+        		  workPackageSheet.fares.sort(sortBy('no', 'asc'));
+    		  }
+    		  else{
+        		  workPackageSheet.fares.sort(sortBy('no', 'desc'));
+    		  }
+    	  }
+    	  else{
+    		  if(workPackageSheet.currentSort.asc){
+    			  workPackageSheet.fares.sort(sortBy(workPackageSheet.currentSort.field, 'asc'));
+    		  }
+    		  else{
+    			  workPackageSheet.fares.sort(sortBy(workPackageSheet.currentSort.field, 'desc'));    			  
+    		  }
+    	  }
+      }      
       
       vm.tbodyClick = function(workPackageSheet){
 //    	  for(var x=0;x<workPackageSheet.fares.length;x++){
