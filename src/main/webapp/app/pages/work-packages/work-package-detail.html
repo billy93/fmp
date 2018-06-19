@@ -319,7 +319,7 @@
 						    	<a ng-click="vm.addSheet()" data-toggle="modal" data-target="#addNewsheet">Add</a>
 						    </li>
 						    <li>
-						    	<a ng-click="vm.removeSheet()">Remove</a>
+						    	<a ng-click="vm.removeSheet()" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'">Remove</a>
 						    </li>
 						    <!-- <li>
 						    	<a href="#">Rename</a>
@@ -328,7 +328,7 @@
 						    	<a ng-click="vm.copySheet()">Copy</a>
 						    </li>
 						    <li>
-						    	<a ng-click="vm.pasteSheet()">Paste</a>
+						    	<a ng-click="vm.pasteSheet()" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'">Paste</a>
 						    </li>
 						</ul>
 					</div>												
@@ -433,14 +433,17 @@
 																    <li>
 																    	<a ng-click="vm.fillDown(workPackageSheet)">Fill Down</a>
 																    </li>	
+																     <li>
+															    		<a ng-click="vm.searchReplace(workPackageSheet)">Search/Replace</a>
+															   		 </li>
 																    <li>
-																    	<a ng-click="vm.addFares(workPackageSheet)">Add Rows</a>
+																    	<a ng-click="vm.addFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Add Rows</a>
 																    </li>
 																    <li>
-																    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)">Duplicate Selected Rows</a>
+																    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Duplicate Selected Rows</a>
 																    </li>
 																    <li>
-																    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)">Delete Selected Rows</a>
+																    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Delete Selected Rows</a>
 																    </li>
 																     														   
 																    
@@ -477,66 +480,70 @@
 																</div>															
 															</th> -->
 															<th class="sorting_asc" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" aria-sort="ascending">No</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Status</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Carrier
+															<th class="sorting_asc" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" aria-sort="ascending"># <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, '#')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Status <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'status')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Carrier <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'carrier')"></span>
 																<div class="resize-div"></div>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Action
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Action <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'action')"></span>
 																<div class="resize-div"></div>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tar No</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tar Cd</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Global
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tar No <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'tariffNumber.tarNo')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tar Cd <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'tariffNumber.tarCd')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Global <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'tariffNumber.global')"></span>
 																<div class="resize-div"></div>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Origin</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Dest</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Fare Cls
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Origin <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'origin')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Dest <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'destination')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Fare Cls <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'fareBasis')"></span>
 																<div class="resize-div"></div>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Bkg Cls
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Bkg Cls <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'bookingClass')"></span>
 																<div class="resize-div"></div>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Cabin
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Cabin <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'cabin')"></span>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">OW/RT
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">OW/RT <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'typeOfJourney')"></span>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Ftnt
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Ftnt <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'footnote')"></span>
 																<div class="resize-div"></div>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Rtg No
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Rtg No <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'rtgno')"></span>
 																<div class="resize-div"></div>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Rule No
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Rule No <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'ruleno')"></span>
 																<div class="resize-div"></div>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Curr</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Base Amt
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Curr <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'currency')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Base Amt <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'amount')"></span>
 																<div class="resize-div"></div>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Target Aif
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Target Aif <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'aif')"></span>
 																<div class="resize-div"></div>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Travel Start</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Travel End</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Sale Start</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Sale End</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Comment
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Travel Start <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelStart')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Travel End <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelEnd')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Sale Start <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'saleStart')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Sale End <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'saleEnd')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Comment <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'comment')"></span>
 																<div class="resize-div" style="min-width: 200px;"></div>
 															</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Travel Complete</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Travel Complete Indicator</th>
-															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Ratesheet Comment
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Travel Complete <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelComplete')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Travel Complete Indicator <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelCompleteIndicator')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Ratesheet Comment <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'ratesheetComment')"></span>
 																<div class="resize-div" style="min-width: 200px;"></div>
 															</th>
 														</tr>
 													</thead>
 													<tbody>
-														<tr ng-click="vm.tbodyClick(workPackageSheet)" ng-repeat="(key, fare) in workPackageSheet.currentFares track by $index" role="row" class="datatable-row" ng-class="{'poiv-none':workPackageSheet.version != 'current', 'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
+														<tr ng-click="vm.tbodyClick(workPackageSheet)" ng-repeat="(key, fare) in workPackageSheet.currentFares track by $index" role="row" class="datatable-row" ng-class="{'poiv-none':workPackageSheet.version != 'current', 'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}" ng-init="
+															fare.no == null || fare.no == undefined ? 
+															fare.no = $index+1 : fare.no = fare.no">
 															<!-- <td>
 																<input type="checkbox" ng-model="fare.selected" ng-change="optionToggled(workPackageSheet.fares)">
 															</td> -->
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['no']}" >{{$index+1}}</td>
+															<td>{{$index+1}}</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['no']}" >{{fare.no}}</td>
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'status', $event)" ng-class="{highlighted:fare.field['status']}">
 																<select class="form-control inside-table" name="status{{$parent.$index}}{{$index}}" ng-model="fare.status" id="field_status" 
 																	ng-class="{'must-fill': !editForm.editFormATPCO.status{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"												         		
@@ -756,6 +763,7 @@
 									               				<input type="text" class="form-control" name="footnote{{$parent.$index}}{{$index}}" id="field_footnote"
 										                				ng-maxlength="2"
 									                					maxlength="2"
+									                					uppercase
 									                					ng-pattern="/^[a-zA-Z0-9]{1,2}$/"
 									                					ng-keypress="vm.keypress($event, '^[a-zA-Z0-9]{1,2}$')"
 										                				ng-class="{'must-fill': editForm.editFormATPCO.footnote{{$parent.$index}}{{$index}}.$error.required ||
@@ -1064,13 +1072,16 @@
 																    	<a ng-click="vm.fillDown(workPackageSheet)">Fill Down</a>
 																    </li>	
 																    <li>
-																    	<a ng-click="vm.addFares(workPackageSheet)">Add Rows</a>
+															    		<a ng-click="vm.searchReplace(workPackageSheet)">Search/Replace</a>
+															   		</li>
+																    <li>
+																    	<a ng-click="vm.addFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Add Rows</a>
 																    </li>
 																    <li>
-																    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)">Duplicate Selected Rows</a>
+																    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Duplicate Selected Rows</a>
 																    </li>
 																    <li>
-																    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)">Delete Selected Rows</a>
+																    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Delete Selected Rows</a>
 																    </li>
 																    <li>
 																    	<a href="#">Paste</a>
@@ -1918,13 +1929,16 @@
 												    	<a ng-click="vm.fillDown(workPackageSheet)">Fill Down</a>
 												    </li>	
 												    <li>
-												    	<a ng-click="vm.addFares(workPackageSheet)">Add Rows</a>
+											    		<a ng-click="vm.searchReplace(workPackageSheet)">Search/Replace</a>
+											   		</li>
+												    <li>
+												    	<a ng-click="vm.addFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Add Rows</a>
 												    </li>
 												    <li>
-												    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)">Duplicate Selected Rows</a>
+												    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Duplicate Selected Rows</a>
 												    </li>
 												    <li>
-												    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)">Delete Selected Rows</a>
+												    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Delete Selected Rows</a>
 												    </li>
 												     														   
 												    
@@ -2780,13 +2794,16 @@
 															    	<a ng-click="vm.fillDown(workPackageSheet)">Fill Down</a>
 															    </li>	
 															    <li>
-															    	<a ng-click="vm.addFares(workPackageSheet)">Add Rows</a>
+														    		<a ng-click="vm.searchReplace(workPackageSheet)">Search/Replace</a>
+														   		</li>
+															    <li>
+															    	<a ng-click="vm.addFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Add Rows</a>
 															    </li>
 															    <li>
-															    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)">Duplicate Selected Rows</a>
+															    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Duplicate Selected Rows</a>
 															    </li>
 															    <li>
-															    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)">Delete Selected Rows</a>
+															    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Delete Selected Rows</a>
 															    </li>
 															</ul>
 														</div>													
@@ -3254,13 +3271,16 @@
 																    	<a ng-click="vm.fillDown(workPackageSheet)">Fill Down</a>
 																    </li>	
 																    <li>
-																    	<a ng-click="vm.addFares(workPackageSheet)">Add Rows</a>
+															    		<a ng-click="vm.searchReplace(workPackageSheet)">Search/Replace</a>
+															   		</li>
+																    <li>
+																    	<a ng-click="vm.addFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Add Rows</a>
 																    </li>
 																    <li>
-																    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)">Duplicate Selected Rows</a>
+																    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Duplicate Selected Rows</a>
 																    </li>
 																    <li>
-																    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)">Delete Selected Rows</a>
+																    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Delete Selected Rows</a>
 																    </li>
 																    <li>
 																    	<a href="#">Paste</a>
@@ -3950,13 +3970,16 @@
 															    	<a ng-click="vm.fillDown(workPackageSheet)">Fill Down</a>
 															    </li>	
 															    <li>
-															    	<a ng-click="vm.addFares(workPackageSheet)">Add Rows</a>
+															    	<a ng-click="vm.searchReplace(workPackageSheet)">Search/Replace</a>
 															    </li>
 															    <li>
-															    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)">Duplicate Selected Rows</a>
+															    	<a ng-click="vm.addFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Add Rows</a>
 															    </li>
 															    <li>
-															    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)">Delete Selected Rows</a>
+															    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Duplicate Selected Rows</a>
+															    </li>
+															    <li>
+															    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Delete Selected Rows</a>
 															    </li>
 															</ul>
 														</div>		

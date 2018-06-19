@@ -1582,45 +1582,49 @@
         };
         
         vm.removeSheet = function(){
-        	var removed = vm.removeTab();
-        	if(!removed){
-        		alert('Sheet cannot be deleted');
-        	}
-        	else{
-        		alert('Sheet deleted');
+        	if(vm.workPackage.reviewLevel != 'DISTRIBUTION'){
+	        	var removed = vm.removeTab();
+	        	if(!removed){
+	        		alert('Sheet cannot be deleted');
+	        	}
+	        	else{
+	        		alert('Sheet deleted');
+	        	}
         	}
         };
         //END SHEET FUNCTION
         
         vm.pasteSheet = function(){
 //        	alert('Paste Sheet');
-        	$uibModal.open({
-                templateUrl: 'app/pages/work-packages/work-package-add-sheet-dialog.html',
-                controller: 'WorkPackageAddSheetDialogController',
-                controllerAs: 'vm',
-                backdrop: 'static',
-                size: 'lg',
-                windowClass: 'full-page-modal',
-                resolve: {
-                	workPackage: function(){
-                		return vm.workPackage;
-                	},
-                    fareTypes: ['FareType', function(FareType) {
-                        return FareType.getAll().$promise;
-                    }],
-                    sheet: function(){
-                    	return ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
-                    }
-                }
-			}).result.then(function(option) {
-				var clipboardSheet = ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
-				clipboardSheet.then(function(result){
-					vm.addTab(option, result.sheet.fares);
-					alert('Paste Sheet Success');
-				});
-            }, function() {
-        			
-            });
+        	if(vm.workPackage.reviewLevel != 'DISTRIBUTION'){
+	        	$uibModal.open({
+	                templateUrl: 'app/pages/work-packages/work-package-add-sheet-dialog.html',
+	                controller: 'WorkPackageAddSheetDialogController',
+	                controllerAs: 'vm',
+	                backdrop: 'static',
+	                size: 'lg',
+	                windowClass: 'full-page-modal',
+	                resolve: {
+	                	workPackage: function(){
+	                		return vm.workPackage;
+	                	},
+	                    fareTypes: ['FareType', function(FareType) {
+	                        return FareType.getAll().$promise;
+	                    }],
+	                    sheet: function(){
+	                    	return ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
+	                    }
+	                }
+				}).result.then(function(option) {
+					var clipboardSheet = ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
+					clipboardSheet.then(function(result){
+						vm.addTab(option, result.sheet.fares);
+						alert('Paste Sheet Success');
+					});
+	            }, function() {
+	        			
+	            });
+        	}
         };
         
         vm.faresActionButton = [];
@@ -1762,13 +1766,85 @@
        	  	}
  	    	
     		fareSheet.fares.push({
+    			no:fareSheet.fares.length+1,
     			status:"PENDING",
     			action:"New",
   	 	      	carrier:"GA"
     		});
  	    }
  	    
- 	    vm.searchReplace = function(fareSheet){
+ 	   function getDescendantProp (obj, desc) {
+ 		  var arr = desc.split('.');
+ 		  while (arr.length && (obj = obj[arr.shift()]));
+ 		  return obj;
+ 		}
+ 	   
+ 	   function sortBy(field, type) {
+ 		   if(type == 'asc'){
+ 			   console.log('ASC '+field);
+	 		    return function(a, b) {
+	 		    	if(getDescendantProp(a, field) === null){
+ 			          return -1;
+ 			        }
+ 			        else if(getDescendantProp(b, field) === null){
+ 			          return 1;
+ 			        }
+ 			        else if (getDescendantProp(a, field) > getDescendantProp(b, field)) {
+	 		            return 1;
+	 		        } else if (getDescendantProp(a, field) < getDescendantProp(b, field)) {
+	 		            return -1;
+	 		        }
+	 		    	
+	 		        return 1;
+	 		    };
+ 		   } else if(type='desc'){
+ 			  return function(a, b) {
+ 				  	if(getDescendantProp(a, field) === null){
+ 			          return 1;
+ 			        }
+ 			        else if(getDescendantProp(b, field) === null){
+ 			          return -1;
+ 			        }
+ 			        else if (getDescendantProp(a, field) > getDescendantProp(b, field)) {
+	 		            return -1;
+	 		        } else if (getDescendantProp(a, field) < getDescendantProp(b, field)) {
+	 		            return 1;
+	 		        }
+	 		        return 1;
+	 		    };
+ 		   }
+ 		}
+ 	  
+ 	    vm.sort = function(workPackageSheet, field){
+ 	    	if(workPackageSheet.sort == undefined){
+ 	 	    	workPackageSheet.sort = []; 	 	    		
+ 	    	}
+ 	    	if(workPackageSheet.sort[field] == undefined){
+ 	    		workPackageSheet.sort[field] = {asc:false}; 	    	
+ 	    	}
+ 	    	else{
+ 	    		workPackageSheet.sort[field].asc = !workPackageSheet.sort[field].asc;
+ 	    	} 	    
+ 	    	
+ 	    	if(field == '#'){
+ 	    		if(workPackageSheet.sort[field].asc){ 
+ 	    			workPackageSheet.fares.sort(sortBy('no', 'asc'));
+ 	    		}
+ 	    		else{
+ 	    			workPackageSheet.fares.sort(sortBy('no', 'desc'));
+ 	    		}
+ 	    	}
+ 	    	else{
+ 	    		if(workPackageSheet.sort[field].asc){ 	    			
+ 	    			workPackageSheet.fares.sort(sortBy(field, 'asc'));
+ 	    		}
+ 	    		else{
+ 	    			workPackageSheet.fares.sort(sortBy(field, 'desc')); 
+ 	    		}
+ 	    	}
+ 	    }
+ 	    
+ 	    vm.searchReplace = function(fareSheet, filter){
  	    	$uibModal.open({
 	            templateUrl: 'app/pages/work-packages/work-package-search-replace-dialog.html',
 	            controller: 'WorkPackageSearchReplaceDialogController',
@@ -1777,11 +1853,35 @@
 	            size: 'lg',
 	            windowClass: 'full-page-modal',
 	            resolve: {
+	            	fareSheet: function(){
+	            		return fareSheet;
+	            	},
+	            	filter: function(){
+	            		if(filter != null)
+	            			return filter;
+	            		return null;
+	            	}
 //	                entity: result.$promise,
 //	                fareSelected: vm.selectedFareDiscount
 	            }
- 	    	}).result.then(function(workPackage) {
-        	    
+ 	    	}).result.then(function(workPackageFareFilter) {
+        	    if(workPackageFareFilter.find){
+        	    	var event = {shiftKey:true};
+        	    	
+        	    	if(workPackageFareFilter.andor == 'and'){
+        	    		for(var i=0; i < fareSheet.fares.length; i++){
+//        	    			if(){
+//        	    				
+//        	    			}
+        	    			vm.tdClick(fareSheet, fareSheet.fares[i], 'no', event);
+        	    		}
+        	    	}
+        	    	else if(workPackageFareFilter.andor == 'or'){
+        	    		
+        	    	}
+        	    	
+        	    	vm.searchReplace(fareSheet, workPackageFareFilter);
+        	    }
             }, function() {
         			
             });
@@ -2480,8 +2580,9 @@
           data.saleDate = DateUtils.convertDateTimeFromServer(data.saleDate);
           
           if(data.fareSheet.length > 0){
-          	for(var x=0;x<data.fareSheet.length;x++){
+          	for(var x=0;x<data.fareSheet.length;x++){          		
           		var fares = data.fareSheet[x].fares;
+          		
           		for(var y=0;y<fares.length;y++){
               		if(fares[y] != null){
               			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
