@@ -635,7 +635,7 @@
 											                    		ng-model="fare.footnote1"/>
 									               			</td>
 									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'rtgno', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['rtgno']}">
-									               				<input type="number" class="form-control" name="rtgno{{$parent.$index}}{{$index}}" id="field_bookingClass"
+									               				<input type="text" class="form-control" name="rtgno{{$parent.$index}}{{$index}}" id="field_bookingClass"
 										                				ng-maxlength="4"
 									                					maxlength="4"
 									                					ng-pattern="/^[0-9]{1,4}$/"

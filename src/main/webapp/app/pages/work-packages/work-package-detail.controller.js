@@ -1869,7 +1869,29 @@
  	    		function checkField(workPackageFareFilter, type, fare){
  	    			var listField = [
     	    			workPackageFareFilter.no.check && workPackageFareFilter.no.search != null ? 'no' : null,
-    	    			workPackageFareFilter.status.check && workPackageFareFilter.status.search != null ? 'status' : null
+    	    			workPackageFareFilter.status.check && workPackageFareFilter.status.search != null ? 'status' : null,
+    	    			workPackageFareFilter.tariffNumber.tarNo.check && workPackageFareFilter.tariffNumber.tarNo.search != null ? 'tariffNumber.tarNo' : null,
+    	    	    	workPackageFareFilter.tariffNumber.tarCd.check && workPackageFareFilter.tariffNumber.tarCd.search != null ? 'tariffNumber.tarCd' : null,
+    	    	    	workPackageFareFilter.tariffNumber.global.check && workPackageFareFilter.tariffNumber.global.search != null ? 'tariffNumber.global' : null,
+    	    			workPackageFareFilter.origin.check && workPackageFareFilter.origin.search != null ? 'origin' : null,
+    	    			workPackageFareFilter.destination.check && workPackageFareFilter.destination.search != null ? 'destination' : null,
+    	    			workPackageFareFilter.fareBasis.check && workPackageFareFilter.fareBasis.search != null ? 'fareBasis' : null,
+    	    			workPackageFareFilter.bookingClass.check && workPackageFareFilter.bookingClass.search != null ? 'bookingClass' : null,
+    	    	    	workPackageFareFilter.cabin.check && workPackageFareFilter.cabin.search != null ? 'cabin' : null,
+    	    	    	workPackageFareFilter.typeOfJourney.check && workPackageFareFilter.typeOfJourney.search != null ? 'typeOfJourney' : null,
+    	    	    	workPackageFareFilter.rtgno.check && workPackageFareFilter.rtgno.search != null ? 'rtgno' : null,
+    	    	    	workPackageFareFilter.ruleno.check && workPackageFareFilter.ruleno.search != null ? 'ruleno' : null,
+    	    	    	workPackageFareFilter.currency.check && workPackageFareFilter.currency.search != null ? 'currency' : null,
+    	    	    	workPackageFareFilter.amount.check && workPackageFareFilter.amount.search != null ? 'amount' : null,
+    	    	    	workPackageFareFilter.aif.check && workPackageFareFilter.aif.search != null ? 'aif' : null,
+    	    	    	workPackageFareFilter.travelStart.check && workPackageFareFilter.travelStart.search != null ? 'travelStart' : null,
+    	    	    	workPackageFareFilter.travelEnd.check && workPackageFareFilter.travelEnd.search != null ? 'travelEnd' : null,
+    	    	    	workPackageFareFilter.saleStart.check && workPackageFareFilter.saleStart.search != null ? 'saleStart' : null,
+    	    	    	workPackageFareFilter.saleEnd.check && workPackageFareFilter.saleEnd.search != null ? 'saleEnd' : null,
+    	    	    	workPackageFareFilter.travelComplete.check && workPackageFareFilter.travelComplete.search != null ? 'travelComplete' : null,
+    	    	    	workPackageFareFilter.travelCompleteIndicator.check && workPackageFareFilter.travelCompleteIndicator.search != null ? 'travelCompleteIndicator' : null,
+    	    	    	workPackageFareFilter.comment.check && workPackageFareFilter.comment.search != null ? 'comment' : null,
+    	    	    	workPackageFareFilter.ratesheetComment.check && workPackageFareFilter.ratesheetComment.search != null ? 'ratesheetComment' : null,
     	    		];
  	    			
  	    			var found = false;
@@ -1877,7 +1899,8 @@
 	 	    			found = true;
 	 	    			for(var x=0;x<listField.length;x++){
 	 	    				if(listField[x] != null){
-	 	    					if(fare[listField[x]] != workPackageFareFilter[listField[x]].search){
+	 	    					if(getDescendantProp(fare, listField[x]) != getDescendantProp(workPackageFareFilter, listField[x]+'.search')){
+//	 	    					if(fare[listField[x]] != workPackageFareFilter[listField[x]].search){
 	 	    						found = false;
 	 	    					}
 	 	    				}
@@ -1886,7 +1909,8 @@
  	    			else if(type == 'or'){
  	    				for(var x=0;x<listField.length;x++){
 	 	    				if(listField[x] != null){
-	 	    					if(fare[listField[x]] == workPackageFareFilter[listField[x]].search){
+	 	    					if(getDescendantProp(fare, listField[x]) != getDescendantProp(workPackageFareFilter, listField[x]+'.search')){
+//	 	    					if(fare[listField[x]] == workPackageFareFilter[listField[x]].search){
 	 	    						found = true;
 	 	    					}
 	 	    				}
@@ -1895,145 +1919,75 @@
  	    			return found;
  	    		}
  	    		
-        	    if(workPackageFareFilter.find){
-        	    	var index = 0;
-    	    		if(workPackageFareFilter.index != null){
-    	    			index = workPackageFareFilter.index;
-    	    		}
-    	    		
-    	    		
-    	    		for(var i = 0; i < fareSheet.fares.length; i++){
-    	    			if(fareSheet.fares[i].field == null || fareSheet.fares[i].field == undefined){
-	    					fareSheet.fares[i].field = {};
-	    		    	}
-    	    			fareSheet.fares[i].field['no'] =  false;
-    	    		}
-    	    		
-    	    		for(var i = index; i < fareSheet.fares.length; i++){
-    	    			var find = false;
-        	    		
-    	    			if(fareSheet.fares[i].field == null || fareSheet.fares[i].field == undefined){
-	    					fareSheet.fares[i].field = {};
-	    		    	}
-    	    			
-    	    			fareSheet.fares[i].field['no'] =  false;
-    	    			
-    	    			if(workPackageFareFilter.andor == 'and'){
-    	    				if(checkField(workPackageFareFilter, 'and', fareSheet.fares[i])){
-    	    					find = true;
-    	    					fareSheet.fares[i].field['no'] =  true;
-    	    					
-    	    					if(i+1 == fareSheet.fares.length){
-    	    						workPackageFareFilter.index = 0;
-    	    					}
-    	    					else{
-    	    						workPackageFareFilter.index = i+1;
-    	    					}
-    	    					break;
-    	    				}
-    	    			}
-    	    			else if(workPackageFareFilter.andor == 'or'){
-    	    				if(checkField(workPackageFareFilter, 'or', fareSheet.fares[i])){
-    	    					find = true;
-    	    					fareSheet.fares[i].field['no'] =  true;
-    	    					
-    	    					if(i+1 == fareSheet.fares.length){
-    	    						workPackageFareFilter.index = 0;
-    	    					}
-    	    					else{
-    	    						workPackageFareFilter.index = i+1;
-    	    					}
-    	    					break;
-    	    				}
-    	    			}    	    			
-    	    		}
-    	    		if(!find){
-    	    			if(workPackageFareFilter.message == null){
-    	    				workPackageFareFilter.message = "No Matches found, continue search at the beginning?";
-    	    			}
-    	    			else{
-    	    				workPackageFareFilter.message = "No matches found";
-    	    			}
-    	    		}
-        	    	vm.searchReplace(fareSheet, workPackageFareFilter);
-        	    }
-        	    else if(workPackageFareFilter.replace){
-    	    		var index = 0;
-    	    		if(!workPackageFareFilter.replaceAll){
-        	    		if(workPackageFareFilter.index != null){
-        	    			index = workPackageFareFilter.index;
-        	    		}
-    	    		}
-    	    		for(var i = index; i < fareSheet.fares.length; i++){
-    	    			var find = false;
-    	    			
-    	    			if(fareSheet.fares[i].field == null || fareSheet.fares[i].field == undefined){
-	    					fareSheet.fares[i].field = {};
-	    		    	}
-    	    			
-    	    			fareSheet.fares[i].field['no'] =  false;
-    	    			
-    	    			if(workPackageFareFilter.andor == 'and'){
-    	    				if(checkField(workPackageFareFilter, 'and', fareSheet.fares[i])){
-    	    					find = true;
-    	    					
-    	    					if(!workPackageFareFilter.replaceAll){
-    	    						fareSheet.fares[i].field['no'] =  true;
-    	    					}
-    	    					if(i+1 == fareSheet.fares.length){
-    	    						workPackageFareFilter.index = 0;
-    	    					}
-    	    					else{
-    	    						workPackageFareFilter.index = i+1;
-    	    					}
-    	    					break;
-    	    				}
-    	    			}
-    	    			else if(workPackageFareFilter.andor == 'or'){
-    	    				if(checkField(workPackageFareFilter, 'or', fareSheet.fares[i])){
-    	    					find = true;
-    	    					
-    	    					if(!workPackageFareFilter.replaceAll){
-    	    						fareSheet.fares[i].field['no'] =  true;
-    	    					}
-    	    					
-    	    					if(i+1 == fareSheet.fares.length){
-    	    						workPackageFareFilter.index = 0;
-    	    					}
-    	    					else{
-    	    						workPackageFareFilter.index = i+1;
-    	    					}
-    	    					break;
-    	    				}
-    	    			}    	    		
-    	    			
-    	    			if(find){
-    	    				//replace
-    	    				if(workPackageFareFilter.status.replace.check){
-    	    					fareSheet.fares[i]['status'] = workPackageFareFilter.status.replace.value;
-    	    				}
-    	    				
-    	    				if(!workPackageFareFilter.replaceAll){
-    	    					if((i+1) == fareSheet.fares.length){
-    	    						workPackageFareFilter.index = 0;
-    	    					}
-    	    					break;
-    	    				}
-    	    				else{
-    	    					if((i+1) == fareSheet.fares.length){
-    	    						workPackageFareFilter.index = 0;
-    	    					}
-    	    				}
-    	    			}
-    	    		}
-    	    		if(!find){
+ 	    		function replaceField(workPackageFareFilter, fare){
+ 	    			var listField = [
+    	    			workPackageFareFilter.status.replace.check && workPackageFareFilter.status.replace.value != null ? 'status' : null
+    	    		];
+ 	    			
+ 	    			for(var x=0;x<listField.length;x++){
+ 	    				if(listField[x] != null){
+ 	    					fare[listField[x]] = workPackageFareFilter.status.replace.value;
+ 	    				}
+ 	    			}
+ 	    		}
+ 	    		
+    	    	var index = 0;
+    	    	if(!workPackageFareFilter.replaceAll){
+		    		if(workPackageFareFilter.index != null){
+		    			index = workPackageFareFilter.index;
+		    		}
+    	    	}
+	    		
+	    		for(var i = 0; i < fareSheet.fares.length; i++){
+	    			if(fareSheet.fares[i].field == null || fareSheet.fares[i].field == undefined){
+    					fareSheet.fares[i].field = {};
+    		    	}
+	    			fareSheet.fares[i].field['no'] =  false;
+	    		}
+	    		
+	    		var find = false;
+	    		
+	    		for(var i = index; i < fareSheet.fares.length; i++){
+	    			
+	    			if(fareSheet.fares[i].field == null || fareSheet.fares[i].field == undefined){
+    					fareSheet.fares[i].field = {};
+    		    	}
+	    			
+	    			fareSheet.fares[i].field['no'] =  false;
+	    			
+	    			if(checkField(workPackageFareFilter, workPackageFareFilter.andor, fareSheet.fares[i])){
+    					find = true;
+    					fareSheet.fares[i].field['no'] =  true;
+    					
+    					if(i+1 == fareSheet.fares.length){
+    						workPackageFareFilter.index = 0;
+    					}
+    					else{
+    						workPackageFareFilter.index = i+1;
+    					}
+    					
+    					if(workPackageFareFilter.replace){
+    						replaceField(workPackageFareFilter, fareSheet.fares[i]);
+    						break;
+    					}
+    					else if(workPackageFareFilter.replaceAll){
+    						replaceField(workPackageFareFilter, fareSheet.fares[i]);
+    					}
+    					else{
+	    					break;	    						
+    					}
+    				}    			
+	    		}
+	    		if(!find){
+	    			if(workPackageFareFilter.message == null){
 	    				workPackageFareFilter.message = "No Matches found, continue search at the beginning?";
-    	    		}
-    	    		
-    	    		
-        	    	vm.searchReplace(fareSheet, workPackageFareFilter);
-        	    	
-        	    }
+	    			}
+//	    			else{
+//	    				workPackageFareFilter.message = "No matches found";
+//	    			}
+	    		}
+	    		
+    	    	vm.searchReplace(fareSheet, workPackageFareFilter);        	    
             }, function() {
         			
             });
