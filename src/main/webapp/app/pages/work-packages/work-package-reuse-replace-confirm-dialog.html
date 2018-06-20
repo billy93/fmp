@@ -45,7 +45,7 @@
       				<div class="box-body">
       					 <form name="outerForm" class="tab-form-demo">
 						    <uib-tabset active="activeForm">
-						      <uib-tab ng-repeat="workPackageFareSheet in vm.workPackage.fareSheet track by $index" heading="{{workPackageFareSheet.specifiedFaresName}}">
+						      <uib-tab ng-if="vm.workPackage.fareSheet.length > 0" ng-repeat="workPackageFareSheet in vm.workPackage.fareSheet track by $index" heading="{{workPackageFareSheet.specifiedFaresName}}">
 						        <ng-form name="nestedForm">
 						          <div class="form-group">
 						            <label>Worksheet Type</label>
@@ -57,7 +57,7 @@
 						          </div>
 						        </ng-form>
 						      </uib-tab>	
-						      <uib-tab ng-repeat="workPackageFareSheet in vm.workPackage.addonFareSheet track by $index" heading="{{workPackageFareSheet.addonFaresName}}">
+						      <uib-tab ng-if="vm.workPackage.addonFareSheet.length > 0" ng-repeat="workPackageFareSheet in vm.workPackage.addonFareSheet track by $index" heading="{{workPackageFareSheet.addonFaresName}}">
 						        <ng-form name="nestedForm">
 						          <div class="form-group">
 						            <label>Worksheet Type</label>
@@ -66,6 +66,42 @@
 						          <div class="form-group">
 						            <label>Worksheet Name</label>
 						            <input type="text" class="form-control" required ng-model="workPackageFareSheet.addonFaresName"/>
+						          </div>
+						        </ng-form>
+						      </uib-tab>
+						      <uib-tab ng-if="vm.workPackage.discountFareSheet.length > 0" ng-repeat="workPackageFareSheet in vm.workPackage.discountFareSheet track by $index" heading="{{workPackageFareSheet.discountFaresName}}">
+						        <ng-form name="nestedForm">
+						          <div class="form-group">
+						            <label>Worksheet Type</label>
+						            <input type="text" class="form-control" required disabled value="Discount Fares"/>
+						          </div>
+						          <div class="form-group">
+						            <label>Worksheet Name</label>
+						            <input type="text" class="form-control" required ng-model="workPackageFareSheet.discountFaresName"/>
+						          </div>
+						        </ng-form>
+						      </uib-tab>
+						      <uib-tab ng-if="vm.workPackage.marketFareSheet.length > 0" ng-repeat="workPackageFareSheet in vm.workPackage.marketFareSheet track by $index" heading="{{workPackageFareSheet.marketFaresName}}">
+						        <ng-form name="nestedForm">
+						          <div class="form-group">
+						            <label>Worksheet Type</label>
+						            <input type="text" class="form-control" required disabled value="Market Fares"/>
+						          </div>
+						          <div class="form-group">
+						            <label>Worksheet Name</label>
+						            <input type="text" class="form-control" required ng-model="workPackageFareSheet.marketFaresName"/>
+						          </div>
+						        </ng-form>
+						      </uib-tab>
+						      <uib-tab ng-if="vm.workPackage.waiverFareSheet.length > 0" ng-repeat="workPackageFareSheet in vm.workPackage.waiverFareSheet track by $index" heading="{{workPackageFareSheet.waiverFaresName}}">
+						        <ng-form name="nestedForm">
+						          <div class="form-group">
+						            <label>Worksheet Type</label>
+						            <input type="text" class="form-control" required disabled value="Waiver Fares"/>
+						          </div>
+						          <div class="form-group">
+						            <label>Worksheet Name</label>
+						            <input type="text" class="form-control" required ng-model="workPackageFareSheet.waiverFaresName"/>
 						          </div>
 						        </ng-form>
 						      </uib-tab>						      

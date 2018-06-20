@@ -1863,39 +1863,98 @@
 	            			return filter;
 	            		return null;
 	            	}
-//	                entity: result.$promise,
-//	                fareSelected: vm.selectedFareDiscount
 	            }
  	    	}).result.then(function(workPackageFareFilter) {
+ 	    		
+ 	    		function checkField(workPackageFareFilter, type, fare){
+ 	    			var listField = [
+    	    			workPackageFareFilter.no.check && workPackageFareFilter.no.search != null ? 'no' : null,
+    	    			workPackageFareFilter.status.check && workPackageFareFilter.status.search != null ? 'status' : null
+    	    		];
+ 	    			
+ 	    			var found = false;
+ 	    			if(type == 'and'){
+	 	    			found = true;
+	 	    			for(var x=0;x<listField.length;x++){
+	 	    				if(listField[x] != null){
+	 	    					if(fare[listField[x]] != workPackageFareFilter[listField[x]].search){
+	 	    						found = false;
+	 	    					}
+	 	    				}
+	 	    			}
+ 	    			}
+ 	    			else if(type == 'or'){
+ 	    				for(var x=0;x<listField.length;x++){
+	 	    				if(listField[x] != null){
+	 	    					if(fare[listField[x]] == workPackageFareFilter[listField[x]].search){
+	 	    						found = true;
+	 	    					}
+	 	    				}
+	 	    			}
+ 	    			}
+ 	    			return found;
+ 	    		}
+ 	    		
         	    if(workPackageFareFilter.find){
-        	    	var event = {shiftKey:true};
-        	    	
-    	    		var find = false;
-    	    		var index = 0;
+        	    	var index = 0;
     	    		if(workPackageFareFilter.index != null){
     	    			index = workPackageFareFilter.index;
     	    		}
+    	    		
+    	    		
+    	    		for(var i = 0; i < fareSheet.fares.length; i++){
+    	    			if(fareSheet.fares[i].field == null || fareSheet.fares[i].field == undefined){
+	    					fareSheet.fares[i].field = {};
+	    		    	}
+    	    			fareSheet.fares[i].field['no'] =  false;
+    	    		}
+    	    		
     	    		for(var i = index; i < fareSheet.fares.length; i++){
+    	    			var find = false;
+        	    		
     	    			if(fareSheet.fares[i].field == null || fareSheet.fares[i].field == undefined){
 	    					fareSheet.fares[i].field = {};
 	    		    	}
     	    			
     	    			fareSheet.fares[i].field['no'] =  false;
-    	    			if(workPackageFareFilter.no.check){
-    	    				if(fareSheet.fares[i].no == workPackageFareFilter.no.search){
-        	    				find = true;
-        	    				fareSheet.fares[i].field['no'] =  true;
-        	    				workPackageFareFilter.index = i;
-        	    			}
+    	    			
+    	    			if(workPackageFareFilter.andor == 'and'){
+    	    				if(checkField(workPackageFareFilter, 'and', fareSheet.fares[i])){
+    	    					find = true;
+    	    					fareSheet.fares[i].field['no'] =  true;
+    	    					
+    	    					if(i+1 == fareSheet.fares.length){
+    	    						workPackageFareFilter.index = 0;
+    	    					}
+    	    					else{
+    	    						workPackageFareFilter.index = i+1;
+    	    					}
+    	    					break;
+    	    				}
     	    			}
+    	    			else if(workPackageFareFilter.andor == 'or'){
+    	    				if(checkField(workPackageFareFilter, 'or', fareSheet.fares[i])){
+    	    					find = true;
+    	    					fareSheet.fares[i].field['no'] =  true;
+    	    					
+    	    					if(i+1 == fareSheet.fares.length){
+    	    						workPackageFareFilter.index = 0;
+    	    					}
+    	    					else{
+    	    						workPackageFareFilter.index = i+1;
+    	    					}
+    	    					break;
+    	    				}
+    	    			}    	    			
     	    		}
     	    		if(!find){
     	    			if(workPackageFareFilter.message == null){
     	    				workPackageFareFilter.message = "No Matches found, continue search at the beginning?";
     	    			}
+    	    			else{
+    	    				workPackageFareFilter.message = "No matches found";
+    	    			}
     	    		}
-        	    	
-        	    	
         	    	vm.searchReplace(fareSheet, workPackageFareFilter);
         	    }
         	    else if(workPackageFareFilter.replace){
@@ -1913,29 +1972,40 @@
 	    		    	}
     	    			
     	    			fareSheet.fares[i].field['no'] =  false;
-    	    			if(workPackageFareFilter.no.check){
-    	    				if(fareSheet.fares[i].no == workPackageFareFilter.no.search){
-        	    				find = true;
-        	    				
-        	    				if(!workPackageFareFilter.replaceAll){
-        	    					fareSheet.fares[i].field['no'] =  true;
-        	    				}
-        	    				workPackageFareFilter.index = i;
-        	    			}
-    	    			}
     	    			
-    	    			if(!find){
-        	    			if(workPackageFareFilter.status.check){
-        	    				if(fareSheet.fares[i].status == workPackageFareFilter.status.search){
-	        	    				find = true;
-	        	    				
-	        	    				if(!workPackageFareFilter.replaceAll){
-	        	    					fareSheet.fares[i].field['no'] =  true;
-	        	    				}
-	        	    				workPackageFareFilter.index = i;
-	        	    			}
-        	    			}
+    	    			if(workPackageFareFilter.andor == 'and'){
+    	    				if(checkField(workPackageFareFilter, 'and', fareSheet.fares[i])){
+    	    					find = true;
+    	    					
+    	    					if(!workPackageFareFilter.replaceAll){
+    	    						fareSheet.fares[i].field['no'] =  true;
+    	    					}
+    	    					if(i+1 == fareSheet.fares.length){
+    	    						workPackageFareFilter.index = 0;
+    	    					}
+    	    					else{
+    	    						workPackageFareFilter.index = i+1;
+    	    					}
+    	    					break;
+    	    				}
     	    			}
+    	    			else if(workPackageFareFilter.andor == 'or'){
+    	    				if(checkField(workPackageFareFilter, 'or', fareSheet.fares[i])){
+    	    					find = true;
+    	    					
+    	    					if(!workPackageFareFilter.replaceAll){
+    	    						fareSheet.fares[i].field['no'] =  true;
+    	    					}
+    	    					
+    	    					if(i+1 == fareSheet.fares.length){
+    	    						workPackageFareFilter.index = 0;
+    	    					}
+    	    					else{
+    	    						workPackageFareFilter.index = i+1;
+    	    					}
+    	    					break;
+    	    				}
+    	    			}    	    		
     	    			
     	    			if(find){
     	    				//replace
@@ -2648,9 +2718,6 @@
         	  }else{
         		  vm.workPackage.validate = false;
         	  }
-        	  
-        	  console.log("CREATED DATE");
-        	  console.log(vm.workPackage.createdDate);
               WorkPackage.update(vm.workPackage, onSaveSuccess, onSaveError);
           } else {
               WorkPackage.save(vm.workPackage, onSaveSuccess, onSaveError);
@@ -2663,7 +2730,7 @@
 	      var data = result;
     	      
 	      data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
-          data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+          data.newCreatedDate = DateUtils.convertDateTimeFromServer(data.createdDate);
           data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
           data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
           data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
@@ -4139,7 +4206,7 @@
       vm.mapWorkpackage = function(result){
     	  data = result;
   	  	  data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
-          data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+          data.newCreatedDate = DateUtils.convertDateTimeFromServer(data.createdDate);
           data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
           data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
           data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
@@ -4453,7 +4520,7 @@
     	  	vm.commentString = null;
     	  	$(document).ready(function(){
                 var _width = $('.comment-wrapper').outerWidth();
-	              $('.comment-list').css({ 'width': 'calc(100% + ' + _width+ 'px)' });
+	              $('.comment-list').css('min-width',_width)
 	        });
     	 }
 	  	
@@ -4466,31 +4533,15 @@
       
       
      
-      vm.viewCommentFillingInstruction = loadCommentFI();
-      function loadCommentFI() {
-    	  vm.viewCommentFillingInstruction =[];
-    	  for(var l = 0;l < vm.workPackage.filingInstructionData.length ; l++){
-    		  if(!vm.workPackage.filingInstructionData[l].isDeleted){
-    			  vm.viewCommentFillingInstruction.push(vm.workPackage.filingInstructionData[l]);
-    		  }
-    	  }
-    	  return vm.viewCommentFillingInstruction = vm.viewCommentFillingInstruction;
-      }
       
+     vm.isFilingInstructionCollapse = true;
+     
       vm.expandCommentFillingInstruction = function(){
-    	  vm.viewCommentFillingInstruction =[];
-    	  for(var l = 0;l < vm.workPackage.filingInstructionData.length ; l++){
-    		vm.viewCommentFillingInstruction.push(vm.workPackage.filingInstructionData[l]);
-    	  }
+    	  vm.isFilingInstructionCollapse = false;
       }
       
       vm.collapseCommentFillingInstruction = function(){
-    	  vm.viewCommentFillingInstruction =[];
-    	  for(var l = 0;l < vm.workPackage.filingInstructionData.length ; l++){
-    		  if(!vm.workPackage.filingInstructionData[l].isDeleted){
-    			  vm.viewCommentFillingInstruction.push(vm.workPackage.filingInstructionData[l]);
-    		  }
-    	  }
+    	  vm.isFilingInstructionCollapse = true;
       }
       vm.addCommentFillingInstruction = function() {
 	  	 	if (vm.commentStringFillingInstruction != null) {
@@ -4503,16 +4554,13 @@
 	     	  		createdTime :new Date()
 	 	  		 });
 	 	  		 vm.save();
-	 	  		 vm.commentStringFillingInstruction = null;
-	 	  		
-	 	  		 
-	 	  		
+	 	  		 vm.commentStringFillingInstruction = null;	 	  		
+	 	  		 	 	  		
 	 	  		 $(document).ready(function(){
 	                var _width = $('.comment-wrapper').outerWidth();
-		              $('.comment-list').css({ 'width': 'calc(100% + ' + _width+ 'px)' });
+		              $('.comment-list').css('min-width',_width)
 		        });
 	  	 	}
-	  	 	loadCommentFI();
      }
      
       vm.deleteCommentFillingInstruction = function(){
@@ -4520,8 +4568,6 @@
     		 vm.tempFIC[l].isDeleted = true;
     	 }
     	 vm.save();
-    	 vm.tempFIC = [];
-    	 loadCommentFI();
       }
       
       vm.tempFIC = [];
@@ -4533,8 +4579,7 @@
     			  if(vm.tempFIC.indexOf(data) > -1){
         			  vm.tempFIC.splice(vm.tempFIC.indexOf(data),1);    				  
     			  }
-    		  }
-    		  
+    		  }    		  
     	  }
        }
       
@@ -4556,7 +4601,7 @@
      	  	vm.ioString = null;
      	  	$(document).ready(function(){
                 var _width = $('.comment-wrapper').outerWidth();
-	              $('.comment-list').css({ 'width': 'calc(100% + ' + _width+ 'px)' });
+	              $('.comment-list').css('min-width',_width)
 	        });
      	 }
        }
@@ -4665,7 +4710,7 @@
     		  var data = result;
     	      
         	  data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
-              data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+              data.newCreatedDate = DateUtils.convertDateTimeFromServer(data.createdDate);
               data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
               data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
               data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
@@ -4687,7 +4732,7 @@
     		  var data = result;
     	      
         	  data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
-              data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+              data.newCreatedDate = DateUtils.convertDateTimeFromServer(data.createdDate);
               data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
               data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
               data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
