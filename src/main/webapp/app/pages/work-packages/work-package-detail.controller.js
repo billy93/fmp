@@ -2723,7 +2723,7 @@
 	      var data = result;
     	      
 	      data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
-          data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+          data.newCreatedDate = DateUtils.convertDateTimeFromServer(data.createdDate);
           data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
           data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
           data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
@@ -4199,7 +4199,7 @@
       vm.mapWorkpackage = function(result){
     	  data = result;
   	  	  data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
-          data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+          data.newCreatedDate = DateUtils.convertDateTimeFromServer(data.createdDate);
           data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
           data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
           data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
@@ -4725,7 +4725,7 @@
     		  var data = result;
     	      
         	  data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
-              data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+              data.newCreatedDate = DateUtils.convertDateTimeFromServer(data.createdDate);
               data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
               data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
               data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
@@ -4747,7 +4747,7 @@
     		  var data = result;
     	      
         	  data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
-              data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+              data.newCreatedDate = DateUtils.convertDateTimeFromServer(data.createdDate);
               data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
               data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
               data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
