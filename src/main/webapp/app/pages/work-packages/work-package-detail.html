@@ -313,7 +313,7 @@
 							    <li ng-if="vm.workPackage.addon" ng-class="{active:vm.currentAddonTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.addonFareSheet track by $index"><a ng-click="vm.selectAddonTab($index);">Addon Fares : {{vm.workPackage.addonFareSheet[$index].addonFaresName}}</a></li>
 							    <li ng-if="vm.workPackage.filingInstruction" ng-class="{active:vm.currentTabFilingInstruction}"><a ng-click="vm.selectOtherTab('filingInstruction')">Filing Instruction</a></li>
 							    <li ng-if="vm.workPackage.attachment" ng-class="{active:vm.currentTabAttachment}"><a ng-click="vm.selectOtherTab('attachment')">Attachment</a></li>
-							    <li ng-if="vm.workPackage.filingDetails" ng-class="{active:vm.currentTabFilingDetail}"><a ng-click="vm.selectOtherTab('filingDetail')">Filling Details</a></li>
+							    <li ng-if="vm.workPackage.fareSheet.length > 0 || vm.workPackage.addonFareSheet.length > 0" ng-class="{active:vm.currentTabFilingDetail}"><a ng-click="vm.selectOtherTab('filingDetail')">Filling Details</a></li>
 							</ul>
 							
 							<div class="tab-content">
@@ -1312,7 +1312,7 @@
 								     </div>
 								</div>
 								
-								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+vm.workPackage.addonFareSheet.length+2}}" ng-class="{active:vm.currentTabFilingDetail}" ng-if="vm.workPackage.filingDetails">
+								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+vm.workPackage.addonFareSheet.length+2}}" ng-class="{active:vm.currentTabFilingDetail}" ng-if="vm.workPackage.fareSheet.length > 0 || vm.workPackage.addonFareSheet.length > 0">
 									<div class="tab-content wp">
 										<div class="clearfix">
 											<div class="pull-left w20 ph5px">
@@ -1501,7 +1501,7 @@
 					          </li>
 					          <li ng-if="vm.workPackage.filingInstruction" ng-class="{active:vm.currentTabFilingInstruction}"><a ng-click="vm.selectOtherTab('filingInstruction')">Filing Instruction</a></li>
 					          <li ng-if="vm.workPackage.attachment" ng-class="{active:vm.currentTabAttachment}"><a ng-click="vm.selectOtherTab('attachment')">Attachment</a></li>
-					          <li ng-class="{active:vm.currentTabFilingDetail}"><a ng-click="vm.selectOtherTab('filingDetail')">Filling Details</a></li>
+					          <li ng-if="vm.workPackage.discountFareSheet.length > 0"  ng-class="{active:vm.currentTabFilingDetail}"><a ng-click="vm.selectOtherTab('filingDetail')">Filling Details</a></li>
 					      </ul>
 				      
 				      
@@ -2125,7 +2125,7 @@
 							     </div>
 							</div>
 					        
-					        <div class="tab-pane" ng-class="{active:vm.currentTabFilingDetail}">
+					        <div class="tab-pane" ng-class="{active:vm.currentTabFilingDetail}" ng-if="vm.workPackage.discountFareSheet.length > 0" >
 			          	
 								<div class="tab-content wp">
 								<div class="clearfix">
