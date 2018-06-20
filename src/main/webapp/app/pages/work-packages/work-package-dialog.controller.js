@@ -11,11 +11,13 @@
         var vm = this;
 
         vm.workPackage = entity;
+        
         vm.workPackage.fareSheet = [{fareCarrier:'GA'}];
         vm.workPackage.addonFareSheet = [{fareCarrier:'GA'}];
         vm.workPackage.discountFareSheet = [{fareCarrier:'GA'}];
         vm.workPackage.marketFareSheet = [{fareCarrier:'GA'}];
         vm.workPackage.waiverFareSheet = [{fareCarrier:'GA'}];
+        
         vm.reviewLevels = reviewLevels;
         vm.businessAreas = businessAreas;
         
@@ -65,6 +67,21 @@
 
         function save () {
             vm.isSaving = true;
+            if(!vm.workPackage.specifiedFares){
+            	 vm.workPackage.fareSheet = [];            	 
+            }
+            if(!vm.workPackage.addon){            	
+            	vm.workPackage.addonFareSheet = [];            	             	
+            }
+            if(!vm.workPackage.discount){
+            	vm.workPackage.discountFareSheet = [];
+            }
+            if(!vm.workPackage.marketFares){
+            	vm.workPackage.marketFareSheet = [];
+            }
+            if(!vm.workPackage.waiverFares){
+            	vm.workPackage.waiverFareSheet = [];
+            }
             if (vm.workPackage.id !== null) {
                 WorkPackage.update(vm.workPackage, onSaveSuccess, onSaveError);
             } else {
