@@ -2628,7 +2628,7 @@ public class WorkPackageResource {
 					    		err1.setMessage("Name is required");
 					    		errors.add(err1);
 							}
-							if(wpfs.getDiscountFareType() == null || wpfs.getDiscountFareType().contentEquals("")) {
+							if(wpfs.getFareType() == null || wpfs.getFareType().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Fare Type is required");
@@ -2756,7 +2756,7 @@ public class WorkPackageResource {
 					    		err1.setMessage("Name is required");
 					    		errors.add(err1);
 							}
-							if(wpfs.getDiscountFareType() == null || wpfs.getDiscountFareType().contentEquals("")) {
+							if(wpfs.getFareType() == null || wpfs.getFareType().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Fare Type is required");
