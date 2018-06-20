@@ -276,7 +276,6 @@ public class WorkPackageResource {
     public ResponseEntity<WorkPackage> reuseWorkPackage(@RequestBody WorkPackage wp) throws URISyntaxException {
         log.debug("REST request to save reuse WorkPackage : {}", wp);
         
-//        WorkPackage wp = workPackageService.findOne(workPackage.getId());
         wp.setReuseFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
@@ -291,10 +290,8 @@ public class WorkPackageResource {
         wp.setLastModifiedBy(null);
         wp.setLastModifiedDate(null);
         wp.setFilingInstruction(false);
-//        if(!wp.getReuseReplaceConfig().isAttachment()) {
-//        	wp.setAttachment(false);
-//        	wp.getAttachmentData().clear();
-//        }
+        wp.setPriority(null);
+        
         for(WorkPackageFareSheet wps : wp.getFareSheet()) {
         	for(WorkPackageFare fare : wps.getFares()) {
         		fare.setStatus("PENDING");
@@ -320,6 +317,10 @@ public class WorkPackageResource {
         		fare.setStatus("PENDING");
         	}
         }
+        
+        wp.setStatus(Status.NEW);
+        wp.setQueuedDate(ZonedDateTime.now());
+        
         WorkPackage result = workPackageService.save(wp);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -342,10 +343,9 @@ public class WorkPackageResource {
      */
     @PostMapping("/work-packages/replace")
     @Timed
-    public ResponseEntity<WorkPackage> replaceWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
-        log.debug("REST request to save reuse WorkPackage : {}", workPackage);
+    public ResponseEntity<WorkPackage> replaceWorkPackage(@RequestBody WorkPackage wp) throws URISyntaxException {
+        log.debug("REST request to save reuse WorkPackage : {}", wp);
                
-        WorkPackage wp = workPackageService.findOne(workPackage.getId());
         wp.setReplaceFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
@@ -356,6 +356,8 @@ public class WorkPackageResource {
         wp.setCreatedDate(null);
         wp.setLastModifiedBy(null);
         wp.setLastModifiedDate(null);
+        wp.setPriority(null);
+        
 //        if(!workPackage.getReuseReplaceConfig().isAttachment()) {
 //        	wp.setAttachment(false);
 //        	wp.getAttachmentData().clear();
