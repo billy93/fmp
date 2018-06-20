@@ -1,6 +1,7 @@
 package com.atibusinessgroup.fmp.domain;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -120,7 +121,7 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     private ZonedDateTime distributionDate;
         
     @Field("queued_date")
-    private ZonedDateTime queuedDate;
+    private Instant queuedDate;
     
     @Field("filling_status")
     private Status fillingStatus;
@@ -184,11 +185,11 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 		this.attachmentApprovalReference = attachmentApprovalReference;
 	}
 	
-    public ZonedDateTime getQueuedDate() {
+    public Instant getQueuedDate() {
 		return queuedDate;
 	}
 
-	public void setQueuedDate(ZonedDateTime queuedDate) {
+	public void setQueuedDate(Instant queuedDate) {
 		this.queuedDate = queuedDate;
 	}
 
