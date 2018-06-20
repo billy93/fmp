@@ -5,6 +5,8 @@ public class CollectionName {
 	public final static String ATPCO_RECORD_0 = "atpco_record_0";
 	public final static String ATPCO_RECORD_1 = "atpco_record_1";
 	public final static String ATPCO_RECORD_2 = "atpco_record_2";
+	public final static String ATPCO_RECORD_2_10 = "atpco_record_2_10";
+	public final static String ATPCO_RECORD_2_25 = "atpco_record_2_25";
 	public final static String ATPCO_RECORD_3_CAT_001 = "atpco_record_3_cat_001";
 	public final static String ATPCO_RECORD_3_CAT_002 = "atpco_record_3_cat_002";
 	public final static String ATPCO_RECORD_3_CAT_003 = "atpco_record_3_cat_003";

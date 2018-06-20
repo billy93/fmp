@@ -136,6 +136,8 @@ public class AfdQueryResource {
         
         Date focusDate = null;
         
+        atpcoRecordService.compareFareClass(null, null);
+        
         for (AtpcoFareAfdQueryWithRecords a1fare:a1fares) {
         	AtpcoFare afare = a1fare.getAtpcoFare();
         	AtpcoRecord1 matchedRecord1 = null;
@@ -148,8 +150,6 @@ public class AfdQueryResource {
         		
         		if (matched) {
         			matchedRecord1 = record1;
-        			log.debug("MATCH FOUND " + afare.getFareClassCode());
-        			log.debug(matchedRecord1.toString());
         			break;
         		}
         	}
