@@ -1495,10 +1495,4 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 	public void setDistributionReviewLevel(String distributionReviewLevel) {
 		this.distributionReviewLevel = distributionReviewLevel;
 	}
-	
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return this.getCreatedDate().toString();
-	}
 }

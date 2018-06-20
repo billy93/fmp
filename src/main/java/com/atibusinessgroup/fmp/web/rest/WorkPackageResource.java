@@ -385,6 +385,10 @@ public class WorkPackageResource {
         		fare.setStatus("PENDING");
         	}
         }
+        
+        wp.setStatus(Status.NEW);
+        wp.setQueuedDate(ZonedDateTime.now());
+        
         WorkPackage result = workPackageService.save(wp);
         
         WorkPackageHistory history = new WorkPackageHistory();
