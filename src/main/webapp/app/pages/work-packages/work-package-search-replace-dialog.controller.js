@@ -26,9 +26,9 @@
         	
         	if(vm.filter.message != null){
         		if(confirm(vm.filter.message)){
-        			vm.filter.index = 0;
-        			vm.filter.message = null;
-        			$uibModalInstance.close(vm.filter);
+//        			vm.filter.index = 0;
+        			//vm.filter.message = null;
+        			$uibModalInstance.close(vm.filter);        			
         		}
         	}
         }
