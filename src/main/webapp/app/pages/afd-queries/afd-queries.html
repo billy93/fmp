@@ -427,7 +427,7 @@
 			                	<td><span ng-if="afdQuery.discontinueDate != 'indef'">{{afdQuery.discontinueDate | date:'ddMMMyyyy':vm.timezone}}</span></td>
 			                	<td><span ng-if="afdQuery.gfsDate != undefined && afdQuery.gfsDate != null">{{afdQuery.gfsDate | date:'ddMMMyyyy':vm.timezone}} - {{afdQuery.gfsReference}}</span></td>
 			                	<td>{{afdQuery.globalIndicator}}</td>
-			                	<td><span ng-if="afdQuery.ruleFocusDate != 'indef'">{{afdQuery.ruleFocusDate | date:'ddMMMyyyy':vm.timezone}}</span></td>
+			                	<td><span ng-if="afdQuery.ruleFocusDate != 'indef'">{{afdQuery.focusDate | date:'ddMMMyyyy':vm.timezone}}</span></td>
 			                	<td></td>
 			                	<td><span ng-if="afdQuery.travelStartDate != 'indef'">{{afdQuery.travelStartDate | date:'ddMMMyyyy':vm.timezone}}</span></td>
 			                	<td><span ng-if="afdQuery.travelEndDate != 'indef'">{{afdQuery.travelEndDate | date:'ddMMMyyyy':vm.timezone}}</span></td>

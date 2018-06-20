@@ -15,6 +15,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -91,7 +92,7 @@ import com.atibusinessgroup.fmp.repository.TariffNumberRepository;
 import com.atibusinessgroup.fmp.repository.UserRepository;
 import com.atibusinessgroup.fmp.repository.WorkPackageFareHistoryDataRepository;
 import com.atibusinessgroup.fmp.repository.WorkPackageHistoryDataRepository;
-import com.atibusinessgroup.fmp.repository.WorkPackagefilterRepository;
+import com.atibusinessgroup.fmp.repository.WorkPackageFilterRepository;
 import com.atibusinessgroup.fmp.security.SecurityUtils;
 import com.atibusinessgroup.fmp.service.BusinessAreaService;
 import com.atibusinessgroup.fmp.service.MailService;
@@ -149,11 +150,11 @@ public class WorkPackageResource {
     private final PriorityRepository priorityRepository;
     private final MailService mailService;
     private final TariffNumberRepository tariffNumberRepository;
-    private final WorkPackagefilterRepository packagefilterRepository;
+    private final WorkPackageFilterRepository packagefilterRepository;
     
     public WorkPackageResource(WorkPackageService workPackageService, WorkPackageFareService workPackageFareService, TargetDistributionService targetDistributionService, BusinessAreaService businessAreaService, ReviewLevelService reviewLevelService, UserService userService, UserRepository userRepository, WorkPackageHistoryService workPackageHistoryService,
     		ContractFMPRepository contractFMPRepository, FormRepository formRepository, WorkPackageHistoryDataRepository workPackageHistoryDataRepository,
-    		WorkPackageFareHistoryDataRepository workPackageFareHistoryDataRepository, ContractFareFMPRepository contractFareFMPRepository, CounterRepository counterRepository, PriorityRepository priorityRepository, MailService mailService, TariffNumberRepository tariffNumberRepository, WorkPackagefilterRepository packagefilterRepository) {
+    		WorkPackageFareHistoryDataRepository workPackageFareHistoryDataRepository, ContractFareFMPRepository contractFareFMPRepository, CounterRepository counterRepository, PriorityRepository priorityRepository, MailService mailService, TariffNumberRepository tariffNumberRepository, WorkPackageFilterRepository packagefilterRepository) {
         this.workPackageService = workPackageService;
         this.workPackageFareService = workPackageFareService;
         this.targetDistributionService = targetDistributionService;
@@ -216,7 +217,7 @@ public class WorkPackageResource {
         }
         
         workPackage.setStatus(Status.NEW);
-        workPackage.setQueuedDate(ZonedDateTime.now());
+        workPackage.setQueuedDate(Instant.now());
         
         WorkPackage result = workPackageService.save(workPackage);
         
@@ -276,7 +277,6 @@ public class WorkPackageResource {
     public ResponseEntity<WorkPackage> reuseWorkPackage(@RequestBody WorkPackage wp) throws URISyntaxException {
         log.debug("REST request to save reuse WorkPackage : {}", wp);
         
-//        WorkPackage wp = workPackageService.findOne(workPackage.getId());
         wp.setReuseFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
@@ -291,10 +291,8 @@ public class WorkPackageResource {
         wp.setLastModifiedBy(null);
         wp.setLastModifiedDate(null);
         wp.setFilingInstruction(false);
-//        if(!wp.getReuseReplaceConfig().isAttachment()) {
-//        	wp.setAttachment(false);
-//        	wp.getAttachmentData().clear();
-//        }
+        wp.setPriority(null);
+        
         for(WorkPackageFareSheet wps : wp.getFareSheet()) {
         	for(WorkPackageFare fare : wps.getFares()) {
         		fare.setStatus("PENDING");
@@ -320,6 +318,10 @@ public class WorkPackageResource {
         		fare.setStatus("PENDING");
         	}
         }
+        
+        wp.setStatus(Status.NEW);
+        wp.setQueuedDate(Instant.now());
+        
         WorkPackage result = workPackageService.save(wp);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -342,10 +344,9 @@ public class WorkPackageResource {
      */
     @PostMapping("/work-packages/replace")
     @Timed
-    public ResponseEntity<WorkPackage> replaceWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
-        log.debug("REST request to save reuse WorkPackage : {}", workPackage);
+    public ResponseEntity<WorkPackage> replaceWorkPackage(@RequestBody WorkPackage wp) throws URISyntaxException {
+        log.debug("REST request to save reuse WorkPackage : {}", wp);
                
-        WorkPackage wp = workPackageService.findOne(workPackage.getId());
         wp.setReplaceFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
@@ -356,6 +357,8 @@ public class WorkPackageResource {
         wp.setCreatedDate(null);
         wp.setLastModifiedBy(null);
         wp.setLastModifiedDate(null);
+        wp.setPriority(null);
+        
 //        if(!workPackage.getReuseReplaceConfig().isAttachment()) {
 //        	wp.setAttachment(false);
 //        	wp.getAttachmentData().clear();
@@ -385,6 +388,10 @@ public class WorkPackageResource {
         		fare.setStatus("PENDING");
         	}
         }
+        
+        wp.setStatus(Status.NEW);
+        wp.setQueuedDate(Instant.now());
+        
         WorkPackage result = workPackageService.save(wp);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -1880,14 +1887,14 @@ public class WorkPackageResource {
     @PutMapping("/work-packages")
     @Timed
     public ResponseEntity<WorkPackage> updateWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
-        log.debug("REST request to update WorkPackage : {}", workPackage);
+        log.debug("REST request to update WorkPackage : {}", workPackage.toString());
         
         boolean isWorkPackageNew = false;
         
         if (workPackage.getId() == null) {
             return createWorkPackage(workPackage);
         }
-        
+
     	if(workPackage.getWpid() == null) {
     		isWorkPackageNew = true;
     		
@@ -1908,6 +1915,21 @@ public class WorkPackageResource {
     		workPackage.setWpid(year+nf.format(c.getSequenceValue()+1));
         }
     	
+    	if(!workPackage.isSpecifiedFares()) {
+    		workPackage.getFareSheet().clear();
+    	}
+    	if(!workPackage.isWaiverFares()) {
+    		workPackage.getWaiverFareSheet().clear();
+    	}
+    	if(!workPackage.isMarketFares()) {
+    		workPackage.getMarketFareSheet().clear();
+    	}
+    	if(!workPackage.isDiscount()) {
+    		workPackage.getDiscountFareSheet().clear();
+    	}
+    	if(!workPackage.isAddon()) {
+    		workPackage.getAddonFareSheet().clear();
+    	}
     	if(workPackage.getComment() != null) {
 	    	for(Comment comments : workPackage.getComment()) {
 	    		if(comments.getUsername() == null && comments.getCreatedTime() == null) {
@@ -2064,6 +2086,96 @@ public class WorkPackageResource {
 		int warningsCount = 0;
 		List<WorkPackage.Validation.Tab> tabs = new ArrayList<WorkPackage.Validation.Tab>();
 		
+		//Validasi Header
+		WorkPackage.Validation.Tab tabHeader = new WorkPackage.Validation.Tab();
+		tabHeader.setName("HEADER");
+		List<WorkPackage.Validation.Tab.Error> errorHeader = new ArrayList<>();
+		
+		if(workPackage.getTargetDistribution().toUpperCase().contentEquals("ATPCO")) {
+			if(workPackage.getReviewLevel().toUpperCase().contentEquals("LSO")) {
+				if(workPackage.getSaleDate() == null) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Sale start date is required");
+		    		errorHeader.add(err1);
+				}
+				if(workPackage.getBusinessArea() == null || workPackage.getBusinessArea().contentEquals("")) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Business area is required");
+		    		errorHeader.add(err1);
+				}
+				if(workPackage.getName() == null || workPackage.getName().contentEquals("")) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Name is required");
+		    		errorHeader.add(err1);
+				}
+			}else if(workPackage.getReviewLevel().toUpperCase().contentEquals("HO")) {
+				if(workPackage.getSaleDate() == null) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Sale start date is required");
+		    		errorHeader.add(err1);
+				}
+				if(workPackage.getBusinessArea() == null || workPackage.getBusinessArea().contentEquals("")) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Business area is required");
+		    		errorHeader.add(err1);
+				}
+				if(workPackage.getName() == null || workPackage.getName().contentEquals("")) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Name is required");
+		    		errorHeader.add(err1);
+				}
+				if(workPackage.getFilingDate() == null) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Filing date is required");
+		    		errorHeader.add(err1);
+				}
+				if(workPackage.getInterofficeComment() == null || workPackage.getInterofficeComment().size() < 1) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("IN is required");
+		    		errorHeader.add(err1);
+				}
+			}
+			
+			tabHeader.setError(errorHeader);
+			
+			errorsCount += errorHeader.size();
+	    	if(errorHeader.size() > 0 || errorHeader.size() > 0) {
+	    		tabs.add(tabHeader);
+	    	}
+			
+		}else if(workPackage.getTargetDistribution().toUpperCase().contentEquals("MARKET")) {
+			if(workPackage.getReviewLevel().toUpperCase().contentEquals("LSO")) {
+				if(workPackage.getName() == null || workPackage.getName().contentEquals("")) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Name is required");
+		    		errorHeader.add(err1);
+				}		
+			}else if(workPackage.getReviewLevel().toUpperCase().contentEquals("HO")) {
+				if(workPackage.getName() == null || workPackage.getName().contentEquals("")) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Name is required");
+		    		errorHeader.add(err1);
+				}
+				if(workPackage.getDistributionDate() == null) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Name is required");
+		    		errorHeader.add(err1);
+				}
+				if(workPackage.getInterofficeComment() == null || workPackage.getInterofficeComment().size() < 1) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("IN is required");
+		    		errorHeader.add(err1);
+				}
+			}
+			
+			tabHeader.setError(errorHeader);
+			
+			errorsCount += errorHeader.size();
+	    	if(errorHeader.size() > 0 || errorHeader.size() > 0) {
+	    		tabs.add(tabHeader);
+	    	}
+		}
+					
 		//Validasi Fare
 		for(WorkPackageFareSheet wpfs : workPackage.getFareSheet()) {
 			WorkPackage.Validation.Tab tab1 = new WorkPackage.Validation.Tab();
@@ -2227,7 +2339,7 @@ public class WorkPackageResource {
 						    		errors.add(err1);
 								}
 							}
-						}else if(workPackage.getReviewLevel().contentEquals("Distribution")) {
+						}else if(workPackage.getReviewLevel().toUpperCase().contentEquals("DISTRIBUTION")) {
 							if(fare.getTariffNumber().getTarCd() == null || fare.getTariffNumber().getTarCd().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
@@ -2425,7 +2537,7 @@ public class WorkPackageResource {
 						    		errors.add(err1);
 								}
 							}
-						}else if(workPackage.getReviewLevel().contentEquals("Distribution")) {
+						}else if(workPackage.getReviewLevel().toUpperCase().contentEquals("DISTRIBUTION")) {
 							if(fare.getTariffNumber().getTarNo() == null || fare.getTariffNumber().getTarNo().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
@@ -2532,7 +2644,7 @@ public class WorkPackageResource {
 					    		err1.setMessage("Name is required");
 					    		errors.add(err1);
 							}
-							if(wpfs.getDiscountFareType() == null || wpfs.getDiscountFareType().contentEquals("")) {
+							if(wpfs.getFareType() == null || wpfs.getFareType().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Fare Type is required");
@@ -2660,7 +2772,7 @@ public class WorkPackageResource {
 					    		err1.setMessage("Name is required");
 					    		errors.add(err1);
 							}
-							if(wpfs.getDiscountFareType() == null || wpfs.getDiscountFareType().contentEquals("")) {
+							if(wpfs.getFareType() == null || wpfs.getFareType().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Fare Type is required");
@@ -2793,7 +2905,7 @@ public class WorkPackageResource {
 						    		errors.add(err1);
 								}
 							}
-						}else if(workPackage.getReviewLevel().contentEquals("Distribution")) {
+						}else if(workPackage.getReviewLevel().toUpperCase().contentEquals("DISTRIBUTION")) {
 							if(fare.getTarcd()== null || fare.getTarcd().contentEquals("")) {									
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
@@ -3626,7 +3738,7 @@ public class WorkPackageResource {
 	        	fareVersion.version = sheet.fareVersion.size() + 1;
 	        	sheet.fareVersion.add(fareVersion);
 	        }
-	        result.setQueuedDate(ZonedDateTime.now());
+	        result.setQueuedDate(Instant.now());
 	        workPackageService.save(result);  
 	        
 	        saveHistoryData(workPackage);
@@ -3685,7 +3797,7 @@ public class WorkPackageResource {
         
         WorkPackage result = workPackageService.findOne(workPackage.getId());
         result.setStatus(Status.WITHDRAWN);
-        result.setQueuedDate(ZonedDateTime.now());
+        result.setQueuedDate(Instant.now());
         workPackageService.save(result);
         /*
         saveHistoryData(workPackage);
@@ -3820,7 +3932,7 @@ public class WorkPackageResource {
         	fareVersion.version = sheet.fareVersion.size() + 1;
         	sheet.fareVersion.add(fareVersion);
         }
-        result.setQueuedDate(ZonedDateTime.now());
+        result.setQueuedDate(Instant.now());
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -3863,7 +3975,7 @@ public class WorkPackageResource {
         }
 		result.setLocked(false);
         result.setStatus(Status.PENDING);
-        result.setQueuedDate(ZonedDateTime.now());
+        result.setQueuedDate(Instant.now());
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -3918,7 +4030,7 @@ public class WorkPackageResource {
 //    		result.setLocked(false);
 //    		result.setStatus(Status.PENDING);        		
 //	    }
-        workPackage.setQueuedDate(ZonedDateTime.now());
+        workPackage.setQueuedDate(Instant.now());
         workPackageService.save(workPackage);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -4149,7 +4261,7 @@ public class WorkPackageResource {
         result.setDistributionReviewLevel(null);
         result.setStatus(Status.REFERRED);
 		result.setLocked(false);
-		result.setQueuedDate(ZonedDateTime.now());
+		result.setQueuedDate(Instant.now());
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -4188,7 +4300,7 @@ public class WorkPackageResource {
         result.setDistributionReviewLevel(result.getDistributionReviewLevel());
         result.setStatus(Status.DISTRIBUTED);
 		result.setLocked(false);
-		result.setQueuedDate(ZonedDateTime.now());
+		result.setQueuedDate(Instant.now());
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();

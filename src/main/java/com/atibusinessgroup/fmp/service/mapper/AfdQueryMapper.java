@@ -31,7 +31,7 @@ public class AfdQueryMapper {
 	}
 	
 	public AfdQuery convertAtpcoFare(AtpcoFare afare, AtpcoRecord1 record1, List<CategoryObject> cat03s, List<CategoryObject> cat05s, List<CategoryObject> cat06s, List<CategoryObject> cat07s, 
-			List<CategoryObject> cat14s, List<CategoryObject> cat15s, List<CategoryObject> footnote14s, List<CategoryObject> footnote15s, Date queryDateFrom, Date queryDateTo) {
+			List<CategoryObject> cat14s, List<CategoryObject> cat15s, List<CategoryObject> footnote14s, List<CategoryObject> footnote15s, Date focusDate) {
 
 		AfdQuery result = new AfdQuery();
 		
@@ -65,16 +65,24 @@ public class AfdQueryMapper {
 		//AtpcoRecord1 attributes
 		if (record1 != null) {
 			for (AtpcoRecord1FareClassInformation fci:record1.getFareClassInformation()) {
-				result.setBookingClass(fci.getRbd1());
+				String rbds = "";
+				for (String rbd:fci.getRbd()) {
+					if (rbd != null && !rbd.trim().isEmpty()) {
+						rbds += rbd + ", ";
+					}
+				}
+				result.setBookingClass(!rbds.isEmpty() ? rbds.substring(0, rbds.length() - 2) : "");
 				result.setPaxType(fci.getPassengerType());
 			}
 			
 			result.setSeason(record1.getSeasonType());
 			result.setFareType(record1.getFareType());
 			
-			if (result.getFareType() != null && !result.getFareType().isEmpty()) {
-				AtpcoMasterFareMatrix fareMatrix = atpcoMasterFareMatrixService.findOneByFareTypeCode(result.getFareType());
-				result.setCabin(fareMatrix.getCabinCode());
+			if (result.getFareType() != null && !result.getFareType().trim().isEmpty()) {
+				AtpcoMasterFareMatrix fareMatrix = atpcoMasterFareMatrixService.findOneByFareTypeCode(result.getFareType().trim());
+				if (fareMatrix != null) {
+					result.setCabin(fareMatrix.getCabinCode());
+				}
 			}
 		}
 		
@@ -153,24 +161,7 @@ public class AfdQueryMapper {
 			}
 		}
 		
-		//Rule Focus Date
-//		Date ruleFocusDate = null;
-//		Date effDate = DateUtil.convertObjectToDate(result.getEffectiveDate());
-//		Date discDate = DateUtil.convertObjectToDate(result.getDiscontinueDate());
-//		
-//		if (queryDateFrom != null && queryDateTo != null) {
-//			
-//		}
-//		
-//		if (queryDateFrom == null && queryDateTo == null) {
-//			ruleFocusDate = new Date();
-//		} else {
-//			if (queryDateFrom != null && queryDateTo == null) {
-//				
-//			}
-//		}
-		
-//		result.setRuleFocusDate(ruleFocusDate);
+		result.setFocusDate(focusDate);
 		
 		return result;
 	}

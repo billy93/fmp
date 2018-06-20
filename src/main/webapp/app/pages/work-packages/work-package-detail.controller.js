@@ -20,8 +20,8 @@
      * @param Clipboard
      * @returns
      */
-    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities', 'states', 'cityGroups', 'Currency', 'atpcoFareTypes', 'ClipboardSheet'];
-    function WorkPackageDetailController($window, $sce, currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups, Currency, atpcoFareTypes, ClipboardSheet) {
+    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber','tariffNumberAddOn', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities', 'states', 'cityGroups', 'Currency', 'atpcoFareTypes', 'ClipboardSheet'];
+    function WorkPackageDetailController($window, $sce, currencies,tariffNumber,tariffNumberAddOn, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups, Currency, atpcoFareTypes, ClipboardSheet) {
     	var vm = this;
 
     	window.onbeforeunload = function () {
@@ -59,6 +59,7 @@
         vm.account = null;
         vm.workPackage = entity;
         vm.tariffNumber = tariffNumber;
+        vm.tariffNumberAddOn = tariffNumberAddOn;
         vm.cities = cities;
         vm.states = states;
         vm.cityGroups = cityGroups;
@@ -1127,6 +1128,39 @@
         		vm.workPackage.filingInstruction = true;
         		vm.selectOtherTab('filingInstruction');
         	}
+        	
+        	
+
+            if(vm.workPackage.fareSheet.length > 0){
+              	for(var x=0;x<vm.workPackage.fareSheet.length;x++){
+              		vm.changeVersion(vm.workPackage.fareSheet[x], 'current'); 
+              	}
+              }
+              
+              if(vm.workPackage.addonFareSheet.length > 0){
+              	for(var x=0;x<vm.workPackage.addonFareSheet.length;x++){
+              		vm.changeVersion(vm.workPackage.addonFareSheet[x], 'current'); 
+              	}
+              }
+              
+              if(vm.workPackage.marketFareSheet.length > 0){
+              	for(var x=0;x<vm.workPackage.marketFareSheet.length;x++){
+              		vm.changeVersion(vm.workPackage.marketFareSheet[x], 'current');                	
+              	}
+              }
+              
+              
+              if(vm.workPackage.discountFareSheet.length > 0){
+              	for(var x=0;x<vm.workPackage.discountFareSheet.length;x++){
+              		vm.changeVersion(vm.workPackage.discountFareSheet[x], 'current');
+              	}
+              }
+              
+              if(vm.workPackage.waiverFareSheet.length > 0){
+              	for(var x=0;x<vm.workPackage.waiverFareSheet.length;x++){
+              		vm.changeVersion(vm.workPackage.waiverFareSheet[x], 'current');
+              	}
+              }
         };
         
         vm.removeTab = function(){
@@ -1549,45 +1583,49 @@
         };
         
         vm.removeSheet = function(){
-        	var removed = vm.removeTab();
-        	if(!removed){
-        		alert('Sheet cannot be deleted');
-        	}
-        	else{
-        		alert('Sheet deleted');
+        	if(vm.workPackage.reviewLevel != 'DISTRIBUTION'){
+	        	var removed = vm.removeTab();
+	        	if(!removed){
+	        		alert('Sheet cannot be deleted');
+	        	}
+	        	else{
+	        		alert('Sheet deleted');
+	        	}
         	}
         };
         //END SHEET FUNCTION
         
         vm.pasteSheet = function(){
 //        	alert('Paste Sheet');
-        	$uibModal.open({
-                templateUrl: 'app/pages/work-packages/work-package-add-sheet-dialog.html',
-                controller: 'WorkPackageAddSheetDialogController',
-                controllerAs: 'vm',
-                backdrop: 'static',
-                size: 'lg',
-                windowClass: 'full-page-modal',
-                resolve: {
-                	workPackage: function(){
-                		return vm.workPackage;
-                	},
-                    fareTypes: ['FareType', function(FareType) {
-                        return FareType.getAll().$promise;
-                    }],
-                    sheet: function(){
-                    	return ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
-                    }
-                }
-			}).result.then(function(option) {
-				var clipboardSheet = ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
-				clipboardSheet.then(function(result){
-					vm.addTab(option, result.sheet.fares);
-					alert('Paste Sheet Success');
-				});
-            }, function() {
-        			
-            });
+        	if(vm.workPackage.reviewLevel != 'DISTRIBUTION'){
+	        	$uibModal.open({
+	                templateUrl: 'app/pages/work-packages/work-package-add-sheet-dialog.html',
+	                controller: 'WorkPackageAddSheetDialogController',
+	                controllerAs: 'vm',
+	                backdrop: 'static',
+	                size: 'lg',
+	                windowClass: 'full-page-modal',
+	                resolve: {
+	                	workPackage: function(){
+	                		return vm.workPackage;
+	                	},
+	                    fareTypes: ['FareType', function(FareType) {
+	                        return FareType.getAll().$promise;
+	                    }],
+	                    sheet: function(){
+	                    	return ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
+	                    }
+	                }
+				}).result.then(function(option) {
+					var clipboardSheet = ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
+					clipboardSheet.then(function(result){
+						vm.addTab(option, result.sheet.fares);
+						alert('Paste Sheet Success');
+					});
+	            }, function() {
+	        			
+	            });
+        	}
         };
         
         vm.faresActionButton = [];
@@ -1729,13 +1767,86 @@
        	  	}
  	    	
     		fareSheet.fares.push({
+    			no:fareSheet.fares.length+1,
     			status:"PENDING",
     			action:"New",
   	 	      	carrier:"GA"
     		});
  	    }
  	    
- 	    vm.searchReplace = function(fareSheet){
+ 	   function getDescendantProp (obj, desc) {
+ 		  var arr = desc.split('.');
+ 		  while (arr.length && (obj = obj[arr.shift()]));
+ 		  return obj;
+ 		}
+ 	   
+ 	   function sortBy(field, type) {
+ 		   if(type == 'asc'){
+	 		    return function(a, b) {
+	 		    	if(getDescendantProp(a, field) === null){
+ 			          return -1;
+ 			        }
+ 			        else if(getDescendantProp(b, field) === null){
+ 			          return 1;
+ 			        }
+ 			        else if (getDescendantProp(a, field) > getDescendantProp(b, field)) {
+	 		            return 1;
+	 		        } else if (getDescendantProp(a, field) < getDescendantProp(b, field)) {
+	 		            return -1;
+	 		        }
+	 		    	
+	 		        return 1;
+	 		    };
+ 		   } else if(type='desc'){
+ 			  return function(a, b) {
+ 				  	if(getDescendantProp(a, field) === null){
+ 			          return 1;
+ 			        }
+ 			        else if(getDescendantProp(b, field) === null){
+ 			          return -1;
+ 			        }
+ 			        else if (getDescendantProp(a, field) > getDescendantProp(b, field)) {
+	 		            return -1;
+	 		        } else if (getDescendantProp(a, field) < getDescendantProp(b, field)) {
+	 		            return 1;
+	 		        }
+	 		        return 1;
+	 		    };
+ 		   }
+ 		}
+ 	  
+ 	    vm.sort = function(workPackageSheet, field){
+ 	    	if(workPackageSheet.sort == undefined){
+ 	 	    	workPackageSheet.sort = []; 	 	    		
+ 	    	}
+ 	    	if(workPackageSheet.sort[field] == undefined){
+ 	    		workPackageSheet.sort[field] = {asc:true}; 	    	
+ 	    	}
+ 	    	else{
+ 	    		workPackageSheet.sort[field].asc = !workPackageSheet.sort[field].asc;
+ 	    	} 	    
+ 	    	
+ 	    	workPackageSheet.currentSort = {field:field, asc:workPackageSheet.sort[field].asc};
+
+ 	    	if(field == '#'){
+ 	    		if(workPackageSheet.sort[field].asc){ 
+ 	    			workPackageSheet.fares.sort(sortBy('no', 'asc'));
+ 	    		}
+ 	    		else{
+ 	    			workPackageSheet.fares.sort(sortBy('no', 'desc'));
+ 	    		}
+ 	    	}
+ 	    	else{
+ 	    		if(workPackageSheet.sort[field].asc){ 	    			
+ 	    			workPackageSheet.fares.sort(sortBy(field, 'asc'));
+ 	    		}
+ 	    		else{
+ 	    			workPackageSheet.fares.sort(sortBy(field, 'desc')); 
+ 	    		}
+ 	    	}
+ 	    }
+ 	    
+ 	    vm.searchReplace = function(fareSheet, filter){
  	    	$uibModal.open({
 	            templateUrl: 'app/pages/work-packages/work-package-search-replace-dialog.html',
 	            controller: 'WorkPackageSearchReplaceDialogController',
@@ -1744,11 +1855,185 @@
 	            size: 'lg',
 	            windowClass: 'full-page-modal',
 	            resolve: {
-//	                entity: result.$promise,
-//	                fareSelected: vm.selectedFareDiscount
+	            	fareSheet: function(){
+	            		return fareSheet;
+	            	},
+	            	filter: function(){
+	            		if(filter != null)
+	            			return filter;
+	            		return null;
+	            	}
 	            }
- 	    	}).result.then(function(workPackage) {
-        	    
+ 	    	}).result.then(function(workPackageFareFilter) {
+ 	    		
+ 	    		function checkField(workPackageFareFilter, type, fare){
+ 	    			var listField = [
+    	    			workPackageFareFilter.no.check && workPackageFareFilter.no.search != null ? 'no' : null,
+    	    			workPackageFareFilter.status.check && workPackageFareFilter.status.search != null ? 'status' : null
+    	    		];
+ 	    			
+ 	    			var found = false;
+ 	    			if(type == 'and'){
+	 	    			found = true;
+	 	    			for(var x=0;x<listField.length;x++){
+	 	    				if(listField[x] != null){
+	 	    					if(fare[listField[x]] != workPackageFareFilter[listField[x]].search){
+	 	    						found = false;
+	 	    					}
+	 	    				}
+	 	    			}
+ 	    			}
+ 	    			else if(type == 'or'){
+ 	    				for(var x=0;x<listField.length;x++){
+	 	    				if(listField[x] != null){
+	 	    					if(fare[listField[x]] == workPackageFareFilter[listField[x]].search){
+	 	    						found = true;
+	 	    					}
+	 	    				}
+	 	    			}
+ 	    			}
+ 	    			return found;
+ 	    		}
+ 	    		
+        	    if(workPackageFareFilter.find){
+        	    	var index = 0;
+    	    		if(workPackageFareFilter.index != null){
+    	    			index = workPackageFareFilter.index;
+    	    		}
+    	    		
+    	    		
+    	    		for(var i = 0; i < fareSheet.fares.length; i++){
+    	    			if(fareSheet.fares[i].field == null || fareSheet.fares[i].field == undefined){
+	    					fareSheet.fares[i].field = {};
+	    		    	}
+    	    			fareSheet.fares[i].field['no'] =  false;
+    	    		}
+    	    		
+    	    		for(var i = index; i < fareSheet.fares.length; i++){
+    	    			var find = false;
+        	    		
+    	    			if(fareSheet.fares[i].field == null || fareSheet.fares[i].field == undefined){
+	    					fareSheet.fares[i].field = {};
+	    		    	}
+    	    			
+    	    			fareSheet.fares[i].field['no'] =  false;
+    	    			
+    	    			if(workPackageFareFilter.andor == 'and'){
+    	    				if(checkField(workPackageFareFilter, 'and', fareSheet.fares[i])){
+    	    					find = true;
+    	    					fareSheet.fares[i].field['no'] =  true;
+    	    					
+    	    					if(i+1 == fareSheet.fares.length){
+    	    						workPackageFareFilter.index = 0;
+    	    					}
+    	    					else{
+    	    						workPackageFareFilter.index = i+1;
+    	    					}
+    	    					break;
+    	    				}
+    	    			}
+    	    			else if(workPackageFareFilter.andor == 'or'){
+    	    				if(checkField(workPackageFareFilter, 'or', fareSheet.fares[i])){
+    	    					find = true;
+    	    					fareSheet.fares[i].field['no'] =  true;
+    	    					
+    	    					if(i+1 == fareSheet.fares.length){
+    	    						workPackageFareFilter.index = 0;
+    	    					}
+    	    					else{
+    	    						workPackageFareFilter.index = i+1;
+    	    					}
+    	    					break;
+    	    				}
+    	    			}    	    			
+    	    		}
+    	    		if(!find){
+    	    			if(workPackageFareFilter.message == null){
+    	    				workPackageFareFilter.message = "No Matches found, continue search at the beginning?";
+    	    			}
+    	    			else{
+    	    				workPackageFareFilter.message = "No matches found";
+    	    			}
+    	    		}
+        	    	vm.searchReplace(fareSheet, workPackageFareFilter);
+        	    }
+        	    else if(workPackageFareFilter.replace){
+    	    		var index = 0;
+    	    		if(!workPackageFareFilter.replaceAll){
+        	    		if(workPackageFareFilter.index != null){
+        	    			index = workPackageFareFilter.index;
+        	    		}
+    	    		}
+    	    		for(var i = index; i < fareSheet.fares.length; i++){
+    	    			var find = false;
+    	    			
+    	    			if(fareSheet.fares[i].field == null || fareSheet.fares[i].field == undefined){
+	    					fareSheet.fares[i].field = {};
+	    		    	}
+    	    			
+    	    			fareSheet.fares[i].field['no'] =  false;
+    	    			
+    	    			if(workPackageFareFilter.andor == 'and'){
+    	    				if(checkField(workPackageFareFilter, 'and', fareSheet.fares[i])){
+    	    					find = true;
+    	    					
+    	    					if(!workPackageFareFilter.replaceAll){
+    	    						fareSheet.fares[i].field['no'] =  true;
+    	    					}
+    	    					if(i+1 == fareSheet.fares.length){
+    	    						workPackageFareFilter.index = 0;
+    	    					}
+    	    					else{
+    	    						workPackageFareFilter.index = i+1;
+    	    					}
+    	    					break;
+    	    				}
+    	    			}
+    	    			else if(workPackageFareFilter.andor == 'or'){
+    	    				if(checkField(workPackageFareFilter, 'or', fareSheet.fares[i])){
+    	    					find = true;
+    	    					
+    	    					if(!workPackageFareFilter.replaceAll){
+    	    						fareSheet.fares[i].field['no'] =  true;
+    	    					}
+    	    					
+    	    					if(i+1 == fareSheet.fares.length){
+    	    						workPackageFareFilter.index = 0;
+    	    					}
+    	    					else{
+    	    						workPackageFareFilter.index = i+1;
+    	    					}
+    	    					break;
+    	    				}
+    	    			}    	    		
+    	    			
+    	    			if(find){
+    	    				//replace
+    	    				if(workPackageFareFilter.status.replace.check){
+    	    					fareSheet.fares[i]['status'] = workPackageFareFilter.status.replace.value;
+    	    				}
+    	    				
+    	    				if(!workPackageFareFilter.replaceAll){
+    	    					if((i+1) == fareSheet.fares.length){
+    	    						workPackageFareFilter.index = 0;
+    	    					}
+    	    					break;
+    	    				}
+    	    				else{
+    	    					if((i+1) == fareSheet.fares.length){
+    	    						workPackageFareFilter.index = 0;
+    	    					}
+    	    				}
+    	    			}
+    	    		}
+    	    		if(!find){
+	    				workPackageFareFilter.message = "No Matches found, continue search at the beginning?";
+    	    		}
+    	    		
+    	    		
+        	    	vm.searchReplace(fareSheet, workPackageFareFilter);
+        	    	
+        	    }
             }, function() {
         			
             });
@@ -2230,17 +2515,19 @@
 	  vm.approve = function(){
 		  var validated = true;
 		  var cekStatus = "";
+		  var counterApprove = false;
 		  
 //		  console.log("REGULAR");
 		  if(vm.workPackage.fareSheet != null && vm.workPackage.fareSheet.length > 0){
 			  for(var x=0;x<vm.workPackage.fareSheet.length;x++){
 				  if(vm.workPackage.fareSheet[x].fares != null && vm.workPackage.fareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.fareSheet[x].fares.length;y++){
-						  if(vm.workPackage.fareSheet[x].fares[y].status != "APPROVED"){
+						  if(vm.workPackage.fareSheet[x].fares[y].status == "APPROVED"){
+							  counterApprove =true;
+						  }
+						  if(vm.workPackage.fareSheet[x].fares[y].status == "" || vm.workPackage.fareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.fareSheet[x].fares[y].status;
 							  validated = false;
-//							  console.log("X : "+x+" | Y : "+y);
-//							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
 							  break;
 						  }
 					  }
@@ -2253,11 +2540,12 @@
 			  for(var x=0;x<vm.workPackage.discountFareSheet.length;x++){
 				  if(vm.workPackage.discountFareSheet[x].fares != null && vm.workPackage.discountFareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.discountFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.discountFareSheet[x].fares[y].status != "APPROVED"){
+						  if(vm.workPackage.discountFareSheet[x].fares[y].status == "APPROVED"){
+							  counterApprove =true;
+						  }
+						  if(vm.workPackage.discountFareSheet[x].fares[y].status == "" || vm.workPackage.discountFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.discountFareSheet[x].fares[y].status;
 							  validated = false;
-//							  console.log("X : "+x+" | Y : "+y);
-//							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
 							  break;
 						  }
 					  }
@@ -2270,11 +2558,12 @@
 			  for(var x=0;x<vm.workPackage.addonFareSheet.length;x++){
 				  if(vm.workPackage.addonFareSheet[x].fares != null && vm.workPackage.addonFareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.addonFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.addonFareSheet[x].fares[y].status != "APPROVED"){
+						  if(vm.workPackage.addonFareSheet[x].fares[y].status == "APPROVED"){
+							  counterApprove =true;
+						  }
+						  if(vm.workPackage.addonFareSheet[x].fares[y].status == "" || vm.workPackage.addonFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.addonFareSheet[x].fares[y].status;
 							  validated = false;
-//							  console.log("X : "+x+" | Y : "+y);
-//							  console.log(vm.workPackage.addonFareSheet[x].fares[y].status);
 							  break;
 						  }
 					  }
@@ -2287,11 +2576,12 @@
 			  for(var x=0;x<vm.workPackage.marketFareSheet.length;x++){
 				  if(vm.workPackage.marketFareSheet[x].fares != null && vm.workPackage.marketFareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.marketFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.marketFareSheet[x].fares[y].status != "APPROVED"){
+						  if(vm.workPackage.marketFareSheet[x].fares[y].status == "APPROVED"){
+							  counterApprove =true;
+						  }
+						  if(vm.workPackage.marketFareSheet[x].fares[y].status == "" || vm.workPackage.marketFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.marketFareSheet[x].fares[y].status;
 							  validated = false;
-//							  console.log("X : "+x+" | Y : "+y);
-//							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
 							  break;
 						  }
 					  }
@@ -2304,11 +2594,12 @@
 			  for(var x=0;x<vm.workPackage.waiverFareSheet.length;x++){
 				  if(vm.workPackage.waiverFareSheet[x].fares != null && vm.workPackage.waiverFareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.waiverFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.waiverFareSheet[x].fares[y].status != "APPROVED"){
+						  if(vm.workPackage.waiverFareSheet[x].fares[y].status == "APPROVED"){
+							  counterApprove =true;
+						  }
+						  if(vm.workPackage.waiverFareSheet[x].fares[y].status == "" || vm.workPackage.waiverFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.waiverFareSheet[x].fares[y].status;
 							  validated = false;
-//							  console.log("X : "+x+" | Y : "+y);
-//							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
 							  break;
 						  }
 					  }
@@ -2439,7 +2730,7 @@
 	      var data = result;
     	      
 	      data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
-          data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+          data.newCreatedDate = DateUtils.convertDateTimeFromServer(data.createdDate);
           data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
           data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
           data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
@@ -2447,8 +2738,9 @@
           data.saleDate = DateUtils.convertDateTimeFromServer(data.saleDate);
           
           if(data.fareSheet.length > 0){
-          	for(var x=0;x<data.fareSheet.length;x++){
+          	for(var x=0;x<data.fareSheet.length;x++){          		
           		var fares = data.fareSheet[x].fares;
+          		
           		for(var y=0;y<fares.length;y++){
               		if(fares[y] != null){
               			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
@@ -3914,7 +4206,7 @@
       vm.mapWorkpackage = function(result){
     	  data = result;
   	  	  data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
-          data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+          data.newCreatedDate = DateUtils.convertDateTimeFromServer(data.createdDate);
           data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
           data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
           data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
@@ -4241,31 +4533,15 @@
       
       
      
-      vm.viewCommentFillingInstruction = loadCommentFI();
-      function loadCommentFI() {
-    	  vm.viewCommentFillingInstruction =[];
-    	  for(var l = 0;l < vm.workPackage.filingInstructionData.length ; l++){
-    		  if(!vm.workPackage.filingInstructionData[l].isDeleted){
-    			  vm.viewCommentFillingInstruction.push(vm.workPackage.filingInstructionData[l]);
-    		  }
-    	  }
-    	  return vm.viewCommentFillingInstruction = vm.viewCommentFillingInstruction;
-      }
       
+     vm.isFilingInstructionCollapse = true;
+     
       vm.expandCommentFillingInstruction = function(){
-    	  vm.viewCommentFillingInstruction =[];
-    	  for(var l = 0;l < vm.workPackage.filingInstructionData.length ; l++){
-    		vm.viewCommentFillingInstruction.push(vm.workPackage.filingInstructionData[l]);
-    	  }
+    	  vm.isFilingInstructionCollapse = false;
       }
       
       vm.collapseCommentFillingInstruction = function(){
-    	  vm.viewCommentFillingInstruction =[];
-    	  for(var l = 0;l < vm.workPackage.filingInstructionData.length ; l++){
-    		  if(!vm.workPackage.filingInstructionData[l].isDeleted){
-    			  vm.viewCommentFillingInstruction.push(vm.workPackage.filingInstructionData[l]);
-    		  }
-    	  }
+    	  vm.isFilingInstructionCollapse = true;
       }
       vm.addCommentFillingInstruction = function() {
 	  	 	if (vm.commentStringFillingInstruction != null) {
@@ -4278,16 +4554,13 @@
 	     	  		createdTime :new Date()
 	 	  		 });
 	 	  		 vm.save();
-	 	  		 vm.commentStringFillingInstruction = null;
-	 	  		
-	 	  		 
-	 	  		
+	 	  		 vm.commentStringFillingInstruction = null;	 	  		
+	 	  		 	 	  		
 	 	  		 $(document).ready(function(){
 	                var _width = $('.comment-wrapper').outerWidth();
 		              $('.comment-list').css({ 'width': 'calc(100% + ' + _width+ 'px)' });
 		        });
 	  	 	}
-	  	 	loadCommentFI();
      }
      
       vm.deleteCommentFillingInstruction = function(){
@@ -4295,12 +4568,10 @@
     		 vm.tempFIC[l].isDeleted = true;
     	 }
     	 vm.save();
-    	 vm.tempFIC = [];
-    	 loadCommentFI();
       }
       
       vm.tempFIC = [];
-      vm.selectCommentFillingInstruction = function(data, index){
+      vm.selectCommentFillingInstruction = function(data){
     	  if(vm.tempFIC.indexOf(data) < 0){
     		  vm.tempFIC.push(data);
     	  }else{
@@ -4308,8 +4579,7 @@
     			  if(vm.tempFIC.indexOf(data) > -1){
         			  vm.tempFIC.splice(vm.tempFIC.indexOf(data),1);    				  
     			  }
-    		  }
-    		  
+    		  }    		  
     	  }
        }
       
@@ -4440,7 +4710,7 @@
     		  var data = result;
     	      
         	  data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
-              data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+              data.newCreatedDate = DateUtils.convertDateTimeFromServer(data.createdDate);
               data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
               data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
               data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
@@ -4462,7 +4732,7 @@
     		  var data = result;
     	      
         	  data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
-              data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+              data.newCreatedDate = DateUtils.convertDateTimeFromServer(data.createdDate);
               data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
               data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
               data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
@@ -4635,6 +4905,7 @@
     			  if(selected){
 //    				  console.log("SELECTED : "+selected);
     				  var copiedFare = angular.copy(workPackageSheet.fares[x]);
+    				  copiedFare.no = workPackageSheet.fares.length+1;
     				  copiedFare.status = "PENDING";
     				  copiedFare.field = null;
     				  workPackageSheet.fares.push(copiedFare);
@@ -4642,6 +4913,8 @@
 //    			  console.log("X : "+x);
     		  }
     	  }
+    	  
+//    	  vm.sort(workPackageSheet, '#');
       }
       
       
@@ -4679,7 +4952,30 @@
     			  }
     		  }
     	  }
-      }
+    	  
+    	  //reset number
+    	  workPackageSheet.fares.sort(sortBy('no', 'asc'));
+    	  for(var i=0;i<workPackageSheet.fares.length; i++){
+    		  workPackageSheet.fares[i].no = i+1;
+    	  }
+    	  
+    	  if(workPackageSheet.currentSort.field == '#'){
+    		  if(workPackageSheet.currentSort.asc){
+        		  workPackageSheet.fares.sort(sortBy('no', 'asc'));
+    		  }
+    		  else{
+        		  workPackageSheet.fares.sort(sortBy('no', 'desc'));
+    		  }
+    	  }
+    	  else{
+    		  if(workPackageSheet.currentSort.asc){
+    			  workPackageSheet.fares.sort(sortBy(workPackageSheet.currentSort.field, 'asc'));
+    		  }
+    		  else{
+    			  workPackageSheet.fares.sort(sortBy(workPackageSheet.currentSort.field, 'desc'));    			  
+    		  }
+    	  }
+      }      
       
       vm.tbodyClick = function(workPackageSheet){
 //    	  for(var x=0;x<workPackageSheet.fares.length;x++){
@@ -4726,6 +5022,33 @@
                   tariffNumber: ['TariffNumber', function(TariffNumber) {
                       return TariffNumber.getAll().$promise;
                   }],
+                  AddOn : false,
+              }
+			}).result.then(function(option) {
+				if(option != null){
+					fare[field] = option;
+				}
+          }, function() {
+      			
+          });
+      }
+      
+      vm.selectTariffAddOn = function(fare, field){
+    	  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-select-tariff-dialog.html',
+              controller: 'WorkPackageSelectTariffDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              windowClass: 'full-page-modal',
+              resolve: {
+	              	fare: function(){
+	              		return fare;
+	              	},
+                  tariffNumber: ['TariffNumberAddOn', function(TariffNumberAddOn) {
+                      return TariffNumberAddOn.getAll().$promise;
+                  }],
+                  AddOn : true,
               }
 			}).result.then(function(option) {
 				if(option != null){
@@ -4977,40 +5300,38 @@
     	  }
       }
       
-      vm.checkLoc = function(fare, field){
+      vm.checkLoc = function(fare, field, type){
     	  if(fare[field] != null || fare[field] != ''){
 	    	  var exist = false;
-	    	  if(fare.loc1Type == 'C'){
+	    	  if(type== 'C'){
 	    		  for(var x=0;x<vm.cities.length;x++){
 		    		  if(vm.cities[x].cityCode.toUpperCase() == fare[field].toUpperCase()){
 		    			  exist = true;
 		    			  break;
 		    		  }
 		    	  }				
-				}else if(fare.loc1Type == 'N'){
+				}else if(type== 'N'){
 					 for(var x=0;x<vm.cities.length;x++){
 			    		  if(vm.cities[x].countryCode.toUpperCase() == fare[field].toUpperCase()){
 			    			  exist = true;
 			    			  break;
 			    		  }
 			    	  }
-				}else if(fare.loc1Type == 'S'){
+				}else if(type== 'S'){
 					 for(var x=0;x<vm.states.length;x++){
 			    		  if(vm.states[x].code.toUpperCase() == fare[field].toUpperCase()){
 			    			  exist = true;
 			    			  break;
 			    		  }
 			    	  }
-				}else if(fare.loc1Type == 'A'){
+				}else if(type== 'A'){
 					 for(var x=0;x<vm.areas.length;x++){
-						 console.log(vm.areas[x]);
-						 console.log(fare[field]);
 			    		  if(vm.areas[x].code == fare[field]){
 			    			  exist = true;
 			    			  break;
 			    		  }
 			    	  }
-				}else if(fare.loc1Type == 'G'){
+				}else if(type== 'G'){
 					 for(var x=0;x<vm.cityGroups.length;x++){
 			    		  if(vm.cityGroups[x].code.toUpperCase() == fare[field].toUpperCase()){
 			    			  exist = true;
@@ -5020,15 +5341,15 @@
 				}		    	 
 	    	  
 	    	  if(!exist){
-	    		  if(fare.loc1Type == 'C'){
+	    		  if(type== 'C'){
 	    		  alert("City code '"+fare[field]+"' is invalid. Please select a correct code");
-	    		  }else if(fare.loc1Type == 'N'){
+	    		  }else if(type== 'N'){
 	    		  alert("Country code '"+fare[field]+"' is invalid. Please select a correct code");
-	    		  }else if(fare.loc1Type == 'S'){
+	    		  }else if(type== 'S'){
 	    		  alert("State code '"+fare[field]+"' is invalid. Please select a correct code");
-	    		  }else if(fare.loc1Type == 'A'){
+	    		  }else if(type== 'A'){
 	    		  alert("Area code '"+fare[field]+"' is invalid. Please select a correct code");
-	    		  }else if(fare.loc1Type == 'G'){
+	    		  }else if(type== 'G'){
 	    		  alert("City Group code '"+fare[field]+"' is invalid. Please select a correct code");
 	    		  }
 	    		  fare[field] = null;
@@ -5079,6 +5400,9 @@
       vm.changeVersion = function(workPackageSheet, index){    	  
     	  workPackageSheet.version = index;
     	  if(index == 'current'){
+    		  if(workPackageSheet.fares == null){
+    			  workPackageSheet.fares = [];
+    		  }
     		  workPackageSheet.currentFares = workPackageSheet.fares;
     	  }
     	  else{

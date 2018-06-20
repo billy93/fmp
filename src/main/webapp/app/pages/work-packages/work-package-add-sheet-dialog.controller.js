@@ -24,27 +24,27 @@
         		name:fareTypes[x].name
         	});
         }
-
-        if(vm.workPackage.type == 'REGULAR' && vm.workPackage.targetDistribution == 'MARKET'){
-        	 vm.types = ["Market Fares", "Add-Ons"];
-        }
-        else if(vm.workPackage.type == 'DISCOUNT'){
-        	 vm.types = ["Discount Fares"];
-        }
-        else if(vm.workPackage.type == 'REGULAR'){
-        	 vm.types = ["Fares", "Add-Ons"];
-        	 if(!vm.workPackage.attachment){
-             	vm.types.push("Attachment");
-             }
-             if(!vm.workPackage.filingInstruction){
-             	vm.types.push("Filing Instruction");
-             }
-        }
-        else if(vm.workPackage.type == 'WAIVER'){
-        	 vm.types = ["Waiver Fares"];
-        }
         
-        
+        if(vm.workPackage.reviewLevel != 'DISTRIBUTION'){
+	        if(vm.workPackage.type == 'REGULAR' && vm.workPackage.targetDistribution == 'MARKET'){
+	        	 vm.types = ["Market Fares", "Add-Ons"];
+	        }
+	        else if(vm.workPackage.type == 'DISCOUNT'){
+	        	 vm.types = ["Discount Fares"];
+	        }
+	        else if(vm.workPackage.type == 'REGULAR'){
+	        	 vm.types = ["Fares", "Add-Ons"];        	 
+	        }
+	        else if(vm.workPackage.type == 'WAIVER'){
+	        	 vm.types = ["Waiver Fares"];
+	        }
+        }
+        if(!vm.workPackage.attachment){
+         	vm.types.push("Attachment");
+         }
+         if(!vm.workPackage.filingInstruction){
+         	vm.types.push("Filing Instruction");
+         }
         
         vm.save = function(){
         	console.log(vm.option);
