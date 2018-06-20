@@ -1914,6 +1914,21 @@ public class WorkPackageResource {
     		workPackage.setWpid(year+nf.format(c.getSequenceValue()+1));
         }
     	
+    	if(!workPackage.isSpecifiedFares()) {
+    		workPackage.getFareSheet().clear();
+    	}
+    	if(!workPackage.isWaiverFares()) {
+    		workPackage.getWaiverFareSheet().clear();
+    	}
+    	if(!workPackage.isMarketFares()) {
+    		workPackage.getMarketFareSheet().clear();
+    	}
+    	if(!workPackage.isDiscount()) {
+    		workPackage.getDiscountFareSheet().clear();
+    	}
+    	if(!workPackage.isAddon()) {
+    		workPackage.getAddonFareSheet().clear();
+    	}
     	if(workPackage.getComment() != null) {
 	    	for(Comment comments : workPackage.getComment()) {
 	    		if(comments.getUsername() == null && comments.getCreatedTime() == null) {
