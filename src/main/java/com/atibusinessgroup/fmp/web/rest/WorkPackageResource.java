@@ -15,6 +15,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -216,7 +217,7 @@ public class WorkPackageResource {
         }
         
         workPackage.setStatus(Status.NEW);
-        workPackage.setQueuedDate(ZonedDateTime.now());
+        workPackage.setQueuedDate(Instant.now());
         
         WorkPackage result = workPackageService.save(workPackage);
         
@@ -319,7 +320,7 @@ public class WorkPackageResource {
         }
         
         wp.setStatus(Status.NEW);
-        wp.setQueuedDate(ZonedDateTime.now());
+        wp.setQueuedDate(Instant.now());
         
         WorkPackage result = workPackageService.save(wp);
         
@@ -389,7 +390,7 @@ public class WorkPackageResource {
         }
         
         wp.setStatus(Status.NEW);
-        wp.setQueuedDate(ZonedDateTime.now());
+        wp.setQueuedDate(Instant.now());
         
         WorkPackage result = workPackageService.save(wp);
         
@@ -3737,7 +3738,7 @@ public class WorkPackageResource {
 	        	fareVersion.version = sheet.fareVersion.size() + 1;
 	        	sheet.fareVersion.add(fareVersion);
 	        }
-	        result.setQueuedDate(ZonedDateTime.now());
+	        result.setQueuedDate(Instant.now());
 	        workPackageService.save(result);  
 	        
 	        saveHistoryData(workPackage);
@@ -3796,7 +3797,7 @@ public class WorkPackageResource {
         
         WorkPackage result = workPackageService.findOne(workPackage.getId());
         result.setStatus(Status.WITHDRAWN);
-        result.setQueuedDate(ZonedDateTime.now());
+        result.setQueuedDate(Instant.now());
         workPackageService.save(result);
         /*
         saveHistoryData(workPackage);
@@ -3931,7 +3932,7 @@ public class WorkPackageResource {
         	fareVersion.version = sheet.fareVersion.size() + 1;
         	sheet.fareVersion.add(fareVersion);
         }
-        result.setQueuedDate(ZonedDateTime.now());
+        result.setQueuedDate(Instant.now());
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -3974,7 +3975,7 @@ public class WorkPackageResource {
         }
 		result.setLocked(false);
         result.setStatus(Status.PENDING);
-        result.setQueuedDate(ZonedDateTime.now());
+        result.setQueuedDate(Instant.now());
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -4029,7 +4030,7 @@ public class WorkPackageResource {
 //    		result.setLocked(false);
 //    		result.setStatus(Status.PENDING);        		
 //	    }
-        workPackage.setQueuedDate(ZonedDateTime.now());
+        workPackage.setQueuedDate(Instant.now());
         workPackageService.save(workPackage);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -4260,7 +4261,7 @@ public class WorkPackageResource {
         result.setDistributionReviewLevel(null);
         result.setStatus(Status.REFERRED);
 		result.setLocked(false);
-		result.setQueuedDate(ZonedDateTime.now());
+		result.setQueuedDate(Instant.now());
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -4299,7 +4300,7 @@ public class WorkPackageResource {
         result.setDistributionReviewLevel(result.getDistributionReviewLevel());
         result.setStatus(Status.DISTRIBUTED);
 		result.setLocked(false);
-		result.setQueuedDate(ZonedDateTime.now());
+		result.setQueuedDate(Instant.now());
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
