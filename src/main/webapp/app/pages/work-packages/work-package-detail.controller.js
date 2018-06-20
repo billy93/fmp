@@ -876,7 +876,7 @@
         	},
         	{
         		name:"waiverCalculatedPn",
-        		editable:[],
+        		editable:["LSO", "HO"],
         		mandatory:["LSO", "HO"]
         	},
         	{
