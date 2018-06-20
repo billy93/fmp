@@ -3532,10 +3532,16 @@
 											             	ng-required="vm.isRequired('waiverFareLost')" disabled/>
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverCalculatedPn', $event)" ng-class="{highlighted:fare.field['waiverCalculatedPn']}">
-															<input type="text" class="form-control" ng-model="fare.waiverCalculatedPn" name="waiverCalculatedPn{{$parent.$index}}{{$index}}"
+															<!-- <input type="text" class="form-control" ng-model="fare.waiverCalculatedPn" name="waiverCalculatedPn{{$parent.$index}}{{$index}}"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverCalculatedPn{{$parent.$index}}{{$index}}.$valid}"												         		
 						           							ng-disabled="!vm.isEditable('waiverCalculatedPn')||vm.workPackage.status=='WITHDRAWN'"
-											             	ng-required="vm.isRequired('waiverCalculatedPn')" ng-init="fare.waiverCalculatedPn = 'amount'"/>
+											             	ng-required="vm.isRequired('waiverCalculatedPn')" /> -->
+											             	<select class="form-control" name="waiverCalculatedPn{{$parent.$index}}{{$index}}" ng-model="fare.waiverCalculatedPn" ng-class="{'must-fill': !editForm.editFormWaiver.waiverCalculatedPn{{$parent.$index}}{{$index}}.$valid}"
+															ng-disabled="!vm.isEditable('waiverCalculatedPn')||vm.workPackage.status=='WITHDRAWN'"
+											             	ng-required="vm.isRequired('waiverCalculatedPn')" >
+																<option value="amount">Amount</option>
+																<option value="percent">Percent</option>
+												</select>
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverOriginalPn', $event)" ng-class="{highlighted:fare.field['waiverOriginalPn']}">
 															<input type="text" class="form-control" ng-model="fare.waiverOriginalPn" name="waiverOriginalPn{{$parent.$index}}{{$index}}"
