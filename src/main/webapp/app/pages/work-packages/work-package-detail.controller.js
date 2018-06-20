@@ -4520,7 +4520,7 @@
     	  	vm.commentString = null;
     	  	$(document).ready(function(){
                 var _width = $('.comment-wrapper').outerWidth();
-	              $('.comment-list').css({ 'width': 'calc(100% + ' + _width+ 'px)' });
+	              $('.comment-list').css('min-width',_width)
 	        });
     	 }
 	  	
@@ -4558,7 +4558,7 @@
 	 	  		 	 	  		
 	 	  		 $(document).ready(function(){
 	                var _width = $('.comment-wrapper').outerWidth();
-		              $('.comment-list').css({ 'width': 'calc(100% + ' + _width+ 'px)' });
+		              $('.comment-list').css('min-width',_width)
 		        });
 	  	 	}
      }
@@ -4601,7 +4601,7 @@
      	  	vm.ioString = null;
      	  	$(document).ready(function(){
                 var _width = $('.comment-wrapper').outerWidth();
-	              $('.comment-list').css({ 'width': 'calc(100% + ' + _width+ 'px)' });
+	              $('.comment-list').css('min-width',_width)
 	        });
      	 }
        }
