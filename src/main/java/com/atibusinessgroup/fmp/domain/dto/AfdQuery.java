@@ -35,7 +35,7 @@ public class AfdQuery {
 	private String gfsReference;
 	private Object gfsDate;
 	private String globalIndicator;
-	private Object ruleFocusDate;
+	private Object focusDate;
 	private boolean sellable;
 	private Object travelStartDate;
 	private Object travelEndDate;
@@ -330,12 +330,12 @@ public class AfdQuery {
 		this.globalIndicator = globalIndicator;
 	}
 	
-	public Object getRuleFocusDate() {
-		return ruleFocusDate;
+	public Object getFocusDate() {
+		return focusDate;
 	}
 	
-	public void setRuleFocusDate(Object ruleFocusDate) {
-		this.ruleFocusDate = ruleFocusDate;
+	public void setFocusDate(Object focusDate) {
+		this.focusDate = focusDate;
 	}
 	
 	public boolean isSellable() {
@@ -616,7 +616,7 @@ public class AfdQuery {
 		result = prime * result + ((resEndDate == null) ? 0 : resEndDate.hashCode());
 		result = prime * result + ((resStartDate == null) ? 0 : resStartDate.hashCode());
 		result = prime * result + ((routingNo == null) ? 0 : routingNo.hashCode());
-		result = prime * result + ((ruleFocusDate == null) ? 0 : ruleFocusDate.hashCode());
+		result = prime * result + ((focusDate == null) ? 0 : focusDate.hashCode());
 		result = prime * result + ((ruleNo == null) ? 0 : ruleNo.hashCode());
 		result = prime * result + ((saleEndDate == null) ? 0 : saleEndDate.hashCode());
 		result = prime * result + ((saleStartDate == null) ? 0 : saleStartDate.hashCode());
@@ -916,11 +916,11 @@ public class AfdQuery {
 		} else if (!routingNo.equals(other.routingNo)) {
 			return false;
 		}
-		if (ruleFocusDate == null) {
-			if (other.ruleFocusDate != null) {
+		if (focusDate == null) {
+			if (other.focusDate != null) {
 				return false;
 			}
-		} else if (!ruleFocusDate.equals(other.ruleFocusDate)) {
+		} else if (!focusDate.equals(other.focusDate)) {
 			return false;
 		}
 		if (ruleNo == null) {
@@ -1056,7 +1056,7 @@ public class AfdQuery {
 				+ ", tfc=" + tfc + ", aif=" + aif + ", itinerary=" + itinerary + ", overrideIndicator="
 				+ overrideIndicator + ", effectiveDate=" + effectiveDate + ", discontinueDate=" + discontinueDate
 				+ ", gfsReference=" + gfsReference + ", gfsDate=" + gfsDate + ", globalIndicator=" + globalIndicator
-				+ ", ruleFocusDate=" + ruleFocusDate + ", sellable=" + sellable + ", travelStartDate=" + travelStartDate
+				+ ", focusDate=" + focusDate + ", sellable=" + sellable + ", travelStartDate=" + travelStartDate
 				+ ", travelEndDate=" + travelEndDate + ", travelComplete=" + travelComplete + ", saleStartDate="
 				+ saleStartDate + ", saleEndDate=" + saleEndDate + ", resStartDate=" + resStartDate + ", resEndDate="
 				+ resEndDate + ", minStay=" + minStay + ", maxStay=" + maxStay + ", advancePurchase=" + advancePurchase

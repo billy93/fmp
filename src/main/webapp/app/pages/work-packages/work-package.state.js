@@ -76,6 +76,11 @@
                         return TariffNumber.getAll().$promise;
                     });
                 }],
+                tariffNumberAddOn: ['$stateParams', 'TariffNumberAddOn', 'Principal', function($stateParams, TariffNumberAddOn, Principal) {
+                	return Principal.identity().then(function(account) {
+                        return TariffNumberAddOn.getAll().$promise;
+                    });
+                }],
                 cities: ['$stateParams', 'City', 'Principal', function($stateParams, City, Principal) {
                 	return Principal.identity().then(function(account) {
                         return City.getAll().$promise;

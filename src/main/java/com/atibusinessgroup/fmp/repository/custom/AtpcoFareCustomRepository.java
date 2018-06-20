@@ -4,6 +4,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.newA
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -30,6 +31,7 @@ import com.atibusinessgroup.fmp.domain.dto.AfdQueryParam;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFareAfdQueryWithRecords;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByCatNo;
+import com.atibusinessgroup.fmp.service.util.DateUtil;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
@@ -116,27 +118,30 @@ public class AtpcoFareCustomRepository {
 					queries.add(routingNo);
 				}
 				
+				Date paramFrom = DateUtil.convertObjectToDate(param.getEffectiveDateFrom());
+				Date paramTo = DateUtil.convertObjectToDate(param.getEffectiveDateTo());
+
 				if (param.getEffectiveDateOption() != null && param.getEffectiveDateOption().contentEquals("A")) {
-					if (param.getEffectiveDateFrom() != null && param.getEffectiveDateTo() != null) {
+					if (paramFrom != null && paramTo != null) {
 						BasicDBObject effective = new BasicDBObject();
-						effective.append("$and", Arrays.asList(new BasicDBObject("tar_eff_date", new BasicDBObject("$lte", param.getEffectiveDateFrom())), 
-								new BasicDBObject("dates_discontinue", new BasicDBObject("$gte", param.getEffectiveDateTo()))));
+						effective.append("$and", Arrays.asList(new BasicDBObject("tar_eff_date", new BasicDBObject("$lte", paramFrom)), 
+								new BasicDBObject("dates_discontinue", new BasicDBObject("$gte", paramTo))));
 						queries.add(effective);
 					} else {
-						if (param.getEffectiveDateFrom() == null && param.getEffectiveDateTo() != null) {
+						if (paramFrom == null && paramTo != null) {
 							BasicDBObject effective = new BasicDBObject();
-							effective.append("dates_discontinue", new BasicDBObject("$gte", param.getEffectiveDateTo()));
+							effective.append("dates_discontinue", new BasicDBObject("$gte", paramTo));
 							queries.add(effective);
-						} else if (param.getEffectiveDateFrom() != null && param.getEffectiveDateTo() == null) {
+						} else if (paramFrom != null && paramTo == null) {
 							BasicDBObject effective = new BasicDBObject();
-							effective.append("tar_eff_date", new BasicDBObject("$lte", param.getEffectiveDateFrom()));
+							effective.append("tar_eff_date", new BasicDBObject("$lte", paramFrom));
 							queries.add(effective);
 						}
 					}
 				} else if (param.getEffectiveDateOption() != null && param.getEffectiveDateOption().contentEquals("E")) {
 					BasicDBObject effective = new BasicDBObject();
-					effective.append("$and", Arrays.asList(new BasicDBObject("tar_eff_date", new BasicDBObject("$eq", param.getEffectiveDateFrom())), 
-							new BasicDBObject("dates_discontinue", new BasicDBObject("$eq", param.getEffectiveDateTo()))));
+					effective.append("$and", Arrays.asList(new BasicDBObject("tar_eff_date", new BasicDBObject("$eq", paramFrom)), 
+							new BasicDBObject("dates_discontinue", new BasicDBObject("$eq", paramTo))));
 					queries.add(effective);
 				}
 				

@@ -177,12 +177,18 @@
 					    </div>
 					    <div class="col-xs-3">
 					       Fare Type
+<<<<<<< HEAD
 		      				<select class="form-control" ng-model="vm.workPackage.discountFareSheet[0].discountFareType" name="fareType{{$index}}"
 					       	ng-style="editForm.editFormATPCO.fareType{{$index}}.$error.required && vm.errorStyle"
 					       	ng-required="vm.checkRequiredField('discountFareType')"
 		      				ng-disabled="vm.isFieldDisable('discountFareType')">
 								<option ng-repeat="fare in vm.atpcoFareTypes track by $index" value="{{fare.typeCode}}">
 									{{fare.typeCode}}  {{fare.definition}}
+=======
+							<select class="form-control" ng-model="vm.workPackage.discountFareSheet[0].fareType">
+								<option ng-repeat="fare in vm.optionFare track by $index" value="{{fare.name}}">
+									{{fare.code}} | {{fare.name}}
+>>>>>>> 71dd330c21ad96bff5ba17624852fa24b9ab1751
 								</option>
 							</select>
 					    </div>
@@ -225,11 +231,11 @@
 				    </div>
 				    <div class="col-xs-3">
 				       Fare Type
-				      <select class="form-control" ng-model="vm.workPackage.waiverFareSheet[0].waiverFareType">
-								<option ng-repeat="fare in vm.optionFare track by $index" value="{{fare.name}}">
-									{{fare.code}} | {{fare.name}}
-								</option>
-							</select>
+				        <select class="form-control" ng-model="vm.workPackage.waiverFareSheet[0].waiverFareType">
+							<option ng-repeat="fare in vm.optionFare track by $index" value="{{fare.name}}">
+								{{fare.code}} | {{fare.name}}
+							</option>
+						</select>
 				    </div>
 				</div>	    
 				    	
