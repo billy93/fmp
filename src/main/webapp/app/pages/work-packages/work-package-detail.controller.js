@@ -5438,6 +5438,104 @@
     	  }
       }
       
+      vm.expandCityGroup = function(workPackageSheet){
+    	  var fares = workPackageSheet.fares;
+    	  
+    	  var faresCityGroupOrigin = [];
+    	  var faresCityGroupDestination = [];
+    	  var faresCityGroupOriginDestination = [];
+
+    	  for(var x=0;x<fares.length;x++){
+    		  var origin = false;
+    		  var destination = false;
+    		  
+    		  for(var y=0;y<vm.cityGroups.length;y++){
+    			  if(fares[x] != undefined){    				  	    			  
+    				  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (fares[x].origin != null && fares[x].origin.toUpperCase())){	    				  
+    					  origin = true;
+	    			  }
+	    			  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (fares[x].destination != null && fares[x].destination.toUpperCase())){
+	      				  destination = true;
+	    			  }	    			   
+    			  }
+    		  }
+    		  
+
+			  if(origin && destination){
+				  faresCityGroupOriginDestination.push(angular.copy(fares[x]));
+				  fares.splice(x, 1);
+			  }else if(origin){
+				  faresCityGroupOrigin.push(angular.copy(fares[x]));
+				  fares.splice(x, 1);
+			  }else if(destination){
+				  faresCityGroupDestination.push(angular.copy(fares[x]));
+				  fares.splice(x, 1);
+			  }
+    	  }
+    	  
+    	  if(faresCityGroupOriginDestination.length > 0){
+    		  for(var x=0;x<faresCityGroupOriginDestination.length;x++){
+    			  var listCitiesOrigin = [];
+        		  var listCitiesDestination = [];
+        		 
+        		  for(var y=0;y<vm.cityGroups.length;y++){
+	    			  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (faresCityGroupOriginDestination[x].origin != null && faresCityGroupOriginDestination[x].origin.toUpperCase())){
+	    				  listCitiesOrigin = vm.cityGroups[y].cities;
+					  }
+	    			  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (faresCityGroupOriginDestination[x].destination != null && faresCityGroupOriginDestination[x].destination.toUpperCase())){
+	    				  listCitiesDestination = vm.cityGroups[y].cities;
+					  }
+        		  }
+        		  
+    			  for(var a=0;a<listCitiesOrigin.length;a++){
+    				  for(var b=0;b<listCitiesDestination.length;b++){
+    					  var f = angular.copy(faresCityGroupOriginDestination[x]);
+        				  f.origin = listCitiesOrigin[a].cityCode;
+        				  f.destination = listCitiesDestination[b].cityCode;
+        				  f.no = fares.length+1;
+        				  fares.push(f);
+    				  }
+    			  }
+    		  }
+    	  }    	  
+    	  else if(faresCityGroupOrigin.length > 0){
+    		  for(var x=0;x<faresCityGroupOrigin.length;x++){
+    			  var listCities = [];
+    			  for(var y=0;y<vm.cityGroups.length;y++){
+    				  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (faresCityGroupOrigin[x].origin != null && faresCityGroupOrigin[x].origin.toUpperCase())){
+    					  listCities = vm.cityGroups[y].cities;
+    					  break;
+    				  }
+    			  }
+    			  
+    			  for(var z=0;z<listCities.length;z++){
+    				  var f = angular.copy(faresCityGroupOrigin[x]);
+    				  f.origin = listCities[z].cityCode;
+    				  f.no = fares.length+1;
+    				  fares.push(f);
+    			  }
+    		  }
+    	  }
+    	  else if(faresCityGroupDestination.length > 0){
+    		  for(var x=0;x<faresCityGroupDestination.length;x++){
+    			  var listCities = [];
+    			  for(var y=0;y<vm.cityGroups.length;y++){
+    				  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (faresCityGroupDestination[x].destination != null && faresCityGroupDestination[x].destination.toUpperCase())){
+    					  listCities = vm.cityGroups[y].cities;
+    					  break;
+    				  }
+    			  }
+    			  
+    			  for(var z=0;z<listCities.length;z++){
+    				  var f = angular.copy(faresCityGroupDestination[x]);
+    				  f.destination = listCities[z].cityCode;
+    				  f.no = fares.length+1;
+    				  fares.push(f);
+    			  }
+    		  }
+    	  }
+      };
+            
       vm.dateNgModelOpts = {
     		  timezone : '+07:00'
 	  };

@@ -421,6 +421,10 @@
 																    <li>
 																    	<a href="#">Paste As Cancel</a>
 																    </li>
+																    
+																    <li>
+																   	 <a ng-click="vm.expandCityGroup(workPackageSheet, 'discount')">Expand City Groups</a>
+																    </li>
 																</ul>
 															</div>													
 															<button class="btn btn-default small btn-secondary" ngf-select  ngf-change="vm.importFare($file, $index)" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT'">Import</button>
@@ -881,6 +885,9 @@
 																    </li>
 																    <li>
 																    	<a href="#">Paste As Cancel</a>
+																    </li>
+																    <li>
+																   	 <a ng-click="vm.expandCityGroup(workPackageSheet)">Expand City Groups</a>
 																    </li>
 																</ul>
 															</div>													
@@ -1613,7 +1620,7 @@
 												    <li>
 												    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Delete Selected Rows</a>
 												    </li>
-\												    <li>
+												    <li>
 												    	<a ng-click="vm.pasteFares(workPackageSheet, 'workorder-discount-fares')">Paste</a>
 												    </li>
 												    <li>
@@ -2425,6 +2432,9 @@
 															    <li>
 															    	<a href="#">Paste As Cancel</a>
 															    </li>
+															    <li>
+															   	 <a ng-click="vm.expandCityGroup(workPackageSheet)">Expand City Groups</a>
+															    </li>
 															</ul>
 														</div>													
 														<button class="btn btn-default small btn-secondary" ngf-select  ngf-change="vm.importFareMarket($file, $index)">Import</button>
@@ -2848,6 +2858,9 @@
 																    </li>
 																    <li>
 																    	<a href="#">Paste As Cancel</a>
+																    </li>
+																    <li>
+																   	 <a ng-click="vm.expandCityGroup(workPackageSheet)">Expand City Groups</a>
 																    </li>
 																</ul>
 															</div>													
@@ -3423,6 +3436,9 @@
 															    <li>
 															    	<a href="#">Paste As Cancel</a>
 															    </li>
+															    <li>
+																   	 <a ng-click="vm.expandCityGroup(workPackageSheet)">Expand City Groups</a>
+																    </li>
 															</ul>
 														</div>		
 														
