@@ -241,7 +241,7 @@
 		<div class="panel-body">
 			<div class="clearfix mb1">
 				<div class="pull-right" ng-class="{'poiv-none' : (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
-						&& vm.workPackage.status=='DISTRIBUTED') || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}">
+						&& vm.workPackage.status=='DISTRIBUTED')}">
 					<button class="btn btn-default small" ng-click="vm.resendApprove()" ng-if="vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.user.reviewLevels.indexOf('HO') > -1">Generate IN</button>
 					<button class="btn btn-default small" ng-click="vm.viewRecipients()" ng-if="vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.user.reviewLevels.indexOf('HO') > -1">View IN Recipients</button>
 					<div class="button-group dropdown custom">
@@ -250,25 +250,27 @@
 						Workflow<i class="fa fa-caret-down"></i></button>
 						<ul class="dropdown-menu custom" role="menu">
 						    <li><a ng-click="vm.passUp()" 
-					        ng-show="vm.workPackage.reviewLevel != 'HO' && vm.workPackage.reviewLevel != 'DISTRIBUTION' && vm.workPackage.reviewLevel != 'ROUTE_MANAGEMENT'">Pass Up</a></li>
+					        ng-show="vm.workPackage.reviewLevel != 'HO' && vm.workPackage.reviewLevel != 'DISTRIBUTION' && vm.workPackage.reviewLevel != 'ROUTE_MANAGEMENT'" 
+					        ng-class="{'poiv-none' :(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}">Pass Up</a></li>
 					        <li><a ng-click="vm.passDown()" 
-					        ng-show="vm.workPackage.reviewLevel != 'LSO'  && vm.workPackage.reviewLevel != 'ROUTE_MANAGEMENT' && vm.workPackage.reviewLevel != 'DISTRIBUTION'">Pass Down</a></li>
+					        ng-show="vm.workPackage.reviewLevel != 'LSO'  && vm.workPackage.reviewLevel != 'ROUTE_MANAGEMENT' && vm.workPackage.reviewLevel != 'DISTRIBUTION'"
+					        ng-class="{'poiv-none' :(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}">Pass Down</a></li>
 					        <li><a ng-click="vm.passSideway()" 
 					        ng-class="{disabled : editForm.$invalid }" 
 					        ng-show="vm.workPackage.reviewLevel == 'HO' || vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT'">Pass Sideways</a></li>
 					        <li class="divider"></li>
 					        <li><a ng-click="vm.approve()" 
-					        ng-class="{disabled : editForm.$invalid }" 
+					        ng-class="{disabled : editForm.$invalid,'poiv-none' :(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}" 
 					        ng-show="vm.workPackage.reviewLevel == 'HO'">Approve</a></li>
 					        <li><a ng-click="vm.referback()" 
 					        ng-show="vm.workPackage.reviewLevel == 'DISTRIBUTION'"
-					        >Refer Back</a></li>
+					        ng-class="{'poiv-none' :(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}">Refer Back</a></li>
 					        <li><a ng-click="vm.complete()" 
 					        ng-show="vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'DISCOUNT'"
-					        >Complete</a></li>
+					        ng-class="{'poiv-none' :(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}">Complete</a></li>
 						</ul>
 					</div>
-					<div class="button-group dropdown custom">
+					<div class="button-group dropdown custom" ng-class="{'poiv-none' :(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}">
 						<button class="btn btn-default small" ng-disabled="vm.workPackage.status=='WITHDRAWN'">Action <i class="fa fa-caret-down"></i></button>
 						<ul class="dropdown-menu custom" role="menu">
 						    <li>
@@ -276,7 +278,7 @@
 						    </li>
 						</ul>
 					</div>	
-					<div class="button-group dropdown custom">
+					<div class="button-group dropdown custom" ng-class="{'poiv-none' :(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}">
 						<button class="btn btn-default small" ng-disabled="vm.workPackage.status=='WITHDRAWN'">Sheet <i class="fa fa-caret-down"></i></button>
 						<ul class="dropdown-menu custom" role="menu">
 						    <li>
@@ -378,7 +380,7 @@
 													<div class="clearfix">
 														<div class="pull-right datatable-button">
 															<div class="button-group dropdown custom">
-																<button class="btn btn-default small btn-secondary" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ">Edit <i class="fa fa-caret-down"></i></button>
+																<button class="btn btn-default small btn-secondary" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN'}"></i></button>
 																<ul class="dropdown-menu custom" role="menu">
 																    <li>
 																    	<a ng-click="vm.clearSelection(workPackageSheet)">Clear Selection</a>
@@ -838,7 +840,7 @@
 													<div class="clearfix">
 														<div class="pull-right datatable-button">
 															<div class="button-group dropdown custom">
-																<button class="btn btn-default small btn-secondary" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ">Edit <i class="fa fa-caret-down"></i></button>
+																<button class="btn btn-default small btn-secondary" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN'">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN'}"></i></button>
 																<ul class="dropdown-menu custom" role="menu">
 																	<li>
 																    	<a ng-click="vm.clearSelection(workPackageSheet)">Clear Selection</a>
@@ -1572,7 +1574,7 @@
 						                  <div class="clearfix">
 						                    <div class="pull-right datatable-button">
 						                      <div class="button-group dropdown custom">
-						                        <button class="btn btn-default small btn-secondary" ng-disabled="vm.workPackage.status=='WITHDRAWN'">Edit <i class="fa fa-caret-down"></i></button>
+						                        <button class="btn btn-default small btn-secondary" ng-disabled="vm.workPackage.status=='WITHDRAWN'">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN'}"></i></button>
 						                        <ul class="dropdown-menu custom" role="menu">
 						                            <li>
 												   		<a ng-click="vm.clearSelection(workPackageSheet)">Clear Selection</a>
@@ -2377,7 +2379,7 @@
 												<div class="clearfix">
 													<div class="pull-right datatable-button">
 														<div class="button-group dropdown custom">
-															<button class="btn btn-default small btn-secondary" ng-disabled="vm.workPackage.status=='WITHDRAWN'">Edit <i class="fa fa-caret-down"></i></button>
+															<button class="btn btn-default small btn-secondary" ng-disabled="vm.workPackage.status=='WITHDRAWN'">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN'}"></i></button>
 															<ul class="dropdown-menu custom" role="menu">
 															    <li>
 															    	<a ng-click="vm.clearSelection(workPackageSheet)">Clear Selection</a>
@@ -2792,7 +2794,7 @@
 													<div class="clearfix">
 														<div class="pull-right datatable-button">
 															<div class="button-group dropdown custom">
-																<button class="btn btn-default small btn-secondary" ng-disabled="vm.workPackage.status=='WITHDRAWN'">Edit <i class="fa fa-caret-down"></i></button>
+																<button class="btn btn-default small btn-secondary" ng-disabled="vm.workPackage.status=='WITHDRAWN'">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN'}"></i></button>
 																<ul class="dropdown-menu custom" role="menu">
 																	<li>
 																    	<a ng-click="vm.clearSelection(workPackageSheet)">Clear Selection</a>
@@ -3363,7 +3365,7 @@
 												<div class="clearfix">
 													<div class="pull-right datatable-button">
 														<div class="button-group dropdown custom">
-															<button class="btn btn-default small btn-secondary" ng-disabled="vm.workPackage.status=='WITHDRAWN'">Edit <i class="fa fa-caret-down"></i></button>
+															<button class="btn btn-default small btn-secondary" ng-disabled="vm.workPackage.status=='WITHDRAWN'">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN'}"></i></button>
 															<ul class="dropdown-menu custom" role="menu">
 															    <li>
 															    	<a ng-click="vm.clearSelection(workPackageSheet)">Clear Selection</a>
