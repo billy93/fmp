@@ -28,6 +28,10 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat06;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat07;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat08;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat09;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat101;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat102;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat106;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat106Carriers;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat11;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat12;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat13;
@@ -130,6 +134,19 @@ public class AtpcoRecordService {
 		}
 		
 		return date;
+	}
+	
+	public boolean compareMatchingFareAndRecord(String fOwrt, String fRoutingNo, String fFootnote, Object focusDate,
+			String rOwrt, String rRoutingNo, String rFootnote, Object rEffectiveDate, String rDiscontinueDate) {
+		boolean match = false;
+		
+		if (compareEffectiveDiscontinueDates(focusDate, rEffectiveDate, rDiscontinueDate) && compareRoutingNo(fRoutingNo, rRoutingNo) && compareOwrt(fOwrt, rOwrt)
+				&& compareFootnote(fFootnote, rFootnote)) {
+			match = true;
+//			 System.out.println("Matched");
+		}
+		
+		return match;
 	}
 	
 	public boolean compareMatchingFareAndRecord(String fGeoType1, String fGeoLoc1, String fGeoType2, String fGeoLoc2,
@@ -451,7 +468,7 @@ public class AtpcoRecordService {
 
 		return result;
 	}
-
+	
 	public CategoryTextFormatAndAttribute getAndConvertCategoryDataTable(String category, List<DataTable> dataTables,
 			String type) {
 		CategoryTextFormatAndAttribute result = new CategoryTextFormatAndAttribute();
@@ -514,16 +531,20 @@ public class AtpcoRecordService {
 						}
 					}
 					
-					if (!textFormat.isEmpty()) {
-						textFormat += AtpcoDataConverterUtil.convertRelationshipToName(relationship) + "\n";
+					if (!textFormat.trim().isEmpty()) {
+						textFormat += AtpcoDataConverterUtil.convertRelationshipToName(relationship) + "\n\n";
 					}
 					
 					String dateTable = AtpcoDataConverterUtil.convertDateTableToText(dateTable994);
-					if (dateTable != null) {
+					if (!dateTable.isEmpty()) {
 						textFormat += dateTable + "\n";
 					}
 					
-					textFormat += convertCodedCategoryValueToText(category, cat);
+					String text = convertCodedCategoryValueToText(category, cat);
+					
+					if (!text.trim().isEmpty()) {
+						textFormat += text;
+					}
 					
 					String textTable = AtpcoDataConverterUtil.convertTextTableToText(textTable996);
 					if (!textTable.isEmpty()) {
@@ -603,7 +624,7 @@ public class AtpcoRecordService {
 		} catch (Exception e) {
 		}
 		
-		result += "EFFECTIVE: " + (effStr != null ? effStr.toUpperCase() : "") + "\n";
+		result += "EFFECTIVE: " + (effStr != null ? effStr.toUpperCase() : "") + "\n\n";
 		
 		return result;
 	}
@@ -666,11 +687,11 @@ public class AtpcoRecordService {
 			result.setGetTextTable996NoMethodName("getText_tbl_no_996");
 			result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_009);
 			break;
-		case "010":
-			result.setClassName(classBasePackage.concat("AtpcoRecord3Cat101"));
+		case "102":
+			result.setClassName(classBasePackage.concat("AtpcoRecord3Cat102"));
 			result.setGetTableNoMethodName("getTbl_no");
 			result.setGetTextTable996NoMethodName("getText_tbl_no_996");
-			result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_010);
+			result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_102);
 			break;
 		case "011":
 			result.setClassName(classBasePackage.concat("AtpcoRecord3Cat11"));
@@ -1090,6 +1111,25 @@ public class AtpcoRecordService {
 					result += transfer + "\n";
 				}
 				break;
+			case "101":
+				AtpcoRecord3Cat101 cat101 = (AtpcoRecord3Cat101) catObj;
+				
+				break;
+			case "102":
+				AtpcoRecord3Cat102 cat102 = (AtpcoRecord3Cat102) catObj;
+				if (cat102.getSame() != null && cat102.getSame().contentEquals("X")) {
+					result += "\tROUND TRIP COMBINATIONS PERMITTED WITH ANY CARRIER\n";
+				}
+				if (!result.isEmpty()) {
+					result += "\n";
+				}
+				break;
+			case "106":
+				AtpcoRecord3Cat106 cat106 = (AtpcoRecord3Cat106) catObj;
+				if (!result.isEmpty()) {
+					result += "\n";
+				}
+				break;
 			case "011":
 				AtpcoRecord3Cat11 cat11 = (AtpcoRecord3Cat11) catObj;
 				String blackout = "";
@@ -1277,16 +1317,6 @@ public class AtpcoRecordService {
 						}
 					}
 				}
-//				String locale = "";
-//				for (AtpcoRecord3Cat15Locale loc:cat15.getLocale()) {
-//					if (loc.getAppl() != null && !loc.getAppl().isEmpty()) {
-//						if (loc.getAppl().contentEquals("Y")) {
-//							locale += "\tTICKETS MAY ONLY BE SOLD: \n";
-//						} else if (loc.getAppl().contentEquals("N")) {
-//							locale += "\tTICKETS MAY NOT BE SOLD: \n";
-//						}
-//					}
-//				}
 				if (!result.isEmpty()) {
 					result += "\n";
 				}
