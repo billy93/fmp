@@ -38,6 +38,11 @@ public class CollectionName {
 	public final static String ATPCO_RECORD_3_CAT_035 = "atpco_record_3_cat_035";
 	public final static String ATPCO_RECORD_3_CAT_050 = "atpco_record_3_cat_050";
 	
+	public final static String ATPCO_RECORD_4 = "atpco_record_4";
+	public final static String ATPCO_RECORD_5 = "atpco_record_5";
+	public final static String ATPCO_RECORD_6 = "atpco_record_6";
+	public final static String ATPCO_RECORD_8 = "atpco_record_8";
+	
 	public final static String ATPCO_FOOTNOTE_RECORD_2 = "atpco_footnote_record_2";
 	public final static String ATPCO_FOOTNOTE_RECORD_3_CAT_003 = "atpco_footnote_record_3_cat_003";
 	public final static String ATPCO_FOOTNOTE_RECORD_3_CAT_011 = "atpco_footnote_record_3_cat_011";
