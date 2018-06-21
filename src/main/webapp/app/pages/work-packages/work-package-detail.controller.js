@@ -2328,14 +2328,19 @@
          
 	   vm.addAttachment = function(){
 		 	if(vm.workPackage.attachmentData == null){
-	        		vm.workPackage.attachmentData = [];
-	        	}
+	        	vm.workPackage.attachmentData = [];
+	        }
 	   		vm.workPackage.attachmentData.push({comment:""});
 	   }
 	   
 	   vm.removeAttachment = function(attachment){
-	  		 var index = vm.workPackage.attachmentData.indexOf(attachment);
-	  		vm.workPackage.attachmentData.splice(index, 1);  
+		   if(vm.workPackage.status != "NEW"){
+			   attachment.inOnly = false;
+			   attachment.isDeleted = true;
+		   }else{
+			 var index = vm.workPackage.attachmentData.indexOf(attachment);
+		  	 vm.workPackage.attachmentData.splice(index, 1); 
+		   }
 	  };
 	  
 	  vm.addMarketRules = function(){
@@ -4443,6 +4448,7 @@
           if ($file) {
               DataUtils.toBase64($file, function(base64Data) {
                   $scope.$apply(function() {
+                	  testing.fileName = $file.name;
                       testing.file = base64Data;
                       testing.fileContentType = $file.type;
                   });
