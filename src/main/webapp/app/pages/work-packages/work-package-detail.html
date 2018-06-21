@@ -391,6 +391,9 @@
 																     <li>
 															    		<a ng-click="vm.searchReplace(workPackageSheet)">Search/Replace</a>
 															   		 </li>
+																     <li>
+															    		<a ng-click="vm.copySelectedFares(workPackageSheet, 'workorder-fares')">Copy Selected Rows</a>
+															   		 </li>
 																    <li>
 																    	<a ng-click="vm.addFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Add Rows</a>
 																    </li>
@@ -403,7 +406,7 @@
 																     														   
 																    
 																    <li>
-																    	<a href="#">Paste</a>
+																    	<a ng-click="vm.pasteFares(workPackageSheet, 'workorder-fares')">Paste</a>
 																    </li>
 																    <li>
 																    	<a href="#">Paste As Cancel</a>
@@ -851,6 +854,9 @@
 																    <li>
 															    		<a ng-click="vm.searchReplace(workPackageSheet)">Search/Replace</a>
 															   		</li>
+															   		 <li>
+															    		<a ng-click="vm.copySelectedFares(workPackageSheet, 'workorder-addon-fares')">Copy Selected Rows</a>
+															   		 </li>
 																    <li>
 																    	<a ng-click="vm.addFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Add Rows</a>
 																    </li>
@@ -861,7 +867,7 @@
 																    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Delete Selected Rows</a>
 																    </li>
 																    <li>
-																    	<a href="#">Paste</a>
+																    	<a ng-click="vm.pasteFares(workPackageSheet, 'workorder-addon-fares')">Paste</a>
 																    </li>
 																    <li>
 																    	<a href="#">Paste As Cancel</a>
@@ -1585,6 +1591,9 @@
 												    <li>
 											    		<a ng-click="vm.searchReplace(workPackageSheet)">Search/Replace</a>
 											   		</li>
+											   		<li>
+											    		<a ng-click="vm.copySelectedFares(workPackageSheet, 'workorder-discount-fares')">Copy Selected Rows</a>
+											   		 </li>
 												    <li>
 												    	<a ng-click="vm.addFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Add Rows</a>
 												    </li>
@@ -1594,10 +1603,8 @@
 												    <li>
 												    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Delete Selected Rows</a>
 												    </li>
-												     														   
-												    
-												    <li>
-												    	<a href="#">Paste</a>
+\												    <li>
+												    	<a ng-click="vm.pasteFares(workPackageSheet, 'workorder-discount-fares')">Paste</a>
 												    </li>
 												    <li>
 												    	<a href="#">Paste As Cancel</a>
@@ -2390,6 +2397,9 @@
 															    <li>
 														    		<a ng-click="vm.searchReplace(workPackageSheet)">Search/Replace</a>
 														   		</li>
+														   		 <li>
+														    		<a ng-click="vm.copySelectedFares(workPackageSheet, 'workorder-market-fares')">Copy Selected Rows</a>
+														   		 </li>
 															    <li>
 															    	<a ng-click="vm.addFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Add Rows</a>
 															    </li>
@@ -2398,6 +2408,12 @@
 															    </li>
 															    <li>
 															    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Delete Selected Rows</a>
+															    </li>
+															    <li>
+															    	<a ng-click="vm.pasteFares(workPackageSheet, 'workorder-market-fares')">Paste</a>
+															    </li>
+															    <li>
+															    	<a href="#">Paste As Cancel</a>
 															    </li>
 															</ul>
 														</div>													
@@ -2805,6 +2821,9 @@
 																    <li>
 															    		<a ng-click="vm.searchReplace(workPackageSheet)">Search/Replace</a>
 															   		</li>
+															   		<li>
+															    		<a ng-click="vm.copySelectedFares(workPackageSheet, 'workorder-addon-fares')">Copy Selected Rows</a>
+															   		 </li>
 																    <li>
 																    	<a ng-click="vm.addFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Add Rows</a>
 																    </li>
@@ -2815,7 +2834,7 @@
 																    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Delete Selected Rows</a>
 																    </li>
 																    <li>
-																    	<a href="#">Paste</a>
+																    	<a ng-click="vm.pasteFares(workPackageSheet, 'workorder-addon-fares')">Paste</a>
 																    </li>
 																    <li>
 																    	<a href="#">Paste As Cancel</a>
@@ -3377,6 +3396,9 @@
 															    	<a ng-click="vm.searchReplace(workPackageSheet)">Search/Replace</a>
 															    </li>
 															    <li>
+														    		<a ng-click="vm.copySelectedFares(workPackageSheet, 'workorder-waiver-fares')">Copy Selected Rows</a>
+														   		 </li>
+															    <li>
 															    	<a ng-click="vm.addFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Add Rows</a>
 															    </li>
 															    <li>
@@ -3384,6 +3406,12 @@
 															    </li>
 															    <li>
 															    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Delete Selected Rows</a>
+															    </li>
+															    <li>
+															    	<a ng-click="vm.pasteFares(workPackageSheet, 'workorder-waiver-fares')">Paste</a>
+															    </li>
+															    <li>
+															    	<a href="#">Paste As Cancel</a>
 															    </li>
 															</ul>
 														</div>		
