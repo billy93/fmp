@@ -159,7 +159,7 @@ public class AtpcoRecord3Cat19 {
     private String fbr_psgr_occ_first;
 
     @Field("fbr_percent")
-    private String fbr_percent;
+    private Decimal128 fbr_percent;
 
 	public String getId() {
 		return id;
@@ -553,11 +553,11 @@ public class AtpcoRecord3Cat19 {
 		this.fbr_psgr_occ_first = fbr_psgr_occ_first;
 	}
 
-	public String getFbr_percent() {
+	public Decimal128 getFbr_percent() {
 		return fbr_percent;
 	}
 
-	public void setFbr_percent(String fbr_percent) {
+	public void setFbr_percent(Decimal128 fbr_percent) {
 		this.fbr_percent = fbr_percent;
 	}
 

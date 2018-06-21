@@ -4522,6 +4522,11 @@ label.tree_label:after {
 .comment-list.FIclicked {
   background-color: rgba(255, 204, 85, 0.4) !important; }
 
+.comment-list label span {
+  display: block;
+  margin-left: 20px;
+  margin-top: -18px; }
+
 /* General Demo Style */
 body, html {
   font-size: 100%;
@@ -4731,7 +4736,8 @@ a:hover {
   border-bottom: 1px solid #f4f4f4; }
 
 .poiv-none {
-  pointer-events: none; }
+  pointer-events: none;
+  cursor: not-allowed; }
 
 .block {
   display: block; }

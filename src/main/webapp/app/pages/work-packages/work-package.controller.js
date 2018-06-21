@@ -77,6 +77,7 @@
                
         });
         
+       
         function loadAll () {
             WorkPackage.query({
             	"reviewLevel.ho": vm.workPackageFilter.reviewLevel.ho,
@@ -147,7 +148,6 @@
 
         vm.reuse = function(){
         	vm.selectedRow.reuseReplaceConfig = {};
-        	if(vm.selectedRow.status == 'NEW'){
         		$uibModal.open({
                     templateUrl: 'app/pages/work-packages/work-package-reuse-replace-confirm-dialog.html',
                     controller: 'WorkPackageReuseReplaceConfirmDialogController',
@@ -175,24 +175,10 @@
     	        		alert("An error occured, please try again");
     	        	}
     			});
-        	}
-        	else{
-        		WorkPackage.reuse(vm.selectedRow, onReuseSuccess, onReuseFailed);
-
-				function onReuseSuccess(result){
-	        		alert('Reuse Success');
-	        		$state.go('work-package-detail', {id:result.id});
-	        	}
-
-	        	function onReuseFailed(error){
-	        		alert("An error occured, please try again");
-	        	}
-        	}
         }
 
         vm.replace = function(){
         	vm.selectedRow.reuseReplaceConfig = {};
-        	if(vm.selectedRow.status == 'NEW'){
         		$uibModal.open({
                     templateUrl: 'app/pages/work-packages/work-package-reuse-replace-confirm-dialog.html',
                     controller: 'WorkPackageReuseReplaceConfirmDialogController',
@@ -203,7 +189,10 @@
                     resolve: {
                     	workPackage: function(){
                     		return vm.selectedRow;
-                    	}
+                    	},
+	                   	 businessAreas: ['User', function(User) {
+	                         return User.getBusinessArea().$promise;
+	                     }],
                     }
     			}).result.then(function(option) {
     				vm.selectedRow.reuseReplaceConfig.attachment = option.attachment;
@@ -219,21 +208,7 @@
     	        	function onReplceFailed(error){
 
     	        	}
-    			});
-        	}
-        	else{
-	        	WorkPackage.replace(vm.selectedRow, onReplaceSuccess, onReplceFailed);
-
-	        	function onReplaceSuccess(result){
-	        		alert('Replace Success');
-	        		$state.go('work-package-detail', {id:result.id});
-
-	        	}
-
-	        	function onReplceFailed(error){
-
-	        	}
-        	}
+    			});        	
         }
         vm.withdraw = function(){
         	WorkPackage.withdraw(vm.selectedRow, onWithdrawSuccess, onWithdrawFailed);

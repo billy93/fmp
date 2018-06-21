@@ -15,6 +15,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -216,7 +217,7 @@ public class WorkPackageResource {
         }
         
         workPackage.setStatus(Status.NEW);
-        workPackage.setQueuedDate(ZonedDateTime.now());
+        workPackage.setQueuedDate(Instant.now());
         
         WorkPackage result = workPackageService.save(workPackage);
         
@@ -276,7 +277,6 @@ public class WorkPackageResource {
     public ResponseEntity<WorkPackage> reuseWorkPackage(@RequestBody WorkPackage wp) throws URISyntaxException {
         log.debug("REST request to save reuse WorkPackage : {}", wp);
         
-//        WorkPackage wp = workPackageService.findOne(workPackage.getId());
         wp.setReuseFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
@@ -291,10 +291,8 @@ public class WorkPackageResource {
         wp.setLastModifiedBy(null);
         wp.setLastModifiedDate(null);
         wp.setFilingInstruction(false);
-//        if(!wp.getReuseReplaceConfig().isAttachment()) {
-//        	wp.setAttachment(false);
-//        	wp.getAttachmentData().clear();
-//        }
+        wp.setPriority(null);
+        
         for(WorkPackageFareSheet wps : wp.getFareSheet()) {
         	for(WorkPackageFare fare : wps.getFares()) {
         		fare.setStatus("PENDING");
@@ -320,6 +318,10 @@ public class WorkPackageResource {
         		fare.setStatus("PENDING");
         	}
         }
+        
+        wp.setStatus(Status.NEW);
+        wp.setQueuedDate(Instant.now());
+        
         WorkPackage result = workPackageService.save(wp);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -342,10 +344,9 @@ public class WorkPackageResource {
      */
     @PostMapping("/work-packages/replace")
     @Timed
-    public ResponseEntity<WorkPackage> replaceWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
-        log.debug("REST request to save reuse WorkPackage : {}", workPackage);
+    public ResponseEntity<WorkPackage> replaceWorkPackage(@RequestBody WorkPackage wp) throws URISyntaxException {
+        log.debug("REST request to save reuse WorkPackage : {}", wp);
                
-        WorkPackage wp = workPackageService.findOne(workPackage.getId());
         wp.setReplaceFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
@@ -356,6 +357,8 @@ public class WorkPackageResource {
         wp.setCreatedDate(null);
         wp.setLastModifiedBy(null);
         wp.setLastModifiedDate(null);
+        wp.setPriority(null);
+        
 //        if(!workPackage.getReuseReplaceConfig().isAttachment()) {
 //        	wp.setAttachment(false);
 //        	wp.getAttachmentData().clear();
@@ -385,6 +388,10 @@ public class WorkPackageResource {
         		fare.setStatus("PENDING");
         	}
         }
+        
+        wp.setStatus(Status.NEW);
+        wp.setQueuedDate(Instant.now());
+        
         WorkPackage result = workPackageService.save(wp);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -1880,14 +1887,14 @@ public class WorkPackageResource {
     @PutMapping("/work-packages")
     @Timed
     public ResponseEntity<WorkPackage> updateWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
-        log.debug("REST request to update WorkPackage : {}", workPackage);
+        log.debug("REST request to update WorkPackage : {}", workPackage.toString());
         
         boolean isWorkPackageNew = false;
         
         if (workPackage.getId() == null) {
             return createWorkPackage(workPackage);
         }
-        
+
     	if(workPackage.getWpid() == null) {
     		isWorkPackageNew = true;
     		
@@ -1908,6 +1915,21 @@ public class WorkPackageResource {
     		workPackage.setWpid(year+nf.format(c.getSequenceValue()+1));
         }
     	
+    	if(!workPackage.isSpecifiedFares()) {
+    		workPackage.getFareSheet().clear();
+    	}
+    	if(!workPackage.isWaiverFares()) {
+    		workPackage.getWaiverFareSheet().clear();
+    	}
+    	if(!workPackage.isMarketFares()) {
+    		workPackage.getMarketFareSheet().clear();
+    	}
+    	if(!workPackage.isDiscount()) {
+    		workPackage.getDiscountFareSheet().clear();
+    	}
+    	if(!workPackage.isAddon()) {
+    		workPackage.getAddonFareSheet().clear();
+    	}
     	if(workPackage.getComment() != null) {
 	    	for(Comment comments : workPackage.getComment()) {
 	    		if(comments.getUsername() == null && comments.getCreatedTime() == null) {
@@ -2162,7 +2184,15 @@ public class WorkPackageResource {
 	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
 	    		
 		    		List<WorkPackageFare> fares = wpfs.getFares();
+		    		
+		    		List<String> rejectStatus = new ArrayList<>();
 					for(WorkPackageFare fare : fares) {
+						if(fare.getStatus() != null || !fare.getStatus().contentEquals("")) {
+							if(fare.getStatus().contentEquals("REJECTED")) {
+								rejectStatus.add("REJECTED");
+							}
+						}
+						
 						if(workPackage.getReviewLevel().contentEquals("LSO")) {
 							if(fare.getOrigin() == null || fare.getOrigin().contentEquals("")) {
 								//List Error
@@ -2366,9 +2396,13 @@ public class WorkPackageResource {
 					    		err1.setMessage("Currency is required");
 					    		errors.add(err1);
 							}
-						}
+						}						
 					}
-					
+					if(rejectStatus.size() == fares.size()) {
+						WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+			    		err1.setMessage("Worksheet cannot be empty or have all items rejected");
+			    		errors.add(err1);
+					}
 	    		tab1.setError(errors);
 	    		
 	    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
@@ -2393,8 +2427,15 @@ public class WorkPackageResource {
 	    		
 	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
 	    		
+	    			List<String> rejectStatus = new ArrayList<>();
 		    		List<WorkPackageFare> fares = wpfs.getFares();
 					for(WorkPackageFare fare : fares) {
+						if(fare.getStatus() != null || !fare.getStatus().contentEquals("")) {
+							if(fare.getStatus().contentEquals("REJECTED")) {
+								rejectStatus.add("REJECTED");
+							}
+						}
+						
 						if(workPackage.getReviewLevel().contentEquals("LSO")) {
 							if(wpfs.getAddonFaresName() == null || wpfs.getAddonFaresName().contentEquals("")) {
 								//List Error
@@ -2593,9 +2634,13 @@ public class WorkPackageResource {
 						    		errors.add(err1);
 								}
 							}
-						}
+						}						
 					}
-					
+					if(rejectStatus.size() == fares.size()) {
+						WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+			    		err1.setMessage("Worksheet cannot be empty or have all items rejected");
+			    		errors.add(err1);
+					}
 	    		tab1.setError(errors);
 	    		
 	    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
@@ -2613,16 +2658,22 @@ public class WorkPackageResource {
 	    		
 	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
 	    		
+		    		List<String> rejectStatus = new ArrayList<>();
 		    		List<WorkPackageFare> fares = wpfs.getFares();
 					for(WorkPackageFare fare : fares) {
-						if(workPackage.getReviewLevel().contentEquals("LSO")) {
+						if(fare.getStatus() != null || !fare.getStatus().contentEquals("")) {
+							if(fare.getStatus().contentEquals("REJECTED")) {
+								rejectStatus.add("REJECTED");
+							}
+						}
+		    			if(workPackage.getReviewLevel().contentEquals("LSO")) {
 							if(wpfs.getDiscountFaresName() == null || wpfs.getDiscountFaresName().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Name is required");
 					    		errors.add(err1);
 							}
-							if(wpfs.getDiscountFareType() == null || wpfs.getDiscountFareType().contentEquals("")) {
+							if(wpfs.getFareType() == null || wpfs.getFareType().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Fare Type is required");
@@ -2750,7 +2801,7 @@ public class WorkPackageResource {
 					    		err1.setMessage("Name is required");
 					    		errors.add(err1);
 							}
-							if(wpfs.getDiscountFareType() == null || wpfs.getDiscountFareType().contentEquals("")) {
+							if(wpfs.getFareType() == null || wpfs.getFareType().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Fare Type is required");
@@ -2979,7 +3030,11 @@ public class WorkPackageResource {
 							}
 						}
 					}
-					
+					if(rejectStatus.size() == fares.size()) {
+						WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+			    		err1.setMessage("Worksheet cannot be empty or have all items rejected");
+			    		errors.add(err1);
+					}
 	    		tab1.setError(errors);
 	    		
 	    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
@@ -2997,8 +3052,14 @@ public class WorkPackageResource {
 	    		
 	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
 	    		
+		    		List<String> rejectStatus = new ArrayList<>();
 		    		List<WorkPackageFare> fares = wpfs.getFares();
 					for(WorkPackageFare fare : fares) {
+						if(fare.getStatus() != null || !fare.getStatus().contentEquals("")) {
+							if(fare.getStatus().contentEquals("REJECTED")) {
+								rejectStatus.add("REJECTED");
+							}
+						}
 						if(workPackage.getReviewLevel().contentEquals("LSO")) {
 							if(wpfs.getMarketFaresName() == null || wpfs.getMarketFaresName().contentEquals("")) {
 								//List Error
@@ -3211,7 +3272,11 @@ public class WorkPackageResource {
 							}
 						}
 					}
-					
+					if(rejectStatus.size() == fares.size()) {
+						WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+			    		err1.setMessage("Worksheet cannot be empty or have all items rejected");
+			    		errors.add(err1);
+					}
 	    		tab1.setError(errors);
 	    		
 	    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
@@ -3229,8 +3294,14 @@ public class WorkPackageResource {
 	    		
 	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
 	    		
+		    		List<String> rejectStatus = new ArrayList<>();
 		    		List<WorkPackageFare> fares = wpfs.getFares();
 					for(WorkPackageFare fare : fares) {
+						if(fare.getStatus() != null || !fare.getStatus().contentEquals("")) {
+							if(fare.getStatus().contentEquals("REJECTED")) {
+								rejectStatus.add("REJECTED");
+							}
+						}
 						if(workPackage.getReviewLevel().contentEquals("LSO")) {
 							if(wpfs.getWaiverFaresName() == null || wpfs.getWaiverFaresName().contentEquals("")) {
 								//List Error
@@ -3427,7 +3498,11 @@ public class WorkPackageResource {
 							}
 						}
 					}
-					
+					if(rejectStatus.size() == fares.size()) {
+						WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+			    		err1.setMessage("Worksheet cannot be empty or have all items rejected");
+			    		errors.add(err1);
+					}
 	    		tab1.setError(errors);
 	    		
 	    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
@@ -3716,7 +3791,7 @@ public class WorkPackageResource {
 	        	fareVersion.version = sheet.fareVersion.size() + 1;
 	        	sheet.fareVersion.add(fareVersion);
 	        }
-	        result.setQueuedDate(ZonedDateTime.now());
+	        result.setQueuedDate(Instant.now());
 	        workPackageService.save(result);  
 	        
 	        saveHistoryData(workPackage);
@@ -3775,7 +3850,7 @@ public class WorkPackageResource {
         
         WorkPackage result = workPackageService.findOne(workPackage.getId());
         result.setStatus(Status.WITHDRAWN);
-        result.setQueuedDate(ZonedDateTime.now());
+        result.setQueuedDate(Instant.now());
         workPackageService.save(result);
         /*
         saveHistoryData(workPackage);
@@ -3910,7 +3985,7 @@ public class WorkPackageResource {
         	fareVersion.version = sheet.fareVersion.size() + 1;
         	sheet.fareVersion.add(fareVersion);
         }
-        result.setQueuedDate(ZonedDateTime.now());
+        result.setQueuedDate(Instant.now());
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -3953,7 +4028,7 @@ public class WorkPackageResource {
         }
 		result.setLocked(false);
         result.setStatus(Status.PENDING);
-        result.setQueuedDate(ZonedDateTime.now());
+        result.setQueuedDate(Instant.now());
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -4008,7 +4083,7 @@ public class WorkPackageResource {
 //    		result.setLocked(false);
 //    		result.setStatus(Status.PENDING);        		
 //	    }
-        workPackage.setQueuedDate(ZonedDateTime.now());
+        workPackage.setQueuedDate(Instant.now());
         workPackageService.save(workPackage);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -4239,7 +4314,7 @@ public class WorkPackageResource {
         result.setDistributionReviewLevel(null);
         result.setStatus(Status.REFERRED);
 		result.setLocked(false);
-		result.setQueuedDate(ZonedDateTime.now());
+		result.setQueuedDate(Instant.now());
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -4278,7 +4353,7 @@ public class WorkPackageResource {
         result.setDistributionReviewLevel(result.getDistributionReviewLevel());
         result.setStatus(Status.DISTRIBUTED);
 		result.setLocked(false);
-		result.setQueuedDate(ZonedDateTime.now());
+		result.setQueuedDate(Instant.now());
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();

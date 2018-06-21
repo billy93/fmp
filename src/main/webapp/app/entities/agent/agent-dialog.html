@@ -140,10 +140,10 @@
 		</div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+        <button type="button" class="btn btn-default btn-back" data-dismiss="modal" ng-click="vm.clear()">
             <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
         </button>
-        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary" ng-click="vm.save()">
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-secondary" ng-click="vm.save()">
             <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
         </button>
     </div>
