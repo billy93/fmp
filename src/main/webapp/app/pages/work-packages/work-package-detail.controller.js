@@ -1769,7 +1769,7 @@
     		fareSheet.fares.push({
     			no:fareSheet.fares.length+1,
     			status:"PENDING",
-    			action:"New",
+    			action:"AUTO",
   	 	      	carrier:"GA"
     		});
  	    }
