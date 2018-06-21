@@ -198,7 +198,7 @@
 											<button class="btn btn-default small fa fa-unlock" ng-click="vm.unlock()" ng-disabled="vm.selectedRow == null || !vm.selectedRow.locked"> Unlock</button>
 											<button class="btn btn-default small fa fa-recycle" ng-click="vm.reuse()" ng-disabled="vm.selectedRow == null"> Reuse</button>
 											<button class="btn btn-default small fa fa-reply" ng-click="vm.replace()" ng-disabled="vm.selectedRow == null && vm.selectedRow.targetDistribution != 'ATPCO'"> Replace</button>
-											<button class="btn btn-default small fa fa-ban" ng-click="vm.withdraw()" ng-disabled="vm.selectedRow == null"> Withdraw</button>
+											<button class="btn btn-default small fa fa-ban" ng-click="vm.withdraw()" ng-disabled="vm.selectedRow == null || (vm.selectedRow.reviewLevel == 'DISTRIBUTION')">Withdraw</button>
 											<button class="btn btn-default small fa fa-history" ng-click="vm.showHistory()" ng-disabled="vm.selectedRow == null"> Histroy</button>
 											<!-- <div class="btn btn-app" ng-click="vm.unlock($index)" ng-if="workPackage.locked">
 													<i class="fa fa-unlock"></i>Unlock

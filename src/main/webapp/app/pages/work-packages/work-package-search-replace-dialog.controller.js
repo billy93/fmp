@@ -12,11 +12,96 @@
         var vm = this;
         vm.clear = clear;
         
-        
+        vm.datePickerOpenStatus = {};
+        vm.openCalendar = openCalendar;
+        $scope.dateformat = "yyyy-MM-dd";
+        function openCalendar (date) {
+            vm.datePickerOpenStatus[date] = true;
+        }
         vm.filter = {
         	andor:'and',
         	no:{
         		check:false
+        	},
+        	status:{
+    			check:false,
+    			replace:{
+    				check:false
+    			}
+    		},
+        	tariffNumber:{        		
+        		tarNo:{
+        			check:false,
+        			search:null
+        		},
+        		tarCd:{
+        			check:false,
+        			search:null
+        		},
+        		global:{
+        			check:false,
+        			search:null
+        		}
+        	},
+        	origin:{
+        		check:false,
+        	},
+        	destination:{
+        		check:false,
+        	},
+        	fareBasis:{
+        		check:false,
+        	},
+        	bookingClass:{
+        		check:false,
+        	},
+        	cabin:{
+        		check:false,
+        	},
+        	typeOfJourney:{
+        		check:false,
+        	},        	
+        	footnote:{
+        		check:false,
+        	},
+        	rtgno:{
+        		check:false,
+        	},
+        	ruleno:{
+        		check:false,
+        	},
+        	currency:{
+        		check:false,
+        	},
+        	amount:{
+        		check:false,
+        	},
+        	aif:{
+        		check:false,
+        	},
+        	travelStart:{
+        		check:false,
+        	},
+        	travelEnd:{
+        		check:false,
+        	},
+        	saleStart:{
+        		check:false,
+        	},
+        	saleEnd:{
+        		check:false,
+        	},
+        	comment:{
+        		check:false,
+        	},
+        	travelComplete:{
+        		check:false,
+        	},
+        	travelCompleteIndicator:{
+        		check:false,
+        	},
+        	ratesheetComment:{
+        		check:false,
         	},
         };
         vm.originalFilter = angular.copy(vm.filter);
@@ -26,8 +111,8 @@
         	
         	if(vm.filter.message != null){
         		if(confirm(vm.filter.message)){
-//        			vm.filter.index = 0;
-        			//vm.filter.message = null;
+        			vm.filter.index = 0;
+        			vm.filter.message = null;
         			$uibModalInstance.close(vm.filter);        			
         		}
         	}
@@ -48,8 +133,8 @@
         }
         
         vm.replaceAll = function(){
-        	vm.filter.replace = true;
         	vm.filter.replaceAll = true;
+        	vm.filter.replace = false;
         	vm.filter.find = false;
         	$uibModalInstance.close(vm.filter);
         }

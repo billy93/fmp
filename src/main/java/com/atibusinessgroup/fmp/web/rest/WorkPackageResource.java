@@ -2184,7 +2184,15 @@ public class WorkPackageResource {
 	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
 	    		
 		    		List<WorkPackageFare> fares = wpfs.getFares();
+		    		
+		    		List<String> rejectStatus = new ArrayList<>();
 					for(WorkPackageFare fare : fares) {
+						if(fare.getStatus() != null || !fare.getStatus().contentEquals("")) {
+							if(fare.getStatus().contentEquals("REJECTED")) {
+								rejectStatus.add("REJECTED");
+							}
+						}
+						
 						if(workPackage.getReviewLevel().contentEquals("LSO")) {
 							if(fare.getOrigin() == null || fare.getOrigin().contentEquals("")) {
 								//List Error
@@ -2388,9 +2396,13 @@ public class WorkPackageResource {
 					    		err1.setMessage("Currency is required");
 					    		errors.add(err1);
 							}
-						}
+						}						
 					}
-					
+					if(rejectStatus.size() == fares.size()) {
+						WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+			    		err1.setMessage("Worksheet cannot be empty or have all items rejected");
+			    		errors.add(err1);
+					}
 	    		tab1.setError(errors);
 	    		
 	    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
@@ -2415,8 +2427,15 @@ public class WorkPackageResource {
 	    		
 	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
 	    		
+	    			List<String> rejectStatus = new ArrayList<>();
 		    		List<WorkPackageFare> fares = wpfs.getFares();
 					for(WorkPackageFare fare : fares) {
+						if(fare.getStatus() != null || !fare.getStatus().contentEquals("")) {
+							if(fare.getStatus().contentEquals("REJECTED")) {
+								rejectStatus.add("REJECTED");
+							}
+						}
+						
 						if(workPackage.getReviewLevel().contentEquals("LSO")) {
 							if(wpfs.getAddonFaresName() == null || wpfs.getAddonFaresName().contentEquals("")) {
 								//List Error
@@ -2615,9 +2634,13 @@ public class WorkPackageResource {
 						    		errors.add(err1);
 								}
 							}
-						}
+						}						
 					}
-					
+					if(rejectStatus.size() == fares.size()) {
+						WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+			    		err1.setMessage("Worksheet cannot be empty or have all items rejected");
+			    		errors.add(err1);
+					}
 	    		tab1.setError(errors);
 	    		
 	    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
@@ -2635,9 +2658,15 @@ public class WorkPackageResource {
 	    		
 	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
 	    		
+		    		List<String> rejectStatus = new ArrayList<>();
 		    		List<WorkPackageFare> fares = wpfs.getFares();
 					for(WorkPackageFare fare : fares) {
-						if(workPackage.getReviewLevel().contentEquals("LSO")) {
+						if(fare.getStatus() != null || !fare.getStatus().contentEquals("")) {
+							if(fare.getStatus().contentEquals("REJECTED")) {
+								rejectStatus.add("REJECTED");
+							}
+						}
+		    			if(workPackage.getReviewLevel().contentEquals("LSO")) {
 							if(wpfs.getDiscountFaresName() == null || wpfs.getDiscountFaresName().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
@@ -3001,7 +3030,11 @@ public class WorkPackageResource {
 							}
 						}
 					}
-					
+					if(rejectStatus.size() == fares.size()) {
+						WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+			    		err1.setMessage("Worksheet cannot be empty or have all items rejected");
+			    		errors.add(err1);
+					}
 	    		tab1.setError(errors);
 	    		
 	    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
@@ -3019,8 +3052,14 @@ public class WorkPackageResource {
 	    		
 	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
 	    		
+		    		List<String> rejectStatus = new ArrayList<>();
 		    		List<WorkPackageFare> fares = wpfs.getFares();
 					for(WorkPackageFare fare : fares) {
+						if(fare.getStatus() != null || !fare.getStatus().contentEquals("")) {
+							if(fare.getStatus().contentEquals("REJECTED")) {
+								rejectStatus.add("REJECTED");
+							}
+						}
 						if(workPackage.getReviewLevel().contentEquals("LSO")) {
 							if(wpfs.getMarketFaresName() == null || wpfs.getMarketFaresName().contentEquals("")) {
 								//List Error
@@ -3233,7 +3272,11 @@ public class WorkPackageResource {
 							}
 						}
 					}
-					
+					if(rejectStatus.size() == fares.size()) {
+						WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+			    		err1.setMessage("Worksheet cannot be empty or have all items rejected");
+			    		errors.add(err1);
+					}
 	    		tab1.setError(errors);
 	    		
 	    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
@@ -3251,8 +3294,14 @@ public class WorkPackageResource {
 	    		
 	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
 	    		
+		    		List<String> rejectStatus = new ArrayList<>();
 		    		List<WorkPackageFare> fares = wpfs.getFares();
 					for(WorkPackageFare fare : fares) {
+						if(fare.getStatus() != null || !fare.getStatus().contentEquals("")) {
+							if(fare.getStatus().contentEquals("REJECTED")) {
+								rejectStatus.add("REJECTED");
+							}
+						}
 						if(workPackage.getReviewLevel().contentEquals("LSO")) {
 							if(wpfs.getWaiverFaresName() == null || wpfs.getWaiverFaresName().contentEquals("")) {
 								//List Error
@@ -3449,7 +3498,11 @@ public class WorkPackageResource {
 							}
 						}
 					}
-					
+					if(rejectStatus.size() == fares.size()) {
+						WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+			    		err1.setMessage("Worksheet cannot be empty or have all items rejected");
+			    		errors.add(err1);
+					}
 	    		tab1.setError(errors);
 	    		
 	    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
