@@ -73,7 +73,7 @@ public class ClipboardResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ClipboardResource clipboardResource = new ClipboardResource(clipboardService);
+        final ClipboardResource clipboardResource = new ClipboardResource(clipboardService, null);
         this.restClipboardMockMvc = MockMvcBuilders.standaloneSetup(clipboardResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

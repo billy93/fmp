@@ -3,15 +3,15 @@ package com.atibusinessgroup.fmp.web.rest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +25,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.atibusinessgroup.fmp.domain.Clipboard;
+import com.atibusinessgroup.fmp.domain.WorkPackageFare;
 import com.atibusinessgroup.fmp.security.SecurityUtils;
 import com.atibusinessgroup.fmp.service.ClipboardService;
 import com.atibusinessgroup.fmp.web.rest.errors.BadRequestAlertException;
 import com.atibusinessgroup.fmp.web.rest.util.HeaderUtil;
 import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
 import com.codahale.metrics.annotation.Timed;
+import com.mongodb.DBObject;
+import com.mongodb.util.JSON;
 
 import io.github.jhipster.web.util.ResponseUtil;
 
@@ -47,8 +50,11 @@ public class ClipboardResource {
 
     private final ClipboardService clipboardService;
 
-    public ClipboardResource(ClipboardService clipboardService) {
+    private final MongoTemplate mongoTemplate;
+    
+    public ClipboardResource(ClipboardService clipboardService, MongoTemplate mongoTemplate) {
         this.clipboardService = clipboardService;
+        this.mongoTemplate = mongoTemplate;
     }
 
     /**
@@ -117,16 +123,19 @@ public class ClipboardResource {
         dbClipboard.setPage(clipboard.getPage());
         dbClipboard.setCopyDateTime(Instant.now());
         
-        Map<String, List<Object>> filtered = new HashMap<>();
-        
-        for (Map.Entry<String, List<Object>> entry : clipboard.getContent().entrySet()) {
-        	if (entry.getKey() != null) {
-        		filtered.put(entry.getKey(), entry.getValue());
-        	}
-        }
-        
-        dbClipboard.setContent(filtered);
-        
+//        Map<String, List<Object>> filtered = new HashMap<>();
+//        
+//        for (Object entry : clipboard.getContent()) {
+//        	if (entry.getKey() != null) {
+//        		filtered.put(entry.getKey(), entry.getValue());
+//        	}
+//        }
+//        for(Object o : clipboard.getContent()) {
+//        	WorkPackageFare fare = (WorkPackageFare) o;
+//        	log.debug("TRAVEL START : {}", fare.getTravelStart());
+//        }
+        dbClipboard.setContent(clipboard.getContent());
+//        dbClipboard.setFares(clipboard.getFares());
         dbClipboard = clipboardService.save(dbClipboard);
         
         return ResponseEntity.ok().body(dbClipboard);
@@ -161,6 +170,35 @@ public class ClipboardResource {
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(clipboard));
     }
 
+    /**
+     * GET  /clipboard-sheets/findByCurrentUsername : get the "id" clipboard sheets.
+     *
+     * @param id the id of the clipboard to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the clipboard, or with status 404 (Not Found)
+     */
+    @GetMapping("/clipboards/findByCurrentUsername")
+    @Timed
+    public ResponseEntity<Clipboard> findClipboardSheetByCurrentUsername() {
+        log.debug("REST request to get ClipboardSheet by current username: {}", SecurityUtils.getCurrentUserLogin().get());
+        Clipboard clipboard = clipboardService.findOneByUsername(SecurityUtils.getCurrentUserLogin().get());
+        
+//        for(int a=0;a<clipboard.getContent().size();a++) {
+//           String jsonString = new JSONObject(clipboard.getContent().get(a)).toString();
+//      	   DBObject dbObject = (DBObject) JSON.parse(jsonString);
+//      	   WorkPackageFare result = mongoTemplate.getConverter().read(WorkPackageFare.class, dbObject);
+//      	   clipboard.getContent().set(a, result);
+//        }
+//       clipboard.getContent().forEach((content) -> {
+//    	   String jsonString = new JSONObject(content).toString();
+//    	   DBObject dbObject = (DBObject) JSON.parse(jsonString);
+//    	   WorkPackageFare result = mongoTemplate.getConverter().read(WorkPackageFare.class, dbObject);
+//    	   log.debug("TEST : {}",result.toString());
+////    	   WorkPackageFare wpf = (WorkPackageFare) content;
+//       });
+        
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(clipboard));
+    }
+    
     /**
      * DELETE  /clipboards/:id : delete the "id" clipboard.
      *

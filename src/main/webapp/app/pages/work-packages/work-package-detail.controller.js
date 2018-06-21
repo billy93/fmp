@@ -20,8 +20,8 @@
      * @param Clipboard
      * @returns
      */
-    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber','tariffNumberAddOn', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities', 'states', 'cityGroups', 'Currency', 'atpcoFareTypes', 'ClipboardSheet'];
-    function WorkPackageDetailController($window, $sce, currencies,tariffNumber,tariffNumberAddOn, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups, Currency, atpcoFareTypes, ClipboardSheet) {
+    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber','tariffNumberAddOn', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities', 'states', 'cityGroups', 'Currency', 'atpcoFareTypes', 'ClipboardSheet', 'Clipboard'];
+    function WorkPackageDetailController($window, $sce, currencies,tariffNumber,tariffNumberAddOn, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups, Currency, atpcoFareTypes, ClipboardSheet, Clipboard) {
     	var vm = this;
 
     	window.onbeforeunload = function () {
@@ -4879,20 +4879,70 @@
     				  }
     			 });
     			  if(selected){
-//    				  console.log("SELECTED : "+selected);
     				  var copiedFare = angular.copy(workPackageSheet.fares[x]);
     				  copiedFare.no = workPackageSheet.fares.length+1;
     				  copiedFare.status = "PENDING";
     				  copiedFare.field = null;
     				  workPackageSheet.fares.push(copiedFare);
     			  }
-//    			  console.log("X : "+x);
     		  }
-    	  }
-    	  
-//    	  vm.sort(workPackageSheet, '#');
+    	  }    	  
       }
       
+      vm.copySelectedFares = function(workPackageSheet, currentPage){
+    	  var fares = [];
+    	  for(var x=0;x<workPackageSheet.fares.length;x++){
+    		  if(workPackageSheet.fares[x].field != undefined){
+    			  var selected = false;
+    			  Object.keys(workPackageSheet.fares[x].field).forEach(function(key,index) {
+    				  if(workPackageSheet.fares[x].field[key]){
+    					  selected = true;
+    				  }
+    			 });
+    			  
+    			  if(selected){
+    				  var copiedFare = angular.copy(workPackageSheet.fares[x]);
+//    				  copiedFare.no = workPackageSheet.fares.length+1;
+    				  copiedFare.status = "PENDING";
+    				  copiedFare.field = null;
+//    				  workPackageSheet.fares.push(copiedFare);
+    				  fares.push(copiedFare);
+    			  }
+    		  }
+    	  }
+    	  var clipboard = {
+    	      content:fares,
+			  page:currentPage
+		  }
+		  
+		  	Clipboard.copy(clipboard, function(result){
+				alert('Fare copied');
+			}, function(error){
+				alert('Error occured');
+			});
+      }
+      
+      vm.pasteFares = function(workPackageSheet, currentPage){
+    	  var clipboard = Clipboard.findByCurrentUsername({id : $stateParams.id}).$promise;
+    	  
+    	  clipboard.then(function(result){
+    		  if(result.page == currentPage){
+	    		  for(var x=0;x<result.content.length;x++){
+	    			  result.content[x].no = workPackageSheet.fares.length+1;
+	    			  
+	    			  result.content[x].travelStart = DateUtils.convertDateTimeFromServer(result.content[x].travelStart);
+	    			  result.content[x].travelEnd = DateUtils.convertDateTimeFromServer(result.content[x].travelEnd);
+	    			  result.content[x].saleStart = DateUtils.convertDateTimeFromServer(result.content[x].saleStart);
+	    			  result.content[x].saleEnd = DateUtils.convertDateTimeFromServer(result.content[x].saleEnd);
+	    			  result.content[x].travelComplete = DateUtils.convertDateTimeFromServer(result.content[x].travelComplete);
+	        		  workPackageSheet.fares.push(result.content[x]);    			  
+	    		  }    
+    		  }
+    		  else{
+    			  alert('Nothing to paste');
+    		  }
+    	  });
+      }
       
       vm.deleteSelectedFares = function(workPackageSheet){
     	  var fares = [];
