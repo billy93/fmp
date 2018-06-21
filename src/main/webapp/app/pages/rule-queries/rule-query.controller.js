@@ -5,17 +5,18 @@
         .module('fmpApp')
         .controller('RuleQueryController', RuleQueryController);
 
-    RuleQueryController.$inject = ['$state', 'RuleQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', '$uibModal'];
+    RuleQueryController.$inject = ['$state', 'RuleQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', 'params', '$uibModal'];
 
-    function RuleQueryController($state, RuleQuery, ParseLinks, AlertService, paginationConstants, queryParams, $uibModal) {
+    function RuleQueryController($state, RuleQuery, ParseLinks, AlertService, paginationConstants, queryParams, params, $uibModal) {
     	
-    	console.log("queryParams :: ",queryParams);
 
         var vm = this;
         vm.loadPage = loadPage;
         vm.itemsPerPage = paginationConstants.itemsPerPage;
         vm.queryParams = queryParams;
+        vm.params = params;
         vm.loadAll = loadAll;
+        vm.loadRec8 = loadRec8;
         vm.getRules = getRules;
         vm.getRules2 = getRules2;
         vm.reset = reset;
@@ -27,30 +28,63 @@
         vm.getTab = getTab;
         
         
+        
         vm.datePickerOpenStatus = {};
         vm.dateFormat = "yyyy-MM-dd";
         vm.openCalendar = openCalendar;
-        vm.loadRec8 = loadRec8;
+        
+        vm.openTooltip = true;
+        
+        $(".ng-valid").keyup(function() {
+        	
+        	$("input.ng-valid").css("border", "0px");
+        });
+        
+        $(".ng-valid").keyup(function() {
+        	
+        	$("input.ng-invalid").css("border", "1px solid red");
+        });
+        
+        
+        function loadAll (queryForm) {
+        	if(queryForm.$valid) {
+        		vm.queryParams.page = vm.page - 1;
+            	vm.queryParams.size = vm.itemsPerPage;
+            	
+            	RuleQuery.query(vm.queryParams, onSuccess, onError);
+            	
+                function onSuccess(data, headers) {
+                    vm.links = ParseLinks.parse(headers('link'));
+                    vm.totalItems = headers('X-Total-Count');
+                    vm.queryCount = vm.totalItems;
+                    vm.ruleQueries = data;
+                }
+                
+                function onError(error) {
+                    AlertService.error(error.data.message);
+                }
+        	}
+        }
 
-        function loadAll () {
-        	vm.queryParams.page = vm.page - 1;
-        	vm.queryParams.size = vm.itemsPerPage;
-        	
-        	console.log(vm.queryParams);
-        	
-        	RuleQuery.query(vm.queryParams, onSuccess, onError);
-        	
-            function onSuccess(data, headers) {
-                vm.links = ParseLinks.parse(headers('link'));
-                vm.totalItems = headers('X-Total-Count');
-                vm.queryCount = vm.totalItems;
-                vm.ruleQueries = data;
-            }
-            
-            function onError(error) {
-                AlertService.error(error.data.message);
-            }
-        	
+        function loadRec8 (rec8Form) {
+        	console.log(rec8Form);
+        	if(rec8Form.$valid) {
+        		vm.rec8params.page = vm.page - 1;
+            	vm.rec8params.size = vm.itemsPerPage;
+            	
+            	RuleQuery.queryRec8(vm.rec8params, onSuccess, onError);
+            	
+                function onSuccess(data, headers) {
+                    vm.links = ParseLinks.parse(headers('link'));
+                    vm.totalItems = headers('X-Total-Count');
+                    vm.queryCount = vm.totalItems;
+                    vm.record8 = data;
+                }
+                
+                function onError(error) {
+                    AlertService.error(error.data.message);
+                }
+        	}
         }
 
         function loadPage(page) {
@@ -58,9 +92,14 @@
         }
 
         function getRules(ruleQuery) {
-        	RuleQuery.getRules(ruleQuery, function(data) {
+        	
+        	vm.params.cxr= ruleQuery.cxr;
+        	vm.params.ruleTarNo= ruleQuery.tarNo;
+        	vm.params.ruleNo= ruleQuery.ruleNo;
+        	vm.params.catNo= ruleQuery.catNo;
+        	
+        	RuleQuery.getRules(vm.params, function(data) {
         		vm.ruleQueryCategories = data;
-        		console.log(data);
         	}, function(error) {
         		console.log(error);
         	});
@@ -69,7 +108,6 @@
         function getRules2(ruleQuery) {
         	RuleQuery.getRules2(ruleQuery, function(data) {
         		vm.ruleQueryCategories2 = data;
-        		console.log(data);
         	}, function(error) {
         		console.log(error);
         	});
@@ -89,16 +127,7 @@
         	$("#tblDetail").hide();
         	$("#ruleCategories").hide();
         }
-        
-        function clearFilter() {
-        	$("#cxr").val("");
-        	$("#ruleNo").val("");
-        	$("#type").val("");
-        	$("#src").val("");
-        	$("#ruleTarNo").val("");
-        	$("#catNo").val("");
-        }
-        
+       
         function openCalendar (e, date) {
         	e.preventDefault();
             e.stopPropagation();
@@ -111,14 +140,17 @@
         vm.tab1 = true;
         function getTab(tab) {
         	if(tab=='1') {
+        		vm.reset();
         		vm.tab1 = true;
         		vm.tab2 = false;
         		vm.tab3 = false;
         	} else if(tab=='2') {
+        		vm.reset();
         		vm.tab1 = false;
         		vm.tab2 = true;
         		vm.tab3 = false;
         	}  else if(tab=='3') {
+        		vm.reset();
         		vm.tab1 = false;
         		vm.tab2 = false;
         		vm.tab3 = true;
@@ -126,22 +158,50 @@
         }
         
         function reset() {
+        	vm.clearFilter();
+        	
         	vm.queryParams = {
     			cxr: null,
         		ruleTarNo: null,
         		ruleNo: null,
         		type: null,
-        		src: null,
-        		cat: null,
         		catNo: null,
-        		accountCode: null,
+        		includeDisc : null,
         	};
         	
-        	vm.clearFilter();
+        	vm.rec8params = {
+        			cxr: null,
+            		ruleTarNo: null,
+            		ruleNo: null,
+            		catNo: null,
+            		includeDisc : null,
+            };
+        	
+        	
         	vm.ruleQueries = null;
         	vm.ruleQueryCategories = null;
         	vm.ruleQueryCategories2 = null;
+        	vm.record8 = null;
         }
+        
+        
+        function clearFilter() {
+        	$("#cxr").val("");
+        	$("#ruleNo").val("");
+        	$("#type").val("");
+        	$("#src").val("");
+        	$("#ruleTarNo").val("");
+        	$("#catNo").val("");
+        	$("#cxrRec8").val("");
+        	$("#ruleNoRec8").val("");
+        	$("#typeRec8").val("");
+        	$("#srcRec8").val("");
+        	$("#ruleTarNoRec8").val("");
+        	$("#catNoRec8").val("");
+        	
+        	$("input.ng-invalid").css("border", "1px solid red");
+        }
+        
         
         function showCategoryDetail(category) {
         	$uibModal.open({
@@ -159,11 +219,6 @@
             }, function() {
                 $state.go('rule-query');
             });
-        }
-        
-        
-        function loadRec8() {
-        	
         }
     }
 })();

@@ -9,6 +9,7 @@ public class RuleQueryParam {
 	private String src;
 	private String category;
 	private String catNo;
+	private boolean includeDisc;
 	
 	private int page;
 	private int size;
@@ -16,20 +17,6 @@ public class RuleQueryParam {
 	public RuleQueryParam() {
 		
 	}
-	
-	
-
-	public String getCatNo() {
-		return catNo;
-	}
-
-
-
-	public void setCatNo(String catNo) {
-		this.catNo = catNo;
-	}
-
-
 
 	public String getCxr() {
 		return cxr;
@@ -79,6 +66,22 @@ public class RuleQueryParam {
 		this.category = category;
 	}
 
+	public String getCatNo() {
+		return catNo;
+	}
+
+	public void setCatNo(String catNo) {
+		this.catNo = catNo;
+	}
+
+	public boolean isIncludeDisc() {
+		return includeDisc;
+	}
+
+	public void setIncludeDisc(boolean includeDisc) {
+		this.includeDisc = includeDisc;
+	}
+
 	public int getPage() {
 		return page;
 	}
@@ -98,9 +101,11 @@ public class RuleQueryParam {
 	@Override
 	public String toString() {
 		return "RuleQueryParam [cxr=" + cxr + ", ruleTarNo=" + ruleTarNo + ", ruleNo=" + ruleNo + ", type=" + type
-				+ ", src=" + src + ", category=" + category + ", page=" + page + ", size=" + size + "]";
+				+ ", src=" + src + ", category=" + category + ", catNo=" + catNo + ", includeDisc=" + includeDisc
+				+ ", page=" + page + ", size=" + size + "]";
 	}
 	
 	
+
 	
 }
