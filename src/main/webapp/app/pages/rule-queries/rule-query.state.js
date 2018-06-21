@@ -34,6 +34,17 @@
                 		cat: null,
                 		catNo: null
                 	}
+            	}],
+            	params: [function() {
+            		return {
+                		cxr: null,
+                		ruleTarNo: null,
+                		ruleNo: null,
+                		type: null,
+                		src: null,
+                		cat: null,
+                		catNo: null
+                	}
             	}]
             }
         })

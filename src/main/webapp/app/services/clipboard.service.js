@@ -21,7 +21,17 @@
                 }
             },
             'update': { method:'PUT' },
-            'copy': { method: 'PUT', url:'api/clipboards/copy' }
+            'copy': { method: 'PUT', url:'api/clipboards/copy' },
+            'findByCurrentUsername': {
+                method: 'GET',
+                transformResponse: function (data) {
+                    if (data) {
+                        data = angular.fromJson(data);
+                    }
+                    return data;
+                },
+                url:'api/clipboards/findByCurrentUsername'
+            },
         });
     }
 })();

@@ -2006,6 +2006,9 @@ public class WorkPackageResource {
     		for(WorkPackageFareSheet sheet : workPackage.getFareSheet()) {
     			if(sheet.getFares().size() > 0) {
     				for(WorkPackageFare fares : sheet.getFares()) {
+    	    			if(fares.getAction().contentEquals("AUTO")) {
+        	    			fares.setAction("NEW");    	    				
+    	    			}
     					if(fares.getSaleStart() != null) {
     						allFares.add(fares);
     						continue;
@@ -2018,6 +2021,9 @@ public class WorkPackageResource {
     		for(WorkPackageFareSheet sheet : workPackage.getAddonFareSheet()) {
     			if(sheet.getFares().size() > 0) {
     				for(WorkPackageFare fares : sheet.getFares()) {
+    					if(fares.getAction().contentEquals("AUTO")) {
+    						fares.setAction("NEW");   	    				
+    	    			}
     					if(fares.getSaleStart() != null) {
     						allFares.add(fares);
     						continue;
@@ -2030,6 +2036,9 @@ public class WorkPackageResource {
     		for(WorkPackageFareSheet sheet : workPackage.getDiscountFareSheet()) {
     			if(sheet.getFares().size() > 0) {
     				for(WorkPackageFare fares : sheet.getFares()) {
+    					if(fares.getAction().contentEquals("AUTO")) {
+    						fares.setAction("NEW");   	    				
+    	    			}
     					if(fares.getSaleStart() != null) {
     						allFares.add(fares);
     						continue;
@@ -2042,6 +2051,9 @@ public class WorkPackageResource {
     		for(WorkPackageFareSheet sheet : workPackage.getMarketFareSheet()) {
     			if(sheet.getFares().size() > 0) {
     				for(WorkPackageFare fares : sheet.getFares()) {
+    					if(fares.getAction().contentEquals("AUTO")) {
+    						fares.setAction("NEW");   	    				
+    	    			}
     					if(fares.getSaleStart() != null) {
     						allFares.add(fares);
     						continue;
@@ -2054,6 +2066,9 @@ public class WorkPackageResource {
     		for(WorkPackageFareSheet sheet : workPackage.getWaiverFareSheet()) {
     			if(sheet.getFares().size() > 0) {
     				for(WorkPackageFare fares : sheet.getFares()) {
+    					if(fares.getAction().contentEquals("AUTO")) {
+    						fares.setAction("NEW");   	    				
+    	    			}
     					if(fares.getSaleStart() != null) {
     						allFares.add(fares);
     						continue;
