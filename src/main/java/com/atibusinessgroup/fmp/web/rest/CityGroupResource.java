@@ -54,10 +54,19 @@ public class CityGroupResource {
         if (cityGroup.getId() != null) {
             throw new BadRequestAlertException("A new cityGroup cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        CityGroup result = cityGroupRepository.save(cityGroup);
-        return ResponseEntity.created(new URI("/api/city-groups/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        
+        CityGroup check = cityGroupRepository.findOneByCode(cityGroup.getCode());
+        if(check == null) {
+        	CityGroup result = cityGroupRepository.save(cityGroup);
+        	
+        	return ResponseEntity.created(new URI("/api/city-groups/" + result.getId()))
+                    .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                    .body(result);
+        }
+        else {
+        	throw new BadRequestAlertException("A cityGroup with code "+cityGroup.getCode()+" already exist in database", ENTITY_NAME, "idexists");
+        }
+        
     }
 
     /**
@@ -76,10 +85,23 @@ public class CityGroupResource {
         if (cityGroup.getId() == null) {
             return createCityGroup(cityGroup);
         }
+        
         CityGroup result = cityGroupRepository.save(cityGroup);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, cityGroup.getId().toString()))
-            .body(result);
+    	
+    	return ResponseEntity.created(new URI("/api/city-groups/" + result.getId()))
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getId().toString()))
+                .body(result);
+//        CityGroup check = cityGroupRepository.findOneByCode(cityGroup.getCode());
+//        if(check != null) {
+//        	CityGroup result = cityGroupRepository.save(cityGroup);
+//        	
+//        	return ResponseEntity.created(new URI("/api/city-groups/" + result.getId()))
+//                    .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getId().toString()))
+//                    .body(result);
+//        }
+//        else {
+//        	return createCityGroup(cityGroup);
+//        }
     }
 
     /**
