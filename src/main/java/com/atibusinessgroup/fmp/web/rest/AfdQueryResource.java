@@ -321,7 +321,7 @@ public class AfdQueryResource {
     				}
     			}
     		}
-            
+        	
         	Category cat = new Category();
         	cat.setCatName(entry.getValue());
         	

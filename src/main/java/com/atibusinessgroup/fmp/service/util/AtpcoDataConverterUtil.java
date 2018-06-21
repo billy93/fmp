@@ -259,13 +259,13 @@ public class AtpcoDataConverterUtil {
 			result = "THE FARE MAY BE USED FOR ADD-ON CONSTRUCTION";
 			break;
 		case "R":
-			result = "THE FARE MUST ONLY BE USED FOR ADD-ON CONSTRUCTION AND SHOULD NOT BE DISPLAYED OR SOLD IN ITS SPECIFIED FARE MARKET";
+			result = "THE FARE MUST ONLY BE USED FOR ADD-ON CONSTRUCTION \n\tAND SHOULD NOT BE DISPLAYED OR SOLD IN ITS SPECIFIED FARE MARKET";
 			break;
 		case "N":
 			result = "THE FARE MAY NOT BE USED FOR ADD-ON CONSTRUCTION";
 			break;
 		case "":
-			result = "THE FARE MAY BE USED FOR ANY PURPOSE (WITHIN THE CONFINES OF THE REMAINDER OF THE FIELDS IN THE RECORD)";
+			result = "THE FARE MAY BE USED FOR ANY PURPOSE (WITHIN \n\tTHE CONFINES OF THE REMAINDER OF THE FIELDS IN THE RECORD)";
 			break;
 		}
 		
@@ -311,6 +311,93 @@ public class AtpcoDataConverterUtil {
 			break;
 		case "K":
 			result = "SPECIFIED AMOUNT IN A CURRENCY OTHER THAN THE CURRENCY OF COUNTRY OF ORIGIN";
+			break;
+		}
+		
+		return result;
+	}
+
+	public static String convertCombination104OptionToName(String option) {
+		String result = "";
+		
+		switch (option) {
+		case "Y": 
+			result = "PERMITTED";
+			break;
+		case "N": 
+			result = "NOT PERMITTED";
+			break;
+		case "R": 
+			result = "REQUIRED";
+			break;
+		}
+		
+		return result;
+	}
+	
+	public static String convertCombination106Application(String option) {
+		String result = "";
+		
+		switch (option.trim()) {
+		case "": 
+			result = "ALLOWED";
+			break;
+		case "N": 
+			result = "NOT ALLOWED";
+			break;
+		case "1": 
+			result = "US/CA DOMESTIC LOCALS ALLOWED";
+			break;
+		case "2": 
+			result = "US/CA DOMESTIC LOCALS NOT ALLOWED";
+			break;
+		}
+		
+		return result;
+	}
+	
+	public static String convertCombination108TypeToName(String type) {
+		String result = "";
+		
+		switch (type) {
+		case "F": 
+			result = "FARE CLASS";
+			break;
+		case "T": 
+			result = "FARE TYPE";
+			break;
+		case "S": 
+			result = "SEASON TYPE";
+			break;
+		case "D": 
+			result = "DAY OF WEEK TYPE";
+			break;
+		}
+		
+		return result;
+	}
+
+	public static String convertCombination109TypeToName(String type) {
+		String result = "";
+		
+		switch (type) {
+		case "A": 
+			result = "AREA";
+			break;
+		case "Z": 
+			result = "ZONE";
+			break;
+		case "N": 
+			result = "COUNTRY";
+			break;
+		case "S": 
+			result = "STATE/COUNTRY";
+			break;
+		case "C": 
+			result = "CITY";
+			break;
+		case "P": 
+			result = "AIRPORT";
 			break;
 		}
 		
@@ -407,9 +494,10 @@ public class AtpcoDataConverterUtil {
 		String result = "";
 		
 		if (dateObj != null) {
+			
 			try {
 				SimpleDateFormat formatter = new SimpleDateFormat("ddMMMyyyy");
-				Date date = (Date) dateObj;
+				Date date = DateUtil.convertObjectToDate(dateObj);
 				result = formatter.format(date);
 			} catch (Exception e) {
 				if (dateObj.toString().contentEquals("indef")) {

@@ -16,7 +16,14 @@ public class CollectionName {
 	public final static String ATPCO_RECORD_3_CAT_007 = "atpco_record_3_cat_007";
 	public final static String ATPCO_RECORD_3_CAT_008 = "atpco_record_3_cat_008";
 	public final static String ATPCO_RECORD_3_CAT_009 = "atpco_record_3_cat_009";
+	public final static String ATPCO_RECORD_3_CAT_101 = "atpco_record_3_cat_101";
 	public final static String ATPCO_RECORD_3_CAT_102 = "atpco_record_3_cat_102";
+	public final static String ATPCO_RECORD_3_CAT_103 = "atpco_record_3_cat_103";
+	public final static String ATPCO_RECORD_3_CAT_104 = "atpco_record_3_cat_104";
+	public final static String ATPCO_RECORD_3_CAT_106 = "atpco_record_3_cat_106";
+	public final static String ATPCO_RECORD_3_CAT_107 = "atpco_record_3_cat_107";
+	public final static String ATPCO_RECORD_3_CAT_108 = "atpco_record_3_cat_108";
+	public final static String ATPCO_RECORD_3_CAT_109 = "atpco_record_3_cat_109";
 	public final static String ATPCO_RECORD_3_CAT_011 = "atpco_record_3_cat_011";
 	public final static String ATPCO_RECORD_3_CAT_012 = "atpco_record_3_cat_012";
 	public final static String ATPCO_RECORD_3_CAT_013 = "atpco_record_3_cat_013";
