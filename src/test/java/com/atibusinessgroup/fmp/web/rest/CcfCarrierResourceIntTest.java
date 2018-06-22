@@ -97,16 +97,7 @@ public class CcfCarrierResourceIntTest {
      * if they test an entity which requires the current entity.
      */
     public static CcfCarrier createEntity() {
-        CcfCarrier ccfCarrier = new CcfCarrier()
-            .svcTagsPsgdom(DEFAULT_SVC_TAGS_PSGDOM)
-            .filler(DEFAULT_FILLER)
-            .svcTagsCardom(DEFAULT_SVC_TAGS_CARDOM)
-            .cxrCode(DEFAULT_CXR_CODE)
-            .recType(DEFAULT_REC_TYPE)
-            .batchNumber(DEFAULT_BATCH_NUMBER)
-            .svcTagsPsgint(DEFAULT_SVC_TAGS_PSGINT)
-            .batchDate(DEFAULT_BATCH_DATE)
-            .svgTagsCarint(DEFAULT_SVG_TAGS_CARINT);
+        CcfCarrier ccfCarrier = new CcfCarrier();
         return ccfCarrier;
     }
 
@@ -216,16 +207,6 @@ public class CcfCarrierResourceIntTest {
 
         // Update the ccfCarrier
         CcfCarrier updatedCcfCarrier = ccfCarrierRepository.findOne(ccfCarrier.getId());
-        updatedCcfCarrier
-            .svcTagsPsgdom(UPDATED_SVC_TAGS_PSGDOM)
-            .filler(UPDATED_FILLER)
-            .svcTagsCardom(UPDATED_SVC_TAGS_CARDOM)
-            .cxrCode(UPDATED_CXR_CODE)
-            .recType(UPDATED_REC_TYPE)
-            .batchNumber(UPDATED_BATCH_NUMBER)
-            .svcTagsPsgint(UPDATED_SVC_TAGS_PSGINT)
-            .batchDate(UPDATED_BATCH_DATE)
-            .svgTagsCarint(UPDATED_SVG_TAGS_CARINT);
 
         restCcfCarrierMockMvc.perform(put("/api/ccf-carriers")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
