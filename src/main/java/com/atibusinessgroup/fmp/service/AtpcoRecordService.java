@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.CharUtils;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,18 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat06;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat07;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat08;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat09;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat101;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat102;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat103;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat104;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat106;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat106Carriers;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat107;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat107Tarrif;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat108;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat108FareClassType;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat109;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat109OpenJaw;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat11;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat12;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat13;
@@ -58,6 +71,7 @@ import com.atibusinessgroup.fmp.repository.TourTypeCodeRepository;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoCcfParcityCustomRepository;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoRecord3CategoryCustomRepository;
 import com.atibusinessgroup.fmp.service.util.AtpcoDataConverterUtil;
+import com.atibusinessgroup.fmp.service.util.DateUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.DBObject;
@@ -130,6 +144,19 @@ public class AtpcoRecordService {
 		return date;
 	}
 	
+	public boolean compareMatchingFareAndRecord(String fOwrt, String fRoutingNo, String fFootnote, Object focusDate,
+			String rOwrt, String rRoutingNo, String rFootnote, Object rEffectiveDate, String rDiscontinueDate) {
+		boolean match = false;
+		
+		if (compareEffectiveDiscontinueDates(focusDate, rEffectiveDate, rDiscontinueDate) && compareRoutingNo(fRoutingNo, rRoutingNo) && compareOwrt(fOwrt, rOwrt)
+				&& compareFootnote(fFootnote, rFootnote)) {
+			match = true;
+//			 System.out.println("Matched");
+		}
+		
+		return match;
+	}
+	
 	public boolean compareMatchingFareAndRecord(String fGeoType1, String fGeoLoc1, String fGeoType2, String fGeoLoc2,
 			String fOwrt, String fRoutingNo, String fFootnote, Object focusDate,
 			String rGeoType1, String rGeoLoc1, String rGeoType2, String rGeoLoc2, String rOwrt, String rRoutingNo,
@@ -139,7 +166,7 @@ public class AtpcoRecordService {
 		if (compareEffectiveDiscontinueDates(focusDate, rEffectiveDate, rDiscontinueDate) && compareRoutingNo(fRoutingNo, rRoutingNo) && compareOwrt(fOwrt, rOwrt)
 				&& compareFootnote(fFootnote, rFootnote) && compareGeoSpec(fGeoType1, fGeoLoc1, fGeoType2, fGeoLoc2, rGeoType1, rGeoLoc1, rGeoType2, rGeoLoc2)) {
 			match = true;
-			 System.out.println("Matched");
+//			 System.out.println("Matched");
 		}
 
 		return match;
@@ -159,7 +186,7 @@ public class AtpcoRecordService {
 				&& compareFareType(fFareType, rFareType) && compareSeasonType(fSeasonType, rSeasonType)
 				&& compareDayOfWeekType(fDayOfWeekType, rDayOfWeekType)) {
 			match = true;
-			 System.out.println("Matched");
+//			 System.out.println("Matched");
 		}
 
 		return match;
@@ -176,35 +203,56 @@ public class AtpcoRecordService {
 			match = true;
 		}
 		
-		System.out.println("Routing No: " + frn + ", " + rrn + ", " + match);
+//		System.out.println("Routing No: " + frn + ", " + rrn + ", " + match);
 		
 		return match;
 	}
 
 	public boolean compareFareClass(String fFareClass, String rFareClass) {
-		boolean match = false;
+		boolean match = true;
 		
-		if (fFareClass != null && rFareClass != null) {
-			if (!rFareClass.isEmpty()) {
-				if (rFareClass.contains("*")) {
-					if (fFareClass.matches("^" + rFareClass.replace("*", ".*") + "$")) {
-						match = true;
+		if (fFareClass != null && !fFareClass.trim().isEmpty() && rFareClass != null && !rFareClass.trim().isEmpty()) {
+			rFareClass = rFareClass.trim();
+			
+			if (rFareClass.contains("-")) {
+				rFareClass += "-";
+				String[] parts = rFareClass.split("-");
+				for (String part: parts) {
+					if (fFareClass.indexOf(part) != -1) {
+						int from = fFareClass.indexOf(part) - 1;
+						int to = from + part.length() + 1;
+						
+						try {
+							if (CharUtils.isAsciiNumeric(fFareClass.charAt(from + 1)) && CharUtils.isAsciiNumeric(fFareClass.charAt(from))) {
+								match = false;
+							}
+						} catch (Exception e) {
+						}
+						
+						try {
+							if (CharUtils.isAsciiNumeric(fFareClass.charAt(to - 1)) && CharUtils.isAsciiNumeric(fFareClass.charAt(to))) {
+								match = false;
+							}
+						} catch (Exception e) {
+						}
+					} else {
+						match = false;
 					}
-				} else if (rFareClass.contains("-")) {
-					if (fFareClass.matches("^" + rFareClass.replace("-", "[A-Z0-9]{1}")  + "$")) {
-						match = true;
+					
+					if (!match) {
+						break;
 					}
-				} else if (fFareClass.contentEquals(rFareClass)) {
-					match = true;
 				}
 			} else {
-				match = true;
+				if (!fFareClass.trim().contentEquals(rFareClass.trim())) {
+					match = false;
+				}
 			}
 		} else {
 			match = true;
 		}
 		
-		System.out.println("Fare Class: " + fFareClass + ", " + rFareClass + ", " + match);
+//		System.out.println("Fare Class: " + fFareClass + ", " + rFareClass + ", " + match);
 		
 		return match;
 	}
@@ -220,7 +268,7 @@ public class AtpcoRecordService {
 			match = true;
 		}
 
-		System.out.println("Fare Type: " + fFareType + ", " + rFareType + ", " + match);
+//		System.out.println("Fare Type: " + fFareType + ", " + rFareType + ", " + match);
 		
 		return match;
 	}
@@ -234,7 +282,7 @@ public class AtpcoRecordService {
 			}
 		} 
 		
-		System.out.println("Season Type: " + fSeasonType + ", " + rSeasonType + ", " + match);
+//		System.out.println("Season Type: " + fSeasonType + ", " + rSeasonType + ", " + match);
 		
 		return match;
 	}
@@ -250,7 +298,7 @@ public class AtpcoRecordService {
 			match = true;
 		}
 		
-		System.out.println("DOW Type: " + fDayOfWeekType + ", " + rDayOfWeekType + ", " + match);
+//		System.out.println("DOW Type: " + fDayOfWeekType + ", " + rDayOfWeekType + ", " + match);
 		
 		return match;
 	}
@@ -266,7 +314,7 @@ public class AtpcoRecordService {
 			match = true;
 		}
 		
-		System.out.println("OW/RT: " + fowrt + ", " + rowrt + ", " + match);
+//		System.out.println("OW/RT: " + fowrt + ", " + rowrt + ", " + match);
 		
 		return match;
 	}
@@ -282,7 +330,7 @@ public class AtpcoRecordService {
 			match = true;
 		}
 		
-		System.out.println("Ftnt: " + ffnt + ", " + rfnt + ", " + match);
+//		System.out.println("Ftnt: " + ffnt + ", " + rfnt + ", " + match);
 		
 		return match;
 	}
@@ -294,8 +342,9 @@ public class AtpcoRecordService {
 			Date focus = null, eff = null, disc = null;
 			
 			try {
-				focus = (Date) focusDate;
+				focus = DateUtil.convertObjectToDate(focusDate);
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 			
 			if (focus != null) {
@@ -333,7 +382,7 @@ public class AtpcoRecordService {
 			}
 		}
 		
-		System.out.println("Effective discontinue date : " + focusDate + ", " + effective + ", " + discontinue + ", " + match);
+//		System.out.println("Effective discontinue date : " + focusDate + ", " + effective + ", " + discontinue + ", " + match);
 		
 		return match;
 	}
@@ -342,25 +391,13 @@ public class AtpcoRecordService {
 			String rl2) {
 		boolean match = false;
 		
-//		ft1 = "C";
-//		fl1 = "JKT";
-//		
-//		ft2 = "C";
-//		fl2 = "BKK";
-//		
-//		rt1 = "A";
-//		rl1 = "1";
-//		
-//		rt2 = "A";
-//		rl2 = "2";
-		
 		if (compareLocations(ft1, fl1, rt1, rl1) || compareLocations(ft1, fl1, rt2, rl2)) {
 			match = true;
 		} else if (compareLocations(ft2, fl2, rt1, rl1) || compareLocations(ft2, fl2, rt2, rl2)) {
 			match = true;
 		}
 		
-		System.out.println("GeoSpec: (" + ft1 + ", " + fl1 + ") (" + ft2 + ", " + fl2 + ") | (" + rt1 + ", " + rl1 + ") (" + rt2 + ", " + rl2 + ") " + match);
+//		System.out.println("GeoSpec: (" + ft1 + ", " + fl1 + ") (" + ft2 + ", " + fl2 + ") | (" + rt1 + ", " + rl1 + ") (" + rt2 + ", " + rl2 + ") " + match);
 		
 		return match;
 	}
@@ -439,7 +476,7 @@ public class AtpcoRecordService {
 
 		return result;
 	}
-
+	
 	public CategoryTextFormatAndAttribute getAndConvertCategoryDataTable(String category, List<DataTable> dataTables,
 			String type) {
 		CategoryTextFormatAndAttribute result = new CategoryTextFormatAndAttribute();
@@ -502,23 +539,27 @@ public class AtpcoRecordService {
 						}
 					}
 					
-					if (!textFormat.isEmpty()) {
-						textFormat += AtpcoDataConverterUtil.convertRelationshipToName(relationship) + "\n";
+					if (!textFormat.trim().isEmpty()) {
+						textFormat += AtpcoDataConverterUtil.convertRelationshipToName(relationship) + "\n\n";
 					}
 					
 					String dateTable = AtpcoDataConverterUtil.convertDateTableToText(dateTable994);
-					if (dateTable != null) {
+					if (!dateTable.isEmpty()) {
 						textFormat += dateTable + "\n";
 					}
 					
-					textFormat += convertCodedCategoryValueToText(category, cat);
+					String text = convertCodedCategoryValueToText(category, cat);
+					
+					if (!text.trim().isEmpty()) {
+						textFormat += text;
+					}
 					
 					String textTable = AtpcoDataConverterUtil.convertTextTableToText(textTable996);
 					if (!textTable.isEmpty()) {
 						textFormat += textTable + "\n";
 					}
 					
-					attributes.add(convertObjectToCategoryAttribute(AtpcoDataConverterUtil.convertCategoryTypeToName(type), AtpcoDataConverterUtil.convertRelationshipToName(relationship), cat));
+					attributes.add(convertObjectToCategoryAttribute(AtpcoDataConverterUtil.convertCategoryTypeToName(type), AtpcoDataConverterUtil.convertRelationshipToName(relationship), category, cat));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -531,9 +572,10 @@ public class AtpcoRecordService {
 		return result;
 	}
 
-	public CategoryAttribute convertObjectToCategoryAttribute(String type, String relationship, Object obj) {
+	public CategoryAttribute convertObjectToCategoryAttribute(String type, String relationship, String category, Object obj) {
 		CategoryAttribute result = new CategoryAttribute();
 		result.setType(type);
+		result.setSubcat(category);
 		result.setRelationship(relationship);
 
 		List<CategoryAttributeObject> catAttrObjs = new ArrayList<>();
@@ -591,7 +633,7 @@ public class AtpcoRecordService {
 		} catch (Exception e) {
 		}
 		
-		result += "EFFECTIVE: " + (effStr != null ? effStr.toUpperCase() : "") + "\n";
+		result += "EFFECTIVE: " + (effStr != null ? effStr.toUpperCase() : "") + "\n\n";
 		
 		return result;
 	}
@@ -654,11 +696,52 @@ public class AtpcoRecordService {
 			result.setGetTextTable996NoMethodName("getText_tbl_no_996");
 			result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_009);
 			break;
-		case "010":
+		case "101":
 			result.setClassName(classBasePackage.concat("AtpcoRecord3Cat101"));
 			result.setGetTableNoMethodName("getTbl_no");
 			result.setGetTextTable996NoMethodName("getText_tbl_no_996");
-			result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_010);
+			result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_101);
+			break;
+		case "102":
+			result.setClassName(classBasePackage.concat("AtpcoRecord3Cat102"));
+			result.setGetTableNoMethodName("getTbl_no");
+			result.setGetTextTable996NoMethodName("getText_tbl_no_996");
+			result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_102);
+			break;
+		case "103":
+			result.setClassName(classBasePackage.concat("AtpcoRecord3Cat103"));
+			result.setGetTableNoMethodName("getTbl_no");
+			result.setGetTextTable996NoMethodName("getText_tbl_no_996");
+			result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_103);
+			break;
+		case "104":
+			result.setClassName(classBasePackage.concat("AtpcoRecord3Cat104"));
+			result.setGetTableNoMethodName("getTbl_no");
+			result.setGetTextTable996NoMethodName("getText_tbl_no_996");
+			result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_104);
+			break;
+		case "106":
+			result.setClassName(classBasePackage.concat("AtpcoRecord3Cat106"));
+			result.setGetTableNoMethodName("getTbl_no");
+			result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_106);
+			break;
+		case "107":
+			result.setClassName(classBasePackage.concat("AtpcoRecord3Cat107"));
+			result.setGetTableNoMethodName("getTbl_no");
+			result.setGetTextTable996NoMethodName("getText_tbl_no_996");
+			result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_107);
+			break;
+		case "108":
+			result.setClassName(classBasePackage.concat("AtpcoRecord3Cat108"));
+			result.setGetTableNoMethodName("getTbl_no");
+			result.setGetTextTable996NoMethodName("getText_tbl_no_996");
+			result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_108);
+			break;
+		case "109":
+			result.setClassName(classBasePackage.concat("AtpcoRecord3Cat109"));
+			result.setGetTableNoMethodName("getTbl_no");
+			result.setGetTextTable996NoMethodName("getText_tbl_no_996");
+			result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_109);
 			break;
 		case "011":
 			result.setClassName(classBasePackage.concat("AtpcoRecord3Cat11"));
@@ -1078,6 +1161,173 @@ public class AtpcoRecordService {
 					result += transfer + "\n";
 				}
 				break;
+			case "101":
+				AtpcoRecord3Cat101 cat101 = (AtpcoRecord3Cat101) catObj;
+				if (cat101.getAppl() != null) {
+					if (cat101.getAppl().trim().isEmpty()) {
+						result += "\tSINGLE AND DOUBLE OPEN JAWS PERMITTED\n";
+					} else if (cat101.getAppl().contentEquals("S")) {
+						result += "\tSINGLE OPEN JAW PERMITTED";
+					} else if (cat101.getAppl().contentEquals("D")) {
+						result += "\tDOUBLE OPEN JAW PERMITTED";
+					}
+				}
+				if (cat101.getSame() != null && cat101.getSame().contentEquals("X")) {
+					result += "\tOPEN JAW COMBINATIONS PERMITTED WITH FARE OWNING CARRIER\n";
+				}
+				if (!result.isEmpty()) {
+					result += "\n";
+				}
+				break;
+			case "102":
+				AtpcoRecord3Cat102 cat102 = (AtpcoRecord3Cat102) catObj;
+				if (cat102.getSame() != null && cat102.getSame().contentEquals("X")) {
+					result += "\tROUND TRIP COMBINATIONS PERMITTED WITH ANY CARRIER\n";
+				}
+				if (!result.isEmpty()) {
+					result += "\n";
+				}
+				break;
+			case "103":
+				AtpcoRecord3Cat103 cat103 = (AtpcoRecord3Cat103) catObj;
+				if (cat103.getSame() != null && cat103.getSame().contentEquals("X")) {
+					result += "\tCIRCLE TRIP COMBINATIONS PERMITTED WITH ANY CARRIER\n";
+				}
+				if (!result.isEmpty()) {
+					result += "\n";
+				}
+				break;
+			case "104":
+				AtpcoRecord3Cat104 cat104 = (AtpcoRecord3Cat104) catObj;
+				if (cat104.getDom() != null && !cat104.getDom().isEmpty()) {
+					String dom = AtpcoDataConverterUtil.convertCombination104OptionToName(cat104.getDom());
+					if (!dom.isEmpty()) {
+						result += "\tEND TO END COMBINATIONS " + dom + " WITH DOMESTIC FARES\n";
+					}
+				}
+				if (cat104.getIntl() != null && !cat104.getIntl().isEmpty()) {
+					String intl = AtpcoDataConverterUtil.convertCombination104OptionToName(cat104.getIntl());
+					if (!intl.isEmpty()) {
+						result += "\tEND TO END COMBINATIONS " + intl + " WITH INTERNATIONAL FARES\n";
+					}
+				}
+				if (cat104.getSame() != null && cat104.getSame().contentEquals("X")) {
+					result += "\tEND TO END COMBINATIONS PERMITTED WITH FARE OWNING CARRIER\n";
+				}
+				if (!result.isEmpty()) {
+					result += "\n";
+				}
+				break;
+			case "106":
+				AtpcoRecord3Cat106 cat106 = (AtpcoRecord3Cat106) catObj;
+				if (cat106.getCarriers() != null) {
+					for (AtpcoRecord3Cat106Carriers car:cat106.getCarriers()) {
+						String appl = "";
+						if (car.getAppl() != null && !car.getAppl().isEmpty()) {
+							appl = AtpcoDataConverterUtil.convertCombination106Application(car.getAppl());
+						}
+						String carrier = "";
+						for (String carr:car.getCarriers()) {
+							carrier += carr + ", ";
+						}
+						if (!appl.isEmpty()) {
+							result += "\tCOMBINATIONS " + appl + (!carrier.isEmpty() ? " WITH CARRIERS " + carrier.substring(0, carrier.length() - 2) + "\n" : "\n");
+						}
+					}
+				}
+				if (!result.isEmpty()) {
+					result += "\n";
+				}
+				break;
+			case "107":
+				AtpcoRecord3Cat107 cat107 = (AtpcoRecord3Cat107) catObj;
+				String ruletar = "";
+				for (AtpcoRecord3Cat107Tarrif tar:cat107.getTarrif()) {
+					if (tar.getRule_no() != null && !tar.getRule_no().isEmpty()) {
+						ruletar += "\t\tRULE " + tar.getRule_no();
+					}
+					if (tar.getTar_no() != null && !tar.getTar_no().isEmpty()) {
+						ruletar += " IN TARIFF " + tar.getTar_no() + "\n";
+					}
+				}
+				if (!ruletar.isEmpty()) {
+					result += "\tCOMBINATIONS PERMITTED WITH THE FOLLOWING: \n" + ruletar;
+				}
+				if (!result.isEmpty()) {
+					result += "\n";
+				}
+				break;
+			case "108":
+				AtpcoRecord3Cat108 cat108 = (AtpcoRecord3Cat108) catObj;
+				String fareclass = "";
+				for (AtpcoRecord3Cat108FareClassType fc:cat108.getFare_class_type()) {
+					String type = "";
+					if (fc.getType() != null && !fc.getType().isEmpty()) {
+						type = AtpcoDataConverterUtil.convertCombination108TypeToName(fc.getType());
+					}
+					if (fc.getFare_class_type() != null && !fc.getFare_class_type().isEmpty()) {
+						fareclass += "\t\t" + (!type.isEmpty() ? type + " " : "") + fc.getFare_class_type() + "\n";
+					}
+				}
+				if (!fareclass.isEmpty()) {
+					result += "\tCOMBINATIONS PERMITTED WITH THE FOLLOWING: \n" + fareclass;
+				}
+				if (!result.isEmpty()) {
+					result += "\n";
+				}
+				break;
+			case "109":
+				AtpcoRecord3Cat109 cat109 = (AtpcoRecord3Cat109) catObj;
+				String geospec = "";
+				for (AtpcoRecord3Cat109OpenJaw oj:cat109.getOpen_jaw_sets()) {
+					String set = "";
+					if (oj.getSet_1_geo_type_1() != null && !oj.getSet_1_geo_type_1().isEmpty()) {
+						String type = AtpcoDataConverterUtil.convertCombination109TypeToName(oj.getSet_1_geo_type_1());
+						if (!type.isEmpty()) {
+							set += type;
+						}
+					}
+					if (oj.getSet_1_geo_loc_1() != null && !oj.getSet_1_geo_loc_1().isEmpty()) {
+						set += (!set.isEmpty() ? " " : "") + oj.getSet_1_geo_loc_1();
+					}
+					if (oj.getSet_1_geo_type_2() != null && !oj.getSet_1_geo_type_2().isEmpty()) {
+						String type = AtpcoDataConverterUtil.convertCombination109TypeToName(oj.getSet_1_geo_type_2());
+						if (!type.isEmpty()) {
+							set += (!set.isEmpty() ? " AND " : "") + type;
+						}
+					}
+					if (oj.getSet_1_geo_loc_2() != null && !oj.getSet_1_geo_loc_2().isEmpty()) {
+						set += (!set.isEmpty() ? " " : "") + oj.getSet_1_geo_loc_2();
+					}
+					if (!set.isEmpty()) {
+						geospec += "\tOPEN JAWS PERMITTED IN " + set + "\n";
+					}
+					if (oj.getSet_2_geo_type_1() != null && !oj.getSet_2_geo_type_1().isEmpty()) {
+						String type = AtpcoDataConverterUtil.convertCombination109TypeToName(oj.getSet_2_geo_type_1());
+						if (!type.isEmpty()) {
+							set += type;
+						}
+					}
+					if (oj.getSet_2_geo_loc_1() != null && !oj.getSet_2_geo_loc_1().isEmpty()) {
+						set += (!set.isEmpty() ? " " : "") + oj.getSet_2_geo_loc_1();
+					}
+					if (oj.getSet_2_geo_type_2() != null && !oj.getSet_2_geo_type_2().isEmpty()) {
+						String type = AtpcoDataConverterUtil.convertCombination109TypeToName(oj.getSet_2_geo_type_2());
+						if (!type.isEmpty()) {
+							set += (!set.isEmpty() ? " AND " : "") + type;
+						}
+					}
+					if (oj.getSet_2_geo_loc_2() != null && !oj.getSet_2_geo_loc_2().isEmpty()) {
+						set += (!set.isEmpty() ? " " : "") + oj.getSet_2_geo_loc_2();
+					}
+					if (!set.isEmpty()) {
+						geospec += "\tOPEN JAWS PERMITTED IN " + set + "\n";
+					}
+				}
+				if (!geospec.isEmpty()) {
+					result += geospec + "\n\n";
+				}
+				break;
 			case "011":
 				AtpcoRecord3Cat11 cat11 = (AtpcoRecord3Cat11) catObj;
 				String blackout = "";
@@ -1265,16 +1515,6 @@ public class AtpcoRecordService {
 						}
 					}
 				}
-//				String locale = "";
-//				for (AtpcoRecord3Cat15Locale loc:cat15.getLocale()) {
-//					if (loc.getAppl() != null && !loc.getAppl().isEmpty()) {
-//						if (loc.getAppl().contentEquals("Y")) {
-//							locale += "\tTICKETS MAY ONLY BE SOLD: \n";
-//						} else if (loc.getAppl().contentEquals("N")) {
-//							locale += "\tTICKETS MAY NOT BE SOLD: \n";
-//						}
-//					}
-//				}
 				if (!result.isEmpty()) {
 					result += "\n";
 				}
@@ -1351,7 +1591,7 @@ public class AtpcoRecordService {
 				if (cat16.getCharges_amt_1() != null && cat16.getCharges_amt_1().bigDecimalValue().doubleValue() != 0.0) {
 					charges += cat16.getCharges_amt_1().bigDecimalValue().doubleValue();
 				}
-				if (cat16.getCharges_percent() != null && !cat16.getCharges_percent().isEmpty() && !cat16.getCharges_percent().contentEquals("0000000")) {
+				if (cat16.getCharges_percent() != null && cat16.getCharges_percent().bigDecimalValue().doubleValue() != 0.0) {
 					if (!charges.isEmpty()) {
 						charges += " OR " + cat16.getCharges_percent() + "%";
 					} else {
@@ -1465,7 +1705,7 @@ public class AtpcoRecordService {
 				if (!fbrage19.isEmpty()) {
 					result += " AGE " + initialfbrage19 + fbrage19 + "\n";
 				}
-				if (cat19.getFbr_percent() != null && !cat19.getFbr_percent().isEmpty() && !cat19.getFbr_percent().contentEquals("0000000")) {
+				if (cat19.getFbr_percent() != null && cat19.getFbr_percent().bigDecimalValue().doubleValue() != 0.0) {
 					result += "\t" + cat19.getFbr_percent() + "% OF THE ADULT FARE\n";
 				}
 				if (cat19.getFbr_ticketing_code() != null && !cat19.getFbr_ticketing_code().isEmpty()) {

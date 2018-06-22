@@ -52,6 +52,9 @@ public class AtpcoRecord3Cat15 {
 	@Field("ta_sale")
     private String ta_sale;
 
+	@Field("extens")
+    private String extens;
+	
 	@Field("cur_country_restriction")
     private String cur_country_restriction;
 
@@ -190,6 +193,14 @@ public class AtpcoRecord3Cat15 {
 
 	public List<AtpcoRecord3Cat15Locale> getLocale() {
 		return locale;
+	}
+
+	public String getExtens() {
+		return extens;
+	}
+
+	public void setExtens(String extens) {
+		this.extens = extens;
 	}
 
 	public void setLocale(List<AtpcoRecord3Cat15Locale> locale) {
@@ -530,6 +541,7 @@ public class AtpcoRecord3Cat15 {
 		result = prime * result + ((cxr_gds_seg == null) ? 0 : cxr_gds_seg.hashCode());
 		result = prime * result + ((cxr_gds_val == null) ? 0 : cxr_gds_val.hashCode());
 		result = prime * result + ((date_table_no_994 == null) ? 0 : date_table_no_994.hashCode());
+		result = prime * result + ((extens == null) ? 0 : extens.hashCode());
 		result = prime * result + ((fam_grp == null) ? 0 : fam_grp.hashCode());
 		result = prime * result + ((fop_ca == null) ? 0 : fop_ca.hashCode());
 		result = prime * result + ((fop_ck == null) ? 0 : fop_ck.hashCode());
@@ -572,243 +584,345 @@ public class AtpcoRecord3Cat15 {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		AtpcoRecord3Cat15 other = (AtpcoRecord3Cat15) obj;
 		if (action == null) {
-			if (other.action != null)
+			if (other.action != null) {
 				return false;
-		} else if (!action.equals(other.action))
+			}
+		} else if (!action.equals(other.action)) {
 			return false;
+		}
 		if (cat_no == null) {
-			if (other.cat_no != null)
+			if (other.cat_no != null) {
 				return false;
-		} else if (!cat_no.equals(other.cat_no))
+			}
+		} else if (!cat_no.equals(other.cat_no)) {
 			return false;
+		}
 		if (ctry == null) {
-			if (other.ctry != null)
+			if (other.ctry != null) {
 				return false;
-		} else if (!ctry.equals(other.ctry))
+			}
+		} else if (!ctry.equals(other.ctry)) {
 			return false;
+		}
 		if (cur_country_restriction == null) {
-			if (other.cur_country_restriction != null)
+			if (other.cur_country_restriction != null) {
 				return false;
-		} else if (!cur_country_restriction.equals(other.cur_country_restriction))
+			}
+		} else if (!cur_country_restriction.equals(other.cur_country_restriction)) {
 			return false;
+		}
 		if (cur_currency == null) {
-			if (other.cur_currency != null)
+			if (other.cur_currency != null) {
 				return false;
-		} else if (!cur_currency.equals(other.cur_currency))
+			}
+		} else if (!cur_currency.equals(other.cur_currency)) {
 			return false;
+		}
 		if (cxr_gds_oth == null) {
-			if (other.cxr_gds_oth != null)
+			if (other.cxr_gds_oth != null) {
 				return false;
-		} else if (!cxr_gds_oth.equals(other.cxr_gds_oth))
+			}
+		} else if (!cxr_gds_oth.equals(other.cxr_gds_oth)) {
 			return false;
+		}
 		if (cxr_gds_sale == null) {
-			if (other.cxr_gds_sale != null)
+			if (other.cxr_gds_sale != null) {
 				return false;
-		} else if (!cxr_gds_sale.equals(other.cxr_gds_sale))
+			}
+		} else if (!cxr_gds_sale.equals(other.cxr_gds_sale)) {
 			return false;
+		}
 		if (cxr_gds_seg == null) {
-			if (other.cxr_gds_seg != null)
+			if (other.cxr_gds_seg != null) {
 				return false;
-		} else if (!cxr_gds_seg.equals(other.cxr_gds_seg))
+			}
+		} else if (!cxr_gds_seg.equals(other.cxr_gds_seg)) {
 			return false;
+		}
 		if (cxr_gds_val == null) {
-			if (other.cxr_gds_val != null)
+			if (other.cxr_gds_val != null) {
 				return false;
-		} else if (!cxr_gds_val.equals(other.cxr_gds_val))
+			}
+		} else if (!cxr_gds_val.equals(other.cxr_gds_val)) {
 			return false;
+		}
 		if (date_table_no_994 == null) {
-			if (other.date_table_no_994 != null)
+			if (other.date_table_no_994 != null) {
 				return false;
-		} else if (!date_table_no_994.equals(other.date_table_no_994))
+			}
+		} else if (!date_table_no_994.equals(other.date_table_no_994)) {
 			return false;
+		}
+		if (extens == null) {
+			if (other.extens != null) {
+				return false;
+			}
+		} else if (!extens.equals(other.extens)) {
+			return false;
+		}
 		if (fam_grp == null) {
-			if (other.fam_grp != null)
+			if (other.fam_grp != null) {
 				return false;
-		} else if (!fam_grp.equals(other.fam_grp))
+			}
+		} else if (!fam_grp.equals(other.fam_grp)) {
 			return false;
+		}
 		if (fop_ca == null) {
-			if (other.fop_ca != null)
+			if (other.fop_ca != null) {
 				return false;
-		} else if (!fop_ca.equals(other.fop_ca))
+			}
+		} else if (!fop_ca.equals(other.fop_ca)) {
 			return false;
+		}
 		if (fop_ck == null) {
-			if (other.fop_ck != null)
+			if (other.fop_ck != null) {
 				return false;
-		} else if (!fop_ck.equals(other.fop_ck))
+			}
+		} else if (!fop_ck.equals(other.fop_ck)) {
 			return false;
+		}
 		if (fop_cr == null) {
-			if (other.fop_cr != null)
+			if (other.fop_cr != null) {
 				return false;
-		} else if (!fop_cr.equals(other.fop_cr))
+			}
+		} else if (!fop_cr.equals(other.fop_cr)) {
 			return false;
+		}
 		if (fop_tr == null) {
-			if (other.fop_tr != null)
+			if (other.fop_tr != null) {
 				return false;
-		} else if (!fop_tr.equals(other.fop_tr))
+			}
+		} else if (!fop_tr.equals(other.fop_tr)) {
 			return false;
+		}
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		if (locale == null) {
-			if (other.locale != null)
+			if (other.locale != null) {
 				return false;
-		} else if (!locale.equals(other.locale))
+			}
+		} else if (!locale.equals(other.locale)) {
 			return false;
+		}
 		if (rec_type == null) {
-			if (other.rec_type != null)
+			if (other.rec_type != null) {
 				return false;
-		} else if (!rec_type.equals(other.rec_type))
+			}
+		} else if (!rec_type.equals(other.rec_type)) {
 			return false;
+		}
 		if (record_batch == null) {
-			if (other.record_batch != null)
+			if (other.record_batch != null) {
 				return false;
-		} else if (!record_batch.equals(other.record_batch))
+			}
+		} else if (!record_batch.equals(other.record_batch)) {
 			return false;
+		}
 		if (record_sequence == null) {
-			if (other.record_sequence != null)
+			if (other.record_sequence != null) {
 				return false;
-		} else if (!record_sequence.equals(other.record_sequence))
+			}
+		} else if (!record_sequence.equals(other.record_sequence)) {
 			return false;
+		}
 		if (res == null) {
-			if (other.res != null)
+			if (other.res != null) {
 				return false;
-		} else if (!res.equals(other.res))
+			}
+		} else if (!res.equals(other.res)) {
 			return false;
+		}
 		if (rules_type == null) {
-			if (other.rules_type != null)
+			if (other.rules_type != null) {
 				return false;
-		} else if (!rules_type.equals(other.rules_type))
+			}
+		} else if (!rules_type.equals(other.rules_type)) {
 			return false;
+		}
 		if (sales_dates_earliest_res == null) {
-			if (other.sales_dates_earliest_res != null)
+			if (other.sales_dates_earliest_res != null) {
 				return false;
-		} else if (!sales_dates_earliest_res.equals(other.sales_dates_earliest_res))
+			}
+		} else if (!sales_dates_earliest_res.equals(other.sales_dates_earliest_res)) {
 			return false;
+		}
 		if (sales_dates_earliest_tktg == null) {
-			if (other.sales_dates_earliest_tktg != null)
+			if (other.sales_dates_earliest_tktg != null) {
 				return false;
-		} else if (!sales_dates_earliest_tktg.equals(other.sales_dates_earliest_tktg))
+			}
+		} else if (!sales_dates_earliest_tktg.equals(other.sales_dates_earliest_tktg)) {
 			return false;
+		}
 		if (sales_dates_latest_res == null) {
-			if (other.sales_dates_latest_res != null)
+			if (other.sales_dates_latest_res != null) {
 				return false;
-		} else if (!sales_dates_latest_res.equals(other.sales_dates_latest_res))
+			}
+		} else if (!sales_dates_latest_res.equals(other.sales_dates_latest_res)) {
 			return false;
+		}
 		if (sales_dates_latest_tktg == null) {
-			if (other.sales_dates_latest_tktg != null)
+			if (other.sales_dates_latest_tktg != null) {
 				return false;
-		} else if (!sales_dates_latest_tktg.equals(other.sales_dates_latest_tktg))
+			}
+		} else if (!sales_dates_latest_tktg.equals(other.sales_dates_latest_tktg)) {
 			return false;
+		}
 		if (ta_filler_1 == null) {
-			if (other.ta_filler_1 != null)
+			if (other.ta_filler_1 != null) {
 				return false;
-		} else if (!ta_filler_1.equals(other.ta_filler_1))
+			}
+		} else if (!ta_filler_1.equals(other.ta_filler_1)) {
 			return false;
+		}
 		if (ta_sale == null) {
-			if (other.ta_sale != null)
+			if (other.ta_sale != null) {
 				return false;
-		} else if (!ta_sale.equals(other.ta_sale))
+			}
+		} else if (!ta_sale.equals(other.ta_sale)) {
 			return false;
+		}
 		if (tbl_no == null) {
-			if (other.tbl_no != null)
+			if (other.tbl_no != null) {
 				return false;
-		} else if (!tbl_no.equals(other.tbl_no))
+			}
+		} else if (!tbl_no.equals(other.tbl_no)) {
 			return false;
+		}
 		if (text_table_no_996 == null) {
-			if (other.text_table_no_996 != null)
+			if (other.text_table_no_996 != null) {
 				return false;
-		} else if (!text_table_no_996.equals(other.text_table_no_996))
+			}
+		} else if (!text_table_no_996.equals(other.text_table_no_996)) {
 			return false;
+		}
 		if (tkt_iss_automatic_ticketing_machine == null) {
-			if (other.tkt_iss_automatic_ticketing_machine != null)
+			if (other.tkt_iss_automatic_ticketing_machine != null) {
 				return false;
-		} else if (!tkt_iss_automatic_ticketing_machine.equals(other.tkt_iss_automatic_ticketing_machine))
+			}
+		} else if (!tkt_iss_automatic_ticketing_machine.equals(other.tkt_iss_automatic_ticketing_machine)) {
 			return false;
+		}
 		if (tkt_iss_et == null) {
-			if (other.tkt_iss_et != null)
+			if (other.tkt_iss_et != null) {
 				return false;
-		} else if (!tkt_iss_et.equals(other.tkt_iss_et))
+			}
+		} else if (!tkt_iss_et.equals(other.tkt_iss_et)) {
 			return false;
+		}
 		if (tkt_iss_filler_1 == null) {
-			if (other.tkt_iss_filler_1 != null)
+			if (other.tkt_iss_filler_1 != null) {
 				return false;
-		} else if (!tkt_iss_filler_1.equals(other.tkt_iss_filler_1))
+			}
+		} else if (!tkt_iss_filler_1.equals(other.tkt_iss_filler_1)) {
 			return false;
+		}
 		if (tkt_iss_filler_2 == null) {
-			if (other.tkt_iss_filler_2 != null)
+			if (other.tkt_iss_filler_2 != null) {
 				return false;
-		} else if (!tkt_iss_filler_2.equals(other.tkt_iss_filler_2))
+			}
+		} else if (!tkt_iss_filler_2.equals(other.tkt_iss_filler_2)) {
 			return false;
+		}
 		if (tkt_iss_mail == null) {
-			if (other.tkt_iss_mail != null)
+			if (other.tkt_iss_mail != null) {
 				return false;
-		} else if (!tkt_iss_mail.equals(other.tkt_iss_mail))
+			}
+		} else if (!tkt_iss_mail.equals(other.tkt_iss_mail)) {
 			return false;
+		}
 		if (tkt_iss_pta == null) {
-			if (other.tkt_iss_pta != null)
+			if (other.tkt_iss_pta != null) {
 				return false;
-		} else if (!tkt_iss_pta.equals(other.tkt_iss_pta))
+			}
+		} else if (!tkt_iss_pta.equals(other.tkt_iss_pta)) {
 			return false;
+		}
 		if (tkt_iss_pta_tkt == null) {
-			if (other.tkt_iss_pta_tkt != null)
+			if (other.tkt_iss_pta_tkt != null) {
 				return false;
-		} else if (!tkt_iss_pta_tkt.equals(other.tkt_iss_pta_tkt))
+			}
+		} else if (!tkt_iss_pta_tkt.equals(other.tkt_iss_pta_tkt)) {
 			return false;
+		}
 		if (tkt_iss_reserved_1 == null) {
-			if (other.tkt_iss_reserved_1 != null)
+			if (other.tkt_iss_reserved_1 != null) {
 				return false;
-		} else if (!tkt_iss_reserved_1.equals(other.tkt_iss_reserved_1))
+			}
+		} else if (!tkt_iss_reserved_1.equals(other.tkt_iss_reserved_1)) {
 			return false;
+		}
 		if (tkt_iss_reserved_2 == null) {
-			if (other.tkt_iss_reserved_2 != null)
+			if (other.tkt_iss_reserved_2 != null) {
 				return false;
-		} else if (!tkt_iss_reserved_2.equals(other.tkt_iss_reserved_2))
+			}
+		} else if (!tkt_iss_reserved_2.equals(other.tkt_iss_reserved_2)) {
 			return false;
+		}
 		if (tkt_iss_sato_cato == null) {
-			if (other.tkt_iss_sato_cato != null)
+			if (other.tkt_iss_sato_cato != null) {
 				return false;
-		} else if (!tkt_iss_sato_cato.equals(other.tkt_iss_sato_cato))
+			}
+		} else if (!tkt_iss_sato_cato.equals(other.tkt_iss_sato_cato)) {
 			return false;
+		}
 		if (tkt_iss_self == null) {
-			if (other.tkt_iss_self != null)
+			if (other.tkt_iss_self != null) {
 				return false;
-		} else if (!tkt_iss_self.equals(other.tkt_iss_self))
+			}
+		} else if (!tkt_iss_self.equals(other.tkt_iss_self)) {
 			return false;
+		}
 		if (tkt_iss_siti == null) {
-			if (other.tkt_iss_siti != null)
+			if (other.tkt_iss_siti != null) {
 				return false;
-		} else if (!tkt_iss_siti.equals(other.tkt_iss_siti))
+			}
+		} else if (!tkt_iss_siti.equals(other.tkt_iss_siti)) {
 			return false;
+		}
 		if (tkt_iss_sito == null) {
-			if (other.tkt_iss_sito != null)
+			if (other.tkt_iss_sito != null) {
 				return false;
-		} else if (!tkt_iss_sito.equals(other.tkt_iss_sito))
+			}
+		} else if (!tkt_iss_sito.equals(other.tkt_iss_sito)) {
 			return false;
+		}
 		if (tkt_iss_soti == null) {
-			if (other.tkt_iss_soti != null)
+			if (other.tkt_iss_soti != null) {
 				return false;
-		} else if (!tkt_iss_soti.equals(other.tkt_iss_soti))
+			}
+		} else if (!tkt_iss_soti.equals(other.tkt_iss_soti)) {
 			return false;
+		}
 		if (tkt_iss_soto == null) {
-			if (other.tkt_iss_soto != null)
+			if (other.tkt_iss_soto != null) {
 				return false;
-		} else if (!tkt_iss_soto.equals(other.tkt_iss_soto))
+			}
+		} else if (!tkt_iss_soto.equals(other.tkt_iss_soto)) {
 			return false;
+		}
 		if (unavail == null) {
-			if (other.unavail != null)
+			if (other.unavail != null) {
 				return false;
-		} else if (!unavail.equals(other.unavail))
+			}
+		} else if (!unavail.equals(other.unavail)) {
 			return false;
+		}
 		return true;
 	}
 
@@ -819,7 +933,7 @@ public class AtpcoRecord3Cat15 {
 				+ ", sales_dates_latest_res=" + sales_dates_latest_res + ", sales_dates_latest_tktg="
 				+ sales_dates_latest_tktg + ", tkt_iss_reserved_2=" + tkt_iss_reserved_2 + ", cxr_gds_sale="
 				+ cxr_gds_sale + ", tkt_iss_reserved_1=" + tkt_iss_reserved_1 + ", tkt_iss_sato_cato="
-				+ tkt_iss_sato_cato + ", cxr_gds_oth=" + cxr_gds_oth + ", ta_sale=" + ta_sale
+				+ tkt_iss_sato_cato + ", cxr_gds_oth=" + cxr_gds_oth + ", ta_sale=" + ta_sale + ", extens=" + extens
 				+ ", cur_country_restriction=" + cur_country_restriction + ", cxr_gds_val=" + cxr_gds_val + ", fop_ca="
 				+ fop_ca + ", sales_dates_earliest_tktg=" + sales_dates_earliest_tktg + ", cxr_gds_seg=" + cxr_gds_seg
 				+ ", tbl_no=" + tbl_no + ", unavail=" + unavail + ", action=" + action + ", rules_type=" + rules_type
@@ -833,6 +947,4 @@ public class AtpcoRecord3Cat15 {
 				+ tkt_iss_automatic_ticketing_machine + ", tkt_iss_filler_1=" + tkt_iss_filler_1 + ", tkt_iss_filler_2="
 				+ tkt_iss_filler_2 + ", tkt_iss_pta_tkt=" + tkt_iss_pta_tkt + "]";
 	}
-
-	
 }

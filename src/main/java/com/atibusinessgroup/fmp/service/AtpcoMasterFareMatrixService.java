@@ -70,7 +70,7 @@ public class AtpcoMasterFareMatrixService {
      * @return the entity
      */
     public AtpcoMasterFareMatrix findOneByFareTypeCode(String code) {
-        log.debug("Request to get AtpcoMasterFareMatrix by Fare Type Code: {}", code);
+//        log.debug("Request to get AtpcoMasterFareMatrix by Fare Type Code: {}", code);
         
         Criteria criteria = Criteria.where("fare_type_code.type_code").is(code);
         Query query = new Query(criteria);

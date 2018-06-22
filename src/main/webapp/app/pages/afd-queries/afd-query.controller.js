@@ -233,9 +233,26 @@
         	}
         }
         
+        function showFareDetail(category) {
+        	$uibModal.open({
+                templateUrl: 'app/pages/modals/fare-detail-modal.html',
+                controller: 'FareDetailModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                resolve: {
+                    entity: category
+                }
+            }).result.then(function() {
+                $state.go('afd-query', {}, { reload: false });
+            }, function() {
+                $state.go('afd-query');
+            });
+        }
+        
         function showCategoryDetail(category) {
         	$uibModal.open({
-                templateUrl: 'app/pages/category-modals/category-modal.html',
+                templateUrl: 'app/pages/modals/category-modal.html',
                 controller: 'CategoryModalController',
                 controllerAs: 'vm',
                 backdrop: 'static',
@@ -252,7 +269,7 @@
         
         function showLegend() {
         	$uibModal.open({
-                templateUrl: 'app/pages/category-modals/legend-modal.html',
+                templateUrl: 'app/pages/modals/legend-modal.html',
                 controller: 'LegendModalController',
                 controllerAs: 'vm',
                 backdrop: 'static',
@@ -266,7 +283,7 @@
         
         function viewFullText() {
         	$uibModal.open({
-                templateUrl: 'app/pages/category-modals/full-text-modal.html',
+                templateUrl: 'app/pages/modals/full-text-modal.html',
                 controller: 'FullTextModalController',
                 controllerAs: 'vm',
                 backdrop: 'static',

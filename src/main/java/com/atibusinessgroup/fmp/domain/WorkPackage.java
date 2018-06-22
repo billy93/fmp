@@ -1,6 +1,7 @@
 package com.atibusinessgroup.fmp.domain;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -120,7 +121,7 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     private ZonedDateTime distributionDate;
         
     @Field("queued_date")
-    private ZonedDateTime queuedDate;
+    private Instant queuedDate;
     
     @Field("filling_status")
     private Status fillingStatus;
@@ -184,11 +185,11 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 		this.attachmentApprovalReference = attachmentApprovalReference;
 	}
 	
-    public ZonedDateTime getQueuedDate() {
+    public Instant getQueuedDate() {
 		return queuedDate;
 	}
 
-	public void setQueuedDate(ZonedDateTime queuedDate) {
+	public void setQueuedDate(Instant queuedDate) {
 		this.queuedDate = queuedDate;
 	}
 
@@ -926,12 +927,28 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 	    @Field("username")	    
 	    private String username;
 	    
+	    @Field("file_name")	    
+	    private String fileName;
+	    
 	    @Field("createdTime")	    
 		private ZonedDateTime createdTime;
 	    
 	    @Field("inOnly")
 	    private Boolean inOnly;
+	    
+	    @Field("isDeleted")
+	    private Boolean isDeleted;
 		
+	    
+	    
+		public String getFileName() {
+			return fileName;
+		}
+
+		public void setFileName(String fileName) {
+			this.fileName = fileName;
+		}
+
 		public String getComment() {
 			return comment;
 		}
@@ -963,7 +980,7 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 		public void setUsername(String username) {
 			this.username = username;
 		}
-
+		
 		public ZonedDateTime getCreatedTime() {
 			return createdTime;
 		}
@@ -978,6 +995,14 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 
 		public void setInOnly(Boolean inOnly) {
 			this.inOnly = inOnly;
+		}
+
+		public Boolean getIsDeleted() {
+			return isDeleted;
+		}
+
+		public void setIsDeleted(Boolean isDeleted) {
+			this.isDeleted = isDeleted;
 		}	
 		
 	}

@@ -15,6 +15,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -216,7 +217,7 @@ public class WorkPackageResource {
         }
         
         workPackage.setStatus(Status.NEW);
-        workPackage.setQueuedDate(ZonedDateTime.now());
+        workPackage.setQueuedDate(Instant.now());
         
         WorkPackage result = workPackageService.save(workPackage);
         
@@ -333,7 +334,7 @@ public class WorkPackageResource {
         }
         
         wp.setStatus(Status.NEW);
-        wp.setQueuedDate(ZonedDateTime.now());
+        wp.setQueuedDate(Instant.now());
         
         WorkPackage result = workPackageService.save(wp);
         
@@ -403,7 +404,7 @@ public class WorkPackageResource {
         }
         
         wp.setStatus(Status.NEW);
-        wp.setQueuedDate(ZonedDateTime.now());
+        wp.setQueuedDate(Instant.now());
         
         WorkPackage result = workPackageService.save(wp);
         
@@ -1905,9 +1906,7 @@ public class WorkPackageResource {
         if (workPackage.getId() == null) {
             return createWorkPackage(workPackage);
         }
-
     	workPackageService.save(workPackage);
-	    
     	if(workPackage.isValidate()) {
     		workPackage = validateWo(workPackage);    		
     	}
@@ -2510,7 +2509,7 @@ public class WorkPackageResource {
 					    		err1.setMessage("Name is required");
 					    		errors.add(err1);
 							}
-							if(wpfs.getDiscountFareType() == null || wpfs.getDiscountFareType().contentEquals("")) {
+							if(wpfs.getFareType() == null || wpfs.getFareType().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Fare Type is required");
@@ -2638,7 +2637,7 @@ public class WorkPackageResource {
 					    		err1.setMessage("Name is required");
 					    		errors.add(err1);
 							}
-							if(wpfs.getDiscountFareType() == null || wpfs.getDiscountFareType().contentEquals("")) {
+							if(wpfs.getFareType() == null || wpfs.getFareType().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Fare Type is required");
@@ -3625,7 +3624,7 @@ public class WorkPackageResource {
 	        	fareVersion.version = sheet.fareVersion.size() + 1;
 	        	sheet.fareVersion.add(fareVersion);
 	        }
-	        result.setQueuedDate(ZonedDateTime.now());
+	        result.setQueuedDate(Instant.now());
 	        workPackageService.save(result);  
 	        
 	        saveHistoryData(workPackage);
@@ -3684,7 +3683,7 @@ public class WorkPackageResource {
         
         WorkPackage result = workPackageService.findOne(workPackage.getId());
         result.setStatus(Status.WITHDRAWN);
-        result.setQueuedDate(ZonedDateTime.now());
+        result.setQueuedDate(Instant.now());
         workPackageService.save(result);
         /*
         saveHistoryData(workPackage);
@@ -3819,7 +3818,7 @@ public class WorkPackageResource {
         	fareVersion.version = sheet.fareVersion.size() + 1;
         	sheet.fareVersion.add(fareVersion);
         }
-        result.setQueuedDate(ZonedDateTime.now());
+        result.setQueuedDate(Instant.now());
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -3862,7 +3861,7 @@ public class WorkPackageResource {
         }
 		result.setLocked(false);
         result.setStatus(Status.PENDING);
-        result.setQueuedDate(ZonedDateTime.now());
+        result.setQueuedDate(Instant.now());
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -3917,7 +3916,7 @@ public class WorkPackageResource {
 //    		result.setLocked(false);
 //    		result.setStatus(Status.PENDING);        		
 //	    }
-        workPackage.setQueuedDate(ZonedDateTime.now());
+        workPackage.setQueuedDate(Instant.now());
         workPackageService.save(workPackage);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -4148,7 +4147,7 @@ public class WorkPackageResource {
         result.setDistributionReviewLevel(null);
         result.setStatus(Status.REFERRED);
 		result.setLocked(false);
-		result.setQueuedDate(ZonedDateTime.now());
+		result.setQueuedDate(Instant.now());
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();
@@ -4187,7 +4186,7 @@ public class WorkPackageResource {
         result.setDistributionReviewLevel(result.getDistributionReviewLevel());
         result.setStatus(Status.DISTRIBUTED);
 		result.setLocked(false);
-		result.setQueuedDate(ZonedDateTime.now());
+		result.setQueuedDate(Instant.now());
         workPackageService.save(result);
         
         WorkPackageHistory history = new WorkPackageHistory();

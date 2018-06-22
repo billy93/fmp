@@ -50,7 +50,7 @@
             }
         })
         .state('routingquery-detail', {
-            parent: 'routingquery',
+            parent: 'app',
             url: '/routingquery/{id}',
             data: {
                 authorities: ['ROLE_USER'],
@@ -76,119 +76,6 @@
                     return currentStateData;
                 }]
             }
-        })
-        .state('routingquery-detail.edit', {
-            parent: 'routingquery-detail',
-            url: '/detail/edit',
-            data: {
-                authorities: ['ROLE_USER']
-            },
-            onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
-                $uibModal.open({
-                    templateUrl: 'app/pages/routing-query/routing-query-dialog.html',
-                    controller: 'RoutingqueryDialogController',
-                    controllerAs: 'vm',
-                    backdrop: 'static',
-                    size: 'lg',
-                    resolve: {
-                        entity: ['Routingquery', function(Routingquery) {
-                            return Routingquery.get({id : $stateParams.id}).$promise;
-                        }]
-                    }
-                }).result.then(function() {
-                    $state.go('^', {}, { reload: false });
-                }, function() {
-                    $state.go('^');
-                });
-            }]
-        })
-        .state('routingquery.new', {
-            parent: 'routingquery',
-            url: '/new',
-            data: {
-                authorities: ['ROLE_USER']
-            },
-            onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
-                $uibModal.open({
-                    templateUrl: 'app/pages/routing-query/routing-query-dialog.html',
-                    controller: 'RoutingqueryDialogController',
-                    controllerAs: 'vm',
-                    backdrop: 'static',
-                    size: 'lg',
-                    resolve: {
-                        entity: function () {
-                            return {
-                                linkNo: null,
-                                src: null,
-                                cxr: null,
-                                tarNo: null,
-                                routingNo: null,
-                                effectiveDate: null,
-                                discontinuedDate: null,
-                                drv: null,
-                                cpi: null,
-                                di: null,
-                                intPt: null,
-                                untPt: null,
-                                id: null
-                            };
-                        }
-                    }
-                }).result.then(function() {
-                    $state.go('routingquery', null, { reload: 'routingquery' });
-                }, function() {
-                    $state.go('routingquery');
-                });
-            }]
-        })
-        .state('routingquery.edit', {
-            parent: 'routingquery',
-            url: '/{id}/edit',
-            data: {
-                authorities: ['ROLE_USER']
-            },
-            onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
-                $uibModal.open({
-                    templateUrl: 'app/pages/routing-query/routing-query-dialog.html',
-                    controller: 'RoutingqueryDialogController',
-                    controllerAs: 'vm',
-                    backdrop: 'static',
-                    size: 'lg',
-                    resolve: {
-                        entity: ['Routingquery', function(Routingquery) {
-                            return Routingquery.get({id : $stateParams.id}).$promise;
-                        }]
-                    }
-                }).result.then(function() {
-                    $state.go('routingquery', null, { reload: 'routingquery' });
-                }, function() {
-                    $state.go('^');
-                });
-            }]
-        })
-        .state('routingquery.delete', {
-            parent: 'routingquery',
-            url: '/{id}/delete',
-            data: {
-                authorities: ['ROLE_USER']
-            },
-            onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
-                $uibModal.open({
-                    templateUrl: 'app/pages/routing-query/routing-query-delete-dialog.html',
-                    controller: 'RoutingqueryDeleteController',
-                    controllerAs: 'vm',
-                    size: 'md',
-                    resolve: {
-                        entity: ['Routingquery', function(Routingquery) {
-                            return Routingquery.get({id : $stateParams.id}).$promise;
-                        }]
-                    }
-                }).result.then(function() {
-                    $state.go('routingquery', null, { reload: 'routingquery' });
-                }, function() {
-                    $state.go('^');
-                });
-            }]
         });
     }
 

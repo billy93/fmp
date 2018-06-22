@@ -48,7 +48,7 @@ public class AtpcoRecord0 {
 	@Field("filler_2")
 	private String filler2;
 	
-	@Field("record_id_map")
+	@Field("record_id")
 	private String recordId;
 	
 	@Field("rule_tar")

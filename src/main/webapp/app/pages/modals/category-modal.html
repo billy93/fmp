@@ -1,0 +1,75 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+            ng-click="vm.clear()">&times;</button>
+    <h4 class="modal-title">Category {{vm.category.catNo}} - {{vm.category.catName}}</h4>
+</div>
+<div class="modal-body">
+	<div class="panel">
+		<div class="panel-body">
+			<pre class="transparent">{{vm.category.textFormat}}</pre>
+			<div class="clearfix">
+				<div class="col-md-12 text-center">
+					<label ng-click="vm.showCodedValue = !vm.showCodedValue" style="font-weight: normal">View coded value &nbsp;<i class="fa fa-caret-down pull-right"></i></label>
+				</div>
+			</div>
+			
+			<div class="table-wrapper" ng-show="vm.showCodedValue">
+				<div class="datatable-wrapper form-inline">
+					<div class="table-responsive">
+				        <table class="table table-striped table-bordered datatable category" ng-if="vm.category.catNo != '10'">
+				        	<thead>
+				                <tr>
+				                	<th>No</th>
+				                	<th>Type</th>
+				                	<th>Relationship</th>
+				                    <th ng-repeat="att in vm.category.catAttributes[0].attributes track by $index" ng-if="att.key != 'id'">
+				                    	<span>{{att.key | objectname }}</span>
+				                    </th>
+			                    </tr>
+				        	</thead>
+				        	<tbody>
+				                <tr ng-repeat="catAtts in vm.category.catAttributes" ng-init="parentIndex = $index">
+				                	<td>{{parentIndex + 1}}</td>
+				                	<td>{{catAtts.type}}</td>
+				                	<td>{{catAtts.relationship}}</td>
+				                    <td ng-repeat="att in catAtts.attributes" ng-if="att.key != 'id'">
+				                    	<span ng-if="vm.checkPreElement(att.key, att.value)"><pre class="transparent">{{att.value}}</pre></span>
+				                    	<span ng-if="!vm.checkPreElement(att.key)">{{att.value}}</span>	
+				                    </td>
+			                    </tr>
+				        	</tbody>
+				        </table>
+				        <table class="table table-striped table-bordered datatable category" ng-if="vm.category.catNo == '10'" ng-repeat="att10 in vm.category10Attributes track by $index" style="margin-bottom: 30px !important;">
+				        	<thead>
+				                <tr>
+				                	<th>No</th>
+				                	<th>Type</th>
+				                	<th>Relationship</th>
+				                    <th ng-repeat="headatt in att10.content[0].attributes track by $index" ng-if="headatt.key != 'id'">
+				                    	<span>{{ headatt.key | objectname }}</span>
+				                    </th>
+			                    </tr>
+				        	</thead>
+				        	<tbody>
+				                <tr ng-repeat="catAtts in att10.content track by $index" ng-init="parentIndex = $index">
+				                	<td>{{parentIndex + 1}}</td>
+				                	<td>{{catAtts.type}}</td>
+				                	<td>{{catAtts.relationship}}</td>
+				                    <td ng-repeat="att in catAtts.attributes" ng-if="att.key != 'id'">
+				                    	<span ng-if="vm.checkPreElement(att.key, att.value)"><pre class="transparent">{{att.value}}</pre></span>
+				                    	<span ng-if="!vm.checkPreElement(att.key)">{{att.value}}</span>	
+				                    </td>
+			                    </tr>
+				        	</tbody>
+				       	</table>
+					</div>
+				</div>
+			</div>
+			<button type="submit" class="btn btn-back" ng-click="vm.clear()">
+		        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Close</span>
+		    </button>
+		</div>
+	</div>
+</div>
+   	
+    

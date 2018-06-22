@@ -876,7 +876,7 @@
         	},
         	{
         		name:"waiverCalculatedPn",
-        		editable:[],
+        		editable:["LSO", "HO"],
         		mandatory:["LSO", "HO"]
         	},
         	{
@@ -1769,7 +1769,7 @@
     		fareSheet.fares.push({
     			no:fareSheet.fares.length+1,
     			status:"PENDING",
-    			action:"New",
+    			action:"AUTO",
   	 	      	carrier:"GA"
     		});
  	    }
@@ -2328,14 +2328,19 @@
          
 	   vm.addAttachment = function(){
 		 	if(vm.workPackage.attachmentData == null){
-	        		vm.workPackage.attachmentData = [];
-	        	}
+	        	vm.workPackage.attachmentData = [];
+	        }
 	   		vm.workPackage.attachmentData.push({comment:""});
 	   }
 	   
 	   vm.removeAttachment = function(attachment){
-	  		 var index = vm.workPackage.attachmentData.indexOf(attachment);
-	  		vm.workPackage.attachmentData.splice(index, 1);  
+		   if(vm.workPackage.status != "NEW"){
+			   attachment.inOnly = false;
+			   attachment.isDeleted = true;
+		   }else{
+			 var index = vm.workPackage.attachmentData.indexOf(attachment);
+		  	 vm.workPackage.attachmentData.splice(index, 1); 
+		   }
 	  };
 	  
 	  vm.addMarketRules = function(){
@@ -4483,6 +4488,7 @@
           if ($file) {
               DataUtils.toBase64($file, function(base64Data) {
                   $scope.$apply(function() {
+                	  testing.fileName = $file.name;
                       testing.file = base64Data;
                       testing.fileContentType = $file.type;
                   });
@@ -4514,7 +4520,7 @@
     	  	vm.commentString = null;
     	  	$(document).ready(function(){
                 var _width = $('.comment-wrapper').outerWidth();
-	              $('.comment-list').css({ 'width': 'calc(100% + ' + _width+ 'px)' });
+	              $('.comment-list').css('min-width',_width)
 	        });
     	 }
 	  	
@@ -4527,31 +4533,15 @@
       
       
      
-      vm.viewCommentFillingInstruction = loadCommentFI();
-      function loadCommentFI() {
-    	  vm.viewCommentFillingInstruction =[];
-    	  for(var l = 0;l < vm.workPackage.filingInstructionData.length ; l++){
-    		  if(!vm.workPackage.filingInstructionData[l].isDeleted){
-    			  vm.viewCommentFillingInstruction.push(vm.workPackage.filingInstructionData[l]);
-    		  }
-    	  }
-    	  return vm.viewCommentFillingInstruction = vm.viewCommentFillingInstruction;
-      }
       
+     vm.isFilingInstructionCollapse = true;
+     
       vm.expandCommentFillingInstruction = function(){
-    	  vm.viewCommentFillingInstruction =[];
-    	  for(var l = 0;l < vm.workPackage.filingInstructionData.length ; l++){
-    		vm.viewCommentFillingInstruction.push(vm.workPackage.filingInstructionData[l]);
-    	  }
+    	  vm.isFilingInstructionCollapse = false;
       }
       
       vm.collapseCommentFillingInstruction = function(){
-    	  vm.viewCommentFillingInstruction =[];
-    	  for(var l = 0;l < vm.workPackage.filingInstructionData.length ; l++){
-    		  if(!vm.workPackage.filingInstructionData[l].isDeleted){
-    			  vm.viewCommentFillingInstruction.push(vm.workPackage.filingInstructionData[l]);
-    		  }
-    	  }
+    	  vm.isFilingInstructionCollapse = true;
       }
       vm.addCommentFillingInstruction = function() {
 	  	 	if (vm.commentStringFillingInstruction != null) {
@@ -4564,16 +4554,13 @@
 	     	  		createdTime :new Date()
 	 	  		 });
 	 	  		 vm.save();
-	 	  		 vm.commentStringFillingInstruction = null;
-	 	  		
-	 	  		 
-	 	  		
+	 	  		 vm.commentStringFillingInstruction = null;	 	  		
+	 	  		 	 	  		
 	 	  		 $(document).ready(function(){
 	                var _width = $('.comment-wrapper').outerWidth();
-		              $('.comment-list').css({ 'width': 'calc(100% + ' + _width+ 'px)' });
+		              $('.comment-list').css('min-width',_width)
 		        });
 	  	 	}
-	  	 	loadCommentFI();
      }
      
       vm.deleteCommentFillingInstruction = function(){
@@ -4581,8 +4568,6 @@
     		 vm.tempFIC[l].isDeleted = true;
     	 }
     	 vm.save();
-    	 vm.tempFIC = [];
-    	 loadCommentFI();
       }
       
       vm.tempFIC = [];
@@ -4594,8 +4579,7 @@
     			  if(vm.tempFIC.indexOf(data) > -1){
         			  vm.tempFIC.splice(vm.tempFIC.indexOf(data),1);    				  
     			  }
-    		  }
-    		  
+    		  }    		  
     	  }
        }
       
@@ -4617,7 +4601,7 @@
      	  	vm.ioString = null;
      	  	$(document).ready(function(){
                 var _width = $('.comment-wrapper').outerWidth();
-	              $('.comment-list').css({ 'width': 'calc(100% + ' + _width+ 'px)' });
+	              $('.comment-list').css('min-width',_width)
 	        });
      	 }
        }
