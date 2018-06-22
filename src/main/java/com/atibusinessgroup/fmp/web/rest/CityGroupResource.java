@@ -85,8 +85,22 @@ public class CityGroupResource {
         if (cityGroup.getId() == null) {
             return createCityGroup(cityGroup);
         }
+        CityGroup result = null;
+        CityGroup current = cityGroupRepository.findOne(cityGroup.getId());
+        if(!current.getCode().contentEquals(cityGroup.getCode())){
+        	CityGroup check = cityGroupRepository.findOneByCode(cityGroup.getCode());
+        	if(check == null) {
+        		//save
+        		result = cityGroupRepository.save(cityGroup);
+        	}
+        	else {
+        		throw new BadRequestAlertException("A cityGroup with code "+cityGroup.getCode()+" already exist in database", ENTITY_NAME, "idexists");
+        	}
+        }
+        else {
+        	result = cityGroupRepository.save(cityGroup);
+        }
         
-        CityGroup result = cityGroupRepository.save(cityGroup);
     	
     	return ResponseEntity.created(new URI("/api/city-groups/" + result.getId()))
                 .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getId().toString()))
