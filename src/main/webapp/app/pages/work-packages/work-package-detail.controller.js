@@ -2475,14 +2475,14 @@
 		  var validated = true;
 		  var cekStatus = "";
 		  var counterApprove = false;
-		  
-//		  console.log("REGULAR");
+
 		  if(vm.workPackage.fareSheet != null && vm.workPackage.fareSheet.length > 0){
 			  for(var x=0;x<vm.workPackage.fareSheet.length;x++){
 				  if(vm.workPackage.fareSheet[x].fares != null && vm.workPackage.fareSheet[x].fares.length > 0){
+					  //vm.expandCityGroup(vm.workPackage.fareSheet[x]);
 					  for(var y=0;y<vm.workPackage.fareSheet[x].fares.length;y++){
 						  if(vm.workPackage.fareSheet[x].fares[y].status == "APPROVED"){
-							  counterApprove =true;
+							  counterApprove = true;
 						  }
 						  if(vm.workPackage.fareSheet[x].fares[y].status == "" || vm.workPackage.fareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.fareSheet[x].fares[y].status;
@@ -2494,7 +2494,6 @@
 			  }
 		  }
 		  
-//		  console.log("DISCOUNT");
 		  if(vm.workPackage.discountFareSheet != null && vm.workPackage.discountFareSheet.length > 0){
 			  for(var x=0;x<vm.workPackage.discountFareSheet.length;x++){
 				  if(vm.workPackage.discountFareSheet[x].fares != null && vm.workPackage.discountFareSheet[x].fares.length > 0){
@@ -2512,10 +2511,10 @@
 			  }
 		  }	
 		  
-//		  console.log("ADDON");
 		  if(vm.workPackage.addonFareSheet != null && vm.workPackage.addonFareSheet.length > 0){
 			  for(var x=0;x<vm.workPackage.addonFareSheet.length;x++){
 				  if(vm.workPackage.addonFareSheet[x].fares != null && vm.workPackage.addonFareSheet[x].fares.length > 0){
+					  //vm.expandCityGroup(vm.workPackage.addonFareSheet[x]);
 					  for(var y=0;y<vm.workPackage.addonFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.addonFareSheet[x].fares[y].status == "APPROVED"){
 							  counterApprove =true;
@@ -2530,10 +2529,10 @@
 			  } 
 		  }	
 		  
-//		  console.log("MARKET");
 		  if(vm.workPackage.marketFareSheet != null && vm.workPackage.marketFareSheet.length > 0){
 			  for(var x=0;x<vm.workPackage.marketFareSheet.length;x++){
 				  if(vm.workPackage.marketFareSheet[x].fares != null && vm.workPackage.marketFareSheet[x].fares.length > 0){
+					  //vm.expandCityGroup(vm.workPackage.marketFareSheet[x]);
 					  for(var y=0;y<vm.workPackage.marketFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.marketFareSheet[x].fares[y].status == "APPROVED"){
 							  counterApprove =true;
@@ -2548,10 +2547,10 @@
 			  }
 		  }	
 		  
-//		  console.log("WAIVER");
 		  if(vm.workPackage.waiverFareSheet != null && vm.workPackage.waiverFareSheet.length > 0){
 			  for(var x=0;x<vm.workPackage.waiverFareSheet.length;x++){
 				  if(vm.workPackage.waiverFareSheet[x].fares != null && vm.workPackage.waiverFareSheet[x].fares.length > 0){
+					  //vm.expandCityGroup(vm.workPackage.waiverFareSheet[x]);
 					  for(var y=0;y<vm.workPackage.waiverFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.waiverFareSheet[x].fares[y].status == "APPROVED"){
 							  counterApprove =true;
@@ -2565,8 +2564,49 @@
 				  }
 			  }
 		  }	
-		  
+		 
 		  if(validated){
+			  
+			  if(vm.workPackage.fareSheet != null && vm.workPackage.fareSheet.length > 0){
+				  for(var x=0;x<vm.workPackage.fareSheet.length;x++){
+					  if(vm.workPackage.fareSheet[x].fares != null && vm.workPackage.fareSheet[x].fares.length > 0){
+						  vm.expandCityGroup(vm.workPackage.fareSheet[x]);
+					  }
+				  }
+			  }
+			  
+			  if(vm.workPackage.discountFareSheet != null && vm.workPackage.discountFareSheet.length > 0){
+				  for(var x=0;x<vm.workPackage.discountFareSheet.length;x++){
+					  if(vm.workPackage.discountFareSheet[x].fares != null && vm.workPackage.discountFareSheet[x].fares.length > 0){
+						 
+					  }
+				  }
+			  }	
+			  
+			  if(vm.workPackage.addonFareSheet != null && vm.workPackage.addonFareSheet.length > 0){
+				  for(var x=0;x<vm.workPackage.addonFareSheet.length;x++){
+					  if(vm.workPackage.addonFareSheet[x].fares != null && vm.workPackage.addonFareSheet[x].fares.length > 0){
+						  vm.expandCityGroup(vm.workPackage.addonFareSheet[x]);
+					  }
+				  } 
+			  }	
+			  
+			  if(vm.workPackage.marketFareSheet != null && vm.workPackage.marketFareSheet.length > 0){
+				  for(var x=0;x<vm.workPackage.marketFareSheet.length;x++){
+					  if(vm.workPackage.marketFareSheet[x].fares != null && vm.workPackage.marketFareSheet[x].fares.length > 0){
+						  vm.expandCityGroup(vm.workPackage.marketFareSheet[x]);
+					  }
+				  }
+			  }	
+			  
+			  if(vm.workPackage.waiverFareSheet != null && vm.workPackage.waiverFareSheet.length > 0){
+				  for(var x=0;x<vm.workPackage.waiverFareSheet.length;x++){
+					  if(vm.workPackage.waiverFareSheet[x].fares != null && vm.workPackage.waiverFareSheet[x].fares.length > 0){
+						  vm.expandCityGroup(vm.workPackage.waiverFareSheet[x]);
+					  }
+				  }
+			  }	
+			  
 			  $uibModal.open({
 	              templateUrl: 'app/pages/work-packages/work-package-approve-email-dialog.html',
 	              controller: 'WorkPackageApproveEmailDialogController',
@@ -5426,6 +5466,32 @@
     	  }
       }
       
+
+      vm.checkValidateCityGroupFares = function(workPackageSheet){
+    	  var fares = workPackageSheet.fares;
+    	  for(var x=0;x<fares.length;x++){
+    		  var origin = false;
+    		  var destination = false;
+    		  
+    		  for(var y=0;y<vm.cityGroups.length;y++){
+    			  if(fares[x] != undefined){    				  	    			  
+    				  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (fares[x].origin != null && fares[x].origin.toUpperCase())){	    				  
+    					  origin = true;
+	    			  }
+	    			  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (fares[x].destination != null && fares[x].destination.toUpperCase())){
+	      				  destination = true;
+	    			  }	    			   
+    			  }
+    		  }
+    		  
+    		  if(origin){
+				  return false;
+			  }else if(destination){
+				  return false;
+			  }
+    	  }
+    	  return true;
+      }
       vm.expandCityGroup = function(workPackageSheet){
     	  var fares = workPackageSheet.fares;
     	  
@@ -5554,6 +5620,7 @@
     	  }
     	  return message;
       }
+      
       vm.dateNgModelOpts = {
     		  timezone : '+07:00'
 	  };

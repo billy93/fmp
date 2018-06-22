@@ -18,12 +18,14 @@
         vm.setSelectedRow = setSelectedRow;
         vm.getRules = getRules;
         vm.showCategoryDetail = showCategoryDetail;
+        vm.showFareDetail = showFareDetail;
         vm.copyAfdQueryFares = copyAfdQueryFares;
         vm.selectAll = selectAll;
         vm.showLegend = showLegend;
         vm.viewFullText = viewFullText;
         vm.showErrorModal = showErrorModal;
         vm.selectedRows = [];
+        vm.selectedFares = [];
         vm.timezone = Timezone.GMT7;
         
         vm.reset = reset;
@@ -184,6 +186,12 @@
         	} else {
         		vm.selectedRows[index] = afdQuery;
         	}
+        	
+        	if (vm.selectedFares.indexOf(afdQuery) != -1) {
+        		vm.selectedFares.splice(vm.selectedFares.indexOf(afdQuery), 1);
+        	} else {
+        		vm.selectedFares.push(afdQuery);
+        	}
         }
         
         function selectAll() {
@@ -199,11 +207,13 @@
         	if (isEmpty) {
         		for (var i = 0; i < vm.afdQueries.length; i++) {
             		vm.selectedRows[i] = vm.afdQueries[i];
+            		vm.selectedFares.push(vm.afdQueries[i]);
             	}
         		vm.allSelected = true;
         	} else {
         		for (var i = 0; i < vm.selectedRows.length; i++) {
         			vm.selectedRows[i] = null;
+        			vm.selectedFares = [];
         		}
         	}
         }
@@ -233,21 +243,27 @@
         	}
         }
         
-        function showFareDetail(category) {
-        	$uibModal.open({
-                templateUrl: 'app/pages/modals/fare-detail-modal.html',
-                controller: 'FareDetailModalController',
-                controllerAs: 'vm',
-                backdrop: 'static',
-                size: 'lg',
-                resolve: {
-                    entity: category
-                }
-            }).result.then(function() {
-                $state.go('afd-query', {}, { reload: false });
-            }, function() {
-                $state.go('afd-query');
-            });
+        function showFareDetail() {
+        	if (vm.selectedFares.length > 0) {
+        		$uibModal.open({
+                    templateUrl: 'app/pages/modals/fare-detail-modal.html',
+                    controller: 'FareDetailModalController',
+                    controllerAs: 'vm',
+                    backdrop: 'static',
+                    size: 'lg',
+                    resolve: {
+                        fare: vm.selectedFares[0],
+                        rules: {
+                        	categories: vm.categoryRules
+                        }
+                    },
+                    windowClass: 'full'
+                }).result.then(function() {
+                    $state.go('afd-query', {}, { reload: false });
+                }, function() {
+                    $state.go('afd-query');
+                });
+        	}
         }
         
         function showCategoryDetail(category) {
