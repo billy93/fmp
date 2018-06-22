@@ -231,8 +231,12 @@ public class WorkPackageResource {
             .body(result);
     }
 
+    static long zonedDateTimeDifference(ZonedDateTime d1, ZonedDateTime d2, ChronoUnit unit){
+        return unit.between(d1, d2);
+    }
+    
     /**
-     * POST  /work-packages/discontinue : Create a new workPackage.
+     * POST  /work-packages/discontinue : Discontinue a workPackage.
      *
      * @param workPackage the workPackage to create
      * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
@@ -247,7 +251,17 @@ public class WorkPackageResource {
         List<WorkPackageFareSheet> sheets = workPackage.getMarketFareSheet();
         for(WorkPackageFareSheet sheet : sheets) {
         	for(WorkPackageFare fare : sheet.getFares()) {
-        		fare.setSaleEnd(ZonedDateTime.now());
+        		if(fare.getSaleStart() != null) {
+        			if(zonedDateTimeDifference(ZonedDateTime.now(), fare.getSaleStart(), ChronoUnit.DAYS) > 0) {
+        				fare.setSaleStart(ZonedDateTime.now());
+        			}
+        		}
+        		
+        		if(fare.getSaleEnd() != null) {
+        			if(zonedDateTimeDifference(ZonedDateTime.now(), fare.getSaleEnd(), ChronoUnit.DAYS) > 0) {
+        				fare.setSaleEnd(ZonedDateTime.now());
+        			}
+        		}        		
         	}        			
         }
         workPackage.setStatus(Status.DISCONTINUED);
@@ -1888,187 +1902,11 @@ public class WorkPackageResource {
     public ResponseEntity<WorkPackage> updateWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
         log.debug("REST request to update WorkPackage : {}", workPackage.toString());
         
-        boolean isWorkPackageNew = false;
-        
         if (workPackage.getId() == null) {
             return createWorkPackage(workPackage);
         }
 
-    	if(workPackage.getWpid() == null) {
-    		isWorkPackageNew = true;
-    		
-    		DateFormat df = new SimpleDateFormat("yy"); // Just the year, with 2 digits
-    		DateFormat dfFull = new SimpleDateFormat("yyyy"); // Just the year, with 4 digits
-    		
-    		Counter c = counterRepository.findOneByIdAndYear("workpackageId", dfFull.format(Calendar.getInstance().getTime()));
-    		if(c == null) {
-    			c.setSequenceValue(0);
-    			c.setYear(dfFull.format(Calendar.getInstance().getTime()));
-    			c = counterRepository.save(c);
-    		}
-    		NumberFormat nf = new DecimalFormat("00000");
-        	c.setSequenceValue(c.getSequenceValue()+1);
-        	c = counterRepository.save(c);
-        	
-    		String year = df.format(Calendar.getInstance().getTime());
-    		workPackage.setWpid(year+nf.format(c.getSequenceValue()+1));
-        }
-    	
-    	if(!workPackage.isSpecifiedFares()) {
-    		workPackage.getFareSheet().clear();
-    	}
-    	if(!workPackage.isWaiverFares()) {
-    		workPackage.getWaiverFareSheet().clear();
-    	}
-    	if(!workPackage.isMarketFares()) {
-    		workPackage.getMarketFareSheet().clear();
-    	}
-    	if(!workPackage.isDiscount()) {
-    		workPackage.getDiscountFareSheet().clear();
-    	}
-    	if(!workPackage.isAddon()) {
-    		workPackage.getAddonFareSheet().clear();
-    	}
-    	if(workPackage.getComment() != null) {
-	    	for(Comment comments : workPackage.getComment()) {
-	    		if(comments.getUsername() == null && comments.getCreatedTime() == null) {
-	    			comments.setUsername(SecurityUtils.getCurrentUserLogin().get());
-	    			comments.setCreatedTime(ZonedDateTime.now());
-	    		}
-	    	}
-    	}
-    	
-    	if(workPackage.getInterofficeComment() != null) {
-	    	for(Comment comments : workPackage.getInterofficeComment()) {
-	    		if(comments.getUsername() == null && comments.getCreatedTime() == null) {
-	    			comments.setUsername(SecurityUtils.getCurrentUserLogin().get());
-	    			comments.setCreatedTime(ZonedDateTime.now());
-	    		}
-	    	}
-    	}
-    	
-    	if(workPackage.getAttachmentData() != null) {
-    		for(Attachment attachment : workPackage.getAttachmentData()) {
-    			if(attachment.getUsername() == null && attachment.getCreatedTime() == null) {
-    				attachment.setUsername(SecurityUtils.getCurrentUserLogin().get());
-    				attachment.setCreatedTime(ZonedDateTime.now());
-    			}
-    		}
-    	}
-    	
-    	if(workPackage.getFilingInstructionData() != null) {
-    		for(FilingInstruction filingInstruction : workPackage.getFilingInstructionData()) {    			
-    			if(filingInstruction.getUsername() == null && filingInstruction.getCreatedTime() == null) {
-    				filingInstruction.setUsername(SecurityUtils.getCurrentUserLogin().get());
-    				filingInstruction.setCreatedTime(ZonedDateTime.now());
-    			}
-    		}
-    	}
-    	
-    	if(workPackage.getMarketRulesData() != null) {
-    		for(MarketRules marketRules : workPackage.getMarketRulesData()) {
-    			if(marketRules.getUsername() == null && marketRules.getCreatedTime() == null) {
-    				marketRules.setUsername(SecurityUtils.getCurrentUserLogin().get());
-    				marketRules.setCreatedTime(ZonedDateTime.now());
-    			}
-    		}
-    	}
-    	
-    	if(workPackage.getSaleDate() != null && (workPackage.getStatus() != Status.DISTRIBUTED) && workPackage.getTargetDistribution().contentEquals("ATPCO")) {
-	    	Sort sort = new Sort(Direction.ASC, "priority");
-	    	List<Priority> priorities = priorityRepository.findAll(sort);
-	    	
-	    	boolean found = false;
-	    	
-	    	for(Priority p : priorities) {
-	    		if(p.getType().contentEquals("DAYS")) {
-	    			long val = zonedDateTimeDifference(ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS), workPackage.getSaleDate().truncatedTo(ChronoUnit.DAYS), ChronoUnit.DAYS);
-	    			long value = p.getValue();
-
-	    			if(val <= value) {    				
-	    				workPackage.setPriority(p.getName());
-	    				found = true;
-	    				break;
-	    			}
-	    		}
-	    	}
-	    	
-	    	if(!found) {
-		    	Sort sortDesc = new Sort(Direction.DESC, "priority");
-		    	List<Priority> prioritiesDesc = priorityRepository.findAll(sortDesc);
-		    	workPackage.setPriority(prioritiesDesc.get(0).getName());
-	    	}
-    	}
-    	
-    	List<WorkPackageFare> allFares = new ArrayList<>();
-    	if(workPackage.getFareSheet().size() > 0) {
-    		for(WorkPackageFareSheet sheet : workPackage.getFareSheet()) {
-    			if(sheet.getFares().size() > 0) {
-    				for(WorkPackageFare fares : sheet.getFares()) {
-    					if(fares.getSaleStart() != null) {
-    						allFares.add(fares);
-    						continue;
-    					}
-    				}
-    			}
-    		}
-    	}
-    	if(workPackage.getAddonFareSheet().size() > 0) {
-    		for(WorkPackageFareSheet sheet : workPackage.getAddonFareSheet()) {
-    			if(sheet.getFares().size() > 0) {
-    				for(WorkPackageFare fares : sheet.getFares()) {
-    					if(fares.getSaleStart() != null) {
-    						allFares.add(fares);
-    						continue;
-    					}
-    				}
-    			}
-    		}
-    	}
-    	if(workPackage.getDiscountFareSheet().size() > 0) {
-    		for(WorkPackageFareSheet sheet : workPackage.getDiscountFareSheet()) {
-    			if(sheet.getFares().size() > 0) {
-    				for(WorkPackageFare fares : sheet.getFares()) {
-    					if(fares.getSaleStart() != null) {
-    						allFares.add(fares);
-    						continue;
-    					}
-    				}
-    			}
-    		}
-    	}
-    	if(workPackage.getMarketFareSheet().size() > 0) {
-    		for(WorkPackageFareSheet sheet : workPackage.getMarketFareSheet()) {
-    			if(sheet.getFares().size() > 0) {
-    				for(WorkPackageFare fares : sheet.getFares()) {
-    					if(fares.getSaleStart() != null) {
-    						allFares.add(fares);
-    						continue;
-    					}
-    				}
-    			}
-    		}
-    	}
-    	if(workPackage.getWaiverFareSheet().size() > 0) {
-    		for(WorkPackageFareSheet sheet : workPackage.getWaiverFareSheet()) {
-    			if(sheet.getFares().size() > 0) {
-    				for(WorkPackageFare fares : sheet.getFares()) {
-    					if(fares.getSaleStart() != null) {
-    						allFares.add(fares);
-    						continue;
-    					}
-    				}
-    			}
-    		}
-    	}
-    	
-    	if(allFares.size() > 0) {
-	    	Collections.sort(allFares, new WorkPackageFare.WorkPackageFareComparator());  
-	    	workPackage.setSaleDate(allFares.get(0).getSaleStart());
-    	}
-    	
-    	workPackage.setValidation(null);
-    	workPackage = workPackageService.save(workPackage);
+    	workPackageService.save(workPackage);
 	    
     	if(workPackage.isValidate()) {
     		workPackage = validateWo(workPackage);    		
@@ -3518,9 +3356,6 @@ public class WorkPackageResource {
 		return workPackage;
 	}
 
-	static long zonedDateTimeDifference(ZonedDateTime d1, ZonedDateTime d2, ChronoUnit unit){
-        return unit.between(d1, d2);
-    }
 
     /**
      * GET  /work-packages : get all the workPackages.
@@ -3727,7 +3562,7 @@ public class WorkPackageResource {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
         
-        workPackageService.save(workPackage);        
+        workPackage = workPackageService.save(workPackage);        
             
         workPackage = validateWo(workPackage);
         if(workPackage.getValidation() != null && workPackage.getValidation().getErrorsCount() > 0) {

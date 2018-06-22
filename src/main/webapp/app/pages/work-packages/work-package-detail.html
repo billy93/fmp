@@ -552,7 +552,7 @@
 															</td>
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'global', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['global']}">{{fare.tariffNumber.global}}</td>
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'origin', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['origin']}">																
-																<span class="input-group" tooltip-placement="bottom" uib-tooltip-html="vm.getTooltip(fare.origin)">
+																<span class="input-group" tooltip-placement="{{$index > 3 ? 'top' : 'bottom'}}" uib-tooltip-html="vm.getTooltip(fare.origin)">
 																	<input type="text" class="form-control" name="origin{{$parent.$index}}{{$index}}" id="field_origin"
 											                    		ng-model="fare.origin"
 											                    		ng-disabled="!vm.isEditable('origin')|| fare.status =='APPROVED' || fare.status =='REJECTED'"
@@ -567,7 +567,7 @@
 																</span>
 															</td>
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'destination', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['destination']}">
-																<span class="input-group" tooltip-placement="bottom" uib-tooltip-html="vm.getTooltip(fare.destination)">
+																<span class="input-group" tooltip-placement="{{$index > 3 ? 'top' : 'bottom'}}" uib-tooltip-html="vm.getTooltip(fare.destination)">
 																	<input type="text" class="form-control" name="destination{{$parent.$index}}{{$index}}" id="field_destination"
 											                    		ng-model="fare.destination"
 											                    		ng-disabled="!vm.isEditable('destination')|| fare.status =='APPROVED' || fare.status =='REJECTED'"
@@ -1035,7 +1035,7 @@
 									                					maxlength="2"
 									                					ng-pattern="/^[a-zA-Z0-9]{1,2}$/"
 									                					ng-keypress="vm.keypress($event, '^[a-zA-Z0-9]{1,2}$')"
-									                				
+									                					uppercase
 															            ng-class="{'must-fill': editForm.editFormATPCO.addonFareFootnote{{$parent.$index}}{{$index}}.$error.required 
 															            || editForm.editFormATPCO.addonFareFootnote{{$parent.$index}}{{$index}}.$error.pattern 
 															            || editForm.editFormATPCO.addonFareFootnote{{$parent.$index}}{{$index}}.$error.maxlength  && fare.action != 'Canceled'}"																			            
@@ -1071,6 +1071,7 @@
 										               			<span class="input-group">
 																		<input type="text" class="form-control" name="addonFareCurrency{{$parent.$index}}{{$index}}" id="field_carrier"
 												                    		ng-model="fare.currency"
+												                    		uppercase
 												                    		ng-disabled="!vm.isEditable('addonFareCurrency') || fare.status =='APPROVED' || fare.status =='REJECTED'"
 												                    		style="min-width:120px"
 												                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareCurrency{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
