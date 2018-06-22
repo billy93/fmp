@@ -45,7 +45,16 @@
                 		cat: null,
                 		catNo: null
                 	}
-            	}]
+            	}],
+            	rec8params : [function() {
+            		return {
+            			cxr: null,
+                		ruleTarNo: null,
+                		ruleNo: null,
+                		accountCode: null,
+                		includeDisc : null
+            		}
+                }]
             }
         })
     }
