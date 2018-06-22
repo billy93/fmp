@@ -3634,6 +3634,10 @@ p {
   .btn i {
     margin-left: 5px;
     font-size: 14px; }
+    .btn i.i-btn {
+      font-size: 13px;
+      margin-left: 0;
+      margin-right: 2px; }
 
 .button-group {
   position: relative;
@@ -4526,6 +4530,13 @@ label.tree_label:after {
   display: block;
   margin-left: 20px;
   margin-top: -18px; }
+
+.help-block {
+  font-size: 12px; }
+
+.a--open {
+  color: #337ab7;
+  margin-left: 10px; }
 
 /* General Demo Style */
 body, html {

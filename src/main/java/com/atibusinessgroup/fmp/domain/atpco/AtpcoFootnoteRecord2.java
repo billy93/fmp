@@ -86,7 +86,7 @@ public class AtpcoFootnoteRecord2 {
 	@Field("batch_date")
     private Object batchDateObject;
 	
-	@Field("data_segs")
+	@Field("data_table")
 	private List<DataTable> dataTables;
 
 	public String getId() {

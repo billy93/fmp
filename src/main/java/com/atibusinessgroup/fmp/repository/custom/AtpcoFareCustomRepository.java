@@ -27,6 +27,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
 import com.atibusinessgroup.fmp.constant.CollectionName;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2Cat10;
 import com.atibusinessgroup.fmp.domain.dto.AfdQueryParam;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFareAfdQueryWithRecords;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByCatNo;
@@ -271,6 +272,20 @@ public class AtpcoFareCustomRepository {
 		Aggregation aggregation = newAggregation(aggregationOperations);
 		
 		List<AtpcoRecord2GroupByCatNo> result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_RECORD_2, AtpcoRecord2GroupByCatNo.class).getMappedResults();
+		
+		return result;
+	}
+	
+	public List<AtpcoRecord2Cat10> findAtpcoRecord2Cat10ByRecordId(String recordId) {
+		
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
+		MatchOperation match = new MatchOperation(new Criteria("record_id").is(recordId));
+		aggregationOperations.add(match);
+		
+		Aggregation aggregation = newAggregation(aggregationOperations);
+		
+		List<AtpcoRecord2Cat10> result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_RECORD_2_10, AtpcoRecord2Cat10.class).getMappedResults();
 		
 		return result;
 	}

@@ -927,12 +927,28 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 	    @Field("username")	    
 	    private String username;
 	    
+	    @Field("file_name")	    
+	    private String fileName;
+	    
 	    @Field("createdTime")	    
 		private ZonedDateTime createdTime;
 	    
 	    @Field("inOnly")
 	    private Boolean inOnly;
+	    
+	    @Field("isDeleted")
+	    private Boolean isDeleted;
 		
+	    
+	    
+		public String getFileName() {
+			return fileName;
+		}
+
+		public void setFileName(String fileName) {
+			this.fileName = fileName;
+		}
+
 		public String getComment() {
 			return comment;
 		}
@@ -964,7 +980,7 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 		public void setUsername(String username) {
 			this.username = username;
 		}
-
+		
 		public ZonedDateTime getCreatedTime() {
 			return createdTime;
 		}
@@ -979,6 +995,14 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 
 		public void setInOnly(Boolean inOnly) {
 			this.inOnly = inOnly;
+		}
+
+		public Boolean getIsDeleted() {
+			return isDeleted;
+		}
+
+		public void setIsDeleted(Boolean isDeleted) {
+			this.isDeleted = isDeleted;
 		}	
 		
 	}

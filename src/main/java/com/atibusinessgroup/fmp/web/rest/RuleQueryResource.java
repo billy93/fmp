@@ -1,6 +1,7 @@
 package com.atibusinessgroup.fmp.web.rest;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,10 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.atibusinessgroup.fmp.constant.CategoryName;
 import com.atibusinessgroup.fmp.constant.CategoryType;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord8;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByRuleNoCxrTarNo;
 import com.atibusinessgroup.fmp.domain.dto.Category;
 import com.atibusinessgroup.fmp.domain.dto.DataTable;
+import com.atibusinessgroup.fmp.domain.dto.Rec8Param;
 import com.atibusinessgroup.fmp.domain.dto.RuleQuery;
 import com.atibusinessgroup.fmp.domain.dto.RuleQueryParam;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoFareCustomRepository;
@@ -103,14 +106,14 @@ public class RuleQueryResource {
 	@PostMapping("/rule-queries")
 	@Timed
 	public ResponseEntity<List<RuleQuery>> getAllRuleQueries(@RequestBody RuleQueryParam param) {
-		log.debug("REST request to get a page of RuleQueries: {}", param);
-
+//		log.debug("REST request to get a page of RuleQueries: {}", param);
+		
 		Pageable pageable = new PageRequest(param.getPage(), param.getSize());
-
+		
 		Page<AtpcoRecord2GroupByRuleNoCxrTarNo> page = atpcoRuleQueryCustomRepository.getGroupingRuleQueries(param, pageable);
-
+		
 		List<RuleQuery> result = new ArrayList<>();
-
+		
 		if (page != null) {
 			for (AtpcoRecord2GroupByRuleNoCxrTarNo record2Group : page.getContent()) {
 				RuleQuery rq = ruleQueryMapper.convertAtpcoRecord2GroupByRuleNoCxrTarNo(record2Group);
@@ -119,7 +122,7 @@ public class RuleQueryResource {
 		}
 
 		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/rule-queries");
-
+		
 		return new ResponseEntity<>(result, headers, HttpStatus.OK);
 	}
 
@@ -130,16 +133,16 @@ public class RuleQueryResource {
 	 */
 	@GetMapping("/rule-queries/rules")
 	@Timed
-	public ResponseEntity<List<AtpcoRecord2>> getRuleQueryRules(RuleQuery ruleQuery) {
+	public ResponseEntity<List<AtpcoRecord2>> getRuleQueryRules(RuleQueryParam ruleQuery) {
 		log.debug("REST request to get ruleQueries rules: {}", ruleQuery);
 
-		String recordId = ruleQuery.getTarNo() + ruleQuery.getCxr() + ruleQuery.getRuleNo();
 
-		List<AtpcoRecord2> arecords2 = atpcoRuleQueryCustomRepository.getListRecord2ById(recordId,
-				ruleQuery.getCatNo());
+		List<AtpcoRecord2> arecords2 = atpcoRuleQueryCustomRepository.getRuleDetails(ruleQuery);
 
 		return new ResponseEntity<>(arecords2, HttpStatus.OK);
 	}
+	
+	
 
 	/**
 	 * GET /rule-queries/rules : get rule query rules.
@@ -191,6 +194,26 @@ public class RuleQueryResource {
 		}
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	/**
+	 * GET /rule-queries/rules : get rule query rules.
+	 *
+	 * @return the ResponseEntity with status 200 (OK) and the list of rules in body
+	 */
+	@PostMapping("/rule-queries/rec8")
+	@Timed
+	public ResponseEntity<List<AtpcoRecord8>> getRec8(@RequestBody Rec8Param param) {
+		
+		System.out.println("param : "+param.getCxr());
+
+		Pageable pageable = new PageRequest(param.getPage(), param.getSize());
+		
+		Page<AtpcoRecord8> result = atpcoRuleQueryCustomRepository.getListRec8(param, pageable);
+		
+		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(result, "/api/rule-queries/rec8");
+		
+		return new ResponseEntity<>(result.getContent(), headers, HttpStatus.OK);
 	}
 
 }
