@@ -6,8 +6,15 @@
 <div class="modal-body">
 	<div class="panel">
 		<div class="panel-body">
+			<div ng-repeat="cat in vm.categoryRules track by $index">
+				<div ng-if="cat.textFormat != ''">
+					<label style="font-size: 14px; color: #000; text-transform: uppercase;">Category {{cat.catNo}} - {{cat.catName}}</label>
+					<pre class="transparent">{{cat.textFormat}}</pre>
+					<br/>
+				</div>
+			</div>
 			
-			<button type="submit" class="btn btn-info" ng-click="vm.clear()">
+			<button type="submit" class="btn btn-back" ng-click="vm.clear()">
 		        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Close</span>
 		    </button>
 		</div>
