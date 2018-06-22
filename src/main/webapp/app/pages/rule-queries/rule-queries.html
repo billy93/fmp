@@ -63,9 +63,15 @@
 										<div class="pull-left col-md-4 no-lpad">
 											<div class="form-group">
 												<div class="custom-label semibold">Tariff Number</div>
-												<input type="text" class="form-control" name="tariff"
-													id="ruleTarNo" ng-model="vm.queryParams.ruleTarNo"
-													uppercase />
+												<div class="input-group">
+													<input id="ruleTarNo" type="text" 
+		                   								name="ruleTarNo"  
+		                   								class="form-control"
+		                   								ng-model="vm.queryParams.ruleTarNo" uppercase>
+		                   								
+													<span ng-click="vm.showTariffModal()" class="input-group-addon"><i class="fa fa-folder"></i>
+													</span>
+												</div>
 											</div>
 											<div class="form-group">
 
@@ -178,7 +184,7 @@
 										items-per-page="vm.itemsPerPage"></jhi-item-count>
 									<uib-pagination class="pagination-sm"
 										total-items="vm.totalItems" items-per-page="vm.itemsPerPage"
-										ng-model="vm.page" ng-change="vm.loadAll()"></uib-pagination>
+										ng-model="vm.page" ng-change="vm.loadAll(queryForm)"></uib-pagination>
 								</div>
 							</div>
 						</div>
@@ -297,7 +303,7 @@
 																	id="fare" ng-model="vm.queryParams.fareClass" uppercase />
 															</div>
 															<div class="form-group">
-																<div class="custom-label semibold">Tariff</div>
+																<div class="custom-label semibold">Tariff Number</div>
 																<input type="text" class="form-control" name="tariff"
 																	id="ruleTarNo" ng-model="vm.queryParams.ruleTarNo"
 																	uppercase />
@@ -592,12 +598,12 @@
 							<div class="filter-label semibold show">Hide Filter</div>
 							<div class="filter-area">
 								<div class="clearfix">
-									<form name="rec8Form" role="form" novalidate>
+									<form id="rec8Form" name="rec8Form" role="form" novalidate>
 										<div class="pull-left col-md-4 no-lpad">
 											<div class="form-group">
 												<div class="custom-label semibold">Carrier</div>
 												<input type="text" class="form-control" name="cxrRec8"
-													id="cxrRec8" ng-model="vm.rec8Params.cxr" uppercase
+													id="cxrRec8" ng-model="vm.rec8params.cxr" uppercase
 													required
 													ng-minlength="2"
 													uib-tooltip="*minimum 2 letters"
@@ -609,23 +615,23 @@
 											<div class="form-group">
 												<div class="custom-label semibold">Rule Number</div>
 												<input type="text" class="form-control" name="ruleNoRec8"
-													id="ruleNoRec8" ng-model="vm.rec8Params.ruleNo" uppercase />
+													id="ruleNoRec8" ng-model="vm.rec8params.ruleNo" uppercase />
 											</div>
 										</div>
 
 
 										<div class="pull-left col-md-4 no-lpad">
 											<div class="form-group">
-												<div class="custom-label semibold">Tariff</div>
+												<div class="custom-label semibold">Tariff Number</div>
 												<input type="text" class="form-control" name="tarNoRec8"
-													id="tarNoRec8" ng-model="vm.rec8Params.ruleTarNo"
+													id="tarNoRec8" ng-model="vm.rec8params.ruleTarNo"
 													uppercase />
 											</div>
 											
 											<div class="form-group">
 												<div class="custom-label semibold">Account Code</div>
 												<input type="text" class="form-control" name="accCodeRec8"
-													id="accCodeRec8" ng-model="vm.rec8Params.accountCode" uppercase />
+													id="accCodeRec8" ng-model="vm.rec8params.accountCode" uppercase />
 											</div>
 											
 										</div>
@@ -637,7 +643,7 @@
 													<label> <input type="checkbox"
 														name="includeDisc"
 														id="includeDisc"
-														ng-model="vm.rec8Params.includeDisc"> Include Discontinued Sequences
+														ng-model="vm.rec8params.includeDisc"> Include Discontinued Sequences
 													</label>
 												</div>
 												<br/>
@@ -683,36 +689,35 @@
 											</tr>
 										</thead>
 										<tbody>
-											<tr ng-repeat="rec8 in vm.record8"
-												ng-class="{'selected': vm.selectedrec8Row == rec8">
+											<tr ng-repeat="rec8 in vm.record8">
 												<td>{{$index + 1}}</td>
-												<td>{{rec8.cxr}}</td>
-												<td>{{rec8.tarNo}}</td>
-												<td>{{rec8.tarCd}}</td>
-												<td>{{rec8.desc}}</td>
-												<td>{{rec8.ruleNo}}</td>
+												<td>{{rec8.cxr_code}}</td>
+												<td>{{rec8.tariff}}</td>
+												<td>{{rec8.tar_cd}}</td>
+												<td>{{rec8.description}}</td>
+												<td>{{rec8.rule_no}}</td>
 												<td>{{rec8.cat35}}</td>
-												<td>{{rec8.paxType}}</td>
-												<td>{{rec8.accountCode}}</td>
-												<td>{{rec8.global}}</td>
-												<td>{{rec8.loc1}}</td>
-												<td>{{rec8.loc2}}</td>
-												<td><span ng-if="rec8.effectiveDateObject=='indef'"></span><span
-													ng-if="rec8.effectiveDateObject!='indef'">{{rq.effectiveDateObject
+												<td>{{rec8.prim_pass_type}}</td>
+												<td>{{rec8.account_code}}</td>
+												<td>{{rec8.fare_geo_scope_global}}</td>
+												<td>{{rec8.fare_geo_scope_loc_1}}</td>
+												<td>{{rec8.fare_geo_scope_loc_2}}</td>
+												<td><span ng-if="rec8.dates_eff=='indef'"></span><span
+													ng-if="rec8.dates_eff != 'indef'">{{rec8.dates_eff
 														| date:'medium'}}</span></td>
-												<td><span ng-if="rec8.discontinueDateObject=='indef'"></span><span
-													ng-if="rec8.discontinueDateObject!='indef'">{{rq.discontinueDateObject
+												<td><span ng-if="rec8.dates_disc=='indef'"></span><span
+													ng-if="rec8.dates_disc != 'indef'">{{rec8.dates_disc
 														| date:'medium'}}</span></td>
 											</tr>
 										</tbody>
 									</table>
 								</div>
 								<div class="text-center">
-									<jhi-item-count page="vm.page" total="vm.queryCount"
-										items-per-page="vm.itemsPerPage"></jhi-item-count>
+									<jhi-item-count page="vm.pageRec8" total="vm.queryCountRec8"
+										items-per-page="vm.itemsPerPageRec8"></jhi-item-count>
 									<uib-pagination class="pagination-sm"
-										total-items="vm.totalItems" items-per-page="vm.itemsPerPage"
-										ng-model="vm.page" ng-change="vm.loadRec8()"></uib-pagination>
+										total-items="vm.totalItemsRec8" items-per-page="vm.itemsPerPageRec8"
+										ng-model="vm.pageRec8" ng-change="vm.loadRec8(rec8Form)"></uib-pagination>
 								</div>
 							</div>
 						</div>
