@@ -514,11 +514,11 @@ public class AtpcoRuleQueryCustomRepository {
 						.append("rule_tar_no","$_id.rule_tar_no")
 						.append("type",new BasicDBObject("$cond", new BasicDBObject("if", 
 										new BasicDBObject("$gt", Arrays.asList(new BasicDBObject("$size", "$atpco_record_0"), 0)))
-								.append("then", "General Rule")
+								.append("then", "GENERAL RULE")
 								.append("else", new BasicDBObject("$cond", new BasicDBObject("if", 
 										new BasicDBObject("$gt", Arrays.asList(new BasicDBObject("$size", "$atpco_record_8"), 0)))
-										.append("then", "Fare By Rule")
-										.append("else", "Rule")
+										.append("then", "FARE BY RULE")
+										.append("else", "FARE RULE")
 								))
 					))
 				);
@@ -539,7 +539,7 @@ public class AtpcoRuleQueryCustomRepository {
 		} else if(param.getType().equals("2")) {
 			type = "GENERAL RULE";
 		} if(param.getType().equals("3")) {
-			type = "RULE";
+			type = "FARE RULE";
 		}
 		
 		final String typeFinal = type;
