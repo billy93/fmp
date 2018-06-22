@@ -233,6 +233,23 @@
         	}
         }
         
+        function showFareDetail(category) {
+        	$uibModal.open({
+                templateUrl: 'app/pages/modals/fare-detail-modal.html',
+                controller: 'FareDetailModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                resolve: {
+                    entity: category
+                }
+            }).result.then(function() {
+                $state.go('afd-query', {}, { reload: false });
+            }, function() {
+                $state.go('afd-query');
+            });
+        }
+        
         function showCategoryDetail(category) {
         	$uibModal.open({
                 templateUrl: 'app/pages/modals/category-modal.html',
