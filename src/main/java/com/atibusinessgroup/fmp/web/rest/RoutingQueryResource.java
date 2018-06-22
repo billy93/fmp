@@ -108,6 +108,9 @@ public class RoutingQueryResource {
 //        Page<RoutingQuery> page = routingQueryService.findCustom(routingQueryParam, pageable);
         Page<RoutingQuery> page = routingQueryService.findCustomJoin(routingQueryParam, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/routingqueries");
+        for (RoutingQuery routingQuery : page.getContent()) {
+        	routingQuery = headerConditionalData(routingQuery);
+		}
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
@@ -121,9 +124,10 @@ public class RoutingQueryResource {
     @Timed
     public ResponseEntity<RoutingQuery> getRoutingquery(@PathVariable String id) {
         log.debug("REST request to get Routingquery : {}", id);
-        RoutingQuery routingquery = routingQueryService.findOne(id);
-        routingquery = routingQueryService.getFullRouteDetails(routingquery);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(routingquery));
+        RoutingQuery routingQuery = routingQueryService.findOne(id);
+        routingQuery = headerConditionalData(routingQuery);
+        routingQuery = routingQueryService.getFullRouteDetails(routingQuery);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(routingQuery));
     }
     
     /**
@@ -162,5 +166,27 @@ public class RoutingQueryResource {
         	detailMaps = routingQueryService.getRouteDetails(routingquery);
         }
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(detailMaps));
+    }
+    
+    private RoutingQuery headerConditionalData(RoutingQuery routingQuery) {
+    	if(routingQuery.getDiscontinuedDate().equals("indef")) routingQuery.setDiscontinuedDate("None");
+    	
+    	if(routingQuery.getDrv().equals("")) routingQuery.setDrv("Does Not Apply");
+    	else if(routingQuery.getDrv().equals("1")) routingQuery.setDrv("Does Apply");
+    	else routingQuery.setDrv("Any Online Point Allowed");
+    	
+    	if(routingQuery.getCpi().equals("")) routingQuery.setCpi("Does Not Apply");
+    	else routingQuery.setCpi("Does Apply");
+    	
+    	if(routingQuery.getDi().equals("")) routingQuery.setDi("Read in Either Direction");
+    	else routingQuery.setDi("Read Left to Right");
+    	
+    	if(routingQuery.getIntPt().equals("")) routingQuery.setIntPt("Must match to entry/exit points");
+    	else routingQuery.setIntPt("Must match to entry/exit or intermediate points");
+    	
+    	if(routingQuery.getUntPt().equals("")) routingQuery.setUntPt("Validate ticketed points only");
+    	else routingQuery.setUntPt("Validate ticketed and unticketed points");
+    	
+    	return routingQuery;
     }
 }
