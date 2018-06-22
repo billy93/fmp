@@ -3,18 +3,19 @@
 
     angular
         .module('fmpApp')
-        .controller('MasterTariffModalController', MasterTariffModalController);
+        .controller('MasterCarrierModalController', MasterCarrierModalController);
 
-    MasterTariffModalController.$inject = ['$state', 'entity', '$uibModalInstance', 'TariffNumber'];
+    MasterCarrierModalController.$inject = ['$state', 'entity', '$uibModalInstance', 'CcfCarrier'];
 
-    function MasterTariffModalController($state, entity, $uibModalInstance, TariffNumber) {
+    function MasterCarrierModalController($state, entity, $uibModalInstance, CcfCarrier) {
     	 var vm = this;
+    	 
+    	 vm.parent = entity;
          vm.clear = clear;
-         vm.parent = entity;
-         vm.tariffNumber = TariffNumber;
-         vm.option = { searchType:'tarNo' };
-         vm.selectedRow = vm.tariffNumber[0];
-         vm.sortType     = 'tarNo'; // set the default sort type
+         vm.carrier = CcfCarrier;
+         vm.option = { searchType:'cxrCode' };
+         vm.selectedRow = vm.carrier[0];
+         vm.sortType     = 'cxrCode'; // set the default sort type
          vm.sortReverse  = false;  // set the default sort order
          vm.searchFish   = '';     // set the default search/filter term
          
@@ -34,16 +35,18 @@
          }
          
          vm.select = function(){
-        	 console.log(vm.parent);
-        	 vm.parent.paramTarNo = vm.selectedRow.tarNo;
+        	 console.log(vm.selectedRow);
+        	vm.parent.paramCarrier = vm.selectedRow.cxrCode;
+//          	$(cxrModel.varName).val(vm.selectedRow.cxrCode);
          	$uibModalInstance.close(vm.selectedRow);
          }
+         
          function clear () {
              $uibModalInstance.dismiss('cancel');
          }
         
-         vm.tariffNumber.getAll(function(data) {
-         	vm.tariffs = data;
+         vm.carrier.getAll(function(data) {
+         	vm.carriers = data;
          });
         
         

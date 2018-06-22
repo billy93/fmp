@@ -1,0 +1,80 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myCcfCarrierLabel">Create or edit a Ccf Carrier</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" ng-show="vm.ccfCarrier.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="vm.ccfCarrier.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_svcTagsPsgdom">Svc Tags Psgdom</label>
+            <input type="text" class="form-control" name="svcTagsPsgdom" id="field_svcTagsPsgdom"
+                    ng-model="vm.ccfCarrier.svcTagsPsgdom"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_filler">Filler</label>
+            <input type="text" class="form-control" name="filler" id="field_filler"
+                    ng-model="vm.ccfCarrier.filler"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_svcTagsCardom">Svc Tags Cardom</label>
+            <input type="text" class="form-control" name="svcTagsCardom" id="field_svcTagsCardom"
+                    ng-model="vm.ccfCarrier.svcTagsCardom"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_cxrCode">Cxr Code</label>
+            <input type="text" class="form-control" name="cxrCode" id="field_cxrCode"
+                    ng-model="vm.ccfCarrier.cxrCode"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_recType">Rec Type</label>
+            <input type="text" class="form-control" name="recType" id="field_recType"
+                    ng-model="vm.ccfCarrier.recType"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_batchNumber">Batch Number</label>
+            <input type="text" class="form-control" name="batchNumber" id="field_batchNumber"
+                    ng-model="vm.ccfCarrier.batchNumber"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_svcTagsPsgint">Svc Tags Psgint</label>
+            <input type="text" class="form-control" name="svcTagsPsgint" id="field_svcTagsPsgint"
+                    ng-model="vm.ccfCarrier.svcTagsPsgint"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_batchDate">Batch Date</label>
+            <input type="text" class="form-control" name="batchDate" id="field_batchDate"
+                    ng-model="vm.ccfCarrier.batchDate"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_svgTagsCarint">Svg Tags Carint</label>
+            <input type="text" class="form-control" name="svgTagsCarint" id="field_svgTagsCarint"
+                    ng-model="vm.ccfCarrier.svgTagsCarint"
+                    />
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>
