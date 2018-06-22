@@ -4797,14 +4797,18 @@
     	  }    	  
       };
       vm.close = function(){
-    	  vm.workPackage.locked = false;
-    	  WorkPackage.unlock(vm.workPackage, onUnlockedSuccess, onUnlockedFailure);
-    	  function onUnlockedSuccess (result) {
+    	  console.log(vm.disabledField(vm.workPackage));
+    	  if(vm.disabledField(vm.workPackage)){
     		  $state.go("work-package");
-    	  }
-    	  function onUnlockedFailure (error) {
-    		  
-    	  }
+    	  }else{
+        	  WorkPackage.unlock(vm.workPackage, onUnlockedSuccess, onUnlockedFailure);
+        	  function onUnlockedSuccess (result) {
+        		  $state.go("work-package");
+        	  }
+        	  function onUnlockedFailure (error) {
+        		  
+        	  } 
+    	  }    	  
       }
       
       vm.isAllSelected = {};
@@ -5519,6 +5523,18 @@
     		  }
     	  }
       };
+      
+      vm.disabledField = function(wp){
+    	  var disabled = false;
+    	  if(wp.locked == true){
+    		  if( wp.lockedBy == vm.user.login){
+    			  disabled = false;
+    		  }else{
+    			  disabled = true;
+    		  }    		  
+    	  }
+    	  return disabled;
+      }
       
       vm.getTooltip = function(value){
     	  var listCity = [];

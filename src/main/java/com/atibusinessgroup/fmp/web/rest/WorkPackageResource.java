@@ -3658,11 +3658,14 @@ public class WorkPackageResource {
         	workPackage.setStatus(Status.REVIEWING);
         	workPackageService.save(workPackage);
         }
-        
-        workPackage.setLocked(true);
-        workPackage.setLockedBy(SecurityUtils.getCurrentUserLogin().get());
-        workPackage.setLockedSince(ZonedDateTime.now());
-        workPackage = workPackageService.save(workPackage);
+        log.debug("ISINYA APA : "+workPackage.isLocked());
+        if(!workPackage.isLocked()) {
+        	log.debug("set jadi true  ");
+        	workPackage.setLocked(true);
+            workPackage.setLockedBy(SecurityUtils.getCurrentUserLogin().get());
+            workPackage.setLockedSince(ZonedDateTime.now());
+            workPackage = workPackageService.save(workPackage);	
+        }        
 //        List<WorkPackageFare> fares = workPackageFareService.findAllByWorkPackageAndFareType(workPackage.getId(), null);
 //        log.debug("REST request to set WorkPackageFARES : {}", fares.size());
 //        workPackage.setFares(fares);
@@ -3840,6 +3843,7 @@ public class WorkPackageResource {
         }
         
         WorkPackage result = workPackageService.findOne(workPackage.getId());
+        
         result.setLocked(false);
         workPackageService.save(result);
         
