@@ -195,11 +195,11 @@
 											</div>
 											<button class="btn btn-default small" ng-click="vm.refresh()">Refresh</button>
 											<button class="btn btn-default small" ng-click="vm.printExport()">Print/Export</button>
-											<button class="btn btn-default small fa fa-unlock" ng-click="vm.unlock()" ng-disabled="vm.selectedRow == null || !vm.selectedRow.locked"> Unlock</button>
-											<button class="btn btn-default small fa fa-recycle" ng-click="vm.reuse()" ng-disabled="vm.selectedRow == null"> Reuse</button>
-											<button class="btn btn-default small fa fa-reply" ng-click="vm.replace()" ng-disabled="vm.selectedRow == null && vm.selectedRow.targetDistribution != 'ATPCO'"> Replace</button>
-											<button class="btn btn-default small fa fa-ban" ng-click="vm.withdraw()" ng-disabled="vm.selectedRow == null"> Withdraw</button>
-											<button class="btn btn-default small fa fa-history" ng-click="vm.showHistory()" ng-disabled="vm.selectedRow == null"> Histroy</button>
+											<button class="btn btn-default small" ng-click="vm.unlock()" ng-disabled="vm.selectedRow == null || !vm.selectedRow.locked"><i class="fa fa-unlock i-btn"></i> Unlock</button>
+											<button class="btn btn-default small" ng-click="vm.reuse()" ng-disabled="vm.selectedRow == null"><i class="fa fa-recycle i-btn"></i> Reuse</button>
+											<button class="btn btn-default small" ng-click="vm.replace()" ng-disabled="vm.selectedRow == null && vm.selectedRow.targetDistribution != 'ATPCO'"><i class="fa fa-reply i-btn"></i> Replace</button>
+											<button class="btn btn-default small" ng-click="vm.withdraw()" ng-disabled="vm.selectedRow == null"><i class="fa fa-ban i-btn"></i> Withdraw</button>
+											<button class="btn btn-default small" ng-click="vm.showHistory()" ng-disabled="vm.selectedRow == null"><i class="fa fa-history i-btn"></i> Histroy</button>
 											<!-- <div class="btn btn-app" ng-click="vm.unlock($index)" ng-if="workPackage.locked">
 													<i class="fa fa-unlock"></i>Unlock
 												</div>
