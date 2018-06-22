@@ -3476,9 +3476,7 @@ public class WorkPackageResource {
         	workPackage.setStatus(Status.REVIEWING);
         	workPackageService.save(workPackage);
         }
-        log.debug("ISINYA APA : "+workPackage.isLocked());
         if(!workPackage.isLocked()) {
-        	log.debug("set jadi true  ");
         	workPackage.setLocked(true);
             workPackage.setLockedBy(SecurityUtils.getCurrentUserLogin().get());
             workPackage.setLockedSince(ZonedDateTime.now());
