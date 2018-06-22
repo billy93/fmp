@@ -1,36 +1,34 @@
 package com.atibusinessgroup.fmp.domain;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.validation.constraints.NotNull;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 /**
  * A RMDataFeeds.
  */
-@Document(collection = "pfc_rates_data_feeds")
+@Document(collection = "data_feed_pfc_rates")
 public class DataFeedPublishedFareRates implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Id
-    private String id;
-    
-    @Field("pos_country")
-    private String posCountry;
+	@Id
+	private String id;
 
-    @Field("from_td")
-    private String travelDateFrom;
+	@Field("pos_country")
+	private String posCountry;
 
-    @Field("to_td")
-    private String travelDateTo;
+	@Field("from_td")
+	private String travelDateFrom;
 
-    @Field("rate")
-    private String rate;
+	@Field("to_td")
+	private String travelDateTo;
+
+	@Field("rate")
+	private String rate;
 
 	public String getId() {
 		return id;
@@ -73,31 +71,29 @@ public class DataFeedPublishedFareRates implements Serializable {
 	}
 
 	@Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        DataFeedPublishedFareRates rMDataFeeds = (DataFeedPublishedFareRates) o;
-        if (rMDataFeeds.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), rMDataFeeds.getId());
-    }
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		DataFeedPublishedFareRates rMDataFeeds = (DataFeedPublishedFareRates) o;
+		if (rMDataFeeds.getId() == null || getId() == null) {
+			return false;
+		}
+		return Objects.equals(getId(), rMDataFeeds.getId());
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
-    
-    @Override
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(getId());
+	}
+
+	@Override
 	public String toString() {
 		return "DataFeedPublishedFareRates [id=" + id + ", posCountry=" + posCountry + ", travelDateFrom="
 				+ travelDateFrom + ", travelDateTo=" + travelDateTo + ", rate=" + rate + "]";
 	}
 
-
-   	
 }
