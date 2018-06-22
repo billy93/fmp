@@ -5535,7 +5535,25 @@
     		  }
     	  }
       };
-            
+      
+      vm.getTooltip = function(value){
+    	  var listCity = [];
+    	  for(var y=0;y<vm.cityGroups.length;y++){
+			  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (value != null && value.toUpperCase())){
+				  for(var x=0;x<vm.cityGroups[y].cities.length;x++){
+					  //message += "<li>"+vm.cityGroups[y].cities[x].code+"</li>";
+					  listCity.push(vm.cityGroups[y].cities[x].cityCode);
+				  }
+				  break;
+			  }
+		  }
+    	  
+    	  var message = "";
+    	  if(listCity.length > 0){
+    		  message += listCity.join(', ');
+    	  }
+    	  return message;
+      }
       vm.dateNgModelOpts = {
     		  timezone : '+07:00'
 	  };
