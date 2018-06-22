@@ -31,20 +31,28 @@
 	        }
 	        else if(vm.workPackage.type == 'DISCOUNT'){
 	        	 vm.types = ["Discount Fares"];
+	        	 if(vm.workPackage.targetDistribution == 'ATPCO'){
+	        		 if(!vm.workPackage.filingInstruction){
+	     	         	vm.types.push("Filing Instruction");
+	     	         }
+	        	 }
 	        }
 	        else if(vm.workPackage.type == 'REGULAR'){
-	        	 vm.types = ["Fares", "Add-Ons"];        	 
+	        	 vm.types = ["Fares", "Add-Ons"];    
+	        	 if(vm.workPackage.targetDistribution == 'ATPCO'){
+	        		 if(!vm.workPackage.filingInstruction){
+	     	         	vm.types.push("Filing Instruction");
+	     	         }
+	        	 }
 	        }
 	        else if(vm.workPackage.type == 'WAIVER'){
 	        	 vm.types = ["Waiver Fares"];
 	        }
         }
-        if(!vm.workPackage.attachment){
+        	if(!vm.workPackage.attachment){
          	vm.types.push("Attachment");
-         }
-         if(!vm.workPackage.filingInstruction){
-         	vm.types.push("Filing Instruction");
-         }
+	         }
+	         
         
         vm.save = function(){
         	console.log(vm.option);

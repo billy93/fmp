@@ -247,7 +247,8 @@
 					<div class="button-group dropdown custom">
 						<button class="btn btn-default small" ng-disabled="(vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
 						&& vm.workPackage.status=='DISTRIBUTED')  || vm.workPackage.status=='WITHDRAWN' ">
-						Workflow<i class="fa fa-caret-down"></i></button>
+						Workflow<i class="fa fa-caret-down" ng-class="{'poiv-none' :(vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
+						&& vm.workPackage.status=='DISTRIBUTED')  || vm.workPackage.status=='WITHDRAWN'}"></i></button>
 						<ul class="dropdown-menu custom" role="menu">
 						    <li><a ng-click="vm.passUp()" 
 					        ng-show="vm.workPackage.reviewLevel != 'HO' && vm.workPackage.reviewLevel != 'DISTRIBUTION' && vm.workPackage.reviewLevel != 'ROUTE_MANAGEMENT'" 
@@ -271,7 +272,7 @@
 						</ul>
 					</div>
 					<div class="button-group dropdown custom" ng-class="{'poiv-none' :(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}">
-						<button class="btn btn-default small" ng-disabled="vm.workPackage.status=='WITHDRAWN'">Action <i class="fa fa-caret-down"></i></button>
+						<button class="btn btn-default small" ng-disabled="vm.workPackage.status=='WITHDRAWN'">Action <i class="fa fa-caret-down" ng-class="{'poiv-none' :vm.workPackage.status=='WITHDRAWN'}"></i></button>
 						<ul class="dropdown-menu custom" role="menu">
 						    <li>
 						    	<a ng-click="vm.save(true)">Save and Validate</a>
@@ -279,7 +280,7 @@
 						</ul>
 					</div>	
 					<div class="button-group dropdown custom" ng-class="{'poiv-none' :(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}">
-						<button class="btn btn-default small" ng-disabled="vm.workPackage.status=='WITHDRAWN'">Sheet <i class="fa fa-caret-down"></i></button>
+						<button class="btn btn-default small" ng-disabled="vm.workPackage.status=='WITHDRAWN'">Sheet <i class="fa fa-caret-down" ng-class="{'poiv-none' :vm.workPackage.status=='WITHDRAWN'}"></i></button>
 						<ul class="dropdown-menu custom" role="menu">
 						    <li>
 						    	<a ng-click="vm.addSheet()" data-toggle="modal" data-target="#addNewsheet">Add</a>
