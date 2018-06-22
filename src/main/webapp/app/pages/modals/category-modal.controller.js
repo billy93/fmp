@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('CategoryModalController', CategoryModalController);
 
-    CategoryModalController.$inject = ['$state', 'entity', '$uibModalInstance', '$q'];
+    CategoryModalController.$inject = ['$state', 'entity', '$uibModalInstance'];
 
-    function CategoryModalController($state, entity, $uibModalInstance, $q) {
+    function CategoryModalController($state, entity, $uibModalInstance) {
         var vm = this;
         vm.clear = clear;
         vm.showCodedValue = false;
