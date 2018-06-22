@@ -113,7 +113,7 @@ public class AtpcoRecord2 {
 	@Field("gen_appl")
     private String generalRuleApplication;
 	
-	@Field("data_table_string")
+	@Field("data_segs")
 	private List<DataTable> dataTables;
 
 	public String getId() {

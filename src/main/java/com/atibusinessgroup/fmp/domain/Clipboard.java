@@ -2,6 +2,7 @@ package com.atibusinessgroup.fmp.domain;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,7 @@ public class Clipboard implements Serializable {
     private String page;
 
     @Field("content")
-    private Map<String, List<Object>> content = new HashMap<>();
+    private List<Object> content = new ArrayList<>();
     
     @Field("copy_date_time")
     private Instant copyDateTime;
@@ -82,8 +83,8 @@ public class Clipboard implements Serializable {
         this.copyDateTime = copyDateTime;
     }
     
+    
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
-
 	@Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -99,11 +100,11 @@ public class Clipboard implements Serializable {
         return Objects.equals(getId(), clipboard.getId());
     }
 
-    public Map<String, List<Object>> getContent() {
+	public List<Object> getContent() {
 		return content;
 	}
 
-	public void setContent(Map<String, List<Object>> content) {
+	public void setContent(List<Object> content) {
 		this.content = content;
 	}
 

@@ -12,4 +12,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 @Repository
 public interface CityGroupRepository extends MongoRepository<CityGroup, String> {
 
+	CityGroup findOneByCode(String code);
+
 }
