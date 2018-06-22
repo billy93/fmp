@@ -1,0 +1,47 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "svcTagsPsgdom",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "filler",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "svcTagsCardom",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "cxrCode",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "recType",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "batchNumber",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "svcTagsPsgint",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "batchDate",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "svgTagsCarint",
+            "fieldType": "String"
+        }
+    ],
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "ccf_carrier",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}
