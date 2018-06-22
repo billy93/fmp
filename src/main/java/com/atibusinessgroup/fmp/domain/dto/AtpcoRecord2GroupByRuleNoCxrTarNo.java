@@ -13,6 +13,9 @@ public class AtpcoRecord2GroupByRuleNoCxrTarNo {
 	@Field("rule_no")
     private String ruleNo;
 	
+	@Field("type")
+    private String type;
+	
 	public String getRuleTariffNo() {
 		return ruleTariffNo;
 	}
@@ -30,6 +33,18 @@ public class AtpcoRecord2GroupByRuleNoCxrTarNo {
 	}
 	public void setRuleNo(String ruleNo) {
 		this.ruleNo = ruleNo;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	
+	@Override
+	public String toString() {
+		return "AtpcoRecord2GroupByRuleNoCxrTarNo [ruleTariffNo=" + ruleTariffNo + ", carrierCode=" + carrierCode
+				+ ", ruleNo=" + ruleNo + ", type=" + type + "]";
 	}
     
 	

@@ -20,8 +20,8 @@
      * @param Clipboard
      * @returns
      */
-    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber','tariffNumberAddOn', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities', 'states', 'cityGroups', 'Currency', 'atpcoFareTypes', 'ClipboardSheet'];
-    function WorkPackageDetailController($window, $sce, currencies,tariffNumber,tariffNumberAddOn, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups, Currency, atpcoFareTypes, ClipboardSheet) {
+    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber','tariffNumberAddOn', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities', 'states', 'cityGroups', 'Currency', 'atpcoFareTypes', 'ClipboardSheet', 'Clipboard'];
+    function WorkPackageDetailController($window, $sce, currencies,tariffNumber,tariffNumberAddOn, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups, Currency, atpcoFareTypes, ClipboardSheet, Clipboard) {
     	var vm = this;
 
     	window.onbeforeunload = function () {
@@ -876,7 +876,7 @@
         	},
         	{
         		name:"waiverCalculatedPn",
-        		editable:[],
+        		editable:["LSO", "HO"],
         		mandatory:["LSO", "HO"]
         	},
         	{
@@ -1769,7 +1769,7 @@
     		fareSheet.fares.push({
     			no:fareSheet.fares.length+1,
     			status:"PENDING",
-    			action:"New",
+    			action:"AUTO",
   	 	      	carrier:"GA"
     		});
  	    }
@@ -1869,7 +1869,29 @@
  	    		function checkField(workPackageFareFilter, type, fare){
  	    			var listField = [
     	    			workPackageFareFilter.no.check && workPackageFareFilter.no.search != null ? 'no' : null,
-    	    			workPackageFareFilter.status.check && workPackageFareFilter.status.search != null ? 'status' : null
+    	    			workPackageFareFilter.status.check && workPackageFareFilter.status.search != null ? 'status' : null,
+    	    			workPackageFareFilter.tariffNumber.tarNo.check && workPackageFareFilter.tariffNumber.tarNo.search != null ? 'tariffNumber.tarNo' : null,
+    	    	    	workPackageFareFilter.tariffNumber.tarCd.check && workPackageFareFilter.tariffNumber.tarCd.search != null ? 'tariffNumber.tarCd' : null,
+    	    	    	workPackageFareFilter.tariffNumber.global.check && workPackageFareFilter.tariffNumber.global.search != null ? 'tariffNumber.global' : null,
+    	    			workPackageFareFilter.origin.check && workPackageFareFilter.origin.search != null ? 'origin' : null,
+    	    			workPackageFareFilter.destination.check && workPackageFareFilter.destination.search != null ? 'destination' : null,
+    	    			workPackageFareFilter.fareBasis.check && workPackageFareFilter.fareBasis.search != null ? 'fareBasis' : null,
+    	    			workPackageFareFilter.bookingClass.check && workPackageFareFilter.bookingClass.search != null ? 'bookingClass' : null,
+    	    	    	workPackageFareFilter.cabin.check && workPackageFareFilter.cabin.search != null ? 'cabin' : null,
+    	    	    	workPackageFareFilter.typeOfJourney.check && workPackageFareFilter.typeOfJourney.search != null ? 'typeOfJourney' : null,
+    	    	    	workPackageFareFilter.rtgno.check && workPackageFareFilter.rtgno.search != null ? 'rtgno' : null,
+    	    	    	workPackageFareFilter.ruleno.check && workPackageFareFilter.ruleno.search != null ? 'ruleno' : null,
+    	    	    	workPackageFareFilter.currency.check && workPackageFareFilter.currency.search != null ? 'currency' : null,
+    	    	    	workPackageFareFilter.amount.check && workPackageFareFilter.amount.search != null ? 'amount' : null,
+    	    	    	workPackageFareFilter.aif.check && workPackageFareFilter.aif.search != null ? 'aif' : null,
+    	    	    	workPackageFareFilter.travelStart.check && workPackageFareFilter.travelStart.search != null ? 'travelStart' : null,
+    	    	    	workPackageFareFilter.travelEnd.check && workPackageFareFilter.travelEnd.search != null ? 'travelEnd' : null,
+    	    	    	workPackageFareFilter.saleStart.check && workPackageFareFilter.saleStart.search != null ? 'saleStart' : null,
+    	    	    	workPackageFareFilter.saleEnd.check && workPackageFareFilter.saleEnd.search != null ? 'saleEnd' : null,
+    	    	    	workPackageFareFilter.travelComplete.check && workPackageFareFilter.travelComplete.search != null ? 'travelComplete' : null,
+    	    	    	workPackageFareFilter.travelCompleteIndicator.check && workPackageFareFilter.travelCompleteIndicator.search != null ? 'travelCompleteIndicator' : null,
+    	    	    	workPackageFareFilter.comment.check && workPackageFareFilter.comment.search != null ? 'comment' : null,
+    	    	    	workPackageFareFilter.ratesheetComment.check && workPackageFareFilter.ratesheetComment.search != null ? 'ratesheetComment' : null,
     	    		];
  	    			
  	    			var found = false;
@@ -1877,7 +1899,8 @@
 	 	    			found = true;
 	 	    			for(var x=0;x<listField.length;x++){
 	 	    				if(listField[x] != null){
-	 	    					if(fare[listField[x]] != workPackageFareFilter[listField[x]].search){
+	 	    					if(getDescendantProp(fare, listField[x]) != getDescendantProp(workPackageFareFilter, listField[x]+'.search')){
+//	 	    					if(fare[listField[x]] != workPackageFareFilter[listField[x]].search){
 	 	    						found = false;
 	 	    					}
 	 	    				}
@@ -1886,7 +1909,8 @@
  	    			else if(type == 'or'){
  	    				for(var x=0;x<listField.length;x++){
 	 	    				if(listField[x] != null){
-	 	    					if(fare[listField[x]] == workPackageFareFilter[listField[x]].search){
+	 	    					if(getDescendantProp(fare, listField[x]) != getDescendantProp(workPackageFareFilter, listField[x]+'.search')){
+//	 	    					if(fare[listField[x]] == workPackageFareFilter[listField[x]].search){
 	 	    						found = true;
 	 	    					}
 	 	    				}
@@ -1895,145 +1919,75 @@
  	    			return found;
  	    		}
  	    		
-        	    if(workPackageFareFilter.find){
-        	    	var index = 0;
-    	    		if(workPackageFareFilter.index != null){
-    	    			index = workPackageFareFilter.index;
-    	    		}
-    	    		
-    	    		
-    	    		for(var i = 0; i < fareSheet.fares.length; i++){
-    	    			if(fareSheet.fares[i].field == null || fareSheet.fares[i].field == undefined){
-	    					fareSheet.fares[i].field = {};
-	    		    	}
-    	    			fareSheet.fares[i].field['no'] =  false;
-    	    		}
-    	    		
-    	    		for(var i = index; i < fareSheet.fares.length; i++){
-    	    			var find = false;
-        	    		
-    	    			if(fareSheet.fares[i].field == null || fareSheet.fares[i].field == undefined){
-	    					fareSheet.fares[i].field = {};
-	    		    	}
-    	    			
-    	    			fareSheet.fares[i].field['no'] =  false;
-    	    			
-    	    			if(workPackageFareFilter.andor == 'and'){
-    	    				if(checkField(workPackageFareFilter, 'and', fareSheet.fares[i])){
-    	    					find = true;
-    	    					fareSheet.fares[i].field['no'] =  true;
-    	    					
-    	    					if(i+1 == fareSheet.fares.length){
-    	    						workPackageFareFilter.index = 0;
-    	    					}
-    	    					else{
-    	    						workPackageFareFilter.index = i+1;
-    	    					}
-    	    					break;
-    	    				}
-    	    			}
-    	    			else if(workPackageFareFilter.andor == 'or'){
-    	    				if(checkField(workPackageFareFilter, 'or', fareSheet.fares[i])){
-    	    					find = true;
-    	    					fareSheet.fares[i].field['no'] =  true;
-    	    					
-    	    					if(i+1 == fareSheet.fares.length){
-    	    						workPackageFareFilter.index = 0;
-    	    					}
-    	    					else{
-    	    						workPackageFareFilter.index = i+1;
-    	    					}
-    	    					break;
-    	    				}
-    	    			}    	    			
-    	    		}
-    	    		if(!find){
-    	    			if(workPackageFareFilter.message == null){
-    	    				workPackageFareFilter.message = "No Matches found, continue search at the beginning?";
-    	    			}
-    	    			else{
-    	    				workPackageFareFilter.message = "No matches found";
-    	    			}
-    	    		}
-        	    	vm.searchReplace(fareSheet, workPackageFareFilter);
-        	    }
-        	    else if(workPackageFareFilter.replace){
-    	    		var index = 0;
-    	    		if(!workPackageFareFilter.replaceAll){
-        	    		if(workPackageFareFilter.index != null){
-        	    			index = workPackageFareFilter.index;
-        	    		}
-    	    		}
-    	    		for(var i = index; i < fareSheet.fares.length; i++){
-    	    			var find = false;
-    	    			
-    	    			if(fareSheet.fares[i].field == null || fareSheet.fares[i].field == undefined){
-	    					fareSheet.fares[i].field = {};
-	    		    	}
-    	    			
-    	    			fareSheet.fares[i].field['no'] =  false;
-    	    			
-    	    			if(workPackageFareFilter.andor == 'and'){
-    	    				if(checkField(workPackageFareFilter, 'and', fareSheet.fares[i])){
-    	    					find = true;
-    	    					
-    	    					if(!workPackageFareFilter.replaceAll){
-    	    						fareSheet.fares[i].field['no'] =  true;
-    	    					}
-    	    					if(i+1 == fareSheet.fares.length){
-    	    						workPackageFareFilter.index = 0;
-    	    					}
-    	    					else{
-    	    						workPackageFareFilter.index = i+1;
-    	    					}
-    	    					break;
-    	    				}
-    	    			}
-    	    			else if(workPackageFareFilter.andor == 'or'){
-    	    				if(checkField(workPackageFareFilter, 'or', fareSheet.fares[i])){
-    	    					find = true;
-    	    					
-    	    					if(!workPackageFareFilter.replaceAll){
-    	    						fareSheet.fares[i].field['no'] =  true;
-    	    					}
-    	    					
-    	    					if(i+1 == fareSheet.fares.length){
-    	    						workPackageFareFilter.index = 0;
-    	    					}
-    	    					else{
-    	    						workPackageFareFilter.index = i+1;
-    	    					}
-    	    					break;
-    	    				}
-    	    			}    	    		
-    	    			
-    	    			if(find){
-    	    				//replace
-    	    				if(workPackageFareFilter.status.replace.check){
-    	    					fareSheet.fares[i]['status'] = workPackageFareFilter.status.replace.value;
-    	    				}
-    	    				
-    	    				if(!workPackageFareFilter.replaceAll){
-    	    					if((i+1) == fareSheet.fares.length){
-    	    						workPackageFareFilter.index = 0;
-    	    					}
-    	    					break;
-    	    				}
-    	    				else{
-    	    					if((i+1) == fareSheet.fares.length){
-    	    						workPackageFareFilter.index = 0;
-    	    					}
-    	    				}
-    	    			}
-    	    		}
-    	    		if(!find){
+ 	    		function replaceField(workPackageFareFilter, fare){
+ 	    			var listField = [
+    	    			workPackageFareFilter.status.replace.check && workPackageFareFilter.status.replace.value != null ? 'status' : null
+    	    		];
+ 	    			
+ 	    			for(var x=0;x<listField.length;x++){
+ 	    				if(listField[x] != null){
+ 	    					fare[listField[x]] = workPackageFareFilter.status.replace.value;
+ 	    				}
+ 	    			}
+ 	    		}
+ 	    		
+    	    	var index = 0;
+    	    	if(!workPackageFareFilter.replaceAll){
+		    		if(workPackageFareFilter.index != null){
+		    			index = workPackageFareFilter.index;
+		    		}
+    	    	}
+	    		
+	    		for(var i = 0; i < fareSheet.fares.length; i++){
+	    			if(fareSheet.fares[i].field == null || fareSheet.fares[i].field == undefined){
+    					fareSheet.fares[i].field = {};
+    		    	}
+	    			fareSheet.fares[i].field['no'] =  false;
+	    		}
+	    		
+	    		var find = false;
+	    		
+	    		for(var i = index; i < fareSheet.fares.length; i++){
+	    			
+	    			if(fareSheet.fares[i].field == null || fareSheet.fares[i].field == undefined){
+    					fareSheet.fares[i].field = {};
+    		    	}
+	    			
+	    			fareSheet.fares[i].field['no'] =  false;
+	    			
+	    			if(checkField(workPackageFareFilter, workPackageFareFilter.andor, fareSheet.fares[i])){
+    					find = true;
+    					fareSheet.fares[i].field['no'] =  true;
+    					
+    					if(i+1 == fareSheet.fares.length){
+    						workPackageFareFilter.index = 0;
+    					}
+    					else{
+    						workPackageFareFilter.index = i+1;
+    					}
+    					
+    					if(workPackageFareFilter.replace){
+    						replaceField(workPackageFareFilter, fareSheet.fares[i]);
+    						break;
+    					}
+    					else if(workPackageFareFilter.replaceAll){
+    						replaceField(workPackageFareFilter, fareSheet.fares[i]);
+    					}
+    					else{
+	    					break;	    						
+    					}
+    				}    			
+	    		}
+	    		if(!find){
+	    			if(workPackageFareFilter.message == null){
 	    				workPackageFareFilter.message = "No Matches found, continue search at the beginning?";
-    	    		}
-    	    		
-    	    		
-        	    	vm.searchReplace(fareSheet, workPackageFareFilter);
-        	    	
-        	    }
+	    			}
+//	    			else{
+//	    				workPackageFareFilter.message = "No matches found";
+//	    			}
+	    		}
+	    		
+    	    	vm.searchReplace(fareSheet, workPackageFareFilter);        	    
             }, function() {
         			
             });
@@ -2374,14 +2328,19 @@
          
 	   vm.addAttachment = function(){
 		 	if(vm.workPackage.attachmentData == null){
-	        		vm.workPackage.attachmentData = [];
-	        	}
+	        	vm.workPackage.attachmentData = [];
+	        }
 	   		vm.workPackage.attachmentData.push({comment:""});
 	   }
 	   
 	   vm.removeAttachment = function(attachment){
-	  		 var index = vm.workPackage.attachmentData.indexOf(attachment);
-	  		vm.workPackage.attachmentData.splice(index, 1);  
+		   if(vm.workPackage.status != "NEW"){
+			   attachment.inOnly = false;
+			   attachment.isDeleted = true;
+		   }else{
+			 var index = vm.workPackage.attachmentData.indexOf(attachment);
+		  	 vm.workPackage.attachmentData.splice(index, 1); 
+		   }
 	  };
 	  
 	  vm.addMarketRules = function(){
@@ -4489,6 +4448,7 @@
           if ($file) {
               DataUtils.toBase64($file, function(base64Data) {
                   $scope.$apply(function() {
+                	  testing.fileName = $file.name;
                       testing.file = base64Data;
                       testing.fileContentType = $file.type;
                   });
@@ -4903,20 +4863,70 @@
     				  }
     			 });
     			  if(selected){
-//    				  console.log("SELECTED : "+selected);
     				  var copiedFare = angular.copy(workPackageSheet.fares[x]);
     				  copiedFare.no = workPackageSheet.fares.length+1;
     				  copiedFare.status = "PENDING";
     				  copiedFare.field = null;
     				  workPackageSheet.fares.push(copiedFare);
     			  }
-//    			  console.log("X : "+x);
     		  }
-    	  }
-    	  
-//    	  vm.sort(workPackageSheet, '#');
+    	  }    	  
       }
       
+      vm.copySelectedFares = function(workPackageSheet, currentPage){
+    	  var fares = [];
+    	  for(var x=0;x<workPackageSheet.fares.length;x++){
+    		  if(workPackageSheet.fares[x].field != undefined){
+    			  var selected = false;
+    			  Object.keys(workPackageSheet.fares[x].field).forEach(function(key,index) {
+    				  if(workPackageSheet.fares[x].field[key]){
+    					  selected = true;
+    				  }
+    			 });
+    			  
+    			  if(selected){
+    				  var copiedFare = angular.copy(workPackageSheet.fares[x]);
+//    				  copiedFare.no = workPackageSheet.fares.length+1;
+    				  copiedFare.status = "PENDING";
+    				  copiedFare.field = null;
+//    				  workPackageSheet.fares.push(copiedFare);
+    				  fares.push(copiedFare);
+    			  }
+    		  }
+    	  }
+    	  var clipboard = {
+    	      content:fares,
+			  page:currentPage
+		  }
+		  
+		  	Clipboard.copy(clipboard, function(result){
+				alert('Fare copied');
+			}, function(error){
+				alert('Error occured');
+			});
+      }
+      
+      vm.pasteFares = function(workPackageSheet, currentPage){
+    	  var clipboard = Clipboard.findByCurrentUsername({id : $stateParams.id}).$promise;
+    	  
+    	  clipboard.then(function(result){
+    		  if(result.page == currentPage){
+	    		  for(var x=0;x<result.content.length;x++){
+	    			  result.content[x].no = workPackageSheet.fares.length+1;
+	    			  
+	    			  result.content[x].travelStart = DateUtils.convertDateTimeFromServer(result.content[x].travelStart);
+	    			  result.content[x].travelEnd = DateUtils.convertDateTimeFromServer(result.content[x].travelEnd);
+	    			  result.content[x].saleStart = DateUtils.convertDateTimeFromServer(result.content[x].saleStart);
+	    			  result.content[x].saleEnd = DateUtils.convertDateTimeFromServer(result.content[x].saleEnd);
+	    			  result.content[x].travelComplete = DateUtils.convertDateTimeFromServer(result.content[x].travelComplete);
+	        		  workPackageSheet.fares.push(result.content[x]);    			  
+	    		  }    
+    		  }
+    		  else{
+    			  alert('Nothing to paste');
+    		  }
+    	  });
+      }
       
       vm.deleteSelectedFares = function(workPackageSheet){
     	  var fares = [];
@@ -5412,6 +5422,122 @@
     	  }
       }
       
+      vm.expandCityGroup = function(workPackageSheet){
+    	  var fares = workPackageSheet.fares;
+    	  
+    	  var faresCityGroupOrigin = [];
+    	  var faresCityGroupDestination = [];
+    	  var faresCityGroupOriginDestination = [];
+
+    	  for(var x=0;x<fares.length;x++){
+    		  var origin = false;
+    		  var destination = false;
+    		  
+    		  for(var y=0;y<vm.cityGroups.length;y++){
+    			  if(fares[x] != undefined){    				  	    			  
+    				  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (fares[x].origin != null && fares[x].origin.toUpperCase())){	    				  
+    					  origin = true;
+	    			  }
+	    			  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (fares[x].destination != null && fares[x].destination.toUpperCase())){
+	      				  destination = true;
+	    			  }	    			   
+    			  }
+    		  }
+    		  
+
+			  if(origin && destination){
+				  faresCityGroupOriginDestination.push(angular.copy(fares[x]));
+				  fares.splice(x, 1);
+			  }else if(origin){
+				  faresCityGroupOrigin.push(angular.copy(fares[x]));
+				  fares.splice(x, 1);
+			  }else if(destination){
+				  faresCityGroupDestination.push(angular.copy(fares[x]));
+				  fares.splice(x, 1);
+			  }
+    	  }
+    	  
+    	  if(faresCityGroupOriginDestination.length > 0){
+    		  for(var x=0;x<faresCityGroupOriginDestination.length;x++){
+    			  var listCitiesOrigin = [];
+        		  var listCitiesDestination = [];
+        		 
+        		  for(var y=0;y<vm.cityGroups.length;y++){
+	    			  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (faresCityGroupOriginDestination[x].origin != null && faresCityGroupOriginDestination[x].origin.toUpperCase())){
+	    				  listCitiesOrigin = vm.cityGroups[y].cities;
+					  }
+	    			  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (faresCityGroupOriginDestination[x].destination != null && faresCityGroupOriginDestination[x].destination.toUpperCase())){
+	    				  listCitiesDestination = vm.cityGroups[y].cities;
+					  }
+        		  }
+        		  
+    			  for(var a=0;a<listCitiesOrigin.length;a++){
+    				  for(var b=0;b<listCitiesDestination.length;b++){
+    					  var f = angular.copy(faresCityGroupOriginDestination[x]);
+        				  f.origin = listCitiesOrigin[a].cityCode;
+        				  f.destination = listCitiesDestination[b].cityCode;
+        				  f.no = fares.length+1;
+        				  fares.push(f);
+    				  }
+    			  }
+    		  }
+    	  }    	  
+    	  else if(faresCityGroupOrigin.length > 0){
+    		  for(var x=0;x<faresCityGroupOrigin.length;x++){
+    			  var listCities = [];
+    			  for(var y=0;y<vm.cityGroups.length;y++){
+    				  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (faresCityGroupOrigin[x].origin != null && faresCityGroupOrigin[x].origin.toUpperCase())){
+    					  listCities = vm.cityGroups[y].cities;
+    					  break;
+    				  }
+    			  }
+    			  
+    			  for(var z=0;z<listCities.length;z++){
+    				  var f = angular.copy(faresCityGroupOrigin[x]);
+    				  f.origin = listCities[z].cityCode;
+    				  f.no = fares.length+1;
+    				  fares.push(f);
+    			  }
+    		  }
+    	  }
+    	  else if(faresCityGroupDestination.length > 0){
+    		  for(var x=0;x<faresCityGroupDestination.length;x++){
+    			  var listCities = [];
+    			  for(var y=0;y<vm.cityGroups.length;y++){
+    				  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (faresCityGroupDestination[x].destination != null && faresCityGroupDestination[x].destination.toUpperCase())){
+    					  listCities = vm.cityGroups[y].cities;
+    					  break;
+    				  }
+    			  }
+    			  
+    			  for(var z=0;z<listCities.length;z++){
+    				  var f = angular.copy(faresCityGroupDestination[x]);
+    				  f.destination = listCities[z].cityCode;
+    				  f.no = fares.length+1;
+    				  fares.push(f);
+    			  }
+    		  }
+    	  }
+      };
+      
+      vm.getTooltip = function(value){
+    	  var listCity = [];
+    	  for(var y=0;y<vm.cityGroups.length;y++){
+			  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (value != null && value.toUpperCase())){
+				  for(var x=0;x<vm.cityGroups[y].cities.length;x++){
+					  //message += "<li>"+vm.cityGroups[y].cities[x].code+"</li>";
+					  listCity.push(vm.cityGroups[y].cities[x].cityCode);
+				  }
+				  break;
+			  }
+		  }
+    	  
+    	  var message = "";
+    	  if(listCity.length > 0){
+    		  message += listCity.join(', ');
+    	  }
+    	  return message;
+      }
       vm.dateNgModelOpts = {
     		  timezone : '+07:00'
 	  };

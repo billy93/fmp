@@ -77,6 +77,17 @@ public class DateUtil {
 		} catch (Exception e) {
 		}
 		
+		if (result == null) {
+			try {
+				String dateString = date.toString();
+				if (dateString.contains("T") && dateString.contains("+")) {
+					String tempDate = dateString.substring(0, 10);
+					result = new SimpleDateFormat("yyyy-MM-dd").parse(tempDate);
+				}
+			} catch (Exception e) {
+			}
+		}
+		
 		return result;
 	}
 }
