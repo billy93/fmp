@@ -235,7 +235,7 @@
         
         function showCategoryDetail(category) {
         	$uibModal.open({
-                templateUrl: 'app/pages/category-modals/category-modal.html',
+                templateUrl: 'app/pages/modals/category-modal.html',
                 controller: 'CategoryModalController',
                 controllerAs: 'vm',
                 backdrop: 'static',
@@ -252,7 +252,7 @@
         
         function showLegend() {
         	$uibModal.open({
-                templateUrl: 'app/pages/category-modals/legend-modal.html',
+                templateUrl: 'app/pages/modals/legend-modal.html',
                 controller: 'LegendModalController',
                 controllerAs: 'vm',
                 backdrop: 'static',
@@ -266,7 +266,7 @@
         
         function viewFullText() {
         	$uibModal.open({
-                templateUrl: 'app/pages/category-modals/full-text-modal.html',
+                templateUrl: 'app/pages/modals/full-text-modal.html',
                 controller: 'FullTextModalController',
                 controllerAs: 'vm',
                 backdrop: 'static',
