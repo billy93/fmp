@@ -569,175 +569,7 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 	
 	@Override
 	public Page<RoutingQuery> findCustomJoin(RoutingQueryParam param, Pageable pageable) {
-		List<AggregationOperation> aggregationOperations = new ArrayList<>();
-		
-		aggregationOperations.add(new AggregationOperation() {
-			@Override
-			public DBObject toDBObject(AggregationOperationContext context) {
-				BasicDBObject match = new BasicDBObject();
-				BasicDBObject and = new BasicDBObject();
-				List<BasicDBObject> queries = new ArrayList<>();
-				
-				if (param.getTarNo() != null && !param.getTarNo().isEmpty()) {
-					BasicDBObject linkNo = new BasicDBObject();
-					linkNo.append("tar_no", param.getTarNo());
-					queries.add(linkNo);
-				}
-
-				if (param.getCarrier() != null && !param.getCarrier().isEmpty()) {
-					BasicDBObject cxr = new BasicDBObject();
-					cxr.append("cxr_cd", param.getCarrier());
-					queries.add(cxr);
-				}
-
-				if (param.getRoutingNo() != null && !param.getRoutingNo().isEmpty()) {
-					BasicDBObject rtg = new BasicDBObject();
-					rtg.append("rtg_no", param.getRoutingNo());
-					queries.add(rtg);
-				}
-				
-				if (param.getEffectiveDateFrom() != null && param.getEffectiveDateTo() != null) {
-					BasicDBObject effectiveDate = new BasicDBObject();
-					effectiveDate.append("dates_effective", BasicDBObjectBuilder.start("$gte", param.getEffectiveDateFrom()).add("$lte", param.getEffectiveDateTo()).get());
-					queries.add(effectiveDate);
-				} else if(param.getEffectiveDateFrom() != null) {
-					BasicDBObject effectiveDate = new BasicDBObject();
-					effectiveDate.append("dates_effective", new BasicDBObject("$gte", param.getEffectiveDateFrom()));
-					queries.add(effectiveDate);
-				} else if(param.getEffectiveDateTo() != null) {
-					BasicDBObject effectiveDate = new BasicDBObject();
-					effectiveDate.append("dates_effective", new BasicDBObject("$lte", param.getEffectiveDateTo()));
-					queries.add(effectiveDate);
-				}
-				
-				if (queries.size() > 0) {
-					and.append("$and", queries);
-				}
-				
-				match.append("$match", and);
-				
-				return match;
-			}
-		});
-		
-		if((param.getEntryPoint() != null && !param.getEntryPoint().isEmpty()) || (param.getExitPoint() != null && !param.getExitPoint().isEmpty())) {
-			log.debug("masuk");
-			aggregationOperations.add(new AggregationOperation() {
-				@Override
-				public DBObject toDBObject(AggregationOperationContext context) {
-					BasicDBObject project = new BasicDBObject();
-					BasicDBObject header = new BasicDBObject();
-					header.append("header", "$$ROOT");
-					project.append("$project", header);
-					return project;
-				}
-			});
-			
-			aggregationOperations.add(new AggregationOperation() {
-				@Override
-				public DBObject toDBObject(AggregationOperationContext context) {
-					BasicDBObject lookup = new BasicDBObject();
-					BasicDBObject query = new BasicDBObject();
-					query.append("from", "Full_Map_Routing_Details");
-					query.append("let", new BasicDBObject("linkNo", "$header.link_no").append("batchNumber", "$header.batch_number"));
-					
-					List<BasicDBObject> orPointList = new ArrayList<>();
-					if((param.getEntryPoint() != null && !param.getEntryPoint().isEmpty()) && (param.getExitPoint() != null && !param.getExitPoint().isEmpty())) {
-						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", "1"), new BasicDBObject("city_1_name", param.getEntryPoint()))));
-						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", "X"), new BasicDBObject("city_1_name", param.getExitPoint()))));
-					} else if(param.getEntryPoint() != null && !param.getEntryPoint().isEmpty()) {
-						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", "1"), new BasicDBObject("city_1_name", param.getEntryPoint()))));
-					} else if(param.getExitPoint() != null && !param.getExitPoint().isEmpty()) {
-						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", "X"), new BasicDBObject("city_1_name", param.getExitPoint()))));
-					}
-					
-					BasicDBObject match = new BasicDBObject();
-					BasicDBObject and = new BasicDBObject();
-					and.append("$and", Arrays.asList(
-							new BasicDBObject("$expr", new BasicDBObject("$eq", Arrays.asList("$batch_number", "$$batchNumber"))),
-							new BasicDBObject("$expr", new BasicDBObject("$eq", Arrays.asList("$link_no", "$$linkNo"))),
-							new BasicDBObject("$or", orPointList)
-						)
-					);
-					match.append("$match", and);
-					
-					BasicDBObject project = new BasicDBObject();
-					BasicDBObject cityName = new BasicDBObject();
-					cityName.append("city_1_name", 1);
-					project.append("$project", cityName);
-					
-					BasicDBObject group = new BasicDBObject();
-					BasicDBObject id = new BasicDBObject();
-					id.append("_id", "$city_1_name");
-					group.append("$group", id);
-					
-					query.append("pipeline", Arrays.asList(new BasicDBObject(match), new BasicDBObject(project), new BasicDBObject(group)));
-					query.append("as", "details");
-					lookup.append("$lookup", query);
-					return lookup;
-				}
-			});
-			
-			aggregationOperations.add(new AggregationOperation() {
-				@Override
-				public DBObject toDBObject(AggregationOperationContext context) {
-					BasicDBObject project = new BasicDBObject();
-					BasicDBObject projectInline = new BasicDBObject();
-					projectInline.append("header", "$header");
-					projectInline.append("details", "$details");
-					
-					BasicDBObject detailSize = new BasicDBObject();
-					detailSize.append("$size", "$details");
-					projectInline.append("details_size", detailSize);
-					
-					project.append("$project", projectInline);
-					return project;
-				}
-			});
-			
-			aggregationOperations.add(new AggregationOperation() {
-				@Override
-				public DBObject toDBObject(AggregationOperationContext context) {
-					BasicDBObject match = new BasicDBObject();
-					BasicDBObject matchInline = new BasicDBObject();
-					BasicDBObject detailSize = new BasicDBObject();
-					if((param.getEntryPoint() != null && !param.getEntryPoint().isEmpty()) && (param.getExitPoint() != null && !param.getExitPoint().isEmpty())) {
-						detailSize.append("$gt", 1);
-					} else {
-						detailSize.append("$gte", 1);
-					}
-					matchInline.append("details_size", detailSize);
-					
-					match.append("$match", matchInline);
-					return match;
-				}
-			});
-			
-			aggregationOperations.add(new AggregationOperation() {
-				@Override
-				public DBObject toDBObject(AggregationOperationContext context) {
-					BasicDBObject project = new BasicDBObject();
-					BasicDBObject projectInline = new BasicDBObject();
-					projectInline.append("batch_number", "$header.batch_number");
-					projectInline.append("link_no", "$header.link_no");
-					projectInline.append("cxr_cd", "$header.cxr_cd");
-					projectInline.append("tar_no", "$header.tar_no");
-					projectInline.append("rtg_no", "$header.rtg_no");
-					projectInline.append("dates_effective", "$header.dates_effective");
-					projectInline.append("dates_discontinue", "$header.dates_discontinue");
-					projectInline.append("drv", "$header.drv");
-					projectInline.append("cp", "$header.cp");
-					projectInline.append("di", "$header.di");
-					projectInline.append("int_pt", "$header.int_pt");
-					projectInline.append("unt_pt", "$header.unt_pt");
-					
-					project.append("$project", projectInline);
-					return project;
-				}
-			});
-		}
-		
-		
+		List<AggregationOperation> aggregationOperations = getAggregationOperation(param);
 		Aggregation aggregation = newAggregation(aggregationOperations);
 		SkipOperation skip = new SkipOperation(pageable.getPageNumber() * pageable.getPageSize());
 		aggregationOperations.add(skip);
@@ -745,190 +577,23 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 		aggregationOperations.add(limit);
 		Aggregation aggregationPagination = newAggregation(aggregationOperations);
 		
-		log.debug("ambil data mulai");
-		log.debug(pageable.toString());
-		log.debug("aggregationPagination "+aggregationPagination);
-		log.debug("aggregation "+aggregation);
+//		log.debug("ambil data mulai");
+//		log.debug(pageable.toString());
+//		log.debug("aggregationPagination "+aggregationPagination);
+//		log.debug("aggregation "+aggregation);
 		List<RoutingQuery> result = mongoTemplate.aggregate(aggregationPagination, RoutingQuery.class, RoutingQuery.class).getMappedResults();
 		long allResultCount = mongoTemplate.aggregate(aggregation, RoutingQuery.class, RoutingQuery.class).getMappedResults().size();
 		
-		log.debug("routingqueries "+result);
-		log.debug("allResultCount "+allResultCount);
-		log.debug("ambil data selesai");
+//		log.debug("routingqueries "+result);
+//		log.debug("allResultCount "+allResultCount);
+//		log.debug("ambil data selesai");
 		
 		return new PageImpl<>(result, pageable, allResultCount);
 	}
 
 	@Override
 	public RoutingQuery findOneCustom(RoutingQueryParam param) {
-		List<AggregationOperation> aggregationOperations = new ArrayList<>();
-		
-		aggregationOperations.add(new AggregationOperation() {
-			@Override
-			public DBObject toDBObject(AggregationOperationContext context) {
-				BasicDBObject match = new BasicDBObject();
-				BasicDBObject and = new BasicDBObject();
-				List<BasicDBObject> queries = new ArrayList<>();
-				
-				if (param.getTarNo() != null && !param.getTarNo().isEmpty()) {
-					BasicDBObject linkNo = new BasicDBObject();
-					linkNo.append("tar_no", param.getTarNo());
-					queries.add(linkNo);
-				}
-
-				if (param.getCarrier() != null && !param.getCarrier().isEmpty()) {
-					BasicDBObject cxr = new BasicDBObject();
-					cxr.append("cxr_cd", param.getCarrier());
-					queries.add(cxr);
-				}
-
-				if (param.getRoutingNo() != null && !param.getRoutingNo().isEmpty()) {
-					BasicDBObject rtg = new BasicDBObject();
-					rtg.append("rtg_no", param.getRoutingNo());
-					queries.add(rtg);
-				}
-				
-				if (param.getEffectiveDateFrom() != null && param.getEffectiveDateTo() != null) {
-					BasicDBObject effectiveDate = new BasicDBObject();
-					effectiveDate.append("dates_effective", BasicDBObjectBuilder.start("$gte", param.getEffectiveDateFrom()).add("$lte", param.getEffectiveDateTo()).get());
-					queries.add(effectiveDate);
-				} else if(param.getEffectiveDateFrom() != null) {
-					BasicDBObject effectiveDate = new BasicDBObject();
-					effectiveDate.append("dates_effective", new BasicDBObject("$gte", param.getEffectiveDateFrom()));
-					queries.add(effectiveDate);
-				} else if(param.getEffectiveDateTo() != null) {
-					BasicDBObject effectiveDate = new BasicDBObject();
-					effectiveDate.append("dates_effective", new BasicDBObject("$lte", param.getEffectiveDateTo()));
-					queries.add(effectiveDate);
-				}
-				
-				if (queries.size() > 0) {
-					and.append("$and", queries);
-				}
-				
-				match.append("$match", and);
-				
-				return match;
-			}
-		});
-		
-		if((param.getEntryPoint() != null && !param.getEntryPoint().isEmpty()) || (param.getExitPoint() != null && !param.getExitPoint().isEmpty())) {
-			log.debug("masuk");
-			aggregationOperations.add(new AggregationOperation() {
-				@Override
-				public DBObject toDBObject(AggregationOperationContext context) {
-					BasicDBObject project = new BasicDBObject();
-					BasicDBObject header = new BasicDBObject();
-					header.append("header", "$$ROOT");
-					project.append("$project", header);
-					return project;
-				}
-			});
-			
-			aggregationOperations.add(new AggregationOperation() {
-				@Override
-				public DBObject toDBObject(AggregationOperationContext context) {
-					BasicDBObject lookup = new BasicDBObject();
-					BasicDBObject query = new BasicDBObject();
-					query.append("from", "Full_Map_Routing_Details");
-					query.append("let", new BasicDBObject("linkNo", "$header.link_no").append("batchNumber", "$header.batch_number"));
-					
-					List<BasicDBObject> orPointList = new ArrayList<>();
-					if((param.getEntryPoint() != null && !param.getEntryPoint().isEmpty()) && (param.getExitPoint() != null && !param.getExitPoint().isEmpty())) {
-						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", "1"), new BasicDBObject("city_1_name", param.getEntryPoint()))));
-						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", "X"), new BasicDBObject("city_1_name", param.getExitPoint()))));
-					} else if(param.getEntryPoint() != null && !param.getEntryPoint().isEmpty()) {
-						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", "1"), new BasicDBObject("city_1_name", param.getEntryPoint()))));
-					} else if(param.getExitPoint() != null && !param.getExitPoint().isEmpty()) {
-						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", "X"), new BasicDBObject("city_1_name", param.getExitPoint()))));
-					}
-					
-					BasicDBObject match = new BasicDBObject();
-					BasicDBObject and = new BasicDBObject();
-					and.append("$and", Arrays.asList(
-							new BasicDBObject("$expr", new BasicDBObject("$eq", Arrays.asList("$batch_number", "$$batchNumber"))),
-							new BasicDBObject("$expr", new BasicDBObject("$eq", Arrays.asList("$link_no", "$$linkNo"))),
-							new BasicDBObject("$or", orPointList)
-						)
-					);
-					match.append("$match", and);
-					
-					BasicDBObject project = new BasicDBObject();
-					BasicDBObject cityName = new BasicDBObject();
-					cityName.append("city_1_name", 1);
-					project.append("$project", cityName);
-					
-					BasicDBObject group = new BasicDBObject();
-					BasicDBObject id = new BasicDBObject();
-					id.append("_id", "$city_1_name");
-					group.append("$group", id);
-					
-					query.append("pipeline", Arrays.asList(new BasicDBObject(match), new BasicDBObject(project), new BasicDBObject(group)));
-					query.append("as", "details");
-					lookup.append("$lookup", query);
-					return lookup;
-				}
-			});
-			
-			aggregationOperations.add(new AggregationOperation() {
-				@Override
-				public DBObject toDBObject(AggregationOperationContext context) {
-					BasicDBObject project = new BasicDBObject();
-					BasicDBObject projectInline = new BasicDBObject();
-					projectInline.append("header", "$header");
-					projectInline.append("details", "$details");
-					
-					BasicDBObject detailSize = new BasicDBObject();
-					detailSize.append("$size", "$details");
-					projectInline.append("details_size", detailSize);
-					
-					project.append("$project", projectInline);
-					return project;
-				}
-			});
-			
-			aggregationOperations.add(new AggregationOperation() {
-				@Override
-				public DBObject toDBObject(AggregationOperationContext context) {
-					BasicDBObject match = new BasicDBObject();
-					BasicDBObject matchInline = new BasicDBObject();
-					BasicDBObject detailSize = new BasicDBObject();
-					if((param.getEntryPoint() != null && !param.getEntryPoint().isEmpty()) && (param.getExitPoint() != null && !param.getExitPoint().isEmpty())) {
-						detailSize.append("$gt", 1);
-					} else {
-						detailSize.append("$gte", 1);
-					}
-					matchInline.append("details_size", detailSize);
-					
-					match.append("$match", matchInline);
-					return match;
-				}
-			});
-			
-			aggregationOperations.add(new AggregationOperation() {
-				@Override
-				public DBObject toDBObject(AggregationOperationContext context) {
-					BasicDBObject project = new BasicDBObject();
-					BasicDBObject projectInline = new BasicDBObject();
-					projectInline.append("batch_number", "$header.batch_number");
-					projectInline.append("link_no", "$header.link_no");
-					projectInline.append("cxr_cd", "$header.cxr_cd");
-					projectInline.append("tar_no", "$header.tar_no");
-					projectInline.append("rtg_no", "$header.rtg_no");
-					projectInline.append("dates_effective", "$header.dates_effective");
-					projectInline.append("dates_discontinue", "$header.dates_discontinue");
-					projectInline.append("drv", "$header.drv");
-					projectInline.append("cp", "$header.cp");
-					projectInline.append("di", "$header.di");
-					projectInline.append("int_pt", "$header.int_pt");
-					projectInline.append("unt_pt", "$header.unt_pt");
-					
-					project.append("$project", projectInline);
-					return project;
-				}
-			});
-		}
-		
+		List<AggregationOperation> aggregationOperations = getAggregationOperation(param);
 		Aggregation aggregations = newAggregation(aggregationOperations);
 		List<RoutingQuery> result = mongoTemplate.aggregate(aggregations, RoutingQuery.class, RoutingQuery.class).getMappedResults();
 		
@@ -937,5 +602,192 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 		} else {
 			return null;
 		}
+	}
+	
+	private List<AggregationOperation> getAggregationOperation(RoutingQueryParam param) {
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject match = new BasicDBObject();
+				BasicDBObject and = new BasicDBObject();
+				List<BasicDBObject> queries = new ArrayList<>();
+				
+				if (param.getTarNo() != null && !param.getTarNo().isEmpty()) {
+					BasicDBObject linkNo = new BasicDBObject();
+					linkNo.append("tar_no", param.getTarNo());
+					queries.add(linkNo);
+				}
+
+				if (param.getCarrier() != null && !param.getCarrier().isEmpty()) {
+					BasicDBObject cxr = new BasicDBObject();
+					cxr.append("cxr_cd", param.getCarrier());
+					queries.add(cxr);
+				}
+
+				if (param.getRoutingNo() != null && !param.getRoutingNo().isEmpty()) {
+					BasicDBObject rtg = new BasicDBObject();
+					rtg.append("rtg_no", param.getRoutingNo());
+					queries.add(rtg);
+				}
+				
+				if (param.getEffectiveDateFrom() != null && param.getEffectiveDateTo() != null) {
+					BasicDBObject effectiveDate = new BasicDBObject();
+					effectiveDate.append("dates_effective", new BasicDBObject("$lte", param.getEffectiveDateFrom()));
+					queries.add(effectiveDate);
+					
+					BasicDBObject discontinueDate = new BasicDBObject();
+					BasicDBObject discontinueDateGte = new BasicDBObject();
+					BasicDBObject discontinueDateIndef = new BasicDBObject();
+					discontinueDateGte.append("dates_discontinue", new BasicDBObject("$gte", param.getEffectiveDateTo()));
+					discontinueDateIndef.append("dates_discontinue", "indef");
+					discontinueDate.append("$or", Arrays.asList(discontinueDateGte, discontinueDateIndef));
+					queries.add(discontinueDate);
+				} else if(param.getEffectiveDateFrom() != null) {
+					BasicDBObject effectiveDate = new BasicDBObject();
+					effectiveDate.append("dates_effective", new BasicDBObject("$lte", param.getEffectiveDateFrom()));
+					queries.add(effectiveDate);
+					
+					BasicDBObject discontinueDate = new BasicDBObject();
+					discontinueDate.append("dates_discontinue", "indef");
+					queries.add(discontinueDate);
+				} else if(param.getEffectiveDateTo() != null) {
+					BasicDBObject discontinueDate = new BasicDBObject();
+					BasicDBObject discontinueDateGte = new BasicDBObject();
+					BasicDBObject discontinueDateIndef = new BasicDBObject();
+					discontinueDateGte.append("dates_discontinue", new BasicDBObject("$gte", param.getEffectiveDateTo()));
+					discontinueDateIndef.append("dates_discontinue", "indef");
+					discontinueDate.append("$or", Arrays.asList(discontinueDateGte, discontinueDateIndef));
+					queries.add(discontinueDate);
+				}
+				
+				if (queries.size() > 0) {
+					and.append("$and", queries);
+				}
+				
+				match.append("$match", and);
+				
+				return match;
+			}
+		});
+		
+		if((param.getEntryPoint() != null && !param.getEntryPoint().isEmpty()) || (param.getExitPoint() != null && !param.getExitPoint().isEmpty())) {
+			aggregationOperations.add(new AggregationOperation() {
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					BasicDBObject project = new BasicDBObject();
+					BasicDBObject header = new BasicDBObject();
+					header.append("header", "$$ROOT");
+					project.append("$project", header);
+					return project;
+				}
+			});
+			
+			aggregationOperations.add(new AggregationOperation() {
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					BasicDBObject lookup = new BasicDBObject();
+					BasicDBObject query = new BasicDBObject();
+					query.append("from", "Full_Map_Routing_Details");
+					query.append("let", new BasicDBObject("linkNo", "$header.link_no").append("batchNumber", "$header.batch_number"));
+					
+					List<BasicDBObject> orPointList = new ArrayList<>();
+					if((param.getEntryPoint() != null && !param.getEntryPoint().isEmpty()) && (param.getExitPoint() != null && !param.getExitPoint().isEmpty())) {
+						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", "1"), new BasicDBObject("city_1_name", param.getEntryPoint()))));
+						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", "X"), new BasicDBObject("city_1_name", param.getExitPoint()))));
+					} else if(param.getEntryPoint() != null && !param.getEntryPoint().isEmpty()) {
+						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", "1"), new BasicDBObject("city_1_name", param.getEntryPoint()))));
+					} else if(param.getExitPoint() != null && !param.getExitPoint().isEmpty()) {
+						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", "X"), new BasicDBObject("city_1_name", param.getExitPoint()))));
+					}
+					
+					BasicDBObject match = new BasicDBObject();
+					BasicDBObject and = new BasicDBObject();
+					and.append("$and", Arrays.asList(
+							new BasicDBObject("$expr", new BasicDBObject("$eq", Arrays.asList("$batch_number", "$$batchNumber"))),
+							new BasicDBObject("$expr", new BasicDBObject("$eq", Arrays.asList("$link_no", "$$linkNo"))),
+							new BasicDBObject("$or", orPointList)
+						)
+					);
+					match.append("$match", and);
+					
+					BasicDBObject project = new BasicDBObject();
+					BasicDBObject cityName = new BasicDBObject();
+					cityName.append("city_1_name", 1);
+					project.append("$project", cityName);
+					
+					BasicDBObject group = new BasicDBObject();
+					BasicDBObject id = new BasicDBObject();
+					id.append("_id", "$city_1_name");
+					group.append("$group", id);
+					
+					query.append("pipeline", Arrays.asList(new BasicDBObject(match), new BasicDBObject(project), new BasicDBObject(group)));
+					query.append("as", "details");
+					lookup.append("$lookup", query);
+					return lookup;
+				}
+			});
+			
+			aggregationOperations.add(new AggregationOperation() {
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					BasicDBObject project = new BasicDBObject();
+					BasicDBObject projectInline = new BasicDBObject();
+					projectInline.append("header", "$header");
+					projectInline.append("details", "$details");
+					
+					BasicDBObject detailSize = new BasicDBObject();
+					detailSize.append("$size", "$details");
+					projectInline.append("details_size", detailSize);
+					
+					project.append("$project", projectInline);
+					return project;
+				}
+			});
+			
+			aggregationOperations.add(new AggregationOperation() {
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					BasicDBObject match = new BasicDBObject();
+					BasicDBObject matchInline = new BasicDBObject();
+					BasicDBObject detailSize = new BasicDBObject();
+					if((param.getEntryPoint() != null && !param.getEntryPoint().isEmpty()) && (param.getExitPoint() != null && !param.getExitPoint().isEmpty())) {
+						detailSize.append("$gt", 1);
+					} else {
+						detailSize.append("$gte", 1);
+					}
+					matchInline.append("details_size", detailSize);
+					
+					match.append("$match", matchInline);
+					return match;
+				}
+			});
+			
+			aggregationOperations.add(new AggregationOperation() {
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					BasicDBObject project = new BasicDBObject();
+					BasicDBObject projectInline = new BasicDBObject();
+					projectInline.append("batch_number", "$header.batch_number");
+					projectInline.append("link_no", "$header.link_no");
+					projectInline.append("cxr_cd", "$header.cxr_cd");
+					projectInline.append("tar_no", "$header.tar_no");
+					projectInline.append("rtg_no", "$header.rtg_no");
+					projectInline.append("dates_effective", "$header.dates_effective");
+					projectInline.append("dates_discontinue", "$header.dates_discontinue");
+					projectInline.append("drv", "$header.drv");
+					projectInline.append("cp", "$header.cp");
+					projectInline.append("di", "$header.di");
+					projectInline.append("int_pt", "$header.int_pt");
+					projectInline.append("unt_pt", "$header.unt_pt");
+					
+					project.append("$project", projectInline);
+					return project;
+				}
+			});
+		}
+		
+		return aggregationOperations;
 	}
 }

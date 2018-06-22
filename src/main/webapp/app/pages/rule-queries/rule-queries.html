@@ -8,11 +8,11 @@
 		<ul class="clearfix nav-responsive nav nav-tabs"
 			style="font-size: 14px !important">
 			<li ng-class="{active:vm.tab1}" class="semibold"><a
-				ng-click="vm.getTab('1')">Rule</a></li>
+				ng-click="vm.getTab('1'); vm.paramCarrier = null; vm.paramTarNo = null">Rule</a></li>
 			<li ng-class="{active:vm.tab2}" class="semibold"><a
-				ng-click="vm.getTab('2')">Fare Class</a></li>
+				ng-click="vm.getTab('2'); vm.paramCarrier = null; vm.paramTarNo = null">Fare Class</a></li>
 			<li ng-class="{active:vm.tab3}" class="semibold"><a
-				ng-click="vm.getTab('3')">Rec 8 - Fare By Rule</a></li>
+				ng-click="vm.getTab('3'); vm.paramCarrier = null; vm.paramTarNo = null">Rec 8 - Fare By Rule</a></li>
 		</ul>
 	</div>
 
@@ -27,20 +27,26 @@
 							<div class="filter-label semibold show">Hide Filter</div>
 							<div class="filter-area">
 								<div class="clearfix">
-									<form name="queryForm" role="form" novalidate>
+									<form name="queryForm" role="form" ng-model="vm.queryForm" novalidate>
 										<div class="pull-left col-md-4 no-lpad" >
 											<div class="form-group">
 												<div class="custom-label semibold">Carrier</div>
+												<div class="input-group">
 												<input type="text" class="form-control" name="cxr"
 													id="cxr" 
 													ng-minlength="2"
-													ng-model="vm.queryParams.cxr" uppercase 
-													required
-													uib-tooltip="*minimum 2 letters"
-													tooltip-placement="top"
-													tooltip-trigger="none"
-													tooltip-is-open="queryForm.$invalid" 
-													style="border:1px solid red"/>
+													ng-model="vm.paramCarrier" uppercase 
+													required/>
+													
+													<span ng-click="vm.showCarrierModal()" class="input-group-addon"><i class="fa fa-folder"></i>
+													</span>
+												</div>
+												<div ng-show="queryForm.cxr.$invalid">
+													<p class="help-block" ng-show="queryForm.cxr.$error.required">
+														This field is required.</p>
+													<p class="help-block" ng-show="queryForm.cxr.$error.minlength">
+														Minimum 2 letters</p>
+												</div>
 											</div>
 											<div class="form-group">
 												<div class="custom-label semibold">Rule Number</div>
@@ -67,7 +73,7 @@
 													<input id="ruleTarNo" type="text" 
 		                   								name="ruleTarNo"  
 		                   								class="form-control"
-		                   								ng-model="vm.queryParams.ruleTarNo" uppercase>
+		                   								ng-model="vm.paramTarNo" uppercase>
 		                   								
 													<span ng-click="vm.showTariffModal()" class="input-group-addon"><i class="fa fa-folder"></i>
 													</span>
@@ -76,7 +82,7 @@
 											<div class="form-group">
 
 												<div class="custom-label semibold">Category</div>
-												<select class="form-control" name="category" id="catNo"
+												<select class="form-control" name="catNo" id="catNo"
 													ng-model="vm.queryParams.catNo">
 													<option value="">All</option>
 													<option value="001">01 - Eligibility</option>
@@ -133,6 +139,7 @@
 												<div class="form-group mt1">
 													<button type="button"
 														class="btn btn-default small pull-left"
+														ng-disabled="queryForm.$invalid"
 														ng-click="vm.loadAll(queryForm); vm.hideDetail()">Query</button>
 													<button type="button"
 														class="btn btn-default small pull-left"
@@ -287,7 +294,7 @@
 															<div class="form-group">
 																<div class="custom-label semibold">Carrier</div>
 																<input type="text" class="form-control" name="carrier"
-																	id="cxr" ng-model="vm.queryParams.cxr" uppercase />
+																	id="cxr" ng-model="vm.paramCarrier" uppercase />
 															</div>
 															<div class="form-group">
 																<div class="custom-label semibold">Rule Number</div>
@@ -602,15 +609,20 @@
 										<div class="pull-left col-md-4 no-lpad">
 											<div class="form-group">
 												<div class="custom-label semibold">Carrier</div>
+												<div class="input-group">
 												<input type="text" class="form-control" name="cxrRec8"
-													id="cxrRec8" ng-model="vm.rec8params.cxr" uppercase
-													required
-													ng-minlength="2"
-													uib-tooltip="*minimum 2 letters"
-													tooltip-placement="top"
-													tooltip-trigger="none"
-													tooltip-is-open="rec8Form.$invalid" 
-													style="border:1px solid red" />
+													id="cxrRec8" ng-minlength="2"
+													ng-model="vm.paramCarrier" uppercase 
+													required/>
+													<span ng-click="vm.showCarrierModal()" class="input-group-addon"><i class="fa fa-folder"></i>
+													</span>
+												</div>
+												<div ng-show="rec8Form.cxrRec8.$invalid">
+													<p class="help-block" ng-show="rec8Form.cxrRec8.$error.required">
+														This field is required.</p>
+													<p class="help-block" ng-show="rec8Form.cxrRec8.$error.minlength">
+														Minimum 2 letters</p>
+												</div>
 											</div>
 											<div class="form-group">
 												<div class="custom-label semibold">Rule Number</div>
@@ -623,9 +635,15 @@
 										<div class="pull-left col-md-4 no-lpad">
 											<div class="form-group">
 												<div class="custom-label semibold">Tariff Number</div>
-												<input type="text" class="form-control" name="tarNoRec8"
-													id="tarNoRec8" ng-model="vm.rec8params.ruleTarNo"
-													uppercase />
+												<div class="input-group">
+													<input id="ruleTarNoRec8" type="text" 
+		                   								name="ruleTarNoRec8"  
+		                   								class="form-control"
+		                   								ng-model="vm.paramTarNo" uppercase>
+		                   								
+													<span ng-click="vm.showTariffModal()" class="input-group-addon"><i class="fa fa-folder"></i>
+													</span>
+												</div>
 											</div>
 											
 											<div class="form-group">
@@ -649,6 +667,7 @@
 												<br/>
 												<div class="form-group mt1">
 													<button type="button" id="btnLoadRec8"
+														ng-disabled="qrec8Form.$invalid"
 														class="btn btn-default small pull-left"
 														ng-click="vm.loadRec8(rec8Form);">Query</button>
 													<button type="button" id="btnClearRec8"

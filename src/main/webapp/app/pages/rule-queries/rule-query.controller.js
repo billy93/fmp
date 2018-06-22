@@ -30,8 +30,10 @@
         vm.showDetail = showDetail;
         vm.getTab = getTab;
         vm.rec8params = rec8params;
-        
+        vm.paramCarrier = null;
+        vm.paramTarNo = null;
         vm.showTariffModal = showTariffModal;
+        vm.showCarrierModal = showCarrierModal;
         
         vm.datePickerOpenStatus = {};
         vm.dateFormat = "yyyy-MM-dd";
@@ -39,66 +41,50 @@
         
         vm.openTooltip = true;
         
-        $(".ng-valid").keyup(function() {
-        	
-        	$("input.ng-valid").css("border", "0px");
-        	vm.openTooltip = false;
-        });
-        
-        $(".ng-valid").keyup(function() {
-        	
-        	$("input.ng-invalid").css("border", "1px solid red");
-        	vm.openTooltip = true;
-        });
-        
-        
-        console.log(paginationConstants);
-        
         function loadAll (queryForm) {
 
-        	if(queryForm.$valid) {
-        		vm.queryParams.page = vm.page - 1;
-            	vm.queryParams.size = vm.itemsPerPage;
-            	
-            	vm.queryParams.ruleTarNo = $("#ruleTarNo").val();
-            	
-            	RuleQuery.query(vm.queryParams, onSuccess, onError);
-            	
-                function onSuccess(data, headers) {
-                    vm.links = ParseLinks.parse(headers('link'));
-                    vm.totalItems = headers('X-Total-Count');
-                    vm.queryCount = vm.totalItems;
-                    vm.ruleQueries = data;
-                }
-                
-                function onError(error) {
-                    AlertService.error(error.data.message);
-                }
-        	}
-    		
+        	vm.queryParams.page = vm.page - 1;
+        	vm.queryParams.size = vm.itemsPerPage;
+        	
+        	vm.queryParams.ruleTarNo = vm.paramTarNo;
+        	vm.queryParams.cxr = vm.paramCarrier;
+        	
+        	RuleQuery.query(vm.queryParams, onSuccess, onError);
+        	
+            function onSuccess(data, headers) {
+                vm.links = ParseLinks.parse(headers('link'));
+                vm.totalItems = headers('X-Total-Count');
+                vm.queryCount = vm.totalItems;
+                vm.ruleQueries = data;
+            }
+            
+            function onError(error) {
+                AlertService.error(error.data.message);
+            }
     	
         }
 
         function loadRec8 (rec8Form) {
         	
-        	if(rec8Form.$valid) {
-        		vm.rec8params.page = vm.pageRec8 - 1;
-            	vm.rec8params.size = vm.itemsPerPageRec8;
-            	
-            	RuleQuery.queryRec8(vm.rec8params, onSuccess, onError);
-            	
-                function onSuccess(data, headers) {
-                    vm.links = ParseLinks.parse(headers('link'));
-                    vm.totalItemsRec8 = headers('X-Total-Count');
-                    vm.queryCountRec8 = vm.totalItemsRec8;
-                    vm.record8 = data;
-                    
-                }
+        	vm.rec8params.page = vm.pageRec8 - 1;
+        	vm.rec8params.size = vm.itemsPerPageRec8;
+        	
+        	vm.rec8params.ruleTarNo = vm.paramTarNo;
+        	vm.rec8params.cxr = vm.paramCarrier;
+        	
+        	RuleQuery.queryRec8(vm.rec8params, onSuccess, onError);
+        	
+            function onSuccess(data, headers) {
+                vm.links = ParseLinks.parse(headers('link'));
+                vm.totalItemsRec8 = headers('X-Total-Count');
+                vm.queryCountRec8 = vm.totalItemsRec8;
+                vm.record8 = data;
                 
-                function onError(error) {
-                    AlertService.error(error.data.message);
-                }
-        	}
+            }
+            
+            function onError(error) {
+                AlertService.error(error.data.message);
+            }
     	
         } 
 
@@ -214,12 +200,8 @@
         	$("#catNo").val("");
         	$("#cxrRec8").val("");
         	$("#ruleNoRec8").val("");
-        	$("#typeRec8").val("");
-        	$("#srcRec8").val("");
+        	$("#accCodeRec8").val("");
         	$("#ruleTarNoRec8").val("");
-        	$("#catNoRec8").val("");
-        	
-//        	$("input.ng-invalid").css("border", "1px solid red");
         }
         
         function checkFormValidation(form) {
@@ -282,9 +264,25 @@
                 size: 'lg',
                 windowClass: 'full',
                 resolve: {
-                    ruleTarNoModel: {
-                    	varName: "#ruleTarNo"
-                    }
+                	entity: vm
+                }
+            }).result.then(function() {
+                $state.go('rule-query', {}, { reload: false });
+            }, function() {
+                $state.go('rule-query');
+            });
+        }
+        
+        function showCarrierModal() {
+        	$uibModal.open({
+                templateUrl: 'app/pages/modals/carrier-modal.html',
+                controller: 'MasterCarrierModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full',
+                resolve: {
+                	entity: vm
                 }
             }).result.then(function() {
                 $state.go('rule-query', {}, { reload: false });
