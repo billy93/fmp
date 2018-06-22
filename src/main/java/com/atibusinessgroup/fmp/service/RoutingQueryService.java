@@ -50,4 +50,5 @@ public interface RoutingQueryService {
     Page<RoutingQuery> findCustomJoin(RoutingQueryParam routingQueryParam, Pageable pageable);
     String[][] getRouteDetails(RoutingQuery routingquery);
     RoutingQuery getFullRouteDetails(RoutingQuery routingquery);
+    RoutingQuery findOneCustom(RoutingQueryParam routingQueryParam);
 }

@@ -283,14 +283,7 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 			}
 			index++;
 		}
-		log.debug("routeViewList 1 "+routeViewList);
-		
-//		Map<String, RouteMapView> routeViewListNew = routeViewList.entrySet().stream().sorted(Map.Entry.comparingByKey()).
-//				collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-//                (oldValue, newValue) -> oldValue, LinkedHashMap::new));
-//		routeViewList = routeViewListNew;
-//		routeViewList = calculateRowSpan(routeViewList); 
-//		log.debug("routeViewList 2 "+routeViewList);
+//		log.debug("routeViewList 1 "+routeViewList);
 		
 		Map<String, RouteMapView> routeViewListNew = routeViewList.entrySet().stream().sorted(Map.Entry.comparingByKey()).
 						collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
@@ -313,8 +306,8 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 			if(columnCount < routeParts.length)
 				columnCount = routeParts.length;
 		}
-		log.debug("rowCount "+rowCount);
-		log.debug("columnCount "+columnCount);
+//		log.debug("rowCount "+rowCount);
+//		log.debug("columnCount "+columnCount);
 		
 		index = 0;
 		String routeMapTable[][] = new String[rowCount][columnCount];
@@ -327,10 +320,92 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 			}
 			index++;
 		}
-		log.debug("routeMapTable "+routeMapTable);
+//		log.debug("routeMapTable "+routeMapTable);
+		
+//		List<String> routingMapsTable = new ArrayList<>(); 
+//		for (int i = 0; i < routeMapTable.length; i++) {
+//			if(i == 0) {
+//				for (String str : routeMapTable[i]) {
+//					if(str != null) {
+//						routingMapsTable.add(str);
+//					}
+//				}
+//				log.debug("Mulai "+routingMapsTable);
+//			} else {
+//				log.debug("=========================================================================================================");
+//				log.debug("awal data");
+//				int columnIndex = 0;
+//				String routeStr = routeMapTable[i][0];
+//				for (int j = 0; j < routeMapTable[i].length; j++) {
+//					String route = routeMapTable[i][j];
+//					if(route != null) {
+//						for (int k = 0; k < routingMapsTable.size(); k++) {
+//							log.debug("routeStr "+routeStr);
+//							if(isContentRoute(routingMapsTable.get(k), routeMapTable[i][j])) {
+//								log.debug("if "+routeMapTable[i][j]+" udah ada dikolom "+k+" baris "+routingMapsTable.get(k).indexOf(routeMapTable[i][j]));
+//								columnIndex++;
+//								String addedRoute = routeStr.replaceAll("-"+routeMapTable[i][j], "");
+//								if(j > 0 && !isContentRoute(routingMapsTable.get(columnIndex-1), addedRoute)) {
+//									log.debug(addedRoute+" akan di-add dikolom "+(columnIndex-1));
+//									routingMapsTable.set(columnIndex-1, routingMapsTable.get(columnIndex-1)+"="+addedRoute);
+//								}
+//								j++;
+//								routeStr = routeMapTable[i][j];
+//								break;
+//							} else if(isContentRoute(routingMapsTable.get(k), routeStr)) {
+//								log.debug("else if "+routeStr+" udah ada dikolom "+k+" baris "+routingMapsTable.get(k).indexOf(routeStr));
+//								columnIndex++;
+//								routeStr = routeMapTable[i][j];
+//								break;
+//							} else {
+//								log.debug(routeMapTable[i][j]+" gak ada dikolom "+k);
+////								if(!isContentRoute(routeStr, routeMapTable[i][j])) {
+//								if(routeStr.indexOf(routeMapTable[i][j]) < 0) {	
+//									log.debug(routeMapTable[i][j]+" belum ada di "+routeStr);
+//									routeStr = routeStr+"-"+routeMapTable[i][j];
+//								}
+//							}
+//						}
+//					}
+//				}
+//				log.debug("akhir data");
+//				if(routeStr != null) {
+//					boolean flag = false;
+//					for (int k = 0; k < routingMapsTable.size(); k++) {
+//						if(routingMapsTable.get(k).indexOf(routeStr) >= 0) {
+//							flag = true;
+//							break;
+//						}
+//					}
+//					
+//					if(!flag) {
+//						log.debug(routeStr+" akan di-add dikolom "+columnIndex);
+//						routingMapsTable.set(columnIndex, routingMapsTable.get(columnIndex)+"="+routeStr);
+//					}
+//				}
+//				log.debug("********************************************************************************************************");
+//			}
+//			log.debug("Update tesMaps "+routingMapsTable);
+//		}
+//		log.debug("tesMaps "+routingMapsTable);
 		
 //		return new ArrayList<RouteMapView>(routeViewList.values());
 		return routeMapTable;
+	}
+	
+	private boolean isContentRoute(String masterRoute, String contentRoute) {
+		boolean isContentRoute = false;
+		String[] masterRouteArr = masterRoute.split("=");
+		for (String route : masterRouteArr) {
+			if(route.indexOf(contentRoute) >= 0) {
+				if(route.length() == contentRoute.length()) {
+					isContentRoute = true; 
+					break;
+				}
+			}
+		}
+		
+		return isContentRoute;
 	}
 	
 	private Map<String, RouteMapView> calculateRowSpan(Map<String, RouteMapView> routeViewList) {
@@ -429,13 +504,23 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 			
 			String altCityCode = nextRouteMap.getAltRouteCode();
 			if(!altCityCode.equals("")) {
-				RouteMap altRouteMap = cityList.get(altCityCode);
-				if(nextRouteMap.getNextRouteCode().equals(altRouteMap.getNextRouteCode())) {
-					String oldRouteMapName = route.get(nextRouteMap.getRouteCode()).getRouteName();
-					route.get(nextRouteMap.getRouteCode()).setRouteName(oldRouteMapName+"/"+altRouteMap.getRouteName());
-				} else {
-					altRouteMap.setNextRouteCodeData(getViaRoutes(altRouteMap, cityList));
-					route.put(altCityCode, altRouteMap);
+				boolean flag = true;
+				RouteMap altRouteMap = new RouteMap();
+				while (flag) {
+					altRouteMap = cityList.get(altCityCode);
+					if(nextRouteMap.getNextRouteCode().equals(altRouteMap.getNextRouteCode())) {
+						String oldRouteMapName = route.get(nextRouteMap.getRouteCode()).getRouteName();
+						route.get(nextRouteMap.getRouteCode()).setRouteName(oldRouteMapName+"/"+altRouteMap.getRouteName());
+						if(!altRouteMap.getAltRouteCode().equals("")) {
+							altCityCode = altRouteMap.getAltRouteCode();
+						} else {
+							flag = false;
+						}
+					} else {
+						altRouteMap.setNextRouteCodeData(getViaRoutes(altRouteMap, cityList));
+						route.put(altCityCode, altRouteMap);
+						flag = false;
+					}
 				}
 			}
 		} else {
@@ -672,5 +757,185 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 		log.debug("ambil data selesai");
 		
 		return new PageImpl<>(result, pageable, allResultCount);
+	}
+
+	@Override
+	public RoutingQuery findOneCustom(RoutingQueryParam param) {
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject match = new BasicDBObject();
+				BasicDBObject and = new BasicDBObject();
+				List<BasicDBObject> queries = new ArrayList<>();
+				
+				if (param.getTarNo() != null && !param.getTarNo().isEmpty()) {
+					BasicDBObject linkNo = new BasicDBObject();
+					linkNo.append("tar_no", param.getTarNo());
+					queries.add(linkNo);
+				}
+
+				if (param.getCarrier() != null && !param.getCarrier().isEmpty()) {
+					BasicDBObject cxr = new BasicDBObject();
+					cxr.append("cxr_cd", param.getCarrier());
+					queries.add(cxr);
+				}
+
+				if (param.getRoutingNo() != null && !param.getRoutingNo().isEmpty()) {
+					BasicDBObject rtg = new BasicDBObject();
+					rtg.append("rtg_no", param.getRoutingNo());
+					queries.add(rtg);
+				}
+				
+				if (param.getEffectiveDateFrom() != null && param.getEffectiveDateTo() != null) {
+					BasicDBObject effectiveDate = new BasicDBObject();
+					effectiveDate.append("dates_effective", BasicDBObjectBuilder.start("$gte", param.getEffectiveDateFrom()).add("$lte", param.getEffectiveDateTo()).get());
+					queries.add(effectiveDate);
+				} else if(param.getEffectiveDateFrom() != null) {
+					BasicDBObject effectiveDate = new BasicDBObject();
+					effectiveDate.append("dates_effective", new BasicDBObject("$gte", param.getEffectiveDateFrom()));
+					queries.add(effectiveDate);
+				} else if(param.getEffectiveDateTo() != null) {
+					BasicDBObject effectiveDate = new BasicDBObject();
+					effectiveDate.append("dates_effective", new BasicDBObject("$lte", param.getEffectiveDateTo()));
+					queries.add(effectiveDate);
+				}
+				
+				if (queries.size() > 0) {
+					and.append("$and", queries);
+				}
+				
+				match.append("$match", and);
+				
+				return match;
+			}
+		});
+		
+		if((param.getEntryPoint() != null && !param.getEntryPoint().isEmpty()) || (param.getExitPoint() != null && !param.getExitPoint().isEmpty())) {
+			log.debug("masuk");
+			aggregationOperations.add(new AggregationOperation() {
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					BasicDBObject project = new BasicDBObject();
+					BasicDBObject header = new BasicDBObject();
+					header.append("header", "$$ROOT");
+					project.append("$project", header);
+					return project;
+				}
+			});
+			
+			aggregationOperations.add(new AggregationOperation() {
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					BasicDBObject lookup = new BasicDBObject();
+					BasicDBObject query = new BasicDBObject();
+					query.append("from", "Full_Map_Routing_Details");
+					query.append("let", new BasicDBObject("linkNo", "$header.link_no").append("batchNumber", "$header.batch_number"));
+					
+					List<BasicDBObject> orPointList = new ArrayList<>();
+					if((param.getEntryPoint() != null && !param.getEntryPoint().isEmpty()) && (param.getExitPoint() != null && !param.getExitPoint().isEmpty())) {
+						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", "1"), new BasicDBObject("city_1_name", param.getEntryPoint()))));
+						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", "X"), new BasicDBObject("city_1_name", param.getExitPoint()))));
+					} else if(param.getEntryPoint() != null && !param.getEntryPoint().isEmpty()) {
+						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", "1"), new BasicDBObject("city_1_name", param.getEntryPoint()))));
+					} else if(param.getExitPoint() != null && !param.getExitPoint().isEmpty()) {
+						orPointList.add(new BasicDBObject("$and", Arrays.asList(new BasicDBObject("city_1_tag", "X"), new BasicDBObject("city_1_name", param.getExitPoint()))));
+					}
+					
+					BasicDBObject match = new BasicDBObject();
+					BasicDBObject and = new BasicDBObject();
+					and.append("$and", Arrays.asList(
+							new BasicDBObject("$expr", new BasicDBObject("$eq", Arrays.asList("$batch_number", "$$batchNumber"))),
+							new BasicDBObject("$expr", new BasicDBObject("$eq", Arrays.asList("$link_no", "$$linkNo"))),
+							new BasicDBObject("$or", orPointList)
+						)
+					);
+					match.append("$match", and);
+					
+					BasicDBObject project = new BasicDBObject();
+					BasicDBObject cityName = new BasicDBObject();
+					cityName.append("city_1_name", 1);
+					project.append("$project", cityName);
+					
+					BasicDBObject group = new BasicDBObject();
+					BasicDBObject id = new BasicDBObject();
+					id.append("_id", "$city_1_name");
+					group.append("$group", id);
+					
+					query.append("pipeline", Arrays.asList(new BasicDBObject(match), new BasicDBObject(project), new BasicDBObject(group)));
+					query.append("as", "details");
+					lookup.append("$lookup", query);
+					return lookup;
+				}
+			});
+			
+			aggregationOperations.add(new AggregationOperation() {
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					BasicDBObject project = new BasicDBObject();
+					BasicDBObject projectInline = new BasicDBObject();
+					projectInline.append("header", "$header");
+					projectInline.append("details", "$details");
+					
+					BasicDBObject detailSize = new BasicDBObject();
+					detailSize.append("$size", "$details");
+					projectInline.append("details_size", detailSize);
+					
+					project.append("$project", projectInline);
+					return project;
+				}
+			});
+			
+			aggregationOperations.add(new AggregationOperation() {
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					BasicDBObject match = new BasicDBObject();
+					BasicDBObject matchInline = new BasicDBObject();
+					BasicDBObject detailSize = new BasicDBObject();
+					if((param.getEntryPoint() != null && !param.getEntryPoint().isEmpty()) && (param.getExitPoint() != null && !param.getExitPoint().isEmpty())) {
+						detailSize.append("$gt", 1);
+					} else {
+						detailSize.append("$gte", 1);
+					}
+					matchInline.append("details_size", detailSize);
+					
+					match.append("$match", matchInline);
+					return match;
+				}
+			});
+			
+			aggregationOperations.add(new AggregationOperation() {
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					BasicDBObject project = new BasicDBObject();
+					BasicDBObject projectInline = new BasicDBObject();
+					projectInline.append("batch_number", "$header.batch_number");
+					projectInline.append("link_no", "$header.link_no");
+					projectInline.append("cxr_cd", "$header.cxr_cd");
+					projectInline.append("tar_no", "$header.tar_no");
+					projectInline.append("rtg_no", "$header.rtg_no");
+					projectInline.append("dates_effective", "$header.dates_effective");
+					projectInline.append("dates_discontinue", "$header.dates_discontinue");
+					projectInline.append("drv", "$header.drv");
+					projectInline.append("cp", "$header.cp");
+					projectInline.append("di", "$header.di");
+					projectInline.append("int_pt", "$header.int_pt");
+					projectInline.append("unt_pt", "$header.unt_pt");
+					
+					project.append("$project", projectInline);
+					return project;
+				}
+			});
+		}
+		
+		Aggregation aggregations = newAggregation(aggregationOperations);
+		List<RoutingQuery> result = mongoTemplate.aggregate(aggregations, RoutingQuery.class, RoutingQuery.class).getMappedResults();
+		
+		if(result.size() > 0) {
+			return result.get(0);
+		} else {
+			return null;
+		}
 	}
 }
