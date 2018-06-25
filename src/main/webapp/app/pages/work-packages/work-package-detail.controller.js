@@ -5080,7 +5080,11 @@
               }
 			}).result.then(function(option) {
 				if(option != null){
-					fare[field] = option;
+					if(field=='tarcd'){
+						fare[field] = option.tarCd;
+					}else{
+						fare[field] = option;
+					}					
 				}
           }, function() {
       			
@@ -5437,7 +5441,34 @@
     		  fare[field] = null;
     		  return;
     	  }
-      }  
+      } 
+      
+      vm.checkTariffDiscount = function(fare, inputField){
+    	  var tariff = null;
+    	  if(fare[inputField] != undefined && fare[inputField] != null && fare[inputField] != ""){
+	    	  var exist = false;
+	    	  for(var x=0;x<vm.tariffNumber.length;x++){
+	    		  if(vm.tariffNumber[x].tarCd == fare[inputField].toUpperCase()){
+	    			  tariff = angular.copy(vm.tariffNumber[x].tarCd);
+	    			  exist = true;
+	    			  break;
+	    		  }
+	    	  }
+	    	  
+	    	  if(!exist){
+	    		  alert("Tariff number is invalid. Please select a correct code");
+	    		  fare[inputField] = null;
+	    		  return;
+	    	  }
+	    	  else{
+	    		  fare[inputField] = tariff;
+	    	  }
+    	  }
+    	  else{
+    		  fare[inputField] = null;
+    		  return;
+    	  }
+      } 
       
       vm.keypress = function(event, regexp){
     	  
@@ -5592,7 +5623,7 @@
       
       vm.disabledField = function(wp){
     	  var disabled = false;
-    	  if(wp.locked == true){
+    	  if(wp.locked == true && wp.locked !=null){
     		  if( wp.lockedBy == vm.user.login){
     			  disabled = false;
     		  }else{
