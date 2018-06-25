@@ -1690,7 +1690,7 @@ public class WorkPackageResource {
         	putValue(data.get("Base Tariff Code"), fares.get(i).getBaseTarcd());
         	putValue(data.get("Calc Type"), fares.get(i).getCalcType());
         	
-        	putValue(data.get("% of Base Fare"), null);
+        	putValue(data.get("% of Base Fare"), fares.get(i).getPercentBaseFare());
         	putValue(data.get("Curr"), fares.get(i).getCurrency());
         	putValue(data.get("Specified Amount"), fares.get(i).getDiscountSpecifiedAmount());
         	putValue(data.get("PAX Type"), fares.get(i).getPassengerType());
@@ -6515,7 +6515,7 @@ public class WorkPackageResource {
     }
   
     /**
-     * POST  /work-packages/referback : referback
+     * POST  /work-packages/update-latest-fare : Update Latest Fare
      *
      * @param workPackage the workPackage to create
      * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
