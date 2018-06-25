@@ -3989,6 +3989,11 @@ tr.rejected {
   background-color: rgba(249, 67, 67, 0.8); }
   tr.rejected:hover {
     background-color: rgba(249, 67, 67, 0.8) !important; }
+    
+tr.pasteAsCancel {
+  background-color: rgba(146, 94, 5, 0.8); }
+  tr.pasteAsCancel:hover {
+    background-color:rgba(146, 94, 5, 0.8) !important; }
 
 tr td.highlighted {
   background-color: rgba(222, 255, 94, 0.7) !important; }
