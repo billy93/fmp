@@ -166,7 +166,8 @@
 	        'exportRateSheetWordWaiver': { method: 'POST',  url:'api/work-packages/export-ratesheet-word-waiver'},
 	        'downloadMarketRules': { method: 'POST',  url:'api/work-packages/download-market-rules'},
 	        'workPackagefilter': { method: 'GET',  url:'api/work-packages/byname'},
-	        'discontinue': { method: 'POST',  url:'api/work-packages/discontinue'}
+	        'discontinue': { method: 'POST',  url:'api/work-packages/discontinue'},
+	        'updateLatestFare' : { method: 'POST',  url:'api/work-packages/update-latest-fare'},
         });
     }
 })();

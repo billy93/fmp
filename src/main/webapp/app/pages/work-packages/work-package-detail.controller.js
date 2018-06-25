@@ -5650,6 +5650,15 @@
     	  return message;
       }
       
+      vm.updateLatestFare = function(workPackageSheet){
+    	  WorkPackage.updateLatestFare(workPackageSheet, function(result){
+    		  alert('Fares updated');
+    		  workPackageSheet.fares = result.fares;
+    		  vm.changeVersion(workPackageSheet, 'current');
+//    		  console.log(result.fares);
+    	  }, function(error){});
+      }
+
       vm.dateNgModelOpts = {
     		  timezone : '+07:00'
 	  };
