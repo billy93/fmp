@@ -887,7 +887,10 @@
 																    	<a ng-click="vm.pasteFares(workPackageSheet)">Paste</a>
 																    </li>
 																    <li>
-																    	<a href="#">Paste As Cancel</a>
+																    	<a ng-click="vm.pasteFares(workPackageSheet, true)">Paste As Cancel</a>
+																    </li>
+																    <li>
+																    	<a ng-click="vm.updateLatestFare(workPackageSheet)">Update With Latest Fare</a>
 																    </li>
 																    <li>
 																   	 <a ng-click="vm.expandCityGroup(workPackageSheet)">Expand City Groups</a>
@@ -959,6 +962,7 @@
 											                    		ng-model="fare.tariffNumber.tarNo"
 											                    		ng-disabled="!vm.isEditable('addonFareTarno') || fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' "
 											                    		style="min-width:120px"
+											                    		uppercase
 											                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareTarno{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('addonFareTarno')"
 															            ng-focus="tarno[$parent.$index][$index]=true" ng-blur="tarno[$parent.$index][$index]=false; vm.checkTariff(fare, 'tariffNumber', 'tarNo');"/>
@@ -973,6 +977,7 @@
 												                    		ng-model="fare.tariffNumber.tarCd"
 												                    		ng-disabled="!vm.isEditable('addonFareTarcd') || fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' "
 												                    		style="min-width:120px"
+												                    		uppercase
 												                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareTarcd{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 																            ng-required="vm.isRequired('addonFareTarcd') && fare.action != 'Canceled'"
 																            ng-focus="tarcd[$parent.$index][$index]=true" ng-blur="tarcd[$parent.$index][$index]=false; vm.checkTariff(fare, 'tariffNumber', 'tarCd');"/>
@@ -986,6 +991,7 @@
 																<span class="input-group">
 																		<input type="text" class="form-control" name="addonFareOrigin{{$parent.$index}}{{$index}}" id="field_carrier"
 												                    		ng-model="fare.origin"
+												                    		uppercase
 												                    		ng-disabled="!vm.isEditable('addonFareOrigin') || fare.status =='APPROVED' || fare.status =='REJECTED'"
 												                    		style="min-width:120px"
 												                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareOrigin{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
@@ -1000,6 +1006,7 @@
 																<span class="input-group">
 																	<input type="text" class="form-control" name="addonFareDestination{{$parent.$index}}{{$index}}" id="field_carrier"
 											                    		ng-model="fare.destination"
+											                    		uppercase
 											                    		ng-disabled="!vm.isEditable('addonFareDestination') || fare.status =='APPROVED' || fare.status =='REJECTED'"
 											                    		style="min-width:120px"
 											                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareDestination{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
@@ -1626,9 +1633,6 @@
 												    <li>
 												    	<a ng-click="vm.pasteFares(workPackageSheet)">Paste</a>
 												    </li>
-												    <li>
-												    	<a href="#">Paste As Cancel</a>
-												    </li>
 						                        </ul>
 						                      </div>													
 						                      <button class="btn btn-default small btn-secondary" ngf-select ngf-change="vm.importFareDiscount($file)" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'">Import</button>
@@ -1760,16 +1764,29 @@
 						                      </td>
 						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'baseFareBasis', $event)" ng-class="{highlighted:fare.field['baseFareBasis']}">
 						                         <input type="text" class="form-control" name="discountBaseFareBasis{{$parent.$index}}{{$index}}" id="field_baseFareBasis" 
+						                         uppercase
+						                         ng-pattern="/^[a-zA-Z0-9*]*$/"
+						                         maxlength="8"
+									             ng-maxlength="8"
 						                                    ng-disabled="!vm.isEditable('discountBaseFareBasis')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'"
 						                                    ng-required="vm.isRequired('discountBaseFareBasis') && fare.action != 'Canceled'"  
-						                                    ng-class="{'must-fill': !editForm.editFormDiscount.discountBaseFareBasis{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"		
+						                                    ng-class="{'must-fill':editFormDiscount.discountBaseFareBasis{{$parent.$index}}{{$index}}.$error.required || 
+										                				editForm.editFormDiscount.discountBaseFareBasis{{$parent.$index}}{{$index}}.$error.maxlength || 
+										                				editForm.editFormDiscount.discountBaseFareBasis{{$parent.$index}}{{$index}}.$error.pattern}"		
 						                                      ng-model="fare.baseFareBasis"/>
 						                      </td>
 						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'baseRuleNo', $event)" ng-class="{highlighted:fare.field['baseRuleNo']}">
 						                        <input type="text" class="form-control" name="discountBaseRuleno{{$parent.$index}}{{$index}}" id="field_origin" 
+						                        ng-maxlength="4"
+							               						uppercase
+									                			maxlength="4"
+									                			ng-pattern="/^[a-zA-Z0-9]{1,4}$/"
 						                                    ng-disabled="!vm.isEditable('discountBaseRuleno')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'"
 						                                    ng-required="vm.isRequired('discountBaseRuleno') && fare.action != 'Canceled'"  
-						                                    ng-class="{'must-fill': !editForm.editFormDiscount.discountBaseRuleno{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"		
+						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountBaseRuleno{{$parent.$index}}{{$index}}.$error.required ||
+								                					editForm.editFormDiscount.discountBaseRuleno{{$parent.$index}}{{$index}}.$error.maxlength || 
+										                			editForm.editFormDiscount.discountBaseRuleno{{$parent.$index}}{{$index}}.$error.pattern
+										                		}"	
 						                                      ng-model="fare.baseRuleNo"/>
 						                      </td>
 						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'baseTarcd', $event)" ng-class="{highlighted:fare.field['baseTarcd']}">
@@ -2856,7 +2873,10 @@
 																    	<a ng-click="vm.pasteFares(workPackageSheet)">Paste</a>
 																    </li>
 																    <li>
-																    	<a href="#">Paste As Cancel</a>
+																    	<a ng-click="vm.pasteFares(workPackageSheet, true)">Paste As Cancel</a>
+																    </li>
+																    <li>
+																    	<a ng-click="vm.updateLatestFare(workPackageSheet)">Update With Latest Fare</a>
 																    </li>
 																    <li>
 																   	 <a ng-click="vm.expandCityGroup(workPackageSheet)">Expand City Groups</a>

@@ -4980,30 +4980,61 @@
 			    			  break;
 			    		  }
 			    	  }
-					  var fare = {
-						  status:"PENDING",
-						  action: cancel ? "X" : "A",
-						  carrier:"GA",
-						  tariffNumber:tariffNumber,
-						  origin:result.content[x].originCity,
-						  destination:result.content[x].destinationCity,
-						  fareBasis:result.content[x].fareClassCode,
-						  bookingClass:result.content[x].bookingClass,
-						  cabin:result.content[x].cabin,
-						  typeOfJourney:result.content[x].owrt,
-						  footnote1:result.content[x].footnote,
-						  rtgno:result.content[x].routingNo,
-						  ruleno:result.content[x].ruleNo,
-						  currency:result.content[x].currencyCode,
-						  amount:result.content[x].baseAmount,
-						  aif:result.content[x].aif,
-						  travelStart:DateUtils.convertDateTimeFromServer(result.content[x].travelStartDate),
-						  travelEnd:DateUtils.convertDateTimeFromServer(result.content[x].travelEndDate),
-						  saleStart:DateUtils.convertDateTimeFromServer(result.content[x].saleStartDate),
-						  saleEnd:DateUtils.convertDateTimeFromServer(result.content[x].saleEndDate),
-						  travelComplete:DateUtils.convertDateTimeFromServer(result.content[x].travelComplete)
-					  };
 					  
+					  if(vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'REGULAR'){
+						  var fare = {
+							  status:"PENDING",
+							  action: cancel ? "X" : "A",
+							  carrier:"GA",
+							  tariffNumber:tariffNumber,
+							  origin:result.content[x].originCity,
+							  destination:result.content[x].destinationCity,
+							  fareBasis:result.content[x].fareClassCode,
+							  bookingClass:result.content[x].bookingClass,
+							  cabin:result.content[x].cabin,
+							  typeOfJourney:result.content[x].owrt,
+							  footnote1:result.content[x].footnote,
+							  rtgno:result.content[x].routingNo,
+							  ruleno:result.content[x].ruleNo,
+							  currency:result.content[x].currencyCode,
+							  amount:result.content[x].baseAmount,
+							  aif:result.content[x].aif,
+							  travelStart:DateUtils.convertDateTimeFromServer(result.content[x].travelStartDate),
+							  travelEnd:DateUtils.convertDateTimeFromServer(result.content[x].travelEndDate),
+							  saleStart:DateUtils.convertDateTimeFromServer(result.content[x].saleStartDate),
+							  saleEnd:DateUtils.convertDateTimeFromServer(result.content[x].saleEndDate),
+							  travelComplete:DateUtils.convertDateTimeFromServer(result.content[x].travelComplete)
+						  };
+					  } else if(vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'DISCOUNT'){
+						  var fare = {
+								  status:"PENDING",
+								 // action: cancel ? "X" : "A",
+								  carrier:"GA",
+								  tariffNumber:tariffNumber,
+								  loc1Type:'C',
+								  loc1:result.content[x].originCity,
+								  loc2Type:'C',
+								  calcType:'S',
+								  discountSpecifiedAmount:result.content[x].baseAmount,
+								  loc2:result.content[x].destinationCity,
+								  fareBasis:result.content[x].fareClassCode,
+								  bookingClass:result.content[x].bookingClass,
+								  cabin:result.content[x].cabin,
+								  typeOfJourney:result.content[x].owrt,
+								  footnote1:result.content[x].footnote,
+								  rtgno:result.content[x].routingNo,
+								  ruleno:result.content[x].ruleNo,
+								  currency:result.content[x].currencyCode,
+								  amount:result.content[x].baseAmount,
+								  aif:result.content[x].aif,
+								  passengerType:result.content[x].paxType,
+								  travelStart:DateUtils.convertDateTimeFromServer(result.content[x].travelStartDate),
+								  travelEnd:DateUtils.convertDateTimeFromServer(result.content[x].travelEndDate),
+								  saleStart:DateUtils.convertDateTimeFromServer(result.content[x].saleStartDate),
+								  saleEnd:DateUtils.convertDateTimeFromServer(result.content[x].saleEndDate),
+								  travelComplete:DateUtils.convertDateTimeFromServer(result.content[x].travelComplete)
+							  };
+					  }
 					  workPackageSheet.fares.push(fare);    	
 				  }
 			  }
