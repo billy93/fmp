@@ -190,8 +190,21 @@ public class WorkPackageResource {
             throw new BadRequestAlertException("A new workPackage cannot already have an ID", ENTITY_NAME, "idexists");
         }
         
-        Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());        
-        workPackage.setReviewLevel(user.get().getReviewLevels().get(0));
+        Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());   
+        
+        if(user.get().getReviewLevels().size()==1) {
+        	workPackage.setReviewLevel(user.get().getReviewLevels().get(0));	
+        }else {
+        	if(user.get().getReviewLevels().indexOf("HO") > 0){
+        		workPackage.setReviewLevel("HO");
+        	}else {
+        		if(user.get().getReviewLevels().indexOf("LSO") > 0){
+            		workPackage.setReviewLevel("LSO");
+            	}
+        	}
+        	
+        }
+        
         
         if(workPackage.isSpecifiedFares()) {
         	workPackage.setFilingDetails(true);
