@@ -24,6 +24,7 @@
 		                    <th jh-sort-by="id"><span>ID</span> <span class="glyphicon glyphicon-sort"></span></th>
 		                    <th jh-sort-by="tarNo"><span>Tar No</span> <span class="glyphicon glyphicon-sort"></span></th>
 		                    <th jh-sort-by="tarCd"><span>Tar Cd</span> <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th jh-sort-by="type"><span>Type</span> <span class="glyphicon glyphicon-sort"></span></th>
 		                    <th jh-sort-by="global"><span>Global</span> <span class="glyphicon glyphicon-sort"></span></th>
 		                    <th jh-sort-by="description"><span>Description</span> <span class="glyphicon glyphicon-sort"></span></th>
 		                    <th></th>
@@ -34,13 +35,14 @@
 		                    <td><a ui-sref="tariff-number-detail({id:tariffNumber.id})">{{tariffNumber.id}}</a></td>
 		                    <td>{{tariffNumber.tarNo}}</td>
 		                    <td>{{tariffNumber.tarCd}}</td>
+		                    <td>{{tariffNumber.type}}</td>
 		                    <td>{{tariffNumber.global}}</td>
 		                    <td>{{tariffNumber.description}}</td>
 		                    <td class="text-right">
 		                        <div class="btn-group flex-btn-group-container">
 		                            <button type="submit"
 		                                    ui-sref="tariff-number-detail({id:tariffNumber.id})"
-		                                    class="btn btn-info btn-sm">
+		                                    class="btn btn-info btn-sm linkClick">
 		                                <span class="glyphicon glyphicon-eye-open"></span>
 		                                <span class="hidden-sm-down"></span>
 		                            </button>

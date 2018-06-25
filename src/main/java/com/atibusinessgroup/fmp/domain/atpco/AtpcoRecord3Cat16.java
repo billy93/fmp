@@ -72,13 +72,16 @@ public class AtpcoRecord3Cat16 {
     private String penalties_rep;
 
 	@Field("charges_percent")
-    private String charges_percent;
+    private Decimal128 charges_percent;
 
 	@Field("charges_appl")
     private String charges_appl;
 
 	@Field("waiver_death_of_immediate_family_member")
     private String waiver_death_of_immediate_family_member;
+	
+	@Field("waiver_illness_of_immediate_family_member")
+    private String waiver_illness_of_immediate_family_member;
 
 	@Field("date_tbl_no_994")
     private String date_tbl_no_994;
@@ -290,11 +293,11 @@ public class AtpcoRecord3Cat16 {
 		this.penalties_rep = penalties_rep;
 	}
 
-	public String getCharges_percent() {
+	public Decimal128 getCharges_percent() {
 		return charges_percent;
 	}
 
-	public void setCharges_percent(String charges_percent) {
+	public void setCharges_percent(Decimal128 charges_percent) {
 		this.charges_percent = charges_percent;
 	}
 
@@ -425,6 +428,14 @@ public class AtpcoRecord3Cat16 {
 	public void setPenalties_pta(String penalties_pta) {
 		this.penalties_pta = penalties_pta;
 	}
+	
+	public String getWaiver_illness_of_immediate_family_member() {
+		return waiver_illness_of_immediate_family_member;
+	}
+
+	public void setWaiver_illness_of_immediate_family_member(String waiver_illness_of_immediate_family_member) {
+		this.waiver_illness_of_immediate_family_member = waiver_illness_of_immediate_family_member;
+	}
 
 	@Override
 	public int hashCode() {
@@ -466,6 +477,8 @@ public class AtpcoRecord3Cat16 {
 		result = prime * result + ((waiver_death_of_immediate_family_member == null) ? 0
 				: waiver_death_of_immediate_family_member.hashCode());
 		result = prime * result + ((waiver_death_of_passenger == null) ? 0 : waiver_death_of_passenger.hashCode());
+		result = prime * result + ((waiver_illness_of_immediate_family_member == null) ? 0
+				: waiver_illness_of_immediate_family_member.hashCode());
 		result = prime * result + ((waiver_illness_of_passenger == null) ? 0 : waiver_illness_of_passenger.hashCode());
 		result = prime * result + ((waiver_schedule_change == null) ? 0 : waiver_schedule_change.hashCode());
 		result = prime * result + ((waiver_ticket_upgrade == null) ? 0 : waiver_ticket_upgrade.hashCode());
@@ -474,203 +487,289 @@ public class AtpcoRecord3Cat16 {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		AtpcoRecord3Cat16 other = (AtpcoRecord3Cat16) obj;
 		if (action == null) {
-			if (other.action != null)
+			if (other.action != null) {
 				return false;
-		} else if (!action.equals(other.action))
+			}
+		} else if (!action.equals(other.action)) {
 			return false;
+		}
 		if (appl_canx == null) {
-			if (other.appl_canx != null)
+			if (other.appl_canx != null) {
 				return false;
-		} else if (!appl_canx.equals(other.appl_canx))
+			}
+		} else if (!appl_canx.equals(other.appl_canx)) {
 			return false;
+		}
 		if (appl_inv == null) {
-			if (other.appl_inv != null)
+			if (other.appl_inv != null) {
 				return false;
-		} else if (!appl_inv.equals(other.appl_inv))
+			}
+		} else if (!appl_inv.equals(other.appl_inv)) {
 			return false;
+		}
 		if (appl_vol == null) {
-			if (other.appl_vol != null)
+			if (other.appl_vol != null) {
 				return false;
-		} else if (!appl_vol.equals(other.appl_vol))
+			}
+		} else if (!appl_vol.equals(other.appl_vol)) {
 			return false;
+		}
 		if (cat_no == null) {
-			if (other.cat_no != null)
+			if (other.cat_no != null) {
 				return false;
-		} else if (!cat_no.equals(other.cat_no))
+			}
+		} else if (!cat_no.equals(other.cat_no)) {
 			return false;
+		}
 		if (charges_amt_1 == null) {
-			if (other.charges_amt_1 != null)
+			if (other.charges_amt_1 != null) {
 				return false;
-		} else if (!charges_amt_1.equals(other.charges_amt_1))
+			}
+		} else if (!charges_amt_1.equals(other.charges_amt_1)) {
 			return false;
+		}
 		if (charges_amt_2 == null) {
-			if (other.charges_amt_2 != null)
+			if (other.charges_amt_2 != null) {
 				return false;
-		} else if (!charges_amt_2.equals(other.charges_amt_2))
+			}
+		} else if (!charges_amt_2.equals(other.charges_amt_2)) {
 			return false;
+		}
 		if (charges_appl == null) {
-			if (other.charges_appl != null)
+			if (other.charges_appl != null) {
 				return false;
-		} else if (!charges_appl.equals(other.charges_appl))
+			}
+		} else if (!charges_appl.equals(other.charges_appl)) {
 			return false;
+		}
 		if (charges_cur_1 == null) {
-			if (other.charges_cur_1 != null)
+			if (other.charges_cur_1 != null) {
 				return false;
-		} else if (!charges_cur_1.equals(other.charges_cur_1))
+			}
+		} else if (!charges_cur_1.equals(other.charges_cur_1)) {
 			return false;
+		}
 		if (charges_cur_2 == null) {
-			if (other.charges_cur_2 != null)
+			if (other.charges_cur_2 != null) {
 				return false;
-		} else if (!charges_cur_2.equals(other.charges_cur_2))
+			}
+		} else if (!charges_cur_2.equals(other.charges_cur_2)) {
 			return false;
+		}
 		if (charges_dec_1 == null) {
-			if (other.charges_dec_1 != null)
+			if (other.charges_dec_1 != null) {
 				return false;
-		} else if (!charges_dec_1.equals(other.charges_dec_1))
+			}
+		} else if (!charges_dec_1.equals(other.charges_dec_1)) {
 			return false;
+		}
 		if (charges_dec_2 == null) {
-			if (other.charges_dec_2 != null)
+			if (other.charges_dec_2 != null) {
 				return false;
-		} else if (!charges_dec_2.equals(other.charges_dec_2))
+			}
+		} else if (!charges_dec_2.equals(other.charges_dec_2)) {
 			return false;
+		}
 		if (charges_h_l == null) {
-			if (other.charges_h_l != null)
+			if (other.charges_h_l != null) {
 				return false;
-		} else if (!charges_h_l.equals(other.charges_h_l))
+			}
+		} else if (!charges_h_l.equals(other.charges_h_l)) {
 			return false;
+		}
 		if (charges_percent == null) {
-			if (other.charges_percent != null)
+			if (other.charges_percent != null) {
 				return false;
-		} else if (!charges_percent.equals(other.charges_percent))
+			}
+		} else if (!charges_percent.equals(other.charges_percent)) {
 			return false;
+		}
 		if (charges_por == null) {
-			if (other.charges_por != null)
+			if (other.charges_por != null) {
 				return false;
-		} else if (!charges_por.equals(other.charges_por))
+			}
+		} else if (!charges_por.equals(other.charges_por)) {
 			return false;
+		}
 		if (date_tbl_no_994 == null) {
-			if (other.date_tbl_no_994 != null)
+			if (other.date_tbl_no_994 != null) {
 				return false;
-		} else if (!date_tbl_no_994.equals(other.date_tbl_no_994))
+			}
+		} else if (!date_tbl_no_994.equals(other.date_tbl_no_994)) {
 			return false;
+		}
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		if (penalties_canx == null) {
-			if (other.penalties_canx != null)
+			if (other.penalties_canx != null) {
 				return false;
-		} else if (!penalties_canx.equals(other.penalties_canx))
+			}
+		} else if (!penalties_canx.equals(other.penalties_canx)) {
 			return false;
+		}
 		if (penalties_chgn == null) {
-			if (other.penalties_chgn != null)
+			if (other.penalties_chgn != null) {
 				return false;
-		} else if (!penalties_chgn.equals(other.penalties_chgn))
+			}
+		} else if (!penalties_chgn.equals(other.penalties_chgn)) {
 			return false;
+		}
 		if (penalties_chrg == null) {
-			if (other.penalties_chrg != null)
+			if (other.penalties_chrg != null) {
 				return false;
-		} else if (!penalties_chrg.equals(other.penalties_chrg))
+			}
+		} else if (!penalties_chrg.equals(other.penalties_chrg)) {
 			return false;
+		}
 		if (penalties_fail == null) {
-			if (other.penalties_fail != null)
+			if (other.penalties_fail != null) {
 				return false;
-		} else if (!penalties_fail.equals(other.penalties_fail))
+			}
+		} else if (!penalties_fail.equals(other.penalties_fail)) {
 			return false;
+		}
 		if (penalties_geo_tbl_995 == null) {
-			if (other.penalties_geo_tbl_995 != null)
+			if (other.penalties_geo_tbl_995 != null) {
 				return false;
-		} else if (!penalties_geo_tbl_995.equals(other.penalties_geo_tbl_995))
+			}
+		} else if (!penalties_geo_tbl_995.equals(other.penalties_geo_tbl_995)) {
 			return false;
+		}
 		if (penalties_pta == null) {
-			if (other.penalties_pta != null)
+			if (other.penalties_pta != null) {
 				return false;
-		} else if (!penalties_pta.equals(other.penalties_pta))
+			}
+		} else if (!penalties_pta.equals(other.penalties_pta)) {
 			return false;
+		}
 		if (penalties_rep == null) {
-			if (other.penalties_rep != null)
+			if (other.penalties_rep != null) {
 				return false;
-		} else if (!penalties_rep.equals(other.penalties_rep))
+			}
+		} else if (!penalties_rep.equals(other.penalties_rep)) {
 			return false;
+		}
 		if (penalties_tkt == null) {
-			if (other.penalties_tkt != null)
+			if (other.penalties_tkt != null) {
 				return false;
-		} else if (!penalties_tkt.equals(other.penalties_tkt))
+			}
+		} else if (!penalties_tkt.equals(other.penalties_tkt)) {
 			return false;
+		}
 		if (rec_type == null) {
-			if (other.rec_type != null)
+			if (other.rec_type != null) {
 				return false;
-		} else if (!rec_type.equals(other.rec_type))
+			}
+		} else if (!rec_type.equals(other.rec_type)) {
 			return false;
+		}
 		if (record_batch == null) {
-			if (other.record_batch != null)
+			if (other.record_batch != null) {
 				return false;
-		} else if (!record_batch.equals(other.record_batch))
+			}
+		} else if (!record_batch.equals(other.record_batch)) {
 			return false;
+		}
 		if (record_sequence == null) {
-			if (other.record_sequence != null)
+			if (other.record_sequence != null) {
 				return false;
-		} else if (!record_sequence.equals(other.record_sequence))
+			}
+		} else if (!record_sequence.equals(other.record_sequence)) {
 			return false;
+		}
 		if (rules_type == null) {
-			if (other.rules_type != null)
+			if (other.rules_type != null) {
 				return false;
-		} else if (!rules_type.equals(other.rules_type))
+			}
+		} else if (!rules_type.equals(other.rules_type)) {
 			return false;
+		}
 		if (tbl_no == null) {
-			if (other.tbl_no != null)
+			if (other.tbl_no != null) {
 				return false;
-		} else if (!tbl_no.equals(other.tbl_no))
+			}
+		} else if (!tbl_no.equals(other.tbl_no)) {
 			return false;
+		}
 		if (text_tbl_no_996 == null) {
-			if (other.text_tbl_no_996 != null)
+			if (other.text_tbl_no_996 != null) {
 				return false;
-		} else if (!text_tbl_no_996.equals(other.text_tbl_no_996))
+			}
+		} else if (!text_tbl_no_996.equals(other.text_tbl_no_996)) {
 			return false;
+		}
 		if (tkt_nrf == null) {
-			if (other.tkt_nrf != null)
+			if (other.tkt_nrf != null) {
 				return false;
-		} else if (!tkt_nrf.equals(other.tkt_nrf))
+			}
+		} else if (!tkt_nrf.equals(other.tkt_nrf)) {
 			return false;
+		}
 		if (unavail == null) {
-			if (other.unavail != null)
+			if (other.unavail != null) {
 				return false;
-		} else if (!unavail.equals(other.unavail))
+			}
+		} else if (!unavail.equals(other.unavail)) {
 			return false;
+		}
 		if (waiver_death_of_immediate_family_member == null) {
-			if (other.waiver_death_of_immediate_family_member != null)
+			if (other.waiver_death_of_immediate_family_member != null) {
 				return false;
-		} else if (!waiver_death_of_immediate_family_member.equals(other.waiver_death_of_immediate_family_member))
+			}
+		} else if (!waiver_death_of_immediate_family_member.equals(other.waiver_death_of_immediate_family_member)) {
 			return false;
+		}
 		if (waiver_death_of_passenger == null) {
-			if (other.waiver_death_of_passenger != null)
+			if (other.waiver_death_of_passenger != null) {
 				return false;
-		} else if (!waiver_death_of_passenger.equals(other.waiver_death_of_passenger))
+			}
+		} else if (!waiver_death_of_passenger.equals(other.waiver_death_of_passenger)) {
 			return false;
+		}
+		if (waiver_illness_of_immediate_family_member == null) {
+			if (other.waiver_illness_of_immediate_family_member != null) {
+				return false;
+			}
+		} else if (!waiver_illness_of_immediate_family_member.equals(other.waiver_illness_of_immediate_family_member)) {
+			return false;
+		}
 		if (waiver_illness_of_passenger == null) {
-			if (other.waiver_illness_of_passenger != null)
+			if (other.waiver_illness_of_passenger != null) {
 				return false;
-		} else if (!waiver_illness_of_passenger.equals(other.waiver_illness_of_passenger))
+			}
+		} else if (!waiver_illness_of_passenger.equals(other.waiver_illness_of_passenger)) {
 			return false;
+		}
 		if (waiver_schedule_change == null) {
-			if (other.waiver_schedule_change != null)
+			if (other.waiver_schedule_change != null) {
 				return false;
-		} else if (!waiver_schedule_change.equals(other.waiver_schedule_change))
+			}
+		} else if (!waiver_schedule_change.equals(other.waiver_schedule_change)) {
 			return false;
+		}
 		if (waiver_ticket_upgrade == null) {
-			if (other.waiver_ticket_upgrade != null)
+			if (other.waiver_ticket_upgrade != null) {
 				return false;
-		} else if (!waiver_ticket_upgrade.equals(other.waiver_ticket_upgrade))
+			}
+		} else if (!waiver_ticket_upgrade.equals(other.waiver_ticket_upgrade)) {
 			return false;
+		}
 		return true;
 	}
 
@@ -686,14 +785,12 @@ public class AtpcoRecord3Cat16 {
 				+ unavail + ", action=" + action + ", rules_type=" + rules_type + ", charges_h_l=" + charges_h_l
 				+ ", charges_por=" + charges_por + ", penalties_rep=" + penalties_rep + ", charges_percent="
 				+ charges_percent + ", charges_appl=" + charges_appl + ", waiver_death_of_immediate_family_member="
-				+ waiver_death_of_immediate_family_member + ", date_tbl_no_994=" + date_tbl_no_994 + ", appl_canx="
+				+ waiver_death_of_immediate_family_member + ", waiver_illness_of_immediate_family_member="
+				+ waiver_illness_of_immediate_family_member + ", date_tbl_no_994=" + date_tbl_no_994 + ", appl_canx="
 				+ appl_canx + ", tkt_nrf=" + tkt_nrf + ", appl_inv=" + appl_inv + ", text_tbl_no_996=" + text_tbl_no_996
 				+ ", appl_vol=" + appl_vol + ", record_batch=" + record_batch + ", penalties_canx=" + penalties_canx
 				+ ", charges_amt_1=" + charges_amt_1 + ", charges_amt_2=" + charges_amt_2 + ", cat_no=" + cat_no
 				+ ", waiver_illness_of_passenger=" + waiver_illness_of_passenger + ", rec_type=" + rec_type
 				+ ", penalties_pta=" + penalties_pta + "]";
 	}
-	
-	
-
 }

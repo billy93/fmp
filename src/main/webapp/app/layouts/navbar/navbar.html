@@ -127,6 +127,9 @@
 		    		    	<a ui-sref="tariff-number" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Tariff Number </a>
 		    		    </li>
 		    		    <li>
+		    		    	<a ui-sref="tariff-number-add-on" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Tariff Number AddOn</a>
+		    		    </li>
+		    		    <li>
 		    		    	<a ui-sref="user-management" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> User Management </a>
 		    		    </li>
 		    		     <li>
@@ -151,6 +154,19 @@
 		    		</ul>
 		    	</div>
 		    	<div class="tooltip">ATPCO Entities</div>
+		    </li>
+		    <li class="menu-list has-sub" ng-click="vm.toggleMenu($event)">
+		    	<a>
+		    		<i class="fa fa-stack-overflow"></i><span>Data Feed</span>
+		    	</a>
+		    	<div class="sub-menu">
+		    		<ul>
+		    			<li>
+		    		    	<a ui-sref="data-feed-fare-basis-group-mapping" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> PROS Data Feed </a>
+		    		    </li>
+		    		</ul>
+		    	</div>
+		    	<div class="tooltip">Data Feed</div>
 		    </li>
 		</ul>
 		</nav>
@@ -222,6 +238,12 @@
                                 <a ui-sref="atpco-master-fare-matrix" ng-click="vm.collapseNavbar()">
                                     <span class="glyphicon glyphicon-asterisk"></span>&nbsp;
                                     <span>Atpco Master Fare Matrix</span>
+                                </a>
+                            </li>
+<li ui-sref-active="active">
+                                <a ui-sref="data-feed-fare-basis-group-mapping" ng-click="vm.collapseNavbar()">
+                                    <span class="glyphicon glyphicon-asterisk"></span>&nbsp;
+                                    <span>Data Feed Fare Basis Group Mapping</span>
                                 </a>
                             </li>
 <!--                         jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->

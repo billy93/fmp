@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('AfdQueryController', AfdQueryController);
 
-    AfdQueryController.$inject = ['$state', 'AfdQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', 'tariffNumbers', 'cities', '$uibModal', 'Clipboard'];
+    AfdQueryController.$inject = ['$state', 'AfdQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', 'tariffNumbers', 'cities', '$uibModal', 'Clipboard', 'Timezone'];
 
-    function AfdQueryController($state, AfdQuery, ParseLinks, AlertService, paginationConstants, queryParams, tariffNumbers, cities, $uibModal, Clipboard ) {
+    function AfdQueryController($state, AfdQuery, ParseLinks, AlertService, paginationConstants, queryParams, tariffNumbers, cities, $uibModal, Clipboard, Timezone) {
 
         var vm = this;
         vm.loadPage = loadPage;
@@ -18,12 +18,15 @@
         vm.setSelectedRow = setSelectedRow;
         vm.getRules = getRules;
         vm.showCategoryDetail = showCategoryDetail;
+        vm.showFareDetail = showFareDetail;
         vm.copyAfdQueryFares = copyAfdQueryFares;
         vm.selectAll = selectAll;
         vm.showLegend = showLegend;
         vm.viewFullText = viewFullText;
         vm.showErrorModal = showErrorModal;
         vm.selectedRows = [];
+        vm.selectedFares = [];
+        vm.timezone = Timezone.GMT7;
         
         vm.reset = reset;
         vm.page = 1;
@@ -183,11 +186,35 @@
         	} else {
         		vm.selectedRows[index] = afdQuery;
         	}
+        	
+        	if (vm.selectedFares.indexOf(afdQuery) != -1) {
+        		vm.selectedFares.splice(vm.selectedFares.indexOf(afdQuery), 1);
+        	} else {
+        		vm.selectedFares.push(afdQuery);
+        	}
         }
         
         function selectAll() {
-        	for (var i = 0; i < vm.afdQueries.length; i++) {
-        		vm.selectedRows[i] = vm.afdQueries[i];
+        	vm.allSelected = false;
+        	var isEmpty = true;
+        	
+        	for (var i = 0; i < vm.selectedRows.length; i++) {
+    			if (vm.selectedRows[i] != null) {
+    				isEmpty = false;
+    			}
+    		}
+        	
+        	if (isEmpty) {
+        		for (var i = 0; i < vm.afdQueries.length; i++) {
+            		vm.selectedRows[i] = vm.afdQueries[i];
+            		vm.selectedFares.push(vm.afdQueries[i]);
+            	}
+        		vm.allSelected = true;
+        	} else {
+        		for (var i = 0; i < vm.selectedRows.length; i++) {
+        			vm.selectedRows[i] = null;
+        			vm.selectedFares = [];
+        		}
         	}
         }
         
@@ -216,14 +243,36 @@
         	}
         }
         
+        function showFareDetail() {
+        	if (vm.selectedFares.length > 0) {
+        		$uibModal.open({
+                    templateUrl: 'app/pages/modals/fare-detail-modal.html',
+                    controller: 'FareDetailModalController',
+                    controllerAs: 'vm',
+                    backdrop: 'static',
+                    size: 'lg',
+                    resolve: {
+                        fare: vm.selectedFares[0],
+                        rules: {
+                        	categories: vm.categoryRules
+                        }
+                    },
+                    windowClass: 'full'
+                }).result.then(function() {
+                    $state.go('afd-query', {}, { reload: false });
+                }, function() {
+                    $state.go('afd-query');
+                });
+        	}
+        }
+        
         function showCategoryDetail(category) {
         	$uibModal.open({
-                templateUrl: 'app/pages/category-modals/category-modal.html',
+                templateUrl: 'app/pages/modals/category-modal.html',
                 controller: 'CategoryModalController',
                 controllerAs: 'vm',
                 backdrop: 'static',
                 size: 'lg',
-                windowClass: 'full',
                 resolve: {
                     entity: category
                 }
@@ -236,7 +285,7 @@
         
         function showLegend() {
         	$uibModal.open({
-                templateUrl: 'app/pages/category-modals/legend-modal.html',
+                templateUrl: 'app/pages/modals/legend-modal.html',
                 controller: 'LegendModalController',
                 controllerAs: 'vm',
                 backdrop: 'static',
@@ -250,7 +299,7 @@
         
         function viewFullText() {
         	$uibModal.open({
-                templateUrl: 'app/pages/category-modals/full-text-modal.html',
+                templateUrl: 'app/pages/modals/full-text-modal.html',
                 controller: 'FullTextModalController',
                 controllerAs: 'vm',
                 backdrop: 'static',

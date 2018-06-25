@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
-import com.atibusinessgroup.fmp.repository.WorkPackagefilterRepository;
+import com.atibusinessgroup.fmp.repository.WorkPackageFilterRepository;
 import com.atibusinessgroup.fmp.security.SecurityUtils;
 import com.atibusinessgroup.fmp.web.rest.errors.BadRequestAlertException;
 import com.atibusinessgroup.fmp.web.rest.util.HeaderUtil;
@@ -42,9 +42,10 @@ public class WorkPackageFilterResource {
 
     private static final String ENTITY_NAME = "work_package_filter";
 
-    private final WorkPackagefilterRepository workPackagefilterRepository;
+    private final WorkPackageFilterRepository workPackagefilterRepository;
+    
 
-    public WorkPackageFilterResource(WorkPackagefilterRepository workPackagefilterRepository) {
+    public WorkPackageFilterResource(WorkPackageFilterRepository workPackagefilterRepository) {
         this.workPackagefilterRepository = workPackagefilterRepository;
     }
 
@@ -165,5 +166,24 @@ public class WorkPackageFilterResource {
         log.debug("REST request to delete workPackagefilter : {}", id);
         workPackagefilterRepository.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
+    }
+    /**
+     * DELETE  /workPackagefilter/:id : delete the "id" workPackagefilter.
+     *
+     * @param id the id of the workPackagefilter to delete
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @DeleteMapping("/workpackagefilters/deleteByName")
+    @Timed
+    public ResponseEntity<Void> deleteWorkPackageFilterByName() {
+        log.debug("REST request to delete workPackagefilter");
+        WorkPackageFilter result = null;
+        String loginName = SecurityUtils.getCurrentUserLogin().get();
+        Optional<WorkPackageFilter> workPackagefilter = workPackagefilterRepository.findOneByLoginName(loginName);
+        if(workPackagefilter.isPresent()) {
+        	 result = workPackagefilter.get();
+        }
+        workPackagefilterRepository.delete(result.getId());
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, result.getId())).build();
     }
 }

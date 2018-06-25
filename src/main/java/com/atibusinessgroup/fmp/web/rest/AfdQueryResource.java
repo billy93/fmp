@@ -1,6 +1,7 @@
 package com.atibusinessgroup.fmp.web.rest;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoFootnoteRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord0;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord1;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2Cat10;
 import com.atibusinessgroup.fmp.domain.dto.AfdQuery;
 import com.atibusinessgroup.fmp.domain.dto.AfdQueryParam;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFareAfdQueryWithRecords;
@@ -34,6 +36,7 @@ import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.Category;
 import com.atibusinessgroup.fmp.domain.dto.CategoryObject;
 import com.atibusinessgroup.fmp.domain.dto.CategoryTextFormatAndAttribute;
+import com.atibusinessgroup.fmp.domain.dto.DataTable;
 import com.atibusinessgroup.fmp.domain.dto.GeneralRuleApplication;
 import com.atibusinessgroup.fmp.repository.AtpcoRecord0Repository;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoFareCustomRepository;
@@ -133,14 +136,20 @@ public class AfdQueryResource {
 
         List<AfdQuery> result = new ArrayList<>();
         
+        Date focusDate = null;
+        
+        atpcoRecordService.compareFareClass(null, null);
+        
         for (AtpcoFareAfdQueryWithRecords a1fare:a1fares) {
         	AtpcoFare afare = a1fare.getAtpcoFare();
         	AtpcoRecord1 matchedRecord1 = null;
         	
-        	for (AtpcoRecord1 record1:a1fare.getAtpcoRecord1()) {
-        		boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afare.getOriginCity(), "C", afare.getDestinationCity(), afare.getOwrt(), afare.getRoutingNo(), afare.getFootnote(), afare.getTariffEffectiveDateObject(), afare.getDiscontinueDateObject(),
-        				record1.getGeoType1(), record1.getGeoLoc1(), record1.getGeoType2(), record1.getGeoLoc2(), record1.getOwrt(), record1.getRoutingNo(), record1.getFootnote(), record1.getEffectiveDateObject(), record1.getDiscontinueDateObject());
+        	focusDate = atpcoRecordService.resolveFocusDate(param.getEffectiveDateTo(), afare.getTariffEffectiveDateObject(), afare.getDiscontinueDateObject());
         	
+        	for (AtpcoRecord1 record1:a1fare.getAtpcoRecord1()) {
+        		boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afare.getOriginCity(), "C", afare.getDestinationCity(), afare.getOwrt(), afare.getRoutingNo(), afare.getFootnote(), focusDate,
+        				record1.getGeoType1(), record1.getGeoLoc1(), record1.getGeoType2(), record1.getGeoLoc2(), record1.getOwrt(), record1.getRoutingNo(), record1.getFootnote(), record1.getEffectiveDateObject(), record1.getDiscontinueDateObject());
+        		
         		if (matched) {
         			matchedRecord1 = record1;
         			break;
@@ -161,7 +170,7 @@ public class AfdQueryResource {
         		for (AtpcoRecord2GroupByCatNo arecord2:a1fare.getAtpcoRecord2()) {
                 	if (arecord2.getCatNo().contentEquals(entry.getKey())) {
                 		for (AtpcoRecord2 record2:arecord2.getRecords2()) {
-                			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afare.getOriginCity(), "C", afare.getDestinationCity(), afare.getFareClassCode(), afare.getFareType(), matchedRecord1 != null ? matchedRecord1.getSeasonType() : null, matchedRecord1 != null ? matchedRecord1.getDayOfWeekType() : null, afare.getOwrt(), afare.getRoutingNo(), afare.getFootnote(), afare.getEffectiveDateObject(), afare.getDiscontinueDateObject(),
+                			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afare.getOriginCity(), "C", afare.getDestinationCity(), afare.getFareClassCode(), afare.getFareType(), matchedRecord1 != null ? matchedRecord1.getSeasonType() : null, matchedRecord1 != null ? matchedRecord1.getDayOfWeekType() : null, afare.getOwrt(), afare.getRoutingNo(), afare.getFootnote(), focusDate,
                 					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getFareClass(), record2.getFareType(), record2.getSeasonType(), record2.getDayOfWeekType(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
                         	
                     		if (matched) {
@@ -204,7 +213,7 @@ public class AfdQueryResource {
             	for (AtpcoFootnoteRecord2GroupByCatNo arecord2:a1fare.getFootnoteRecord()) {
                 	if (arecord2.getCatNo().contentEquals(entry.getKey())) {
                 		for (AtpcoFootnoteRecord2 record2:arecord2.getRecords2()) {
-                			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afare.getOriginCity(), "C", afare.getDestinationCity(), afare.getOwrt(), afare.getRoutingNo(), afare.getFootnote(), afare.getEffectiveDateObject(), afare.getDiscontinueDateObject(),
+                			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afare.getOriginCity(), "C", afare.getDestinationCity(), afare.getOwrt(), afare.getRoutingNo(), afare.getFootnote(), focusDate,
                 					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
                         	
                     		if (matched) {
@@ -230,7 +239,7 @@ public class AfdQueryResource {
         	}
         	
         	AfdQuery afdQuery = afdQueryMapper.convertAtpcoFare(afare, matchedRecord1, cat03s, cat05s, cat06s, cat07s, cat14s, cat15s, 
-        			footnote14s, footnote15s, param.getEffectiveDateFrom(), param.getEffectiveDateTo());
+        			footnote14s, footnote15s, focusDate);
         	
         	result.add(afdQuery);
         }
@@ -254,18 +263,20 @@ public class AfdQueryResource {
         
         List<AtpcoRecord0> arecords0 = atpcoRecord0Repository.findAllByRecordId(afdQuery.getTariffNo() + afdQuery.getCarrierCode() + "");
         List<AtpcoRecord2GroupByCatNo> arecords2 = atpcoFareCustomRepository.findAtpcoRecord2ByRecordId(afdQuery.getTariffNo() + afdQuery.getCarrierCode() + afdQuery.getRuleNo() + "");
+        List<AtpcoRecord2Cat10> arecords210 = atpcoFareCustomRepository.findAtpcoRecord2Cat10ByRecordId(afdQuery.getTariffNo() + afdQuery.getCarrierCode() + afdQuery.getRuleNo() + "");
         List<AtpcoFootnoteRecord2GroupByCatNo> frecords2 = atpcoFareCustomRepository.findAtpcoFootnoteRecord2ByRecordId(afdQuery.getTariffNo() + afdQuery.getCarrierCode() + afdQuery.getFootnote() + "");
         
         for (Map.Entry<String, String> entry : categories.entrySet()) {
         	AtpcoRecord2 matchedGeneralRecord2 = null;
         	AtpcoRecord2 matchedRecord2 = null;
+        	AtpcoRecord2Cat10 matchedRecord2Cat10 = null;
         	AtpcoFootnoteRecord2 matchedFRecord2 = null;
         	GeneralRuleApplication matchedGeneral = null;
 
         	all : for (AtpcoRecord2GroupByCatNo arecord2:arecords2) {
             	if (arecord2.getCatNo().contentEquals(entry.getKey())) {
             		for (AtpcoRecord2 record2:arecord2.getRecords2()) {
-            			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afdQuery.getOriginCity(), "C", afdQuery.getDestinationCity(), afdQuery.getFareClassCode(), afdQuery.getFareType(), afdQuery.getSeason(), afdQuery.getDayOfWeekType(), afdQuery.getOwrt(), afdQuery.getRoutingNo(), afdQuery.getFootnote(), afdQuery.getEffectiveDate(), afdQuery.getDiscontinueDate(),
+            			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afdQuery.getOriginCity(), "C", afdQuery.getDestinationCity(), afdQuery.getFareClassCode(), afdQuery.getFareType(), afdQuery.getSeason(), afdQuery.getDayOfWeekType(), afdQuery.getOwrt(), afdQuery.getRoutingNo(), afdQuery.getFootnote(), afdQuery.getFocusDate(),
             					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getFareClass(), record2.getFareType(), record2.getSeasonType(), record2.getDayOfWeekType(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
                     	
                 		if (matched) {
@@ -279,7 +290,7 @@ public class AfdQueryResource {
         	all : for (AtpcoFootnoteRecord2GroupByCatNo frecord2:frecords2) {
             	if (frecord2.getCatNo().contentEquals(entry.getKey())) {
             		for (AtpcoFootnoteRecord2 record2:frecord2.getRecords2()) {
-            			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afdQuery.getOriginCity(), "C", afdQuery.getDestinationCity(), afdQuery.getOwrt(), afdQuery.getRoutingNo(), afdQuery.getFootnote(), afdQuery.getEffectiveDate(), afdQuery.getDiscontinueDate(),
+            			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afdQuery.getOriginCity(), "C", afdQuery.getDestinationCity(), afdQuery.getOwrt(), afdQuery.getRoutingNo(), afdQuery.getFootnote(), afdQuery.getFocusDate(),
             					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
                     	
                 		if (matched) {
@@ -289,7 +300,19 @@ public class AfdQueryResource {
             		}
             	}
             }	
-    		
+            
+            if (entry.getKey().contentEquals("010")) {
+            	all : for (AtpcoRecord2Cat10 arecord210:arecords210) {
+            		boolean matched = atpcoRecordService.compareMatchingFareAndRecord(afdQuery.getOwrt(), afdQuery.getRoutingNo(), afdQuery.getFootnote(), afdQuery.getFocusDate(),
+            				arecord210.getOwrt(), arecord210.getRtg_no(), arecord210.getFt_nt(), arecord210.getDates_eff(), arecord210.getDates_disc());
+                	
+            		if (matched) {
+            			matchedRecord2Cat10 = arecord210;
+            			break all;
+            		} 
+                }	
+            }
+            
     		all : for (AtpcoRecord0 arecord0:arecords0) {
     			for (GeneralRuleApplication gra:arecord0.getGeneralRuleApplications()) {
     				if (entry.getKey().contentEquals(gra.getCatNo())) {
@@ -298,7 +321,7 @@ public class AfdQueryResource {
     				}
     			}
     		}
-            
+        	
         	Category cat = new Category();
         	cat.setCatName(entry.getValue());
         	
@@ -327,13 +350,36 @@ public class AfdQueryResource {
         		cat.getCatAttributes().addAll(ctfa.getAttributes());
         	}
         	
+        	if (matchedRecord2Cat10 != null && matchedRecord2Cat10.getData_segs() != null && matchedRecord2Cat10.getData_segs().size() > 0) {
+        		type += CategoryType.RULE;
+        		textFormat += atpcoRecordService.generateCategoryTextHeader(CategoryType.RULE, afdQuery.getTariffNo(), afdQuery.getTariffCode(), afdQuery.getRuleNo(), matchedRecord2Cat10.getSeq_no(), matchedRecord2Cat10.getDates_eff());
+        		
+        		LinkedHashMap<String, List<DataTable>> groupedCat10DataTables = new LinkedHashMap<>();
+        		
+        		for (DataTable dt:matchedRecord2Cat10.getData_segs()) {
+        			if (!groupedCat10DataTables.containsKey(dt.getCatNo())) {
+        				List<DataTable> dts = new ArrayList<>();
+        				dts.add(dt);
+        				groupedCat10DataTables.put(dt.getCatNo(), dts);
+        			} else {
+        				groupedCat10DataTables.get(dt.getCatNo()).add(dt);
+        			}
+        		}
+        		
+        		for (Map.Entry<String, List<DataTable>> dtEntry:groupedCat10DataTables.entrySet()) {
+        			CategoryTextFormatAndAttribute ctfa = atpcoRecordService.getAndConvertCategoryDataTable(dtEntry.getKey(), dtEntry.getValue(), CategoryType.RULE);
+        			textFormat += ctfa.getTextFormat();
+        			cat.getCatAttributes().addAll(ctfa.getAttributes());
+        		}
+        	}
+        	
         	if (matchedGeneral != null) {
     			List<AtpcoRecord2GroupByCatNo> generalRecords2 = atpcoFareCustomRepository.findAtpcoRecord2ByRecordId(matchedGeneral.getSourceTariff() + afdQuery.getCarrierCode() + matchedGeneral.getRuleNo() + "");
         		
         		all : for (AtpcoRecord2GroupByCatNo grecord2:generalRecords2) {
                 	if (grecord2.getCatNo().contentEquals(entry.getKey())) {
                 		for (AtpcoRecord2 record2:grecord2.getRecords2()) {
-                			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afdQuery.getOriginCity(), "C", afdQuery.getDestinationCity(), afdQuery.getFareClassCode(), afdQuery.getFareType(), afdQuery.getSeason(), afdQuery.getDayOfWeekType(), afdQuery.getOwrt(), afdQuery.getRoutingNo(), afdQuery.getFootnote(), afdQuery.getEffectiveDate(), afdQuery.getDiscontinueDate(),
+                			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afdQuery.getOriginCity(), "C", afdQuery.getDestinationCity(), afdQuery.getFareClassCode(), afdQuery.getFareType(), afdQuery.getSeason(), afdQuery.getDayOfWeekType(), afdQuery.getOwrt(), afdQuery.getRoutingNo(), afdQuery.getFootnote(), afdQuery.getFocusDate(),
                 					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getFareClass(), record2.getFareType(), record2.getSeasonType(), record2.getDayOfWeekType(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
                         	
                     		if (matched) {

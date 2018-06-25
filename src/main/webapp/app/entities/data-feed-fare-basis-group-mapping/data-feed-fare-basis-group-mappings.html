@@ -1,0 +1,290 @@
+<div>
+	
+	<div class="content-title">
+		<h2>Data Feed Administration</h2>
+		<jhi-alert></jhi-alert>
+	</div>
+	
+	<div class="panel">
+		<div class="panel-body">
+			<div class="tab-wrapper">
+				<div class="clearfix tab-body">
+					<ul class="clearfix nav-responsive nav nav-tabs">
+						<li ng-class="{active:vm.currentTabFareBasis}"><a
+							ng-click="vm.selectDataFeedTab('fareBasis')">Fare Basis Group
+								Mappings</a></li>
+						<li ng-class="{active:vm.currentTabCityCodes}"><a
+							ng-click="vm.selectDataFeedTab('cityCodes')">City Codes to
+								Airport Codes</a></li>
+						<li ng-class="{active:vm.currentTabPublishedFare}"><a
+							ng-click="vm.selectDataFeedTab('publishedFare')">Published Fare
+								Commission Rates</a></li>
+						<li ng-class="{active:vm.currentTabSignificant}"><a
+							ng-click="vm.selectDataFeedTab('significant')">Significant ODs
+						</a></li>
+					</ul>
+					<div class="tab-content">
+						<div ng-class="{active:vm.currentTabFareBasis}" class="tab-pane"
+							id="fareBasis">
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-md-12 no-pad text-right">
+						                <button class="btn btn-default"
+											ui-sref="data-feed-fare-basis-group-mapping.new">
+											<span>
+												Create new Data Feed Fare Basis Group Mapping 
+											</span>
+										</button>
+						            </div>
+								</div>
+							</div>
+							<br />
+							<div class="table-responsive">
+								<table class="jh-table table table-striped">
+									<thead>
+										<tr>
+											<th><span>ID</span></th>
+											<th><span>Origin City</span></th>
+											<th><span>Origin Country</span></th>
+											<th><span>Destination City</span></th>
+											<th><span>Destination Country</span></th>
+											<th><span>Rbd</span></th>
+											<th><span>Fare Basis Code</span></th>
+											<th><span>Fare Basis Group</span></th>
+											<th><span>Priority</span></th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr
+											ng-repeat="dataFeedFareBasisGroupMapping in vm.dataFeedFareBasisGroupMappings track by dataFeedFareBasisGroupMapping.id">
+											<td><a
+												ui-sref="data-feed-fare-basis-group-mapping-detail({id:dataFeedFareBasisGroupMapping.id})">{{dataFeedFareBasisGroupMapping.id}}</a></td>
+											<td>{{dataFeedFareBasisGroupMapping.originCity}}</td>
+											<td>{{dataFeedFareBasisGroupMapping.originCountry}}</td>
+											<td>{{dataFeedFareBasisGroupMapping.destinationCity}}</td>
+											<td>{{dataFeedFareBasisGroupMapping.destinationCountry}}</td>
+											<td>{{dataFeedFareBasisGroupMapping.rbd}}</td>
+											<td>{{dataFeedFareBasisGroupMapping.fareBasisCode}}</td>
+											<td>{{dataFeedFareBasisGroupMapping.fareBasisGroup}}</td>
+											<td>{{dataFeedFareBasisGroupMapping.priority}}</td>
+											<td class="text-right">
+												<div class="btn-group flex-btn-group-container">
+													<button type="submit"
+														ui-sref="data-feed-fare-basis-group-mapping-detail({id:dataFeedFareBasisGroupMapping.id})"
+														class="btn btn-info btn-sm linkClick">
+														<span class="glyphicon glyphicon-eye-open"></span> <span
+															class="hidden-sm-down"></span>
+													</button>
+													<button type="submit"
+														ui-sref="data-feed-fare-basis-group-mapping.edit({id:dataFeedFareBasisGroupMapping.id})"
+														class="btn btn-primary btn-sm">
+														<span class="glyphicon glyphicon-pencil"></span> <span
+															class="hidden-sm-down"></span>
+													</button>
+													<button type="submit"
+														ui-sref="data-feed-fare-basis-group-mapping.delete({id:dataFeedFareBasisGroupMapping.id})"
+														class="btn btn-danger btn-sm">
+														<span class="glyphicon glyphicon-remove-circle"></span> <span
+															class="hidden-sm-down"></span>
+													</button>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						
+						<div ng-class="{active:vm.currentTabCityCodes}" class="tab-pane"
+							id="cityCodes">
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-md-12 no-pad text-right">
+						                <button class="btn btn-default" ng-click="vm.addCity()">
+											<span>
+												Create new City Codes to Airport Codes
+											</span>
+										</button>
+						            </div>
+								</div>
+							</div>
+							<br />
+							<div class="table-responsive">
+								<table class="jh-table table table-striped">
+									<thead>
+										<tr>
+											<th><span>ID</span></th>
+											<th><span>City Code</span></th>
+											<th><span>Airport Code</span></th>
+											<th><span>Country</span></th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr
+											ng-repeat="airportMapingDataFeeds in vm.airportMapingDataFeeds track by airportMapingDataFeeds.id">
+											<td><a
+												ui-sref="city-codes-to-airport-codes-detail({id:airportMapingDataFeeds.id})">{{airportMapingDataFeeds.id}}</a></td>
+											<td>{{airportMapingDataFeeds.cityCode}}</td>
+											<td>{{airportMapingDataFeeds.airportCode}}</td>
+											<td>{{airportMapingDataFeeds.countryCode}}</td>
+											<td class="text-right">
+												<div class="btn-group flex-btn-group-container">
+													<button type="submit"
+														ui-sref="city-codes-to-airport-codes-detail({id:airportMapingDataFeeds.id})"
+														class="btn btn-info btn-sm linkClick">
+														<span class="glyphicon glyphicon-eye-open"></span> <span
+															class="hidden-sm-down"></span>
+													</button>
+													<button type="submit"
+														ng-click="vm.editCity(airportMapingDataFeeds.id)"
+														class="btn btn-primary btn-sm">
+														<span class="glyphicon glyphicon-pencil"></span> <span
+															class="hidden-sm-down"></span>
+													</button>
+													<button type="submit"
+														ng-click="vm.deleteCity(airportMapingDataFeeds.id)"
+														class="btn btn-danger btn-sm">
+														<span class="glyphicon glyphicon-remove-circle"></span> <span
+															class="hidden-sm-down"></span>
+													</button>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div ng-class="{active:vm.currentTabPublishedFare}" class="tab-pane"
+							id="publishedFare">
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-md-12 no-pad text-right">
+						                <button class="btn btn-default" ng-click="vm.addPublished()">
+											<span>
+												Create new Published Fare Commission Rates
+											</span>
+										</button>
+						            </div>
+								</div>
+							</div>
+							<br />
+							<div class="table-responsive">
+								<table class="jh-table table table-striped">
+									<thead>
+										<tr>
+											<th><span>ID</span></th>
+											<th><span>POS Country</span></th>
+											<th><span>Travel Date From</span></th>
+											<th><span>Travel Date To</span></th>
+											<th><span>Rate</span></th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr
+											ng-repeat="publishedFareCommissionRates in vm.publishedFareCommissionRates track by publishedFareCommissionRates.id">
+											<td><a
+												ui-sref="published-fare-commission-rates-detail({id:publishedFareCommissionRates.id})">{{publishedFareCommissionRates.id}}</a></td>
+											<td>{{publishedFareCommissionRates.posCountry}}</td>
+											<td>{{publishedFareCommissionRates.travelDateFrom}}</td>
+											<td>{{publishedFareCommissionRates.travelDateTo}}</td>
+											<td>{{publishedFareCommissionRates.rate}}</td>
+											<td class="text-right">
+												<div class="btn-group flex-btn-group-container">
+													<button type="submit"
+														ui-sref="published-fare-commission-rates-detail({id:publishedFareCommissionRates.id})"
+														class="btn btn-info btn-sm linkClick">
+														<span class="glyphicon glyphicon-eye-open"></span> <span
+															class="hidden-sm-down"></span>
+													</button>
+													<button type="submit"
+														ng-click="vm.editPublished(publishedFareCommissionRates.id)"
+														class="btn btn-primary btn-sm">
+														<span class="glyphicon glyphicon-pencil"></span> <span
+															class="hidden-sm-down"></span>
+													</button>
+													<button type="submit"
+														ng-click="vm.deletePublished(publishedFareCommissionRates.id)"
+														class="btn btn-danger btn-sm">
+														<span class="glyphicon glyphicon-remove-circle"></span> <span
+															class="hidden-sm-down"></span>
+													</button>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div ng-class="{active:vm.currentTabSignificant}" class="tab-pane"
+							id="significant">
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-md-12 no-pad text-right">
+						                <button class="btn btn-default" ng-click="vm.addOrigin()">
+											<span>
+												Create new Origin Destination
+											</span>
+										</button>
+						            </div>
+								</div>
+							</div>
+							<br />
+							<div class="table-responsive">
+								<table class="jh-table table table-striped">
+									<thead>
+										<tr>
+											<th><span>ID</span></th>
+											<th><span>Orig. City</span></th>
+											<th><span>Dest. City</span></th>
+											<th><span>Orig. Airport</span></th>
+											<th><span>Dest. Airport</span></th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr
+											ng-repeat="originDestination in vm.originDestination track by originDestination.id">
+											<td><a
+												ui-sref="origin-destination-detail({id:originDestination.id})">{{originDestination.id}}</a></td>
+											<td>{{originDestination.origCity}}</td>
+											<td>{{originDestination.destCity}}</td>
+											<td>{{originDestination.origAirport}}</td>
+											<td>{{originDestination.destAirport}}</td>
+											<td class="text-right">
+												<div class="btn-group flex-btn-group-container">
+													<button type="submit"
+														ui-sref="origin-destination-detail({id:originDestination.id})"
+														class="btn btn-info btn-sm linkClick">
+														<span class="glyphicon glyphicon-eye-open"></span> <span
+															class="hidden-sm-down"></span>
+													</button>
+													<button type="submit"
+														ng-click="vm.editOrigin(originDestination.id)"
+														class="btn btn-primary btn-sm">
+														<span class="glyphicon glyphicon-pencil"></span> <span
+															class="hidden-sm-down"></span>
+													</button>
+													<button type="submit"
+														ng-click="vm.deleteOrigin(originDestination.id)"
+														class="btn btn-danger btn-sm">
+														<span class="glyphicon glyphicon-remove-circle"></span> <span
+															class="hidden-sm-down"></span>
+													</button>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--  end of tab wrapper -->
+		</div>
+	</div>
+	
+</div>

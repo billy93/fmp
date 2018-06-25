@@ -1,0 +1,51 @@
+
+<div>
+    <h2><span>Data Feed Fare Basis Group Mapping</span> {{vm.dataFeedFareBasisGroupMapping.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span>Origin City</span></dt>
+        <dd>
+            <span>{{vm.dataFeedFareBasisGroupMapping.originCity}}</span>
+        </dd>
+        <dt><span>Origin Country</span></dt>
+        <dd>
+            <span>{{vm.dataFeedFareBasisGroupMapping.originCountry}}</span>
+        </dd>
+        <dt><span>Destination City</span></dt>
+        <dd>
+            <span>{{vm.dataFeedFareBasisGroupMapping.destinationCity}}</span>
+        </dd>
+        <dt><span>Destination Country</span></dt>
+        <dd>
+            <span>{{vm.dataFeedFareBasisGroupMapping.destinationCountry}}</span>
+        </dd>
+        <dt><span>Rbd</span></dt>
+        <dd>
+            <span>{{vm.dataFeedFareBasisGroupMapping.rbd}}</span>
+        </dd>
+        <dt><span>Fare Basis Code</span></dt>
+        <dd>
+            <span>{{vm.dataFeedFareBasisGroupMapping.fareBasisCode}}</span>
+        </dd>
+        <dt><span>Fare Basis Group</span></dt>
+        <dd>
+            <span>{{vm.dataFeedFareBasisGroupMapping.fareBasisGroup}}</span>
+        </dd>
+        <dt><span>Priority</span></dt>
+        <dd>
+            <span>{{vm.dataFeedFareBasisGroupMapping.priority}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            ui-sref="{{ vm.previousState }}"
+            class="btn btn-back linkClick">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button" ui-sref="data-feed-fare-basis-group-mapping-detail.edit({id:vm.dataFeedFareBasisGroupMapping.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-sm-down"> Edit</span>
+    </button>
+</div>

@@ -64,8 +64,28 @@ public class DateUtil {
 		Date result = null;
 		
 		try {
-			result = (Date) date;
+			Date paramDate = (Date) date;
+			
+			Calendar calendar = Calendar.getInstance();
+			calendar.set(Calendar.HOUR_OF_DAY, 0);
+			calendar.set(Calendar.MINUTE, 0);
+			calendar.set(Calendar.SECOND, 0);
+			calendar.set(Calendar.MILLISECOND, 0);
+			calendar.setTime(paramDate);
+			
+			result = calendar.getTime();
 		} catch (Exception e) {
+		}
+		
+		if (result == null) {
+			try {
+				String dateString = date.toString();
+				if (dateString.contains("T") && dateString.contains("+")) {
+					String tempDate = dateString.substring(0, 10);
+					result = new SimpleDateFormat("yyyy-MM-dd").parse(tempDate);
+				}
+			} catch (Exception e) {
+			}
 		}
 		
 		return result;

@@ -1,13 +1,10 @@
 package com.atibusinessgroup.fmp.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.atibusinessgroup.fmp.domain.RoutingQuery;
-import com.atibusinessgroup.fmp.domain.dto.RoutingQueryParam;
-import com.atibusinessgroup.fmp.service.RoutingQueryService;
-import com.atibusinessgroup.fmp.web.rest.errors.BadRequestAlertException;
-import com.atibusinessgroup.fmp.web.rest.util.HeaderUtil;
-import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -16,13 +13,23 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import com.atibusinessgroup.fmp.domain.RoutingQuery;
+import com.atibusinessgroup.fmp.domain.dto.RoutingQueryParam;
+import com.atibusinessgroup.fmp.service.RoutingQueryService;
+import com.atibusinessgroup.fmp.web.rest.errors.BadRequestAlertException;
+import com.atibusinessgroup.fmp.web.rest.util.HeaderUtil;
+import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
+import com.codahale.metrics.annotation.Timed;
+
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing Routingquery.
@@ -101,6 +108,9 @@ public class RoutingQueryResource {
 //        Page<RoutingQuery> page = routingQueryService.findCustom(routingQueryParam, pageable);
         Page<RoutingQuery> page = routingQueryService.findCustomJoin(routingQueryParam, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/routingqueries");
+        for (RoutingQuery routingQuery : page.getContent()) {
+        	routingQuery = headerConditionalData(routingQuery);
+		}
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
@@ -114,38 +124,69 @@ public class RoutingQueryResource {
     @Timed
     public ResponseEntity<RoutingQuery> getRoutingquery(@PathVariable String id) {
         log.debug("REST request to get Routingquery : {}", id);
-        RoutingQuery routingquery = routingQueryService.findOne(id);
-        routingquery = routingQueryService.getFullRouteDetails(routingquery);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(routingquery));
+        RoutingQuery routingQuery = routingQueryService.findOne(id);
+        routingQuery = headerConditionalData(routingQuery);
+        routingQuery = routingQueryService.getFullRouteDetails(routingQuery);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(routingQuery));
     }
     
     /**
-	 * GET /rule-queries/rules : get rule query rules.
+	 * GET /routingqueries/details : get detail maps of routingquery.
 	 *
-	 * @return the ResponseEntity with status 200 (OK) and the list of rules in body
+	 * @return the ResponseEntity with status 200 (OK) and the detail maps in body
 	 */
 	@GetMapping("/routingqueries/details")
 	@Timed
-	public ResponseEntity<ArrayList<ArrayList<String>>> getRouteDetails(RoutingQuery routingquery) {
+	public ResponseEntity<String[][]> getRouteDetails(RoutingQuery routingquery) {
 		log.debug("REST request to routing query details: {}", routingquery);
 
-		ArrayList<ArrayList<String>> routeDetails = routingQueryService.getRouteDetails(routingquery);
+		String[][] routeDetails = routingQueryService.getRouteDetails(routingquery);
 
 		return new ResponseEntity<>(routeDetails, HttpStatus.OK);
 	}
 	
 	/**
-	 * GET /rule-queries/rules : get rule query rules.
-	 *
-	 * @return the ResponseEntity with status 200 (OK) and the list of rules in body
-	 */
-	@GetMapping("/routingqueries/fulldetails")
-	@Timed
-	public ResponseEntity<RoutingQuery> getFullRouteDetails(RoutingQuery routingquery) {
-		log.debug("REST request to routing query full details: {}", routingquery);
-
-		routingquery = routingQueryService.getFullRouteDetails(routingquery);
-
-		return new ResponseEntity<>(routingquery, HttpStatus.OK);
-	}
+     * GET  /routingqueries/:id : get the "id" routingquery.
+     *
+     * @param id the id of the routingquery to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the routingquery, or with status 404 (Not Found)
+     */
+	@GetMapping("/routingqueries/getmaps/{tarno}/{crx}/{rtg}")
+    @Timed
+    public ResponseEntity<String[][]> getMaps(@PathVariable String tarno, @PathVariable String crx, @PathVariable String rtg) {
+        log.debug("REST request to get maps : tarno : "+tarno+", crx "+crx+", rtg "+rtg);
+        RoutingQueryParam routingQueryParam = new RoutingQueryParam();
+        routingQueryParam.setTarNo(tarno);
+        routingQueryParam.setCarrier(crx);
+        routingQueryParam.setRoutingNo(rtg);
+        
+        RoutingQuery routingquery = routingQueryService.findOneCustom(routingQueryParam);
+        String[][] detailMaps = null;
+        if(routingquery != null) {
+        	detailMaps = routingQueryService.getRouteDetails(routingquery);
+        }
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(detailMaps));
+    }
+    
+    private RoutingQuery headerConditionalData(RoutingQuery routingQuery) {
+    	if(routingQuery.getDiscontinuedDate().equals("indef")) routingQuery.setDiscontinuedDate("None");
+    	
+    	if(routingQuery.getDrv().equals("")) routingQuery.setDrv("Does Not Apply");
+    	else if(routingQuery.getDrv().equals("1")) routingQuery.setDrv("Does Apply");
+    	else routingQuery.setDrv("Any Online Point Allowed");
+    	
+    	if(routingQuery.getCpi().equals("")) routingQuery.setCpi("Does Not Apply");
+    	else routingQuery.setCpi("Does Apply");
+    	
+    	if(routingQuery.getDi().equals("")) routingQuery.setDi("Read in Either Direction");
+    	else routingQuery.setDi("Read Left to Right");
+    	
+    	if(routingQuery.getIntPt().equals("")) routingQuery.setIntPt("Must match to entry/exit points");
+    	else routingQuery.setIntPt("Must match to entry/exit or intermediate points");
+    	
+    	if(routingQuery.getUntPt().equals("")) routingQuery.setUntPt("Validate ticketed points only");
+    	else routingQuery.setUntPt("Validate ticketed and unticketed points");
+    	
+    	return routingQuery;
+    }
 }

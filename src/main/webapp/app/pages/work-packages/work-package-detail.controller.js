@@ -20,8 +20,8 @@
      * @param Clipboard
      * @returns
      */
-    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities', 'states', 'cityGroups', 'Currency', 'atpcoFareTypes'];
-    function WorkPackageDetailController($window, $sce, currencies,tariffNumber, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups, Currency, atpcoFareTypes) {
+    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber','tariffNumberAddOn', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities', 'states', 'cityGroups', 'Currency', 'atpcoFareTypes', 'ClipboardSheet', 'Clipboard'];
+    function WorkPackageDetailController($window, $sce, currencies,tariffNumber,tariffNumberAddOn, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups, Currency, atpcoFareTypes, ClipboardSheet, Clipboard) {
     	var vm = this;
 
     	window.onbeforeunload = function () {
@@ -59,6 +59,7 @@
         vm.account = null;
         vm.workPackage = entity;
         vm.tariffNumber = tariffNumber;
+        vm.tariffNumberAddOn = tariffNumberAddOn;
         vm.cities = cities;
         vm.states = states;
         vm.cityGroups = cityGroups;
@@ -69,7 +70,7 @@
         $scope.dateformat = "yyyy-MM-dd";
         vm.optionFare = fareTypes;
         vm.atpcoFareTypes = atpcoFareTypes;
-                      
+                           
         
         vm.businessArea = {};
         for(var x=0;x<businessAreas.length;x++){
@@ -215,13 +216,13 @@
         	},
         	{
         		name:"tarno",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["HO", "DISTRIBUTION"]
         	},
         	{
         		name:"tarcd",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["HO", "DISTRIBUTION"]
         	},
         	{
         		name:"origin",
@@ -235,43 +236,43 @@
         	},
         	{
         		name:"farebasis",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["HO", "DISTRIBUTION"]
         	},
         	{
         		name:"bookingClass",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:["HO"]
         	},
         	{
         		name:"cabin",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	{
         		name:"typeOfJourney",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	{
         		name:"footnote",
-        		editable:["HO", "Distribution"],
+        		editable:["HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"rtgno",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["DISTRIBUTION"]
         	},
         	{
         		name:"ruleno",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["DISTRIBUTION"]
         	},
         	{
         		name:"currency",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	{
         		name:"amount",
@@ -299,37 +300,37 @@
         	},
         	{
         		name:"travelStartDate",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"travelEndDate",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"saleStartDate",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"saleEndDate",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"comment",
-        		editable:["LSO", "HO", "Distribution", "Route Management"],
+        		editable:["LSO", "HO", "DISTRIBUTION", "ROUTE_MANAGEMENT"],
         		mandatory:[]
         	},
         	{
         		name:"travelComplete",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"travelIndicator",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
@@ -359,92 +360,92 @@
         	},
         	{
         		name:"addonFareTarno",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["DISTRIBUTION"]
         	},
         	{
         		name:"addonFareTarcd",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["DISTRIBUTION"]
         	},
         	{
         		name:"addonFareOrigin",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	{
         		name:"addonFareDestination",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	{
         		name:"addonFareBucket",
-        		editable:["HO", "Distribution"],
-        		mandatory:["Distribution"]
+        		editable:["HO", "DISTRIBUTION"],
+        		mandatory:["DISTRIBUTION"]
         	},
         	{
         		name:"addonFareTypeOfJourney",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO","Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO","DISTRIBUTION"]
         	},
         	{
         		name:"addonFareFootnote",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"addonFareZone",
-        		editable:["HO", "Distribution"],
-        		mandatory:["Distribution"]
+        		editable:["HO", "DISTRIBUTION"],
+        		mandatory:["DISTRIBUTION"]
         	},
         	{
         		name:"addonFareRtgno",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["DISTRIBUTION"]
         	},
         	{
         		name:"addonFareCurrency",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	{
         		name:"addonFareAmount",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:["LSO", "HO"]
         	},
         	{
         		name:"addonFareTravelStartDate",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"addonFareTravelEndDate",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"addonFareSaleStartDate",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"addonFareSaleEndDate",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"addonFareComment",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"addonFareTravelComplete",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"addonFareTravelIndicator",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	
@@ -466,8 +467,8 @@
         	},
         	{
         		name:"discountAccountCode",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	
         	//DISCOUNT FARE
@@ -478,45 +479,45 @@
         	},
         	{
         		name:"discountTariffCode",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["HO", "DISTRIBUTION"]
         	},
         	{
         		name:"discountLoc1Type",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	
         	{
         		name:"discountLoc1",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	{
         		name:"discountLoc2Type",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	
         	{
         		name:"discountLoc2",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["LSO", "HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
         	
         	{
         		name:"discountBaseFareBasis",
-        		editable:["LSO", "HO", "Distribution"],
-        		mandatory:["HO", "Distribution"]
+        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		mandatory:["HO", "DISTRIBUTION"]
         	},
         	{
         		name:"discountBaseRuleno",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountBaseTariffCode",
-        		editable:["LSO", "HO", "Distribution"],
+        		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
@@ -526,7 +527,7 @@
         	},
         	{
         		name:"discountPercentageOfBaseFare",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[],
         		mandatoryExtraCondition:[
         			{
@@ -541,12 +542,12 @@
         	},
         	{
         		name:"discountFareCurrency",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountSpecifiedAmount",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[],
         		mandatoryExtraCondition:[
         			{
@@ -557,93 +558,93 @@
         	},
         	{
         		name:"discountPaxType",
-        		editable:["LSO", "HO",  "Distribution"],
-        		mandatory:["LSO", "HO",  "Distribution"]
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
+        		mandatory:["LSO", "HO",  "DISTRIBUTION"]
         	},
         	{
         		name:"discountFareFareType",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountTicketCode",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	
         	{
         		name:"discountTicketDesignator",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountBaseFareOwRt",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountGlobal",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountRtgno",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountRtgnoTarno",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountNewFarebasis",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountNewBaseFareOwRt",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountNewBookingCode",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountTravelStartDate",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountTravelEndDate",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountSaleStartDate",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountSaleEndDate",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountComment",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountTravelComplete",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	{
         		name:"discountTravelCompleteIndicator",
-        		editable:["LSO", "HO",  "Distribution"],
+        		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
         	
@@ -875,7 +876,7 @@
         	},
         	{
         		name:"waiverCalculatedPn",
-        		editable:[],
+        		editable:["LSO", "HO"],
         		mandatory:["LSO", "HO"]
         	},
         	{
@@ -1014,7 +1015,7 @@
 	    }
         
         //GENERATE TOUR CODE
-        vm.generateTourCode = function(workPackageSheet){
+        vm.generateTourCode = function(workPackageSheet, type){
         	$uibModal.open({
                 templateUrl: 'app/pages/work-packages/work-package-generate-tourcode-dialog.html',
                 controller: 'WorkPackageGenerateTourcodeDialogController',
@@ -1028,7 +1029,7 @@
                 	}
                 }
 			}).result.then(function(option) {
-				workPackageSheet.approvalReference = option.tourcode;		        			    			
+				workPackageSheet.approvalReference = option.tourcode;	
             }, function() {
         			
             });
@@ -1090,30 +1091,33 @@
         	}
         };
         
-        vm.addTab = function(option){
+        vm.addTab = function(option, fares){
         	if(option.type == 'Fares'){
+        		if(!vm.workPackage.specifiedFares){
+        			vm.workPackage.fareSheet = [];
+        		}
         		vm.workPackage.specifiedFares = true;
-        		vm.workPackage.fareSheet.push({specifiedFaresName:option.name, fareType:option.fareType, fares:[]});
+        		vm.workPackage.fareSheet.push({specifiedFaresName:option.name, fareType:option.fareType, fares:fares});
         		vm.selectTab(vm.workPackage.fareSheet.length-1);
         	}
         	else if(option.type == 'Market Fares'){
         		vm.workPackage.marketFares = true;
-        		vm.workPackage.marketFareSheet.push({marketFaresName:option.name, marketFareType:option.fareType});
+        		vm.workPackage.marketFareSheet.push({marketFaresName:option.name, fareType:option.fareType, fares:fares});
         		vm.selectMarketTab(vm.workPackage.marketFareSheet.length-1);
         	}
         	else if(option.type == 'Waiver Fares'){
         		vm.workPackage.waiverFares = true;
-        		vm.workPackage.waiverFareSheet.push({waiverFaresName:option.name, waiverFareType:option.fareType});
+        		vm.workPackage.waiverFareSheet.push({waiverFaresName:option.name, waiverFareType:option.fareType, fares:fares});
         		vm.selectWaiverTab(vm.workPackage.waiverFareSheet.length-1);
         	}
         	else if(option.type == 'Discount Fares'){
-        		vm.workPackage.discountFares = true;
-        		vm.workPackage.discountFareSheet.push({discountFaresName:option.name, discountFareType:option.fareType});
+        		vm.workPackage.discount = true;
+        		vm.workPackage.discountFareSheet.push({discountFaresName:option.name, discountFareType:option.fareType, fares:fares});
         		vm.selectDiscountTab(vm.workPackage.discountFareSheet.length-1);
         	}
         	else if(option.type == 'Add-Ons'){
         		vm.workPackage.addon = true;
-        		vm.workPackage.addonFareSheet.push({addonFaresName:option.name});
+        		vm.workPackage.addonFareSheet.push({addonFaresName:option.name, fares:fares});
         		vm.selectAddonTab(vm.workPackage.addonFareSheet.length-1);
         	}
         	else if(option.type == 'Attachment'){
@@ -1124,6 +1128,39 @@
         		vm.workPackage.filingInstruction = true;
         		vm.selectOtherTab('filingInstruction');
         	}
+        	
+        	
+
+            if(vm.workPackage.fareSheet.length > 0){
+              	for(var x=0;x<vm.workPackage.fareSheet.length;x++){
+              		vm.changeVersion(vm.workPackage.fareSheet[x], 'current'); 
+              	}
+              }
+              
+              if(vm.workPackage.addonFareSheet.length > 0){
+              	for(var x=0;x<vm.workPackage.addonFareSheet.length;x++){
+              		vm.changeVersion(vm.workPackage.addonFareSheet[x], 'current'); 
+              	}
+              }
+              
+              if(vm.workPackage.marketFareSheet.length > 0){
+              	for(var x=0;x<vm.workPackage.marketFareSheet.length;x++){
+              		vm.changeVersion(vm.workPackage.marketFareSheet[x], 'current');                	
+              	}
+              }
+              
+              
+              if(vm.workPackage.discountFareSheet.length > 0){
+              	for(var x=0;x<vm.workPackage.discountFareSheet.length;x++){
+              		vm.changeVersion(vm.workPackage.discountFareSheet[x], 'current');
+              	}
+              }
+              
+              if(vm.workPackage.waiverFareSheet.length > 0){
+              	for(var x=0;x<vm.workPackage.waiverFareSheet.length;x++){
+              		vm.changeVersion(vm.workPackage.waiverFareSheet[x], 'current');
+              	}
+              }
         };
         
         vm.removeTab = function(){
@@ -1258,10 +1295,20 @@
         if(vm.workPackage.discount){
         	vm.currentDiscountTab[0] = true;
         }
+        
+//        vm.selectTab = function(index){
+//        	vm.resetTab(); 
+//        	if(vm.workPackage.fareSheet.length > 0){
+//        		vm.currentTab[index] = true;
+//        	}
+//        };
         vm.selectDiscountTab = function(index){
-        	vm.resetTab();        	
-        	vm.currentDiscountTab[index] = true;
-        	vm.selectedDiscountTab = index;
+        	vm.resetTab();    
+        	if(vm.workPackage.discountFareSheet.length > 0){
+        		vm.currentDiscountTab[index] = true;
+        	}
+//        	vm.currentDiscountTab[index] = true;
+//        	vm.selectedDiscountTab = index;
         };
         
         vm.addDiscountTab = function(){
@@ -1413,13 +1460,14 @@
                     fareTypes: ['FareType', function(FareType) {
                         return FareType.getAll().$promise;
                     }],
+                    sheet: function(){
+                    	return null;
+                    }
                 }
 			}).result.then(function(option) {
-				console.log(option);
 				vm.addTab(option);
-
-//				GlobalService.sayHello();
-//			    GlobalService.boxHeader();
+				
+				
             }, function() {
         			
             });
@@ -1427,7 +1475,9 @@
         
         vm.copySheet = function(){
         	var findTab = false;
-        	
+        	var clipboardSheet = {
+    			//sheet: angular.copy(vm.workPackage.fareSheet[x])
+    		};
         	if(!findTab){
 	        	for(var x=0;x<vm.currentTab.length;x++){
 	        		if(vm.currentTab[x]){
@@ -1435,7 +1485,12 @@
 	        			findTab = true;
 	        			
 	        			var index = vm.workPackage.fareSheet.indexOf(x);
-	        			vm.workPackage.fareSheet.push(angular.copy(vm.workPackage.fareSheet[x]));
+//	        			vm.workPackage.fareSheet.push(angular.copy(vm.workPackage.fareSheet[x]));
+	        			console.log(vm.workPackage.fareSheet[x]);
+	        			if(vm.workPackage.fareSheet[x].fares != undefined && vm.workPackage.fareSheet[x].fares.length > 0){
+		        			clipboardSheet.sheet = angular.copy(vm.workPackage.fareSheet[x]);
+		        			clipboardSheet.type = "fares";
+	        			}
 	        			break;
 	        		}
 	        	}
@@ -1448,7 +1503,11 @@
 	        			findTab = true;
 	        			
 	        			var index = vm.workPackage.addonFareSheet.indexOf(x);
-	        			vm.workPackage.addonFareSheet.push(angular.copy(vm.workPackage.addonFareSheet[x]));
+//	        			vm.workPackage.addonFareSheet.push(angular.copy(vm.workPackage.addonFareSheet[x]));
+	        			if(vm.workPackage.addonFareSheet[x].fares.length > 0){
+		        			clipboardSheet.sheet = angular.copy(vm.workPackage.addonFareSheet[x]);
+		        			clipboardSheet.type = "addon";
+	        			}
 	        			break;
 	        		}
 	        	}
@@ -1461,32 +1520,113 @@
 	        			findTab = true;
 	        			
 	        			var index = vm.workPackage.marketFareSheet.indexOf(x);
-	        			vm.workPackage.marketFareSheet.push(angular.copy(vm.workPackage.marketFareSheet[x]));
+//	        			vm.workPackage.marketFareSheet.push(angular.copy(vm.workPackage.marketFareSheet[x]));
+	        			if(vm.workPackage.marketFareSheet[x].fares.length > 0){
+		        			clipboardSheet.sheet = angular.copy(vm.workPackage.marketFareSheet[x]);
+		        			clipboardSheet.type = "market";
+	        			}
 	        			break;
 	        		}
 	        	}
         	}
         	
         	if(!findTab){
+	        	for(var x=0;x<vm.currentDiscountTab.length;x++){
+	        		if(vm.currentDiscountTab[x]){
+	        			console.log('Active Discount Tab '+x);
+	        			findTab = true;
+	        			
+	        			var index = vm.workPackage.discountFareSheet.indexOf(x);
+//	        			vm.workPackage.discountFareSheet.push(angular.copy(vm.workPackage.discountFareSheet[x]));
+	        			if(vm.workPackage.discountFareSheet[x].fares.length > 0){			        		
+		        			clipboardSheet.sheet = angular.copy(vm.workPackage.discountFareSheet[x]);
+		        			clipboardSheet.type = "discount";
+	        			}
+	        			break;
+	        		}
+	        	}
+        	}
+        	
+        	if(!findTab){
+	        	for(var x=0;x<vm.currentWaiverTab.length;x++){
+	        		if(vm.currentWaiverTab[x]){
+	        			console.log('Active Waiver Tab '+x);
+	        			findTab = true;
+	        			
+	        			var index = vm.workPackage.waiverFareSheet.indexOf(x);
+//	        			vm.workPackage.waiverFareSheet.push(angular.copy(vm.workPackage.waiverFareSheet[x]));
+	        			if(vm.workPackage.waiverFareSheet[x].fares.length > 0){		
+		        			clipboardSheet.sheet = angular.copy(vm.workPackage.waiverFareSheet[x]);
+		        			clipboardSheet.type = "waiver";
+	        			}
+	        			break;
+	        		}
+	        	}
+        	}
+        	
+        	
+        	if(!findTab){
         		alert('Sheet cannot be copied');
+        	}
+        	else{
+        		if(clipboardSheet.sheet != null){
+	    			ClipboardSheet.copy(clipboardSheet, function(result){
+	    				alert('Sheet copied');
+	    			}, function(error){
+	    				alert('Error occured');
+	    			});
+        		}
+        		else{
+        			alert('Sheet cannot be copied');
+        		}
         	}
         };
         
         vm.removeSheet = function(){
-        	var removed = vm.removeTab();
-        	if(!removed){
-        		alert('Sheet cannot be deleted');
-        	}
-        	else{
-        		console.log(angular.element("#tabAtpco0"));
-        		
-//        		var result = document.getElementsByName("editFormATPCO");
-//        		console.log(result);
-//        		console.log(result[0].children[0].children[0].children[0].children[1].children[0].classList);
-//        		result[0].children[0].children[0].children[0].children[1].children[0].classList.add('active');
+        	if(vm.workPackage.reviewLevel != 'DISTRIBUTION'){
+	        	var removed = vm.removeTab();
+	        	if(!removed){
+	        		alert('Sheet cannot be deleted');
+	        	}
+	        	else{
+	        		alert('Sheet deleted');
+	        	}
         	}
         };
         //END SHEET FUNCTION
+        
+        vm.pasteSheet = function(){
+//        	alert('Paste Sheet');
+        	if(vm.workPackage.reviewLevel != 'DISTRIBUTION'){
+	        	$uibModal.open({
+	                templateUrl: 'app/pages/work-packages/work-package-add-sheet-dialog.html',
+	                controller: 'WorkPackageAddSheetDialogController',
+	                controllerAs: 'vm',
+	                backdrop: 'static',
+	                size: 'lg',
+	                windowClass: 'full-page-modal',
+	                resolve: {
+	                	workPackage: function(){
+	                		return vm.workPackage;
+	                	},
+	                    fareTypes: ['FareType', function(FareType) {
+	                        return FareType.getAll().$promise;
+	                    }],
+	                    sheet: function(){
+	                    	return ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
+	                    }
+	                }
+				}).result.then(function(option) {
+					var clipboardSheet = ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
+					clipboardSheet.then(function(result){
+						vm.addTab(option, result.sheet.fares);
+						alert('Paste Sheet Success');
+					});
+	            }, function() {
+	        			
+	            });
+        	}
+        };
         
         vm.faresActionButton = [];
         vm.addonFaresActionButton = [];
@@ -1620,19 +1760,93 @@
         }
         
  	    //Specific Fares Function
- 	    vm.addFares = function(fareSheet){ 	    	
+ 	    vm.addFares = function(fareSheet){ 	 
+ 	    	console.log("ADD FARES");
  	    	if(fareSheet.fares == null){
  	    		fareSheet.fares = [];
        	  	}
  	    	
     		fareSheet.fares.push({
+    			no:fareSheet.fares.length+1,
     			status:"PENDING",
-    			action:"New",
+    			action:"AUTO",
   	 	      	carrier:"GA"
     		});
  	    }
  	    
- 	    vm.searchReplace = function(fareSheet){
+ 	   function getDescendantProp (obj, desc) {
+ 		  var arr = desc.split('.');
+ 		  while (arr.length && (obj = obj[arr.shift()]));
+ 		  return obj;
+ 		}
+ 	   
+ 	   function sortBy(field, type) {
+ 		   if(type == 'asc'){
+	 		    return function(a, b) {
+	 		    	if(getDescendantProp(a, field) === null){
+ 			          return -1;
+ 			        }
+ 			        else if(getDescendantProp(b, field) === null){
+ 			          return 1;
+ 			        }
+ 			        else if (getDescendantProp(a, field) > getDescendantProp(b, field)) {
+	 		            return 1;
+	 		        } else if (getDescendantProp(a, field) < getDescendantProp(b, field)) {
+	 		            return -1;
+	 		        }
+	 		    	
+	 		        return 1;
+	 		    };
+ 		   } else if(type='desc'){
+ 			  return function(a, b) {
+ 				  	if(getDescendantProp(a, field) === null){
+ 			          return 1;
+ 			        }
+ 			        else if(getDescendantProp(b, field) === null){
+ 			          return -1;
+ 			        }
+ 			        else if (getDescendantProp(a, field) > getDescendantProp(b, field)) {
+	 		            return -1;
+	 		        } else if (getDescendantProp(a, field) < getDescendantProp(b, field)) {
+	 		            return 1;
+	 		        }
+	 		        return 1;
+	 		    };
+ 		   }
+ 		}
+ 	  
+ 	    vm.sort = function(workPackageSheet, field){
+ 	    	if(workPackageSheet.sort == undefined){
+ 	 	    	workPackageSheet.sort = []; 	 	    		
+ 	    	}
+ 	    	if(workPackageSheet.sort[field] == undefined){
+ 	    		workPackageSheet.sort[field] = {asc:true}; 	    	
+ 	    	}
+ 	    	else{
+ 	    		workPackageSheet.sort[field].asc = !workPackageSheet.sort[field].asc;
+ 	    	} 	    
+ 	    	
+ 	    	workPackageSheet.currentSort = {field:field, asc:workPackageSheet.sort[field].asc};
+
+ 	    	if(field == '#'){
+ 	    		if(workPackageSheet.sort[field].asc){ 
+ 	    			workPackageSheet.fares.sort(sortBy('no', 'asc'));
+ 	    		}
+ 	    		else{
+ 	    			workPackageSheet.fares.sort(sortBy('no', 'desc'));
+ 	    		}
+ 	    	}
+ 	    	else{
+ 	    		if(workPackageSheet.sort[field].asc){ 	    			
+ 	    			workPackageSheet.fares.sort(sortBy(field, 'asc'));
+ 	    		}
+ 	    		else{
+ 	    			workPackageSheet.fares.sort(sortBy(field, 'desc')); 
+ 	    		}
+ 	    	}
+ 	    }
+ 	    
+ 	    vm.searchReplace = function(fareSheet, filter){
  	    	$uibModal.open({
 	            templateUrl: 'app/pages/work-packages/work-package-search-replace-dialog.html',
 	            controller: 'WorkPackageSearchReplaceDialogController',
@@ -1641,11 +1855,139 @@
 	            size: 'lg',
 	            windowClass: 'full-page-modal',
 	            resolve: {
-//	                entity: result.$promise,
-//	                fareSelected: vm.selectedFareDiscount
+	            	fareSheet: function(){
+	            		return fareSheet;
+	            	},
+	            	filter: function(){
+	            		if(filter != null)
+	            			return filter;
+	            		return null;
+	            	}
 	            }
- 	    	}).result.then(function(workPackage) {
-        	    
+ 	    	}).result.then(function(workPackageFareFilter) {
+ 	    		
+ 	    		function checkField(workPackageFareFilter, type, fare){
+ 	    			var listField = [
+    	    			workPackageFareFilter.no.check && workPackageFareFilter.no.search != null ? 'no' : null,
+    	    			workPackageFareFilter.status.check && workPackageFareFilter.status.search != null ? 'status' : null,
+    	    			workPackageFareFilter.tariffNumber.tarNo.check && workPackageFareFilter.tariffNumber.tarNo.search != null ? 'tariffNumber.tarNo' : null,
+    	    	    	workPackageFareFilter.tariffNumber.tarCd.check && workPackageFareFilter.tariffNumber.tarCd.search != null ? 'tariffNumber.tarCd' : null,
+    	    	    	workPackageFareFilter.tariffNumber.global.check && workPackageFareFilter.tariffNumber.global.search != null ? 'tariffNumber.global' : null,
+    	    			workPackageFareFilter.origin.check && workPackageFareFilter.origin.search != null ? 'origin' : null,
+    	    			workPackageFareFilter.destination.check && workPackageFareFilter.destination.search != null ? 'destination' : null,
+    	    			workPackageFareFilter.fareBasis.check && workPackageFareFilter.fareBasis.search != null ? 'fareBasis' : null,
+    	    			workPackageFareFilter.bookingClass.check && workPackageFareFilter.bookingClass.search != null ? 'bookingClass' : null,
+    	    	    	workPackageFareFilter.cabin.check && workPackageFareFilter.cabin.search != null ? 'cabin' : null,
+    	    	    	workPackageFareFilter.typeOfJourney.check && workPackageFareFilter.typeOfJourney.search != null ? 'typeOfJourney' : null,
+    	    	    	workPackageFareFilter.rtgno.check && workPackageFareFilter.rtgno.search != null ? 'rtgno' : null,
+    	    	    	workPackageFareFilter.ruleno.check && workPackageFareFilter.ruleno.search != null ? 'ruleno' : null,
+    	    	    	workPackageFareFilter.currency.check && workPackageFareFilter.currency.search != null ? 'currency' : null,
+    	    	    	workPackageFareFilter.amount.check && workPackageFareFilter.amount.search != null ? 'amount' : null,
+    	    	    	workPackageFareFilter.aif.check && workPackageFareFilter.aif.search != null ? 'aif' : null,
+    	    	    	workPackageFareFilter.travelStart.check && workPackageFareFilter.travelStart.search != null ? 'travelStart' : null,
+    	    	    	workPackageFareFilter.travelEnd.check && workPackageFareFilter.travelEnd.search != null ? 'travelEnd' : null,
+    	    	    	workPackageFareFilter.saleStart.check && workPackageFareFilter.saleStart.search != null ? 'saleStart' : null,
+    	    	    	workPackageFareFilter.saleEnd.check && workPackageFareFilter.saleEnd.search != null ? 'saleEnd' : null,
+    	    	    	workPackageFareFilter.travelComplete.check && workPackageFareFilter.travelComplete.search != null ? 'travelComplete' : null,
+    	    	    	workPackageFareFilter.travelCompleteIndicator.check && workPackageFareFilter.travelCompleteIndicator.search != null ? 'travelCompleteIndicator' : null,
+    	    	    	workPackageFareFilter.comment.check && workPackageFareFilter.comment.search != null ? 'comment' : null,
+    	    	    	workPackageFareFilter.ratesheetComment.check && workPackageFareFilter.ratesheetComment.search != null ? 'ratesheetComment' : null,
+    	    		];
+ 	    			
+ 	    			var found = false;
+ 	    			if(type == 'and'){
+	 	    			found = true;
+	 	    			for(var x=0;x<listField.length;x++){
+	 	    				if(listField[x] != null){
+	 	    					if(getDescendantProp(fare, listField[x]) != getDescendantProp(workPackageFareFilter, listField[x]+'.search')){
+//	 	    					if(fare[listField[x]] != workPackageFareFilter[listField[x]].search){
+	 	    						found = false;
+	 	    					}
+	 	    				}
+	 	    			}
+ 	    			}
+ 	    			else if(type == 'or'){
+ 	    				for(var x=0;x<listField.length;x++){
+	 	    				if(listField[x] != null){
+	 	    					if(getDescendantProp(fare, listField[x]) != getDescendantProp(workPackageFareFilter, listField[x]+'.search')){
+//	 	    					if(fare[listField[x]] == workPackageFareFilter[listField[x]].search){
+	 	    						found = true;
+	 	    					}
+	 	    				}
+	 	    			}
+ 	    			}
+ 	    			return found;
+ 	    		}
+ 	    		
+ 	    		function replaceField(workPackageFareFilter, fare){
+ 	    			var listField = [
+    	    			workPackageFareFilter.status.replace.check && workPackageFareFilter.status.replace.value != null ? 'status' : null
+    	    		];
+ 	    			
+ 	    			for(var x=0;x<listField.length;x++){
+ 	    				if(listField[x] != null){
+ 	    					fare[listField[x]] = workPackageFareFilter.status.replace.value;
+ 	    				}
+ 	    			}
+ 	    		}
+ 	    		
+    	    	var index = 0;
+    	    	if(!workPackageFareFilter.replaceAll){
+		    		if(workPackageFareFilter.index != null){
+		    			index = workPackageFareFilter.index;
+		    		}
+    	    	}
+	    		
+	    		for(var i = 0; i < fareSheet.fares.length; i++){
+	    			if(fareSheet.fares[i].field == null || fareSheet.fares[i].field == undefined){
+    					fareSheet.fares[i].field = {};
+    		    	}
+	    			fareSheet.fares[i].field['no'] =  false;
+	    		}
+	    		
+	    		var find = false;
+	    		
+	    		for(var i = index; i < fareSheet.fares.length; i++){
+	    			
+	    			if(fareSheet.fares[i].field == null || fareSheet.fares[i].field == undefined){
+    					fareSheet.fares[i].field = {};
+    		    	}
+	    			
+	    			fareSheet.fares[i].field['no'] =  false;
+	    			
+	    			if(checkField(workPackageFareFilter, workPackageFareFilter.andor, fareSheet.fares[i])){
+    					find = true;
+    					fareSheet.fares[i].field['no'] =  true;
+    					
+    					if(i+1 == fareSheet.fares.length){
+    						workPackageFareFilter.index = 0;
+    					}
+    					else{
+    						workPackageFareFilter.index = i+1;
+    					}
+    					
+    					if(workPackageFareFilter.replace){
+    						replaceField(workPackageFareFilter, fareSheet.fares[i]);
+    						break;
+    					}
+    					else if(workPackageFareFilter.replaceAll){
+    						replaceField(workPackageFareFilter, fareSheet.fares[i]);
+    					}
+    					else{
+	    					break;	    						
+    					}
+    				}    			
+	    		}
+	    		if(!find){
+	    			if(workPackageFareFilter.message == null){
+	    				workPackageFareFilter.message = "No Matches found, continue search at the beginning?";
+	    			}
+//	    			else{
+//	    				workPackageFareFilter.message = "No matches found";
+//	    			}
+	    		}
+	    		
+    	    	vm.searchReplace(fareSheet, workPackageFareFilter);        	    
             }, function() {
         			
             });
@@ -1986,14 +2328,19 @@
          
 	   vm.addAttachment = function(){
 		 	if(vm.workPackage.attachmentData == null){
-	        		vm.workPackage.attachmentData = [];
-	        	}
+	        	vm.workPackage.attachmentData = [];
+	        }
 	   		vm.workPackage.attachmentData.push({comment:""});
 	   }
 	   
 	   vm.removeAttachment = function(attachment){
-	  		 var index = vm.workPackage.attachmentData.indexOf(attachment);
-	  		vm.workPackage.attachmentData.splice(index, 1);  
+		   if(vm.workPackage.status != "NEW"){
+			   attachment.inOnly = false;
+			   attachment.isDeleted = true;
+		   }else{
+			 var index = vm.workPackage.attachmentData.indexOf(attachment);
+		  	 vm.workPackage.attachmentData.splice(index, 1); 
+		   }
 	  };
 	  
 	  vm.addMarketRules = function(){
@@ -2127,17 +2474,19 @@
 	  vm.approve = function(){
 		  var validated = true;
 		  var cekStatus = "";
-		  
-//		  console.log("REGULAR");
+		  var counterApprove = false;
+
 		  if(vm.workPackage.fareSheet != null && vm.workPackage.fareSheet.length > 0){
 			  for(var x=0;x<vm.workPackage.fareSheet.length;x++){
 				  if(vm.workPackage.fareSheet[x].fares != null && vm.workPackage.fareSheet[x].fares.length > 0){
+					  //vm.expandCityGroup(vm.workPackage.fareSheet[x]);
 					  for(var y=0;y<vm.workPackage.fareSheet[x].fares.length;y++){
-						  if(vm.workPackage.fareSheet[x].fares[y].status != "APPROVED"){
+						  if(vm.workPackage.fareSheet[x].fares[y].status == "APPROVED"){
+							  counterApprove = true;
+						  }
+						  if(vm.workPackage.fareSheet[x].fares[y].status == "" || vm.workPackage.fareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.fareSheet[x].fares[y].status;
 							  validated = false;
-//							  console.log("X : "+x+" | Y : "+y);
-//							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
 							  break;
 						  }
 					  }
@@ -2145,16 +2494,16 @@
 			  }
 		  }
 		  
-//		  console.log("DISCOUNT");
 		  if(vm.workPackage.discountFareSheet != null && vm.workPackage.discountFareSheet.length > 0){
 			  for(var x=0;x<vm.workPackage.discountFareSheet.length;x++){
 				  if(vm.workPackage.discountFareSheet[x].fares != null && vm.workPackage.discountFareSheet[x].fares.length > 0){
 					  for(var y=0;y<vm.workPackage.discountFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.discountFareSheet[x].fares[y].status != "APPROVED"){
+						  if(vm.workPackage.discountFareSheet[x].fares[y].status == "APPROVED"){
+							  counterApprove =true;
+						  }
+						  if(vm.workPackage.discountFareSheet[x].fares[y].status == "" || vm.workPackage.discountFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.discountFareSheet[x].fares[y].status;
 							  validated = false;
-//							  console.log("X : "+x+" | Y : "+y);
-//							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
 							  break;
 						  }
 					  }
@@ -2162,16 +2511,17 @@
 			  }
 		  }	
 		  
-//		  console.log("ADDON");
 		  if(vm.workPackage.addonFareSheet != null && vm.workPackage.addonFareSheet.length > 0){
 			  for(var x=0;x<vm.workPackage.addonFareSheet.length;x++){
 				  if(vm.workPackage.addonFareSheet[x].fares != null && vm.workPackage.addonFareSheet[x].fares.length > 0){
+					  //vm.expandCityGroup(vm.workPackage.addonFareSheet[x]);
 					  for(var y=0;y<vm.workPackage.addonFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.addonFareSheet[x].fares[y].status != "APPROVED"){
+						  if(vm.workPackage.addonFareSheet[x].fares[y].status == "APPROVED"){
+							  counterApprove =true;
+						  }
+						  if(vm.workPackage.addonFareSheet[x].fares[y].status == "" || vm.workPackage.addonFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.addonFareSheet[x].fares[y].status;
 							  validated = false;
-//							  console.log("X : "+x+" | Y : "+y);
-//							  console.log(vm.workPackage.addonFareSheet[x].fares[y].status);
 							  break;
 						  }
 					  }
@@ -2179,16 +2529,17 @@
 			  } 
 		  }	
 		  
-//		  console.log("MARKET");
 		  if(vm.workPackage.marketFareSheet != null && vm.workPackage.marketFareSheet.length > 0){
 			  for(var x=0;x<vm.workPackage.marketFareSheet.length;x++){
 				  if(vm.workPackage.marketFareSheet[x].fares != null && vm.workPackage.marketFareSheet[x].fares.length > 0){
+					  //vm.expandCityGroup(vm.workPackage.marketFareSheet[x]);
 					  for(var y=0;y<vm.workPackage.marketFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.marketFareSheet[x].fares[y].status != "APPROVED"){
+						  if(vm.workPackage.marketFareSheet[x].fares[y].status == "APPROVED"){
+							  counterApprove =true;
+						  }
+						  if(vm.workPackage.marketFareSheet[x].fares[y].status == "" || vm.workPackage.marketFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.marketFareSheet[x].fares[y].status;
 							  validated = false;
-//							  console.log("X : "+x+" | Y : "+y);
-//							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
 							  break;
 						  }
 					  }
@@ -2196,24 +2547,66 @@
 			  }
 		  }	
 		  
-//		  console.log("WAIVER");
 		  if(vm.workPackage.waiverFareSheet != null && vm.workPackage.waiverFareSheet.length > 0){
 			  for(var x=0;x<vm.workPackage.waiverFareSheet.length;x++){
 				  if(vm.workPackage.waiverFareSheet[x].fares != null && vm.workPackage.waiverFareSheet[x].fares.length > 0){
+					  //vm.expandCityGroup(vm.workPackage.waiverFareSheet[x]);
 					  for(var y=0;y<vm.workPackage.waiverFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.waiverFareSheet[x].fares[y].status != "APPROVED"){
+						  if(vm.workPackage.waiverFareSheet[x].fares[y].status == "APPROVED"){
+							  counterApprove =true;
+						  }
+						  if(vm.workPackage.waiverFareSheet[x].fares[y].status == "" || vm.workPackage.waiverFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.waiverFareSheet[x].fares[y].status;
 							  validated = false;
-//							  console.log("X : "+x+" | Y : "+y);
-//							  console.log(vm.workPackage.marketFareSheet[x].fares[y].status);
 							  break;
 						  }
 					  }
 				  }
 			  }
 		  }	
-		  
+		 
 		  if(validated){
+			  
+			  if(vm.workPackage.fareSheet != null && vm.workPackage.fareSheet.length > 0){
+				  for(var x=0;x<vm.workPackage.fareSheet.length;x++){
+					  if(vm.workPackage.fareSheet[x].fares != null && vm.workPackage.fareSheet[x].fares.length > 0){
+						  vm.expandCityGroup(vm.workPackage.fareSheet[x]);
+					  }
+				  }
+			  }
+			  
+			  if(vm.workPackage.discountFareSheet != null && vm.workPackage.discountFareSheet.length > 0){
+				  for(var x=0;x<vm.workPackage.discountFareSheet.length;x++){
+					  if(vm.workPackage.discountFareSheet[x].fares != null && vm.workPackage.discountFareSheet[x].fares.length > 0){
+						 
+					  }
+				  }
+			  }	
+			  
+			  if(vm.workPackage.addonFareSheet != null && vm.workPackage.addonFareSheet.length > 0){
+				  for(var x=0;x<vm.workPackage.addonFareSheet.length;x++){
+					  if(vm.workPackage.addonFareSheet[x].fares != null && vm.workPackage.addonFareSheet[x].fares.length > 0){
+						  vm.expandCityGroup(vm.workPackage.addonFareSheet[x]);
+					  }
+				  } 
+			  }	
+			  
+			  if(vm.workPackage.marketFareSheet != null && vm.workPackage.marketFareSheet.length > 0){
+				  for(var x=0;x<vm.workPackage.marketFareSheet.length;x++){
+					  if(vm.workPackage.marketFareSheet[x].fares != null && vm.workPackage.marketFareSheet[x].fares.length > 0){
+						  vm.expandCityGroup(vm.workPackage.marketFareSheet[x]);
+					  }
+				  }
+			  }	
+			  
+			  if(vm.workPackage.waiverFareSheet != null && vm.workPackage.waiverFareSheet.length > 0){
+				  for(var x=0;x<vm.workPackage.waiverFareSheet.length;x++){
+					  if(vm.workPackage.waiverFareSheet[x].fares != null && vm.workPackage.waiverFareSheet[x].fares.length > 0){
+						  vm.expandCityGroup(vm.workPackage.waiverFareSheet[x]);
+					  }
+				  }
+			  }	
+			  
 			  $uibModal.open({
 	              templateUrl: 'app/pages/work-packages/work-package-approve-email-dialog.html',
 	              controller: 'WorkPackageApproveEmailDialogController',
@@ -2262,6 +2655,18 @@
 		    			$state.go('work-package');
 		    		}, function(){
 		    			alert('Refer Back Failed');
+		    		});
+		    } else {
+		    }
+	  };
+	  
+	  vm.complete = function(){
+		    if (confirm("Are you sure to Complete this workorder?")) {
+		    		WorkPackage.complete(vm.workPackage, function(){
+		    			alert('Complete Success');
+		    			$state.go('work-package');
+		    		}, function(){
+		    			alert('Complete Failed');
 		    		});
 		    } else {
 		    }
@@ -2324,7 +2729,7 @@
 	      var data = result;
     	      
 	      data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
-          data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+          data.newCreatedDate = DateUtils.convertDateTimeFromServer(data.createdDate);
           data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
           data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
           data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
@@ -2332,8 +2737,9 @@
           data.saleDate = DateUtils.convertDateTimeFromServer(data.saleDate);
           
           if(data.fareSheet.length > 0){
-          	for(var x=0;x<data.fareSheet.length;x++){
+          	for(var x=0;x<data.fareSheet.length;x++){          		
           		var fares = data.fareSheet[x].fares;
+          		
           		for(var y=0;y<fares.length;y++){
               		if(fares[y] != null){
               			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
@@ -3799,7 +4205,7 @@
       vm.mapWorkpackage = function(result){
     	  data = result;
   	  	  data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
-          data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+          data.newCreatedDate = DateUtils.convertDateTimeFromServer(data.createdDate);
           data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
           data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
           data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
@@ -4082,6 +4488,7 @@
           if ($file) {
               DataUtils.toBase64($file, function(base64Data) {
                   $scope.$apply(function() {
+                	  testing.fileName = $file.name;
                       testing.file = base64Data;
                       testing.fileContentType = $file.type;
                   });
@@ -4113,7 +4520,7 @@
     	  	vm.commentString = null;
     	  	$(document).ready(function(){
                 var _width = $('.comment-wrapper').outerWidth();
-	              $('.comment-list').css({ 'width': 'calc(100% + ' + _width+ 'px)' });
+	              $('.comment-list').css('min-width',_width)
 	        });
     	 }
 	  	
@@ -4125,30 +4532,62 @@
      };
       
       
+     
+      
+     vm.isFilingInstructionCollapse = true;
+     
+      vm.expandCommentFillingInstruction = function(){
+    	  vm.isFilingInstructionCollapse = false;
+      }
+      
+      vm.collapseCommentFillingInstruction = function(){
+    	  vm.isFilingInstructionCollapse = true;
+      }
       vm.addCommentFillingInstruction = function() {
- 	  	 	if (vm.commentStringFillingInstruction != null) {
+	  	 	if (vm.commentStringFillingInstruction != null) {
 	 	  		 if (vm.workPackage.filingInstructionData == null) {
 	 	      		vm.workPackage.filingInstructionData = [];
 	 	  		 }
 	 	    	  
 	 	  		 vm.workPackage.filingInstructionData.push({ 
-	     	  		status:"PENDING", tarno:"", cxr:"GA", comment:vm.commentStringFillingInstruction, file:"", fileContentType:"", isDeleted:false
+	     	  		status:"PENDING", tarno:"", cxr:"GA", comment:vm.commentStringFillingInstruction, file:"", fileContentType:"", isDeleted:false, username :vm.user.login,
+	     	  		createdTime :new Date()
 	 	  		 });
-	 	  		 
 	 	  		 vm.save();
-	 	  		 vm.commentStringFillingInstruction = null;
-	 	  		$(document).ready(function(){
+	 	  		 vm.commentStringFillingInstruction = null;	 	  		
+	 	  		 	 	  		
+	 	  		 $(document).ready(function(){
 	                var _width = $('.comment-wrapper').outerWidth();
-		              $('.comment-list').css({ 'width': 'calc(100% + ' + _width+ 'px)' });
+		              $('.comment-list').css('min-width',_width)
 		        });
- 	  	 	}
+	  	 	}
+     }
+     
+      vm.deleteCommentFillingInstruction = function(){
+    	 for(var l=0; l<vm.tempFIC.length; l++){
+    		 vm.tempFIC[l].isDeleted = true;
+    	 }
+    	 vm.save();
+      }
+      
+      vm.tempFIC = [];
+      vm.selectCommentFillingInstruction = function(data){
+    	  if(vm.tempFIC.indexOf(data) < 0){
+    		  vm.tempFIC.push(data);
+    	  }else{
+    		  for(var x = 0; x<vm.tempFIC.length; x++){
+    			  if(vm.tempFIC.indexOf(data) > -1){
+        			  vm.tempFIC.splice(vm.tempFIC.indexOf(data),1);    				  
+    			  }
+    		  }    		  
+    	  }
        }
       
       vm.removeFiling = function(filing){
 	   		var index = vm.workPackage.filingInstructionData.indexOf(filing); 
 	   		console.log(filing.isDeleted);
 	   };
-      
+	         
       vm.addInterOffice = function(){
  	  	 if(vm.ioString != null){
  	    	  if(vm.workPackage.interofficeComment == null){
@@ -4162,7 +4601,7 @@
      	  	vm.ioString = null;
      	  	$(document).ready(function(){
                 var _width = $('.comment-wrapper').outerWidth();
-	              $('.comment-list').css({ 'width': 'calc(100% + ' + _width+ 'px)' });
+	              $('.comment-list').css('min-width',_width)
 	        });
      	 }
        }
@@ -4271,7 +4710,7 @@
     		  var data = result;
     	      
         	  data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
-              data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+              data.newCreatedDate = DateUtils.convertDateTimeFromServer(data.createdDate);
               data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
               data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
               data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
@@ -4293,7 +4732,7 @@
     		  var data = result;
     	      
         	  data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
-              data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+              data.newCreatedDate = DateUtils.convertDateTimeFromServer(data.createdDate);
               data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
               data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
               data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
@@ -4398,14 +4837,18 @@
     	  }    	  
       };
       vm.close = function(){
-    	  vm.workPackage.locked = false;
-    	  WorkPackage.unlock(vm.workPackage, onUnlockedSuccess, onUnlockedFailure);
-    	  function onUnlockedSuccess (result) {
+    	  console.log(vm.disabledField(vm.workPackage));
+    	  if(vm.disabledField(vm.workPackage)){
     		  $state.go("work-package");
-    	  }
-    	  function onUnlockedFailure (error) {
-    		  
-    	  }
+    	  }else{
+        	  WorkPackage.unlock(vm.workPackage, onUnlockedSuccess, onUnlockedFailure);
+        	  function onUnlockedSuccess (result) {
+        		  $state.go("work-package");
+        	  }
+        	  function onUnlockedFailure (error) {
+        		  
+        	  } 
+    	  }    	  
       }
       
       vm.isAllSelected = {};
@@ -4464,17 +4907,70 @@
     				  }
     			 });
     			  if(selected){
-//    				  console.log("SELECTED : "+selected);
     				  var copiedFare = angular.copy(workPackageSheet.fares[x]);
+    				  copiedFare.no = workPackageSheet.fares.length+1;
     				  copiedFare.status = "PENDING";
     				  copiedFare.field = null;
     				  workPackageSheet.fares.push(copiedFare);
     			  }
-//    			  console.log("X : "+x);
     		  }
-    	  }
+    	  }    	  
       }
       
+      vm.copySelectedFares = function(workPackageSheet, currentPage){
+    	  var fares = [];
+    	  for(var x=0;x<workPackageSheet.fares.length;x++){
+    		  if(workPackageSheet.fares[x].field != undefined){
+    			  var selected = false;
+    			  Object.keys(workPackageSheet.fares[x].field).forEach(function(key,index) {
+    				  if(workPackageSheet.fares[x].field[key]){
+    					  selected = true;
+    				  }
+    			 });
+    			  
+    			  if(selected){
+    				  var copiedFare = angular.copy(workPackageSheet.fares[x]);
+//    				  copiedFare.no = workPackageSheet.fares.length+1;
+    				  copiedFare.status = "PENDING";
+    				  copiedFare.field = null;
+//    				  workPackageSheet.fares.push(copiedFare);
+    				  fares.push(copiedFare);
+    			  }
+    		  }
+    	  }
+    	  var clipboard = {
+    	      content:fares,
+			  page:currentPage
+		  }
+		  
+		  	Clipboard.copy(clipboard, function(result){
+				alert('Fare copied');
+			}, function(error){
+				alert('Error occured');
+			});
+      }
+      
+      vm.pasteFares = function(workPackageSheet, currentPage){
+    	  var clipboard = Clipboard.findByCurrentUsername({id : $stateParams.id}).$promise;
+    	  
+    	  clipboard.then(function(result){
+    		  if(result.page == currentPage){
+	    		  for(var x=0;x<result.content.length;x++){
+	    			  result.content[x].no = workPackageSheet.fares.length+1;
+	    			  
+	    			  result.content[x].travelStart = DateUtils.convertDateTimeFromServer(result.content[x].travelStart);
+	    			  result.content[x].travelEnd = DateUtils.convertDateTimeFromServer(result.content[x].travelEnd);
+	    			  result.content[x].saleStart = DateUtils.convertDateTimeFromServer(result.content[x].saleStart);
+	    			  result.content[x].saleEnd = DateUtils.convertDateTimeFromServer(result.content[x].saleEnd);
+	    			  result.content[x].travelComplete = DateUtils.convertDateTimeFromServer(result.content[x].travelComplete);
+	        		  workPackageSheet.fares.push(result.content[x]);    			  
+	    		  }    
+    		  }
+    		  else{
+    			  alert('Nothing to paste');
+    		  }
+    	  });
+      }
       
       vm.deleteSelectedFares = function(workPackageSheet){
     	  var fares = [];
@@ -4510,7 +5006,30 @@
     			  }
     		  }
     	  }
-      }
+    	  
+    	  //reset number
+    	  workPackageSheet.fares.sort(sortBy('no', 'asc'));
+    	  for(var i=0;i<workPackageSheet.fares.length; i++){
+    		  workPackageSheet.fares[i].no = i+1;
+    	  }
+    	  
+    	  if(workPackageSheet.currentSort.field == '#'){
+    		  if(workPackageSheet.currentSort.asc){
+        		  workPackageSheet.fares.sort(sortBy('no', 'asc'));
+    		  }
+    		  else{
+        		  workPackageSheet.fares.sort(sortBy('no', 'desc'));
+    		  }
+    	  }
+    	  else{
+    		  if(workPackageSheet.currentSort.asc){
+    			  workPackageSheet.fares.sort(sortBy(workPackageSheet.currentSort.field, 'asc'));
+    		  }
+    		  else{
+    			  workPackageSheet.fares.sort(sortBy(workPackageSheet.currentSort.field, 'desc'));    			  
+    		  }
+    	  }
+      }      
       
       vm.tbodyClick = function(workPackageSheet){
 //    	  for(var x=0;x<workPackageSheet.fares.length;x++){
@@ -4557,6 +5076,33 @@
                   tariffNumber: ['TariffNumber', function(TariffNumber) {
                       return TariffNumber.getAll().$promise;
                   }],
+                  AddOn : false,
+              }
+			}).result.then(function(option) {
+				if(option != null){
+					fare[field] = option;
+				}
+          }, function() {
+      			
+          });
+      }
+      
+      vm.selectTariffAddOn = function(fare, field){
+    	  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-select-tariff-dialog.html',
+              controller: 'WorkPackageSelectTariffDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              windowClass: 'full-page-modal',
+              resolve: {
+	              	fare: function(){
+	              		return fare;
+	              	},
+                  tariffNumber: ['TariffNumberAddOn', function(TariffNumberAddOn) {
+                      return TariffNumberAddOn.getAll().$promise;
+                  }],
+                  AddOn : true,
               }
 			}).result.then(function(option) {
 				if(option != null){
@@ -4583,10 +5129,19 @@
                   cities: ['City', function(City) {
                       return City.getAll().$promise;
                   }],
+                  cityGroup: ['CityGroup', function(CityGroup) {
+                      return CityGroup.getAll().$promise;
+                  }],
               }
 			}).result.then(function(option) {
-				if(option != null)
-					fare[field] = option.cityCode;
+				if(option != null){
+					if(option.type == 'city'){
+						fare[field] = option.cityCode;					
+					}
+					else if(option.type == 'cityGroup'){
+						fare[field] = option.code;	
+					}
+				}
           }, function() {
       			
           });
@@ -4606,6 +5161,9 @@
 	              	},
                   cities: ['City', function(City) {
                       return City.getAll().$promise;
+                  }],
+                  cityGroup: ['CityGroup', function(CityGroup) {
+                      return null;
                   }],
               }
 			}).result.then(function(option) {
@@ -4772,10 +5330,17 @@
       }
       
       vm.checkCity = function(fare, field){
-    	  if(fare[field] != null || fare[field] != ''){
+    	  if(fare[field] != null && fare[field] != '' && fare[field] != undefined){
 	    	  var exist = false;
 	    	  for(var x=0;x<vm.cities.length;x++){
+	    		  
 	    		  if(vm.cities[x].cityCode.toUpperCase() == fare[field].toUpperCase()){
+	    			  exist = true;
+	    			  break;
+	    		  }
+	    	  }
+	    	  for(var x=0;x<vm.cityGroups.length;x++){
+	    		  if(vm.cityGroups[x].code.toUpperCase() == fare[field].toUpperCase()){
 	    			  exist = true;
 	    			  break;
 	    		  }
@@ -4789,40 +5354,38 @@
     	  }
       }
       
-      vm.checkLoc = function(fare, field){
+      vm.checkLoc = function(fare, field, type){
     	  if(fare[field] != null || fare[field] != ''){
 	    	  var exist = false;
-	    	  if(fare.loc1Type == 'C'){
+	    	  if(type== 'C'){
 	    		  for(var x=0;x<vm.cities.length;x++){
 		    		  if(vm.cities[x].cityCode.toUpperCase() == fare[field].toUpperCase()){
 		    			  exist = true;
 		    			  break;
 		    		  }
 		    	  }				
-				}else if(fare.loc1Type == 'N'){
+				}else if(type== 'N'){
 					 for(var x=0;x<vm.cities.length;x++){
 			    		  if(vm.cities[x].countryCode.toUpperCase() == fare[field].toUpperCase()){
 			    			  exist = true;
 			    			  break;
 			    		  }
 			    	  }
-				}else if(fare.loc1Type == 'S'){
+				}else if(type== 'S'){
 					 for(var x=0;x<vm.states.length;x++){
 			    		  if(vm.states[x].code.toUpperCase() == fare[field].toUpperCase()){
 			    			  exist = true;
 			    			  break;
 			    		  }
 			    	  }
-				}else if(fare.loc1Type == 'A'){
+				}else if(type== 'A'){
 					 for(var x=0;x<vm.areas.length;x++){
-						 console.log(vm.areas[x]);
-						 console.log(fare[field]);
 			    		  if(vm.areas[x].code == fare[field]){
 			    			  exist = true;
 			    			  break;
 			    		  }
 			    	  }
-				}else if(fare.loc1Type == 'G'){
+				}else if(type== 'G'){
 					 for(var x=0;x<vm.cityGroups.length;x++){
 			    		  if(vm.cityGroups[x].code.toUpperCase() == fare[field].toUpperCase()){
 			    			  exist = true;
@@ -4832,15 +5395,15 @@
 				}		    	 
 	    	  
 	    	  if(!exist){
-	    		  if(fare.loc1Type == 'C'){
+	    		  if(type== 'C'){
 	    		  alert("City code '"+fare[field]+"' is invalid. Please select a correct code");
-	    		  }else if(fare.loc1Type == 'N'){
+	    		  }else if(type== 'N'){
 	    		  alert("Country code '"+fare[field]+"' is invalid. Please select a correct code");
-	    		  }else if(fare.loc1Type == 'S'){
+	    		  }else if(type== 'S'){
 	    		  alert("State code '"+fare[field]+"' is invalid. Please select a correct code");
-	    		  }else if(fare.loc1Type == 'A'){
+	    		  }else if(type== 'A'){
 	    		  alert("Area code '"+fare[field]+"' is invalid. Please select a correct code");
-	    		  }else if(fare.loc1Type == 'G'){
+	    		  }else if(type== 'G'){
 	    		  alert("City Group code '"+fare[field]+"' is invalid. Please select a correct code");
 	    		  }
 	    		  fare[field] = null;
@@ -4851,7 +5414,7 @@
           
       vm.checkTariff = function(fare, field, inputField){
     	  var tariff = null;
-    	  if(fare[field][inputField] != undefined){
+    	  if(fare[field][inputField] != undefined && fare[field][inputField] != null && fare[field][inputField] != ""){
 	    	  var exist = false;
 	    	  for(var x=0;x<vm.tariffNumber.length;x++){	   
 	    		  if(vm.tariffNumber[x][inputField] == fare[field][inputField]){
@@ -4891,6 +5454,9 @@
       vm.changeVersion = function(workPackageSheet, index){    	  
     	  workPackageSheet.version = index;
     	  if(index == 'current'){
+    		  if(workPackageSheet.fares == null){
+    			  workPackageSheet.fares = [];
+    		  }
     		  workPackageSheet.currentFares = workPackageSheet.fares;
     	  }
     	  else{
@@ -4899,5 +5465,164 @@
     		  }
     	  }
       }
+      
+
+      vm.checkValidateCityGroupFares = function(workPackageSheet){
+    	  var fares = workPackageSheet.fares;
+    	  for(var x=0;x<fares.length;x++){
+    		  var origin = false;
+    		  var destination = false;
+    		  
+    		  for(var y=0;y<vm.cityGroups.length;y++){
+    			  if(fares[x] != undefined){    				  	    			  
+    				  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (fares[x].origin != null && fares[x].origin.toUpperCase())){	    				  
+    					  origin = true;
+	    			  }
+	    			  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (fares[x].destination != null && fares[x].destination.toUpperCase())){
+	      				  destination = true;
+	    			  }	    			   
+    			  }
+    		  }
+    		  
+    		  if(origin){
+				  return false;
+			  }else if(destination){
+				  return false;
+			  }
+    	  }
+    	  return true;
+      }
+      vm.expandCityGroup = function(workPackageSheet){
+    	  var fares = workPackageSheet.fares;
+    	  
+    	  var faresCityGroupOrigin = [];
+    	  var faresCityGroupDestination = [];
+    	  var faresCityGroupOriginDestination = [];
+
+    	  for(var x=0;x<fares.length;x++){
+    		  var origin = false;
+    		  var destination = false;
+    		  
+    		  for(var y=0;y<vm.cityGroups.length;y++){
+    			  if(fares[x] != undefined){    				  	    			  
+    				  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (fares[x].origin != null && fares[x].origin.toUpperCase())){	    				  
+    					  origin = true;
+	    			  }
+	    			  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (fares[x].destination != null && fares[x].destination.toUpperCase())){
+	      				  destination = true;
+	    			  }	    			   
+    			  }
+    		  }
+    		  
+
+			  if(origin && destination){
+				  faresCityGroupOriginDestination.push(angular.copy(fares[x]));
+				  fares.splice(x, 1);
+			  }else if(origin){
+				  faresCityGroupOrigin.push(angular.copy(fares[x]));
+				  fares.splice(x, 1);
+			  }else if(destination){
+				  faresCityGroupDestination.push(angular.copy(fares[x]));
+				  fares.splice(x, 1);
+			  }
+    	  }
+    	  
+    	  if(faresCityGroupOriginDestination.length > 0){
+    		  for(var x=0;x<faresCityGroupOriginDestination.length;x++){
+    			  var listCitiesOrigin = [];
+        		  var listCitiesDestination = [];
+        		 
+        		  for(var y=0;y<vm.cityGroups.length;y++){
+	    			  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (faresCityGroupOriginDestination[x].origin != null && faresCityGroupOriginDestination[x].origin.toUpperCase())){
+	    				  listCitiesOrigin = vm.cityGroups[y].cities;
+					  }
+	    			  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (faresCityGroupOriginDestination[x].destination != null && faresCityGroupOriginDestination[x].destination.toUpperCase())){
+	    				  listCitiesDestination = vm.cityGroups[y].cities;
+					  }
+        		  }
+        		  
+    			  for(var a=0;a<listCitiesOrigin.length;a++){
+    				  for(var b=0;b<listCitiesDestination.length;b++){
+    					  var f = angular.copy(faresCityGroupOriginDestination[x]);
+        				  f.origin = listCitiesOrigin[a].cityCode;
+        				  f.destination = listCitiesDestination[b].cityCode;
+        				  f.no = fares.length+1;
+        				  fares.push(f);
+    				  }
+    			  }
+    		  }
+    	  }    	  
+    	  else if(faresCityGroupOrigin.length > 0){
+    		  for(var x=0;x<faresCityGroupOrigin.length;x++){
+    			  var listCities = [];
+    			  for(var y=0;y<vm.cityGroups.length;y++){
+    				  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (faresCityGroupOrigin[x].origin != null && faresCityGroupOrigin[x].origin.toUpperCase())){
+    					  listCities = vm.cityGroups[y].cities;
+    					  break;
+    				  }
+    			  }
+    			  
+    			  for(var z=0;z<listCities.length;z++){
+    				  var f = angular.copy(faresCityGroupOrigin[x]);
+    				  f.origin = listCities[z].cityCode;
+    				  f.no = fares.length+1;
+    				  fares.push(f);
+    			  }
+    		  }
+    	  }
+    	  else if(faresCityGroupDestination.length > 0){
+    		  for(var x=0;x<faresCityGroupDestination.length;x++){
+    			  var listCities = [];
+    			  for(var y=0;y<vm.cityGroups.length;y++){
+    				  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (faresCityGroupDestination[x].destination != null && faresCityGroupDestination[x].destination.toUpperCase())){
+    					  listCities = vm.cityGroups[y].cities;
+    					  break;
+    				  }
+    			  }
+    			  
+    			  for(var z=0;z<listCities.length;z++){
+    				  var f = angular.copy(faresCityGroupDestination[x]);
+    				  f.destination = listCities[z].cityCode;
+    				  f.no = fares.length+1;
+    				  fares.push(f);
+    			  }
+    		  }
+    	  }
+      };
+      
+      vm.disabledField = function(wp){
+    	  var disabled = false;
+    	  if(wp.locked == true){
+    		  if( wp.lockedBy == vm.user.login){
+    			  disabled = false;
+    		  }else{
+    			  disabled = true;
+    		  }    		  
+    	  }
+    	  return disabled;
+      }
+      
+      vm.getTooltip = function(value){
+    	  var listCity = [];
+    	  for(var y=0;y<vm.cityGroups.length;y++){
+			  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (value != null && value.toUpperCase())){
+				  for(var x=0;x<vm.cityGroups[y].cities.length;x++){
+					  //message += "<li>"+vm.cityGroups[y].cities[x].code+"</li>";
+					  listCity.push(vm.cityGroups[y].cities[x].cityCode);
+				  }
+				  break;
+			  }
+		  }
+    	  
+    	  var message = "";
+    	  if(listCity.length > 0){
+    		  message += listCity.join(', ');
+    	  }
+    	  return message;
+      }
+      
+      vm.dateNgModelOpts = {
+    		  timezone : '+07:00'
+	  };
     }
 })();

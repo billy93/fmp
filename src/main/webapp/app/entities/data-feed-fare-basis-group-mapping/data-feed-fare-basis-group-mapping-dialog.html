@@ -1,0 +1,74 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myDataFeedFareBasisGroupMappingLabel">Create or edit a Data Feed Fare Basis Group Mapping</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" ng-show="vm.dataFeedFareBasisGroupMapping.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="vm.dataFeedFareBasisGroupMapping.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_originCity">Origin City</label>
+            <input type="text" class="form-control" name="originCity" id="field_originCity"
+                    ng-model="vm.dataFeedFareBasisGroupMapping.originCity"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_originCountry">Origin Country</label>
+            <input type="text" class="form-control" name="originCountry" id="field_originCountry"
+                    ng-model="vm.dataFeedFareBasisGroupMapping.originCountry"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_destinationCity">Destination City</label>
+            <input type="text" class="form-control" name="destinationCity" id="field_destinationCity"
+                    ng-model="vm.dataFeedFareBasisGroupMapping.destinationCity"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_destinationCountry">Destination Country</label>
+            <input type="text" class="form-control" name="destinationCountry" id="field_destinationCountry"
+                    ng-model="vm.dataFeedFareBasisGroupMapping.destinationCountry"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_rbd">Rbd</label>
+            <input type="text" class="form-control" name="rbd" id="field_rbd"
+                    ng-model="vm.dataFeedFareBasisGroupMapping.rbd"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_fareBasisCode">Fare Basis Code</label>
+            <input type="text" class="form-control" name="fareBasisCode" id="field_fareBasisCode"
+                    ng-model="vm.dataFeedFareBasisGroupMapping.fareBasisCode"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_fareBasisGroup">Fare Basis Group</label>
+            <input type="text" class="form-control" name="fareBasisGroup" id="field_fareBasisGroup"
+                    ng-model="vm.dataFeedFareBasisGroupMapping.fareBasisGroup"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_priority">Priority</label>
+            <input type="text" class="form-control" name="priority" id="field_priority"
+                    ng-model="vm.dataFeedFareBasisGroupMapping.priority"
+                    />
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-back" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-secondary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

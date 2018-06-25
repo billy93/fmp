@@ -1640,7 +1640,7 @@ button.ui-button::-moz-focus-inner {
   padding: 0; }
 
 .ui-datepicker {
-  width: 21em;
+  width: 23em;
   padding: .2em .2em 0;
   display: none; }
 
@@ -3634,6 +3634,10 @@ p {
   .btn i {
     margin-left: 5px;
     font-size: 14px; }
+    .btn i.i-btn {
+      font-size: 13px;
+      margin-left: 0;
+      margin-right: 2px; }
 
 .button-group {
   position: relative;
@@ -3787,6 +3791,7 @@ p {
     position: relative;
     margin-bottom: 15px;
     max-height: 390px;
+    padding-bottom: 30px;
     overflow: auto; }
     .table-wrapper .table-responsive.main-table {
       max-height: 550px; }
@@ -3883,7 +3888,7 @@ p {
         .table-wrapper table tbody tr td.locked:before {
           position: absolute;
           top: 50%;
-          left: 50%;
+          left: 25%;
           -webkit-transform: translate(-50%, -50%);
           -ms-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
@@ -4508,6 +4513,32 @@ label.tree_label:after {
   background: #3c8dbc;
   color: #fff; }
 
+.additional-container {
+  width: 16.66667%;
+  padding: 5px 20px;
+  position: relative; }
+  .additional-container .additional-info {
+    float: none;
+    width: 100%;
+    min-width: auto;
+    margin: 0;
+    border-radius: 2px; }
+
+.comment-list.FIclicked {
+  background-color: rgba(255, 204, 85, 0.4) !important; }
+
+.comment-list label span {
+  display: block;
+  margin-left: 20px;
+  margin-top: -18px; }
+
+.help-block {
+  font-size: 12px; }
+
+.a--open {
+  color: #337ab7;
+  margin-left: 10px; }
+
 /* General Demo Style */
 body, html {
   font-size: 100%;
@@ -4601,7 +4632,7 @@ a:hover {
   padding: 28px 20px 20px;
   position: relative;
   width: 40%;
-  margin: 0 auto 30px;
+  margin: 0 auto 15px;
   background: rgba(252, 252, 252, 0.89);
   text-align: center; }
   .content-title h2 {
@@ -4623,10 +4654,10 @@ a:hover {
 
 .page-wrapper {
   float: left;
-  padding-top: 70px; }
+  padding-top: 55px; }
   .page-wrapper .page-content {
     margin-left: 100px;
-    padding: 20px 40px 200px;
+    padding: 0 40px 200px;
     -webkit-transition: .3s all;
     -o-transition: .3s all;
     transition: .3s all; }
@@ -4717,7 +4748,8 @@ a:hover {
   border-bottom: 1px solid #f4f4f4; }
 
 .poiv-none {
-  pointer-events: none; }
+  pointer-events: none;
+  cursor: not-allowed; }
 
 .block {
   display: block; }

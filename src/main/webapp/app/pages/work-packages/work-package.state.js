@@ -29,7 +29,7 @@
                     squash: true
                 },
                 sort: {
-                    value: 'last_modified_date,desc',
+                    value: 'queued_date,desc',
                     squash: true
                 },
                 size: null,
@@ -74,6 +74,11 @@
                 tariffNumber: ['$stateParams', 'TariffNumber', 'Principal', function($stateParams, TariffNumber, Principal) {
                 	return Principal.identity().then(function(account) {
                         return TariffNumber.getAll().$promise;
+                    });
+                }],
+                tariffNumberAddOn: ['$stateParams', 'TariffNumberAddOn', 'Principal', function($stateParams, TariffNumberAddOn, Principal) {
+                	return Principal.identity().then(function(account) {
+                        return TariffNumberAddOn.getAll().$promise;
                     });
                 }],
                 cities: ['$stateParams', 'City', 'Principal', function($stateParams, City, Principal) {

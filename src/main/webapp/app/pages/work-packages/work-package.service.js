@@ -13,7 +13,8 @@
         	if (data) {
                 data = angular.fromJson(data);
                 data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
-                data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+                data.newCreatedDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+                
                 data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
                 data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
                 data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
@@ -114,6 +115,9 @@
 	        },
 	        'referback': {
 	    			method:'POST', url:'api/work-packages/referback'
+	        },
+	        'complete': {
+    			method:'POST', url:'api/work-packages/complete'
 	        },
 	        'createbatch': {
 	    			method:'POST', url:'api/work-packages/createbatch'

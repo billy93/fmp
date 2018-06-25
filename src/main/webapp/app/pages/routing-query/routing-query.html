@@ -1,3 +1,7 @@
+<div class="content-title">
+	<h2>Routing Query</h2>
+	<jhi-alert></jhi-alert>
+</div>
 <div class="panel">
 	<div class="panel-body">
 		<div class="filter-hero">
@@ -22,7 +26,7 @@
 									<input type="text" class="form-control" name="routingno" id="routingno" ng-model="vm.queryParams.routingNo" uppercase />
 								</div>
 								<div class="form-group">
-									<div class="custom-label semibold">Effective Date</div>
+									<div class="custom-label semibold">Active Date</div>
 									<div class="row no-mar">
 										<div class="col-md-6 no-lpad">
 											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'effectiveDateFrom')" 
@@ -89,7 +93,7 @@
 						</thead>
 						<tbody>
 							<tr ng-repeat="routingQuery in vm.routingqueries" ng-class="{'selected': vm.selectedRow == routingQuery}" ng-click="vm.selectedRow = routingQuery; vm.getDetails(routingQuery);">
-								<td>{{$index + 1}}</td>
+								<td>{{(vm.queryParams.page * vm.queryParams.size) + $index + 1}}</td>
 			                    <td>{{routingQuery.cxr}}</td>
 			                    <td>{{routingQuery.tarNo}}</td>
 			                    <td>{{routingQuery.routingNo}}</td>
@@ -108,6 +112,11 @@
 			                                <span class="glyphicon glyphicon-eye-open"></span>
 			                                <span class="hidden-sm-down"></span>
 			                            </button>
+<!-- 			                            <button type="submit" -->
+<!-- 			                                    class="btn btn-primary btn-sm"> -->
+<!-- 			                                <span class="glyphicon glyphicon-copy"></span> -->
+<!-- 			                                <span class="hidden-sm-down"></span> -->
+<!-- 			                            </button> -->
 			                        </div>
 			                    </td>
 							</tr>
@@ -135,7 +144,7 @@
 					  		<tbody>
 					  			<tr ng-repeat="details in vm.routingDetails">
 					  				<td>{{$index + 1}}</td>
-					  				<td ng-repeat="detail in details" style="white-space:normal">
+					  				<td ng-repeat="detail in details track by $index" style="white-space:normal">
 					  					<div style="word-break:break-all; width: 10vw">{{detail}}</div>
 					  				</td>
 					  			</tr>

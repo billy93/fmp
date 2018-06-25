@@ -1,0 +1,27 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "postCountry",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "travelDateFrom",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "travelDateTo",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "rate",
+            "fieldType": "String"
+        }
+    ],
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "dfpublished_fare_rates",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}

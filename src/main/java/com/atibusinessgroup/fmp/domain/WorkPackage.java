@@ -1,6 +1,7 @@
 package com.atibusinessgroup.fmp.domain;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -118,7 +119,10 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     
     @Field("distribution_date")
     private ZonedDateTime distributionDate;
-
+        
+    @Field("queued_date")
+    private Instant queuedDate;
+    
     @Field("filling_status")
     private Status fillingStatus;
 
@@ -143,6 +147,9 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     @Field("approval_reference")
     private String approvalReference;
 
+    @Field("attachment_approval_reference")
+    private String attachmentApprovalReference;
+    
     @Field("fare_sheet")
     private List<WorkPackageFareSheet> fareSheet;
     
@@ -169,9 +176,24 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     
     private Validation validation;
     private boolean validate;
-    
-    
-    public int getImportIndex() {
+           
+    public String getAttachmentApprovalReference() {
+		return attachmentApprovalReference;
+	}
+
+	public void setAttachmentApprovalReference(String attachmentApprovalReference) {
+		this.attachmentApprovalReference = attachmentApprovalReference;
+	}
+	
+    public Instant getQueuedDate() {
+		return queuedDate;
+	}
+
+	public void setQueuedDate(Instant queuedDate) {
+		this.queuedDate = queuedDate;
+	}
+
+	public int getImportIndex() {
 		return importIndex;
 	}
 
@@ -417,9 +439,6 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
         @Field("discount_fare_type")
         private String discountFareType;
         
-        @Field("discount_approval_reference")
-        private String discountApprovalReference;
-        
         @Field("account_code")
         private String accountCode;
         //End Discount Fares
@@ -430,9 +449,6 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
         
         @Field("waiver_fare_type")
         private String waiverFareType;     
-        
-        @Field("waiver_approval_reference")
-        private String waiverApprovalReference;
         
         @Field("waiver_agent_name")
         private String waiverAgentName;    
@@ -478,29 +494,13 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 		public void setVersion(String version) {
 			this.version = version;
 		}
-
-		public String getDiscountApprovalReference() {
-			return discountApprovalReference;
-		}
-
-		public void setDiscountApprovalReference(String discountApprovalReference) {
-			this.discountApprovalReference = discountApprovalReference;
-		}
-
+		
 		public String getWaiverIocNumber() {
 			return waiverIocNumber;
 		}
 
 		public void setWaiverIocNumber(String waiverIocNumber) {
 			this.waiverIocNumber = waiverIocNumber;
-		}
-
-		public String getWaiverApprovalReference() {
-			return waiverApprovalReference;
-		}
-
-		public void setWaiverApprovalReference(String waiverApprovalReference) {
-			this.waiverApprovalReference = waiverApprovalReference;
 		}
 
 		public String getWaiverAgentName() {
@@ -703,23 +703,11 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     
     private List<MarketRules> marketRulesData = new ArrayList<>();
     
-    @Field("attachment_approval_reference")
-    private String atachmentApprovalReference;
-    
     private List<Attachment> attachmentData = new ArrayList<>();
     
     private List<String> agent = new ArrayList<>();
     
     private ImportFares importFares;
-    
-    
-    public String getAtachmentApprovalReference() {
-		return atachmentApprovalReference;
-	}
-
-	public void setAtachmentApprovalReference(String atachmentApprovalReference) {
-		this.atachmentApprovalReference = atachmentApprovalReference;
-	}
 
 	public boolean isMarketFares() {
 		return marketFares;
@@ -939,12 +927,28 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 	    @Field("username")	    
 	    private String username;
 	    
+	    @Field("file_name")	    
+	    private String fileName;
+	    
 	    @Field("createdTime")	    
 		private ZonedDateTime createdTime;
 	    
 	    @Field("inOnly")
 	    private Boolean inOnly;
+	    
+	    @Field("isDeleted")
+	    private Boolean isDeleted;
 		
+	    
+	    
+		public String getFileName() {
+			return fileName;
+		}
+
+		public void setFileName(String fileName) {
+			this.fileName = fileName;
+		}
+
 		public String getComment() {
 			return comment;
 		}
@@ -976,7 +980,7 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 		public void setUsername(String username) {
 			this.username = username;
 		}
-
+		
 		public ZonedDateTime getCreatedTime() {
 			return createdTime;
 		}
@@ -991,6 +995,14 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 
 		public void setInOnly(Boolean inOnly) {
 			this.inOnly = inOnly;
+		}
+
+		public Boolean getIsDeleted() {
+			return isDeleted;
+		}
+
+		public void setIsDeleted(Boolean isDeleted) {
+			this.isDeleted = isDeleted;
 		}	
 		
 	}
@@ -1508,5 +1520,4 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 	public void setDistributionReviewLevel(String distributionReviewLevel) {
 		this.distributionReviewLevel = distributionReviewLevel;
 	}
-	
 }

@@ -1,9 +1,11 @@
 package com.atibusinessgroup.fmp.service;
 
 import com.atibusinessgroup.fmp.domain.RoutingQuery;
+import com.atibusinessgroup.fmp.domain.dto.RouteMapView;
 import com.atibusinessgroup.fmp.domain.dto.RoutingQueryParam;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,6 +48,7 @@ public interface RoutingQueryService {
     
     Page<RoutingQuery> findCustom(RoutingQueryParam routingQueryParam, Pageable pageable);
     Page<RoutingQuery> findCustomJoin(RoutingQueryParam routingQueryParam, Pageable pageable);
-    ArrayList<ArrayList<String>> getRouteDetails(RoutingQuery routingquery);
+    String[][] getRouteDetails(RoutingQuery routingquery);
     RoutingQuery getFullRouteDetails(RoutingQuery routingquery);
+    RoutingQuery findOneCustom(RoutingQueryParam routingQueryParam);
 }

@@ -4,6 +4,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.newA
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -26,10 +27,12 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
 import com.atibusinessgroup.fmp.constant.CollectionName;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2Cat10;
 import com.atibusinessgroup.fmp.domain.dto.AfdQueryParam;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFareAfdQueryWithRecords;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByCatNo;
+import com.atibusinessgroup.fmp.service.util.DateUtil;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
@@ -116,27 +119,30 @@ public class AtpcoFareCustomRepository {
 					queries.add(routingNo);
 				}
 				
+				Date paramFrom = DateUtil.convertObjectToDate(param.getEffectiveDateFrom());
+				Date paramTo = DateUtil.convertObjectToDate(param.getEffectiveDateTo());
+
 				if (param.getEffectiveDateOption() != null && param.getEffectiveDateOption().contentEquals("A")) {
-					if (param.getEffectiveDateFrom() != null && param.getEffectiveDateTo() != null) {
+					if (paramFrom != null && paramTo != null) {
 						BasicDBObject effective = new BasicDBObject();
-						effective.append("$and", Arrays.asList(new BasicDBObject("tar_eff_date", new BasicDBObject("$lte", param.getEffectiveDateFrom())), 
-								new BasicDBObject("dates_discontinue", new BasicDBObject("$gte", param.getEffectiveDateTo()))));
+						effective.append("$and", Arrays.asList(new BasicDBObject("tar_eff_date", new BasicDBObject("$lte", paramFrom)), 
+								new BasicDBObject("dates_discontinue", new BasicDBObject("$gte", paramTo))));
 						queries.add(effective);
 					} else {
-						if (param.getEffectiveDateFrom() == null && param.getEffectiveDateTo() != null) {
+						if (paramFrom == null && paramTo != null) {
 							BasicDBObject effective = new BasicDBObject();
-							effective.append("dates_discontinue", new BasicDBObject("$gte", param.getEffectiveDateTo()));
+							effective.append("dates_discontinue", new BasicDBObject("$gte", paramTo));
 							queries.add(effective);
-						} else if (param.getEffectiveDateFrom() != null && param.getEffectiveDateTo() == null) {
+						} else if (paramFrom != null && paramTo == null) {
 							BasicDBObject effective = new BasicDBObject();
-							effective.append("tar_eff_date", new BasicDBObject("$lte", param.getEffectiveDateFrom()));
+							effective.append("tar_eff_date", new BasicDBObject("$lte", paramFrom));
 							queries.add(effective);
 						}
 					}
 				} else if (param.getEffectiveDateOption() != null && param.getEffectiveDateOption().contentEquals("E")) {
 					BasicDBObject effective = new BasicDBObject();
-					effective.append("$and", Arrays.asList(new BasicDBObject("tar_eff_date", new BasicDBObject("$eq", param.getEffectiveDateFrom())), 
-							new BasicDBObject("dates_discontinue", new BasicDBObject("$eq", param.getEffectiveDateTo()))));
+					effective.append("$and", Arrays.asList(new BasicDBObject("tar_eff_date", new BasicDBObject("$eq", paramFrom)), 
+							new BasicDBObject("dates_discontinue", new BasicDBObject("$eq", paramTo))));
 					queries.add(effective);
 				}
 				
@@ -266,6 +272,20 @@ public class AtpcoFareCustomRepository {
 		Aggregation aggregation = newAggregation(aggregationOperations);
 		
 		List<AtpcoRecord2GroupByCatNo> result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_RECORD_2, AtpcoRecord2GroupByCatNo.class).getMappedResults();
+		
+		return result;
+	}
+	
+	public List<AtpcoRecord2Cat10> findAtpcoRecord2Cat10ByRecordId(String recordId) {
+		
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
+		MatchOperation match = new MatchOperation(new Criteria("record_id").is(recordId));
+		aggregationOperations.add(match);
+		
+		Aggregation aggregation = newAggregation(aggregationOperations);
+		
+		List<AtpcoRecord2Cat10> result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_RECORD_2_10, AtpcoRecord2Cat10.class).getMappedResults();
 		
 		return result;
 	}

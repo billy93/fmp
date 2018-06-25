@@ -1,5 +1,9 @@
 package com.atibusinessgroup.fmp.web.rest.util;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -18,6 +22,8 @@ public final class HeaderUtil {
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-fmpApp-alert", message);
         headers.add("X-fmpApp-params", param);
+        headers.add("X-fmpApp-timezone", getCurrentTimezoneOffset());
+        
         return headers;
     }
 
@@ -40,4 +46,16 @@ public final class HeaderUtil {
         headers.add("X-fmpApp-params", entityName);
         return headers;
     }
+    
+    public static String getCurrentTimezoneOffset() {
+
+	    TimeZone tz = TimeZone.getDefault();  
+	    Calendar cal = GregorianCalendar.getInstance(tz);
+	    int offsetInMillis = tz.getOffset(cal.getTimeInMillis());
+
+	    String offset = String.format("%02d:%02d", Math.abs(offsetInMillis / 3600000), Math.abs((offsetInMillis / 60000) % 60));
+	    offset = (offsetInMillis >= 0 ? "+" : "-") + offset;
+
+	    return offset;
+	} 
 }
