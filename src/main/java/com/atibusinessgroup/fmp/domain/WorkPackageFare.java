@@ -349,7 +349,10 @@ public class WorkPackageFare implements Serializable {
 	@Field("waiver_remark")
 	private String waiverRemark;
 
-	
+	@Field("amt_diff")
+	private String amtDiff;
+	@Field("amt_percent_diff")
+	private String amtPercentDiff;
 	
 	public int getNo() {
 		return no;
@@ -1173,6 +1176,23 @@ public class WorkPackageFare implements Serializable {
 
 	public void setDealCode(String dealCode) {
 		this.dealCode = dealCode;
+	}
+
+	
+	public String getAmtDiff() {
+		return amtDiff;
+	}
+
+	public void setAmtDiff(String amtDiff) {
+		this.amtDiff = amtDiff;
+	}
+
+	public String getAmtPercentDiff() {
+		return amtPercentDiff;
+	}
+
+	public void setAmtPercentDiff(String amtPercentDiff) {
+		this.amtPercentDiff = amtPercentDiff;
 	}
 
 	@Override

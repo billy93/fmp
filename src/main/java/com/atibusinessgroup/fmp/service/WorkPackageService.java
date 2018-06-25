@@ -1,21 +1,43 @@
 package com.atibusinessgroup.fmp.service;
 
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.atibusinessgroup.fmp.domain.Counter;
+import com.atibusinessgroup.fmp.domain.Priority;
 import com.atibusinessgroup.fmp.domain.WorkPackage;
+import com.atibusinessgroup.fmp.domain.WorkPackage.Attachment;
+import com.atibusinessgroup.fmp.domain.WorkPackage.Comment;
+import com.atibusinessgroup.fmp.domain.WorkPackage.FilingInstruction;
+import com.atibusinessgroup.fmp.domain.WorkPackage.MarketRules;
 import com.atibusinessgroup.fmp.domain.WorkPackage.WorkPackageFareSheet;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
 import com.atibusinessgroup.fmp.domain.enumeration.Status;
+import com.atibusinessgroup.fmp.repository.AtpcoFareRepository;
+import com.atibusinessgroup.fmp.repository.CounterRepository;
+import com.atibusinessgroup.fmp.repository.PriorityRepository;
 import com.atibusinessgroup.fmp.repository.WorkPackageRepository;
+import com.atibusinessgroup.fmp.security.SecurityUtils;
 
 
 /**
@@ -27,9 +49,15 @@ public class WorkPackageService {
     private final Logger log = LoggerFactory.getLogger(WorkPackageService.class);
 
     private final WorkPackageRepository workPackageRepository;
-
-    public WorkPackageService(WorkPackageRepository workPackageRepository) {
+    private final CounterRepository counterRepository;
+    private final PriorityRepository priorityRepository;
+    private final AtpcoFareRepository atpcoFareRepository;
+    
+    public WorkPackageService(WorkPackageRepository workPackageRepository, CounterRepository counterRepository, PriorityRepository priorityRepository, AtpcoFareRepository atpcoFareRepository) {
         this.workPackageRepository = workPackageRepository;
+        this.counterRepository = counterRepository;
+        this.priorityRepository = priorityRepository;
+        this.atpcoFareRepository = atpcoFareRepository;
     }
 
     /**
@@ -54,6 +82,44 @@ public class WorkPackageService {
             		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
         		if(fare.getTravelComplete() != null)
 	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
+        		
+//        		Optional<AtpcoFare> checkAtpcoFare = atpcoFareRepository.findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCityAndFareOriginCurrencyCodeAndFareClassCodeAndOwrtAndFootnoteAndRoutingNoAndRuleNo(
+//        				fare.getCarrier(), 
+//        				fare.getTariffNumber() != null ? fare.getTariffNumber().getTarNo() : null, 
+//        				fare.getOrigin(), 
+//        				fare.getDestination(), 
+//        				fare.getCurrency(), 
+//        				fare.getFareBasis(), 
+//        				fare.getTypeOfJourney(), 
+//        				fare.getFootnote1(), 
+//        				fare.getRtgno(), 
+//        				fare.getRuleno());
+        		Optional<AtpcoFare> checkAtpcoFare = atpcoFareRepository.findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCity(fare.getCarrier(), fare.getTariffNumber() != null ? fare.getTariffNumber().getTarNo() : null, fare.getOrigin(), fare.getDestination());
+        		if(checkAtpcoFare.isPresent()) {
+        			//I, R, Y
+        			if(fare.getAmount() != null) {
+        				float atpcoFareAmount = Float.parseFloat(checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().toString());
+        				float fareAmount = Float.parseFloat(fare.getAmount());
+	        			if(fareAmount < atpcoFareAmount) {
+	        				fare.setAction("R");
+	        			}
+	        			else if(fareAmount > atpcoFareAmount) {
+	        				fare.setAction("I");        				
+	        			}
+	        			else if(fareAmount== atpcoFareAmount){
+	        				fare.setAction("Y");        				        				
+	        			}
+	        			
+	        			float amtDiff = ((Float.parseFloat(fare.getAmount())) - Float.parseFloat(checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().toString()));
+	        			fare.setAmtDiff(String.format("%.02f",amtDiff));
+	        			
+	        			float percentDiff = (amtDiff / atpcoFareAmount) * 100;
+	        			fare.setAmtPercentDiff(String.format("%.02f", percentDiff));
+        			}        			
+        		}
+        		else {
+        			fare.setAction("N");        		
+        		}
         	}
         }
         for(WorkPackageFareSheet sheet : workPackage.getAddonFareSheet()) {
@@ -116,7 +182,186 @@ public class WorkPackageService {
 	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
         	}
         }
+        
+        if(workPackage.getWpid() == null) {
+    		DateFormat df = new SimpleDateFormat("yy"); // Just the year, with 2 digits
+    		DateFormat dfFull = new SimpleDateFormat("yyyy"); // Just the year, with 4 digits
+    		
+    		Counter c = counterRepository.findOneByIdAndYear("workpackageId", dfFull.format(Calendar.getInstance().getTime()));
+    		if(c == null) {
+    			c = new Counter();
+    			c.setSequenceValue(0);
+    			c.setYear(dfFull.format(Calendar.getInstance().getTime()));
+    			c = counterRepository.save(c);
+    		}
+    		NumberFormat nf = new DecimalFormat("00000");
+        	c.setSequenceValue(c.getSequenceValue()+1);
+        	c = counterRepository.save(c);
+        	
+    		String year = df.format(Calendar.getInstance().getTime());
+    		workPackage.setWpid(year+nf.format(c.getSequenceValue()+1));
+        }
+    	
+    	if(!workPackage.isSpecifiedFares()) {
+    		workPackage.getFareSheet().clear();
+    	}
+    	if(!workPackage.isWaiverFares()) {
+    		workPackage.getWaiverFareSheet().clear();
+    	}
+    	if(!workPackage.isMarketFares()) {
+    		workPackage.getMarketFareSheet().clear();
+    	}
+    	if(!workPackage.isDiscount()) {
+    		workPackage.getDiscountFareSheet().clear();
+    	}
+    	if(!workPackage.isAddon()) {
+    		workPackage.getAddonFareSheet().clear();
+    	}
+    	if(workPackage.getComment() != null) {
+	    	for(Comment comments : workPackage.getComment()) {
+	    		if(comments.getUsername() == null && comments.getCreatedTime() == null) {
+	    			comments.setUsername(SecurityUtils.getCurrentUserLogin().get());
+	    			comments.setCreatedTime(ZonedDateTime.now());
+	    		}
+	    	}
+    	}
+    	
+    	if(workPackage.getInterofficeComment() != null) {
+	    	for(Comment comments : workPackage.getInterofficeComment()) {
+	    		if(comments.getUsername() == null && comments.getCreatedTime() == null) {
+	    			comments.setUsername(SecurityUtils.getCurrentUserLogin().get());
+	    			comments.setCreatedTime(ZonedDateTime.now());
+	    		}
+	    	}
+    	}
+    	
+    	if(workPackage.getAttachmentData() != null) {
+    		for(Attachment attachment : workPackage.getAttachmentData()) {
+    			if(attachment.getUsername() == null && attachment.getCreatedTime() == null) {
+    				attachment.setUsername(SecurityUtils.getCurrentUserLogin().get());
+    				attachment.setCreatedTime(ZonedDateTime.now());
+    			}
+    		}
+    	}
+    	
+    	if(workPackage.getFilingInstructionData() != null) {
+    		for(FilingInstruction filingInstruction : workPackage.getFilingInstructionData()) {    			
+    			if(filingInstruction.getUsername() == null && filingInstruction.getCreatedTime() == null) {
+    				filingInstruction.setUsername(SecurityUtils.getCurrentUserLogin().get());
+    				filingInstruction.setCreatedTime(ZonedDateTime.now());
+    			}
+    		}
+    	}
+    	
+    	if(workPackage.getMarketRulesData() != null) {
+    		for(MarketRules marketRules : workPackage.getMarketRulesData()) {
+    			if(marketRules.getUsername() == null && marketRules.getCreatedTime() == null) {
+    				marketRules.setUsername(SecurityUtils.getCurrentUserLogin().get());
+    				marketRules.setCreatedTime(ZonedDateTime.now());
+    			}
+    		}
+    	}
+    	
+    	List<WorkPackageFare> allFares = new ArrayList<>();
+    	if(workPackage.getFareSheet().size() > 0) {
+    		for(WorkPackageFareSheet sheet : workPackage.getFareSheet()) {
+    			if(sheet.getFares().size() > 0) {
+    				for(WorkPackageFare fares : sheet.getFares()) {
+    					if(fares.getSaleStart() != null) {
+    						allFares.add(fares);
+    						continue;
+    					}
+    				}
+    			}
+    		}
+    	}
+    	if(workPackage.getAddonFareSheet().size() > 0) {
+    		for(WorkPackageFareSheet sheet : workPackage.getAddonFareSheet()) {
+    			if(sheet.getFares().size() > 0) {
+    				for(WorkPackageFare fares : sheet.getFares()) {
+    					if(fares.getSaleStart() != null) {
+    						allFares.add(fares);
+    						continue;
+    					}
+    				}
+    			}
+    		}
+    	}
+    	if(workPackage.getDiscountFareSheet().size() > 0) {
+    		for(WorkPackageFareSheet sheet : workPackage.getDiscountFareSheet()) {
+    			if(sheet.getFares().size() > 0) {
+    				for(WorkPackageFare fares : sheet.getFares()) {
+    					if(fares.getSaleStart() != null) {
+    						allFares.add(fares);
+    						continue;
+    					}
+    				}
+    			}
+    		}
+    	}
+    	if(workPackage.getMarketFareSheet().size() > 0) {
+    		for(WorkPackageFareSheet sheet : workPackage.getMarketFareSheet()) {
+    			if(sheet.getFares().size() > 0) {
+    				for(WorkPackageFare fares : sheet.getFares()) {
+    					if(fares.getSaleStart() != null) {
+    						allFares.add(fares);
+    						continue;
+    					}
+    				}
+    			}
+    		}
+    	}
+    	if(workPackage.getWaiverFareSheet().size() > 0) {
+    		for(WorkPackageFareSheet sheet : workPackage.getWaiverFareSheet()) {
+    			if(sheet.getFares().size() > 0) {
+    				for(WorkPackageFare fares : sheet.getFares()) {
+    					if(fares.getSaleStart() != null) {
+    						allFares.add(fares);
+    						continue;
+    					}
+    				}
+    			}
+    		}
+    	}
+    	
+    	if(allFares.size() > 0) {
+	    	Collections.sort(allFares, new WorkPackageFare.WorkPackageFareComparator());  
+	    	workPackage.setSaleDate(allFares.get(0).getSaleStart());
+    	}
+    	
+    	if(workPackage.getSaleDate() != null && (workPackage.getStatus() != Status.DISTRIBUTED) && workPackage.getTargetDistribution().contentEquals("ATPCO")) {
+	    	Sort sort = new Sort(Direction.ASC, "priority");
+	    	List<Priority> priorities = priorityRepository.findAll(sort);
+	    	
+	    	boolean found = false;
+	    	
+	    	for(Priority p : priorities) {
+	    		if(p.getType().contentEquals("DAYS")) {
+	    			long val = zonedDateTimeDifference(ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS), workPackage.getSaleDate().truncatedTo(ChronoUnit.DAYS), ChronoUnit.DAYS);
+	    			long value = p.getValue();
+
+	    			if(val <= value) {    				
+	    				workPackage.setPriority(p.getName());
+	    				found = true;
+	    				break;
+	    			}
+	    		}
+	    	}
+	    	
+	    	if(!found) {
+		    	Sort sortDesc = new Sort(Direction.DESC, "priority");
+		    	List<Priority> prioritiesDesc = priorityRepository.findAll(sortDesc);
+		    	workPackage.setPriority(prioritiesDesc.get(0).getName());
+	    	}
+    	}
+    	
+    	workPackage.setValidation(null);
         return workPackageRepository.save(workPackage);
+    }
+    
+
+	static long zonedDateTimeDifference(ZonedDateTime d1, ZonedDateTime d2, ChronoUnit unit){
+        return unit.between(d1, d2);
     }
 
     /**

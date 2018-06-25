@@ -1,0 +1,201 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+            ng-click="vm.clear()">&times;</button>
+    <h4 class="modal-title">Fare Details</h4>
+</div>
+<div class="modal-body">
+	<label>Fare</label>
+	<div class="panel" style="margin-bottom: 20px;">
+		<div class="panel-body">
+			<div class="clearfix">
+				<div class="pull-left col-md-3 no-pad">
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Source</div>
+						<div class="col-md-6 no-pad">{{vm.fare.source}}</div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Pub/Prv</div>
+						<div class="col-md-6 no-pad"></div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Carrier</div>
+						<div class="col-md-6 no-pad">{{vm.fare.carrierCode}}</div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Tariff No/Cd</div>
+						<div class="col-md-6 no-pad">{{vm.fare.tariffNo}} / {{vm.fare.tariffCode}}</div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Global/Area</div>
+						<div class="col-md-6 no-pad">{{vm.fare.globalIndicator}}</div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Orig</div>
+						<div class="col-md-6 no-pad">{{vm.fare.originCity}}</div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">OrigCn</div>
+						<div class="col-md-6 no-pad">{{vm.fare.originCountry}}</div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Dest</div>
+						<div class="col-md-6 no-pad">{{vm.fare.destinationCity}}</div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">DestCn</div>
+						<div class="col-md-6 no-pad">{{vm.fare.destinationCountry}}</div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">OWRT</div>
+						<div class="col-md-6 no-pad"><span ng-if="vm.fare.owrt == '1'">OW</span><span ng-if="vm.fare.owrt == '2'">RT</span><span ng-if="vm.fare.owrt == '3'">OO</span></div>
+					</div>
+				</div>
+				<div class="pull-left col-md-3 no-pad">
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Fare Class</div>
+						<div class="col-md-6 no-pad">{{vm.fare.fareClassCode}}</div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">RBD</div>
+						<div class="col-md-6 no-pad">{{vm.fare.bookingClass}}</div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Cabin</div>
+						<div class="col-md-6 no-pad">{{vm.fare.cabin}}</div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">GFS Ref</div>
+						<div class="col-md-6 no-pad"><span ng-if="vm.fare.gfsDate != undefined && vm.fare.gfsDate != null">{{vm.fare.gfsDate | date:'ddMMMyyyy':vm.timezone}} - {{vm.fare.gfsReference}}</span></div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Effective</div>
+						<div class="col-md-6 no-pad"><span ng-if="vm.fare.effectiveDate != 'indef'">{{vm.fare.effectiveDate | date:'ddMMMyyyy':vm.timezone}}</span></div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Discontinue</div>
+						<div class="col-md-6 no-pad"><span ng-if="vm.fare.discontinueDate != 'indef'">{{vm.fare.discontinueDate | date:'ddMMMyyyy':vm.timezone}}</span></div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Pax Type</div>
+						<div class="col-md-6 no-pad">{{vm.fare.paxType}}</div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Season Type</div>
+						<div class="col-md-6 no-pad">{{vm.fare.season}}</div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Dow Type</div>
+						<div class="col-md-6 no-pad"></div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Fare Type</div>
+						<div class="col-md-6 no-pad">{{vm.fare.fareType}}</div>
+					</div>
+				</div>
+				<div class="pull-left col-md-3 no-pad">
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Base Amount</div>
+						<div class="col-md-6 no-pad">{{vm.fare.baseAmount}}</div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Currency</div>
+						<div class="col-md-6 no-pad">{{vm.fare.currencyCode}}</div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Routing No</div>
+						<div class="col-md-6 no-pad">{{vm.fare.routingNo}}</div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">MPM</div>
+						<div class="col-md-6 no-pad">{{vm.fare.maximumPermittedMileage}}</div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Footnote</div>
+						<div class="col-md-6 no-pad">{{vm.fare.footnote}}</div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Rule No</div>
+						<div class="col-md-6 no-pad">{{vm.fare.ruleNo}}</div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">First Travel</div>
+						<div class="col-md-6 no-pad"><span ng-if="vm.fare.travelStartDate != 'indef'">{{vm.fare.travelStartDate | date:'ddMMMyyyy':vm.timezone}}</span></div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Last Travel</div>
+						<div class="col-md-6 no-pad"><span ng-if="vm.fare.travelEndDate != 'indef'">{{vm.fare.travelEndDate | date:'ddMMMyyyy':vm.timezone}}</span></div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">First Season</div>
+						<div class="col-md-6 no-pad"><span ng-if="vm.fare.firstSeasonDate != 'indef'">{{vm.fare.firstSeasonDate | date:'ddMMMyyyy':vm.timezone}}</span></div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Last Season</div>
+						<div class="col-md-6 no-pad"><span ng-if="vm.fare.lastSeasonDate != 'indef'">{{vm.fare.lastSeasonDate | date:'ddMMMyyyy':vm.timezone}}</span></div>
+					</div>
+					
+				</div>
+				<div class="pull-left col-md-3 no-pad">
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Old Base Amount</div>
+						<div class="col-md-6 no-pad"></div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Old Currency</div>
+						<div class="col-md-6 no-pad"></div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Old Routing No</div>
+						<div class="col-md-6 no-pad"></div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Old MPM</div>
+						<div class="col-md-6 no-pad"></div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Old Footnote</div>
+						<div class="col-md-6 no-pad"></div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Last Action</div>
+						<div class="col-md-6 no-pad"></div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Travel Complete</div>
+						<div class="col-md-6 no-pad"><span ng-if="vm.fare.travelComplete != 'indef'">{{vm.fare.travelComplete | date:'ddMMMyyyy':vm.timezone}}</span></div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Min Stay</div>
+						<div class="col-md-6 no-pad">{{vm.fare.minStay}}</div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Max Stay</div>
+						<div class="col-md-6 no-pad">{{vm.fare.maxStay}}</div>
+					</div>
+					<div class="detail-group">
+						<div class="header col-md-6 no-pad">Adv Purchase</div>
+						<div class="col-md-6 no-pad">{{vm.fare.advancePurchase}}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<label>Rule</label>
+	<div class="panel">
+		<div class="panel-body">
+			<div ng-repeat="cat in vm.categoryRules track by $index">
+				<div ng-if="cat.textFormat != ''">
+					<label style="font-size: 14px; color: #000; text-transform: uppercase;">Category {{cat.catNo}} - {{cat.catName}}</label>
+					<pre class="transparent">{{cat.textFormat}}</pre>
+					<br/>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<button type="submit" class="btn btn-back" ng-click="vm.clear()">
+        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Close</span>
+    </button>
+</div>
+   	
+    

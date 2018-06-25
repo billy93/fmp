@@ -1,56 +1,54 @@
 package com.atibusinessgroup.fmp.domain;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.validation.constraints.NotNull;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 /**
  * A RMDataFeeds.
  */
-@Document(collection = "origin_destination_data_feeds")
+@Document(collection = "data_feed_origin_destination")
 public class DataFeedOriginDestination implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Id
-    private String id;
-    
-    @Field("origin_airport")
-    private String origAirport;
+	@Id
+	private String id;
 
-    @Field("destination_airport")
-    private String destAirport;
+	@Field("origin_airport")
+	private String origAirport;
 
-    @Field("origin_city")
-    private String origCity;
+	@Field("destination_airport")
+	private String destAirport;
 
-    @Field("destination_city")
-    private String destCity;
-        
+	@Field("origin_city")
+	private String origCity;
+
+	@Field("destination_city")
+	private String destCity;
+
 	@Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        DataFeedOriginDestination rMDataFeeds = (DataFeedOriginDestination) o;
-        if (rMDataFeeds.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), rMDataFeeds.getId());
-    }
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		DataFeedOriginDestination rMDataFeeds = (DataFeedOriginDestination) o;
+		if (rMDataFeeds.getId() == null || getId() == null) {
+			return false;
+		}
+		return Objects.equals(getId(), rMDataFeeds.getId());
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(getId());
+	}
 
 	public String getId() {
 		return id;
@@ -97,5 +95,5 @@ public class DataFeedOriginDestination implements Serializable {
 		return "DataFeedOriginDestination [id=" + id + ", origAirport=" + origAirport + ", destAirport=" + destAirport
 				+ ", origCity=" + origCity + ", destCity=" + destCity + "]";
 	}
-	
+
 }

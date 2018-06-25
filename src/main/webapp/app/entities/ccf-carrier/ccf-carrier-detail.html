@@ -1,0 +1,55 @@
+
+<div>
+    <h2><span>Ccf Carrier</span> {{vm.ccfCarrier.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span>Svc Tags Psgdom</span></dt>
+        <dd>
+            <span>{{vm.ccfCarrier.svcTagsPsgdom}}</span>
+        </dd>
+        <dt><span>Filler</span></dt>
+        <dd>
+            <span>{{vm.ccfCarrier.filler}}</span>
+        </dd>
+        <dt><span>Svc Tags Cardom</span></dt>
+        <dd>
+            <span>{{vm.ccfCarrier.svcTagsCardom}}</span>
+        </dd>
+        <dt><span>Cxr Code</span></dt>
+        <dd>
+            <span>{{vm.ccfCarrier.cxrCode}}</span>
+        </dd>
+        <dt><span>Rec Type</span></dt>
+        <dd>
+            <span>{{vm.ccfCarrier.recType}}</span>
+        </dd>
+        <dt><span>Batch Number</span></dt>
+        <dd>
+            <span>{{vm.ccfCarrier.batchNumber}}</span>
+        </dd>
+        <dt><span>Svc Tags Psgint</span></dt>
+        <dd>
+            <span>{{vm.ccfCarrier.svcTagsPsgint}}</span>
+        </dd>
+        <dt><span>Batch Date</span></dt>
+        <dd>
+            <span>{{vm.ccfCarrier.batchDate}}</span>
+        </dd>
+        <dt><span>Svg Tags Carint</span></dt>
+        <dd>
+            <span>{{vm.ccfCarrier.svgTagsCarint}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            ui-sref="{{ vm.previousState }}"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button" ui-sref="ccf-carrier-detail.edit({id:vm.ccfCarrier.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-sm-down"> Edit</span>
+    </button>
+</div>

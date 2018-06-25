@@ -25,14 +25,9 @@ import org.springframework.stereotype.Service;
 
 import com.atibusinessgroup.fmp.constant.CollectionName;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFootnoteRecord2;
-import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByFtntCxrTarNo;
-import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByCatNo;
-import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByRuleNoCxrTarNo;
-import com.atibusinessgroup.fmp.domain.dto.FootnoteQuery;
 import com.atibusinessgroup.fmp.domain.dto.FootnoteQueryParam;
-import com.atibusinessgroup.fmp.domain.dto.RuleQueryParam;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 

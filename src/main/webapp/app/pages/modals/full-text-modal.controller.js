@@ -13,8 +13,6 @@
         
         vm.categoryRules = entity.categories;
 
-        console.log(vm.categoryRules);
-        
         function clear () {
             $uibModalInstance.dismiss('cancel');
         }

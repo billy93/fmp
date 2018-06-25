@@ -8,11 +8,11 @@
 		<ul class="clearfix nav-responsive nav nav-tabs"
 			style="font-size: 14px !important">
 			<li ng-class="{active:vm.tab1}" class="semibold"><a
-				ng-click="vm.getTab('1')">Rule</a></li>
+				ng-click="vm.getTab('1'); vm.paramCarrier = null; vm.paramTarNo = null">Rule</a></li>
 			<li ng-class="{active:vm.tab2}" class="semibold"><a
-				ng-click="vm.getTab('2')">Fare Class</a></li>
+				ng-click="vm.getTab('2'); vm.paramCarrier = null; vm.paramTarNo = null">Fare Class</a></li>
 			<li ng-class="{active:vm.tab3}" class="semibold"><a
-				ng-click="vm.getTab('3')">Rec 8 - Fare By Rule</a></li>
+				ng-click="vm.getTab('3'); vm.paramCarrier = null; vm.paramTarNo = null">Rec 8 - Fare By Rule</a></li>
 		</ul>
 	</div>
 
@@ -27,20 +27,26 @@
 							<div class="filter-label semibold show">Hide Filter</div>
 							<div class="filter-area">
 								<div class="clearfix">
-									<form name="queryForm" role="form" novalidate>
+									<form name="queryForm" role="form" ng-model="vm.queryForm" novalidate>
 										<div class="pull-left col-md-4 no-lpad" >
 											<div class="form-group">
 												<div class="custom-label semibold">Carrier</div>
+												<div class="input-group">
 												<input type="text" class="form-control" name="cxr"
 													id="cxr" 
 													ng-minlength="2"
-													ng-model="vm.queryParams.cxr" uppercase 
-													required
-													uib-tooltip="*minimum 2 letters"
-													tooltip-placement="top"
-													tooltip-trigger="none"
-													tooltip-is-open="queryForm.$invalid" 
-													style="border:1px solid red"/>
+													ng-model="vm.paramCarrier" uppercase 
+													required/>
+													
+													<span ng-click="vm.showCarrierModal()" class="input-group-addon"><i class="fa fa-folder"></i>
+													</span>
+												</div>
+												<div ng-show="queryForm.cxr.$invalid">
+													<p class="help-block" ng-show="queryForm.cxr.$error.required">
+														This field is required.</p>
+													<p class="help-block" ng-show="queryForm.cxr.$error.minlength">
+														Minimum 2 letters</p>
+												</div>
 											</div>
 											<div class="form-group">
 												<div class="custom-label semibold">Rule Number</div>
@@ -63,14 +69,20 @@
 										<div class="pull-left col-md-4 no-lpad">
 											<div class="form-group">
 												<div class="custom-label semibold">Tariff Number</div>
-												<input type="text" class="form-control" name="tariff"
-													id="ruleTarNo" ng-model="vm.queryParams.ruleTarNo"
-													uppercase />
+												<div class="input-group">
+													<input id="ruleTarNo" type="text" 
+		                   								name="ruleTarNo"  
+		                   								class="form-control"
+		                   								ng-model="vm.paramTarNo" uppercase>
+		                   								
+													<span ng-click="vm.showTariffModal()" class="input-group-addon"><i class="fa fa-folder"></i>
+													</span>
+												</div>
 											</div>
 											<div class="form-group">
 
 												<div class="custom-label semibold">Category</div>
-												<select class="form-control" name="category" id="catNo"
+												<select class="form-control" name="catNo" id="catNo"
 													ng-model="vm.queryParams.catNo">
 													<option value="">All</option>
 													<option value="001">01 - Eligibility</option>
@@ -127,6 +139,7 @@
 												<div class="form-group mt1">
 													<button type="button"
 														class="btn btn-default small pull-left"
+														ng-disabled="queryForm.$invalid"
 														ng-click="vm.loadAll(queryForm); vm.hideDetail()">Query</button>
 													<button type="button"
 														class="btn btn-default small pull-left"
@@ -178,7 +191,7 @@
 										items-per-page="vm.itemsPerPage"></jhi-item-count>
 									<uib-pagination class="pagination-sm"
 										total-items="vm.totalItems" items-per-page="vm.itemsPerPage"
-										ng-model="vm.page" ng-change="vm.loadAll()"></uib-pagination>
+										ng-model="vm.page" ng-change="vm.loadAll(queryForm)"></uib-pagination>
 								</div>
 							</div>
 						</div>
@@ -281,7 +294,7 @@
 															<div class="form-group">
 																<div class="custom-label semibold">Carrier</div>
 																<input type="text" class="form-control" name="carrier"
-																	id="cxr" ng-model="vm.queryParams.cxr" uppercase />
+																	id="cxr" ng-model="vm.paramCarrier" uppercase />
 															</div>
 															<div class="form-group">
 																<div class="custom-label semibold">Rule Number</div>
@@ -297,7 +310,7 @@
 																	id="fare" ng-model="vm.queryParams.fareClass" uppercase />
 															</div>
 															<div class="form-group">
-																<div class="custom-label semibold">Tariff</div>
+																<div class="custom-label semibold">Tariff Number</div>
 																<input type="text" class="form-control" name="tariff"
 																	id="ruleTarNo" ng-model="vm.queryParams.ruleTarNo"
 																	uppercase />
@@ -592,40 +605,51 @@
 							<div class="filter-label semibold show">Hide Filter</div>
 							<div class="filter-area">
 								<div class="clearfix">
-									<form name="rec8Form" role="form" novalidate>
+									<form id="rec8Form" name="rec8Form" role="form" novalidate>
 										<div class="pull-left col-md-4 no-lpad">
 											<div class="form-group">
 												<div class="custom-label semibold">Carrier</div>
+												<div class="input-group">
 												<input type="text" class="form-control" name="cxrRec8"
-													id="cxrRec8" ng-model="vm.rec8Params.cxr" uppercase
-													required
-													ng-minlength="2"
-													uib-tooltip="*minimum 2 letters"
-													tooltip-placement="top"
-													tooltip-trigger="none"
-													tooltip-is-open="rec8Form.$invalid" 
-													style="border:1px solid red" />
+													id="cxrRec8" ng-minlength="2"
+													ng-model="vm.paramCarrier" uppercase 
+													required/>
+													<span ng-click="vm.showCarrierModal()" class="input-group-addon"><i class="fa fa-folder"></i>
+													</span>
+												</div>
+												<div ng-show="rec8Form.cxrRec8.$invalid">
+													<p class="help-block" ng-show="rec8Form.cxrRec8.$error.required">
+														This field is required.</p>
+													<p class="help-block" ng-show="rec8Form.cxrRec8.$error.minlength">
+														Minimum 2 letters</p>
+												</div>
 											</div>
 											<div class="form-group">
 												<div class="custom-label semibold">Rule Number</div>
 												<input type="text" class="form-control" name="ruleNoRec8"
-													id="ruleNoRec8" ng-model="vm.rec8Params.ruleNo" uppercase />
+													id="ruleNoRec8" ng-model="vm.rec8params.ruleNo" uppercase />
 											</div>
 										</div>
 
 
 										<div class="pull-left col-md-4 no-lpad">
 											<div class="form-group">
-												<div class="custom-label semibold">Tariff</div>
-												<input type="text" class="form-control" name="tarNoRec8"
-													id="tarNoRec8" ng-model="vm.rec8Params.ruleTarNo"
-													uppercase />
+												<div class="custom-label semibold">Tariff Number</div>
+												<div class="input-group">
+													<input id="ruleTarNoRec8" type="text" 
+		                   								name="ruleTarNoRec8"  
+		                   								class="form-control"
+		                   								ng-model="vm.paramTarNo" uppercase>
+		                   								
+													<span ng-click="vm.showTariffModal()" class="input-group-addon"><i class="fa fa-folder"></i>
+													</span>
+												</div>
 											</div>
 											
 											<div class="form-group">
 												<div class="custom-label semibold">Account Code</div>
 												<input type="text" class="form-control" name="accCodeRec8"
-													id="accCodeRec8" ng-model="vm.rec8Params.accountCode" uppercase />
+													id="accCodeRec8" ng-model="vm.rec8params.accountCode" uppercase />
 											</div>
 											
 										</div>
@@ -637,12 +661,13 @@
 													<label> <input type="checkbox"
 														name="includeDisc"
 														id="includeDisc"
-														ng-model="vm.rec8Params.includeDisc"> Include Discontinued Sequences
+														ng-model="vm.rec8params.includeDisc"> Include Discontinued Sequences
 													</label>
 												</div>
 												<br/>
 												<div class="form-group mt1">
 													<button type="button" id="btnLoadRec8"
+														ng-disabled="qrec8Form.$invalid"
 														class="btn btn-default small pull-left"
 														ng-click="vm.loadRec8(rec8Form);">Query</button>
 													<button type="button" id="btnClearRec8"
@@ -683,36 +708,35 @@
 											</tr>
 										</thead>
 										<tbody>
-											<tr ng-repeat="rec8 in vm.record8"
-												ng-class="{'selected': vm.selectedrec8Row == rec8">
+											<tr ng-repeat="rec8 in vm.record8">
 												<td>{{$index + 1}}</td>
-												<td>{{rec8.cxr}}</td>
-												<td>{{rec8.tarNo}}</td>
-												<td>{{rec8.tarCd}}</td>
-												<td>{{rec8.desc}}</td>
-												<td>{{rec8.ruleNo}}</td>
+												<td>{{rec8.cxr_code}}</td>
+												<td>{{rec8.tariff}}</td>
+												<td>{{rec8.tar_cd}}</td>
+												<td>{{rec8.description}}</td>
+												<td>{{rec8.rule_no}}</td>
 												<td>{{rec8.cat35}}</td>
-												<td>{{rec8.paxType}}</td>
-												<td>{{rec8.accountCode}}</td>
-												<td>{{rec8.global}}</td>
-												<td>{{rec8.loc1}}</td>
-												<td>{{rec8.loc2}}</td>
-												<td><span ng-if="rec8.effectiveDateObject=='indef'"></span><span
-													ng-if="rec8.effectiveDateObject!='indef'">{{rq.effectiveDateObject
+												<td>{{rec8.prim_pass_type}}</td>
+												<td>{{rec8.account_code}}</td>
+												<td>{{rec8.fare_geo_scope_global}}</td>
+												<td>{{rec8.fare_geo_scope_loc_1}}</td>
+												<td>{{rec8.fare_geo_scope_loc_2}}</td>
+												<td><span ng-if="rec8.dates_eff=='indef'"></span><span
+													ng-if="rec8.dates_eff != 'indef'">{{rec8.dates_eff
 														| date:'medium'}}</span></td>
-												<td><span ng-if="rec8.discontinueDateObject=='indef'"></span><span
-													ng-if="rec8.discontinueDateObject!='indef'">{{rq.discontinueDateObject
+												<td><span ng-if="rec8.dates_disc=='indef'"></span><span
+													ng-if="rec8.dates_disc != 'indef'">{{rec8.dates_disc
 														| date:'medium'}}</span></td>
 											</tr>
 										</tbody>
 									</table>
 								</div>
 								<div class="text-center">
-									<jhi-item-count page="vm.page" total="vm.queryCount"
-										items-per-page="vm.itemsPerPage"></jhi-item-count>
+									<jhi-item-count page="vm.pageRec8" total="vm.queryCountRec8"
+										items-per-page="vm.itemsPerPageRec8"></jhi-item-count>
 									<uib-pagination class="pagination-sm"
-										total-items="vm.totalItems" items-per-page="vm.itemsPerPage"
-										ng-model="vm.page" ng-change="vm.loadRec8()"></uib-pagination>
+										total-items="vm.totalItemsRec8" items-per-page="vm.itemsPerPageRec8"
+										ng-model="vm.pageRec8" ng-change="vm.loadRec8(rec8Form)"></uib-pagination>
 								</div>
 							</div>
 						</div>

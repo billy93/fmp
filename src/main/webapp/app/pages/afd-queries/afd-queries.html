@@ -1,3 +1,9 @@
+<style>
+	.page-wrapper .page-content {
+		padding-bottom: 60px;
+	}
+</style>
+
 <div class="content-title">
 	<h2>AFD Query</h2>
 	<jhi-alert></jhi-alert>
@@ -249,7 +255,7 @@
 							</div>
 							<div class="clearfix">
 								<div class="pull-right pv1">
-									<button type="button" class="btn btn-default small" ng-click="vm.loadAll()">Query</button>
+									<button type="button" class="btn btn-default small" ng-click="vm.query()">Query</button>
 									<button type="reset" ng-click="vm.reset()" class="btn btn-default small">Reset</button>
 								</div>
 							</div>
@@ -262,18 +268,6 @@
 		<div class="table-wrapper mb2" ng-if="vm.afdQueries">
 			<div class="datatable-wrapper form-inline">
 				<div class="clearfix">
-					<div class="pull-left w50">
-						<div class="datatable-length">
-							<label>
-								<select class="form-control" ng-model="vm.itemsPerPage" ng-init="vm.itemsPerPage = '10'" ng-change="vm.loadAll()">
-									<option value="10">10</option>
-									<option value="15">15</option>
-									<option value="20">20</option>
-								</select>
-								 records per page
-							</label>
-						</div>
-					</div>
 					<div class="pull-right w50">
 						<div class="clearfix">
 							<div class="pull-right datatable-button">
@@ -293,7 +287,7 @@
 									    	<a ng-click="vm.copyAfdQueryFares()" ng-disabled="vm.selectedRows.length == 0">Copy</a>
 									    </li>
 									    <li>
-									    	<a ng-click="vm.fareDetails()">Fare Details</a>
+									    	<a ng-click="vm.showFareDetail()" ng-disabled="vm.selectedFares.length == 0">Fare Details</a>
 									    </li>
 									    <li>
 									    	<a ng-click="">Compare Fares</a>
@@ -322,78 +316,78 @@
 						</div>																						
 					</div>
 				</div>
-							
-				<div class="table-responsive">
-			        <table class="table table-striped table-bordered datatable">
+				<br/>
+				<div class="table-responsive" style="max-height: initial;">
+			        <table class="table table-striped table-header-fixed table-bordered datatable">
 			            <thead>
 			                <tr>
-			                    <th>ID</th>
-			                    <th>Source</th>
-			                    <th>S/C</th>
-			                    <th>Tar No</th>
-			                    <th>Tar Cd</th>
-			                    <th>Cxr</th>
-			                    <th>Orig</th>
-			                    <th>Orig Cn</th>
-			                    <th>Dest</th>
-			                    <th>Dest Cn</th>
-			                    <th>Fare Cls</th>
-			                    <th>Bkg Cls</th> 
-			                    <th>Cabin</th>
-			                    <th>OW/RT</th>
-			                    <th>Ftnt</th>
-			                    <th>Rtg No</th>
-			                    <th>Rule No</th>
-			                    <th>MPM</th>
-			                    <th>Curr</th>
-			                    <th>Base Amt</th>
-			                    <th ng-if="vm.showTFC">Error</th>
-			                    <th ng-if="vm.showTFC">TFC Calc Date</th>
-			                    <th ng-if="vm.showTFC">TFC Focus Date</th>
-			                    <th ng-if="vm.showTFC">YQYR</th>
-			                    <th ng-if="vm.showTFC">Taxes</th>
-			                    <th>TFC <span ng-click="vm.showTFC = !vm.showTFC"><i ng-if="vm.showTFC" class="glyphicon glyphicon-minus"></i><i ng-if="!vm.showTFC" class="glyphicon glyphicon-plus"></i></span></th>
-			                    <th>AIF</th>
-			                    <th>Itinerary</th>
-			                    <th>Override Ind</th>
-			                    <th>Eff Date</th>
-			                    <th>Disc Date</th>
-			                    <th>GFS Ref</th>
-			                    <th>Global</th>
-			                    <th>Rule Focus Date</th>
-			                    <th>Sellable</th>
-			                    <th>Travel Start</th>
-			                    <th>Travel End</th>
-			                    <th>Travel Complete</th>
-			                    <th>Sale Start</th>
-			                    <th>Sale End</th>
-			                    <th>Res Start</th>
-			                    <th>Res End</th>
-			                    <th>Min Stay</th>
-			                    <th>Max Stay</th>
-			                    <th>Adv Pur</th>
-			                    <th>DOW In</th>
-			                    <th>DOW Out</th>
-			                    <th>Season</th>
-			                    <th>F Season Date</th>
-			                    <th>L Season Date</th>
-			                    <th>Travel Date Ranges</th>
-			                    <th>Fare Type</th>
-			                    <th>Pax Type</th>
-			                    <th>WO Id</th>
-			                    <th>WO Name</th>
-			                    <th>Tour Code</th>
-			                    <th>Cat 50 Title</th>
-			                    <th>Group Fare</th>
-			                    <th>Ref Amt</th>
-			                    <th>Ref YQYR</th>
-			                    <th>Ref Taxes</th>
-			                    <th>Ref TFC</th>
-			                    <th>Ref AIF</th>
+			                    <th class="th-fixed">ID</th>
+			                    <th class="th-fixed">Source</th>
+			                    <th class="th-fixed">S/C</th>
+			                    <th class="th-fixed">Tar No</th>
+			                    <th class="th-fixed">Tar Cd</th>
+			                    <th class="th-fixed">Cxr</th>
+			                    <th class="th-fixed">Orig</th>
+			                    <th class="th-fixed">Orig Cn</th>
+			                    <th class="th-fixed">Dest</th>
+			                    <th class="th-fixed">Dest Cn</th>
+			                    <th class="th-fixed">Fare Cls</th>
+			                    <th class="th-fixed">Bkg Cls</th> 
+			                    <th class="th-fixed">Cabin</th>
+			                    <th class="th-fixed">OW/RT</th>
+			                    <th class="th-fixed">Ftnt</th>
+			                    <th class="th-fixed">Rtg No</th>
+			                    <th class="th-fixed">Rule No</th>
+			                    <th class="th-fixed">MPM</th>
+			                    <th class="th-fixed">Curr</th>
+			                    <th class="th-fixed">Base Amt</th>
+			                    <th class="th-fixed" ng-if="vm.showTFC">Error</th>
+			                    <th class="th-fixed" ng-if="vm.showTFC">TFC Calc Date</th>
+			                    <th class="th-fixed" ng-if="vm.showTFC">TFC Focus Date</th>
+			                    <th class="th-fixed" ng-if="vm.showTFC">YQYR</th>
+			                    <th class="th-fixed" ng-if="vm.showTFC">Taxes</th>
+			                    <th class="th-fixed">TFC <span ng-click="vm.showTFC = !vm.showTFC"><i ng-if="vm.showTFC" class="glyphicon glyphicon-minus"></i><i ng-if="!vm.showTFC" class="glyphicon glyphicon-plus"></i></span></th>
+			                    <th class="th-fixed">AIF</th>
+			                    <th class="th-fixed">Itinerary</th>
+			                    <th class="th-fixed">Override Ind</th>
+			                    <th class="th-fixed">Eff Date</th>
+			                    <th class="th-fixed">Disc Date</th>
+			                    <th class="th-fixed">GFS Ref</th>
+			                    <th class="th-fixed">Global</th>
+			                    <th class="th-fixed">Rule Focus Date</th>
+			                    <th class="th-fixed">Sellable</th>
+			                    <th class="th-fixed">Travel Start</th>
+			                    <th class="th-fixed">Travel End</th>
+			                    <th class="th-fixed">Travel Complete</th>
+			                    <th class="th-fixed">Sale Start</th>
+			                    <th class="th-fixed">Sale End</th>
+			                    <th class="th-fixed">Res Start</th>
+			                    <th class="th-fixed">Res End</th>
+			                    <th class="th-fixed">Min Stay</th>
+			                    <th class="th-fixed">Max Stay</th>
+			                    <th class="th-fixed">Adv Pur</th>
+			                    <th class="th-fixed">DOW In</th>
+			                    <th class="th-fixed">DOW Out</th>
+			                    <th class="th-fixed">Season</th>
+			                    <th class="th-fixed">F Season Date</th>
+			                    <th class="th-fixed">L Season Date</th>
+			                    <th class="th-fixed">Travel Date Ranges</th>
+			                    <th class="th-fixed">Fare Type</th>
+			                    <th class="th-fixed">Pax Type</th>
+			                    <th class="th-fixed">WO Id</th>
+			                    <th class="th-fixed">WO Name</th>
+			                    <th class="th-fixed">Tour Code</th>
+			                    <th class="th-fixed">Cat 50 Title</th>
+			                    <th class="th-fixed">Group Fare</th>
+			                    <th class="th-fixed">Ref Amt</th>
+			                    <th class="th-fixed">Ref YQYR</th>
+			                    <th class="th-fixed">Ref Taxes</th>
+			                    <th class="th-fixed">Ref TFC</th>
+			                    <th class="th-fixed">Ref AIF</th>
 			                </tr>
 			            </thead>
-			            <tbody ng-repeat="afdQuery in vm.afdQueries track by afdQuery.atpcoFareId">
-			                <tr ng-click="vm.setSelectedRow($index, afdQuery); vm.getRules(afdQuery)" ng-class="{'selected': vm.selectedRows[$index] == afdQuery}">
+			            <tbody infinite-scroll="vm.loadPage(vm.page + 1)" infinite-scroll-disabled="vm.isLastPage || vm.isLoading" infinite-scroll-container="'.table-responsive'">
+			                <tr ng-repeat="afdQuery in vm.afdQueries track by afdQuery.atpcoFareId" ng-click="vm.setSelectedRow($index, afdQuery); vm.getRules(afdQuery)" ng-class="{'selected': vm.selectedRows[$index] == afdQuery}">
 			                    <td><a ui-sref="system-parameter-detail({id:afdQuery.id})">{{$index + 1}}</a></td>
 			                    <td>{{afdQuery.source}}</td>
 			                    <td>{{afdQuery.sc}}</td>
@@ -442,11 +436,11 @@
 			                	<td></td>
 			                	<td></td>
 			                	<td>{{afdQuery.season}}</td>
-			                	<td>{{afdQuery.firstSeasonDate}}</td>
-			                	<td>{{afdQuery.lastSeasonDate}}</td>
+			                	<td><span ng-if="afdQuery.firstSeasonDate != 'indef'">{{afdQuery.firstSeasonDate | date:'ddMMMyyyy':vm.timezone}}</span></td>
+			                	<td><span ng-if="afdQuery.lastSeasonDate != 'indef'">{{afdQuery.lastSeasonDate | date:'ddMMMyyyy':vm.timezone}}</span></td>
 			                	<td>
 			                		<span ng-if="afdQuery.travelStartDate == 'indef'">XXXXXXXX</span><span ng-if="afdQuery.travelStartDate != 'indef'">{{afdQuery.travelStartDate | date:'ddMMMyyyy':vm.timezone}}</span>
-			                		<span ng-if="afdQuery.travelEndDate == 'indef'">-XXXXXXXX</span><span ng-if="afdQuery.travelEndDate != undefined && afdQuery.travelEndDate != null && afdQuery.travelEndDate != 'indef'">-{{afdQuery.travelEndDate | date:'ddMMMyyyy':vm.timezone}}</span>
+			                		<span ng-if="afdQuery.travelEndDate == 'indef'"> - XXXXXXXX</span><span ng-if="afdQuery.travelEndDate != undefined && afdQuery.travelEndDate != null && afdQuery.travelEndDate != 'indef'"> - {{afdQuery.travelEndDate | date:'ddMMMyyyy':vm.timezone}}</span>
 			                	</td>
 			               		<td>{{afdQuery.fareType}}</td>
 			                	<td>{{afdQuery.paxType}}</td>
@@ -464,6 +458,7 @@
 			            </tbody>
 			        </table>
 			    </div>
+			    <label ng-if="vm.isLastPage" style="width: 100%; text-align: center;">You have reached the end of the page &nbsp;<i style="font-size: 10px !important;" class="glyphicon glyphicon-chevron-up"></i></label>
 			</div>
 		</div>
 		
@@ -485,10 +480,5 @@
 	      		</div>
 			</div>
    		</div>
-   		
-		<div class="text-center" ng-if="vm.afdQueries">
-	        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
-	        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.loadAll()"></uib-pagination>
-	    </div>
 	</div>
 </div>

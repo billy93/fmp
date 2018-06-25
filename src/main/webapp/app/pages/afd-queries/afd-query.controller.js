@@ -14,20 +14,25 @@
         vm.itemsPerPage = paginationConstants.itemsPerPage;
         vm.queryParams = queryParams;
         vm.loadAll = loadAll;
+        vm.query = query;
+        vm.toTopPage = toTopPage;
         vm.checkValidParameters = checkValidParameters;
         vm.setSelectedRow = setSelectedRow;
         vm.getRules = getRules;
         vm.showCategoryDetail = showCategoryDetail;
+        vm.showFareDetail = showFareDetail;
         vm.copyAfdQueryFares = copyAfdQueryFares;
         vm.selectAll = selectAll;
         vm.showLegend = showLegend;
         vm.viewFullText = viewFullText;
         vm.showErrorModal = showErrorModal;
         vm.selectedRows = [];
+        vm.selectedFares = [];
         vm.timezone = Timezone.GMT7;
         
+        vm.afdQueries = [];
         vm.reset = reset;
-        vm.page = 1;
+        vm.page = 0;
         
         vm.datePickerOpenStatus = {};
         vm.dateFormat = "yyyy-MM-dd";
@@ -75,7 +80,17 @@
         
         vm.loadAll();
 
+        function query() {
+        	vm.afdQueries = [];
+        	vm.page = 0;
+        	vm.loadAll();
+        }
+        
         function loadAll () {
+        	vm.isLoading = true;
+        	vm.isLastPage = false;
+        	vm.showLastPageInfo = false;
+        	
         	if (!vm.checkValidParameters()) {
         		vm.showErrorModal();
         		return;
@@ -84,20 +99,24 @@
         	vm.categoryRules = null;
         	vm.currentAfdQuery = null;
         	
-        	vm.queryParams.page = vm.page - 1;
+        	vm.queryParams.page = vm.page;
         	vm.queryParams.size = vm.itemsPerPage;
         	
         	AfdQuery.query(vm.queryParams, onSuccess, onError);
         	
-            function onSuccess(data, headers) {
-                vm.links = ParseLinks.parse(headers('link'));
-                vm.totalItems = headers('X-Total-Count');
-                vm.queryCount = vm.totalItems;
-                vm.afdQueries = data;
+            function onSuccess(data) {
+            	vm.isLastPage = data.lastPage;
+            	
+                for (var i = 0; i < data.afdQueries.length; i++) {
+                	vm.afdQueries.push(data.afdQueries[i]);
+                }
+                
+                vm.isLoading = false;
             }
             
             function onError(error) {
                 AlertService.error(error.data.message);
+                vm.isLoading = false;
             }
         }
         
@@ -110,7 +129,12 @@
         }
 
         function loadPage(page) {
-            vm.page = page;
+    		vm.page = page;
+    		vm.loadAll();
+        }
+        
+        function toTopPage() {
+        	$('.page-wrapper').scrollTop(0);
         }
 
         function getRules(afdQuery) {
@@ -118,7 +142,6 @@
         		AfdQuery.getRules(afdQuery, function(data) {
             		vm.categoryRules = data;
             		vm.currentAfdQuery = afdQuery;
-            		console.log(vm.categoryRules);
             	}, function(error) {
             		console.log(error);
             	});
@@ -184,6 +207,12 @@
         	} else {
         		vm.selectedRows[index] = afdQuery;
         	}
+        	
+        	if (vm.selectedFares.indexOf(afdQuery) != -1) {
+        		vm.selectedFares.splice(vm.selectedFares.indexOf(afdQuery), 1);
+        	} else {
+        		vm.selectedFares.push(afdQuery);
+        	}
         }
         
         function selectAll() {
@@ -199,11 +228,13 @@
         	if (isEmpty) {
         		for (var i = 0; i < vm.afdQueries.length; i++) {
             		vm.selectedRows[i] = vm.afdQueries[i];
+            		vm.selectedFares.push(vm.afdQueries[i]);
             	}
         		vm.allSelected = true;
         	} else {
         		for (var i = 0; i < vm.selectedRows.length; i++) {
         			vm.selectedRows[i] = null;
+        			vm.selectedFares = [];
         		}
         	}
         }
@@ -220,9 +251,7 @@
         		
         		var clipboard = {
         			page: 'AFD_QUERY',
-        			content: {
-        				'ATPCO_FARE': selectedFares
-        			}
+        			content: selectedFares        			
         		}
         		
         		Clipboard.copy(clipboard, function(data) {
@@ -233,9 +262,32 @@
         	}
         }
         
+        function showFareDetail() {
+        	if (vm.selectedFares.length > 0) {
+        		$uibModal.open({
+                    templateUrl: 'app/pages/modals/fare-detail-modal.html',
+                    controller: 'FareDetailModalController',
+                    controllerAs: 'vm',
+                    backdrop: 'static',
+                    size: 'lg',
+                    resolve: {
+                        fare: vm.selectedFares[0],
+                        rules: {
+                        	categories: vm.categoryRules
+                        }
+                    },
+                    windowClass: 'full'
+                }).result.then(function() {
+                    $state.go('afd-query', {}, { reload: false });
+                }, function() {
+                    $state.go('afd-query');
+                });
+        	}
+        }
+        
         function showCategoryDetail(category) {
         	$uibModal.open({
-                templateUrl: 'app/pages/category-modals/category-modal.html',
+                templateUrl: 'app/pages/modals/category-modal.html',
                 controller: 'CategoryModalController',
                 controllerAs: 'vm',
                 backdrop: 'static',
@@ -252,7 +304,7 @@
         
         function showLegend() {
         	$uibModal.open({
-                templateUrl: 'app/pages/category-modals/legend-modal.html',
+                templateUrl: 'app/pages/modals/legend-modal.html',
                 controller: 'LegendModalController',
                 controllerAs: 'vm',
                 backdrop: 'static',
@@ -266,7 +318,7 @@
         
         function viewFullText() {
         	$uibModal.open({
-                templateUrl: 'app/pages/category-modals/full-text-modal.html',
+                templateUrl: 'app/pages/modals/full-text-modal.html',
                 controller: 'FullTextModalController',
                 controllerAs: 'vm',
                 backdrop: 'static',

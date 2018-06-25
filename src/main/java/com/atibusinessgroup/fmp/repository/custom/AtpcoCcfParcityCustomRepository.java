@@ -5,6 +5,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.newA
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -32,14 +33,14 @@ public class AtpcoCcfParcityCustomRepository {
 			public DBObject toDBObject(AggregationOperationContext context) {
 				BasicDBObject match = new BasicDBObject();
 				BasicDBObject and = new BasicDBObject();
-				List<BasicDBObject> queries = new ArrayList<>();
+				List<Document> queries = new ArrayList<>();
 				
-				BasicDBObject one = convertTypeAndLocationToDBObject(t1, l1);
+				Document one = convertTypeAndLocationToDBObject(t1, l1);
 				if (one != null) {
 					queries.add(one);
 				}
 				
-				BasicDBObject two = convertTypeAndLocationToDBObject(t2, l2);
+				Document two = convertTypeAndLocationToDBObject(t2, l2);
 				if (two != null) {
 					queries.add(two);
 				}
@@ -61,28 +62,28 @@ public class AtpcoCcfParcityCustomRepository {
 		return result;
 	}
 	
-	private BasicDBObject convertTypeAndLocationToDBObject(String t, String l) {
-		BasicDBObject result = null;
+	private Document convertTypeAndLocationToDBObject(String t, String l) {
+		Document result = null;
 		
 		switch (t) {
 			case "A":
-				result = new BasicDBObject();
+				result = new Document();
 				result.append("city_area", l);
 				break;
 			case "Z":
-				result = new BasicDBObject();
+				result = new Document();
 				result.append("city_zone", l);
 				break;
 			case "N":
-				result = new BasicDBObject();
+				result = new Document();
 				result.append("city_country", l);
 				break;
 			case "S":
-				result = new BasicDBObject();
+				result = new Document();
 				result.append("city_state", l);
 				break;
 			default:
-				result = new BasicDBObject();
+				result = new Document();
 				result.append("city_code", l);
 				break;
 		}
