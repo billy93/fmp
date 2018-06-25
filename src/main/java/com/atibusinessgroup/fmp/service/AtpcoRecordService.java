@@ -740,7 +740,6 @@ public class AtpcoRecordService {
 		case "109":
 			result.setClassName(classBasePackage.concat("AtpcoRecord3Cat109"));
 			result.setGetTableNoMethodName("getTbl_no");
-			result.setGetTextTable996NoMethodName("getText_tbl_no_996");
 			result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_109);
 			break;
 		case "011":

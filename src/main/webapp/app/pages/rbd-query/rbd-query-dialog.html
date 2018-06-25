@@ -1,0 +1,50 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myRbdqueryLabel">Create or edit a Rbdquery</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" ng-show="vm.rbdquery.id">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="vm.rbdquery.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_recordBatch">Record Batch</label>
+            <input type="number" class="form-control" name="recordBatch" id="field_recordBatch"
+                    ng-model="vm.rbdquery.recordBatch"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_recordSequence">Record Sequence</label>
+            <input type="number" class="form-control" name="recordSequence" id="field_recordSequence"
+                    ng-model="vm.rbdquery.recordSequence"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_recType">Rec Type</label>
+            <input type="number" class="form-control" name="recType" id="field_recType"
+                    ng-model="vm.rbdquery.recType"
+                    />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_action">Action</label>
+            <input type="text" class="form-control" name="action" id="field_action"
+                    ng-model="vm.rbdquery.action"
+                    />
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

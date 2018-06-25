@@ -184,8 +184,21 @@ public class WorkPackageResource {
             throw new BadRequestAlertException("A new workPackage cannot already have an ID", ENTITY_NAME, "idexists");
         }
         
-        Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());        
-        workPackage.setReviewLevel(user.get().getReviewLevels().get(0));
+        Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());   
+        
+        if(user.get().getReviewLevels().size()==1) {
+        	workPackage.setReviewLevel(user.get().getReviewLevels().get(0));	
+        }else {
+        	if(user.get().getReviewLevels().indexOf("HO") > 0){
+        		workPackage.setReviewLevel("HO");
+        	}else {
+        		if(user.get().getReviewLevels().indexOf("LSO") > 0){
+            		workPackage.setReviewLevel("LSO");
+            	}
+        	}
+        	
+        }
+        
         
         if(workPackage.isSpecifiedFares()) {
         	workPackage.setFilingDetails(true);
@@ -285,6 +298,12 @@ public class WorkPackageResource {
     public ResponseEntity<WorkPackage> reuseWorkPackage(@RequestBody WorkPackage wp) throws URISyntaxException {
         log.debug("REST request to save reuse WorkPackage : {}", wp);
         
+        WorkPackageHistory history = new WorkPackageHistory();
+        history.setWorkPackage(new ObjectId(wp.getId()));
+        history.setType("REUSE");
+        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        workPackageHistoryService.save(history);
+        
         wp.setReuseFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
@@ -296,6 +315,9 @@ public class WorkPackageResource {
         wp.setFilingInstructionData(null);     
         wp.setCreatedBy(null);
         wp.setCreatedDate(null);
+        wp.setLocked(false);
+    	wp.setLockedBy(null);
+    	wp.setLockedSince(null);
         wp.setLastModifiedBy(null);
         wp.setLastModifiedDate(null);
         wp.setFilingInstruction(false);
@@ -329,14 +351,9 @@ public class WorkPackageResource {
         
         wp.setStatus(Status.NEW);
         wp.setQueuedDate(Instant.now());
-        
+                
         WorkPackage result = workPackageService.save(wp);
         
-        WorkPackageHistory history = new WorkPackageHistory();
-        history.setWorkPackage(new ObjectId(result.getId()));
-        history.setType("REUSE");
-        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
-        workPackageHistoryService.save(history);
         
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -354,6 +371,12 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<WorkPackage> replaceWorkPackage(@RequestBody WorkPackage wp) throws URISyntaxException {
         log.debug("REST request to save reuse WorkPackage : {}", wp);
+        
+        WorkPackageHistory history = new WorkPackageHistory();
+        history.setWorkPackage(new ObjectId(wp.getId()));
+        history.setType("REPLACE");
+        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        workPackageHistoryService.save(history);
                
         wp.setReplaceFrom(wp.getWpid());
         wp.setId(null);
@@ -365,7 +388,11 @@ public class WorkPackageResource {
         wp.setCreatedDate(null);
         wp.setLastModifiedBy(null);
         wp.setLastModifiedDate(null);
-        wp.setPriority(null);
+        wp.setPriority(null);        
+    	wp.setLocked(false);
+    	wp.setLockedBy(null);
+    	wp.setLockedSince(null);
+
         
 //        if(!workPackage.getReuseReplaceConfig().isAttachment()) {
 //        	wp.setAttachment(false);
@@ -400,13 +427,8 @@ public class WorkPackageResource {
         wp.setStatus(Status.NEW);
         wp.setQueuedDate(Instant.now());
         
-        WorkPackage result = workPackageService.save(wp);
+        WorkPackage result = workPackageService.save(wp);        
         
-        WorkPackageHistory history = new WorkPackageHistory();
-        history.setWorkPackage(new ObjectId(result.getId()));
-        history.setType("REPLACE");
-        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
-        workPackageHistoryService.save(history);
         
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -3470,11 +3492,12 @@ public class WorkPackageResource {
         	workPackage.setStatus(Status.REVIEWING);
         	workPackageService.save(workPackage);
         }
-        
-        workPackage.setLocked(true);
-        workPackage.setLockedBy(SecurityUtils.getCurrentUserLogin().get());
-        workPackage.setLockedSince(ZonedDateTime.now());
-        workPackage = workPackageService.save(workPackage);
+        if(!workPackage.isLocked()) {
+        	workPackage.setLocked(true);
+            workPackage.setLockedBy(SecurityUtils.getCurrentUserLogin().get());
+            workPackage.setLockedSince(ZonedDateTime.now());
+            workPackage = workPackageService.save(workPackage);	
+        }        
 //        List<WorkPackageFare> fares = workPackageFareService.findAllByWorkPackageAndFareType(workPackage.getId(), null);
 //        log.debug("REST request to set WorkPackageFARES : {}", fares.size());
 //        workPackage.setFares(fares);
@@ -3652,6 +3675,7 @@ public class WorkPackageResource {
         }
         
         WorkPackage result = workPackageService.findOne(workPackage.getId());
+        
         result.setLocked(false);
         workPackageService.save(result);
         

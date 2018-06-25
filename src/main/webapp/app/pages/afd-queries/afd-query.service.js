@@ -10,7 +10,7 @@
         var resourceUrl =  'api/afd-queries/:id';
 
         return $resource(resourceUrl, {}, {
-            'query': { method: 'POST', isArray: true},
+            'query': { method: 'POST'},
             'get': {
                 method: 'GET',
                 transformResponse: function (data) {

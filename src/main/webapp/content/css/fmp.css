@@ -3791,6 +3791,7 @@ p {
     position: relative;
     margin-bottom: 15px;
     max-height: 390px;
+    padding-bottom: 30px;
     overflow: auto; }
     .table-wrapper .table-responsive.main-table {
       max-height: 550px; }
@@ -3887,7 +3888,7 @@ p {
         .table-wrapper table tbody tr td.locked:before {
           position: absolute;
           top: 50%;
-          left: 50%;
+          left: 25%;
           -webkit-transform: translate(-50%, -50%);
           -ms-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
@@ -3988,6 +3989,11 @@ tr.rejected {
   background-color: rgba(249, 67, 67, 0.8); }
   tr.rejected:hover {
     background-color: rgba(249, 67, 67, 0.8) !important; }
+    
+tr.pasteAsCancel {
+  background-color: rgba(146, 94, 5, 0.8); }
+  tr.pasteAsCancel:hover {
+    background-color:rgba(146, 94, 5, 0.8) !important; }
 
 tr td.highlighted {
   background-color: rgba(222, 255, 94, 0.7) !important; }

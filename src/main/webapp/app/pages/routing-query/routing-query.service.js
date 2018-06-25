@@ -10,7 +10,7 @@
         var resourceUrl =  'api/routingqueries/:id';
 
         return $resource(resourceUrl, {}, {
-            'query': { method: 'POST', isArray: true},
+            'query': { method: 'GET', isArray: true},
             'get': {
                 method: 'GET',
                 transformResponse: function (data) {
@@ -19,7 +19,7 @@
                     }
                     return data;
                 }
-            },
+            },        
             'getDetails': { method: 'GET', url:'api/routingqueries/details', isArray: true },
             'getMaps': { method: 'GET', url:'api/routingqueries/getmaps/:tarno/:crx/:rtg', isArray: true },
         });
