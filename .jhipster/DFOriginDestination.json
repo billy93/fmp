@@ -1,0 +1,27 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "origAirport",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "destAirport",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "origCity",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "destCity",
+            "fieldType": "String"
+        }
+    ],
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "dforigin_destination",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}

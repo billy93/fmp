@@ -1,0 +1,35 @@
+
+<div>
+    <h2><span>DF Origin Destination</span> {{vm.dFOriginDestination.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span>Orig Airport</span></dt>
+        <dd>
+            <span>{{vm.dFOriginDestination.origAirport}}</span>
+        </dd>
+        <dt><span>Dest Airport</span></dt>
+        <dd>
+            <span>{{vm.dFOriginDestination.destAirport}}</span>
+        </dd>
+        <dt><span>Orig City</span></dt>
+        <dd>
+            <span>{{vm.dFOriginDestination.origCity}}</span>
+        </dd>
+        <dt><span>Dest City</span></dt>
+        <dd>
+            <span>{{vm.dFOriginDestination.destCity}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            ui-sref="{{ vm.previousState }}"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button" ui-sref="df-origin-destination-detail.edit({id:vm.dFOriginDestination.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-sm-down"> Edit</span>
+    </button>
+</div>

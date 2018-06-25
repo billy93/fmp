@@ -30,7 +30,9 @@ import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByRuleNoCxrTarNo;
 import com.atibusinessgroup.fmp.domain.dto.Rec8Param;
 import com.atibusinessgroup.fmp.domain.dto.RuleQueryParam;
 import com.mongodb.BasicDBObject;
+import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import com.mongodb.client.AggregateIterable;
 
 @Service
 public class AtpcoRuleQueryCustomRepository {
@@ -134,7 +136,11 @@ public class AtpcoRuleQueryCustomRepository {
 		});
 	
 		Aggregation aggregation = newAggregation(aggregationCount);
+		 
 
+		for (AtpcoRecord2GroupByRuleNoCxrTarNo a : mongoTemplate.aggregate(aggregation, "atpco_record_2", AtpcoRecord2GroupByRuleNoCxrTarNo.class).getMappedResults()) {
+			
+		}
 		aggregationOperations.add(skip);
 
 		aggregationOperations.add(limit);
@@ -528,6 +534,7 @@ public class AtpcoRuleQueryCustomRepository {
 		});
 
 		return aggregationOperations;
+		
 	}
 	
 	//BY TYPE
