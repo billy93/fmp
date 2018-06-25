@@ -23,10 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.atibusinessgroup.fmp.constant.CategoryName;
 import com.atibusinessgroup.fmp.constant.CategoryType;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord8;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByRuleNoCxrTarNo;
 import com.atibusinessgroup.fmp.domain.dto.Category;
 import com.atibusinessgroup.fmp.domain.dto.DataTable;
+import com.atibusinessgroup.fmp.domain.dto.Rec8Param;
 import com.atibusinessgroup.fmp.domain.dto.RuleQuery;
 import com.atibusinessgroup.fmp.domain.dto.RuleQueryParam;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoFareCustomRepository;
@@ -139,6 +141,8 @@ public class RuleQueryResource {
 
 		return new ResponseEntity<>(arecords2, HttpStatus.OK);
 	}
+	
+	
 
 	/**
 	 * GET /rule-queries/rules : get rule query rules.
@@ -190,6 +194,26 @@ public class RuleQueryResource {
 		}
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	/**
+	 * GET /rule-queries/rules : get rule query rules.
+	 *
+	 * @return the ResponseEntity with status 200 (OK) and the list of rules in body
+	 */
+	@PostMapping("/rule-queries/rec8")
+	@Timed
+	public ResponseEntity<List<AtpcoRecord8>> getRec8(@RequestBody Rec8Param param) {
+		
+		System.out.println("param : "+param.getCxr());
+
+		Pageable pageable = new PageRequest(param.getPage(), param.getSize());
+		
+		Page<AtpcoRecord8> result = atpcoRuleQueryCustomRepository.getListRec8(param, pageable);
+		
+		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(result, "/api/rule-queries/rec8");
+		
+		return new ResponseEntity<>(result.getContent(), headers, HttpStatus.OK);
 	}
 
 }

@@ -283,7 +283,7 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 			}
 			index++;
 		}
-		log.debug("routeViewList 1 "+routeViewList);
+//		log.debug("routeViewList 1 "+routeViewList);
 		
 		Map<String, RouteMapView> routeViewListNew = routeViewList.entrySet().stream().sorted(Map.Entry.comparingByKey()).
 						collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
@@ -293,23 +293,26 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 		routeViewList = getRouteMapView(routeViewList); 
 //		log.debug("routeViewList 2 "+routeViewList);
 		
-		List<String> routeViewStringList = new ArrayList<>();
+		List<String> routeViewString = new ArrayList<>();
+		for (Map.Entry<String, RouteMapView> routeMapViewData : routeViewList.entrySet()) {
+			routeViewString.add(routeMapViewData.getValue().getName());
+		}
+//		log.debug("routeViewString "+routeViewString);
+		
 		int rowCount = routeViewList.size();
 		int columnCount = 0;
 		for (Map.Entry<String, RouteMapView> route : routeViewList.entrySet()) {
-			routeViewStringList.add(route.getValue().getName());
 			String[] routeParts = route.getValue().getName().split("-");
 			if(columnCount < routeParts.length)
 				columnCount = routeParts.length;
 		}
-		routeViewStringList.sort(String.CASE_INSENSITIVE_ORDER);
 //		log.debug("rowCount "+rowCount);
 //		log.debug("columnCount "+columnCount);
 		
 		index = 0;
 		String routeMapTable[][] = new String[rowCount][columnCount];
-		for (String routeViewString : routeViewStringList) {
-			String[] routeParts = routeViewString.split("-");
+		for (Map.Entry<String, RouteMapView> route : routeViewList.entrySet()) {
+			String[] routeParts = route.getValue().getName().split("-");
 			int routePartIndex = 0;
 			for (String routePart : routeParts) {
 				routeMapTable[index][routePartIndex] = routePart;
@@ -319,8 +322,90 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 		}
 //		log.debug("routeMapTable "+routeMapTable);
 		
+//		List<String> routingMapsTable = new ArrayList<>(); 
+//		for (int i = 0; i < routeMapTable.length; i++) {
+//			if(i == 0) {
+//				for (String str : routeMapTable[i]) {
+//					if(str != null) {
+//						routingMapsTable.add(str);
+//					}
+//				}
+//				log.debug("Mulai "+routingMapsTable);
+//			} else {
+//				log.debug("=========================================================================================================");
+//				log.debug("awal data");
+//				int columnIndex = 0;
+//				String routeStr = routeMapTable[i][0];
+//				for (int j = 0; j < routeMapTable[i].length; j++) {
+//					String route = routeMapTable[i][j];
+//					if(route != null) {
+//						for (int k = 0; k < routingMapsTable.size(); k++) {
+//							log.debug("routeStr "+routeStr);
+//							if(isContentRoute(routingMapsTable.get(k), routeMapTable[i][j])) {
+//								log.debug("if "+routeMapTable[i][j]+" udah ada dikolom "+k+" baris "+routingMapsTable.get(k).indexOf(routeMapTable[i][j]));
+//								columnIndex++;
+//								String addedRoute = routeStr.replaceAll("-"+routeMapTable[i][j], "");
+//								if(j > 0 && !isContentRoute(routingMapsTable.get(columnIndex-1), addedRoute)) {
+//									log.debug(addedRoute+" akan di-add dikolom "+(columnIndex-1));
+//									routingMapsTable.set(columnIndex-1, routingMapsTable.get(columnIndex-1)+"="+addedRoute);
+//								}
+//								j++;
+//								routeStr = routeMapTable[i][j];
+//								break;
+//							} else if(isContentRoute(routingMapsTable.get(k), routeStr)) {
+//								log.debug("else if "+routeStr+" udah ada dikolom "+k+" baris "+routingMapsTable.get(k).indexOf(routeStr));
+//								columnIndex++;
+//								routeStr = routeMapTable[i][j];
+//								break;
+//							} else {
+//								log.debug(routeMapTable[i][j]+" gak ada dikolom "+k);
+////								if(!isContentRoute(routeStr, routeMapTable[i][j])) {
+//								if(routeStr.indexOf(routeMapTable[i][j]) < 0) {	
+//									log.debug(routeMapTable[i][j]+" belum ada di "+routeStr);
+//									routeStr = routeStr+"-"+routeMapTable[i][j];
+//								}
+//							}
+//						}
+//					}
+//				}
+//				log.debug("akhir data");
+//				if(routeStr != null) {
+//					boolean flag = false;
+//					for (int k = 0; k < routingMapsTable.size(); k++) {
+//						if(routingMapsTable.get(k).indexOf(routeStr) >= 0) {
+//							flag = true;
+//							break;
+//						}
+//					}
+//					
+//					if(!flag) {
+//						log.debug(routeStr+" akan di-add dikolom "+columnIndex);
+//						routingMapsTable.set(columnIndex, routingMapsTable.get(columnIndex)+"="+routeStr);
+//					}
+//				}
+//				log.debug("********************************************************************************************************");
+//			}
+//			log.debug("Update tesMaps "+routingMapsTable);
+//		}
+//		log.debug("tesMaps "+routingMapsTable);
+		
 //		return new ArrayList<RouteMapView>(routeViewList.values());
 		return routeMapTable;
+	}
+	
+	private boolean isContentRoute(String masterRoute, String contentRoute) {
+		boolean isContentRoute = false;
+		String[] masterRouteArr = masterRoute.split("=");
+		for (String route : masterRouteArr) {
+			if(route.indexOf(contentRoute) >= 0) {
+				if(route.length() == contentRoute.length()) {
+					isContentRoute = true; 
+					break;
+				}
+			}
+		}
+		
+		return isContentRoute;
 	}
 	
 	private Map<String, RouteMapView> calculateRowSpan(Map<String, RouteMapView> routeViewList) {
@@ -437,7 +522,6 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 						flag = false;
 					}
 				}
-				
 			}
 		} else {
 			nextRouteMap.setExitRoute(getDestinyRoutes(nextRouteMap, cityList));
@@ -485,6 +569,42 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 	
 	@Override
 	public Page<RoutingQuery> findCustomJoin(RoutingQueryParam param, Pageable pageable) {
+		List<AggregationOperation> aggregationOperations = getAggregationOperation(param);
+		Aggregation aggregation = newAggregation(aggregationOperations);
+		SkipOperation skip = new SkipOperation(pageable.getPageNumber() * pageable.getPageSize());
+		aggregationOperations.add(skip);
+		LimitOperation limit = new LimitOperation(pageable.getPageSize());
+		aggregationOperations.add(limit);
+		Aggregation aggregationPagination = newAggregation(aggregationOperations);
+		
+//		log.debug("ambil data mulai");
+//		log.debug(pageable.toString());
+//		log.debug("aggregationPagination "+aggregationPagination);
+//		log.debug("aggregation "+aggregation);
+		List<RoutingQuery> result = mongoTemplate.aggregate(aggregationPagination, RoutingQuery.class, RoutingQuery.class).getMappedResults();
+		long allResultCount = mongoTemplate.aggregate(aggregation, RoutingQuery.class, RoutingQuery.class).getMappedResults().size();
+		
+//		log.debug("routingqueries "+result);
+//		log.debug("allResultCount "+allResultCount);
+//		log.debug("ambil data selesai");
+		
+		return new PageImpl<>(result, pageable, allResultCount);
+	}
+
+	@Override
+	public RoutingQuery findOneCustom(RoutingQueryParam param) {
+		List<AggregationOperation> aggregationOperations = getAggregationOperation(param);
+		Aggregation aggregations = newAggregation(aggregationOperations);
+		List<RoutingQuery> result = mongoTemplate.aggregate(aggregations, RoutingQuery.class, RoutingQuery.class).getMappedResults();
+		
+		if(result.size() > 0) {
+			return result.get(0);
+		} else {
+			return null;
+		}
+	}
+	
+	private List<AggregationOperation> getAggregationOperation(RoutingQueryParam param) {
 		List<AggregationOperation> aggregationOperations = new ArrayList<>();
 		
 		aggregationOperations.add(new AggregationOperation() {
@@ -514,16 +634,32 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 				
 				if (param.getEffectiveDateFrom() != null && param.getEffectiveDateTo() != null) {
 					BasicDBObject effectiveDate = new BasicDBObject();
-					effectiveDate.append("dates_effective", BasicDBObjectBuilder.start("$gte", param.getEffectiveDateFrom()).add("$lte", param.getEffectiveDateTo()).get());
+					effectiveDate.append("dates_effective", new BasicDBObject("$lte", param.getEffectiveDateFrom()));
 					queries.add(effectiveDate);
+					
+					BasicDBObject discontinueDate = new BasicDBObject();
+					BasicDBObject discontinueDateGte = new BasicDBObject();
+					BasicDBObject discontinueDateIndef = new BasicDBObject();
+					discontinueDateGte.append("dates_discontinue", new BasicDBObject("$gte", param.getEffectiveDateTo()));
+					discontinueDateIndef.append("dates_discontinue", "indef");
+					discontinueDate.append("$or", Arrays.asList(discontinueDateGte, discontinueDateIndef));
+					queries.add(discontinueDate);
 				} else if(param.getEffectiveDateFrom() != null) {
 					BasicDBObject effectiveDate = new BasicDBObject();
-					effectiveDate.append("dates_effective", new BasicDBObject("$gte", param.getEffectiveDateFrom()));
+					effectiveDate.append("dates_effective", new BasicDBObject("$lte", param.getEffectiveDateFrom()));
 					queries.add(effectiveDate);
+					
+					BasicDBObject discontinueDate = new BasicDBObject();
+					discontinueDate.append("dates_discontinue", "indef");
+					queries.add(discontinueDate);
 				} else if(param.getEffectiveDateTo() != null) {
-					BasicDBObject effectiveDate = new BasicDBObject();
-					effectiveDate.append("dates_effective", new BasicDBObject("$lte", param.getEffectiveDateTo()));
-					queries.add(effectiveDate);
+					BasicDBObject discontinueDate = new BasicDBObject();
+					BasicDBObject discontinueDateGte = new BasicDBObject();
+					BasicDBObject discontinueDateIndef = new BasicDBObject();
+					discontinueDateGte.append("dates_discontinue", new BasicDBObject("$gte", param.getEffectiveDateTo()));
+					discontinueDateIndef.append("dates_discontinue", "indef");
+					discontinueDate.append("$or", Arrays.asList(discontinueDateGte, discontinueDateIndef));
+					queries.add(discontinueDate);
 				}
 				
 				if (queries.size() > 0) {
@@ -537,7 +673,6 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 		});
 		
 		if((param.getEntryPoint() != null && !param.getEntryPoint().isEmpty()) || (param.getExitPoint() != null && !param.getExitPoint().isEmpty())) {
-			log.debug("masuk");
 			aggregationOperations.add(new AggregationOperation() {
 				@Override
 				public DBObject toDBObject(AggregationOperationContext context) {
@@ -653,25 +788,6 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 			});
 		}
 		
-		
-		Aggregation aggregation = newAggregation(aggregationOperations);
-		SkipOperation skip = new SkipOperation(pageable.getPageNumber() * pageable.getPageSize());
-		aggregationOperations.add(skip);
-		LimitOperation limit = new LimitOperation(pageable.getPageSize());
-		aggregationOperations.add(limit);
-		Aggregation aggregationPagination = newAggregation(aggregationOperations);
-		
-		log.debug("ambil data mulai");
-		log.debug(pageable.toString());
-		log.debug("aggregationPagination "+aggregationPagination);
-		log.debug("aggregation "+aggregation);
-		List<RoutingQuery> result = mongoTemplate.aggregate(aggregationPagination, RoutingQuery.class, RoutingQuery.class).getMappedResults();
-		long allResultCount = mongoTemplate.aggregate(aggregation, RoutingQuery.class, RoutingQuery.class).getMappedResults().size();
-		
-		log.debug("routingqueries "+result);
-		log.debug("allResultCount "+allResultCount);
-		log.debug("ambil data selesai");
-		
-		return new PageImpl<>(result, pageable, allResultCount);
+		return aggregationOperations;
 	}
 }

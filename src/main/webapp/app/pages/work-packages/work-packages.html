@@ -217,7 +217,7 @@
 													<i class="fa fa-history"></i>History
 												</div> -->
 												
-											<button class="btn btn-default small" ng-click="vm.discontinue()" ng-disabled="vm.selectedRow == null || (vm.selectedRow.targetDistribution != 'MARKET' || vm.selectedRow.status != 'DISTRIBUTED')">Discontinue</button>
+											<button class="btn btn-default small" ng-click="vm.discontinue()" ng-disabled="vm.selectedRow == null || (vm.selectedRow.targetDistribution != 'MARKET' || vm.selectedRow.status == 'DISTRIBUTED')">Discontinue</button>
 										</div>
 									</div>
 								</div>
@@ -258,7 +258,7 @@
 											ng-click="vm.rowSelected($index, workPackage)">
 											<td class="text-right" ng-class="{selected: workPackage === vm.selectedRow, locked: workPackage.locked}">
 						                        <div class="btn-group edit-btn entities flex-btn-group-container">
-						                            <button type="submit" title="Edit" ng-disabled="workPackage.locked"
+						                            <button type="submit" title="Edit" 
 						                                    ui-sref="work-package-detail({id:workPackage.id})"
 						                                    class="btn btn-primary btn-tiny mb0">
 						                                <span class="glyphicon glyphicon-pencil"></span>
