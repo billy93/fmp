@@ -4951,18 +4951,50 @@
     	  var clipboard = Clipboard.findByCurrentUsername({id : $stateParams.id}).$promise;
     	  
     	  clipboard.then(function(result){
-    		  if(result.page == currentPage){
+			  if(result.page == 'workorder-fares'){
 	    		  for(var x=0;x<result.content.length;x++){
 	    			  result.content[x].no = workPackageSheet.fares.length+1;
 	    			  
+	    			  result.content[x].status = "PENDING";
+	    			  result.content[x].action = "A";
 	    			  result.content[x].travelStart = DateUtils.convertDateTimeFromServer(result.content[x].travelStart);
 	    			  result.content[x].travelEnd = DateUtils.convertDateTimeFromServer(result.content[x].travelEnd);
 	    			  result.content[x].saleStart = DateUtils.convertDateTimeFromServer(result.content[x].saleStart);
 	    			  result.content[x].saleEnd = DateUtils.convertDateTimeFromServer(result.content[x].saleEnd);
 	    			  result.content[x].travelComplete = DateUtils.convertDateTimeFromServer(result.content[x].travelComplete);
 	        		  workPackageSheet.fares.push(result.content[x]);    			  
-	    		  }    
-    		  }
+	    		  }
+			  }
+			  else if(result.page == 'AFD_QUERY'){
+//				  alert('Paste afd query');
+				  for(var x=0;x<result.content.length;x++){
+					  console.log(result.content[x]);
+					  var tariffNumber = null;
+					  for(var y=0;y<vm.tariffNumber.length;y++){	
+			    		  if(vm.tariffNumber[y].tarNo == result.content[x].tariffNo){
+			    			  tariffNumber = angular.copy(vm.tariffNumber[x]);
+			    			  break;
+			    		  }
+			    	  }
+					  var fare = {
+						  status:"PENDING",
+						  action:"A",
+						  carrier:"GA",
+						  tariffNumber:tariffNumber,
+						  origin:result.content[x].originCity,
+						  destination:result.content[x].destinationCity,
+						  fareBasis:result.content[x].fareClassCode,
+						  bookingClass:result.content[x].bookingClass,
+						  cabin:result.content[x].cabin,
+						  typeOfJourney:result.content[x].owrt,
+						  footnote1:result.content[x].footnote,
+						  rtgno:result.content[x].routingNo,
+						  ruleno:result.content[x].ruleNo
+					  };
+					  
+					  workPackageSheet.fares.push(fare);    	
+				  }
+			  }
     		  else{
     			  alert('Nothing to paste');
     		  }

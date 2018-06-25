@@ -230,9 +230,7 @@
         		
         		var clipboard = {
         			page: 'AFD_QUERY',
-        			content: {
-        				'ATPCO_FARE': selectedFares
-        			}
+        			content: selectedFares        			
         		}
         		
         		Clipboard.copy(clipboard, function(data) {
