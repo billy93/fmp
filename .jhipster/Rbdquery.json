@@ -1,0 +1,27 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "recordBatch",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "recordSequence",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "recType",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "action",
+            "fieldType": "String"
+        }
+    ],
+    "dto": "no",
+    "service": "serviceImpl",
+    "entityTableName": "rbdquery",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}

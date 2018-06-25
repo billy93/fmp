@@ -2,12 +2,12 @@
     'use strict';
     angular
         .module('fmpApp')
-        .factory('Routingquery', Routingquery);
+        .factory('Rbdquery', Rbdquery);
 
-    Routingquery.$inject = ['$resource'];
+    Rbdquery.$inject = ['$resource'];
 
-    function Routingquery ($resource) {
-        var resourceUrl =  'api/routingqueries/:id';
+    function Rbdquery ($resource) {
+        var resourceUrl =  'api/rbdqueries/:id';
 
         return $resource(resourceUrl, {}, {
             'query': { method: 'GET', isArray: true},
@@ -19,9 +19,9 @@
                     }
                     return data;
                 }
-            },        
-            'getDetails': { method: 'GET', url:'api/routingqueries/details', isArray: true },
-            'getFullDetails': { method: 'GET', url:'api/routingqueries/fulldetails', isArray: true },
+            },
+            'update': { method:'PUT' },
+            'getRbd': { method: 'GET', url:'api/rbdqueries/rbd', isArray: true }
         });
     }
 })();
