@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,9 +29,11 @@ import com.atibusinessgroup.fmp.domain.WorkPackage.Comment;
 import com.atibusinessgroup.fmp.domain.WorkPackage.FilingInstruction;
 import com.atibusinessgroup.fmp.domain.WorkPackage.MarketRules;
 import com.atibusinessgroup.fmp.domain.WorkPackage.WorkPackageFareSheet;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
 import com.atibusinessgroup.fmp.domain.enumeration.Status;
+import com.atibusinessgroup.fmp.repository.AtpcoFareRepository;
 import com.atibusinessgroup.fmp.repository.CounterRepository;
 import com.atibusinessgroup.fmp.repository.PriorityRepository;
 import com.atibusinessgroup.fmp.repository.WorkPackageRepository;
@@ -48,12 +51,13 @@ public class WorkPackageService {
     private final WorkPackageRepository workPackageRepository;
     private final CounterRepository counterRepository;
     private final PriorityRepository priorityRepository;
+    private final AtpcoFareRepository atpcoFareRepository;
     
-    
-    public WorkPackageService(WorkPackageRepository workPackageRepository, CounterRepository counterRepository, PriorityRepository priorityRepository) {
+    public WorkPackageService(WorkPackageRepository workPackageRepository, CounterRepository counterRepository, PriorityRepository priorityRepository, AtpcoFareRepository atpcoFareRepository) {
         this.workPackageRepository = workPackageRepository;
         this.counterRepository = counterRepository;
         this.priorityRepository = priorityRepository;
+        this.atpcoFareRepository = atpcoFareRepository;
     }
 
     /**
@@ -78,6 +82,44 @@ public class WorkPackageService {
             		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
         		if(fare.getTravelComplete() != null)
 	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
+        		
+//        		Optional<AtpcoFare> checkAtpcoFare = atpcoFareRepository.findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCityAndFareOriginCurrencyCodeAndFareClassCodeAndOwrtAndFootnoteAndRoutingNoAndRuleNo(
+//        				fare.getCarrier(), 
+//        				fare.getTariffNumber() != null ? fare.getTariffNumber().getTarNo() : null, 
+//        				fare.getOrigin(), 
+//        				fare.getDestination(), 
+//        				fare.getCurrency(), 
+//        				fare.getFareBasis(), 
+//        				fare.getTypeOfJourney(), 
+//        				fare.getFootnote1(), 
+//        				fare.getRtgno(), 
+//        				fare.getRuleno());
+        		Optional<AtpcoFare> checkAtpcoFare = atpcoFareRepository.findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCity(fare.getCarrier(), fare.getTariffNumber() != null ? fare.getTariffNumber().getTarNo() : null, fare.getOrigin(), fare.getDestination());
+        		if(checkAtpcoFare.isPresent()) {
+        			//I, R, Y
+        			if(fare.getAmount() != null) {
+        				float atpcoFareAmount = Float.parseFloat(checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().toString());
+        				float fareAmount = Float.parseFloat(fare.getAmount());
+	        			if(fareAmount < atpcoFareAmount) {
+	        				fare.setAction("R");
+	        			}
+	        			else if(fareAmount > atpcoFareAmount) {
+	        				fare.setAction("I");        				
+	        			}
+	        			else if(fareAmount== atpcoFareAmount){
+	        				fare.setAction("Y");        				        				
+	        			}
+	        			
+	        			float amtDiff = ((Float.parseFloat(fare.getAmount())) - Float.parseFloat(checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().toString()));
+	        			fare.setAmtDiff(String.format("%.02f",amtDiff));
+	        			
+	        			float percentDiff = (amtDiff / atpcoFareAmount) * 100;
+	        			fare.setAmtPercentDiff(String.format("%.02f", percentDiff));
+        			}        			
+        		}
+        		else {
+        			fare.setAction("N");        		
+        		}
         	}
         }
         for(WorkPackageFareSheet sheet : workPackage.getAddonFareSheet()) {

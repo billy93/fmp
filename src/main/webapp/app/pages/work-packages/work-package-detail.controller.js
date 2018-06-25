@@ -84,9 +84,9 @@
         
         vm.typeOfJourney = {
     		"":"Select OW/RT", 
-    		"OW":"One Way", 
-    		"RT":"Return", 
-    		"OO":"One Way Only"
+    		"1":"One Way", 
+    		"2":"Round Trip", 
+    		"3":"One Way Only"
         };
         
         vm.cabin = {
@@ -1769,7 +1769,7 @@
     		fareSheet.fares.push({
     			no:fareSheet.fares.length+1,
     			status:"PENDING",
-    			action:"AUTO",
+    			action:"A",
   	 	      	carrier:"GA"
     		});
  	    }
@@ -2334,13 +2334,15 @@
 	   }
 	   
 	   vm.removeAttachment = function(attachment){
-		   if(vm.workPackage.status != "NEW"){
-			   attachment.inOnly = false;
-			   attachment.isDeleted = true;
-		   }else{
-			 var index = vm.workPackage.attachmentData.indexOf(attachment);
-		  	 vm.workPackage.attachmentData.splice(index, 1); 
-		   }
+		  if(vm.workPackage.reviewLevel != "DISTRIBUTION"){
+			  if(vm.workPackage.status != "NEW"){
+				   attachment.inOnly = false;
+				   attachment.isDeleted = true;
+			   }else{
+				 var index = vm.workPackage.attachmentData.indexOf(attachment);
+			  	 vm.workPackage.attachmentData.splice(index, 1); 
+			   }  
+		  }
 	  };
 	  
 	  vm.addMarketRules = function(){
@@ -4910,6 +4912,7 @@
     				  var copiedFare = angular.copy(workPackageSheet.fares[x]);
     				  copiedFare.no = workPackageSheet.fares.length+1;
     				  copiedFare.status = "PENDING";
+    				  copiedFare.action = "A";
     				  copiedFare.field = null;
     				  workPackageSheet.fares.push(copiedFare);
     			  }
@@ -4950,22 +4953,66 @@
 			});
       }
       
-      vm.pasteFares = function(workPackageSheet, currentPage){
+      vm.pasteFares = function(workPackageSheet, cancel){
     	  var clipboard = Clipboard.findByCurrentUsername({id : $stateParams.id}).$promise;
     	  
     	  clipboard.then(function(result){
-    		  if(result.page == currentPage){
+			  if(result.page == 'workorder-fares'){
 	    		  for(var x=0;x<result.content.length;x++){
 	    			  result.content[x].no = workPackageSheet.fares.length+1;
 	    			  
+	    			  result.content[x].status = "PENDING";
+	    			  if(cancel){
+	    				  result.content[x].action = "X";
+	    			  }
+	    			  else{
+	    				  result.content[x].action = "A";
+	    			  }	    			  
 	    			  result.content[x].travelStart = DateUtils.convertDateTimeFromServer(result.content[x].travelStart);
 	    			  result.content[x].travelEnd = DateUtils.convertDateTimeFromServer(result.content[x].travelEnd);
 	    			  result.content[x].saleStart = DateUtils.convertDateTimeFromServer(result.content[x].saleStart);
 	    			  result.content[x].saleEnd = DateUtils.convertDateTimeFromServer(result.content[x].saleEnd);
 	    			  result.content[x].travelComplete = DateUtils.convertDateTimeFromServer(result.content[x].travelComplete);
 	        		  workPackageSheet.fares.push(result.content[x]);    			  
-	    		  }    
-    		  }
+	    		  }
+			  }
+			  else if(result.page == 'AFD_QUERY'){
+				  for(var x=0;x<result.content.length;x++){
+					  console.log(result.content[x]);
+					  var tariffNumber = null;
+					  for(var y=0;y<vm.tariffNumber.length;y++){	
+			    		  if(vm.tariffNumber[y].tarNo == result.content[x].tariffNo){
+			    			  tariffNumber = angular.copy(vm.tariffNumber[x]);
+			    			  break;
+			    		  }
+			    	  }
+					  var fare = {
+						  status:"PENDING",
+						  action: cancel ? "X" : "A",
+						  carrier:"GA",
+						  tariffNumber:tariffNumber,
+						  origin:result.content[x].originCity,
+						  destination:result.content[x].destinationCity,
+						  fareBasis:result.content[x].fareClassCode,
+						  bookingClass:result.content[x].bookingClass,
+						  cabin:result.content[x].cabin,
+						  typeOfJourney:result.content[x].owrt,
+						  footnote1:result.content[x].footnote,
+						  rtgno:result.content[x].routingNo,
+						  ruleno:result.content[x].ruleNo,
+						  currency:result.content[x].currencyCode,
+						  amount:result.content[x].baseAmount,
+						  aif:result.content[x].aif,
+						  travelStart:DateUtils.convertDateTimeFromServer(result.content[x].travelStartDate),
+						  travelEnd:DateUtils.convertDateTimeFromServer(result.content[x].travelEndDate),
+						  saleStart:DateUtils.convertDateTimeFromServer(result.content[x].saleStartDate),
+						  saleEnd:DateUtils.convertDateTimeFromServer(result.content[x].saleEndDate),
+						  travelComplete:DateUtils.convertDateTimeFromServer(result.content[x].travelComplete)
+					  };
+					  
+					  workPackageSheet.fares.push(fare);    	
+				  }
+			  }
     		  else{
     			  alert('Nothing to paste');
     		  }
@@ -5080,7 +5127,11 @@
               }
 			}).result.then(function(option) {
 				if(option != null){
-					fare[field] = option;
+					if(field=='tarcd'){
+						fare[field] = option.tarCd;
+					}else{
+						fare[field] = option;
+					}					
 				}
           }, function() {
       			
@@ -5437,7 +5488,34 @@
     		  fare[field] = null;
     		  return;
     	  }
-      }  
+      } 
+      
+      vm.checkTariffDiscount = function(fare, inputField){
+    	  var tariff = null;
+    	  if(fare[inputField] != undefined && fare[inputField] != null && fare[inputField] != ""){
+	    	  var exist = false;
+	    	  for(var x=0;x<vm.tariffNumber.length;x++){
+	    		  if(vm.tariffNumber[x].tarCd == fare[inputField].toUpperCase()){
+	    			  tariff = angular.copy(vm.tariffNumber[x].tarCd);
+	    			  exist = true;
+	    			  break;
+	    		  }
+	    	  }
+	    	  
+	    	  if(!exist){
+	    		  alert("Tariff number is invalid. Please select a correct code");
+	    		  fare[inputField] = null;
+	    		  return;
+	    	  }
+	    	  else{
+	    		  fare[inputField] = tariff;
+	    	  }
+    	  }
+    	  else{
+    		  fare[inputField] = null;
+    		  return;
+    	  }
+      } 
       
       vm.keypress = function(event, regexp){
     	  
@@ -5592,7 +5670,7 @@
       
       vm.disabledField = function(wp){
     	  var disabled = false;
-    	  if(wp.locked == true){
+    	  if(wp.locked == true && wp.locked !=null){
     		  if( wp.lockedBy == vm.user.login){
     			  disabled = false;
     		  }else{
