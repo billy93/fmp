@@ -4947,7 +4947,7 @@
 			});
       }
       
-      vm.pasteFares = function(workPackageSheet, currentPage){
+      vm.pasteFares = function(workPackageSheet, cancel){
     	  var clipboard = Clipboard.findByCurrentUsername({id : $stateParams.id}).$promise;
     	  
     	  clipboard.then(function(result){
@@ -4956,7 +4956,12 @@
 	    			  result.content[x].no = workPackageSheet.fares.length+1;
 	    			  
 	    			  result.content[x].status = "PENDING";
-	    			  result.content[x].action = "A";
+	    			  if(cancel){
+	    				  result.content[x].action = "X";
+	    			  }
+	    			  else{
+	    				  result.content[x].action = "A";
+	    			  }	    			  
 	    			  result.content[x].travelStart = DateUtils.convertDateTimeFromServer(result.content[x].travelStart);
 	    			  result.content[x].travelEnd = DateUtils.convertDateTimeFromServer(result.content[x].travelEnd);
 	    			  result.content[x].saleStart = DateUtils.convertDateTimeFromServer(result.content[x].saleStart);
@@ -4966,7 +4971,6 @@
 	    		  }
 			  }
 			  else if(result.page == 'AFD_QUERY'){
-//				  alert('Paste afd query');
 				  for(var x=0;x<result.content.length;x++){
 					  console.log(result.content[x]);
 					  var tariffNumber = null;
@@ -4978,7 +4982,7 @@
 			    	  }
 					  var fare = {
 						  status:"PENDING",
-						  action:"A",
+						  action: cancel ? "X" : "A",
 						  carrier:"GA",
 						  tariffNumber:tariffNumber,
 						  origin:result.content[x].originCity,
@@ -4989,7 +4993,15 @@
 						  typeOfJourney:result.content[x].owrt,
 						  footnote1:result.content[x].footnote,
 						  rtgno:result.content[x].routingNo,
-						  ruleno:result.content[x].ruleNo
+						  ruleno:result.content[x].ruleNo,
+						  currency:result.content[x].currencyCode,
+						  amount:result.content[x].baseAmount,
+						  aif:result.content[x].aif,
+						  travelStart:DateUtils.convertDateTimeFromServer(result.content[x].travelStartDate),
+						  travelEnd:DateUtils.convertDateTimeFromServer(result.content[x].travelEndDate),
+						  saleStart:DateUtils.convertDateTimeFromServer(result.content[x].saleStartDate),
+						  saleEnd:DateUtils.convertDateTimeFromServer(result.content[x].saleEndDate),
+						  travelComplete:DateUtils.convertDateTimeFromServer(result.content[x].travelComplete)
 					  };
 					  
 					  workPackageSheet.fares.push(fare);    	

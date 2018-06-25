@@ -407,10 +407,10 @@
 																     														   
 																    
 																    <li>
-																    	<a ng-click="vm.pasteFares(workPackageSheet, 'workorder-fares')">Paste</a>
+																    	<a ng-click="vm.pasteFares(workPackageSheet)">Paste</a>
 																    </li>
 																    <li>
-																    	<a href="#">Paste As Cancel</a>
+																    	<a ng-click="vm.pasteFares(workPackageSheet, true)">Paste As Cancel</a>
 																    </li>
 																    
 																    <li>
@@ -756,7 +756,7 @@
 									               			</td>
 									               			<td  ng-click="vm.tdClick(workPackageSheet, fare, 'saleEnd', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['saleEnd']}">
 							               						<span class="input-group">
-																	<input id="field_startDate" 
+																	<input id="field_endDate" 
 																		type="text"
 																		name="saleEndDate{{$parent.$index}}{{$index}}" id="field_salesaleEnd"
 										                				ng-disabled="!vm.isEditable('saleEndDate')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' "	
@@ -881,7 +881,7 @@
 																    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Delete Selected Rows</a>
 																    </li>
 																    <li>
-																    	<a ng-click="vm.pasteFares(workPackageSheet, 'workorder-addon-fares')">Paste</a>
+																    	<a ng-click="vm.pasteFares(workPackageSheet)">Paste</a>
 																    </li>
 																    <li>
 																    	<a href="#">Paste As Cancel</a>
@@ -1621,7 +1621,7 @@
 												    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Delete Selected Rows</a>
 												    </li>
 												    <li>
-												    	<a ng-click="vm.pasteFares(workPackageSheet, 'workorder-discount-fares')">Paste</a>
+												    	<a ng-click="vm.pasteFares(workPackageSheet)">Paste</a>
 												    </li>
 												    <li>
 												    	<a href="#">Paste As Cancel</a>
@@ -2423,7 +2423,7 @@
 															    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Delete Selected Rows</a>
 															    </li>
 															    <li>
-															    	<a ng-click="vm.pasteFares(workPackageSheet, 'workorder-market-fares')">Paste</a>
+															    	<a ng-click="vm.pasteFares(workPackageSheet)">Paste</a>
 															    </li>
 															    <li>
 															    	<a href="#">Paste As Cancel</a>
@@ -2850,7 +2850,7 @@
 																    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Delete Selected Rows</a>
 																    </li>
 																    <li>
-																    	<a ng-click="vm.pasteFares(workPackageSheet, 'workorder-addon-fares')">Paste</a>
+																    	<a ng-click="vm.pasteFares(workPackageSheet)">Paste</a>
 																    </li>
 																    <li>
 																    	<a href="#">Paste As Cancel</a>
@@ -3423,7 +3423,7 @@
 															    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Delete Selected Rows</a>
 															    </li>
 															    <li>
-															    	<a ng-click="vm.pasteFares(workPackageSheet, 'workorder-waiver-fares')">Paste</a>
+															    	<a ng-click="vm.pasteFares(workPackageSheet)">Paste</a>
 															    </li>
 															    <li>
 															    	<a href="#">Paste As Cancel</a>
