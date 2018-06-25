@@ -10,7 +10,7 @@ import java.util.Objects;
 /**
  * A TariffNumber.
  */
-@Document(collection = "master_tariff")
+@Document(collection = "tariff_number")
 public class TariffNumber implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -24,7 +24,7 @@ public class TariffNumber implements Serializable {
     @Field("tar_cd")
     private String tarCd;
 
-    @Field("gfs_global_area")
+    @Field("global")
     private String global;
 
     @Field("description")

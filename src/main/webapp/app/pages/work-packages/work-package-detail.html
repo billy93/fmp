@@ -471,6 +471,8 @@
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Base Amt <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'amount')"></span>
 																<div class="resize-div"></div>
 															</th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Amt Diff</th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">% Amt Diff</th>															
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Target Aif <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'aif')"></span>
 																<div class="resize-div"></div>
 															</th>
@@ -649,6 +651,7 @@
 									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'ruleno', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['ruleno']}">
 							               						<input type="text" 
 							               						ng-maxlength="4"
+							               						uppercase
 									                			maxlength="4"
 									                			ng-pattern="/^[a-zA-Z0-9]{1,4}$/"
 									                			class="form-control" name="ruleno{{$parent.$index}}{{$index}}" id="field_bookingClass"
@@ -683,6 +686,12 @@
 								                				ng-required="vm.isRequired('amount', fare)" 
 								                				ng-class="{'must-fill': editForm.editFormATPCO.amount{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 													            ng-model="fare.amount"/>									                												                			
+									               			</td>
+									               			<td>
+									               				<input class="form-control" disabled ng-model="fare.amtDiff" style="min-width:100px"/>
+									               			</td>
+									               			<td>
+									               				<input class="form-control" disabled ng-model="fare.amtPercentDiff" style="min-width:100px"/>
 									               			</td>
 									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'aif', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['aif']}">
 										               			<input type="text" class="form-control" name="aif{{$parent.$index}}{{$index}}" id="field_bookingClass"

@@ -84,9 +84,9 @@
         
         vm.typeOfJourney = {
     		"":"Select OW/RT", 
-    		"OW":"One Way", 
-    		"RT":"Return", 
-    		"OO":"One Way Only"
+    		"1":"One Way", 
+    		"2":"Round Trip", 
+    		"3":"One Way Only"
         };
         
         vm.cabin = {
@@ -1769,7 +1769,7 @@
     		fareSheet.fares.push({
     			no:fareSheet.fares.length+1,
     			status:"PENDING",
-    			action:"AUTO",
+    			action:"A",
   	 	      	carrier:"GA"
     		});
  	    }
@@ -4906,6 +4906,7 @@
     				  var copiedFare = angular.copy(workPackageSheet.fares[x]);
     				  copiedFare.no = workPackageSheet.fares.length+1;
     				  copiedFare.status = "PENDING";
+    				  copiedFare.action = "A";
     				  copiedFare.field = null;
     				  workPackageSheet.fares.push(copiedFare);
     			  }
