@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 
 import com.atibusinessgroup.fmp.constant.CollectionName;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
-import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat50GeoLocation;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord8;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByRuleNoCxrTarNo;
 import com.atibusinessgroup.fmp.domain.dto.Rec8Param;

@@ -1,17 +1,14 @@
 package com.atibusinessgroup.fmp.web.rest;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,35 +19,28 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.atibusinessgroup.fmp.constant.CategoryName;
 import com.atibusinessgroup.fmp.constant.CategoryType;
-import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFootnoteRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord0;
-import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord1;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2Cat10;
 import com.atibusinessgroup.fmp.domain.dto.AfdQuery;
 import com.atibusinessgroup.fmp.domain.dto.AfdQueryParam;
-import com.atibusinessgroup.fmp.domain.dto.AtpcoFareAfdQueryWithRecords;
+import com.atibusinessgroup.fmp.domain.dto.AfdQueryWrapper;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.Category;
-import com.atibusinessgroup.fmp.domain.dto.CategoryObject;
 import com.atibusinessgroup.fmp.domain.dto.CategoryTextFormatAndAttribute;
 import com.atibusinessgroup.fmp.domain.dto.DataTable;
 import com.atibusinessgroup.fmp.domain.dto.GeneralRuleApplication;
 import com.atibusinessgroup.fmp.repository.AtpcoRecord0Repository;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoFareCustomRepository;
 import com.atibusinessgroup.fmp.service.AtpcoRecordService;
-import com.atibusinessgroup.fmp.service.mapper.AfdQueryMapper;
-import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
 import com.codahale.metrics.annotation.Timed;
 
 @RestController
 @RequestMapping("/api")
 public class AfdQueryResource {
 
-	private final LinkedHashMap<String, String> fareCategories = new LinkedHashMap<>();
-	private final LinkedHashMap<String, String> fareFootnotes = new LinkedHashMap<>();
 	private final LinkedHashMap<String, String> categories = new LinkedHashMap<>();
 	private final LinkedHashMap<String, String> footnotes = new LinkedHashMap<>();
 	private final String[] ruleCategories = new String[] {"003", "005", "006", "007", "014", "015"};
@@ -61,27 +51,13 @@ public class AfdQueryResource {
 	
 	private final AtpcoFareCustomRepository atpcoFareCustomRepository;
 	
-	private final AfdQueryMapper afdQueryMapper;
-	
 	private final AtpcoRecordService atpcoRecordService;
 	
-    public AfdQueryResource(AtpcoRecord0Repository atpcoRecord0Repository, AtpcoFareCustomRepository atpcoFareCustomRepository, AfdQueryMapper afdQueryMapper, AtpcoRecordService atpcoRecordService) {
+    public AfdQueryResource(AtpcoRecord0Repository atpcoRecord0Repository, AtpcoFareCustomRepository atpcoFareCustomRepository, AtpcoRecordService atpcoRecordService) {
     	this.atpcoRecord0Repository = atpcoRecord0Repository;
     	this.atpcoFareCustomRepository = atpcoFareCustomRepository;
-    	this.afdQueryMapper = afdQueryMapper;
     	this.atpcoRecordService = atpcoRecordService;
     	
-    	//Fares
-    	fareCategories.put("003", CategoryName.CAT_003);
-    	fareCategories.put("005", CategoryName.CAT_005);
-    	fareCategories.put("006", CategoryName.CAT_006);
-    	fareCategories.put("007", CategoryName.CAT_007);
-    	fareCategories.put("014", CategoryName.CAT_014);
-    	fareCategories.put("015", CategoryName.CAT_015);
-    	fareFootnotes.put("014", CategoryName.CAT_014);
-    	fareFootnotes.put("015", CategoryName.CAT_015);
-    	
-    	//Rules
     	categories.put("001", CategoryName.CAT_001);
     	categories.put("002", CategoryName.CAT_002);
     	categories.put("003", CategoryName.CAT_003);
@@ -125,128 +101,24 @@ public class AfdQueryResource {
      */
     @PostMapping("/afd-queries")
     @Timed
-    public ResponseEntity<List<AfdQuery>> getAllAfdQueries(@RequestBody AfdQueryParam param) {
+    public ResponseEntity<AfdQueryWrapper> getAllAfdQueries(@RequestBody AfdQueryParam param) {
         log.debug("REST request to get a page of AfdQueries: {}", param);
+        AfdQueryWrapper result = new AfdQueryWrapper();
         
         Pageable pageable = new PageRequest(param.getPage(), param.getSize());
         
+        List<AfdQuery> afdQueries = new ArrayList<>();
+        boolean isLastPage = false;
+        
         //ATPCO
-        Page<AtpcoFareAfdQueryWithRecords> page = atpcoFareCustomRepository.findAtpcoFareAfdQueryWithRecords(param, ruleCategories, pageable);
-        List<AtpcoFareAfdQueryWithRecords> a1fares = page.getContent();
-
-        List<AfdQuery> result = new ArrayList<>();
+        AfdQueryWrapper atpco = atpcoFareCustomRepository.findAtpcoFareAfdQueryWithRecords(param, ruleCategories, pageable);
+        afdQueries.addAll(atpco.getAfdQueries());
+        isLastPage = atpco.isLastPage();
         
-        Date focusDate = null;
+        result.setAfdQueries(afdQueries);
+        result.setLastPage(isLastPage);
         
-        atpcoRecordService.compareFareClass(null, null);
-        
-        for (AtpcoFareAfdQueryWithRecords a1fare:a1fares) {
-        	AtpcoFare afare = a1fare.getAtpcoFare();
-        	AtpcoRecord1 matchedRecord1 = null;
-        	
-        	focusDate = atpcoRecordService.resolveFocusDate(param.getEffectiveDateTo(), afare.getTariffEffectiveDateObject(), afare.getDiscontinueDateObject());
-        	
-        	for (AtpcoRecord1 record1:a1fare.getAtpcoRecord1()) {
-        		boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afare.getOriginCity(), "C", afare.getDestinationCity(), afare.getOwrt(), afare.getRoutingNo(), afare.getFootnote(), focusDate,
-        				record1.getGeoType1(), record1.getGeoLoc1(), record1.getGeoType2(), record1.getGeoLoc2(), record1.getOwrt(), record1.getRoutingNo(), record1.getFootnote(), record1.getEffectiveDateObject(), record1.getDiscontinueDateObject());
-        		
-        		if (matched) {
-        			matchedRecord1 = record1;
-        			break;
-        		}
-        	}
-        	
-        	//Rule
-        	List<CategoryObject> cat03s = null;
-        	List<CategoryObject> cat05s = null;
-        	List<CategoryObject> cat06s = null;
-        	List<CategoryObject> cat07s = null;
-        	List<CategoryObject> cat14s = null;
-        	List<CategoryObject> cat15s = null;
-        	
-        	for (Map.Entry<String, String> entry : fareCategories.entrySet()) {
-        		AtpcoRecord2 matchedRecord2 = null;
-        		
-        		for (AtpcoRecord2GroupByCatNo arecord2:a1fare.getAtpcoRecord2()) {
-                	if (arecord2.getCatNo().contentEquals(entry.getKey())) {
-                		for (AtpcoRecord2 record2:arecord2.getRecords2()) {
-                			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afare.getOriginCity(), "C", afare.getDestinationCity(), afare.getFareClassCode(), afare.getFareType(), matchedRecord1 != null ? matchedRecord1.getSeasonType() : null, matchedRecord1 != null ? matchedRecord1.getDayOfWeekType() : null, afare.getOwrt(), afare.getRoutingNo(), afare.getFootnote(), focusDate,
-                					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getFareClass(), record2.getFareType(), record2.getSeasonType(), record2.getDayOfWeekType(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
-                        	
-                    		if (matched) {
-                    			matchedRecord2 = record2;
-                    			break;
-                    		} 
-                		}
-                		
-                		break;
-                	}
-                }	
-        		
-        		if (matchedRecord2 != null && matchedRecord2.getDataTables() != null && matchedRecord2.getDataTables().size() > 0) {
-            		List<CategoryObject> rules = atpcoRecordService.getAndConvertCategoryObjectDataTable(entry.getKey(), matchedRecord2.getDataTables(), "Rule");
-            		
-            		switch (entry.getKey()) {
-	            		case "003": cat03s = rules;
-									break;	
-            			case "005": cat05s = rules;
-									break;	
-            			case "006": cat06s = rules;
-            						break;
-            			case "007": cat07s = rules;
-									break;
-            			case "014": cat14s = rules;
-									break;
-            			case "015": cat15s = rules;
-									break;
-            		}
-            	}
-        	}
-        	
-        	//Footnote
-        	List<CategoryObject> footnote14s = null;
-        	List<CategoryObject> footnote15s = null;
-        	
-        	for (Map.Entry<String, String> entry : footnotes.entrySet()) {
-        		AtpcoFootnoteRecord2 matchedRecord2 = null;
-            	
-            	for (AtpcoFootnoteRecord2GroupByCatNo arecord2:a1fare.getFootnoteRecord()) {
-                	if (arecord2.getCatNo().contentEquals(entry.getKey())) {
-                		for (AtpcoFootnoteRecord2 record2:arecord2.getRecords2()) {
-                			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afare.getOriginCity(), "C", afare.getDestinationCity(), afare.getOwrt(), afare.getRoutingNo(), afare.getFootnote(), focusDate,
-                					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
-                        	
-                    		if (matched) {
-                    			matchedRecord2 = record2;
-                    			break;
-                    		} 
-                		}
-                		
-                		break;
-                	}
-                }	
-            	
-            	if (matchedRecord2 != null && matchedRecord2.getDataTables() != null && matchedRecord2.getDataTables().size() > 0) {
-            		List<CategoryObject> footnotes = atpcoRecordService.getAndConvertCategoryObjectDataTable(entry.getKey(), matchedRecord2.getDataTables(), "Footnote");
-            		
-            		switch (entry.getKey()) {
-            			case "014": footnote14s = footnotes;
-            						break;
-            			case "015": footnote15s = footnotes;
-									break;
-            		}
-            	}
-        	}
-        	
-        	AfdQuery afdQuery = afdQueryMapper.convertAtpcoFare(afare, matchedRecord1, cat03s, cat05s, cat06s, cat07s, cat14s, cat15s, 
-        			footnote14s, footnote15s, focusDate);
-        	
-        	result.add(afdQuery);
-        }
-        
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/afd-queries");
-        
-        return new ResponseEntity<>(result, headers, HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
     
     /**
