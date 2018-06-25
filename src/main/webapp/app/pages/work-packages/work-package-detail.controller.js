@@ -2334,13 +2334,15 @@
 	   }
 	   
 	   vm.removeAttachment = function(attachment){
-		   if(vm.workPackage.status != "NEW"){
-			   attachment.inOnly = false;
-			   attachment.isDeleted = true;
-		   }else{
-			 var index = vm.workPackage.attachmentData.indexOf(attachment);
-		  	 vm.workPackage.attachmentData.splice(index, 1); 
-		   }
+		  if(vm.workPackage.reviewLevel != "DISTRIBUTION"){
+			  if(vm.workPackage.status != "NEW"){
+				   attachment.inOnly = false;
+				   attachment.isDeleted = true;
+			   }else{
+				 var index = vm.workPackage.attachmentData.indexOf(attachment);
+			  	 vm.workPackage.attachmentData.splice(index, 1); 
+			   }  
+		  }
 	  };
 	  
 	  vm.addMarketRules = function(){
