@@ -29,6 +29,9 @@
     				check:false
     			}
     		},
+    		action:{
+    			check:false
+    		},
         	tariffNumber:{        		
         		tarNo:{
         			check:false,
@@ -45,15 +48,27 @@
         	},
         	origin:{
         		check:false,
+        		replace:{
+    				check:false
+    			}
         	},
         	destination:{
         		check:false,
+        		replace:{
+    				check:false
+    			}
         	},
         	fareBasis:{
         		check:false,
+        		replace:{
+    				check:false
+    			}
         	},
         	bookingClass:{
         		check:false,
+        		replace:{
+    				check:false
+    			}
         	},
         	cabin:{
         		check:false,
@@ -103,6 +118,10 @@
         	ratesheetComment:{
         		check:false,
         	},
+        	carrier:{
+        		check:false,
+        		search:'GA'
+        	}
         };
         vm.originalFilter = angular.copy(vm.filter);
         

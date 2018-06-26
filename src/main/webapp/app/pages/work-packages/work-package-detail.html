@@ -99,19 +99,19 @@
 											enable-time="false"
 											datetime-picker="{{dateformat}}" ng-model="vm.workPackage.filingDate" is-open="vm.datePickerOpenStatus.filingDate"  ng-disabled="!vm.isEditable('filingDate') || vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"/>
 											<span ng-click="vm.openCalendar('filingDate')" class="input-group-addon" ng-class="{'poiv-none': !vm.isEditable('filingDate')  || vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}">
-												<i class="fa fa-calendar" ng-disabled="vm.isFieldDisable('filingDate')"></i>
+												<i class="fa fa-calendar" ng-disabled="!vm.isEditable('filingDate')"></i>
 											</span>
 										</div>
 									</div>
 									<div class="form-group">
 										<label for="field_expPax">Exp Pax</label>
 										<input type="text" name="expPax" class="form-control"name="name" id="field_expPax"
-                    						ng-model="vm.workPackage.expPax" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"/>
+                    						ng-model="vm.workPackage.expPax" ng-disabled="!vm.isEditable('expPax') || vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"/>
 									</div>
 									<div class="form-group">
 										<label for="field_expRev">Exp Rev</label>
 										<input type="text" name="expPax" class="form-control"name="name" id="field_expRev"
-                    						ng-model="vm.workPackage.expRev" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"/>
+                    						ng-model="vm.workPackage.expRev" ng-disabled="!vm.isEditable('expRev') || vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"/>
 									</div>
 									<div class="form-group" ng-if="vm.workPackage.targetDistribution != 'MARKET'">
 										<label for="field_saleDate">Sale Start Date</label>
@@ -127,7 +127,7 @@
                    								is-open="vm.datePickerOpenStatus.saleDate" class="form-control">
                    								
 											<span ng-click="vm.openCalendar('saleDate')" class="input-group-addon" ng-class="{'poiv-none': !vm.isEditable('saleDate') || vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}">
-												<i class="fa fa-calendar" ng-disabled="vm.isFieldDisable('saleDate')"></i>
+												<i class="fa fa-calendar" ng-disabled="!vm.isEditable('saleDate')"></i>
 											</span>
 										</div>
 									</div>
@@ -145,7 +145,7 @@
                    								is-open="vm.datePickerOpenStatus.distributionDate" class="form-control">
                    								
 											<span ng-click="vm.openCalendar('distributionDate')" class="input-group-addon" ng-class="{'poiv-none': !vm.isEditable('distributionDate') || vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}">
-												<i class="fa fa-calendar" ng-disabled="vm.isFieldDisable('distributionDate')"></i>
+												<i class="fa fa-calendar" ng-disabled="!vm.isEditable('distributionDate')"></i>
 											</span>
 										</div>
 									</div>
@@ -192,7 +192,7 @@
 
 									<div ng-class="{active:vm.currentTabInterofficeComment, 'poiv-none' : (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') 
 											|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO'&& vm.workPackage.status=='DISTRIBUTED')  || vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'}" class="tab-pane" id="inter-office">
-										<div class="form-group" ng-class="{'poiv-none' :vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)}">
+										<div class="form-group" ng-class="{'poiv-none' :vm.workPackage.status =='DISCONTINUED' || vm.workPackage.reviewLevel == 'DISTRIBUTION'|| vm.disabledField(vm.workPackage)}">
 											<wysiwyg-edit content="vm.ioString" config="vm.editorConfig"></wysiwyg-edit>
 										</div> 
 										<div class="clearfix">
@@ -220,7 +220,7 @@
 											<div class="form-group">
 												<label>Rate Sheet Comment</label>
 												<textarea class="form-control" rows="3" id="ratesheetComment" ng-model="vm.workPackage.ratesheetComment" name="ratesheetComment"
-							                    ng-disabled="!vm.isFieldDisable('ratesheetComment') || vm.workPackage.status=='WITHDRAWN' || vm.disabledField(vm.workPackage)" 
+							                    ng-disabled="!vm.isEditable('ratesheetComment') || vm.workPackage.status=='WITHDRAWN' || vm.disabledField(vm.workPackage)" 
 							                    ng-class="{'must-fill': editForm.ratesheetComment.$error.required}"
 							                    ng-required="vm.isRequired('ratesheetComment')"></textarea>
 											</div>								
@@ -350,7 +350,7 @@
 												<div class="form-group">
 													<label>Fare Type</label>	
 												<select class="form-control" name="fareType{{$index}}" ng-model="workPackageSheet.fareType" ng-class="{'must-fill': !editForm.editFormATPCO.fareType{{$index}}.$valid && fare.action != 'Canceled'}"
-													ng-required="vm.checkRequiredField('fareType')" ng-disabled="!vm.isFieldDisable('fareType')|| vm.workPackage.status=='WITHDRAWN'  ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
+													ng-required="vm.checkRequiredField('fareType')" ng-disabled="!vm.isEditable('fareType') || vm.workPackage.status=='WITHDRAWN'  ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
 													<option ng-repeat="fare in vm.optionFare track by $index" value="{{fare.name}}">
 														{{fare.code}} | {{fare.name}}
 													</option>
