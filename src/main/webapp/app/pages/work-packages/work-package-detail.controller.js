@@ -185,6 +185,16 @@
         		editable:["HO"],
         		mandatory:["HO"]
         	},
+        	{
+        		name:"expPax",
+        		editable:["HO", "LSO"],
+        		mandatory:["HO", "LSO"]
+        	},
+        	{
+        		name:"expRev",
+        		editable:["HO", "LSO"],
+        		mandatory:["HO", "LSO"]
+        	},
         	
         	// REGULAR HEADER FARES FIELD
         	{
@@ -1870,6 +1880,7 @@
  	    			var listField = [
     	    			workPackageFareFilter.no.check && workPackageFareFilter.no.search != null ? 'no' : null,
     	    			workPackageFareFilter.status.check && workPackageFareFilter.status.search != null ? 'status' : null,
+    	    			workPackageFareFilter.action.check && workPackageFareFilter.action.search != null ? 'action' : null,
     	    			workPackageFareFilter.tariffNumber.tarNo.check && workPackageFareFilter.tariffNumber.tarNo.search != null ? 'tariffNumber.tarNo' : null,
     	    	    	workPackageFareFilter.tariffNumber.tarCd.check && workPackageFareFilter.tariffNumber.tarCd.search != null ? 'tariffNumber.tarCd' : null,
     	    	    	workPackageFareFilter.tariffNumber.global.check && workPackageFareFilter.tariffNumber.global.search != null ? 'tariffNumber.global' : null,
@@ -1921,13 +1932,25 @@
  	    		
  	    		function replaceField(workPackageFareFilter, fare){
  	    			var listField = [
-    	    			workPackageFareFilter.status.replace.check && workPackageFareFilter.status.replace.value != null ? 'status' : null
+    	    			workPackageFareFilter.status.replace.check && workPackageFareFilter.status.replace.value != null ? 'status' : null,
+    					workPackageFareFilter.origin.replace.check && workPackageFareFilter.origin.replace.value != null ? 'origin' : null,
+    					workPackageFareFilter.destination.replace.check && workPackageFareFilter.destination.replace.value != null ? 'destination' : null,
+    					workPackageFareFilter.fareBasis.replace.check && workPackageFareFilter.fareBasis.replace.value != null ? 'fareBasis' : null,
+    					workPackageFareFilter.bookingClass.replace.check && workPackageFareFilter.bookingClass.replace.value != null ? 'bookingClass' : null,
     	    		];
  	    			
  	    			for(var x=0;x<listField.length;x++){
  	    				if(listField[x] != null){
- 	    					fare[listField[x]] = workPackageFareFilter.status.replace.value;
+ 	    					fare[listField[x]] = getDescendantProp(workPackageFareFilter, listField[x]+'.replace.value');
+// 	    					if(getDescendantProp(fare, listField[x]) != getDescendantProp(workPackageFareFilter, listField[x]+'.replace.search')){
+// 	    					if(fare[listField[x]] == workPackageFareFilter[listField[x]].search){
+// 	    						found = true;
+// 	    					}
  	    				}
+ 	    				
+// 	    				if(listField[x] != null){
+// 	    					fare[listField[x]] = workPackageFareFilter.status.replace.value;
+// 	    				}
  	    			}
  	    		}
  	    		
@@ -2478,6 +2501,11 @@
 		  var cekStatus = "";
 		  var counterApprove = false;
 
+		  if(vm.workPackage.interofficeComment == null || vm.workPackage.interofficeComment.length == 0){
+			  cekStatus = "Interoffice comment could not be blank";
+			  validated = false;
+		  }
+		  
 		  if(vm.workPackage.fareSheet != null && vm.workPackage.fareSheet.length > 0){
 			  for(var x=0;x<vm.workPackage.fareSheet.length;x++){
 				  if(vm.workPackage.fareSheet[x].fares != null && vm.workPackage.fareSheet[x].fares.length > 0){
@@ -4839,7 +4867,6 @@
     	  }    	  
       };
       vm.close = function(){
-    	  console.log(vm.disabledField(vm.workPackage));
     	  if(vm.disabledField(vm.workPackage)){
     		  $state.go("work-package");
     	  }else{
