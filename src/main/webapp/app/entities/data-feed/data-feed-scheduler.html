@@ -1,0 +1,82 @@
+<div>
+	<h2>Data Feed Manual Extract</h2>
+	<jhi-alert></jhi-alert>
+</div>
+
+<div class="panel">
+	<div class="panel-body">
+		<div class="clearfix">
+			<form name="manualExtractForm" role="form"
+				ng-model="vm.manualExtractForm" novalidate>
+				<div class="col-md-12 no-lpad">
+					<div class="form-group">
+						<label>Output File</label>
+						<input type="text" class="form-control" name="outputFile"
+							id="outputFile" ng-model="vm.params.outputFile" />
+					</div>
+				</div>
+				<div class="col-md-12 no-lpad">
+					<div class="col-md-4 no-lpad">
+						<div class="form-group">
+							<label>Delay Days</label>
+							<input type="text" class="form-control" name="outputFile"
+								id="outputFile" ng-model="vm.params.outputFile" />
+						</div>
+					</div>
+					<div class="col-md-4 no-lpad">
+						<div class="form-group">
+							<label>Delay Hours</label>
+							<input type="text" class="form-control" name="outputFile"
+								id="outputFile" ng-model="vm.params.outputFile" />
+						</div>
+					</div>
+					<div class="col-md-4 no-lpad">
+						<div class="form-group">
+							<label>Delay Minutes</label>
+							<input type="text" class="form-control" name="outputFile"
+								id="outputFile" ng-model="vm.params.outputFile" />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12 no-lpad">
+					<div class="form-group">
+						<div class=" semibold">
+							<label> <input type="checkbox" name="includeDisc"
+								ng-model="vm.queryParams.includeDisc"> &nbsp; ATPCO Fares
+							</label>
+						</div>
+						<div class=" semibold">
+							<label> <input type="checkbox" name="includeDisc"
+								ng-model="vm.queryParams.includeDisc"> &nbsp; Market Fares
+							</label>
+						</div>
+						<br />
+					</div>
+				</div>
+				<div class="col-md-12 no-lpad">
+					<div class="col-md-4 no-lpad">
+						<div class="form-group">
+							<label>Start Date</label>
+							<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'effectiveDateFrom')" 
+													is-open="vm.datePickerOpenStatus['effectiveDateFrom']" datetime-picker="{{vm.dateFormat}}" 
+													enable-time="false" name="effectiveDateFrom" id="datepicker" 
+													ng-model="vm.queryParams.effectiveDateFrom" placeholder="From"/>
+						</div>
+					</div>
+					<div class="col-md-4 no-lpad">
+						<div class="form-group">
+							<label>End Date</label>
+							<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'effectiveDateFrom')" 
+													is-open="vm.datePickerOpenStatus['effectiveDateFrom']" datetime-picker="{{vm.dateFormat}}" 
+													enable-time="false" name="effectiveDateFrom" id="datepicker" 
+													ng-model="vm.queryParams.effectiveDateFrom" placeholder="From"/>
+						</div>
+					</div>
+				</div>
+				<div class="pull-right col-md-6 no-lpad">
+				
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

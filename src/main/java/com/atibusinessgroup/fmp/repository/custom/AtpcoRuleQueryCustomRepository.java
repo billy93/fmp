@@ -388,6 +388,22 @@ public class AtpcoRuleQueryCustomRepository {
 				return unwind;
 			}
 		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject group = new BasicDBObject();
+				BasicDBObject groupId = new BasicDBObject();
+				BasicDBObject groupList = new BasicDBObject();
+				groupList.put("cxr_code", "$_id.cxr_code");
+				groupList.put("rule_no", "$_id.rule_no");
+				groupList.put("rule_tar_no", "$_id.rule_tar_no");
+				groupList.put("type", "$m_tariff.type");
+				groupId.append("_id", groupList);
+				group.append("$group", groupId);
+				return group;
+			}
+		});
 
 		aggregationOperations.add(new AggregationOperation() {
 			@Override
@@ -400,7 +416,7 @@ public class AtpcoRuleQueryCustomRepository {
 						.append("cxr_code","$_id.cxr_code")
 						.append("rule_no","$_id.rule_no")
 						.append("rule_tar_no","$_id.rule_tar_no")
-						.append("type", "$m_tariff.type")
+						.append("type", "$_id.type")
 				);
 				return projection;
 			}

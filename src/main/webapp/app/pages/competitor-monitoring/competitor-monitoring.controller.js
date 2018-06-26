@@ -299,6 +299,7 @@
 				$('#barOpacity option[value="0.1"]').attr("selected",true);
 			  	
 				var fares = data;
+				console.log(fares);
 			  
 			      var barThickness = $('#barThickness').val();;
 			      var barOpacity = $('#barOpacity').val();;
@@ -323,8 +324,7 @@
 			      for(var k=0;k<fares.length;k++) {
 			    	  
 			        if(fares[k].carrierCode==categories[j]) {
-			          var amt = String(fares[k].amount);
-			          
+			          var amt = String(fares[k].baseAmount);
 			          
 			          if(fares[k].cabin == 'Y') {
 			        	  cabColor = 'rgba(255,0,0,'+barOpacity+')';
