@@ -296,11 +296,19 @@
         }
 
         vm.discontinue = function(){
-//        	console.log(vm.selectedRow);
-//        	alert('Discontinue');
-        	WorkPackage.discontinue(vm.selectedRow, function onSuccess(){
-        		alert("Work Package successfully discontinued");
-        	}, function onError(){});
+        	if(vm.selectedRow.targetDistribution == 'MARKET' && vm.selectedRow.status == 'DISTRIBUTED'){
+        		WorkPackage.discontinue(vm.selectedRow, function onSuccess(){
+            		alert("Work Package successfully discontinued");
+            	}, function onError(){});
+        	}        	
+        }
+        
+        vm.checkDisabled = function(bakso){
+        	if(bakso.targetDistribution == 'MARKET' && bakso.status == 'DISTRIBUTED'){
+        		return false;
+        	}else {
+        		return true;
+        	}
         }
         
         vm.printExport = function(){
