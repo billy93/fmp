@@ -1051,7 +1051,7 @@
 															            || editForm.editFormATPCO.addonFareFootnote{{$parent.$index}}{{$index}}.$error.maxlength  && fare.action != 'Canceled'}"																			            
 															            ng-disabled="!vm.isEditable('addonFareFootnote') || fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN'  ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 															            ng-required="vm.isRequired('addonFareFootnote')"
-											                    		ng-model="fare.footnote"/>
+											                    		ng-model="fare.footnote1"/>
 									               			</td>
 									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'zone', $event)" ng-class="{highlighted:fare.field['zone']}">
 									               				<input type="text" class="form-control" name="addonFareZone{{$parent.$index}}{{$index}}" id="field_footnote"
@@ -3039,7 +3039,7 @@
 															            || editForm.editFormATPCO.addonFareFootnote{{$parent.$index}}{{$index}}.$error.maxlength  && fare.action != 'Canceled'}"																			            
 															            ng-disabled="!vm.isEditable('addonFareFootnote')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 															            ng-required="vm.isRequired('addonFareFootnote')"
-											                    		ng-model="fare.footnote"/>
+											                    		ng-model="fare.footnote1"/>
 									               			</td>
 									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'zone', $event)" ng-class="{highlighted:fare.field['zone']}">
 									               				<input type="text" class="form-control" name="addonFareZone{{$parent.$index}}{{$index}}" id="field_footnote"
