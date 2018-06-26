@@ -2037,7 +2037,7 @@
     	    input[index_A] = input[index_B];
     	    input[index_B] = temp;
     	}
-        vm.moveUpFare = function(workPackageSheet, idx){
+       /* vm.moveUpFare = function(workPackageSheet, idx){
         	if(idx != 0){
         		swap(workPackageSheet.fares, idx, idx-1);
         	}
@@ -2046,6 +2046,79 @@
         	if(idx != workPackageSheet.fares.length-1){
         		swap(workPackageSheet.fares, idx, idx+1);
         	}
+        }*/
+        
+        vm.moveUpFare = function(workPackageSheet){
+        	 var fares = [];
+             var selected = [];
+             var exist = false;
+         	  for(var x=0;x<workPackageSheet.fares.length;x++){
+         		  if(workPackageSheet.fares[x].field != undefined){      			  
+         			  Object.keys(workPackageSheet.fares[x].field).forEach(function(key) {
+         				  if(workPackageSheet.fares[x].field[key]){
+         					  exist = true;
+         					  selected.push(workPackageSheet.fares[x]);
+         				  }
+         			 });      			 
+         		  }
+         	  }
+         	if(exist){      
+         		var readySwap = true; 
+         		for(var l=selected.length; l>0; l--){      			 				
+     				var index1 =  workPackageSheet.fares.indexOf(selected[l-1]);
+     				var index2 =  workPackageSheet.fares.indexOf(selected[l-1])-1; 
+     				if(index1 == 0){
+     					readySwap = false;
+     				}
+     			 }
+         		 
+         		if(readySwap){
+         		 for(var l=0; l<selected.length; l++){      			 				
+    				var index1 =  workPackageSheet.fares.indexOf(selected[l]);
+    				var index2 =  workPackageSheet.fares.indexOf(selected[l])-1; 
+    				swap(workPackageSheet.fares, index1, index2);
+    			 }
+         		 for(var x=0;x<workPackageSheet.fares.length;x++){
+         			workPackageSheet.fares[x].no = x+1;
+         		 }
+         		}
+   		  }
+        }
+        vm.moveDownFare = function(workPackageSheet){
+    	  var fares = [];
+          var selected = [];
+          var exist = false;
+      	  for(var x=0;x<workPackageSheet.fares.length;x++){
+      		  if(workPackageSheet.fares[x].field != undefined){      			  
+      			  Object.keys(workPackageSheet.fares[x].field).forEach(function(key) {
+      				  if(workPackageSheet.fares[x].field[key]){
+      					  exist = true;
+      					  selected.push(workPackageSheet.fares[x]);
+      				  }
+      			 });      			 
+      		  }
+      	  }
+      	if(exist){      
+      		var readySwap = true; 
+      		for(var l=selected.length; l>0; l--){      			 				
+  				var index1 =  workPackageSheet.fares.indexOf(selected[l-1]);
+  				var index2 =  workPackageSheet.fares.indexOf(selected[l-1])+1; 
+  				if(index2 == workPackageSheet.fares.length){
+  					readySwap = false;
+  				}
+  			 }
+      		 
+      		if(readySwap){
+      		 for(var l=selected.length; l>0; l--){      			 				
+ 				var index1 =  workPackageSheet.fares.indexOf(selected[l-1]);
+ 				var index2 =  workPackageSheet.fares.indexOf(selected[l-1])+1; 
+ 				swap(workPackageSheet.fares, index1, index2);
+ 			 }
+      		 for(var x=0;x<workPackageSheet.fares.length;x++){
+      			workPackageSheet.fares[x].no = x+1;
+      		 }
+      		}
+		  }
         }
         
         vm.clearSelection = function(workPackageSheet){
