@@ -259,11 +259,11 @@ public class WorkPackageResource {
         List<WorkPackageFareSheet> sheets = workPackage.getMarketFareSheet();
         for(WorkPackageFareSheet sheet : sheets) {
         	for(WorkPackageFare fare : sheet.getFares()) {
-        		if(fare.getSaleStart() != null) {
-        			if(zonedDateTimeDifference(ZonedDateTime.now(), fare.getSaleStart(), ChronoUnit.DAYS) > 0) {
-        				fare.setSaleStart(ZonedDateTime.now());
-        			}
-        		}
+//        		if(fare.getSaleStart() != null) {
+//        			if(zonedDateTimeDifference(ZonedDateTime.now(), fare.getSaleStart(), ChronoUnit.DAYS) > 0) {
+//        				fare.setSaleStart(ZonedDateTime.now());
+//        			}
+//        		}
         		
         		if(fare.getSaleEnd() != null) {
         			if(zonedDateTimeDifference(ZonedDateTime.now(), fare.getSaleEnd(), ChronoUnit.DAYS) > 0) {
