@@ -5735,7 +5735,14 @@
     		  alert('Fares updated');
     		  workPackageSheet.fares = result.fares;
     		  vm.changeVersion(workPackageSheet, 'current');
-//    		  console.log(result.fares);
+    	  }, function(error){});
+      }
+      
+      vm.updateActionCodes = function(workPackageSheet){
+    	  WorkPackage.updateActionCodes(workPackageSheet, function(result){
+    		  alert('Action code updated');
+    		  workPackageSheet.fares = result.fares;
+    		  vm.changeVersion(workPackageSheet, 'current');
     	  }, function(error){});
       }
 
