@@ -478,7 +478,7 @@
         	{
         		name:"discountAccountCode",
         		editable:["LSO", "HO", "DISTRIBUTION"],
-        		mandatory:["LSO", "HO", "DISTRIBUTION"]
+        		mandatory:[]
         	},
         	
         	//DISCOUNT FARE
