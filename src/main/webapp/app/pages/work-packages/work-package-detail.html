@@ -1812,7 +1812,7 @@
 						                                 ng-options="key as value for (key , value) in vm.calculationType"></select>
 						                      </td>
 						                      	<td ng-click="vm.tdClick(workPackageSheet, fare, 'percentBaseFare', $event)" ng-class="{highlighted:fare.field['percentBaseFare']}">
-						                           <input type="number" class="form-control" name="discountPercentageOfBaseFare{{$parent.$index}}{{$index}}"
+						                           <input type="text" class="form-control" name="discountPercentageOfBaseFare{{$parent.$index}}{{$index}}"
 						                                    ng-disabled="!vm.isEditable('discountPercentageOfBaseFare')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 						                                    ng-required="vm.isRequired('discountPercentageOfBaseFare', fare) && fare.action != 'Canceled'" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountPercentageOfBaseFare{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
