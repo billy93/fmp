@@ -110,7 +110,7 @@ public class RuleQueryResource {
 		
 		Pageable pageable = new PageRequest(param.getPage(), param.getSize());
 		
-		Page<AtpcoRecord2GroupByRuleNoCxrTarNo> page = atpcoRuleQueryCustomRepository.getGroupingRuleQueries(param, pageable);
+		Page<AtpcoRecord2GroupByRuleNoCxrTarNo> page = atpcoRuleQueryCustomRepository.getQueryByType(param, pageable);
 		
 		List<RuleQuery> result = new ArrayList<>();
 		
