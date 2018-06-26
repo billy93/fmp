@@ -6524,14 +6524,14 @@ public class WorkPackageResource {
     @PostMapping("/work-packages/update-latest-fare")
     @Timed
     public ResponseEntity<WorkPackageFareSheet> updateLatestFare(@RequestBody WorkPackageFareSheet workPackageSheet) throws URISyntaxException {
-        log.debug("REST request to referback WorkPackageSheet : {}", workPackageSheet);
+        log.debug("REST request to update latest fare WorkPackageSheet : {}", workPackageSheet);
        
         List<WorkPackageFare> fares = workPackageSheet.getFares();
         for(WorkPackageFare fare : fares) {
 	        Optional<AtpcoFare> checkAtpcoFare = atpcoFareRepository.findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCity(fare.getCarrier(), fare.getTariffNumber() != null ? fare.getTariffNumber().getTarNo() : null, fare.getOrigin(), fare.getDestination());
 			if(checkAtpcoFare.isPresent()) {
 				float atpcoFareAmount = Float.parseFloat(checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().toString());
-				fare.setAmount(String.format("%.02f",atpcoFareAmount));		
+				fare.setAmount(String.valueOf(atpcoFareAmount));		
 				fare.setAction("Y");      
 				fare.setAmtDiff("0");
 				fare.setAmtPercentDiff("0");
@@ -6540,21 +6540,52 @@ public class WorkPackageResource {
 //				fare.setAction("N");        		
 			}
         }
-//        WorkPackage result = workPackageService.findOne(workPackage.getId());
-//
-//        result.setReviewLevel(result.getDistributionReviewLevel());
-//        result.setDistributionReviewLevel(null);
-//        result.setStatus(Status.REFERRED);
-//		result.setLocked(false);
-//		result.setQueuedDate(Instant.now());
-//        workPackageService.save(result);
-//        
-//        WorkPackageHistory history = new WorkPackageHistory();
-//        history.setWorkPackage(new ObjectId(result.getId()));
-//        history.setType("REFERBACK");
-//        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
-//        workPackageHistoryService.save(history);
-        
+        return ResponseEntity.ok().body(workPackageSheet);
+    }
+    
+    
+    /**
+     * POST  /work-packages/update-action-codes : Update Action Codes
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/work-packages/update-action-codes")
+    @Timed
+    public ResponseEntity<WorkPackageFareSheet> updateActionCodes(@RequestBody WorkPackageFareSheet workPackageSheet) throws URISyntaxException {
+        log.debug("REST request to update action code WorkPackageSheet : {}", workPackageSheet);
+       
+        List<WorkPackageFare> fares = workPackageSheet.getFares();
+        for(WorkPackageFare fare : fares) {
+        	Optional<AtpcoFare> checkAtpcoFare = atpcoFareRepository.findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCity(fare.getCarrier(), fare.getTariffNumber() != null ? fare.getTariffNumber().getTarNo() : null, fare.getOrigin(), fare.getDestination());
+    		if(checkAtpcoFare.isPresent()) {
+    			//I, R, Y
+    			if(fare.getAmount() != null) {
+    				float atpcoFareAmount = Float.parseFloat(checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().toString());
+    				float fareAmount = Float.parseFloat(fare.getAmount());
+        			if(fareAmount < atpcoFareAmount) {
+        				fare.setAction("R");
+        			}
+        			else if(fareAmount > atpcoFareAmount) {
+        				fare.setAction("I");        				
+        			}
+        			else if(fareAmount== atpcoFareAmount){
+        				fare.setAction("Y");        				        				
+        			}
+        			
+        			float amtDiff = ((Float.parseFloat(fare.getAmount())) - Float.parseFloat(checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().toString()));
+        			fare.setAmtDiff(String.format("%.02f",amtDiff));
+        			
+        			float percentDiff = (amtDiff / atpcoFareAmount) * 100;
+        			fare.setAmtPercentDiff(String.format("%.02f", percentDiff));
+    			}        			
+    		}
+    		else {
+    			fare.setAction("N");        		
+    		}
+        }
         return ResponseEntity.ok().body(workPackageSheet);
     }
 }
+

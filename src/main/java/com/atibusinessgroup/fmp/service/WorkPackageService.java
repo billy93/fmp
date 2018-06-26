@@ -111,10 +111,10 @@ public class WorkPackageService {
 	        			}
 	        			
 	        			float amtDiff = ((Float.parseFloat(fare.getAmount())) - Float.parseFloat(checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().toString()));
-	        			fare.setAmtDiff(String.format("%.02f",amtDiff));
+	        			fare.setAmtDiff(String.valueOf(amtDiff));
 	        			
 	        			float percentDiff = (amtDiff / atpcoFareAmount) * 100;
-	        			fare.setAmtPercentDiff(String.format("%.02f", percentDiff));
+	        			fare.setAmtPercentDiff(String.valueOf(percentDiff));
         			}        			
         		}
         		else {

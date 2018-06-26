@@ -168,6 +168,7 @@
 	        'workPackagefilter': { method: 'GET',  url:'api/work-packages/byname'},
 	        'discontinue': { method: 'POST',  url:'api/work-packages/discontinue'},
 	        'updateLatestFare' : { method: 'POST',  url:'api/work-packages/update-latest-fare'},
+	        'updateActionCodes' : { method: 'POST',  url:'api/work-packages/update-action-codes'},
         });
     }
 })();
