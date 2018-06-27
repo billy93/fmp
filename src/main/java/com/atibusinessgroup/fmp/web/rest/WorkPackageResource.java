@@ -189,10 +189,10 @@ public class WorkPackageResource {
         if(user.get().getReviewLevels().size()==1) {
         	workPackage.setReviewLevel(user.get().getReviewLevels().get(0));	
         }else {
-        	if(user.get().getReviewLevels().indexOf("HO") > 0){
+        	if(user.get().getReviewLevels().indexOf("HO") > -1){
         		workPackage.setReviewLevel("HO");
         	}else {
-        		if(user.get().getReviewLevels().indexOf("LSO") > 0){
+        		if(user.get().getReviewLevels().indexOf("LSO") > -1){
             		workPackage.setReviewLevel("LSO");
             	}
         	}
