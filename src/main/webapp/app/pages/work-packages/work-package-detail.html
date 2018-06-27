@@ -505,7 +505,7 @@
 															fare.no == null || fare.no == undefined ? 
 															fare.no = $index+1 : fare.no = fare.no">
 															<td>{{$index+1}}</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['no']}" >{{fare.no}}</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['no']}" name="no{{$parent.$index}}{{$index}}" >{{fare.no}}</td>
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'status', $event)" ng-class="{highlighted:fare.field['status']}">
 																<select class="form-control inside-table" name="status{{$parent.$index}}{{$index}}" ng-model="fare.status" id="field_status" 
 																	ng-class="{'must-fill': !editForm.editFormATPCO.status{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"												         		
@@ -585,14 +585,14 @@
 																</span>
 															</td>
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'fareBasis', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['fareBasis']}">
-																<input type="text" class="form-control" name="farebasis{{$parent.$index}}{{$index}}" id="field_farebasis"
+																<input type="text" class="form-control" name="fareBasis{{$parent.$index}}{{$index}}" id="field_farebasis"
 									                				ng-disabled="!vm.isEditable('farebasis')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X'"
 									                				ng-required="vm.isRequired('farebasis') && fare.action != 'Canceled'" 
 									                				uppercase
 									                				ng-pattern="/^[a-zA-Z0-9*]*$/"
-									                				ng-class="{'must-fill':editForm.editFormATPCO.farebasis{{$parent.$index}}{{$index}}.$error.required || 
-										                				editForm.editFormATPCO.farebasis{{$parent.$index}}{{$index}}.$error.maxlength || 
-										                				editForm.editFormATPCO.farebasis{{$parent.$index}}{{$index}}.$error.pattern}"
+									                				ng-class="{'must-fill':editForm.editFormATPCO.fareBasis{{$parent.$index}}{{$index}}.$error.required || 
+										                				editForm.editFormATPCO.fareBasis{{$parent.$index}}{{$index}}.$error.maxlength || 
+										                				editForm.editFormATPCO.fareBasis{{$parent.$index}}{{$index}}.$error.pattern}"
 									                				maxlength="8"
 									                				ng-maxlength="8"
 									                				ng-model="fare.fareBasis"/>				
@@ -3858,7 +3858,7 @@
 								        			<label for="c3" class="tree_label warning-label">Warnings</label>
 								        			<ul>
 								        			    <li ng-repeat="warning in workPackageTab.warning track by $index">
-								        			    	<span class="tree_label tree-detail">{{warning.message}}</span>
+								        			    	<span ng-click="vm.selectErrorField(workPackageTab.type, workPackageTab.index, warning.index, warning.field)" class="tree_label tree-detail">{{warning.message}}</span>
 								        			    </li>
 								        			</ul>
 									          	</li>
@@ -3867,7 +3867,7 @@
 								        			<label for="c5" class="tree_label error-label">Errors</label>
 								        			<ul>
 								        			    <li ng-repeat="error in workPackageTab.error track by $index">
-								        			    	<span class="tree_label tree-detail">{{error.message}}</span>
+								        			    	<span ng-click="vm.selectErrorField(workPackageTab.type, workPackageTab.index, error.index, error.field)" class="tree_label tree-detail">{{error.message}}</span>
 								        			    </li>
 								        			</ul>
 									          	</li>
