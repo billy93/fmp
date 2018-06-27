@@ -217,7 +217,7 @@
 													<i class="fa fa-history"></i>History
 												</div> -->
 												
-											<button class="btn btn-default small" ng-click="vm.discontinue()" ng-disabled="vm.selectedRow == null || (vm.selectedRow.targetDistribution != 'MARKET' || vm.selectedRow.status == 'DISTRIBUTED')">Discontinue</button>
+											<button class="btn btn-default small" ng-click="vm.discontinue()" ng-disabled="vm.selectedRow == null || vm.checkDisabled(vm.selectedRow)">Discontinue</button>
 										</div>
 									</div>
 								</div>

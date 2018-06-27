@@ -12,16 +12,12 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -52,8 +48,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -66,23 +60,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.atibusinessgroup.fmp.domain.Counter;
-import com.atibusinessgroup.fmp.domain.Priority;
 import com.atibusinessgroup.fmp.domain.TariffNumber;
 import com.atibusinessgroup.fmp.domain.User;
 import com.atibusinessgroup.fmp.domain.WorkPackage;
 import com.atibusinessgroup.fmp.domain.WorkPackage.ApproveConfig;
 import com.atibusinessgroup.fmp.domain.WorkPackage.Attachment;
 import com.atibusinessgroup.fmp.domain.WorkPackage.Comment;
-import com.atibusinessgroup.fmp.domain.WorkPackage.FilingInstruction;
 import com.atibusinessgroup.fmp.domain.WorkPackage.ImportFares;
-import com.atibusinessgroup.fmp.domain.WorkPackage.MarketRules;
 import com.atibusinessgroup.fmp.domain.WorkPackage.WorkPackageFareSheet;
 import com.atibusinessgroup.fmp.domain.WorkPackage.WorkPackageFareSheet.FareVersion;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
 import com.atibusinessgroup.fmp.domain.WorkPackageHistory;
 import com.atibusinessgroup.fmp.domain.enumeration.Status;
+import com.atibusinessgroup.fmp.repository.AtpcoFareRepository;
 import com.atibusinessgroup.fmp.repository.ContractFMPRepository;
 import com.atibusinessgroup.fmp.repository.ContractFareFMPRepository;
 import com.atibusinessgroup.fmp.repository.CounterRepository;
@@ -91,8 +83,8 @@ import com.atibusinessgroup.fmp.repository.PriorityRepository;
 import com.atibusinessgroup.fmp.repository.TariffNumberRepository;
 import com.atibusinessgroup.fmp.repository.UserRepository;
 import com.atibusinessgroup.fmp.repository.WorkPackageFareHistoryDataRepository;
-import com.atibusinessgroup.fmp.repository.WorkPackageHistoryDataRepository;
 import com.atibusinessgroup.fmp.repository.WorkPackageFilterRepository;
+import com.atibusinessgroup.fmp.repository.WorkPackageHistoryDataRepository;
 import com.atibusinessgroup.fmp.security.SecurityUtils;
 import com.atibusinessgroup.fmp.service.BusinessAreaService;
 import com.atibusinessgroup.fmp.service.MailService;
@@ -151,10 +143,11 @@ public class WorkPackageResource {
     private final MailService mailService;
     private final TariffNumberRepository tariffNumberRepository;
     private final WorkPackageFilterRepository packagefilterRepository;
+    private final AtpcoFareRepository atpcoFareRepository;
     
     public WorkPackageResource(WorkPackageService workPackageService, WorkPackageFareService workPackageFareService, TargetDistributionService targetDistributionService, BusinessAreaService businessAreaService, ReviewLevelService reviewLevelService, UserService userService, UserRepository userRepository, WorkPackageHistoryService workPackageHistoryService,
     		ContractFMPRepository contractFMPRepository, FormRepository formRepository, WorkPackageHistoryDataRepository workPackageHistoryDataRepository,
-    		WorkPackageFareHistoryDataRepository workPackageFareHistoryDataRepository, ContractFareFMPRepository contractFareFMPRepository, CounterRepository counterRepository, PriorityRepository priorityRepository, MailService mailService, TariffNumberRepository tariffNumberRepository, WorkPackageFilterRepository packagefilterRepository) {
+    		WorkPackageFareHistoryDataRepository workPackageFareHistoryDataRepository, ContractFareFMPRepository contractFareFMPRepository, CounterRepository counterRepository, PriorityRepository priorityRepository, MailService mailService, TariffNumberRepository tariffNumberRepository, WorkPackageFilterRepository packagefilterRepository, AtpcoFareRepository atpcoFareRepository) {
         this.workPackageService = workPackageService;
         this.workPackageFareService = workPackageFareService;
         this.targetDistributionService = targetDistributionService;
@@ -173,6 +166,7 @@ public class WorkPackageResource {
         this.mailService = mailService;
         this.tariffNumberRepository = tariffNumberRepository;
         this.packagefilterRepository=  packagefilterRepository;
+        this.atpcoFareRepository = atpcoFareRepository;
     }
 
     /**
@@ -190,8 +184,21 @@ public class WorkPackageResource {
             throw new BadRequestAlertException("A new workPackage cannot already have an ID", ENTITY_NAME, "idexists");
         }
         
-        Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());        
-        workPackage.setReviewLevel(user.get().getReviewLevels().get(0));
+        Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());   
+        
+        if(user.get().getReviewLevels().size()==1) {
+        	workPackage.setReviewLevel(user.get().getReviewLevels().get(0));	
+        }else {
+        	if(user.get().getReviewLevels().indexOf("HO") > -1){
+        		workPackage.setReviewLevel("HO");
+        	}else {
+        		if(user.get().getReviewLevels().indexOf("LSO") > -1){
+            		workPackage.setReviewLevel("LSO");
+            	}
+        	}
+        	
+        }
+        
         
         if(workPackage.isSpecifiedFares()) {
         	workPackage.setFilingDetails(true);
@@ -252,11 +259,11 @@ public class WorkPackageResource {
         List<WorkPackageFareSheet> sheets = workPackage.getMarketFareSheet();
         for(WorkPackageFareSheet sheet : sheets) {
         	for(WorkPackageFare fare : sheet.getFares()) {
-        		if(fare.getSaleStart() != null) {
-        			if(zonedDateTimeDifference(ZonedDateTime.now(), fare.getSaleStart(), ChronoUnit.DAYS) > 0) {
-        				fare.setSaleStart(ZonedDateTime.now());
-        			}
-        		}
+//        		if(fare.getSaleStart() != null) {
+//        			if(zonedDateTimeDifference(ZonedDateTime.now(), fare.getSaleStart(), ChronoUnit.DAYS) > 0) {
+//        				fare.setSaleStart(ZonedDateTime.now());
+//        			}
+//        		}
         		
         		if(fare.getSaleEnd() != null) {
         			if(zonedDateTimeDifference(ZonedDateTime.now(), fare.getSaleEnd(), ChronoUnit.DAYS) > 0) {
@@ -1683,7 +1690,7 @@ public class WorkPackageResource {
         	putValue(data.get("Base Tariff Code"), fares.get(i).getBaseTarcd());
         	putValue(data.get("Calc Type"), fares.get(i).getCalcType());
         	
-        	putValue(data.get("% of Base Fare"), null);
+        	putValue(data.get("% of Base Fare"), fares.get(i).getPercentBaseFare());
         	putValue(data.get("Curr"), fares.get(i).getCurrency());
         	putValue(data.get("Specified Amount"), fares.get(i).getDiscountSpecifiedAmount());
         	putValue(data.get("PAX Type"), fares.get(i).getPassengerType());
@@ -2003,7 +2010,7 @@ public class WorkPackageResource {
 				}
 				if(workPackage.getDistributionDate() == null) {
 					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
-		    		err1.setMessage("Name is required");
+		    		err1.setMessage("Distribution Date is required");
 		    		errorHeader.add(err1);
 				}
 				if(workPackage.getInterofficeComment() == null || workPackage.getInterofficeComment().size() < 1) {
@@ -2020,17 +2027,24 @@ public class WorkPackageResource {
 	    		tabs.add(tabHeader);
 	    	}
 		}
+		
+		
 					
 		//Validasi Fare
+		int sheetIndex = 0;
 		for(WorkPackageFareSheet wpfs : workPackage.getFareSheet()) {
 			WorkPackage.Validation.Tab tab1 = new WorkPackage.Validation.Tab();
 	    		tab1.setName(wpfs.getSpecifiedFaresName());
+	    		tab1.setType("Fares");
+	    		tab1.setIndex(sheetIndex+"");
 	    		
-	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
+	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();	 
+	    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
 	    		
-		    		List<WorkPackageFare> fares = wpfs.getFares();
-		    		
+		    		List<WorkPackageFare> fares = wpfs.getFares();		    		
 		    		List<String> rejectStatus = new ArrayList<>();
+		    		
+		    		int index = 0;
 					for(WorkPackageFare fare : fares) {
 						if(fare.getStatus() != null || !fare.getStatus().contentEquals("")) {
 							if(fare.getStatus().contentEquals("REJECTED")) {
@@ -2042,30 +2056,40 @@ public class WorkPackageResource {
 							if(fare.getOrigin() == null || fare.getOrigin().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setIndex(index+"");
+					    		err1.setField("origin");
 					    		err1.setMessage("Origin is required");
 					    		errors.add(err1);
 							}
 							if(fare.getDestination() == null || fare.getDestination().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setIndex(index+"");
+					    		err1.setField("destination");
 					    		err1.setMessage("Destination is required");
 					    		errors.add(err1);
 							}
 							if(fare.getCabin() == null || fare.getCabin().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setIndex(index+"");
+					    		err1.setField("cabin");
 					    		err1.setMessage("Cabin is required");
 					    		errors.add(err1);
 							}
 							if(fare.getTypeOfJourney() == null || fare.getTypeOfJourney().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setIndex(index+"");
+					    		err1.setField("typeOfJourney");
 					    		err1.setMessage("OW/RT is required");
 					    		errors.add(err1);
 							}
 							if(fare.getCurrency() == null || fare.getCurrency().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setIndex(index+"");
+					    		err1.setField("currency");
 					    		err1.setMessage("Currency is required");
 					    		errors.add(err1);
 							}
@@ -2073,6 +2097,8 @@ public class WorkPackageResource {
 								if(fare.getAif() == null || fare.getAif().contentEquals("")) {
 									//List Error
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+									err1.setIndex(index+"");
+						    		err1.setField("aif");
 						    		err1.setMessage("Either Base Amt or Target AIF must be specified");
 						    		errors.add(err1);
 								}						    		
@@ -2080,10 +2106,14 @@ public class WorkPackageResource {
 							if(fare.getTravelStart() != null && fare.getTravelEnd() != null) {
 								if(fare.getTravelStart().isAfter(fare.getTravelEnd())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+									err1.setIndex(index+"");
+						    		err1.setField("travelStart");
 						    		err1.setMessage("Travel Start Date must be less than or equal to Travel End Date");
 						    		errors.add(err1);
 								}else if(fare.getTravelEnd().isBefore(fare.getTravelStart())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+									err1.setIndex(index+"");
+						    		err1.setField("travelEnd");
 						    		err1.setMessage("Travel End Date cannot be earlier than Sales End Date");
 						    		errors.add(err1);
 								}
@@ -2091,11 +2121,15 @@ public class WorkPackageResource {
 							if(fare.getSaleStart() != null && fare.getSaleEnd() != null) {
 								if(fare.getSaleStart().isAfter(fare.getSaleEnd())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+									err1.setIndex(index+"");
+						    		err1.setField("saleStart");
 						    		err1.setMessage("Sale Start Date must be less than or equal to Sale End Date");
 						    		errors.add(err1);
 								}
 								if(fare.getSaleStart().isAfter(fare.getTravelStart())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+									err1.setIndex(index+"");
+						    		err1.setField("saleStart");
 						    		err1.setMessage("Sale Start Date must be before  or equal to Travel Starte Date");
 						    		errors.add(err1);
 								}
@@ -2104,60 +2138,91 @@ public class WorkPackageResource {
 							if(fare.getStatus() == null || fare.getStatus().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setIndex(index+"");
+					    		err1.setField("status");
 					    		err1.setMessage("Status is required");
 					    		errors.add(err1);
 							}
-							if(fare.getTariffNumber().getTarCd() == null || fare.getTariffNumber().getTarCd().contentEquals("")) {
+							if(fare.getTariffNumber() == null || fare.getTariffNumber().getTarCd() == null || fare.getTariffNumber().getTarCd().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setIndex(index+"");
+					    		err1.setField("tarcd");
 					    		err1.setMessage("TarCd is required");
 					    		errors.add(err1);
 							}
-							if(fare.getTariffNumber().getTarNo() == null || fare.getTariffNumber().getTarNo().contentEquals("")) {
+							if(fare.getTariffNumber() == null || fare.getTariffNumber().getTarNo() == null || fare.getTariffNumber().getTarNo().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setIndex(index+"");
+					    		err1.setField("tarno");
 					    		err1.setMessage("TarNo is required");
 					    		errors.add(err1);
 							}
 							if(fare.getOrigin() == null || fare.getOrigin().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setIndex(index+"");
+					    		err1.setField("origin");
 					    		err1.setMessage("Origin is required");
 					    		errors.add(err1);
 							}
 							if(fare.getDestination() == null || fare.getDestination().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setIndex(index+"");
+					    		err1.setField("destination");
 					    		err1.setMessage("Destination is required");
 					    		errors.add(err1);
 							}
-							if(fare.getFareType() == null || fare.getFareType().contentEquals("")) {
+							if(fare.getFareBasis() == null || fare.getFareBasis().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setIndex(index+"");
+					    		err1.setField("fareBasis");
 					    		err1.setMessage("Fare Cls is required");
 					    		errors.add(err1);
 							}
 							if(fare.getBookingClass() == null || fare.getBookingClass().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setIndex(index+"");
+					    		err1.setField("bookingClass");
 					    		err1.setMessage("Booking Cls is required");
 					    		errors.add(err1);
+							}
+							else {
+								if(fare.getFareBasis() != null && !fare.getFareBasis().contentEquals("")) {
+									if(fare.getFareBasis().charAt(0) != fare.getBookingClass().charAt(0)) {
+										WorkPackage.Validation.Tab.Error warning1 = new WorkPackage.Validation.Tab.Error();
+										warning1.setIndex(index+"");
+										warning1.setMessage("FareCls value does not start with BkgCls value");
+										warning1.setField("fareBasis");
+							    		warnings.add(warning1);
+									}
+								}
 							}
 							if(fare.getCabin() == null || fare.getCabin().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setIndex(index+"");
+					    		err1.setField("cabin");
 					    		err1.setMessage("Cabin is required");
 					    		errors.add(err1);
 							}
 							if(fare.getTypeOfJourney() == null || fare.getTypeOfJourney().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setIndex(index+"");
+					    		err1.setField("typeOfJourney");
 					    		err1.setMessage("OW/RT is required");
 					    		errors.add(err1);
 							}
 							if(fare.getCurrency() == null || fare.getCurrency().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setIndex(index+"");
+					    		err1.setField("currency");
 					    		err1.setMessage("Currency is required");
 					    		errors.add(err1);
 							}
@@ -2165,6 +2230,8 @@ public class WorkPackageResource {
 								if(fare.getAif() == null || fare.getAif().contentEquals("")) {
 									//List Error
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+									err1.setIndex(index+"");
+						    		err1.setField("aif");
 						    		err1.setMessage("Either Base Amt or Target AIF must be specified");
 						    		errors.add(err1);
 								}						    		
@@ -2172,10 +2239,14 @@ public class WorkPackageResource {
 							if(fare.getTravelStart() != null && fare.getTravelEnd() != null) {
 								if(fare.getTravelStart().isAfter(fare.getTravelEnd())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+									err1.setIndex(index+"");
+						    		err1.setField("travelStart");
 						    		err1.setMessage("Travel Start Date must be less than or equal to Travel End Date");
 						    		errors.add(err1);
 								}else if(fare.getTravelEnd().isBefore(fare.getTravelStart())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+									err1.setIndex(index+"");
+						    		err1.setField("travelStart");
 						    		err1.setMessage("Travel End Date cannot be earlier than Sales End Date");
 						    		errors.add(err1);
 								}
@@ -2183,65 +2254,86 @@ public class WorkPackageResource {
 							if(fare.getSaleStart() != null && fare.getSaleEnd() != null) {
 								if(fare.getSaleStart().isAfter(fare.getSaleEnd())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+									err1.setIndex(index+"");
+						    		err1.setField("saleStart");
 						    		err1.setMessage("Sale Start Date must be less than or equal to Sale End Date");
 						    		errors.add(err1);
 								}
 								if(fare.getSaleStart().isAfter(fare.getTravelStart())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
-						    		err1.setMessage("Sale Start Date must be before  or equal to Travel Starte Date");
+									err1.setIndex(index+"");
+						    		err1.setField("saleStart");
+						    		err1.setMessage("Sale Start Date must be before  or equal to Travel Start Date");
 						    		errors.add(err1);
 								}
 							}
 						}else if(workPackage.getReviewLevel().toUpperCase().contentEquals("DISTRIBUTION")) {
-							if(fare.getTariffNumber().getTarCd() == null || fare.getTariffNumber().getTarCd().contentEquals("")) {
+							if(fare.getTariffNumber() == null || fare.getTariffNumber().getTarCd() == null || fare.getTariffNumber().getTarCd().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setIndex(index+"");
+					    		err1.setField("tarcd");
 					    		err1.setMessage("TarCd is required");
 					    		errors.add(err1);
 							}
-							if(fare.getTariffNumber().getTarNo() == null || fare.getTariffNumber().getTarNo().contentEquals("")) {
+							if(fare.getTariffNumber() == null || fare.getTariffNumber().getTarNo() == null || fare.getTariffNumber().getTarNo().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setIndex(index+"");
+					    		err1.setField("tarno");
 					    		err1.setMessage("TarNo is required");
 					    		errors.add(err1);
 							}
 							if(fare.getFareType() == null || fare.getFareType().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setIndex(index+"");
+					    		err1.setField("fareBasis");
 					    		err1.setMessage("Fare Cls is required");
 					    		errors.add(err1);
 							}
 							if(fare.getCabin() == null || fare.getCabin().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setIndex(index+"");
+					    		err1.setField("cabin");
 					    		err1.setMessage("Cabin is required");
 					    		errors.add(err1);
 							}
 							if(fare.getTypeOfJourney() == null || fare.getTypeOfJourney().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setIndex(index+"");
+					    		err1.setField("typeOfJourney");
 					    		err1.setMessage("OW/RT is required");
 					    		errors.add(err1);
 							}
 							if(fare.getRtgno() == null || fare.getRtgno().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setIndex(index+"");
+					    		err1.setField("rtgno");
 					    		err1.setMessage("RtgNo is required");
 					    		errors.add(err1);
 							}
 							if(fare.getRuleno() == null || fare.getRuleno().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setIndex(index+"");
+					    		err1.setField("ruleno");
 					    		err1.setMessage("RuleNo is required");
 					    		errors.add(err1);
 							}
 							if(fare.getCurrency() == null || fare.getCurrency().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setIndex(index+"");
+					    		err1.setField("currency");
 					    		err1.setMessage("Currency is required");
 					    		errors.add(err1);
 							}
 						}						
+						index++;
 					}
 					if(rejectStatus.size() == fares.size()) {
 						WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
@@ -2250,19 +2342,36 @@ public class WorkPackageResource {
 					}
 	    		tab1.setError(errors);
 	    		
-	    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
-//	    		
-//		    		//List Warning
-//		    		WorkPackage.Validation.Tab.Error warn1 = new WorkPackage.Validation.Tab.Error();
-//		    		warn1.setMessage("WARNING 1");
-//		    		warnings.add(warn1);
-//		    		
-//	    		tab1.setWarning(warnings);
+	    		// check for duplicates
+	    		for(int i =0; i < fares.size(); i++){
+	    		    for(int j=0; j< fares.size(); j++){
+	    		        // compare for equality if it is not the same element
+	    		        if(i != j){
+	    		            if(fares.get(i).equals(fares.get(j))){
+	    		                // than we know there is a duplicate at index i,j
+
+//	    			    		//List Warning
+	    			    		WorkPackage.Validation.Tab.Error warn1 = new WorkPackage.Validation.Tab.Error();
+	    			    		warn1.setIndex(i+"");
+	    			    		warn1.setField("no");
+	    			    		warn1.setMessage("Duplicate fares in work package '"+workPackage.getWpid()+"' row "+(i+1)+" with [Cxr/TarNo/Orig-Dest/FareCls/OWRT/Curr/RtgNo/RuleNo/Ftnt]");
+	    			    		warnings.add(warn1);
+	    		            }
+	    		        }
+	    		    }
+	    		}
+	    		
+	    		
+	    		
+	    		if(warnings.size() > 0) {
+	    			tab1.setWarning(warnings);
+	    		}
 	    		errorsCount += errors.size();
 	    		warningsCount += warnings.size();
 	    	if(errors.size() > 0 || warnings.size() > 0) {
 	    		tabs.add(tab1);
 	    	}
+	    	sheetIndex++;
 		}
 		
 		//Validasi Addon Fare
@@ -2488,7 +2597,29 @@ public class WorkPackageResource {
 					}
 	    		tab1.setError(errors);
 	    		
+
 	    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
+	    		// check for duplicates
+//	    		for(int i =0; i < fares.size(); i++){
+//	    		    for(int j=0; j< fares.size(); j++){
+//	    		        // compare for equality if it is not the same element
+//	    		        if(i != j){
+//	    		            if(fares.get(i).equalsAddon(fares.get(j))){
+//	    		                // than we know there is a duplicate at index i,j
+//
+////	    			    		//List Warning
+//	    			    		WorkPackage.Validation.Tab.Error warn1 = new WorkPackage.Validation.Tab.Error();
+//	    			    		warn1.setMessage("Duplicate fares in work package '"+workPackage.getWpid()+"' row "+(i+1)+" with [Cxr/TarNo/Orig-Dest/FareCls/OWRT/Curr/RtgNo/RuleNo/Ftnt]");
+//	    			    		warnings.add(warn1);
+//	    		            }
+//	    		        }
+//	    		    }
+//	    		}
+	    		
+	    		if(warnings.size() > 0) {
+	    			tab1.setWarning(warnings);
+	    		}
+	    		
 	    		errorsCount += errors.size();
 	    		warningsCount += warnings.size();
 	    	if(errors.size() > 0 || warnings.size() > 0) {
@@ -6507,4 +6638,80 @@ public class WorkPackageResource {
                 .body(att);
     }
   
+    /**
+     * POST  /work-packages/update-latest-fare : Update Latest Fare
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/work-packages/update-latest-fare")
+    @Timed
+    public ResponseEntity<WorkPackageFareSheet> updateLatestFare(@RequestBody WorkPackageFareSheet workPackageSheet) throws URISyntaxException {
+        log.debug("REST request to update latest fare WorkPackageSheet : {}", workPackageSheet);
+       
+        List<WorkPackageFare> fares = workPackageSheet.getFares();
+        for(WorkPackageFare fare : fares) {
+	        Optional<AtpcoFare> checkAtpcoFare = atpcoFareRepository.findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCity(fare.getCarrier(), fare.getTariffNumber() != null ? fare.getTariffNumber().getTarNo() : null, fare.getOrigin(), fare.getDestination());
+			if(checkAtpcoFare.isPresent()) {
+				float atpcoFareAmount = Float.parseFloat(checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().toString());
+				fare.setAmount(String.valueOf(atpcoFareAmount));		
+				fare.setAction("Y");      
+				fare.setAmtDiff("0");
+				fare.setAmtPercentDiff("0");
+			}
+			else {
+//				fare.setAction("N");        		
+			}
+        }
+        return ResponseEntity.ok().body(workPackageSheet);
+    }
+    
+    
+    /**
+     * POST  /work-packages/update-action-codes : Update Action Codes
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/work-packages/update-action-codes")
+    @Timed
+    public ResponseEntity<WorkPackageFareSheet> updateActionCodes(@RequestBody WorkPackageFareSheet workPackageSheet) throws URISyntaxException {
+        log.debug("REST request to update action code WorkPackageSheet : {}", workPackageSheet);
+       
+        List<WorkPackageFare> fares = workPackageSheet.getFares();
+        for(WorkPackageFare fare : fares) {
+        	Optional<AtpcoFare> checkAtpcoFare = atpcoFareRepository.findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCity(fare.getCarrier(), fare.getTariffNumber() != null ? fare.getTariffNumber().getTarNo() : null, fare.getOrigin(), fare.getDestination());
+    		if(checkAtpcoFare.isPresent()) {
+    			//I, R, Y
+    			if(fare.getAmount() != null) {
+    				float atpcoFareAmount = Float.parseFloat(checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().toString());
+    				float fareAmount = Float.parseFloat(fare.getAmount());
+        			if(fareAmount < atpcoFareAmount) {
+        				fare.setAction("R");
+        			}
+        			else if(fareAmount > atpcoFareAmount) {
+        				fare.setAction("I");        				
+        			}
+        			else if(fareAmount== atpcoFareAmount){
+        				fare.setAction("Y");        				        				
+        			}
+        			
+        			float amtDiff = ((Float.parseFloat(fare.getAmount())) - Float.parseFloat(checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().toString()));
+        			fare.setAmtDiff(String.format("%.02f",amtDiff));
+        			
+        			float percentDiff = (amtDiff / atpcoFareAmount) * 100;
+        			fare.setAmtPercentDiff(String.format("%.02f", percentDiff));
+    			}        			
+    		}
+    		else {
+    			fare.setAction("N");        		
+    		}
+        }
+        return ResponseEntity.ok().body(workPackageSheet);
+    }
+    
+    
 }
+

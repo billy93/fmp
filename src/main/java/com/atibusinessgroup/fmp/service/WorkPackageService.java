@@ -83,17 +83,6 @@ public class WorkPackageService {
         		if(fare.getTravelComplete() != null)
 	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
         		
-//        		Optional<AtpcoFare> checkAtpcoFare = atpcoFareRepository.findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCityAndFareOriginCurrencyCodeAndFareClassCodeAndOwrtAndFootnoteAndRoutingNoAndRuleNo(
-//        				fare.getCarrier(), 
-//        				fare.getTariffNumber() != null ? fare.getTariffNumber().getTarNo() : null, 
-//        				fare.getOrigin(), 
-//        				fare.getDestination(), 
-//        				fare.getCurrency(), 
-//        				fare.getFareBasis(), 
-//        				fare.getTypeOfJourney(), 
-//        				fare.getFootnote1(), 
-//        				fare.getRtgno(), 
-//        				fare.getRuleno());
         		Optional<AtpcoFare> checkAtpcoFare = atpcoFareRepository.findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCity(fare.getCarrier(), fare.getTariffNumber() != null ? fare.getTariffNumber().getTarNo() : null, fare.getOrigin(), fare.getDestination());
         		if(checkAtpcoFare.isPresent()) {
         			//I, R, Y
@@ -111,10 +100,10 @@ public class WorkPackageService {
 	        			}
 	        			
 	        			float amtDiff = ((Float.parseFloat(fare.getAmount())) - Float.parseFloat(checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().toString()));
-	        			fare.setAmtDiff(String.format("%.02f",amtDiff));
+	        			fare.setAmtDiff(String.valueOf(amtDiff));
 	        			
 	        			float percentDiff = (amtDiff / atpcoFareAmount) * 100;
-	        			fare.setAmtPercentDiff(String.format("%.02f", percentDiff));
+	        			fare.setAmtPercentDiff(String.valueOf(percentDiff));
         			}        			
         		}
         		else {
@@ -134,7 +123,8 @@ public class WorkPackageService {
         		if(fare.getSaleEnd() != null)
             		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
         		if(fare.getTravelComplete() != null)
-	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
+	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));        		
+        		
         	}
         }
         for(WorkPackageFareSheet sheet : workPackage.getMarketFareSheet()) {
@@ -150,6 +140,8 @@ public class WorkPackageService {
             		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
         		if(fare.getTravelComplete() != null)
 	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
+        		
+        		fare.setAction("N");   
         	}
         }
         for(WorkPackageFareSheet sheet : workPackage.getDiscountFareSheet()) {

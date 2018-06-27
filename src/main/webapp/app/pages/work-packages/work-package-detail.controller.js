@@ -185,6 +185,16 @@
         		editable:["HO"],
         		mandatory:["HO"]
         	},
+        	{
+        		name:"expPax",
+        		editable:["HO", "LSO"],
+        		mandatory:["HO", "LSO"]
+        	},
+        	{
+        		name:"expRev",
+        		editable:["HO", "LSO"],
+        		mandatory:["HO", "LSO"]
+        	},
         	
         	// REGULAR HEADER FARES FIELD
         	{
@@ -468,7 +478,7 @@
         	{
         		name:"discountAccountCode",
         		editable:["LSO", "HO", "DISTRIBUTION"],
-        		mandatory:["LSO", "HO", "DISTRIBUTION"]
+        		mandatory:[]
         	},
         	
         	//DISCOUNT FARE
@@ -538,12 +548,42 @@
         				field:"calcType",
         				isEqual:"C"
         			}
-        		]
+        		],
+	        	editableExtraCondition:[
+	    			{
+	    				field:"calcType",
+	    				isEqual:"M"
+	    			},
+	    			{
+	    				field:"calcType",
+	    				isEqual:"C"
+	    			}
+	    		]
         	},
         	{
         		name:"discountFareCurrency",
         		editable:["LSO", "HO",  "DISTRIBUTION"],
-        		mandatory:[]
+        		mandatory:[],
+        		mandatoryExtraCondition:[
+        			{
+        				field:"calcType",
+        				isEqual:"M"
+        			},
+        			{
+        				field:"calcType",
+        				isEqual:"S"
+        			}
+        		],
+        		editableExtraCondition:[
+	    			{
+	    				field:"calcType",
+	    				isEqual:"M"
+	    			},
+	    			{
+	    				field:"calcType",
+	    				isEqual:"S"
+	    			}
+	    		]
         	},
         	{
         		name:"discountSpecifiedAmount",
@@ -552,9 +592,23 @@
         		mandatoryExtraCondition:[
         			{
         				field:"calcType",
+        				isEqual:"M"
+        			},
+        			{
+        				field:"calcType",
         				isEqual:"S"
         			}
-        		]
+        		],
+        		editableExtraCondition:[
+	    			{
+	    				field:"calcType",
+	    				isEqual:"M"
+	    			},
+	    			{
+	    				field:"calcType",
+	    				isEqual:"S"
+	    			}
+	    		]
         	},
         	{
         		name:"discountPaxType",
@@ -564,7 +618,17 @@
         	{
         		name:"discountFareFareType",
         		editable:["LSO", "HO",  "DISTRIBUTION"],
-        		mandatory:[]
+        		mandatory:[],
+        		mandatoryExtraCondition:[
+        			{
+        				field:"calcType",
+        				isEqual:"M"
+        			},
+        			{
+        				field:"calcType",
+        				isEqual:"C"
+        			}
+        		],
         	},
         	{
         		name:"discountTicketCode",
@@ -930,8 +994,8 @@
         	return vm.checkField(field, 'mandatory', fare);        	 
         };
         
-        vm.isEditable = function(field){
-        	return vm.checkField(field, 'editable');    
+        vm.isEditable = function(field, fare){
+        	return vm.checkField(field, 'editable', fare);    
         };
         
         vm.checkField = function(field, type, fare){
@@ -1004,9 +1068,61 @@
         		for(var x=0;x<vm.fields.length;x++){
         			if(vm.fields[x].name == field){
         				var reviewLevels = vm.fields[x].editable;
-        				if(reviewLevels.indexOf(vm.workPackage.reviewLevel) > -1){
-        					result = true;
-        					break;
+        				var extraCondition = vm.fields[x].editableExtraCondition;
+        				
+        				if(extraCondition != null && extraCondition.length > 0){
+        					
+        					if(reviewLevels.indexOf(vm.workPackage.reviewLevel) > -1){
+	        					for(var y=0;y<extraCondition.length;y++){
+	        						if(fare != null){
+	        							//Check extra condition here
+	        							var field = extraCondition[y].field;
+	        							
+	        							//Check other field empty condition
+	        							var isEmpty = extraCondition[y].isEmpty;
+	        							if(isEmpty){
+	        								if(fare[field] == null || fare[field] == ''){
+	        									result = false;
+	        									break;
+	        								}
+	        							} 
+	        							//End check other field empty condition
+	        							
+	        							//Check other field value condition
+	        							var otherField = extraCondition[y].field;
+        								if(fare != null){
+	        								if(fare[otherField] == extraCondition[y].isEqual){
+	        									result = true;	        									
+	        									break;
+	        								}
+	        							}
+	        							else{
+	        								
+	        							}    
+	        							//End check other field value condition
+	        						}
+	        					}
+	        					break;
+        					}
+        					else{
+        						for(var y=0;y<extraCondition.length;y++){
+        							var otherField = extraCondition[y].field;
+        							if(fare != null){
+        								if(fare[otherField] == extraCondition[y].isEqual){
+        									result = true;
+        									break;
+        								}
+        							}
+        							else{
+        								
+        							}        							
+        						}
+        					}
+        				} else {        				
+	        				if(reviewLevels.indexOf(vm.workPackage.reviewLevel) > -1){
+	        					result = true;
+	        					break;
+	        				}
         				}
         			}
         		}
@@ -1870,6 +1986,7 @@
  	    			var listField = [
     	    			workPackageFareFilter.no.check && workPackageFareFilter.no.search != null ? 'no' : null,
     	    			workPackageFareFilter.status.check && workPackageFareFilter.status.search != null ? 'status' : null,
+    	    			workPackageFareFilter.action.check && workPackageFareFilter.action.search != null ? 'action' : null,
     	    			workPackageFareFilter.tariffNumber.tarNo.check && workPackageFareFilter.tariffNumber.tarNo.search != null ? 'tariffNumber.tarNo' : null,
     	    	    	workPackageFareFilter.tariffNumber.tarCd.check && workPackageFareFilter.tariffNumber.tarCd.search != null ? 'tariffNumber.tarCd' : null,
     	    	    	workPackageFareFilter.tariffNumber.global.check && workPackageFareFilter.tariffNumber.global.search != null ? 'tariffNumber.global' : null,
@@ -1921,13 +2038,25 @@
  	    		
  	    		function replaceField(workPackageFareFilter, fare){
  	    			var listField = [
-    	    			workPackageFareFilter.status.replace.check && workPackageFareFilter.status.replace.value != null ? 'status' : null
+    	    			workPackageFareFilter.status.replace.check && workPackageFareFilter.status.replace.value != null ? 'status' : null,
+    					workPackageFareFilter.origin.replace.check && workPackageFareFilter.origin.replace.value != null ? 'origin' : null,
+    					workPackageFareFilter.destination.replace.check && workPackageFareFilter.destination.replace.value != null ? 'destination' : null,
+    					workPackageFareFilter.fareBasis.replace.check && workPackageFareFilter.fareBasis.replace.value != null ? 'fareBasis' : null,
+    					workPackageFareFilter.bookingClass.replace.check && workPackageFareFilter.bookingClass.replace.value != null ? 'bookingClass' : null,
     	    		];
  	    			
  	    			for(var x=0;x<listField.length;x++){
  	    				if(listField[x] != null){
- 	    					fare[listField[x]] = workPackageFareFilter.status.replace.value;
+ 	    					fare[listField[x]] = getDescendantProp(workPackageFareFilter, listField[x]+'.replace.value');
+// 	    					if(getDescendantProp(fare, listField[x]) != getDescendantProp(workPackageFareFilter, listField[x]+'.replace.search')){
+// 	    					if(fare[listField[x]] == workPackageFareFilter[listField[x]].search){
+// 	    						found = true;
+// 	    					}
  	    				}
+ 	    				
+// 	    				if(listField[x] != null){
+// 	    					fare[listField[x]] = workPackageFareFilter.status.replace.value;
+// 	    				}
  	    			}
  	    		}
  	    		
@@ -2037,7 +2166,7 @@
     	    input[index_A] = input[index_B];
     	    input[index_B] = temp;
     	}
-        vm.moveUpFare = function(workPackageSheet, idx){
+       /* vm.moveUpFare = function(workPackageSheet, idx){
         	if(idx != 0){
         		swap(workPackageSheet.fares, idx, idx-1);
         	}
@@ -2046,6 +2175,79 @@
         	if(idx != workPackageSheet.fares.length-1){
         		swap(workPackageSheet.fares, idx, idx+1);
         	}
+        }*/
+        
+        vm.moveUpFare = function(workPackageSheet){
+        	 var fares = [];
+             var selected = [];
+             var exist = false;
+         	  for(var x=0;x<workPackageSheet.fares.length;x++){
+         		  if(workPackageSheet.fares[x].field != undefined){      			  
+         			  Object.keys(workPackageSheet.fares[x].field).forEach(function(key) {
+         				  if(workPackageSheet.fares[x].field[key]){
+         					  exist = true;
+         					  selected.push(workPackageSheet.fares[x]);
+         				  }
+         			 });      			 
+         		  }
+         	  }
+         	if(exist){      
+         		var readySwap = true; 
+         		for(var l=selected.length; l>0; l--){      			 				
+     				var index1 =  workPackageSheet.fares.indexOf(selected[l-1]);
+     				var index2 =  workPackageSheet.fares.indexOf(selected[l-1])-1; 
+     				if(index1 == 0){
+     					readySwap = false;
+     				}
+     			 }
+         		 
+         		if(readySwap){
+         		 for(var l=0; l<selected.length; l++){      			 				
+    				var index1 =  workPackageSheet.fares.indexOf(selected[l]);
+    				var index2 =  workPackageSheet.fares.indexOf(selected[l])-1; 
+    				swap(workPackageSheet.fares, index1, index2);
+    			 }
+         		 for(var x=0;x<workPackageSheet.fares.length;x++){
+         			workPackageSheet.fares[x].no = x+1;
+         		 }
+         		}
+   		  }
+        }
+        vm.moveDownFare = function(workPackageSheet){
+    	  var fares = [];
+          var selected = [];
+          var exist = false;
+      	  for(var x=0;x<workPackageSheet.fares.length;x++){
+      		  if(workPackageSheet.fares[x].field != undefined){      			  
+      			  Object.keys(workPackageSheet.fares[x].field).forEach(function(key) {
+      				  if(workPackageSheet.fares[x].field[key]){
+      					  exist = true;
+      					  selected.push(workPackageSheet.fares[x]);
+      				  }
+      			 });      			 
+      		  }
+      	  }
+      	if(exist){      
+      		var readySwap = true; 
+      		for(var l=selected.length; l>0; l--){      			 				
+  				var index1 =  workPackageSheet.fares.indexOf(selected[l-1]);
+  				var index2 =  workPackageSheet.fares.indexOf(selected[l-1])+1; 
+  				if(index2 == workPackageSheet.fares.length){
+  					readySwap = false;
+  				}
+  			 }
+      		 
+      		if(readySwap){
+      		 for(var l=selected.length; l>0; l--){      			 				
+ 				var index1 =  workPackageSheet.fares.indexOf(selected[l-1]);
+ 				var index2 =  workPackageSheet.fares.indexOf(selected[l-1])+1; 
+ 				swap(workPackageSheet.fares, index1, index2);
+ 			 }
+      		 for(var x=0;x<workPackageSheet.fares.length;x++){
+      			workPackageSheet.fares[x].no = x+1;
+      		 }
+      		}
+		  }
         }
         
         vm.clearSelection = function(workPackageSheet){
@@ -2477,7 +2679,14 @@
 		  var validated = true;
 		  var cekStatus = "";
 		  var counterApprove = false;
+		  var approveRuleNo = [];
+		  var marketRulesNo = [];
 
+		  if(vm.workPackage.interofficeComment == null || vm.workPackage.interofficeComment.length == 0){
+			  cekStatus = "Interoffice comment could not be blank";
+			  validated = false;
+		  }
+		  
 		  if(vm.workPackage.fareSheet != null && vm.workPackage.fareSheet.length > 0){
 			  for(var x=0;x<vm.workPackage.fareSheet.length;x++){
 				  if(vm.workPackage.fareSheet[x].fares != null && vm.workPackage.fareSheet[x].fares.length > 0){
@@ -2485,7 +2694,10 @@
 					  for(var y=0;y<vm.workPackage.fareSheet[x].fares.length;y++){
 						  if(vm.workPackage.fareSheet[x].fares[y].status == "APPROVED"){
 							  counterApprove = true;
+							  break;
 						  }
+					  }
+					  for(var y=0;y<vm.workPackage.fareSheet[x].fares.length;y++){
 						  if(vm.workPackage.fareSheet[x].fares[y].status == "" || vm.workPackage.fareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.fareSheet[x].fares[y].status;
 							  validated = false;
@@ -2502,7 +2714,10 @@
 					  for(var y=0;y<vm.workPackage.discountFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.discountFareSheet[x].fares[y].status == "APPROVED"){
 							  counterApprove =true;
+							  break;
 						  }
+					  }
+					  for(var y=0;y<vm.workPackage.discountFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.discountFareSheet[x].fares[y].status == "" || vm.workPackage.discountFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.discountFareSheet[x].fares[y].status;
 							  validated = false;
@@ -2520,7 +2735,10 @@
 					  for(var y=0;y<vm.workPackage.addonFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.addonFareSheet[x].fares[y].status == "APPROVED"){
 							  counterApprove =true;
+							  break;
 						  }
+					  }
+					  for(var y=0;y<vm.workPackage.addonFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.addonFareSheet[x].fares[y].status == "" || vm.workPackage.addonFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.addonFareSheet[x].fares[y].status;
 							  validated = false;
@@ -2537,8 +2755,11 @@
 					  //vm.expandCityGroup(vm.workPackage.marketFareSheet[x]);
 					  for(var y=0;y<vm.workPackage.marketFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.marketFareSheet[x].fares[y].status == "APPROVED"){
+							  approveRuleNo.push(vm.workPackage.marketFareSheet[x].fares[y].ruleno);
 							  counterApprove =true;
 						  }
+					  }					  
+					  for(var y=0;y<vm.workPackage.marketFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.marketFareSheet[x].fares[y].status == "" || vm.workPackage.marketFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.marketFareSheet[x].fares[y].status;
 							  validated = false;
@@ -2546,6 +2767,22 @@
 						  }
 					  }
 				  }
+			  }
+			  if(counterApprove){
+				  if(vm.workPackage.marketRulesData != null && vm.workPackage.marketRulesData.length > 0 ){
+					  for(var h=0; h<vm.workPackage.marketRulesData.length; h++){
+						  marketRulesNo.push(vm.workPackage.marketRulesData[h].ruleid);
+					  }
+					  for(var l=0;l<approveRuleNo.length;l++){
+						  if(marketRulesNo.indexOf(approveRuleNo[l]) < 0){
+							  cekStatus = "Rule ID "+approveRuleNo[l]+ " does not exist in market rule";
+							  validated = false;
+						  }
+					  }
+				  }else{
+					  cekStatus = "Market rules data could not be blank";
+					  validated = false;
+				  }				  
 			  }
 		  }	
 		  
@@ -2556,7 +2793,10 @@
 					  for(var y=0;y<vm.workPackage.waiverFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.waiverFareSheet[x].fares[y].status == "APPROVED"){
 							  counterApprove =true;
+							  break;
 						  }
+					  }
+					  for(var y=0;y<vm.workPackage.waiverFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.waiverFareSheet[x].fares[y].status == "" || vm.workPackage.waiverFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.waiverFareSheet[x].fares[y].status;
 							  validated = false;
@@ -4839,7 +5079,6 @@
     	  }    	  
       };
       vm.close = function(){
-    	  console.log(vm.disabledField(vm.workPackage));
     	  if(vm.disabledField(vm.workPackage)){
     		  $state.go("work-package");
     	  }else{
@@ -4986,30 +5225,88 @@
 			    			  break;
 			    		  }
 			    	  }
-					  var fare = {
-						  status:"PENDING",
-						  action: cancel ? "X" : "A",
-						  carrier:"GA",
-						  tariffNumber:tariffNumber,
-						  origin:result.content[x].originCity,
-						  destination:result.content[x].destinationCity,
-						  fareBasis:result.content[x].fareClassCode,
-						  bookingClass:result.content[x].bookingClass,
-						  cabin:result.content[x].cabin,
-						  typeOfJourney:result.content[x].owrt,
-						  footnote1:result.content[x].footnote,
-						  rtgno:result.content[x].routingNo,
-						  ruleno:result.content[x].ruleNo,
-						  currency:result.content[x].currencyCode,
-						  amount:result.content[x].baseAmount,
-						  aif:result.content[x].aif,
-						  travelStart:DateUtils.convertDateTimeFromServer(result.content[x].travelStartDate),
-						  travelEnd:DateUtils.convertDateTimeFromServer(result.content[x].travelEndDate),
-						  saleStart:DateUtils.convertDateTimeFromServer(result.content[x].saleStartDate),
-						  saleEnd:DateUtils.convertDateTimeFromServer(result.content[x].saleEndDate),
-						  travelComplete:DateUtils.convertDateTimeFromServer(result.content[x].travelComplete)
-					  };
 					  
+					  if(vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'REGULAR'){
+						  var fare = {
+							  status:"PENDING",
+							  action: cancel ? "X" : "A",
+							  carrier:"GA",
+							  tariffNumber:tariffNumber,
+							  origin:result.content[x].originCity,
+							  destination:result.content[x].destinationCity,
+							  fareBasis:result.content[x].fareClassCode,
+							  bookingClass:result.content[x].bookingClass,
+							  cabin:result.content[x].cabin,
+							  typeOfJourney:result.content[x].owrt,
+							  footnote1:result.content[x].footnote,
+							  rtgno:result.content[x].routingNo,
+							  ruleno:result.content[x].ruleNo,
+							  currency:result.content[x].currencyCode,
+							  amount:result.content[x].baseAmount,
+							  aif:result.content[x].aif,
+							  travelStart:DateUtils.convertDateTimeFromServer(result.content[x].travelStartDate),
+							  travelEnd:DateUtils.convertDateTimeFromServer(result.content[x].travelEndDate),
+							  saleStart:DateUtils.convertDateTimeFromServer(result.content[x].saleStartDate),
+							  saleEnd:DateUtils.convertDateTimeFromServer(result.content[x].saleEndDate),
+							  travelComplete:DateUtils.convertDateTimeFromServer(result.content[x].travelComplete)
+						  };
+					  } else if(vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.type == 'REGULAR'){
+						  var fare = {
+								  status:"PENDING",
+								  action: cancel ? "X" : "A",
+								  carrier:"GA",
+								  tariffNumber:tariffNumber,
+								  origin:result.content[x].originCity,
+								  destination:result.content[x].destinationCity,
+								  fareBasis:result.content[x].fareClassCode,
+								  bookingClass:result.content[x].bookingClass,
+								  cabin:result.content[x].cabin,
+								  typeOfJourney:result.content[x].owrt,
+								  footnote1:result.content[x].footnote,
+								  rtgno:result.content[x].routingNo,
+								  ruleno:result.content[x].ruleNo,
+								  currency:result.content[x].currencyCode,
+								  amount:result.content[x].baseAmount,
+								  aif:result.content[x].aif,
+								  travelStart:DateUtils.convertDateTimeFromServer(result.content[x].travelStartDate),
+								  travelEnd:DateUtils.convertDateTimeFromServer(result.content[x].travelEndDate),
+								  saleStart:DateUtils.convertDateTimeFromServer(result.content[x].saleStartDate),
+								  saleEnd:DateUtils.convertDateTimeFromServer(result.content[x].saleEndDate),
+								  travelComplete:DateUtils.convertDateTimeFromServer(result.content[x].travelComplete),
+								  prevAmount:result.content[x].baseAmount,
+								  prevAmountDiff:0,
+								  prevPercentAmountDiff:0
+							  };
+					  } else if(vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'DISCOUNT'){
+						  var fare = {
+								  status:"PENDING",
+								 // action: cancel ? "X" : "A",
+								  carrier:"GA",
+								  tariffNumber:tariffNumber,
+								  loc1Type:'C',
+								  loc1:result.content[x].originCity,
+								  loc2Type:'C',
+								  calcType:'S',
+								  discountSpecifiedAmount:result.content[x].baseAmount,
+								  loc2:result.content[x].destinationCity,
+								  fareBasis:result.content[x].fareClassCode,
+								  bookingClass:result.content[x].bookingClass,
+								  cabin:result.content[x].cabin,
+								  typeOfJourney:result.content[x].owrt,
+								  footnote1:result.content[x].footnote,
+								  rtgno:result.content[x].routingNo,
+								  ruleno:result.content[x].ruleNo,
+								  currency:result.content[x].currencyCode,
+								  amount:result.content[x].baseAmount,
+								  aif:result.content[x].aif,
+								  passengerType:result.content[x].paxType,
+								  travelStart:DateUtils.convertDateTimeFromServer(result.content[x].travelStartDate),
+								  travelEnd:DateUtils.convertDateTimeFromServer(result.content[x].travelEndDate),
+								  saleStart:DateUtils.convertDateTimeFromServer(result.content[x].saleStartDate),
+								  saleEnd:DateUtils.convertDateTimeFromServer(result.content[x].saleEndDate),
+								  travelComplete:DateUtils.convertDateTimeFromServer(result.content[x].travelComplete)
+							  };
+					  }
 					  workPackageSheet.fares.push(fare);    	
 				  }
 			  }
@@ -5017,6 +5314,11 @@
     			  alert('Nothing to paste');
     		  }
     	  });
+      }
+      
+      vm.marketPrevBaseAmount = function(fare){
+		  fare.prevAmountDiff = fare.amount - fare.prevAmount;
+		  fare.prevPercentAmountDiff = parseFloat((fare.prevAmountDiff/fare.prevAmount)*100).toFixed(2);
       }
       
       vm.deleteSelectedFares = function(workPackageSheet){
@@ -5699,8 +6001,38 @@
     	  return message;
       }
       
+      vm.updateLatestFare = function(workPackageSheet){
+    	  WorkPackage.updateLatestFare(workPackageSheet, function(result){
+    		  alert('Fares updated');
+    		  workPackageSheet.fares = result.fares;
+    		  vm.changeVersion(workPackageSheet, 'current');
+    	  }, function(error){});
+      }
+      
+      vm.updateActionCodes = function(workPackageSheet){
+    	  WorkPackage.updateActionCodes(workPackageSheet, function(result){
+    		  alert('Action code updated');
+    		  workPackageSheet.fares = result.fares;
+    		  vm.changeVersion(workPackageSheet, 'current');
+    	  }, function(error){});
+      }
+
       vm.dateNgModelOpts = {
     		  timezone : '+07:00'
 	  };
+      
+      vm.selectErrorField = function(sheetType, sheetIndex, fareIndex, field){
+    	  if(sheetType == 'Fares'){
+    		  for(var x=0;x<vm.workPackage.fareSheet[sheetIndex].fares.length;x++){
+    			  vm.workPackage.fareSheet[sheetIndex].fares[x].field = {};
+        	  }
+    		  
+    		  vm.workPackage.fareSheet[sheetIndex].fares[fareIndex].field[field] = !vm.workPackage.fareSheet[sheetIndex].fares[fareIndex].field[field]; 
+    		  
+    		  var fieldName = ""+field+sheetIndex+fareIndex;
+    		  var elmnt = $window.document.getElementsByName(fieldName)[0];
+    		  elmnt.scrollIntoView();
+    	  }
+      }
     }
 })();

@@ -50,7 +50,7 @@
                 	$state.go('password-expired');
                 } 
                 
-                if (toState.data.pageTitle) {
+                if (toState.data != undefined && toState.data.pageTitle) {
                 	 $window.document.title = titleKey;
                     titleKey = toState.data.pageTitle;
                 }
