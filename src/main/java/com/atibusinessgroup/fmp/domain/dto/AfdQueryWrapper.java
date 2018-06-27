@@ -5,6 +5,7 @@ import java.util.List;
 
 public class AfdQueryWrapper {
 	private boolean isLastPage = false;
+	private int lastIndex = 0;
 	private List<AfdQuery> afdQueries = new ArrayList<>();
 	
 	public boolean isLastPage() {
@@ -15,6 +16,14 @@ public class AfdQueryWrapper {
 		this.isLastPage = isLastPage;
 	}
 	
+	public int getLastIndex() {
+		return lastIndex;
+	}
+
+	public void setLastIndex(int lastIndex) {
+		this.lastIndex = lastIndex;
+	}
+
 	public List<AfdQuery> getAfdQueries() {
 		return afdQueries;
 	}
@@ -27,7 +36,9 @@ public class AfdQueryWrapper {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((afdQueries == null) ? 0 : afdQueries.hashCode());
 		result = prime * result + (isLastPage ? 1231 : 1237);
+		result = prime * result + lastIndex;
 		return result;
 	}
 
@@ -43,7 +54,17 @@ public class AfdQueryWrapper {
 			return false;
 		}
 		AfdQueryWrapper other = (AfdQueryWrapper) obj;
+		if (afdQueries == null) {
+			if (other.afdQueries != null) {
+				return false;
+			}
+		} else if (!afdQueries.equals(other.afdQueries)) {
+			return false;
+		}
 		if (isLastPage != other.isLastPage) {
+			return false;
+		}
+		if (lastIndex != other.lastIndex) {
 			return false;
 		}
 		return true;
@@ -51,6 +72,7 @@ public class AfdQueryWrapper {
 
 	@Override
 	public String toString() {
-		return "AfdQueryWrapper [isLastPage=" + isLastPage + "]";
+		return "AfdQueryWrapper [isLastPage=" + isLastPage + ", lastIndex=" + lastIndex + ", afdQueries=" + afdQueries
+				+ "]";
 	}
 }

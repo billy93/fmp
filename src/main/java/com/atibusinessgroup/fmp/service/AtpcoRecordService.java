@@ -143,6 +143,60 @@ public class AtpcoRecordService {
 		
 		return date;
 	}
+
+	public boolean compareAfdQueryWithParamString(String value, String param) {
+		boolean match = false;
+		
+		if (param != null && !param.trim().isEmpty()) {
+			if (value != null && !value.trim().isEmpty()) {
+				if (value.trim().contentEquals(param.trim())) {
+					match = true;
+				}
+			}
+		} else {
+			match = true;
+		}
+		
+		
+		return match;
+	}
+	
+	public boolean compareAfdQueryWithParamDate(Object startDate, Object endDate, Date paramFrom,
+			Date paramTo, String option) {
+		boolean match = false;
+		
+		Date start = DateUtil.convertObjectToDate(startDate);
+		Date end = DateUtil.convertObjectToDate(endDate);
+		
+		if (option != null && option.contentEquals("A")) {
+			if (paramFrom != null && paramTo != null) {
+				if ((start == null || start.before(paramFrom) || start.equals(paramFrom)) &&
+						(end == null || end.after(paramTo) || end.equals(paramTo))) {
+					match = true;
+				}
+			} else {
+				if (paramFrom == null && paramTo != null) {
+					if (end == null || end.after(paramTo) || end.equals(paramTo)) {
+						match = true;
+					}
+				} else if (paramFrom != null && paramTo == null) {
+					if ((start == null || start.before(paramFrom) || start.equals(paramFrom))) {
+						match = true;
+					}
+				} else {
+					match = true;
+				}
+			}
+		} else if (option != null && option.contentEquals("E")) {
+			if (paramFrom != null && paramTo != null && start != null && end != null) {
+				if (paramFrom.equals(start) && paramTo.equals(end)) {
+					match = true;
+				}
+			}
+		}
+		 
+		return match;
+	}
 	
 	public boolean compareMatchingFareAndRecord(String fOwrt, String fRoutingNo, String fFootnote, Object focusDate,
 			String rOwrt, String rRoutingNo, String rFootnote, Object rEffectiveDate, String rDiscontinueDate) {
@@ -151,7 +205,6 @@ public class AtpcoRecordService {
 		if (compareEffectiveDiscontinueDates(focusDate, rEffectiveDate, rDiscontinueDate) && compareRoutingNo(fRoutingNo, rRoutingNo) && compareOwrt(fOwrt, rOwrt)
 				&& compareFootnote(fFootnote, rFootnote)) {
 			match = true;
-//			 System.out.println("Matched");
 		}
 		
 		return match;
@@ -166,7 +219,6 @@ public class AtpcoRecordService {
 		if (compareEffectiveDiscontinueDates(focusDate, rEffectiveDate, rDiscontinueDate) && compareRoutingNo(fRoutingNo, rRoutingNo) && compareOwrt(fOwrt, rOwrt)
 				&& compareFootnote(fFootnote, rFootnote) && compareGeoSpec(fGeoType1, fGeoLoc1, fGeoType2, fGeoLoc2, rGeoType1, rGeoLoc1, rGeoType2, rGeoLoc2)) {
 			match = true;
-//			 System.out.println("Matched");
 		}
 
 		return match;
@@ -186,7 +238,6 @@ public class AtpcoRecordService {
 				&& compareFareType(fFareType, rFareType) && compareSeasonType(fSeasonType, rSeasonType)
 				&& compareDayOfWeekType(fDayOfWeekType, rDayOfWeekType)) {
 			match = true;
-//			 System.out.println("Matched");
 		}
 
 		return match;
@@ -202,8 +253,6 @@ public class AtpcoRecordService {
 		} else {
 			match = true;
 		}
-		
-//		System.out.println("Routing No: " + frn + ", " + rrn + ", " + match);
 		
 		return match;
 	}
@@ -252,8 +301,6 @@ public class AtpcoRecordService {
 			match = true;
 		}
 		
-//		System.out.println("Fare Class: " + fFareClass + ", " + rFareClass + ", " + match);
-		
 		return match;
 	}
 
@@ -267,8 +314,6 @@ public class AtpcoRecordService {
 		} else {
 			match = true;
 		}
-
-//		System.out.println("Fare Type: " + fFareType + ", " + rFareType + ", " + match);
 		
 		return match;
 	}
@@ -281,8 +326,6 @@ public class AtpcoRecordService {
 				match = true;
 			}
 		} 
-		
-//		System.out.println("Season Type: " + fSeasonType + ", " + rSeasonType + ", " + match);
 		
 		return match;
 	}
@@ -298,8 +341,6 @@ public class AtpcoRecordService {
 			match = true;
 		}
 		
-//		System.out.println("DOW Type: " + fDayOfWeekType + ", " + rDayOfWeekType + ", " + match);
-		
 		return match;
 	}
 
@@ -314,8 +355,6 @@ public class AtpcoRecordService {
 			match = true;
 		}
 		
-//		System.out.println("OW/RT: " + fowrt + ", " + rowrt + ", " + match);
-		
 		return match;
 	}
 
@@ -329,8 +368,6 @@ public class AtpcoRecordService {
 		} else {
 			match = true;
 		}
-		
-//		System.out.println("Ftnt: " + ffnt + ", " + rfnt + ", " + match);
 		
 		return match;
 	}
@@ -382,8 +419,6 @@ public class AtpcoRecordService {
 			}
 		}
 		
-//		System.out.println("Effective discontinue date : " + focusDate + ", " + effective + ", " + discontinue + ", " + match);
-		
 		return match;
 	}
 	
@@ -396,8 +431,6 @@ public class AtpcoRecordService {
 		} else if (compareLocations(ft2, fl2, rt1, rl1) || compareLocations(ft2, fl2, rt2, rl2)) {
 			match = true;
 		}
-		
-//		System.out.println("GeoSpec: (" + ft1 + ", " + fl1 + ") (" + ft2 + ", " + fl2 + ") | (" + rt1 + ", " + rl1 + ") (" + rt2 + ", " + rl2 + ") " + match);
 		
 		return match;
 	}
@@ -728,13 +761,11 @@ public class AtpcoRecordService {
 		case "107":
 			result.setClassName(classBasePackage.concat("AtpcoRecord3Cat107"));
 			result.setGetTableNoMethodName("getTbl_no");
-			result.setGetTextTable996NoMethodName("getText_tbl_no_996");
 			result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_107);
 			break;
 		case "108":
 			result.setClassName(classBasePackage.concat("AtpcoRecord3Cat108"));
 			result.setGetTableNoMethodName("getTbl_no");
-			result.setGetTextTable996NoMethodName("getText_tbl_no_996");
 			result.setCollectionName(CollectionName.ATPCO_RECORD_3_CAT_108);
 			break;
 		case "109":
