@@ -5987,5 +5987,19 @@
       vm.dateNgModelOpts = {
     		  timezone : '+07:00'
 	  };
+      
+      vm.selectErrorField = function(sheetType, sheetIndex, fareIndex, field){
+    	  if(sheetType == 'Fares'){
+    		  for(var x=0;x<vm.workPackage.fareSheet[sheetIndex].fares.length;x++){
+    			  vm.workPackage.fareSheet[sheetIndex].fares[x].field = {};
+        	  }
+    		  
+    		  vm.workPackage.fareSheet[sheetIndex].fares[fareIndex].field[field] = !vm.workPackage.fareSheet[sheetIndex].fares[fareIndex].field[field]; 
+    		  
+    		  var fieldName = ""+field+sheetIndex+fareIndex;
+    		  var elmnt = $window.document.getElementsByName(fieldName)[0];
+    		  elmnt.scrollIntoView();
+    	  }
+      }
     }
 })();
