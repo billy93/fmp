@@ -2573,6 +2573,8 @@
 		  var validated = true;
 		  var cekStatus = "";
 		  var counterApprove = false;
+		  var approveRuleNo = [];
+		  var marketRulesNo = [];
 
 		  if(vm.workPackage.interofficeComment == null || vm.workPackage.interofficeComment.length == 0){
 			  cekStatus = "Interoffice comment could not be blank";
@@ -2586,7 +2588,10 @@
 					  for(var y=0;y<vm.workPackage.fareSheet[x].fares.length;y++){
 						  if(vm.workPackage.fareSheet[x].fares[y].status == "APPROVED"){
 							  counterApprove = true;
+							  break;
 						  }
+					  }
+					  for(var y=0;y<vm.workPackage.fareSheet[x].fares.length;y++){
 						  if(vm.workPackage.fareSheet[x].fares[y].status == "" || vm.workPackage.fareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.fareSheet[x].fares[y].status;
 							  validated = false;
@@ -2603,7 +2608,10 @@
 					  for(var y=0;y<vm.workPackage.discountFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.discountFareSheet[x].fares[y].status == "APPROVED"){
 							  counterApprove =true;
+							  break;
 						  }
+					  }
+					  for(var y=0;y<vm.workPackage.discountFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.discountFareSheet[x].fares[y].status == "" || vm.workPackage.discountFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.discountFareSheet[x].fares[y].status;
 							  validated = false;
@@ -2621,7 +2629,10 @@
 					  for(var y=0;y<vm.workPackage.addonFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.addonFareSheet[x].fares[y].status == "APPROVED"){
 							  counterApprove =true;
+							  break;
 						  }
+					  }
+					  for(var y=0;y<vm.workPackage.addonFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.addonFareSheet[x].fares[y].status == "" || vm.workPackage.addonFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.addonFareSheet[x].fares[y].status;
 							  validated = false;
@@ -2638,8 +2649,11 @@
 					  //vm.expandCityGroup(vm.workPackage.marketFareSheet[x]);
 					  for(var y=0;y<vm.workPackage.marketFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.marketFareSheet[x].fares[y].status == "APPROVED"){
+							  approveRuleNo.push(vm.workPackage.marketFareSheet[x].fares[y].ruleno);
 							  counterApprove =true;
 						  }
+					  }					  
+					  for(var y=0;y<vm.workPackage.marketFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.marketFareSheet[x].fares[y].status == "" || vm.workPackage.marketFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.marketFareSheet[x].fares[y].status;
 							  validated = false;
@@ -2647,6 +2661,22 @@
 						  }
 					  }
 				  }
+			  }
+			  if(counterApprove){
+				  if(vm.workPackage.marketRulesData != null && vm.workPackage.marketRulesData.length > 0 ){
+					  for(var h=0; h<vm.workPackage.marketRulesData.length; h++){
+						  marketRulesNo.push(vm.workPackage.marketRulesData[h].ruleid);
+					  }
+					  for(var l=0;l<approveRuleNo.length;l++){
+						  if(marketRulesNo.indexOf(approveRuleNo[l]) < 0){
+							  cekStatus = "Rule ID "+approveRuleNo[l]+ " does not exist in market rule";
+							  validated = false;
+						  }
+					  }
+				  }else{
+					  cekStatus = "Market rules data could not be blank";
+					  validated = false;
+				  }				  
 			  }
 		  }	
 		  
@@ -2657,7 +2687,10 @@
 					  for(var y=0;y<vm.workPackage.waiverFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.waiverFareSheet[x].fares[y].status == "APPROVED"){
 							  counterApprove =true;
+							  break;
 						  }
+					  }
+					  for(var y=0;y<vm.workPackage.waiverFareSheet[x].fares.length;y++){
 						  if(vm.workPackage.waiverFareSheet[x].fares[y].status == "" || vm.workPackage.waiverFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.waiverFareSheet[x].fares[y].status;
 							  validated = false;
