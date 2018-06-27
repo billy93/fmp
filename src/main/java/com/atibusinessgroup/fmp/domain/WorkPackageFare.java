@@ -278,6 +278,15 @@ public class WorkPackageFare implements Serializable {
 	@Field("discount_specified_amount")
     private String discountSpecifiedAmount;
 	
+	@Field("prev_amount")
+	private String prevAmount;
+	
+	@Field("prev_amount_diff")
+	private String prevAmountDiff;
+
+	@Field("prev_percent_amount_diff")
+	private String prevPercentAmountDiff;
+	  
 	
 	//WAIVER
 	@Field("waiver_type")
@@ -351,9 +360,35 @@ public class WorkPackageFare implements Serializable {
 
 	@Field("amt_diff")
 	private String amtDiff;
+	
 	@Field("amt_percent_diff")
 	private String amtPercentDiff;
 	
+	
+	public String getPrevAmount() {
+		return prevAmount;
+	}
+
+	public void setPrevAmount(String prevAmount) {
+		this.prevAmount = prevAmount;
+	}
+
+	public String getPrevAmountDiff() {
+		return prevAmountDiff;
+	}
+
+	public void setPrevAmountDiff(String prevAmountDiff) {
+		this.prevAmountDiff = prevAmountDiff;
+	}
+
+	public String getPrevPercentAmountDiff() {
+		return prevPercentAmountDiff;
+	}
+
+	public void setPrevPercentAmountDiff(String prevPercentAmountDiff) {
+		this.prevPercentAmountDiff = prevPercentAmountDiff;
+	}
+
 	public int getNo() {
 		return no;
 	}

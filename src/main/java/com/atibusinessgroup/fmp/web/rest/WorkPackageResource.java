@@ -2010,7 +2010,7 @@ public class WorkPackageResource {
 				}
 				if(workPackage.getDistributionDate() == null) {
 					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
-		    		err1.setMessage("Name is required");
+		    		err1.setMessage("Distribution Date is required");
 		    		errorHeader.add(err1);
 				}
 				if(workPackage.getInterofficeComment() == null || workPackage.getInterofficeComment().size() < 1) {

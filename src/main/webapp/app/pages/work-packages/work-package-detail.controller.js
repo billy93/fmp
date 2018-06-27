@@ -548,12 +548,42 @@
         				field:"calcType",
         				isEqual:"C"
         			}
-        		]
+        		],
+	        	editableExtraCondition:[
+	    			{
+	    				field:"calcType",
+	    				isEqual:"M"
+	    			},
+	    			{
+	    				field:"calcType",
+	    				isEqual:"C"
+	    			}
+	    		]
         	},
         	{
         		name:"discountFareCurrency",
         		editable:["LSO", "HO",  "DISTRIBUTION"],
-        		mandatory:[]
+        		mandatory:[],
+        		mandatoryExtraCondition:[
+        			{
+        				field:"calcType",
+        				isEqual:"M"
+        			},
+        			{
+        				field:"calcType",
+        				isEqual:"S"
+        			}
+        		],
+        		editableExtraCondition:[
+	    			{
+	    				field:"calcType",
+	    				isEqual:"M"
+	    			},
+	    			{
+	    				field:"calcType",
+	    				isEqual:"S"
+	    			}
+	    		]
         	},
         	{
         		name:"discountSpecifiedAmount",
@@ -562,9 +592,23 @@
         		mandatoryExtraCondition:[
         			{
         				field:"calcType",
+        				isEqual:"M"
+        			},
+        			{
+        				field:"calcType",
         				isEqual:"S"
         			}
-        		]
+        		],
+        		editableExtraCondition:[
+	    			{
+	    				field:"calcType",
+	    				isEqual:"M"
+	    			},
+	    			{
+	    				field:"calcType",
+	    				isEqual:"S"
+	    			}
+	    		]
         	},
         	{
         		name:"discountPaxType",
@@ -574,7 +618,17 @@
         	{
         		name:"discountFareFareType",
         		editable:["LSO", "HO",  "DISTRIBUTION"],
-        		mandatory:[]
+        		mandatory:[],
+        		mandatoryExtraCondition:[
+        			{
+        				field:"calcType",
+        				isEqual:"M"
+        			},
+        			{
+        				field:"calcType",
+        				isEqual:"C"
+        			}
+        		],
         	},
         	{
         		name:"discountTicketCode",
@@ -940,8 +994,8 @@
         	return vm.checkField(field, 'mandatory', fare);        	 
         };
         
-        vm.isEditable = function(field){
-        	return vm.checkField(field, 'editable');    
+        vm.isEditable = function(field, fare){
+        	return vm.checkField(field, 'editable', fare);    
         };
         
         vm.checkField = function(field, type, fare){
@@ -1014,9 +1068,61 @@
         		for(var x=0;x<vm.fields.length;x++){
         			if(vm.fields[x].name == field){
         				var reviewLevels = vm.fields[x].editable;
-        				if(reviewLevels.indexOf(vm.workPackage.reviewLevel) > -1){
-        					result = true;
-        					break;
+        				var extraCondition = vm.fields[x].editableExtraCondition;
+        				
+        				if(extraCondition != null && extraCondition.length > 0){
+        					
+        					if(reviewLevels.indexOf(vm.workPackage.reviewLevel) > -1){
+	        					for(var y=0;y<extraCondition.length;y++){
+	        						if(fare != null){
+	        							//Check extra condition here
+	        							var field = extraCondition[y].field;
+	        							
+	        							//Check other field empty condition
+	        							var isEmpty = extraCondition[y].isEmpty;
+	        							if(isEmpty){
+	        								if(fare[field] == null || fare[field] == ''){
+	        									result = false;
+	        									break;
+	        								}
+	        							} 
+	        							//End check other field empty condition
+	        							
+	        							//Check other field value condition
+	        							var otherField = extraCondition[y].field;
+        								if(fare != null){
+	        								if(fare[otherField] == extraCondition[y].isEqual){
+	        									result = true;	        									
+	        									break;
+	        								}
+	        							}
+	        							else{
+	        								
+	        							}    
+	        							//End check other field value condition
+	        						}
+	        					}
+	        					break;
+        					}
+        					else{
+        						for(var y=0;y<extraCondition.length;y++){
+        							var otherField = extraCondition[y].field;
+        							if(fare != null){
+        								if(fare[otherField] == extraCondition[y].isEqual){
+        									result = true;
+        									break;
+        								}
+        							}
+        							else{
+        								
+        							}        							
+        						}
+        					}
+        				} else {        				
+	        				if(reviewLevels.indexOf(vm.workPackage.reviewLevel) > -1){
+	        					result = true;
+	        					break;
+	        				}
         				}
         			}
         		}
@@ -5144,6 +5250,33 @@
 							  saleEnd:DateUtils.convertDateTimeFromServer(result.content[x].saleEndDate),
 							  travelComplete:DateUtils.convertDateTimeFromServer(result.content[x].travelComplete)
 						  };
+					  } else if(vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.type == 'REGULAR'){
+						  var fare = {
+								  status:"PENDING",
+								  action: cancel ? "X" : "A",
+								  carrier:"GA",
+								  tariffNumber:tariffNumber,
+								  origin:result.content[x].originCity,
+								  destination:result.content[x].destinationCity,
+								  fareBasis:result.content[x].fareClassCode,
+								  bookingClass:result.content[x].bookingClass,
+								  cabin:result.content[x].cabin,
+								  typeOfJourney:result.content[x].owrt,
+								  footnote1:result.content[x].footnote,
+								  rtgno:result.content[x].routingNo,
+								  ruleno:result.content[x].ruleNo,
+								  currency:result.content[x].currencyCode,
+								  amount:result.content[x].baseAmount,
+								  aif:result.content[x].aif,
+								  travelStart:DateUtils.convertDateTimeFromServer(result.content[x].travelStartDate),
+								  travelEnd:DateUtils.convertDateTimeFromServer(result.content[x].travelEndDate),
+								  saleStart:DateUtils.convertDateTimeFromServer(result.content[x].saleStartDate),
+								  saleEnd:DateUtils.convertDateTimeFromServer(result.content[x].saleEndDate),
+								  travelComplete:DateUtils.convertDateTimeFromServer(result.content[x].travelComplete),
+								  prevAmount:result.content[x].baseAmount,
+								  prevAmountDiff:0,
+								  prevPercentAmountDiff:0
+							  };
 					  } else if(vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'DISCOUNT'){
 						  var fare = {
 								  status:"PENDING",
@@ -5181,6 +5314,11 @@
     			  alert('Nothing to paste');
     		  }
     	  });
+      }
+      
+      vm.marketPrevBaseAmount = function(fare){
+		  fare.prevAmountDiff = fare.amount - fare.prevAmount;
+		  fare.prevPercentAmountDiff = parseFloat((fare.prevAmountDiff/fare.prevAmount)*100).toFixed(2);
       }
       
       vm.deleteSelectedFares = function(workPackageSheet){
