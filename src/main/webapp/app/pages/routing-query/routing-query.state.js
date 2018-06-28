@@ -34,7 +34,7 @@
                 },
                 search: null,
                 size: null,
-                itemsPerPage: "10",
+//                itemsPerPage: "10",
                 routingQueryFilter: null
             },
             resolve: {
