@@ -110,6 +110,8 @@
             	vm.queryParams.size = vm.itemsPerPage;
             	vm.queryParams.lastIndex = vm.lastIndex;
             	
+            	console.log(vm.queryParams);
+            	
             	AfdQuery.query(vm.queryParams, onSuccess, onError);
             	
                 function onSuccess(data) {
@@ -140,10 +142,12 @@
         			(vm.queryParams.carrier != null && vm.queryParams.destination != null) ||
         			(vm.queryParams.origin != null && vm.queryParams.destination != null) ||
         			(vm.queryParams.origin != null && vm.queryParams.fareBasis != null) ||
-        			(vm.queryParams.destination != null && vm.queryParams.fareBasis != null)) {
+        			(vm.queryParams.destination != null && vm.queryParams.fareBasis != null) || 
+        			(vm.queryParams.carrier != null && vm.queryParams.fareBasis != null) || 
+        			vm.queryParams.woId != null) {
         		return 'Valid';
         	} else {
-        		return "Error: One set of the following is required.\n\tCarrier and Origin\n\tCarrier and Destination\n\tOrigin and Destination\n\tOrigin and Fare Basis\n\tDestination and Fare Basis\n";
+        		return "Error: One set of the following is required.\n\tCarrier and Origin\n\tCarrier and Destination\n\tCarrier and Fare Basis\n\tOrigin and Destination\n\tOrigin and Fare Basis\n\tDestination and Fare Basis\n\tWork Order ID\n";
         	}
         	
 //        	if (vm.effectiveDateFrom == null) {

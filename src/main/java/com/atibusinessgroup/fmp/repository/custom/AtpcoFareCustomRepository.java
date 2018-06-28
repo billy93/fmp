@@ -97,20 +97,36 @@ public class AtpcoFareCustomRepository {
 				
 				if (param.getFareBasis() != null && !param.getFareBasis().isEmpty()) {
 					BasicDBObject fareBasis = new BasicDBObject();
-					String fbc = param.getFareBasis();
+					BasicDBObject fbcOr = new BasicDBObject();
+					String[] fbcParts = param.getFareBasis().split(",");
+					List<BasicDBObject> orQueries = new ArrayList<>();
 					
-					if (param.getFareBasis().contains("*")) {
-						fbc = "^" + param.getFareBasis().replace("*", ".*") + "$";
-						fareBasis.append("fare_class_cd", new BasicDBObject("$regex", Pattern.compile(fbc)));
-					} else if (param.getFareBasis().contains("-")) {
-						fbc = "^" + param.getFareBasis().replace("-", "[A-Z0-9]{1}")  + "$";
-						System.out.println(fbc);
-						fareBasis.append("fare_class_cd", new BasicDBObject("$regex", Pattern.compile(fbc)));
-					} else {
-						fareBasis.append("fare_class_cd", fbc);
+					for (String fbc:fbcParts) {
+						fbc = fbc.trim();
+						BasicDBObject query = new BasicDBObject();
+						
+						if (fbc.contains("*") && fbc.contains("-")) {
+							String convertStar = fbc.replace("*", ".*");
+							String convertHyphen = convertStar.replace("-", "[A-Z0-9]{1}");
+							fbc = "^" + convertHyphen + "$";
+							query.append("fare_class_cd", new BasicDBObject("$regex", Pattern.compile(fbc)));
+						} else if (fbc.contains("*")) {
+							fbc = "^" + fbc.replace("*", ".*") + "$";
+							query.append("fare_class_cd", new BasicDBObject("$regex", Pattern.compile(fbc)));
+						} else if (fbc.contains("-")) {
+							fbc = "^" + fbc.replace("-", "[A-Z0-9]{1}")  + "$";
+							fareBasis.append("fare_class_cd", new BasicDBObject("$regex", Pattern.compile(fbc)));
+						} else {
+							query.append("fare_class_cd", fbc);
+						}
+						
+						orQueries.add(query);
 					}
 					
-					queries.add(fareBasis);
+					if (orQueries.size() > 0) {
+						fbcOr.append("$or", orQueries);
+						queries.add(fbcOr);
+					}
 				} else {
 					BasicDBObject fareBasis = new BasicDBObject();
 					fareBasis.append("fare_class_cd", new BasicDBObject("$exists", "true"));

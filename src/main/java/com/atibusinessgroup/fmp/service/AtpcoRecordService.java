@@ -350,6 +350,8 @@ public class AtpcoRecordService {
 		if (fowrt != null && rowrt != null) {
 			if (rowrt.trim().isEmpty() || fowrt.contentEquals(rowrt)) {
 				match = true;
+			} else if ((fowrt.contentEquals("1") || fowrt.contentEquals("3")) && (rowrt.contentEquals("1") || rowrt.contentEquals("3"))) {
+				match = true;
 			}
 		} else {
 			match = true;
