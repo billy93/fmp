@@ -3257,23 +3257,23 @@ public class WorkPackageResource {
 	    		tab1.setError(errors);
 	    		
 	    		// check for duplicates
-	    		for(int i =0; i < fares.size(); i++){
-	    		    for(int j=0; j< fares.size(); j++){
-	    		        // compare for equality if it is not the same element
-	    		        if(i != j){
-	    		            if(fares.get(i).equals(fares.get(j))){
-	    		                // than we know there is a duplicate at index i,j
-
-//	    			    		//List Warning
-	    			    		WorkPackage.Validation.Tab.Error warn1 = new WorkPackage.Validation.Tab.Error();
-	    			    		warn1.setIndex(i+"");
-	    			    		warn1.setField("no");
-	    			    		warn1.setMessage("Duplicate fares in work package '"+workPackage.getWpid()+"' row "+(i+1)+" with [Cxr/TarNo/Orig-Dest/FareCls/OWRT/Curr/RtgNo/RuleNo/Ftnt]");
-	    			    		warnings.add(warn1);
-	    		            }
-	    		        }
-	    		    }
-	    		}
+//	    		for(int i =0; i < fares.size(); i++){
+//	    		    for(int j=0; j< fares.size(); j++){
+//	    		        // compare for equality if it is not the same element
+//	    		        if(i != j){
+//	    		            if(fares.get(i).equals(fares.get(j))){
+//	    		                // than we know there is a duplicate at index i,j
+//
+////	    			    		//List Warning
+//	    			    		WorkPackage.Validation.Tab.Error warn1 = new WorkPackage.Validation.Tab.Error();
+//	    			    		warn1.setIndex(i+"");
+//	    			    		warn1.setField("no");
+//	    			    		warn1.setMessage("Duplicate fares in work package '"+workPackage.getWpid()+"' row "+(i+1)+" with [Cxr/TarNo/Orig-Dest/FareCls/OWRT/Curr/RtgNo/RuleNo/Ftnt]");
+//	    			    		warnings.add(warn1);
+//	    		            }
+//	    		        }
+//	    		    }
+//	    		}
 	    		errorsCount += errors.size();
 	    		warningsCount += warnings.size();
 	    	if(errors.size() > 0 || warnings.size() > 0) {
