@@ -18,5 +18,6 @@ public interface AtpcoFareRepository extends MongoRepository<AtpcoFare, String> 
 //	ori,dest,fareclass,owrt,footnote,routingnumber
 	Optional<AtpcoFare> findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCityAndFareOriginCurrencyCodeAndFareClassCodeAndOwrtAndFootnoteAndRoutingNoAndRuleNo(String carrier, String tarno, String origin, String dest, String currency, String fareClass, String owrt, String footnote, String rtgno, String ruleno);
 	Optional<AtpcoFare> findOneByCarrierCodeAndTariffNo(String carrier, String tarno);
-	Optional<AtpcoFare> findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCity(String carrier, String tarno, String origin, String dest);
+	Optional<AtpcoFare> findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCity(String carrier, String tarno, String origin, String destination);
+	Optional<AtpcoFare> findOneByCarrierCodeAndTariffNoAndOriginCity(String carrier, String tarno, String origin);
 }
