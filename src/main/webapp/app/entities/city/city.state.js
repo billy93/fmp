@@ -119,6 +119,9 @@
                                 cityCode: null,
                                 countryName: null,
                                 countryCode: null,
+                                airportCode: null,
+                                airportName: null,
+                                worldareaCode: null,
                                 id: null
                             };
                         }
