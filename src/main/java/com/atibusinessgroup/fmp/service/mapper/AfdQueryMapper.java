@@ -14,6 +14,7 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat06;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat07;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat14;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat15;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat50;
 import com.atibusinessgroup.fmp.domain.dto.AfdQuery;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord1FareClassInformation;
 import com.atibusinessgroup.fmp.domain.dto.CategoryObject;
@@ -31,7 +32,8 @@ public class AfdQueryMapper {
 	}
 	
 	public AfdQuery convertAtpcoFare(AtpcoFare afare, AtpcoRecord1 record1, List<CategoryObject> cat03s, List<CategoryObject> cat05s, List<CategoryObject> cat06s, List<CategoryObject> cat07s, 
-			List<CategoryObject> cat14s, List<CategoryObject> cat15s, List<CategoryObject> footnote14s, List<CategoryObject> footnote15s, Date focusDate) {
+			List<CategoryObject> cat14s, List<CategoryObject> cat15s, List<CategoryObject> cat27s, List<CategoryObject> cat35s, List<CategoryObject> cat50s, List<CategoryObject> footnote14s, 
+			List<CategoryObject> footnote15s, Date focusDate) {
 
 		AfdQuery result = new AfdQuery();
 		
@@ -138,6 +140,13 @@ public class AfdQueryMapper {
 				result.setSaleEndDate(cat15.getSales_dates_latest_tktg());
 				result.setResStartDate(cat15.getSales_dates_earliest_res());
 				result.setResEndDate(cat15.getSales_dates_latest_res());
+			}
+		}
+		
+		if (cat50s != null) {
+			for (CategoryObject cat50o:cat50s) {
+				AtpcoRecord3Cat50 cat50 = (AtpcoRecord3Cat50) cat50o.getCategory();
+				
 			}
 		}
 		

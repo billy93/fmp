@@ -144,7 +144,7 @@ public class AtpcoRecordService {
 		return date;
 	}
 
-	public boolean compareAfdQueryWithParamString(String value, String param) {
+	public boolean compareValueWithParamString(String value, String param) {
 		boolean match = false;
 		
 		if (param != null && !param.trim().isEmpty()) {
@@ -161,7 +161,7 @@ public class AtpcoRecordService {
 		return match;
 	}
 	
-	public boolean compareAfdQueryWithParamDate(Object startDate, Object endDate, Date paramFrom,
+	public boolean compareValueWithParamDate(Object startDate, Object endDate, Date paramFrom,
 			Date paramTo, String option) {
 		boolean match = false;
 		
@@ -176,11 +176,11 @@ public class AtpcoRecordService {
 				}
 			} else {
 				if (paramFrom == null && paramTo != null) {
-					if (end == null || end.after(paramTo) || end.equals(paramTo)) {
+					if (end == null || end.after(paramTo) || end.equals(paramTo) && (start == null || start.before(paramTo) || start.equals(paramTo))) {
 						match = true;
 					}
 				} else if (paramFrom != null && paramTo == null) {
-					if ((start == null || start.before(paramFrom) || start.equals(paramFrom))) {
+					if ((start == null || start.before(paramFrom) || start.equals(paramFrom)) && (end == null || end.after(paramFrom) || end.equals(paramFrom))) {
 						match = true;
 					}
 				} else {
