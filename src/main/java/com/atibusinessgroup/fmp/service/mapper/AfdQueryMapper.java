@@ -14,21 +14,30 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat06;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat07;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat14;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat15;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat27;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat35;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat35Ticketing;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat50;
 import com.atibusinessgroup.fmp.domain.dto.AfdQuery;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord1FareClassInformation;
 import com.atibusinessgroup.fmp.domain.dto.CategoryObject;
+import com.atibusinessgroup.fmp.domain.dto.TextTable;
+import com.atibusinessgroup.fmp.repository.custom.AtpcoRecord3CategoryCustomRepository;
 import com.atibusinessgroup.fmp.service.AtpcoMasterFareMatrixService;
+import com.atibusinessgroup.fmp.service.util.AtpcoDataConverterUtil;
 import com.atibusinessgroup.fmp.service.util.DateUtil;
 import com.atibusinessgroup.fmp.service.util.TypeConverterUtil;
+import com.itextpdf.text.pdf.StringUtils;
 
 @Service
 public class AfdQueryMapper {
 	
 	private final AtpcoMasterFareMatrixService atpcoMasterFareMatrixService;
+	private final AtpcoRecord3CategoryCustomRepository atpcoRecord3CategoryCustomRepository;
 	
-	public AfdQueryMapper(AtpcoMasterFareMatrixService atpcoMasterFareMatrixService) {
+	public AfdQueryMapper(AtpcoMasterFareMatrixService atpcoMasterFareMatrixService, AtpcoRecord3CategoryCustomRepository atpcoRecord3CategoryCustomRepository) {
 		this.atpcoMasterFareMatrixService = atpcoMasterFareMatrixService;
+		this.atpcoRecord3CategoryCustomRepository = atpcoRecord3CategoryCustomRepository;
 	}
 	
 	public AfdQuery convertAtpcoFare(AtpcoFare afare, AtpcoRecord1 record1, List<CategoryObject> cat03s, List<CategoryObject> cat05s, List<CategoryObject> cat06s, List<CategoryObject> cat07s, 
@@ -143,10 +152,34 @@ public class AfdQueryMapper {
 			}
 		}
 		
+		if (cat35s != null) {
+			for (CategoryObject cat35o:cat35s) {
+				AtpcoRecord3Cat35 cat35 = (AtpcoRecord3Cat35) cat35o.getCategory();
+				for (AtpcoRecord3Cat35Ticketing ticketing:cat35.getTicketing()) {
+					if (ticketing.getTour_car_value_code() != null && !ticketing.getTour_car_value_code().trim().isEmpty()) {
+						result.setTourCode(ticketing.getTour_car_value_code());
+					}
+				}
+			}
+		}
+		
+		if (result.getTourCode() != null && cat27s != null) {
+			for (CategoryObject cat27o:cat27s) {
+				AtpcoRecord3Cat27 cat27 = (AtpcoRecord3Cat27) cat27o.getCategory();
+				if (cat27.getText_table_no_996() != null && !cat27.getText_table_no_996().trim().isEmpty()) {
+					TextTable textTable996 = atpcoRecord3CategoryCustomRepository.findRecord3TextTable(cat27.getText_table_no_996().trim());
+					String textTable = AtpcoDataConverterUtil.convertTextTableToText(textTable996);
+					result.setTourCode(textTable);
+				}
+			}
+		}
+		
 		if (cat50s != null) {
 			for (CategoryObject cat50o:cat50s) {
 				AtpcoRecord3Cat50 cat50 = (AtpcoRecord3Cat50) cat50o.getCategory();
-				
+				if (cat50.getApplication_title() != null && !cat50.getApplication_title().trim().isEmpty()) {
+					result.setCat50Title(cat50.getApplication_title());
+				}
 			}
 		}
 		
