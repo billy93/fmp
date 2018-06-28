@@ -59,37 +59,12 @@ public class FootnoteQueryResource {
 		this.atpcoFareCustomRepository = atpcoFareCustomRepository;
 		this.atpcoRecordService = atpcoRecordService;
 
-		categories.put("001", CategoryName.CAT_001);
-		categories.put("002", CategoryName.CAT_002);
 		categories.put("003", CategoryName.CAT_003);
-		categories.put("004", CategoryName.CAT_004);
-		categories.put("005", CategoryName.CAT_005);
-		categories.put("006", CategoryName.CAT_006);
-		categories.put("007", CategoryName.CAT_007);
-		categories.put("008", CategoryName.CAT_008);
-		categories.put("009", CategoryName.CAT_009);
-		categories.put("010", CategoryName.CAT_010);
 		categories.put("011", CategoryName.CAT_011);
-		categories.put("012", CategoryName.CAT_012);
-		categories.put("013", CategoryName.CAT_013);
 		categories.put("014", CategoryName.CAT_014);
 		categories.put("015", CategoryName.CAT_015);
-		categories.put("016", CategoryName.CAT_016);
-		categories.put("017", CategoryName.CAT_017);
-		categories.put("018", CategoryName.CAT_018);
-		categories.put("019", CategoryName.CAT_019);
-		categories.put("020", CategoryName.CAT_020);
-		categories.put("021", CategoryName.CAT_021);
-		categories.put("022", CategoryName.CAT_022);
 		categories.put("023", CategoryName.CAT_023);
-		categories.put("026", CategoryName.CAT_026);
-		categories.put("027", CategoryName.CAT_027);
-		categories.put("028", CategoryName.CAT_028);
-		categories.put("029", CategoryName.CAT_029);
-		categories.put("031", CategoryName.CAT_031);
-		categories.put("033", CategoryName.CAT_033);
-		categories.put("035", CategoryName.CAT_035);
-		categories.put("050", CategoryName.CAT_050);
+		
 	}
 
 	/**
