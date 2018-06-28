@@ -29,10 +29,11 @@
 		        	  element[0].selectionStart = selection;
 		        	  element[0].selectionEnd = selection;
 	        	  } else {
+	        		  
 	        		  console.log('not matched');
 	        	  }
 	        	  
-		          return capitalized;
+		          return capitalized.replace();
 		        }
 	        modelCtrl.$parsers.push(farebasis);
 	        farebasis(scope[attrs.ngModel]);

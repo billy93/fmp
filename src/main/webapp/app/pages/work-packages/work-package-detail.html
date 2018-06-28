@@ -320,6 +320,7 @@
 							</ul>
 							
 							<div class="tab-content">
+							
 								<div class="tab-pane" id="tabAtpco{{$index}}" ng-class="{active:vm.currentTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.fareSheet track by $index">
 									<div class="pb1 mb1 bbgrey">
 										<div class="clearfix">
@@ -695,7 +696,7 @@
 								                				ng-disabled="!vm.isEditable('amount')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)||fare.action == 'X'"
 								                				ng-required="vm.isRequired('amount', fare)" 
 								                				ng-class="{'must-fill': editForm.editFormATPCO.amount{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
-													            ng-model="fare.amount"/  style="min-width: 80px">									                												                			
+													            ng-model="fare.amount"  style="min-width: 80px">									                												                			
 									               			</td>
 									               			<td>
 									               				<input class="form-control" disabled ng-model="fare.amtDiff" style="min-width:100px"/>
@@ -1240,8 +1241,7 @@
 									</div>
 								
 								</div>
-																			
-	
+
 								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+vm.workPackage.addonFareSheet.length}}" ng-class="{active:vm.currentTabFilingInstruction, 'poiv-none': vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}" ng-if="vm.workPackage.filingInstruction">
 									
 									<div class="box-header"></div>
@@ -1278,6 +1278,7 @@
 								    	</div>
 									</div>							
 							    </div>		
+								
 								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+vm.workPackage.addonFareSheet.length+1}}" ng-class="{active:vm.currentTabAttachment}" ng-if="vm.workPackage.attachment">
 									<div class="action-btn-wrapper">
 					     				<div class="col-md-12 text-right no-pad">
@@ -1614,7 +1615,7 @@
 						                  <div class="clearfix">
 						                    <div class="pull-right datatable-button">
 						                      <div class="button-group dropdown custom">
-						                        <button class="btn btn-default small btn-secondary" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}"></i></button>
+						                        <button class="btn btn-default small btn-secondary" ng-disabled="vm.workPackage.status=='WITHDRAWN' || vm.workPackage.status=='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none': (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || vm.workPackage.status == 'WITHDRAWN' || vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage) }"></i></button>
 						                        <ul class="dropdown-menu custom" role="menu">
 						                            <li>
 												   		<a ng-click="vm.clearSelection(workPackageSheet)">Clear Selection</a>
@@ -3965,7 +3966,7 @@
 							</ul>
 						</div>
 						<div class="tab-pane" id="release-errors">
-							b
+							
 						</div>
 					</div>
 				</div>							
