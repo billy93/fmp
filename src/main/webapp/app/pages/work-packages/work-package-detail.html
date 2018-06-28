@@ -695,10 +695,10 @@
 								                				ng-class="{'must-fill': editForm.editFormATPCO.amount{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 													            ng-model="fare.amount"  style="min-width: 80px">									                												                			
 									               			</td>
-									               			<td ng-class="{changed : vm.diff[fare.id].indexOf('amtDiff') > -1}">
+									               			<td>
 									               				<input class="form-control" disabled ng-model="fare.amtDiff" style="min-width:100px"/>
 									               			</td>
-									               			<td ng-class="{changed : vm.diff[fare.id].indexOf('amtPercentDiff') > -1}">
+									               			<td>
 									               				<input class="form-control" disabled ng-model="fare.amtPercentDiff" style="min-width:100px"/>
 									               			</td>
 									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'aif', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['aif'], changed : vm.diff[fare.id].indexOf('aif') > -1}">
