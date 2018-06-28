@@ -4,6 +4,8 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.newA
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +91,20 @@ public class AtpcoFootnoteQueryCustomRepository {
 				BasicDBObject andQuery = new BasicDBObject();
 
 				List<BasicDBObject> and = new ArrayList<>();
+				
+				Date today = getCalendarDate(0);
+				Date twoYearsBefore = getCalendarDate(1);
+				
+				if(param.isIncludeDiscDate()) {
+					and.add(new BasicDBObject("$or", Arrays.asList(
+							new BasicDBObject("dates_disc", new BasicDBObject("$lte", today).append("$gte", twoYearsBefore)), 
+							new BasicDBObject("dates_disc", "indef"))));
+					
+				} else {
+					and.add(new BasicDBObject("$or", Arrays.asList(
+							new BasicDBObject("dates_disc", new BasicDBObject("$gte", today)), 
+							new BasicDBObject("dates_disc", "indef"))));
+				}
 
 				if (param.getCxr() != null && !param.getCxr().isEmpty()) {
 					and.add(new BasicDBObject("cxr_code", param.getCxr()));
@@ -137,7 +153,207 @@ public class AtpcoFootnoteQueryCustomRepository {
 
 		return aggregationOperations;
 	}
+	
+	public List<AggregationOperation> getAggregationFootnoteQueryAvailable(FootnoteQueryParam param) {
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				
+				BasicDBObject match = new BasicDBObject();
 
+				Date today = getCalendarDate(0);
+				Date twoYearsBefore = getCalendarDate(1);
+				
+				if(param.isIncludeDiscDate()) {
+					match.append("$match", new BasicDBObject("$or", Arrays.asList(
+							new BasicDBObject("dates_disc", new BasicDBObject("$lte", today).append("$gte", twoYearsBefore)), 
+							new BasicDBObject("dates_disc", "indef"))));
+					
+				} else {
+					match.append("$match", new BasicDBObject("$or", Arrays.asList(
+							new BasicDBObject("dates_disc", new BasicDBObject("$gte", today)), 
+							new BasicDBObject("dates_disc", "indef"))));
+				}
+				
+				return match;
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				
+				BasicDBObject match = new BasicDBObject();
+				Date today = getCalendarDate(0);
+				match.append("$match", new BasicDBObject("$or", Arrays.asList(
+						new BasicDBObject("dates_disc", "indef"), 
+						new BasicDBObject("dates_eff", "indef"), 
+						new BasicDBObject("dates_disc", new BasicDBObject("$gte", today))
+						)
+					));
+				
+				return match;
+			}
+		});
+
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject match = new BasicDBObject();
+				BasicDBObject andQuery = new BasicDBObject();
+
+				List<BasicDBObject> and = new ArrayList<>();
+				
+				if (param.getCxr() != null && !param.getCxr().isEmpty()) {
+					and.add(new BasicDBObject("cxr_code", param.getCxr()));
+				} else {
+					and.add(new BasicDBObject("cxr_code", new BasicDBObject("$exists", "true")));
+				}
+
+				if (param.getTarNo()!= null && !param.getTarNo().isEmpty()) {
+					and.add(new BasicDBObject("fare_tar_no", param.getTarNo()));
+				} else {
+					and.add(new BasicDBObject("fare_tar_no", new BasicDBObject("$exists", "true")));
+				}
+
+
+				if (param.getFtnt() != null && !param.getFtnt().isEmpty()) {
+					and.add(new BasicDBObject("ftnt", param.getFtnt()));
+				} else {
+					and.add(new BasicDBObject("ftnt", new BasicDBObject("$exists", "true")));
+				}
+
+				
+				if (param.getCatNo() != null && !param.getCatNo().isEmpty()) {
+					if(param.getCatNo().equalsIgnoreCase("comb")) {
+								
+						and.add(new BasicDBObject("cat_no", new BasicDBObject("$in", Arrays.asList("014","015"))));
+						
+						System.out.println(and.toString());
+					} else {
+						and.add(new BasicDBObject("cat_no", param.getCatNo()));
+					}
+					
+				} else {
+					and.add(new BasicDBObject("cat_no", new BasicDBObject("$exists", "true")));
+				}
+
+
+				if (and.size() > 0) {
+					andQuery.append("$and", and);
+				}
+
+				match.append("$match", andQuery);
+
+				return match;
+			}
+		});
+
+		return aggregationOperations;
+	}
+
+	public List<AggregationOperation> getAggregationFootnoteQueryExpired(FootnoteQueryParam param) {
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				
+				BasicDBObject match = new BasicDBObject();
+
+				Date today = getCalendarDate(0);
+				Date twoYearsBefore = getCalendarDate(1);
+				
+				if(param.isIncludeDiscDate()) {
+					match.append("$match", new BasicDBObject("$or", Arrays.asList(
+							new BasicDBObject("dates_disc", new BasicDBObject("$lte", today).append("$gte", twoYearsBefore)), 
+							new BasicDBObject("dates_disc", "indef"))));
+					
+				} else {
+					match.append("$match", new BasicDBObject("$or", Arrays.asList(
+							new BasicDBObject("dates_disc", new BasicDBObject("$gte", today)), 
+							new BasicDBObject("dates_disc", "indef"))));
+				}
+				
+				return match;
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				
+				BasicDBObject match = new BasicDBObject();
+				Date today = getCalendarDate(0);
+				match.append("$match", new BasicDBObject("$or", Arrays.asList( 
+						new BasicDBObject("dates_disc", new BasicDBObject("$lt", today))
+						)
+					));
+				
+				return match;
+			}
+		});
+
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject match = new BasicDBObject();
+				BasicDBObject andQuery = new BasicDBObject();
+
+				List<BasicDBObject> and = new ArrayList<>();
+				
+				
+
+				if (param.getCxr() != null && !param.getCxr().isEmpty()) {
+					and.add(new BasicDBObject("cxr_code", param.getCxr()));
+				} else {
+					and.add(new BasicDBObject("cxr_code", new BasicDBObject("$exists", "true")));
+				}
+
+				if (param.getTarNo()!= null && !param.getTarNo().isEmpty()) {
+					and.add(new BasicDBObject("fare_tar_no", param.getTarNo()));
+				} else {
+					and.add(new BasicDBObject("fare_tar_no", new BasicDBObject("$exists", "true")));
+				}
+
+
+				if (param.getFtnt() != null && !param.getFtnt().isEmpty()) {
+					and.add(new BasicDBObject("ftnt", param.getFtnt()));
+				} else {
+					and.add(new BasicDBObject("ftnt", new BasicDBObject("$exists", "true")));
+				}
+
+				
+				if (param.getCatNo() != null && !param.getCatNo().isEmpty()) {
+					if(param.getCatNo().equalsIgnoreCase("comb")) {
+								
+						and.add(new BasicDBObject("cat_no", new BasicDBObject("$in", Arrays.asList("014","015"))));
+						
+						System.out.println(and.toString());
+					} else {
+						and.add(new BasicDBObject("cat_no", param.getCatNo()));
+					}
+					
+				} else {
+					and.add(new BasicDBObject("cat_no", new BasicDBObject("$exists", "true")));
+				}
+
+
+				if (and.size() > 0) {
+					andQuery.append("$and", and);
+				}
+
+				match.append("$match", andQuery);
+
+				return match;
+			}
+		});
+
+		return aggregationOperations;
+	}
+	
 	public Page<AtpcoFootnoteRecord2GroupByFtntCxrTarNo> groupingFootnoteQuery(FootnoteQueryParam param, Pageable pageable) {
 
 		List<AggregationOperation> aggregationOperations = getAggregationGrouping(param);
@@ -159,11 +375,121 @@ public class AtpcoFootnoteQueryCustomRepository {
 		
 		return new PageImpl<>(result, pageable, mongoTemplate.aggregate(aggregation, "atpco_footnote_record_2", AtpcoFootnoteRecord2GroupByFtntCxrTarNo.class).getMappedResults().size());
 	}
+	
+	public Page<AtpcoFootnoteRecord2GroupByFtntCxrTarNo> groupingFootnoteQueryAvailable(FootnoteQueryParam param, Pageable pageable) {
 
+		List<AggregationOperation> aggregationOperations = getAggregationGroupingAvailable(param);
+		
+		Aggregation aggregation = newAggregation(aggregationOperations);
+
+		SkipOperation skip = new SkipOperation(pageable.getPageNumber() * pageable.getPageSize());
+		aggregationOperations.add(skip);
+
+		LimitOperation limit = new LimitOperation(pageable.getPageSize());
+		aggregationOperations.add(limit);
+
+		Aggregation aggregationPagination = newAggregation(aggregationOperations);
+
+		SortOperation sort = new SortOperation(new Sort(Direction.ASC, "ftnt"));
+		aggregationOperations.add(sort);
+
+		List<AtpcoFootnoteRecord2GroupByFtntCxrTarNo> result = mongoTemplate.aggregate(aggregationPagination, "atpco_footnote_record_2", AtpcoFootnoteRecord2GroupByFtntCxrTarNo.class).getMappedResults();
+		
+		return new PageImpl<>(result, pageable, mongoTemplate.aggregate(aggregation, "atpco_footnote_record_2", AtpcoFootnoteRecord2GroupByFtntCxrTarNo.class).getMappedResults().size());
+	}
+
+	public Page<AtpcoFootnoteRecord2GroupByFtntCxrTarNo> groupingFootnoteQueryExpired(FootnoteQueryParam param, Pageable pageable) {
+
+		List<AggregationOperation> aggregationOperations = getAggregationGroupingExpired(param);
+		
+		Aggregation aggregation = newAggregation(aggregationOperations);
+
+		SkipOperation skip = new SkipOperation(pageable.getPageNumber() * pageable.getPageSize());
+		aggregationOperations.add(skip);
+
+		LimitOperation limit = new LimitOperation(pageable.getPageSize());
+		aggregationOperations.add(limit);
+
+		Aggregation aggregationPagination = newAggregation(aggregationOperations);
+
+		SortOperation sort = new SortOperation(new Sort(Direction.ASC, "ftnt"));
+		aggregationOperations.add(sort);
+
+		List<AtpcoFootnoteRecord2GroupByFtntCxrTarNo> result = mongoTemplate.aggregate(aggregationPagination, "atpco_footnote_record_2", AtpcoFootnoteRecord2GroupByFtntCxrTarNo.class).getMappedResults();
+		
+		return new PageImpl<>(result, pageable, mongoTemplate.aggregate(aggregation, "atpco_footnote_record_2", AtpcoFootnoteRecord2GroupByFtntCxrTarNo.class).getMappedResults().size());
+	}
+	
 	public List<AggregationOperation> getAggregationGrouping(FootnoteQueryParam param) {
 
 		List<AggregationOperation> aggregationOperations = new ArrayList<>();
-		aggregationOperations = getAggregationFootnoteQuery(param);
+		aggregationOperations = getAggregationFootnoteQueryAvailable(param);
+		
+
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject group = new BasicDBObject();
+				BasicDBObject groupId = new BasicDBObject();
+				BasicDBObject groupList = new BasicDBObject();
+				groupList.put("ftnt", "$ftnt");
+				groupList.put("cxr_code", "$cxr_code");
+				groupList.put("fare_tar_no", "$fare_tar_no");
+				groupId.append("_id", groupList);
+				group.append("$group", groupId);
+				return group;
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject replace = new BasicDBObject();
+				replace.append("$replaceRoot", new BasicDBObject().append("newRoot", "$_id"));
+				return replace;
+			}
+		});
+
+		return aggregationOperations;
+	}
+	
+	public List<AggregationOperation> getAggregationGroupingAvailable(FootnoteQueryParam param) {
+
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		aggregationOperations = getAggregationFootnoteQueryAvailable(param);
+		
+
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject group = new BasicDBObject();
+				BasicDBObject groupId = new BasicDBObject();
+				BasicDBObject groupList = new BasicDBObject();
+				groupList.put("ftnt", "$ftnt");
+				groupList.put("cxr_code", "$cxr_code");
+				groupList.put("fare_tar_no", "$fare_tar_no");
+				groupId.append("_id", groupList);
+				group.append("$group", groupId);
+				return group;
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject replace = new BasicDBObject();
+				replace.append("$replaceRoot", new BasicDBObject().append("newRoot", "$_id"));
+				return replace;
+			}
+		});
+
+		return aggregationOperations;
+	}
+	
+	public List<AggregationOperation> getAggregationGroupingExpired(FootnoteQueryParam param) {
+
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		aggregationOperations = getAggregationFootnoteQueryExpired(param);
 		
 
 		aggregationOperations.add(new AggregationOperation() {
@@ -222,4 +548,22 @@ public class AtpcoFootnoteQueryCustomRepository {
 		return result;
 	}
 
+	public Date getCalendarDate(int beforeAfter) {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		
+		Date dt = null;
+		
+		if(beforeAfter == 0) {
+			dt = cal.getTime();
+		} else if(beforeAfter == 1) {
+			cal.add(Calendar.YEAR, -2); 
+			dt = cal.getTime();
+		}
+		
+		return dt;
+	}
 }

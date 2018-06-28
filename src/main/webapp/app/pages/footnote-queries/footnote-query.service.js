@@ -11,6 +11,8 @@
 
         return $resource(resourceUrl, {}, {
             'query': { method: 'POST', isArray: true},
+            'queryAvailable': { method: 'POST', url:'api/footnote-queries/available', isArray: true },
+            'queryExpired': { method: 'POST', url:'api/footnote-queries/expired', isArray: true },
             'get': {
                 method: 'GET',
                 transformResponse: function (data) {
