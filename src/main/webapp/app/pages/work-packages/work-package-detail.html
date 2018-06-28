@@ -505,8 +505,8 @@
 															fare.no == null || fare.no == undefined ? 
 															fare.no = $index+1 : fare.no = fare.no">
 															<td>{{$index+1}}</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['no']}" name="no{{$parent.$index}}{{$index}}">{{fare.no}}</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'status', $event)" ng-class="{highlighted:fare.field['status'], changed : vm.diff.indexOf('status') > -1}">
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['no'], changed : vm.diff[fare.id].indexOf('no') > -1}" name="no{{$parent.$index}}{{$index}}">{{fare.no}}</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'status', $event)" ng-class="{highlighted:fare.field['status'], changed : vm.diff[fare.id].indexOf('status') > -1}">
 																<select class="form-control inside-table" name="status{{$parent.$index}}{{$index}}" ng-model="fare.status" id="field_status" 
 																	ng-class="{'must-fill': !editForm.editFormATPCO.status{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"												         		
 								           							ng-disabled="!vm.isEditable('status')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
@@ -514,15 +514,15 @@
 													             	ng-options="key as value for (key , value) in vm.status">
 																</select>	
 															</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'carrier', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['carrier']}">
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'carrier', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['carrier'], changed : vm.diff[fare.id].indexOf('carrier') > -1}">
 																<input type="text" class="form-control" name="carrier{{$parent.$index}}{{$index}}" id="field_carrier"
 											                    		ng-model="fare.carrier"
 											                    		ng-disabled="!vm.isEditable('carrier')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)" 
 											                    		ng-class="{'must-fill': editForm.editFormATPCO.carrier{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('carrier')"/>
 															</td>																
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'action', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['action']}">{{fare.action}}</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'tarno', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['tarno'], changed : vm.diff.indexOf('tarNo') > -1}">																
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'action', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['action'], changed : vm.diff[fare.id].indexOf('action') > -1}">{{fare.action}}</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'tarno', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['tarno'], changed : vm.diff[fare.id].indexOf('tarNo') > -1}">																
 																<span class="input-group">
 																	<input type="text" class="form-control" name="tarno{{$parent.$index}}{{$index}}" id="field_tarcd"
 											                    		ng-model="fare.tariffNumber.tarNo"
@@ -536,7 +536,7 @@
 																	</span>
 																</span>
 															</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'tarcd', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['tarcd'], changed : vm.diff.indexOf('tarCd') > -1}">
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'tarcd', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['tarcd'], changed : vm.diff[fare.id].indexOf('tarCd') > -1}">
 																
 																<span class="input-group">
 																	<input type="text" class="form-control" name="tarcd{{$parent.$index}}{{$index}}" id="field_tarcd"
@@ -552,8 +552,8 @@
 																	</span>
 																</span>
 															</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'global', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['global'], changed : vm.diff.indexOf('global') > -1}">{{fare.tariffNumber.global}}</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'origin', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['origin'], changed : vm.diff.indexOf('origin') > -1}">																
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'global', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['global'], changed : vm.diff[fare.id].indexOf('global') > -1}">{{fare.tariffNumber.global}}</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'origin', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['origin'], changed : vm.diff[fare.id].indexOf('origin') > -1}">																
 																<span class="input-group" tooltip-placement="{{$index > 3 ? 'top' : 'bottom'}}" uib-tooltip-html="vm.getTooltip(fare.origin)">
 																	<input type="text" class="form-control" name="origin{{$parent.$index}}{{$index}}" id="field_origin"
 											                    		ng-model="fare.origin"
@@ -568,7 +568,7 @@
 																	</span>
 																</span>
 															</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'destination', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['destination'], changed : vm.diff.indexOf('destination') > -1}">
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'destination', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['destination'], changed : vm.diff[fare.id].indexOf('destination') > -1}">
 																<span class="input-group" tooltip-placement="{{$index > 3 ? 'top' : 'bottom'}}" uib-tooltip-html="vm.getTooltip(fare.destination)">
 																	<input type="text" class="form-control" name="destination{{$parent.$index}}{{$index}}" id="field_destination"
 											                    		ng-model="fare.destination"
@@ -583,7 +583,7 @@
 																	</span>
 																</span>
 															</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'fareBasis', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['fareBasis'], changed : vm.diff.indexOf('fareBasis') > -1}">
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'fareBasis', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['fareBasis'], changed : vm.diff[fare.id].indexOf('fareBasis') > -1}">
 																<input type="text" class="form-control" name="fareBasis{{$parent.$index}}{{$index}}" id="field_farebasis"
 									                				ng-disabled="!vm.isEditable('farebasis')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X'"
 									                				ng-required="vm.isRequired('farebasis') && fare.action != 'Canceled'" 
@@ -596,7 +596,7 @@
 									                				ng-maxlength="8"
 									                				ng-model="fare.fareBasis"/>				
 															</td>	
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'bookingClass', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['bookingClass'], changed : vm.diff.indexOf('bookingClass') > -1}">
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'bookingClass', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['bookingClass'], changed : vm.diff[fare.id].indexOf('bookingClass') > -1}">
 																<input type="text" class="form-control" name="bookingClass{{$parent.$index}}{{$index}}" id="field_bookingClass"
 									                				ng-maxlength="2"
 									                				maxlength="2"
@@ -609,7 +609,7 @@
 										                				editForm.editFormATPCO.bookingClass{{$parent.$index}}{{$index}}.$error.pattern}"
 										                    		ng-model="fare.bookingClass"/>	
 															</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'cabin', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['cabin'], changed : vm.diff.indexOf('cabin') > -1}">
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'cabin', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['cabin'], changed : vm.diff[fare.id].indexOf('cabin') > -1}">
 										           				<select class="form-control" 
 														             name="cabin{{$parent.$index}}{{$index}}"
 														             ng-required="vm.isRequired('cabin')"
@@ -619,7 +619,7 @@
 														             ng-options="key as value for (key , value) in vm.cabin"></select>
 										                			
 										           			</td>
-										           			<td ng-click="vm.tdClick(workPackageSheet, fare, 'typeOfJourney', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['typeOfJourney'], changed : vm.diff.indexOf('typeOfJourney') > -1}">
+										           			<td ng-click="vm.tdClick(workPackageSheet, fare, 'typeOfJourney', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['typeOfJourney'], changed : vm.diff[fare.id].indexOf('typeOfJourney') > -1}">
 										           				<select class="form-control" 
 														             name="typeOfJourney{{$parent.$index}}{{$index}}"
 														             ng-required="vm.isRequired('typeOfJourney')"
@@ -628,7 +628,7 @@
 														             ng-disabled="!vm.isEditable('typeOfJourney')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X'"
 														             ng-options="key as value for (key , value) in vm.typeOfJourney"></select>
 										           			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'footnote', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['footnote'], changed : vm.diff.indexOf('footnote1') > -1}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'footnote', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['footnote'], changed : vm.diff[fare.id].indexOf('footnote1') > -1}">
 									               				<input type="text" class="form-control" name="footnote{{$parent.$index}}{{$index}}" id="field_footnote"
 										                				ng-maxlength="2"
 									                					maxlength="2"
@@ -643,7 +643,7 @@
 															            ng-required="vm.isRequired('footnote')"
 											                    		ng-model="fare.footnote1"/>
 									               			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'rtgno', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['rtgno'], changed : vm.diff.indexOf('rtgno') > -1}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'rtgno', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['rtgno'], changed : vm.diff[fare.id].indexOf('rtgno') > -1}">
 									               				<input type="text" class="form-control" name="rtgno{{$parent.$index}}{{$index}}" id="field_bookingClass"
 										                				ng-maxlength="4"
 									                					maxlength="4"
@@ -657,7 +657,7 @@
 										                			 && fare.action != 'Canceled'}"																			            
 															            ng-model="fare.rtgno"/>
 									               			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'ruleno', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['ruleno'], changed : vm.diff.indexOf('ruleno') > -1}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'ruleno', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['ruleno'], changed : vm.diff[fare.id].indexOf('ruleno') > -1}">
 							               						<input type="text" 
 							               						ng-maxlength="4"
 							               						uppercase
@@ -673,7 +673,7 @@
 										                		}"																			            
 													            ng-model="fare.ruleno"/>
 									               			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'currency', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['currency'], changed : vm.diff.indexOf('currency') > -1}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'currency', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['currency'], changed : vm.diff[fare.id].indexOf('currency') > -1}">
 									               			
 									               				<span class="input-group">
 																	<input type="text" class="form-control" name="currency{{$parent.$index}}{{$index}}" id="field_carrier"
@@ -689,27 +689,27 @@
 																	</span>
 																</span>
 									               			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'amount', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['amount'], changed : vm.diff.indexOf('amount') > -1}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'amount', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['amount'], changed : vm.diff[fare.id].indexOf('amount') > -1}">
 							               						<input type="text" class="form-control" name="amount{{$parent.$index}}{{$index}}" id="field_bookingClass"
 								                				ng-disabled="!vm.isEditable('amount')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)||fare.action == 'X'"
 								                				ng-required="vm.isRequired('amount', fare)" 
 								                				ng-class="{'must-fill': editForm.editFormATPCO.amount{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 													            ng-model="fare.amount"/>									                												                			
 									               			</td>
-									               			<td ng-class="{changed : vm.diff.indexOf('amtDiff') > -1}">
+									               			<td ng-class="{changed : vm.diff[fare.id].indexOf('amtDiff') > -1}">
 									               				<input class="form-control" disabled ng-model="fare.amtDiff" style="min-width:100px"/>
 									               			</td>
-									               			<td ng-class="{changed : vm.diff.indexOf('amtPercentDiff') > -1}">
+									               			<td ng-class="{changed : vm.diff[fare.id].indexOf('amtPercentDiff') > -1}">
 									               				<input class="form-control" disabled ng-model="fare.amtPercentDiff" style="min-width:100px"/>
 									               			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'aif', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['aif'], changed : vm.diff.indexOf('aif') > -1}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'aif', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['aif'], changed : vm.diff[fare.id].indexOf('aif') > -1}">
 										               			<input type="text" class="form-control" name="aif{{$parent.$index}}{{$index}}" id="field_bookingClass"
 										                				ng-disabled="!vm.isEditable('aif')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) ||fare.action == 'X'"
 										                				ng-required="vm.isRequired('aif', fare)" 
 										                				ng-class="{'must-fill': editForm.editFormATPCO.aif{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 															            ng-model="fare.aif"/>
 										               		</td> 
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelStart', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['travelStart'], changed : vm.diff.indexOf('travelStart') > -1}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelStart', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['travelStart'], changed : vm.diff[fare.id].indexOf('travelStart') > -1}">
 									               				<span class="input-group">
 																	<input id="field_travelStartDate" 
 																		type="text"
@@ -727,7 +727,7 @@
 																	</span>
 																</span>
 									               			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelEnd', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['travelEnd'], changed : vm.diff.indexOf('travelEnd') > -1}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelEnd', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['travelEnd'], changed : vm.diff[fare.id].indexOf('travelEnd') > -1}">
 									               				<span class="input-group">
 																	<input id="field_travelEndDate" 
 																		type="text"
@@ -745,7 +745,7 @@
 																	</span>
 																</span>								                			
 									               			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'saleStart', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['saleStart'], changed : vm.diff.indexOf('saleStart') > -1}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'saleStart', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['saleStart'], changed : vm.diff[fare.id].indexOf('saleStart') > -1}">
 									               				<span class="input-group">
 																	<input id="field_startDate" 
 																		type="text"
@@ -763,7 +763,7 @@
 																	</span>
 																</span>
 									               			</td>
-									               			<td  ng-click="vm.tdClick(workPackageSheet, fare, 'saleEnd', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['saleEnd'], changed : vm.diff.indexOf('saleEnd') > -1}">
+									               			<td  ng-click="vm.tdClick(workPackageSheet, fare, 'saleEnd', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['saleEnd'], changed : vm.diff[fare.id].indexOf('saleEnd') > -1}">
 							               						<span class="input-group">
 																	<input id="field_endDate" 
 																		type="text"
@@ -781,11 +781,11 @@
 																	</span>
 																</span>							                			
 									               			</td>
-									               			<td  ng-click="vm.tdClick(workPackageSheet, fare, 'comment', $event);" ng-class="{'poiv-none': fare.status != 'PENDING' || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X', highlighted:fare.field['comment'], changed : vm.diff.indexOf('comment') > -1}">
+									               			<td  ng-click="vm.tdClick(workPackageSheet, fare, 'comment', $event);" ng-class="{'poiv-none': fare.status != 'PENDING' || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X', highlighted:fare.field['comment'], changed : vm.diff[fare.id].indexOf('comment') > -1}">
 									               				<input type="text" class="form-control" name="comment{{$parent.$index}}{{$index}}" id="field_comment"
 											                    		ng-model="fare.comment"/>
 									               			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelComplete', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['travelComplete'], changed : vm.diff.indexOf('travelComplete') > -1}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelComplete', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['travelComplete'], changed : vm.diff[fare.id].indexOf('travelComplete') > -1}">
 									               				<span class="input-group">
 																	<input id="field_travelComplete" 
 																		type="text"
@@ -803,7 +803,7 @@
 																	</span>
 																</span>
 									               			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelCompleteIndicator', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['travelCompleteIndicator'], changed : vm.diff.indexOf('travelCompleteIndicator') > -1}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelCompleteIndicator', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['travelCompleteIndicator'], changed : vm.diff[fare.id].indexOf('travelCompleteIndicator') > -1}">
 							               						<select class="form-control" name="travelIndicator{{$parent.$index}}{{$index}}" id="field_travelIndicator"
 								                				ng-disabled="!vm.isEditable('travelIndicator')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X' "
 								                				ng-required="vm.isRequired('travelIndicator')"
@@ -811,7 +811,7 @@
 									                    		ng-options="key as value for (key , value) in vm.travelCompleteIndicator"											             																		            														                    		
 								                				ng-model="fare.travelCompleteIndicator"></select>
 									               			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'ratesheetComment', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['ratesheetComment'], changed : vm.diff.indexOf('ratesheetComment') > -1}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'ratesheetComment', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['ratesheetComment'], changed : vm.diff[fare.id].indexOf('ratesheetComment') > -1}">
 								                				<input type="text" class="form-control" name="ratesheetComment{{$parent.$index}}{{$index}}" id="field_ratesheetComment"
 								                				ng-disabled="!vm.isEditable('ratesheetComment')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' || vm.disabledField(vm.workPackage) ||fare.action == 'X'"
 								                				ng-required="vm.isRequired('ratesheetComment')"
@@ -951,8 +951,8 @@
 													</thead>
 													<tbody>
 														<tr role="row" class="datatable-row" ng-repeat="fare in workPackageSheet.currentFares track by $index" ng-class="{'poiv-none': workPackageSheet.version != 'current', 'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no']}">{{$index+1}}</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'status', $event)" ng-class="{highlighted:fare.field['status']}">
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no'], changed : vm.diff[fare.id].indexOf('no') > -1}">{{$index+1}}</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'status', $event)" ng-class="{highlighted:fare.field['status'], changed : vm.diff[fare.id].indexOf('status') > -1}">
 																<select class="form-control inside-table" name="addonFareStatus{{$index}}" ng-model="fare.status" id="field_status" 
 																	ng-class="{'must-fill': !editForm.editFormATPCO.addonFareStatus{{$index}}.$valid && fare.action != 'Canceled'}"												         		
 								           							ng-disabled="!vm.isEditable('addonFareStatus')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)"
@@ -960,15 +960,15 @@
 													             	ng-options="key as value for (key , value) in vm.status">
 																</select>
 															</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'carrier', $event)" ng-class="{highlighted:fare.field['carrier']}">
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'carrier', $event)" ng-class="{highlighted:fare.field['carrier'], changed : vm.diff[fare.id].indexOf('carrier') > -1}">
 																<input type="text" class="form-control" name="addonFareCarrier{{$index}}" id="field_carrier"
 											                    		ng-model="fare.carrier"
 											                    		ng-disabled="!vm.isEditable('addonFareCarrier')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 											                    		ng-class="{'must-fill': ditForm.editFormATPCO.addonFareCarrier{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('addonFareCarrier')"/>
 															</td>																
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'action', $event)" ng-class="{highlighted:fare.field['action']}">{{fare.action}}</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'tarno', $event)" ng-class="{highlighted:fare.field['tarno']}">
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'action', $event)" ng-class="{highlighted:fare.field['action'], changed : vm.diff[fare.id].indexOf('action') > -1}">{{fare.action}}</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'tarno', $event)" ng-class="{highlighted:fare.field['tarno'], changed : vm.diff[fare.id].indexOf('tarNo') > -1}">
 																<span class="input-group">
 																	<input type="text" class="form-control" name="addonFareTarno{{$parent.$index}}{{$index}}" id="field_tarcd"
 											                    		ng-model="fare.tariffNumber.tarNo"
@@ -983,7 +983,7 @@
 																	</span>
 																</span>
 															</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'tarcd', $event)" ng-class="{highlighted:fare.field['tarcd']}">
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'tarcd', $event)" ng-class="{highlighted:fare.field['tarcd'], changed : vm.diff[fare.id].indexOf('tarCd') > -1}">
 																<span class="input-group">
 																		<input type="text" class="form-control" name="addonFareTarcd{{$parent.$index}}{{$index}}" id="field_tarcd"
 												                    		ng-model="fare.tariffNumber.tarCd"
@@ -998,8 +998,8 @@
 																		</span>
 																	</span>
 															</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'global', $event)" ng-class="{highlighted:fare.field['global']}">{{fare.tariffNumber.global}}</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'origin', $event)" ng-class="{highlighted:fare.field['origin']}">
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'global', $event)" ng-class="{highlighted:fare.field['global'], changed : vm.diff[fare.id].indexOf('global') > -1}">{{fare.tariffNumber.global}}</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'origin', $event)" ng-class="{highlighted:fare.field['origin'], changed : vm.diff[fare.id].indexOf('origin') > -1}">
 																<span class="input-group">
 																		<input type="text" class="form-control" name="addonFareOrigin{{$parent.$index}}{{$index}}" id="field_carrier"
 												                    		ng-model="fare.origin"
@@ -1014,7 +1014,7 @@
 																		</span>
 																	</span>
 															</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'destination', $event)" ng-class="{highlighted:fare.field['destination']}">
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'destination', $event)" ng-class="{highlighted:fare.field['destination'], changed : vm.diff[fare.id].indexOf('destination') > -1}">
 																<span class="input-group">
 																	<input type="text" class="form-control" name="addonFareDestination{{$parent.$index}}{{$index}}" id="field_carrier"
 											                    		ng-model="fare.destination"
@@ -1029,7 +1029,7 @@
 																	</span>
 																</span>
 															</td>
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'bucket', $event)" ng-class="{highlighted:fare.field['bucket']}">
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'bucket', $event)" ng-class="{highlighted:fare.field['bucket'], changed : vm.diff[fare.id].indexOf('bucket') > -1}">
 																<input type="text" class="form-control" ng-model="fare.bucket" name="addonFareBucket{$parent.$index}}{{$index}}"
 											           				ng-disabled="!vm.isEditable('addonFareBucket') || fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 											           				ng-maxlength="8"
@@ -1042,7 +1042,7 @@
 														            || editForm.editFormATPCO.addonFareBucket{{$parent.$index}}{{$index}}.$error.maxlength && fare.action != 'Canceled'}"	
 														            ng-required="vm.isRequired('addonFareBucket')" />
 															</td>
-										           			<td ng-click="vm.tdClick(workPackageSheet, fare, 'typeOfJourney', $event)" ng-class="{highlighted:fare.field['typeOfJourney']}">
+										           			<td ng-click="vm.tdClick(workPackageSheet, fare, 'typeOfJourney', $event)" ng-class="{highlighted:fare.field['typeOfJourney'], changed : vm.diff[fare.id].indexOf('typeOfJourney') > -1}">
 										           				<select class="form-control" 
 														             name="addonFareTypeOfJourney{{$parent.$index}}{{$index}}"
 														             ng-required="vm.isRequired('addonFareTypeOfJourney')"
@@ -1051,7 +1051,7 @@
 														             ng-disabled="!vm.isEditable('addonFareTypeOfJourney') || fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)"
 														             ng-options="key as value for (key , value) in vm.typeOfJourney"></select>
 										           			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'footnote', $event)" ng-class="{highlighted:fare.field['footnote']}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'footnote', $event)" ng-class="{highlighted:fare.field['footnote'], changed : vm.diff[fare.id].indexOf('footnote1') > -1}">
 									               				<input type="text" class="form-control" name="addonFareFootnote{{$parent.$index}}{{$index}}" id="field_footnote"
 										               					ng-maxlength="2"
 									                					maxlength="2"
@@ -1065,7 +1065,7 @@
 															            ng-required="vm.isRequired('addonFareFootnote')"
 											                    		ng-model="fare.footnote1"/>
 									               			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'zone', $event)" ng-class="{highlighted:fare.field['zone']}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'zone', $event)" ng-class="{highlighted:fare.field['zone'], changed : vm.diff[fare.id].indexOf('zone') > -1}">
 									               				<input type="text" class="form-control" name="addonFareZone{{$parent.$index}}{{$index}}" id="field_footnote"
 															            ng-class="{'must-fill': editForm.editFormATPCO.addonFareZone{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 															            ng-disabled="!vm.isEditable('addonFareZone') || fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) "
@@ -1076,7 +1076,7 @@
 									                					ng-keypress="vm.keypress($event, '^[0-9]{1,3}$')"
 											                    		ng-model="fare.zone"/>
 									               			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'rtgno', $event)" ng-class="{highlighted:fare.field['rtgno']}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'rtgno', $event)" ng-class="{highlighted:fare.field['rtgno'], changed : vm.diff[fare.id].indexOf('rtgno') > -1}">
 									               				<input type="text" class="form-control" name="addonFareRtgno{{$parent.$index}}{{$index}}" id="field_bookingClass"
 										                				ng-disabled="!vm.isEditable('addonFareRtgno') || fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN'  ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 										                				ng-required="vm.isRequired('addonFareRtgno')" 
@@ -1089,7 +1089,7 @@
 										                				|| editForm.editFormATPCO.addonFareRtgno{{$parent.$index}}{{$index}}.$error.maxlength && fare.action != 'Canceled'}"																			            
 															            ng-model="fare.rtgno"/>
 									               			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'currency', $event)" ng-class="{highlighted:fare.field['currency']}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'currency', $event)" ng-class="{highlighted:fare.field['currency'], changed : vm.diff[fare.id].indexOf('currency') > -1}">
 										               			<span class="input-group">
 																		<input type="text" class="form-control" name="addonFareCurrency{{$parent.$index}}{{$index}}" id="field_carrier"
 												                    		ng-model="fare.currency" uppercase
@@ -1103,7 +1103,7 @@
 																		</span>
 																	</span>
 									               			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'amount', $event)" ng-class="{highlighted:fare.field['amount']}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'amount', $event)" ng-class="{highlighted:fare.field['amount'], changed : vm.diff[fare.id].indexOf('amount') > -1}">
 									               				<input type="text" class="form-control" name="addonFareAmount{{$parent.$index}}{{$index}}" id="field_amount"
 										                				ng-disabled="!vm.isEditable('addonFareAmount') || fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) "
 										                				ng-required="vm.isRequired('addonFareAmount')" 
@@ -1119,7 +1119,7 @@
 									               			<td></td>
 									               			<td></td>
 										               		
-										               		<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelStart', $event)" ng-class="{highlighted:fare.field['travelStart']}" >
+										               		<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelStart', $event)" ng-class="{highlighted:fare.field['travelStart'], changed : vm.diff[fare.id].indexOf('travelStart') > -1}" >
 									               				<span class="input-group">
 																	<input id="field_addonFareTravelStartDate" 
 																		type="text"
@@ -1138,7 +1138,7 @@
 																</span>
 									               			</td>
 									               			
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelEnd', $event)" ng-class="{highlighted:fare.field['travelEnd']}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelEnd', $event)" ng-class="{highlighted:fare.field['travelEnd'], changed : vm.diff[fare.id].indexOf('travelEnd') > -1}">
 									               				<span class="input-group">
 																	<input id="field_addonFareTravelEndDate" 
 																		type="text"
@@ -1157,7 +1157,7 @@
 																</span>
 									               			</td>
 									               			
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'saleStart', $event)" ng-class="{highlighted:fare.field['saleStart']}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'saleStart', $event)" ng-class="{highlighted:fare.field['saleStart'], changed : vm.diff[fare.id].indexOf('saleStart') > -1}">
 									               				<span class="input-group">
 																	<input id="field_addonFareSaleStartDate" 
 																		type="text"
@@ -1176,7 +1176,7 @@
 																</span>
 									               			</td>
 									               			
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'saleEnd', $event)" ng-class="{highlighted:fare.field['saleEnd']}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'saleEnd', $event)" ng-class="{highlighted:fare.field['saleEnd'], changed : vm.diff[fare.id].indexOf('saleEnd') > -1}">
 									               				<span class="input-group">
 																	<input id="field_addonFareSaleEndDate" 
 																		type="text"
@@ -1194,13 +1194,13 @@
 																	</span>
 																</span>
 									               			</td>
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'comment', $event)" ng-class="{highlighted:fare.field['comment']}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'comment', $event)" ng-class="{highlighted:fare.field['comment'], changed : vm.diff[fare.id].indexOf('comment') > -1}">
 									               				<input type="text" class="form-control" name="addonFareComment{{$parent.$index}}{{$index}}" id="field_comment"
 									               					ng-disabled="fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)"
 											                    		ng-model="fare.comment"/>
 									               			</td>
 									               			
-									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelComplete', $event)" ng-class="{highlighted:fare.field['travelComplete']}">
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelComplete', $event)" ng-class="{highlighted:fare.field['travelComplete'], changed : vm.diff[fare.id].indexOf('travelComplete') > -1}">
 									               				<span class="input-group">
 																	<input id="field_addonFareTravelComplete" 
 																		type="text"
@@ -1218,7 +1218,7 @@
 																	</span>
 																</span>
 									               			</td>
-									               			<td>
+									               			<td ng-class="{changed : vm.diff[fare.id].indexOf('travelCompleteIndicator') > -1}">
 									               				<select class="form-control" name="addonFareTravelIndicator{{$index}}" id="field_travelIndicator"
 										                				ng-disabled="!vm.isEditable('addonFareTravelIndicator') || fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)"
 										                				ng-required="vm.isRequired('addonFareTravelIndicator')"
@@ -1241,20 +1241,20 @@
 								</div>
 																			
 	
-								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+vm.workPackage.addonFareSheet.length}}" ng-class="{active:vm.currentTabFilingInstruction, 'poiv-none': vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}" ng-if="vm.workPackage.filingInstruction">
+								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+vm.workPackage.addonFareSheet.length}}" ng-class="{active:vm.currentTabFilingInstruction}" ng-if="vm.workPackage.filingInstruction">
 									
 									<div class="box-header"></div>
 									<div class="box-body mb1">
-										<div class="form-group">
+										<div class="form-group" ng-class="{'poiv-none': vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}">
 											<label>Comment</label>
 											<wysiwyg-edit content="vm.commentStringFillingInstruction" config="vm.editorConfig"></wysiwyg-edit>
 										</div>
 										<div class="clearfix">
 											<div class="pull-right">
-												<button class="btn btn-default small btn-secondary" ng-click="vm.deleteCommentFillingInstruction()">Delete Comment</button>
-												<button class="btn btn-default small btn-secondary" ng-click="vm.collapseCommentFillingInstruction()">Collapse Deleted Comment</button>
-												<button class="btn btn-default small btn-secondary" ng-click="vm.expandCommentFillingInstruction()">Expand Deleted Comment</button>
-												<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()">Add Comment</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.deleteCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Delete Comment</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.collapseCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Collapse Deleted Comment</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.expandCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Expand Deleted Comment</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Add Comment</button>
 											</div>
 										</div>		
 									</div>
@@ -1280,28 +1280,28 @@
 								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+vm.workPackage.addonFareSheet.length+1}}" ng-class="{active:vm.currentTabAttachment}" ng-if="vm.workPackage.attachment">
 									<div class="action-btn-wrapper">
 					     				<div class="col-md-12 text-right no-pad">
-					     					<button ng-click="vm.addAttachment()" class="btn btn-primary" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Add</button>
+					     					<button ng-click="vm.addAttachment()" class="btn btn-primary" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Add</button>
 					     				</div>
 					     			</div>
 									<div class="pull-left w50 two-column">
 						                <div class="form-group">
 						                  <label>Approval Reference</label>
 						                  <input type="text" name="attachmentApprovalReference{{$index}}" class="form-control" 
-						                  ng-model="vm.workPackage.attachmentApprovalReference" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
-						                  <button ng-click="vm.generateTourCodeAttachment()" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Generate Tour Code</button>
+						                  ng-model="vm.workPackage.attachmentApprovalReference" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
+						                  <button ng-click="vm.generateTourCodeAttachment()" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Generate Tour Code</button>
 						                </div>
 						              </div>
 						              
 					     			<div class="col-md-12">
 					     				<div class="text-center no-data" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">No Attachment Available</div>							
 						     			<div ng-repeat="attachment in vm.workPackage.attachmentData.slice().reverse() track by $index" class="form-repeat">
-					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION'"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION'}"></span></button>
+					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION' || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION' || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}"></span></button>
 							       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'short'}}</label>
 							       			<div class="row mt1">
 								        		<div class="col-md-6">
 									      			<div class="form-group">
 									      				<label>Comment</label>
-									      				<textarea class="form-control" ng-model="attachment.comment" ng-disabled="attachment.isDeleted ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"></textarea>
+									      				<textarea class="form-control" ng-model="attachment.comment" ng-disabled="attachment.isDeleted ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"></textarea>
 									      			</div>
 								        		</div>
 								        		<div class="col-md-6">
@@ -1313,13 +1313,13 @@
 											                    Open
 											                </button>
 											                <button type="button" ngf-select class="btn btn-secondary"
-											                        ngf-change="vm.setFile($file, attachment)" ng-disabled="attachment.isDeleted||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
+											                        ngf-change="vm.setFile($file, attachment)" ng-disabled="attachment.isDeleted||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
 											                    Add file
 											                </button>
 										                    <div class="form-group mt1">
 																<div class="checkbox-wrapper">
 																	<label class="black" for="inOnly">
-																		<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly" ng-disabled="attachment.isDeleted || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
+																		<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly" ng-disabled="attachment.isDeleted || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
 																		Inter Office Notification
 																	</label>
 																	<label class="black" for="isDeleted">
@@ -1700,7 +1700,7 @@
 						                                  ng-options="key as value for (key , value) in vm.status">
 						                          </select>		
 						                      </td>
-						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'tarcd', $event)" ng-class="{highlighted:fare.field['tarcd']}">
+						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'tarcd', $event)" ng-class="{highlighted:fare.field['tarcd'], changed : vm.diff[fare.id].indexOf('tarCd') > -1}">
 						                      <!--  <input type="text" class="form-control" name="discountTariffCode{{$parent.$index}}{{$index}}" id="field_farebasis"
 						                                    ng-disabled="!vm.isEditable('discountTariffCode')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 						                                    ng-required="vm.isRequired('discountTariffCode') && fare.action != 'Canceled'" 
@@ -1719,7 +1719,7 @@
 														</span>      
 												</span> 	
 						                      </td>																
-						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'loc1Type', $event)" ng-class="{highlighted:fare.field['loc1Type']}">
+						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'loc1Type', $event)" ng-class="{highlighted:fare.field['loc1Type'], changed : vm.diff[fare.id].indexOf('loc1Type') > -1}">
 						                       	 <select class="form-control" 
 						                                   name="discountLoc1Type{{$parent.$index}}{{$index}}"
 						                                   ng-required="vm.isRequired('discountLoc1Type')"
@@ -1728,7 +1728,7 @@
 						                                   ng-disabled="!vm.isEditable('discountLoc1Type')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 						                                   ng-options="key as value for (key , value) in vm.locationType"></select>
 						                      </td>
-						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'loc1', $event)" ng-class="{highlighted:fare.field['loc1']}">						                      
+						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'loc1', $event)" ng-class="{highlighted:fare.field['loc1'], changed : vm.diff[fare.id].indexOf('loc1') > -1}">						                      
 						                     		 <span class="input-group">
 														<input type="text" class="form-control" 
 															name="discountLoc1{{$parent.$index}}{{$index}}" 
@@ -1750,7 +1750,7 @@
 														</span>
 													</span>
 						                      </td>
-						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'loc2Type', $event)" ng-class="{highlighted:fare.field['loc2Type']}">
+						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'loc2Type', $event)" ng-class="{highlighted:fare.field['loc2Type'], changed : vm.diff[fare.id].indexOf('loc2Type') > -1}">
 						                         <select class="form-control" 
 						                                   name="discountLoc2Type{{$parent.$index}}{{$index}}"
 						                                   ng-required="vm.isRequired('discountLoc1Type')"
@@ -1760,7 +1760,7 @@
 						                                   ng-click="$event.stopPropagation()"
 						                                   ng-options="key as value for (key , value) in vm.locationType"></select>
 						                      </td>
-						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'loc2', $event)" ng-class="{highlighted:fare.field['loc2']}">
+						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'loc2', $event)" ng-class="{highlighted:fare.field['loc2'], changed : vm.diff[fare.id].indexOf('loc2') > -1}">
 						                      		<span class="input-group">
 														<input type="text" class="form-control" 
 															name="discountLoc2{{$parent.$index}}{{$index}}" 
@@ -1782,7 +1782,7 @@
 														</span>
 													</span>
 						                      </td>
-						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'baseFareBasis', $event)" ng-class="{highlighted:fare.field['baseFareBasis']}">
+						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'baseFareBasis', $event)" ng-class="{highlighted:fare.field['baseFareBasis'], changed : vm.diff[fare.id].indexOf('baseFareBasis') > -1}">
 						                         <input type="text" class="form-control" name="discountBaseFareBasis{{$parent.$index}}{{$index}}" id="field_baseFareBasis" 
 						                         uppercase
 						                         ng-pattern="/^[a-zA-Z0-9*]*$/"
@@ -1795,7 +1795,7 @@
 										                				editForm.editFormDiscount.discountBaseFareBasis{{$parent.$index}}{{$index}}.$error.pattern}"		
 						                                      ng-model="fare.baseFareBasis"/>
 						                      </td>
-						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'baseRuleNo', $event)" ng-class="{highlighted:fare.field['baseRuleNo']}">
+						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'baseRuleNo', $event)" ng-class="{highlighted:fare.field['baseRuleNo'], changed : vm.diff[fare.id].indexOf('baseRuleNo') > -1}">
 						                        <input type="text" class="form-control" name="discountBaseRuleno{{$parent.$index}}{{$index}}" id="field_origin" 
 						                        ng-maxlength="4"
 							               						uppercase
@@ -1809,14 +1809,14 @@
 										                		}"	
 						                                      ng-model="fare.baseRuleNo"/>
 						                      </td>
-						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'baseTarcd', $event)" ng-class="{highlighted:fare.field['baseTarcd']}">
+						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'baseTarcd', $event)" ng-class="{highlighted:fare.field['baseTarcd'],changed : vm.diff[fare.id].indexOf('baseTarcd') > -1}">
 						                         <input type="text" class="form-control" name="discountBaseTariffCode{{$parent.$index}}{{$index}}" id="field_farebasis"
 						                                    ng-disabled="!vm.isEditable('discountBaseTariffCode')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 						                                    ng-required="vm.isRequired('discountBaseTariffCode') && fare.action != 'Canceled'" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountBaseTariffCode{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
 						                                      ng-model="fare.baseTarcd"/>	
 						                      </td>	
-						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'calcType', $event)" ng-class="{highlighted:fare.field['calcType']}">
+						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'calcType', $event)" ng-class="{highlighted:fare.field['calcType'],changed : vm.diff[fare.id].indexOf('calcType') > -1}">
 						                         <select class="form-control" 
 						                                 name="discountCalcType{{$parent.$index}}{{$index}}"
 						                                 ng-required="vm.isRequired('discountCalcType', fare)"
@@ -1825,14 +1825,14 @@
 						                                 ng-disabled="!vm.isEditable('discountCalcType')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 						                                 ng-options="key as value for (key , value) in vm.calculationType"></select>
 						                      </td>
-						                      	<td ng-click="vm.tdClick(workPackageSheet, fare, 'percentBaseFare', $event)" ng-class="{highlighted:fare.field['percentBaseFare']}">
+						                      	<td ng-click="vm.tdClick(workPackageSheet, fare, 'percentBaseFare', $event)" ng-class="{highlighted:fare.field['percentBaseFare'],changed : vm.diff[fare.id].indexOf('percentBaseFare') > -1}">
 						                           <input type="text" class="form-control" name="discountPercentageOfBaseFare{{$parent.$index}}{{$index}}"
 						                                    ng-disabled="!vm.isEditable('discountPercentageOfBaseFare', fare)|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 						                                    ng-required="vm.isRequired('discountPercentageOfBaseFare', fare) && fare.action != 'Canceled'" 
 						                                    ng-class="{'must-fill': editForm.editFormDiscount.discountPercentageOfBaseFare{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
 						                                      ng-model="fare.percentBaseFare"/>	
 				                            	</td>
-					                          <td ng-click="vm.tdClick(workPackageSheet, fare, 'currency', $event)" ng-class="{highlighted:fare.field['currency']}">
+					                          <td ng-click="vm.tdClick(workPackageSheet, fare, 'currency', $event)" ng-class="{highlighted:fare.field['currency'],changed : vm.diff[fare.id].indexOf('currency') > -1}">
 					                          		<span class="input-group">
 														<input type="text" class="form-control" name="discountFareCurrency{{$parent.$index}}{{$index}}" id="field_carrier"
 								                    		ng-model="fare.currency"
@@ -1846,14 +1846,14 @@
 														</span>
 													</span>					                          	
 					                            </td>
-				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'discountSpecifiedAmount', $event)" ng-class="{highlighted:fare.field['discountSpecifiedAmount']}">
+				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'discountSpecifiedAmount', $event)" ng-class="{highlighted:fare.field['discountSpecifiedAmount'],changed : vm.diff[fare.id].indexOf('discountSpecifiedAmount') > -1}">
 				                                <input type="text" class="form-control" name="discountSpecifiedAmount{{$parent.$index}}{{$index}}"
 				                                    ng-disabled="!vm.isEditable('discountSpecifiedAmount', fare)|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 				                                    ng-required="vm.isRequired('discountSpecifiedAmount', fare)" 
 				                                    ng-class="{'must-fill': editForm.editFormDiscount.discountSpecifiedAmount{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
 				                                      ng-model="fare.discountSpecifiedAmount"/>	
 				                              </td>
-				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'passengerType', $event)" ng-class="{highlighted:fare.field['passengerType']}">
+				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'passengerType', $event)" ng-class="{highlighted:fare.field['passengerType'],changed : vm.diff[fare.id].indexOf('passengerType') > -1}">
 				                              		<span class="input-group">
 														<input type="text" class="form-control" name="discountPaxType{{$parent.$index}}{{$index}}" id="field_carrier"
 								                    		ng-model="fare.passengerType"
@@ -1867,7 +1867,7 @@
 														</span>
 													</span>	
 				                              </td>
-				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'fareType', $event)" ng-class="{highlighted:fare.field['fareType']}">
+				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'fareType', $event)" ng-class="{highlighted:fare.field['fareType'],changed : vm.diff[fare.id].indexOf('fareType') > -1}">
 				                                   <select class="form-control" name="discountFareFareType{{$parent.$index}}{{$index}}" ng-model="fare.fareType" 
 				                                   ng-class="{'must-fill': !editForm.editFormDiscount.discountFareFareType{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"
 														ng-required="vm.isRequired('discountFareFareType', fare)" ng-disabled="!vm.isEditable('discountFareFareType', fare)|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
@@ -1876,7 +1876,7 @@
 														</option>
 													</select>
 				                              </td>
-				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'ticketCode', $event)" ng-class="{highlighted:fare.field['ticketCode']}">
+				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'ticketCode', $event)" ng-class="{highlighted:fare.field['ticketCode'],changed : vm.diff[fare.id].indexOf('ticketCode') > -1}">
 				                                <input type="text" class="form-control" name="discountTicketCode{{$parent.$index}}{{$index}}"
 				                                    ng-disabled="!vm.isEditable('discountTicketCode')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 				                                    ng-maxlength="10"
@@ -1884,7 +1884,7 @@
 				                                    ng-class="{'must-fill': (editForm.editFormDiscount.discountTicketCode{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled') || editForm.editFormDiscount.discountTicketCode{{$parent.$index}}{{$index}}.$invalid}"	
 				                                      ng-model="fare.ticketCode"/>
 				                              </td>
-				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'ticketDesignator', $event)" ng-class="{highlighted:fare.field['ticketDesignator']}">
+				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'ticketDesignator', $event)" ng-class="{highlighted:fare.field['ticketDesignator'],changed : vm.diff[fare.id].indexOf('ticketDesignator') > -1}">
 				                                <input type="text" class="form-control" name="discountTicketDesignator{{$parent.$index}}{{$index}}"
 				                                    ng-disabled="!vm.isEditable('discountTicketDesignator')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 				                                    ng-maxlength="10"
@@ -1892,7 +1892,7 @@
 				                                    ng-class="{'must-fill': (editForm.editFormDiscount.discountTicketDesignator{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled') || editForm.editFormDiscount.discountTicketDesignator{{$parent.$index}}{{$index}}.$invalid}"	
 				                                      ng-model="fare.ticketDesignator"/>	
 				                              </td>
-				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'typeOfJourney', $event)" ng-class="{highlighted:fare.field['typeOfJourney']}">
+				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'typeOfJourney', $event)" ng-class="{highlighted:fare.field['typeOfJourney'],changed : vm.diff[fare.id].indexOf('typeOfJourney') > -1}">
 				                                <select class="form-control" 
 				                                 name="discountBaseFareOwRt{{$parent.$index}}{{$index}}"
 				                                 ng-required="vm.isRequired('discountBaseFareOwRt')"
@@ -1901,35 +1901,35 @@
 				                                 ng-disabled="!vm.isEditable('discountBaseFareOwRt')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 				                                 ng-options="key as value for (key , value) in vm.typeOfJourney"></select>
 				                              </td> 
-				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'global', $event)" ng-class="{highlighted:fare.field['global']}">
+				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'global', $event)" ng-class="{highlighted:fare.field['global'],changed : vm.diff[fare.id].indexOf('global') > -1}">
 				                                <input type="text" class="form-control" name="discountGlobal{{$parent.$index}}{{$index}}"
 				                                    ng-disabled="!vm.isEditable('discountGlobal')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 				                                    ng-required="vm.isRequired('discountGlobal') && fare.action != 'Canceled'" 
 				                                    ng-class="{'must-fill': editForm.editFormDiscount.discountGlobal{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
 				                                      ng-model="fare.global"/>		
 				                              </td>
-				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'rtgno', $event)" ng-class="{highlighted:fare.field['rtgno']}">
+				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'rtgno', $event)" ng-class="{highlighted:fare.field['rtgno'],changed : vm.diff[fare.id].indexOf('rtgno') > -1}">
 				                                <input type="text" class="form-control" name="discountRtgno{{$parent.$index}}{{$index}}"
 				                                    ng-disabled="!vm.isEditable('discountRtgno')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 				                                    ng-required="vm.isRequired('discountRtgno') && fare.action != 'Canceled'" 
 				                                    ng-class="{'must-fill': editForm.editFormDiscount.discountRtgno{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
 				                                      ng-model="fare.rtgno"/>		
 				                              </td>
-				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'rtgnoTarno', $event)" ng-class="{highlighted:fare.field['rtgnoTarno']}">
+				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'rtgnoTarno', $event)" ng-class="{highlighted:fare.field['rtgnoTarno'],changed : vm.diff[fare.id].indexOf('rtgnoTarno') > -1}">
 				                                 <input type="text" class="form-control" name="discountRtgnoTarno{{$parent.$index}}{{$index}}"
 				                                    ng-disabled="!vm.isEditable('discountRtgnoTarno')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 				                                    ng-required="vm.isRequired('discountRtgnoTarno') && fare.action != 'Canceled'" 
 				                                    ng-class="{'must-fill': editForm.editFormDiscount.discountRtgnoTarno{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
 				                                      ng-model="fare.rtgnoTarno"/>		
 				                              </td>
-				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'newFareBasis', $event)" ng-class="{highlighted:fare.field['newFareBasis']}">
+				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'newFareBasis', $event)" ng-class="{highlighted:fare.field['newFareBasis'],changed : vm.diff[fare.id].indexOf('newFareBasis') > -1}">
 				                                <input type="text" class="form-control" name="discountNewFarebasis{{$parent.$index}}{{$index}}"
 				                                    ng-disabled="!vm.isEditable('discountNewFarebasis')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 				                                    ng-required="vm.isRequired('discountNewFarebasis') && fare.action != 'Canceled'" 
 				                                    ng-class="{'must-fill': editForm.editFormDiscount.discountNewFarebasis{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
 				                                      ng-model="fare.newFareBasis"/>	
 				                              </td>
-				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'newTypeOfJourney', $event)" ng-class="{highlighted:fare.field['newTypeOfJourney']}">
+				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'newTypeOfJourney', $event)" ng-class="{highlighted:fare.field['newTypeOfJourney'],changed : vm.diff[fare.id].indexOf('newTypeOfJourney') > -1}">
 				                                <select class="form-control" 
 				                                 name="discountNewBaseFareOwRt{{$parent.$index}}{{$index}}"
 				                                 ng-required="vm.isRequired('discountNewBaseFareOwRt')"
@@ -1938,14 +1938,14 @@
 				                                 ng-disabled="!vm.isEditable('discountNewBaseFareOwRt')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 				                                 ng-options="key as value for (key , value) in vm.typeOfJourney"></select>
 				                              </td>
-				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'newBookingCode', $event)" ng-class="{highlighted:fare.field['newBookingCode']}">
+				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'newBookingCode', $event)" ng-class="{highlighted:fare.field['newBookingCode'],changed : vm.diff[fare.id].indexOf('newBookingCode') > -1}">
 				                                <input type="text" class="form-control" name="discountNewBookingCode{{$parent.$index}}{{$index}}"
 				                                    ng-disabled="!vm.isEditable('discountNewBookingCode')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 				                                    ng-required="vm.isRequired('discountNewBookingCode') && fare.action != 'Canceled'" 
 				                                    ng-class="{'must-fill': editForm.editFormDiscount.discountNewBookingCode{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
 				                                      ng-model="fare.newBookingCode"/>
 				                              </td>                            
-				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'travelStart', $event)" ng-class="{highlighted:fare.field['travelStart']}">
+				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'travelStart', $event)" ng-class="{highlighted:fare.field['travelStart'],changed : vm.diff[fare.id].indexOf('travelStart') > -1}">
 						               				<span class="input-group">
 														<input id="field_startDate" 
 															type="text"
@@ -1963,7 +1963,7 @@
 														</span>
 													</span>
 						               		  </td>
-											  <td ng-click="vm.tdClick(workPackageSheet, fare, 'travelEnd', $event)" ng-class="{highlighted:fare.field['travelEnd']}">
+											  <td ng-click="vm.tdClick(workPackageSheet, fare, 'travelEnd', $event)" ng-class="{highlighted:fare.field['travelEnd'],changed : vm.diff[fare.id].indexOf('travelEnd') > -1}">
 						               				<span class="input-group">
 														<input id="field_startDate" 
 															type="text"
@@ -1981,7 +1981,7 @@
 														</span>
 													</span>
 						               		  </td>
-				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'saleStart', $event)" ng-class="{highlighted:fare.field['saleStart']}">
+				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'saleStart', $event)" ng-class="{highlighted:fare.field['saleStart'],changed : vm.diff[fare.id].indexOf('saleStart') > -1}">
 						               				<span class="input-group">
 														<input id="field_startDate" 
 															type="text"
@@ -1999,7 +1999,7 @@
 														</span>
 													</span>
 						               		  </td>
-						               		  <td ng-click="vm.tdClick(workPackageSheet, fare, 'saleEnd', $event)" ng-class="{highlighted:fare.field['saleEnd']}">
+						               		  <td ng-click="vm.tdClick(workPackageSheet, fare, 'saleEnd', $event)" ng-class="{highlighted:fare.field['saleEnd'],changed : vm.diff[fare.id].indexOf('saleEnd') > -1}">
 						               				<span class="input-group">
 														<input id="field_startDate" 
 															type="text"
@@ -2017,7 +2017,7 @@
 														</span>
 													</span>
 						               		  </td>
-				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'comment', $event)" ng-class="{highlighted:fare.field['comment']}">
+				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'comment', $event)" ng-class="{highlighted:fare.field['comment'],changed : vm.diff[fare.id].indexOf('comment') > -1}">
 				                                 <input type="text" class="form-control" name="discountComment{{$parent.$index}}{{$index}}"
 				                                    ng-disabled="!vm.isEditable('discountComment')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 				                                    ng-click="$event.stopPropagation()"
@@ -2025,7 +2025,7 @@
 				                                    ng-class="{'must-fill': editForm.editFormDiscount.discountComment{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
 				                                      ng-model="fare.comment"/>	
 				                              </td>
-				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'travelComplete', $event)" ng-class="{highlighted:fare.field['travelComplete']}">
+				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'travelComplete', $event)" ng-class="{highlighted:fare.field['travelComplete'],changed : vm.diff[fare.id].indexOf('travelComplete') > -1}">
 						               				<span class="input-group">
 														<input id="field_startDate" 
 															type="text"
@@ -2043,7 +2043,7 @@
 														</span>
 													</span>
 						               		  </td>
-				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'travelCompleteIndicator', $event)" ng-class="{highlighted:fare.field['travelCompleteIndicator']}">
+				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'travelCompleteIndicator', $event)" ng-class="{highlighted:fare.field['travelCompleteIndicator'],changed : vm.diff[fare.id].indexOf('travelCompleteIndicator')}">
 				                                <input type="text" class="form-control" name="discountTravelCompleteIndicator{{$parent.$index}}{{$index}}"
 				                                    ng-disabled="!vm.isEditable('discountTravelCompleteIndicator')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 				                                    ng-required="vm.isRequired('discountTravelCompleteIndicator') && fare.action != 'Canceled'" 

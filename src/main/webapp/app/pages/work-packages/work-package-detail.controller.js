@@ -5152,6 +5152,7 @@
     				  copiedFare.no = workPackageSheet.fares.length+1;
     				  copiedFare.status = "PENDING";
     				  copiedFare.action = "A";
+    				  copiedFare.id = null;
     				  copiedFare.field = null;
     				  workPackageSheet.fares.push(copiedFare);
     			  }
@@ -5175,6 +5176,7 @@
 //    				  copiedFare.no = workPackageSheet.fares.length+1;
     				  copiedFare.status = "PENDING";
     				  copiedFare.field = null;
+    				  copiedFare.id = null;
 //    				  workPackageSheet.fares.push(copiedFare);
     				  fares.push(copiedFare);
     			  }
@@ -5207,6 +5209,7 @@
 	    			  else{
 	    				  result.content[x].action = "A";
 	    			  }	    			  
+	    			  result.content[x].id = null;
 	    			  result.content[x].travelStart = DateUtils.convertDateTimeFromServer(result.content[x].travelStart);
 	    			  result.content[x].travelEnd = DateUtils.convertDateTimeFromServer(result.content[x].travelEnd);
 	    			  result.content[x].saleStart = DateUtils.convertDateTimeFromServer(result.content[x].saleStart);
@@ -5843,6 +5846,7 @@
     	  }
     	  else{
     		  if(index != null){
+    			  vm.diff = [];
     			  vm.checkDiff(workPackageSheet.fares, workPackageSheet.fareVersion[index].fares);
     			  workPackageSheet.currentFares = workPackageSheet.fareVersion[index].fares;
     		  }
@@ -5851,88 +5855,234 @@
             
       vm.checkDiff = function(current, version){
     	  vm.diff = [];
-    	  if(current.length == version.length){
-    		if(current[0].status != version[0].status){
-    			vm.diff.push('status');
-    		}
-    		if(current[0].tariffNumber.tarNo != version[0].tariffNumber.tarNo){
-    			vm.diff.push('tarNo');
-    		}
-    		if(current[0].tariffNumber.tarCd != version[0].tariffNumber.tarCd){
-    			vm.diff.push('tarCd');
-    		}
-    		if(current[0].tariffNumber.global != version[0].tariffNumber.global){
-    			vm.diff.push('global');
-    		}
-    		if(current[0].origin != version[0].origin){
-    			vm.diff.push('origin');
-    		}
-    		if(current[0].destination != version[0].destination){
-    			vm.diff.push('destination');
-    		}
-    		if(current[0].fareBasis != version[0].fareBasis){
-    			vm.diff.push('fareBasis');
-    		}
-    		if(current[0].bookingClass != version[0].bookingClass){
-    			vm.diff.push('bookingClass');
-    		}
-    		if(current[0].cabin != version[0].cabin){
-    			vm.diff.push('cabin');
-    		}
-    		if(current[0].typeOfJourney != version[0].typeOfJourney){
-    			vm.diff.push('typeOfJourney');
-    		}
-    		if(current[0].footnote1 != version[0].footnote1){
-    			vm.diff.push('footnote1');
-    		}
-    		if(current[0].rtgno != version[0].rtgno){
-    			vm.diff.push('rtgno');
-    		}
-    		if(current[0].ruleno != version[0].ruleno){
-    			vm.diff.push('ruleno');
-    		}
-    		if(current[0].currency != version[0].currency){
-    			vm.diff.push('currency');
-    		}
-    		if(current[0].amount != version[0].amount){
-    			vm.diff.push('amount');
-    		}
-    		if(current[0].amtDiff != version[0].amtDiff){
-    			vm.diff.push('amtDiff');
-    		}
-    		if(current[0].amtPercentDiff != version[0].amtPercentDiff){
-    			vm.diff.push('amtPercentDiff');
-    		}
-    		if(current[0].aif != version[0].aif){
-    			vm.diff.push('aif');
-    		}
-    		if(current[0].travelStart != version[0].travelStart){
-    			vm.diff.push('travelStart');
-    		}
-    		if(current[0].travelEnd != version[0].travelEnd){
-    			vm.diff.push('travelEnd');
-    		}
-    		if(current[0].saleStart != version[0].saleStart){
-    			vm.diff.push('saleStart');
-    		}
-    		if(current[0].saleEnd != version[0].saleEnd){
-    			vm.diff.push('saleEnd');
-    		}
-    		if(current[0].comment != version[0].comment){
-    			vm.diff.push('comment');
-    		}
-    		if(current[0].travelComplete != version[0].travelComplete){
-    			vm.diff.push('travelComplete');
-    		}
-    		if(current[0].travelCompleteIndicator != version[0].travelCompleteIndicator){
-    			vm.diff.push('travelCompleteIndicator');
-    		}
-    		if(current[0].ratesheetComment != version[0].ratesheetComment){
-    			vm.diff.push('ratesheetComment');
-    		}
-    	  }else{
-    		  console.log("field beda");
+    	  var idObject =[];
+    	  var colorDiff = false;
+    	  
+    	  if(current.length == 0){
+    		  for(var y = 0; y< version.length; y++){ 
+    			 vm.diff[version[y].id]=['prevPercentAmountDiff','prevAmountDiff','prevAmount','percentBaseFare','passengerType','overrideIndicator','newTypeOfJourney','newFareBasis','newBookingCode','minStay','maxStay','loc2Type','loc1Type','loc2','loc1','itinerary','fareType','dowIn','discountSpecifiedAmount','direction','dealCode','calcType','cabinClass','status','bucket', 'carrier','tarNo','tarCd','global','origin','destination','fareBasis','bookingClass','cabin',
+    					  'typeOfJourney','typeOfJourney','typeOfJourney','typeOfJourney','recommendedAmount','typeOfJourney','footnote1','rtgno','ruleno','currency', 'amount','amtDiff','amtPercentDiff', 'aif', 'action','no',
+        				  'travelStart','travelEnd', 'saleStart','saleEnd','comment','travelComplete','travelCompleteIndicator','ratesheetComment'];
+    			  }
     	  }
+    	  for(var x = 0; x< current.length; x++){
+    		  for(var y = 0; y< version.length; y++){ 
+    			  if(current[x].id == version[y].id){
+    				  idObject.push(version[y]);
+    			  }    			  
+    			  if(idObject.length == 0){
+    				  vm.diff[version[y].id]=['prevPercentAmountDiff','prevAmountDiff','prevAmount','percentBaseFare','passengerType','overrideIndicator','newTypeOfJourney','newFareBasis','newBookingCode','minStay','maxStay','loc2Type','loc1Type','loc2','loc1','itinerary','fareType','dowIn','discountSpecifiedAmount','direction','dealCode','calcType','cabinClass','status','bucket', 'carrier','tarNo','tarCd','global','origin','destination','fareBasis','bookingClass','cabin',
+    					  'typeOfJourney','recommendedAmount','typeOfJourney','footnote1','rtgno','ruleno','currency', 'amount','amtDiff','amtPercentDiff', 'aif', 'action','no','rtgnoTarno',
+        				  'travelStart','travelEnd', 'saleStart','saleEnd','comment','travelComplete','travelCompleteIndicator','ratesheetComment','baseRuleNo','baseFareBasis','baseTarcd','ticketCode','ticketDesignator'];
+    			  }else{
+    				  colorDiff = true;    				  
+    			  }
+    		  }
+    		  if(colorDiff){    			  
+        		  for(var y=0; y<idObject.length;y++){
+    			    if(current[x].id == idObject[y].id){
+    			    	if(vm.diff[idObject[y].id] == null){
+    	    				  vm.diff[idObject[y].id] = [];  
+    	    			    }    	    		
+    	    				if(current[x].status != idObject[y].status){
+    	    	    			vm.diff[idObject[y].id].push('status');
+    	      	    		}
+    	      	    		if(current[x].ticketCode != idObject[y].ticketCode){
+    	    	    			vm.diff[idObject[y].id].push('ticketCode');
+    	      	    		}
+    	      	    		if(current[x].ticketDesignator != idObject[y].ticketDesignator){
+    	    	    			vm.diff[idObject[y].id].push('ticketDesignator');
+    	      	    		}
+    	    				if(current[x].baseTarcd != idObject[y].baseTarcd){
+    	    	    			vm.diff[idObject[y].id].push('baseTarcd');
+    	      	    		}
+    	    				if(current[x].recommendedAmount != idObject[y].recommendedAmount){
+    	    	    			vm.diff[idObject[y].id].push('recommendedAmount');
+    	      	    		}    	    				
+    	    				if(current[x].newBookingCode != idObject[y].newBookingCode){
+    	    	    			vm.diff[idObject[y].id].push('newBookingCode');
+    	      	    		}
+    	    				if(current[x].newFareBasis != idObject[y].newFareBasis){
+    	    	    			vm.diff[idObject[y].id].push('newFareBasis');
+    	      	    		}
+    	    				if(current[x].newTypeOfJourney != idObject[y].newTypeOfJourney){
+    	    	    			vm.diff[idObject[y].id].push('newTypeOfJourney');
+    	      	    		}
+    	    				if(current[x].overrideIndicator != idObject[y].overrideIndicator){
+    	    	    			vm.diff[idObject[y].id].push('overrideIndicator');
+    	      	    		}
+    	    				if(current[x].passengerType != idObject[y].passengerType){
+    	    	    			vm.diff[idObject[y].id].push('passengerType');
+    	      	    		}
+    	    				if(current[x].percentBaseFare != idObject[y].percentBaseFare){
+    	    	    			vm.diff[idObject[y].id].push('percentBaseFare');
+    	      	    		}
+    	    				if(current[x].prevAmount != idObject[y].prevAmount){
+    	    	    			vm.diff[idObject[y].id].push('prevAmount');
+    	      	    		}
+    	    				if(current[x].prevAmountDiff != idObject[y].prevAmountDiff){
+    	    	    			vm.diff[idObject[y].id].push('prevAmountDiff');
+    	      	    		}
+    	    				if(current[x].prevPercentAmountDiff != idObject[y].prevPercentAmountDiff){
+    	    	    			vm.diff[idObject[y].id].push('prevPercentAmountDiff');
+    	      	    		}
+    	    				if(current[x].minStay != idObject[y].minStay){
+    	    	    			vm.diff[idObject[y].id].push('minStay');
+    	      	    		}
+    	    				if(current[x].cabinClass != idObject[y].cabinClass){
+    	    	    			vm.diff[idObject[y].id].push('cabinClass');
+    	      	    		}
+    	    				if(current[x].calcType != idObject[y].calcType){
+    	    	    			vm.diff[idObject[y].id].push('calcType');
+    	      	    		}
+    	    				if(current[x].dealCode != idObject[y].dealCode){
+    	    	    			vm.diff[idObject[y].id].push('dealCode');
+    	      	    		}
+    	    				if(current[x].direction != idObject[y].direction){
+    	    	    			vm.diff[idObject[y].id].push('direction');
+    	      	    		}
+    	    				if(current[x].dowIn != idObject[y].dowIn){
+    	    	    			vm.diff[idObject[y].id].push('dowIn');
+    	      	    		}
+    	    				if(current[x].dowOut != idObject[y].dowOut){
+    	    	    			vm.diff[idObject[y].id].push('dowOut');
+    	      	    		}
+    	    				if(current[x].fareType != idObject[y].fareType){
+    	    	    			vm.diff[idObject[y].id].push('fareType');
+    	      	    		}
+    	    				if(current[x].itinerary != idObject[y].itinerary){
+    	    	    			vm.diff[idObject[y].id].push('itinerary');
+    	      	    		}
+    	    				if(current[x].loc1 != idObject[y].loc1){
+    	    	    			vm.diff[idObject[y].id].push('loc1');
+    	      	    		}
+    	    				if(current[x].loc2 != idObject[y].loc2){
+    	    	    			vm.diff[idObject[y].id].push('loc2');
+    	      	    		}
+    	    				if(current[x].loc1Type != idObject[y].loc1Type){
+    	    	    			vm.diff[idObject[y].id].push('loc1Type');
+    	      	    		}
+    	    				if(current[x].loc2Type != idObject[y].loc2Type){
+    	    	    			vm.diff[idObject[y].id].push('loc2Type');
+    	      	    		}
+    	    				if(current[x].maxStay != idObject[y].maxStay){
+    	    	    			vm.diff[idObject[y].id].push('maxStay');
+    	      	    		}
+    	    				if(current[x].discountSpecifiedAmount != idObject[y].discountSpecifiedAmount){
+    	    	    			vm.diff[idObject[y].id].push('discountSpecifiedAmount');
+    	      	    		}
+    	    				try {
+    	    					if(current[x].tariffNumber.tarNo != idObject[y].tariffNumber.tarNo){
+        	      	    			vm.diff[idObject[y].id].push('tarNo');
+        	      	    		}
+    	      	    		}
+    	      	    		catch(err) {
+    	      	    			if(current[x].tarno != idObject[y].tarno){
+        	      	    			vm.diff[idObject[y].id].push('tarCd');
+        	      	    		}
+    	      	    		}
+    	      	    		try {
+    	      	    			if(current[x].tariffNumber.tarCd != idObject[y].tariffNumber.tarCd){
+        	      	    			vm.diff[idObject[y].id].push('tarCd');
+        	      	    		}
+    	      	    		}
+    	      	    		catch(err) {
+    	      	    			if(current[x].tarcd != idObject[y].tarcd){
+        	      	    			vm.diff[idObject[y].id].push('tarCd');
+        	      	    		}
+    	      	    		}
+    	      	    		try {
+    	      	    			if(current[x].tariffNumber.global != idObject[y].tariffNumber.global){
+        	      	    			vm.diff[idObject[y].id].push('global');
+        	      	    		}
+    	      	    		}
+    	      	    		catch(err) {
+    	      	    			if(current[x].global != idObject[y].global){
+        	      	    			vm.diff[idObject[y].id].push('global');
+        	      	    		}
+    	      	    		}
+    	      	    		if(current[x].rtgnoTarno != idObject[y].rtgnoTarno){
+    	      	    			vm.diff[idObject[y].id].push('rtgnoTarno');
+    	      	    		}
+    	      	    		if(current[x].baseFareBasis != idObject[y].baseFareBasis){
+    	      	    			vm.diff[idObject[y].id].push('baseFareBasis');
+    	      	    		}
+    	      	    		if(current[x].baseRuleNo != idObject[y].baseRuleNo){
+    	      	    			vm.diff[idObject[y].id].push('baseRuleNo');
+    	      	    		}
+    	      	    		if(current[x].origin != idObject[y].origin){
+    	      	    			vm.diff[idObject[y].id].push('origin');
+    	      	    		}
+    	      	    		if(current[x].destination != idObject[y].destination){
+    	      	    			vm.diff[idObject[y].id].push('destination');
+    	      	    		}
+    	      	    		if(current[x].fareBasis != idObject[y].fareBasis){
+    	      	    			vm.diff[idObject[y].id].push('fareBasis');
+    	      	    		}
+    	      	    		if(current[x].bookingClass != idObject[y].bookingClass){
+    	      	    			vm.diff[idObject[y].id].push('bookingClass');
+    	      	    		}
+    	      	    		if(current[x].cabin != idObject[y].cabin){
+    	      	    			vm.diff[idObject[y].id].push('cabin');
+    	      	    		}
+    	      	    		if(current[x].typeOfJourney != idObject[y].typeOfJourney){
+    	      	    			vm.diff[idObject[y].id].push('typeOfJourney');
+    	      	    		}
+    	      	    		if(current[x].footnote1 != idObject[y].footnote1){
+    	      	    			vm.diff[idObject[y].id].push('footnote1');
+    	      	    		}
+    	      	    		if(current[x].rtgno != idObject[y].rtgno){
+    	      	    			vm.diff[idObject[y].id].push('rtgno');
+    	      	    		}
+    	      	    		if(current[x].ruleno != idObject[y].ruleno){
+    	      	    			vm.diff[idObject[y].id].push('ruleno');
+    	      	    		}
+    	      	    		if(current[x].currency != idObject[y].currency){
+    	      	    			vm.diff[idObject[y].id].push('currency');
+    	      	    		}
+    	      	    		if(current[x].amount != idObject[y].amount){
+    	      	    			vm.diff[idObject[y].id].push('amount');
+    	      	    		}
+    	      	    		if(current[x].amtDiff != idObject[y].amtDiff){
+    	      	    			vm.diff[idObject[y].id].push('amtDiff');
+    	      	    		}
+    	      	    		if(current[x].amtPercentDiff != idObject[y].amtPercentDiff){
+    	      	    			vm.diff[idObject[y].id].push('amtPercentDiff');
+    	      	    		}
+    	      	    		if(current[x].aif != idObject[y].aif){
+    	      	    			vm.diff[idObject[y].id].push('aif');
+    	      	    		}
+    	      	    		if(current[x].travelStart != idObject[y].travelStart){
+    	      	    			vm.diff[idObject[y].id].push('travelStart');
+    	      	    		}
+    	      	    		if(current[x].travelEnd != idObject[y].travelEnd){
+    	      	    			vm.diff[idObject[y].id].push('travelEnd');
+    	      	    		}
+    	      	    		if(current[x].saleStart != idObject[y].saleStart){
+    	      	    			vm.diff[idObject[y].id].push('saleStart');
+    	      	    		}
+    	      	    		if(current[x].saleEnd != idObject[y].saleEnd){
+    	      	    			vm.diff[idObject[y].id].push('saleEnd');
+    	      	    		}
+    	      	    		if(current[x].comment != idObject[y].comment){
+    	      	    			vm.diff[idObject[y].id].push('comment');
+    	      	    		}
+    	      	    		if(current[x].travelComplete != idObject[y].travelComplete){
+    	      	    			vm.diff[idObject[y].id].push('travelComplete');
+    	      	    		}
+    	      	    		if(current[x].travelCompleteIndicator != idObject[y].travelCompleteIndicator){
+    	      	    			vm.diff[idObject[y].id].push('travelCompleteIndicator');
+    	      	    		}
+    	      	    		if(current[x].ratesheetComment != idObject[y].ratesheetComment){
+    	      	    			vm.diff[idObject[y].id].push('ratesheetComment');
+    	      	    		} 
+    	      	    		if(current[x].bucket != idObject[y].bucket){
+    	      	    			vm.diff[idObject[y].id].push('bucket');
+    	      	    		} 
+    			      }    			    
+    			  }
+        	  }
+    	  }    	  
       }
             
 
