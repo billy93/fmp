@@ -3,6 +3,7 @@ package com.atibusinessgroup.fmp.repository.custom;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,28 +92,38 @@ public class AtpcoFootnoteQueryCustomRepository {
 
 				if (param.getCxr() != null && !param.getCxr().isEmpty()) {
 					and.add(new BasicDBObject("cxr_code", param.getCxr()));
+				} else {
+					and.add(new BasicDBObject("cxr_code", new BasicDBObject("$exists", "true")));
 				}
 
 				if (param.getTarNo()!= null && !param.getTarNo().isEmpty()) {
 					and.add(new BasicDBObject("fare_tar_no", param.getTarNo()));
+				} else {
+					and.add(new BasicDBObject("fare_tar_no", new BasicDBObject("$exists", "true")));
 				}
+
 
 				if (param.getFtnt() != null && !param.getFtnt().isEmpty()) {
 					and.add(new BasicDBObject("ftnt", param.getFtnt()));
+				} else {
+					and.add(new BasicDBObject("ftnt", new BasicDBObject("$exists", "true")));
 				}
+
 				
 				if (param.getCatNo() != null && !param.getCatNo().isEmpty()) {
 					if(param.getCatNo().equalsIgnoreCase("comb")) {
-						String[] comb = {"014","015"};
 								
-						and.add(new BasicDBObject("cat_no", new BasicDBObject("$in", comb)));
+						and.add(new BasicDBObject("cat_no", new BasicDBObject("$in", Arrays.asList("014","015"))));
 						
 						System.out.println(and.toString());
 					} else {
 						and.add(new BasicDBObject("cat_no", param.getCatNo()));
 					}
 					
+				} else {
+					and.add(new BasicDBObject("cat_no", new BasicDBObject("$exists", "true")));
 				}
+
 
 				if (and.size() > 0) {
 					andQuery.append("$and", and);
