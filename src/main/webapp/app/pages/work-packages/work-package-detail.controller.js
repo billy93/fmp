@@ -5388,7 +5388,7 @@
       
       
       vm.tdClick = function(workPackageSheet, fare, f, event){
-    	  if (event.shiftKey){
+    	  if (event.ctrlKey){
 
     	  }else{
     		  for(var x=0;x<workPackageSheet.fares.length;x++){
