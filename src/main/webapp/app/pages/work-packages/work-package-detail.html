@@ -321,6 +321,514 @@
 							
 							<div class="tab-content">
 							
+								<div class="tab-pane" id="tabAtpco{{$index}}" ng-class="{active:vm.currentTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.fareSheet track by $index">
+									<div class="pb1 mb1 bbgrey">
+										<div class="clearfix">
+											<div class="pull-left w50 two-column">
+												<div class="form-group">
+													<label>Description</label>
+													<input type="text" name="description{{$index}}" class="form-control"
+													ng-class="{'must-fill': editForm.editFormATPCO.description{{$index}}.$error.required && fare.action != 'Canceled'}"
+									         		ng-model="workPackageSheet.specifiedFaresName" 
+									         		ng-required="vm.isRequired('description')"  
+									         		ng-disabled="!vm.isEditable('description')|| vm.workPackage.status=='WITHDRAWN'  ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
+												</div>
+											</div>
+											<div class="pull-left w50 two-column">
+												<div class="form-group">
+													<label>Approval Reference</label>
+													<input type="text" name="approvalReference{{$index}}" class="form-control" 
+													ng-class="{'must-fill': editForm.editFormATPCO.approvalReference{{$index}}.$error.required}"
+										            ng-model="workPackageSheet.approvalReference"
+													ng-disabled="!vm.isEditable('approvalReference')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+													ng-required="vm.isRequired('approvalReference')">
+													<button ng-click="vm.generateTourCode(workPackageSheet)" ng-disabled="!vm.isEditable('approvalReference')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Generate Tour Code</button>
+												</div>
+											</div>
+										</div>
+										
+										<div class="clearfix">
+											<div class="pull-left w50 two-column">
+												<div class="form-group">
+													<label>Fare Type</label>	
+												<select class="form-control" name="fareType{{$index}}" ng-model="workPackageSheet.fareType" ng-class="{'must-fill': !editForm.editFormATPCO.fareType{{$index}}.$valid && fare.action != 'Canceled'}"
+													ng-required="vm.checkRequiredField('fareType')" ng-disabled="!vm.isEditable('fareType') || vm.workPackage.status=='WITHDRAWN'  ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
+													<option ng-repeat="fare in vm.optionFare track by $index" value="{{fare.name}}">
+														{{fare.code}} | {{fare.name}}
+													</option>
+												</select>									      				
+												</div>
+											</div>
+											<div class="pull-left w50 two-column">
+												<div class="form-group">
+													<label>Version</label>
+													<select class="form-control" ng-model="workPackageSheet.version" 
+													ng-change="vm.changeVersion(workPackageSheet, workPackageSheet.version)" 
+													ng-init="vm.changeVersion(workPackageSheet, 'current')">
+														<option value='current'>Current</option>
+														<option ng-repeat="version in workPackageSheet.fareVersion track by $index" ng-selected="{{version.version == workPackageSheet.version}}" value="{{$index}}">
+															{{version.version}} - {{version.username}} - {{version.action}}
+														</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+									
+									<!-- table details-->
+									<div class="table-wrapper">
+										<div class="datatable-wrapper form-inline">
+											<div class="clearfix">
+												<div class="pull-left">
+													<div class="clearfix">
+														<div class="pull-right datatable-button">
+															<div class="button-group dropdown custom">
+																<button class="btn btn-default small btn-secondary" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}"></i></button>
+																<ul class="dropdown-menu custom" role="menu">
+																    <li>
+																    	<a ng-click="vm.clearSelection(workPackageSheet)">Clear Selection</a>
+																    </li>	
+																    <li>
+																    	<a ng-click="vm.fillDown(workPackageSheet)">Fill Down</a>
+																    </li>	
+																     <li>
+															    		<a ng-click="vm.searchReplace(workPackageSheet)">Search/Replace</a>
+															   		 </li>
+																     <li>
+															    		<a ng-click="vm.copySelectedFares(workPackageSheet, 'workorder-fares')">Copy Selected Rows</a>
+															   		 </li>
+																    <li>
+																    	<a ng-click="vm.addFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Add Rows</a>
+																    </li>
+																    <li>
+																    	<a ng-click="vm.duplicateSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Duplicate Selected Rows</a>
+																    </li>
+																    <li>
+																    	<a ng-click="vm.deleteSelectedFares(workPackageSheet)" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION'" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION'}">Delete Selected Rows</a>
+																    </li>
+																     														   
+																    
+																    <li>
+																    	<a ng-click="vm.pasteFares(workPackageSheet)">Paste</a>
+																    </li>
+																    <li>
+																    	<a ng-click="vm.pasteFares(workPackageSheet, true)">Paste As Cancel</a>
+																    </li>
+																    
+																    <li>
+																    	<a ng-click="vm.updateLatestFare(workPackageSheet)">Update With Latest Fare</a>
+																    </li>
+																    
+																    <li>
+																    	<a ng-click="vm.updateActionCodes(workPackageSheet)">Update Action Codes</a>
+																    </li>
+																    <li>
+																   	 <a ng-click="vm.expandCityGroup(workPackageSheet, 'discount')">Expand City Groups</a>
+																    </li>
+																</ul>
+															</div>													
+															<button class="btn btn-default small btn-secondary" ngf-select  ngf-change="vm.importFare($file, $index)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Import</button>
+															<button class="btn btn-default small btn-secondary" ng-click="vm.exportFares($index)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Export</button>
+															<!-- <button class="btn btn-default small btn-secondary">Publish</button> -->
+															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.agent()" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || vm.disabledField(vm.workPackage)">Agents</button>
+															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN'|| vm.disabledField(vm.workPackage)">Rate Sheet</button> 
+															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.routemap()" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Route Map</button>
+															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.moveUpFare(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Move Up</button>
+															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.moveDownFare(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Move Down</button> 
+														</div>
+													</div>																						
+												</div>
+											</div>
+											<div class="table-responsive">
+												<table class="table table-stripped table-bordered datatable" ng-init="vm.sort(workPackageSheet, '#')">
+													<thead>
+														<tr role="row">
+															<th class="sorting_asc" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" aria-sort="ascending">No</th>
+															<th class="sorting_asc" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" aria-sort="ascending"># <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, '#')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Status <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'status')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Carrier <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'carrier')"></span>
+																<div class="resize-div"></div>
+															</th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Action <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'action')"></span>
+																<div class="resize-div"></div>
+															</th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tar No <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'tariffNumber.tarNo')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tar Cd <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'tariffNumber.tarCd')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Global <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'tariffNumber.global')"></span>
+															</th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Origin <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'origin')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Dest <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'destination')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Fare Cls <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'fareBasis')"></span>
+																<div class="resize-div"></div>
+															</th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Bkg Cls <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'bookingClass')"></span>
+															</th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Cabin <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'cabin')"></span>
+																<div class="resize-div" style="min-width: 120px"></div>
+															</th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">OW/RT <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'typeOfJourney')"></span>
+																<div class="resize-div" style="min-width: 120px"></div>
+															</th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Ftnt <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'footnote')"></span>
+																<div class="resize-div"></div>
+															</th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Rtg No <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'rtgno')"></span>
+																<div class="resize-div"></div>
+															</th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Rule No <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'ruleno')"></span>
+																<div class="resize-div"></div>
+															</th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Curr <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'currency')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Base Amt <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'amount')"></span>
+																<div class="resize-div" style="min-width: 120px"></div>
+															</th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Amt Diff</th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">% Amt Diff</th>															
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Target Aif <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'aif')"></span>
+																<div class="resize-div"></div>
+															</th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Travel Start <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelStart')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Travel End <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelEnd')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Sale Start <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'saleStart')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Sale End <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'saleEnd')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Comment <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'comment')"></span>
+																<div class="resize-div" style="min-width: 200px;"></div>
+															</th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Travel Complete <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelComplete')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Travel Complete Indicator <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelCompleteIndicator')"></span></th>
+															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Ratesheet Comment <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'ratesheetComment')"></span>
+																<div class="resize-div" style="min-width: 200px;"></div>
+															</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr ng-click="vm.tbodyClick(workPackageSheet)" ng-repeat="(key, fare) in workPackageSheet.currentFares track by $index" role="row" class="datatable-row" ng-class="{'poiv-none':workPackageSheet.version != 'current', 'pasteAsCancel': fare.action == 'X','approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}" ng-init="
+															fare.no == null || fare.no == undefined ? 
+															fare.no = $index+1 : fare.no = fare.no">
+															<td>{{$index+1}}</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['no']}" name="no{{$parent.$index}}{{$index}}" >{{fare.no}}</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'status', $event)" ng-class="{highlighted:fare.field['status']}">
+																<select class="form-control inside-table" name="status{{$parent.$index}}{{$index}}" ng-model="fare.status" id="field_status" 
+																	ng-class="{'must-fill': !editForm.editFormATPCO.status{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"												         		
+								           							ng-disabled="!vm.isEditable('status')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+													             	ng-required="vm.isRequired('status')"
+													             	ng-options="key as value for (key , value) in vm.status">
+																</select>	
+															</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'carrier', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['carrier']}">
+																<input type="text" class="form-control" name="carrier{{$parent.$index}}{{$index}}" id="field_carrier"
+											                    		ng-model="fare.carrier"
+											                    		ng-disabled="!vm.isEditable('carrier')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)" 
+											                    		ng-class="{'must-fill': editForm.editFormATPCO.carrier{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
+															            ng-required="vm.isRequired('carrier')"/>
+															</td>																
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'action', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['action']}">{{fare.action}}</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'tarno', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['tarno']}">
+																
+																<span class="input-group">
+																	<input type="text" class="form-control" name="tarno{{$parent.$index}}{{$index}}" id="field_tarcd"
+											                    		ng-model="fare.tariffNumber.tarNo"
+											                    		ng-disabled="!vm.isEditable('tarno')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X'"  
+											                    		style="min-width:60px"
+											                    		ng-class="{'must-fill': editForm.editFormATPCO.tarno{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
+															            ng-required="vm.isRequired('tarno')"
+															            ng-focus="tarno[$parent.$index][$index]=true" ng-blur="tarno[$parent.$index][$index]=false; vm.checkTariff(fare, 'tariffNumber', 'tarNo');"/>
+																	<span class="input-group-addon disabled" ng-click="$event.stopPropagation(); vm.selectTariff(fare, 'tariffNumber')" ng-class="{'poiv-none': !vm.isEditable('tarno')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X'}">
+																		<i class="fa fa-folder"></i>
+																	</span>
+																</span>
+															</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'tarcd', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['tarcd']}">
+																
+																<span class="input-group">
+																	<input type="text" class="form-control" name="tarcd{{$parent.$index}}{{$index}}" id="field_tarcd"
+											                    		ng-model="fare.tariffNumber.tarCd"
+											                    		ng-disabled="!vm.isEditable('tarcd')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X'" 
+											                    		style="min-width:60px"
+											                    		uppercase
+											                    		ng-class="{'must-fill': editForm.editFormATPCO.tarcd{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
+															            ng-required="vm.isRequired('tarcd')"
+															            ng-focus="tarcd[$parent.$index][$index]=true" ng-blur="tarcd[$parent.$index][$index]=false; vm.checkTariff(fare, 'tariffNumber', 'tarCd');"/>
+																	<span class="input-group-addon disabled" ng-click="$event.stopPropagation(); vm.selectTariff(fare, 'tariffNumber')" ng-class="{'poiv-none': !vm.isEditable('tarcd')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X'}">
+																		<i class="fa fa-folder"></i>
+																	</span>
+																</span>
+															</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'global', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['global']}">{{fare.tariffNumber.global}}</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'origin', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['origin']}">																
+																<span class="input-group" tooltip-placement="{{$index > 3 ? 'top' : 'bottom'}}" uib-tooltip-html="vm.getTooltip(fare.origin)">
+																	<input type="text" class="form-control" name="origin{{$parent.$index}}{{$index}}" id="field_origin"
+											                    		ng-model="fare.origin"
+											                    		ng-disabled="!vm.isEditable('origin')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X'" 
+											                    		style="min-width:60px;"
+											                    		uppercase
+											                    		ng-class="{'must-fill': editForm.editFormATPCO.origin{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
+															            ng-required="vm.isRequired('origin')"
+															            ng-focus="origin[$parent.$index][$index]=true" ng-blur="origin[$parent.$index][$index]=false; vm.checkCity(fare, 'origin');"/>
+																	<span class="input-group-addon disabled" ng-click="$event.stopPropagation(); vm.selectCity(fare, 'origin')" ng-class="{'poiv-none': !vm.isEditable('origin')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)||fare.action == 'X'}">
+																		<i class="fa fa-folder"></i>
+																	</span>
+																</span>
+															</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'destination', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['destination']}">
+																<span class="input-group" tooltip-placement="{{$index > 3 ? 'top' : 'bottom'}}" uib-tooltip-html="vm.getTooltip(fare.destination)">
+																	<input type="text" class="form-control" name="destination{{$parent.$index}}{{$index}}" id="field_destination"
+											                    		ng-model="fare.destination"
+											                    		ng-disabled="!vm.isEditable('destination')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X'" 
+											                    		style="min-width:60px;"
+											                    		uppercase
+											                    		ng-class="{'must-fill': editForm.editFormATPCO.destination{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
+															            ng-required="vm.isRequired('destination')"
+															            ng-focus="destination[$parent.$index][$index]=true" ng-blur="destination[$parent.$index][$index]=false; vm.checkCity(fare, 'destination');"/>
+																	<span class="input-group-addon disabled" ng-click="$event.stopPropagation(); vm.selectCity(fare, 'destination')" ng-class="{'poiv-none': !vm.isEditable('destination')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X'}">
+																		<i class="fa fa-folder"></i>
+																	</span>
+																</span>
+															</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'fareBasis', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['fareBasis']}">
+																<input type="text" class="form-control" name="fareBasis{{$parent.$index}}{{$index}}" id="field_farebasis"
+									                				ng-disabled="!vm.isEditable('farebasis')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X'"
+									                				ng-required="vm.isRequired('farebasis') && fare.action != 'Canceled'" 
+									                				uppercase
+									                				ng-pattern="/^[a-zA-Z0-9*]*$/"
+									                				ng-class="{'must-fill':editForm.editFormATPCO.fareBasis{{$parent.$index}}{{$index}}.$error.required || 
+										                				editForm.editFormATPCO.fareBasis{{$parent.$index}}{{$index}}.$error.maxlength || 
+										                				editForm.editFormATPCO.fareBasis{{$parent.$index}}{{$index}}.$error.pattern}"
+									                				maxlength="8"
+									                				ng-maxlength="8"
+									                				ng-model="fare.fareBasis"/>				
+															</td>	
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'bookingClass', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['bookingClass']}">
+																<input type="text" class="form-control" name="bookingClass{{$parent.$index}}{{$index}}" id="field_bookingClass"
+									                				ng-maxlength="2"
+									                				maxlength="2"
+									                				uppercase
+									                				ng-pattern="/^[a-zA-Z]{1,2}$/"
+									                				ng-disabled="!vm.isEditable('bookingClass')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN'  ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X'"
+									                				ng-required="vm.isRequired('bookingClass')" 
+									                				ng-class="{'must-fill':editForm.editFormATPCO.bookingClass{{$parent.$index}}{{$index}}.$error.required || 
+										                				editForm.editFormATPCO.bookingClass{{$parent.$index}}{{$index}}.$error.maxlength || 
+										                				editForm.editFormATPCO.bookingClass{{$parent.$index}}{{$index}}.$error.pattern}"
+										                    		ng-model="fare.bookingClass"/>	
+															</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'cabin', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['cabin']}">
+										           				<select class="form-control inside-table" 
+														             name="cabin{{$parent.$index}}{{$index}}"
+														             ng-required="vm.isRequired('cabin')"
+														             ng-class="{'must-fill': !editForm.editFormATPCO.cabin{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"	
+														             ng-model="fare.cabin" id="field_cabin" 
+														             ng-disabled="!vm.isEditable('cabin')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)||fare.action == 'X'"
+														             ng-options="key as value for (key , value) in vm.cabin"></select>
+										                			
+										           			</td>
+										           			<td ng-click="vm.tdClick(workPackageSheet, fare, 'typeOfJourney', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['typeOfJourney']}">
+										           				<select class="form-control inside-table" 
+														             name="typeOfJourney{{$parent.$index}}{{$index}}"
+														             ng-required="vm.isRequired('typeOfJourney')"
+														             ng-class="{'must-fill': !editForm.editFormATPCO.typeOfJourney{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"																			            
+														             ng-model="fare.typeOfJourney" id="field_typeOfJourney"
+														             ng-disabled="!vm.isEditable('typeOfJourney')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X'"
+														             ng-options="key as value for (key , value) in vm.typeOfJourney"></select>
+										           			</td>
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'footnote', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['footnote']}">
+									               				<input type="text" class="form-control" name="footnote{{$parent.$index}}{{$index}}" id="field_footnote"
+										                				ng-maxlength="2"
+									                					maxlength="2"
+									                					uppercase
+									                					ng-pattern="/^[a-zA-Z0-9]{1,2}$/"
+									                					ng-keypress="vm.keypress($event, '^[a-zA-Z0-9]{1,2}$')"
+										                				ng-class="{'must-fill': editForm.editFormATPCO.footnote{{$parent.$index}}{{$index}}.$error.required ||
+										                				editForm.editFormATPCO.footnote{{$parent.$index}}{{$index}}.$error.maxlength || 
+										                				editForm.editFormATPCO.footnote{{$parent.$index}}{{$index}}.$error.pattern
+										                				}"																			            
+															            ng-disabled="!vm.isEditable('footnote')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) ||fare.action == 'X'"
+															            ng-required="vm.isRequired('footnote')"
+											                    		ng-model="fare.footnote1"/>
+									               			</td>
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'rtgno', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['rtgno']}">
+									               				<input type="text" class="form-control" name="rtgno{{$parent.$index}}{{$index}}" id="field_bookingClass"
+										                				ng-maxlength="4"
+									                					maxlength="4"
+									                					ng-pattern="/^[0-9]{1,4}$/"
+										                				ng-disabled="!vm.isEditable('rtgno')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN'  ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X'"
+										                				ng-required="vm.isRequired('rtgno')" 
+										                				ng-keypress="vm.keypress($event, '^[0-9]{1,4}$')"
+										                				ng-class="{'must-fill': editForm.editFormATPCO.rtgno{{$parent.$index}}{{$index}}.$error.required ||
+										                				editForm.editFormATPCO.rtgno{{$parent.$index}}{{$index}}.$error.maxlength || 
+										                			editForm.editFormATPCO.rtgno{{$parent.$index}}{{$index}}.$error.pattern
+										                			 && fare.action != 'Canceled'}"																			            
+															            ng-model="fare.rtgno"/>
+									               			</td>
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'ruleno', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['ruleno']}">
+							               						<input type="text" 
+							               						ng-maxlength="4"
+							               						uppercase
+									                			maxlength="4"
+									                			ng-pattern="/^[a-zA-Z0-9]{1,4}$/"
+									                			class="form-control" name="ruleno{{$parent.$index}}{{$index}}" id="field_bookingClass"
+									                			ng-keypress="vm.keypress($event, '^[a-zA-Z0-9]{1,4}$')"
+								                				ng-disabled="!vm.isEditable('ruleno')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)||fare.action == 'X'"
+								                				ng-required="vm.isRequired('ruleno')" 
+								                				ng-class="{'must-fill': editForm.editFormATPCO.ruleno{{$parent.$index}}{{$index}}.$error.required ||
+								                					editForm.editFormATPCO.ruleno{{$parent.$index}}{{$index}}.$error.maxlength || 
+										                			editForm.editFormATPCO.ruleno{{$parent.$index}}{{$index}}.$error.pattern
+										                		}"																			            
+													            ng-model="fare.ruleno"/>
+									               			</td>
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'currency', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['currency']}">
+									               			
+									               				<span class="input-group">
+																	<input type="text" class="form-control" name="currency{{$parent.$index}}{{$index}}" id="field_carrier"
+											                    		ng-model="fare.currency"
+											                    		ng-disabled="!vm.isEditable('currency')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X' "
+											                    		style="min-width:60px"
+											                    		uppercase
+											                    		ng-class="{'must-fill': editForm.editFormATPCO.currency{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
+															            ng-required="vm.isRequired('currency')"
+															            ng-focus="currency[$parent.$index][$index]=true" ng-blur="currency[$parent.$index][$index]=false; vm.checkCurrency(fare, 'currency');"/>
+																	<span class="input-group-addon disabled" ng-click="$event.stopPropagation(); vm.selectCurrency(fare, 'currency')" ng-class="{'poiv-none': !vm.isEditable('currency')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)||fare.action == 'X'}">
+																		<i class="fa fa-folder"></i>
+																	</span>
+																</span>
+									               			</td>
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'amount', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['amount']}">
+							               						<input type="text" class="form-control" name="amount{{$parent.$index}}{{$index}}" id="field_bookingClass"
+								                				ng-disabled="!vm.isEditable('amount')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)||fare.action == 'X'"
+								                				ng-required="vm.isRequired('amount', fare)" 
+								                				ng-class="{'must-fill': editForm.editFormATPCO.amount{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+													            ng-model="fare.amount"  style="min-width: 80px">									                												                			
+									               			</td>
+									               			<td>
+									               				<input class="form-control" disabled ng-model="fare.amtDiff" style="min-width:100px"/>
+									               			</td>
+									               			<td>
+									               				<input class="form-control" disabled ng-model="fare.amtPercentDiff" style="min-width:100px"/>
+									               			</td>
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'aif', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['aif']}">
+										               			<input type="text" class="form-control" name="aif{{$parent.$index}}{{$index}}" id="field_bookingClass"
+										                				ng-disabled="!vm.isEditable('aif')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) ||fare.action == 'X'"
+										                				ng-required="vm.isRequired('aif', fare)" 
+										                				ng-class="{'must-fill': editForm.editFormATPCO.aif{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+															            ng-model="fare.aif"/>
+										               		</td> 
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelStart', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['travelStart']}">
+									               				<span class="input-group">
+																	<input id="field_travelStartDate" 
+																		type="text"
+																		name="travelStartDate{{$parent.$index}}{{$index}}" id="field_travelEndDate"
+										                				ng-disabled="!vm.isEditable('travelStartDate')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) ||fare.action == 'X'"	
+										                				class="form-control input-date"					                				
+										                				ng-required="vm.isRequired('travelStartDate')"										           
+											                    		ng-class="{'must-fill': editForm.editFormATPCO.travelStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+															            ng-model="fare.travelStart" 
+															            datetime-picker="{{dateformat}}" 
+															            enable-time="false"
+															            is-open="vm.datePickerOpenStatus['travelStartDate'+$parent.$index+''+$index]">
+																	<span ng-click="vm.openCalendar('travelStartDate'+$parent.$index+''+$index)" class="input-group-addon disabled" ng-class="{'poiv-none': !vm.isEditable('travelStartDate')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X' }">
+																		<i ng-disabled="true" class="fa fa-calendar"></i>
+																	</span>
+																</span>
+									               			</td>
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelEnd', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['travelEnd']}">
+									               				<span class="input-group">
+																	<input id="field_travelEndDate" 
+																		type="text"
+																		name="travelEndDate{{$parent.$index}}{{$index}}" id="field_travelEndDate"
+										                				ng-disabled="!vm.isEditable('travelEndDate')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN'  ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X'"	
+										                				class="form-control input-date"					                				
+										                				ng-required="vm.isRequired('travelEndDate')"
+											                    		ng-class="{'must-fill': editForm.editFormATPCO.travelEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+															            ng-model="fare.travelEnd" 
+															            datetime-picker="{{dateformat}}" 
+															            enable-time="false"
+															            is-open="vm.datePickerOpenStatus['travelEndDate'+$parent.$index+''+$index]">
+																	<span ng-click="vm.openCalendar('travelEndDate'+$parent.$index+''+$index)" class="input-group-addon disabled" ng-class="{'poiv-none': !vm.isEditable('travelEndDate')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN'  ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X'}">
+																		<i ng-disabled="true" class="fa fa-calendar"></i>
+																	</span>
+																</span>								                			
+									               			</td>
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'saleStart', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['saleStart']}">
+									               				<span class="input-group">
+																	<input id="field_startDate" 
+																		type="text"
+																		name="saleStartDate{{$parent.$index}}{{$index}}" id="field_saleStartDate"
+										                				ng-disabled="!vm.isEditable('saleStartDate')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN'  ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X'"	
+										                				class="form-control input-date"					                				
+										                				ng-required="vm.isRequired('saleStartDate')"
+											                    		ng-class="{'must-fill': editForm.editFormATPCO.saleStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+															            ng-model="fare.saleStart" 
+															            datetime-picker="{{dateformat}}" 
+															            enable-time="false"
+															            is-open="vm.datePickerOpenStatus['saleStartDate'+$parent.$index+''+$index]">
+																	<span ng-click="vm.openCalendar('saleStartDate'+$parent.$index+''+$index)" class="input-group-addon disabled" ng-class="{'poiv-none': !vm.isEditable('saleStartDate')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)||fare.action == 'X'}">
+																		<i ng-disabled="true" class="fa fa-calendar"></i>
+																	</span>
+																</span>
+									               			</td>
+									               			<td  ng-click="vm.tdClick(workPackageSheet, fare, 'saleEnd', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['saleEnd']}">
+							               						<span class="input-group">
+																	<input id="field_endDate" 
+																		type="text"
+																		name="saleEndDate{{$parent.$index}}{{$index}}" id="field_salesaleEnd"
+										                				ng-disabled="!vm.isEditable('saleEndDate')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)||fare.action == 'X'"	
+										                				class="form-control input-date"					                				
+										                				ng-required="vm.isRequired('saleEndDate')"
+											                    		ng-class="{'must-fill': editForm.editFormATPCO.saleEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+															            ng-model="fare.saleEnd" 
+															            datetime-picker="{{dateformat}}" 
+															            enable-time="false"
+															            is-open="vm.datePickerOpenStatus['saleEndDate'+$parent.$index+''+$index]">
+																	<span ng-click="vm.openCalendar('saleEndDate'+$parent.$index+''+$index)" class="input-group-addon disabled" ng-class="{'poiv-none': !vm.isEditable('saleEndDate')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN'  ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X'}">
+																		<i ng-disabled="true" class="fa fa-calendar"></i>
+																	</span>
+																</span>							                			
+									               			</td>
+									               			<td  ng-click="vm.tdClick(workPackageSheet, fare, 'comment', $event);" ng-class="{'poiv-none': fare.status != 'PENDING' || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X', highlighted:fare.field['comment']}">
+									               				<input type="text" class="form-control" name="comment{{$parent.$index}}{{$index}}" id="field_comment"
+											                    		ng-model="fare.comment"/>
+									               			</td>
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelComplete', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['travelComplete']}">
+									               				<span class="input-group">
+																	<input id="field_travelComplete" 
+																		type="text"
+																		name="travelComplete{{$parent.$index}}{{$index}}" id="field_travelEndDate"
+										                				ng-disabled="!vm.isEditable('travelComplete')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)||fare.action == 'X'"	
+										                				class="form-control input-date"					                				
+										                				ng-required="vm.isRequired('travelComplete')"
+											                    		ng-class="{'must-fill': editForm.editFormATPCO.travelComplete{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+															            ng-model="fare.travelComplete" 
+															            datetime-picker="{{dateformat}}" 
+															            enable-time="false"
+															            is-open="vm.datePickerOpenStatus['travelComplete'+$parent.$index+''+$index]">
+																	<span ng-click="vm.openCalendar('travelComplete'+$parent.$index+''+$index)" class="input-group-addon disabled" ng-class="{'poiv-none': !vm.isEditable('travelComplete')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X' }">
+																		<i ng-disabled="true" class="fa fa-calendar"></i>
+																	</span>
+																</span>
+									               			</td>
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelCompleteIndicator', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['travelCompleteIndicator']}">
+							               						<select class="form-control inside-table" name="travelIndicator{{$parent.$index}}{{$index}}" id="field_travelIndicator"
+								                				ng-disabled="!vm.isEditable('travelIndicator')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X' "
+								                				ng-required="vm.isRequired('travelIndicator')"
+									                    		ng-class="{'must-fill': !editForm.editFormATPCO.travelIndicator{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"									                    		
+									                    		ng-options="key as value for (key , value) in vm.travelCompleteIndicator"											             																		            														                    		
+								                				ng-model="fare.travelCompleteIndicator"></select>
+									               			</td>
+									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'ratesheetComment', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['ratesheetComment']}">
+								                				<input type="text" class="form-control" name="ratesheetComment{{$parent.$index}}{{$index}}" id="field_ratesheetComment"
+								                				ng-disabled="!vm.isEditable('ratesheetComment')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' || vm.disabledField(vm.workPackage) ||fare.action == 'X'"
+								                				ng-required="vm.isRequired('ratesheetComment')"
+									                    		ng-class="{'must-fill': editForm.editFormATPCO.ratesheetComment{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            														                    		
+									                    		ng-model="fare.ratesheetComment"/>
+									               			</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								
+								</div>
+								
 								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+$index}}" ng-class="{active:vm.currentAddonTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.addonFareSheet track by $index">
 									<div class="pb1 mb1 bbgrey">
 										<div class="clearfix">
