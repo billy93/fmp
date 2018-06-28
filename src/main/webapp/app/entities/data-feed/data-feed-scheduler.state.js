@@ -26,11 +26,11 @@
             resolve: {
             	params: [function() {
             		return {
-                		outputFile: null,
                 		delayDays: null,
                 		delayHours: null,
                 		delayMinutes: null,
-                		fares: [],
+                		faresAtpco: null,
+                    	faresMarket: null,
                 		startDate: null,
                 		endDate: null
                 	}

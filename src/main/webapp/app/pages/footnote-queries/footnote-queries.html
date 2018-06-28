@@ -8,13 +8,23 @@
 			<div class="filter-label semibold show">Hide Filter</div>
 			<div class="filter-area">
 				<div class="clearfix">
-					<form name="queryForm" role="form" novalidate>
+					<form name="ftntQueryForm" role="form" novalidate>
 						<div class="col-md-3 no-lpad">
 							<div class="form-group">
 								<div class="custom-label semibold">Carrier</div>
-								<div class="no-rpad">
-									<input type="text" class="form-control" name="carrier" id="cxr"
-										ng-model="vm.queryParams.cxr" uppercase />
+								<div class="input-group">
+									<input type="text" class="form-control" name="cxr" id="cxr"
+										ng-minlength="2" ng-model="vm.paramCarrier" uppercase required />
+
+									<span ng-click="vm.showCarrierModal()"
+										class="input-group-addon"><i class="fa fa-folder"></i>
+									</span>
+								</div>
+								<div ng-show="ftntQueryForm.cxr.$invalid">
+									<p class="help-block" ng-show="ftntQueryForm.cxr.$error.required">
+										This field is required.</p>
+									<p class="help-block" ng-show="ftntQueryForm.cxr.$error.minlength">
+										Minimum 2 letters</p>
 								</div>
 							</div>
 							<div class="form-group">
@@ -28,10 +38,13 @@
 
 						<div class="col-md-3 no-lpad">
 							<div class="form-group">
-								<div class="custom-label semibold">Tariff</div>
-								<div class="no-rpad">
-									<input type="text" class="form-control" name="tariff"
-										id="tarNo" ng-model="vm.queryParams.tarNo" uppercase />
+								<div class="custom-label semibold">Tariff Number</div>
+								<div class="input-group">
+									<input id="ftntTarNo" type="text" name="ftntTarNo"
+										class="form-control" ng-model="vm.paramTarNo" uppercase>
+
+									<span ng-click="vm.showTariffModal()" class="input-group-addon"><i
+										class="fa fa-folder"></i> </span>
 								</div>
 							</div>
 							<div class="form-group">
@@ -140,11 +153,17 @@
 								</div>
 							</div>
 						</div>
-						
+
 						<div class="clearfix">
 							<div class="pull-right pv1">
-								<button type="button" class="btn btn-default small" ng-click="vm.loadAll()">Query</button>
-								<button type="reset" ng-click="vm.reset()" class="btn btn-default small">Reset</button>
+								<button type="button" class="btn btn-default small" ng-click="">Show
+									Available Footnotes</button>
+								<button type="button" class="btn btn-default small" ng-click="">Show
+									Expired Footnotes</button>
+								<button type="button" class="btn btn-default small" ng-disabled="ftntQueryForm.$invalid"
+									ng-click="vm.loadAll()">Query</button>
+								<button type="reset" ng-click="vm.reset()"
+									class="btn btn-default small">Reset</button>
 							</div>
 						</div>
 					</form>
@@ -226,29 +245,29 @@
 								<td>{{rq.routingNo}}</td>
 								<td>{{rq.footnote}}</td>
 								<td>{{rq.effectiveDateObject | date:'medium'}}</td>
-								<td>
-									<span ng-if="rq.discontinueDateObject=='indef'"></span>
-									<span ng-if="rq.discontinueDateObject!='indef'">{{rq.discontinueDateObject | date:'medium'}}</span>
-								</td>
+								<td><span ng-if="rq.discontinueDateObject=='indef'"></span>
+									<span ng-if="rq.discontinueDateObject!='indef'">{{rq.discontinueDateObject
+										| date:'medium'}}</span></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 			</div>
 		</div>
-		
-		<div class="additional-info-wrapper" id="vm.footnoteQueryCategories2">
+
+		<div class="additional-info-wrapper" id="vm.footnoteQueryCategories2" ng-if="vm.footnoteQueryCategories != null">
 			<div class="clearfix">
-				<div class="pull-left ph5px additional-container" ng-repeat="cat in vm.footnoteQueryCategories2 track by cat.catNo">
-					<div class="additional-info" ng-click="vm.showCategoryDetail(cat)" ng-class="{'yellow': cat.catAttributes.length > 0 && cat.type != 'G', 'blue': cat.catAttributes.length > 0 && cat.type == 'G'}"
-						>
-						{{cat.catNo}} {{cat.catName}} 
-						<span ng-if="cat.catAttributes.length > 0">({{cat.type}})</span>
+				<div class="pull-left ph5px additional-container"
+					ng-repeat="cat in vm.footnoteQueryCategories2 track by cat.catNo">
+					<div class="additional-info" ng-click="vm.showCategoryDetail(cat)"
+						ng-class="{'yellow': cat.catAttributes.length > 0 && cat.type != 'G', 'blue': cat.catAttributes.length > 0 && cat.type == 'G'}">
+						{{cat.catNo}} {{cat.catName}} <span
+							ng-if="cat.catAttributes.length > 0">({{cat.type}})</span>
 					</div>
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="text-center" ng-if="vm.footnoteQueries">
 			<jhi-item-count page="vm.page" total="vm.queryCount"
 				items-per-page="vm.itemsPerPage"></jhi-item-count>
