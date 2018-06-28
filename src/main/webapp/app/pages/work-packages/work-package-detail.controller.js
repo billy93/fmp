@@ -2680,7 +2680,7 @@
 			  }
 		  }	
 		  
-		  if(vm.workPackage.waiverFareSheet != null && vm.workPackage.waiverFareSheet.length > 0){
+		  /*if(vm.workPackage.waiverFareSheet != null && vm.workPackage.waiverFareSheet.length > 0){
 			  for(var x=0;x<vm.workPackage.waiverFareSheet.length;x++){
 				  if(vm.workPackage.waiverFareSheet[x].fares != null && vm.workPackage.waiverFareSheet[x].fares.length > 0){
 					  //vm.expandCityGroup(vm.workPackage.waiverFareSheet[x]);
@@ -2699,7 +2699,7 @@
 					  }
 				  }
 			  }
-		  }	
+		  }	*/
 		 
 		  if(validated){
 			  
@@ -5693,9 +5693,11 @@
     		}
       }
       
+      vm.diff = [];
       vm.changeVersion = function(workPackageSheet, index){    	  
     	  workPackageSheet.version = index;
     	  if(index == 'current'){
+    		  vm.diff = [];
     		  if(workPackageSheet.fares == null){
     			  workPackageSheet.fares = [];
     		  }
@@ -5703,11 +5705,98 @@
     	  }
     	  else{
     		  if(index != null){
+    			  vm.checkDiff(workPackageSheet.fares, workPackageSheet.fareVersion[index].fares);
     			  workPackageSheet.currentFares = workPackageSheet.fareVersion[index].fares;
     		  }
     	  }
       }
-      
+            
+      vm.checkDiff = function(current, version){
+    	  vm.diff = [];
+    	  if(current.length == version.length){
+    		if(current[0].status != version[0].status){
+    			vm.diff.push('status');
+    		}
+    		if(current[0].tariffNumber.tarNo != version[0].tariffNumber.tarNo){
+    			vm.diff.push('tarNo');
+    		}
+    		if(current[0].tariffNumber.tarCd != version[0].tariffNumber.tarCd){
+    			vm.diff.push('tarCd');
+    		}
+    		if(current[0].tariffNumber.global != version[0].tariffNumber.global){
+    			vm.diff.push('global');
+    		}
+    		if(current[0].origin != version[0].origin){
+    			vm.diff.push('origin');
+    		}
+    		if(current[0].destination != version[0].destination){
+    			vm.diff.push('destination');
+    		}
+    		if(current[0].fareBasis != version[0].fareBasis){
+    			vm.diff.push('fareBasis');
+    		}
+    		if(current[0].bookingClass != version[0].bookingClass){
+    			vm.diff.push('bookingClass');
+    		}
+    		if(current[0].cabin != version[0].cabin){
+    			vm.diff.push('cabin');
+    		}
+    		if(current[0].typeOfJourney != version[0].typeOfJourney){
+    			vm.diff.push('typeOfJourney');
+    		}
+    		if(current[0].footnote1 != version[0].footnote1){
+    			vm.diff.push('footnote1');
+    		}
+    		if(current[0].rtgno != version[0].rtgno){
+    			vm.diff.push('rtgno');
+    		}
+    		if(current[0].ruleno != version[0].ruleno){
+    			vm.diff.push('ruleno');
+    		}
+    		if(current[0].currency != version[0].currency){
+    			vm.diff.push('currency');
+    		}
+    		if(current[0].amount != version[0].amount){
+    			vm.diff.push('amount');
+    		}
+    		if(current[0].amtDiff != version[0].amtDiff){
+    			vm.diff.push('amtDiff');
+    		}
+    		if(current[0].amtPercentDiff != version[0].amtPercentDiff){
+    			vm.diff.push('amtPercentDiff');
+    		}
+    		if(current[0].aif != version[0].aif){
+    			vm.diff.push('aif');
+    		}
+    		if(current[0].travelStart != version[0].travelStart){
+    			vm.diff.push('travelStart');
+    		}
+    		if(current[0].travelEnd != version[0].travelEnd){
+    			vm.diff.push('travelEnd');
+    		}
+    		if(current[0].saleStart != version[0].saleStart){
+    			vm.diff.push('saleStart');
+    		}
+    		if(current[0].saleEnd != version[0].saleEnd){
+    			vm.diff.push('saleEnd');
+    		}
+    		if(current[0].comment != version[0].comment){
+    			vm.diff.push('comment');
+    		}
+    		if(current[0].travelComplete != version[0].travelComplete){
+    			vm.diff.push('travelComplete');
+    		}
+    		if(current[0].travelCompleteIndicator != version[0].travelCompleteIndicator){
+    			vm.diff.push('travelCompleteIndicator');
+    		}
+    		if(current[0].ratesheetComment != version[0].ratesheetComment){
+    			vm.diff.push('ratesheetComment');
+    		}
+    	  }else{
+    		  console.log("field beda");
+    	  }
+      }
+            
 
       vm.checkValidateCityGroupFares = function(workPackageSheet){
     	  var fares = workPackageSheet.fares;

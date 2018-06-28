@@ -3998,6 +3998,9 @@ tr.pasteAsCancel {
 tr td.highlighted {
   background-color: rgba(222, 255, 94, 0.7) !important; }
 
+tr td.changed {
+  background-color: rgba(222, 58, 102, 0.7) !important; }
+
 .table {
   width: 100%; }
   .table.table-header-fixed tbody {
