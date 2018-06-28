@@ -73,7 +73,21 @@
 		</div>
 		<div class="table-wrapper">
 			<div class="datatable-wrapper form-inline">
-				<div class="table-responsive">
+				<div class="clearfix">
+					<div class="pull-left w50">
+						<div class="datatable-length">
+							<label>
+								<select class="form-control" ng-model="vm.itemsPerPage" ng-change="vm.changeItemsPerPage()">
+									<option value="10">10</option>
+									<option value="15">15</option>
+									<option value="20">20</option>
+								</select>
+								 records per page
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="table-responsive main-table">
 					<table class="table table-striped table-bordered datatable">
 						<thead>
 							<tr role="row" jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
