@@ -5188,7 +5188,7 @@
 					  var tariffNumber = null;
 					  for(var y=0;y<vm.tariffNumber.length;y++){	
 			    		  if(vm.tariffNumber[y].tarNo == result.content[x].tariffNo){
-			    			  tariffNumber = angular.copy(vm.tariffNumber[x]);
+			    			  tariffNumber = angular.copy(vm.tariffNumber[y]);
 			    			  break;
 			    		  }
 			    	  }
