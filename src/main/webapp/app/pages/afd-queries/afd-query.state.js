@@ -77,6 +77,24 @@
                         return City.getAll().$promise;
                     });
                 }],
+                atpcoMasterFareType: ['AtpcoMasterFareType', 'Principal', function(AtpcoMasterFareType, Principal) {
+                	return Principal.identity().then(function(account) {
+                        return AtpcoMasterFareType.getAll().$promise;
+                    });
+                }],
+                globals: ['TariffNumber', 'Principal', function(TariffNumber, Principal) {
+                	return Principal.identity().then(function(account) {
+                        return TariffNumber.getAllGlobal().$promise;
+                    });
+                }],
+                passengers: ['Passenger', 'Principal', function(Passenger, Principal) {
+                	return Principal.identity().then(function(account) {
+                        return Passenger.getAll().$promise;
+                    });
+                }],
+                fareTypes: ['FareType', function(FareType) {
+                    return FareType.getAll().$promise;
+                }],
             }
         })
     }

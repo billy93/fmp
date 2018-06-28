@@ -278,6 +278,15 @@ public class WorkPackageFare implements Serializable {
 	@Field("discount_specified_amount")
     private String discountSpecifiedAmount;
 	
+	@Field("prev_amount")
+	private String prevAmount;
+	
+	@Field("prev_amount_diff")
+	private String prevAmountDiff;
+
+	@Field("prev_percent_amount_diff")
+	private String prevPercentAmountDiff;
+	  
 	
 	//WAIVER
 	@Field("waiver_type")
@@ -351,9 +360,35 @@ public class WorkPackageFare implements Serializable {
 
 	@Field("amt_diff")
 	private String amtDiff;
+	
 	@Field("amt_percent_diff")
 	private String amtPercentDiff;
 	
+	
+	public String getPrevAmount() {
+		return prevAmount;
+	}
+
+	public void setPrevAmount(String prevAmount) {
+		this.prevAmount = prevAmount;
+	}
+
+	public String getPrevAmountDiff() {
+		return prevAmountDiff;
+	}
+
+	public void setPrevAmountDiff(String prevAmountDiff) {
+		this.prevAmountDiff = prevAmountDiff;
+	}
+
+	public String getPrevPercentAmountDiff() {
+		return prevPercentAmountDiff;
+	}
+
+	public void setPrevPercentAmountDiff(String prevPercentAmountDiff) {
+		this.prevPercentAmountDiff = prevPercentAmountDiff;
+	}
+
 	public int getNo() {
 		return no;
 	}
@@ -1195,7 +1230,6 @@ public class WorkPackageFare implements Serializable {
 		this.amtPercentDiff = amtPercentDiff;
 	}
 
-	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -1203,13 +1237,46 @@ public class WorkPackageFare implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        WorkPackageFare fare = (WorkPackageFare) o;
-        if (fare.getId() == null || getId() == null) {
+        // compare strings to see if they are equal        
+        WorkPackageFare other_data = (WorkPackageFare) o;
+        boolean cxr_equal = other_data.carrier.equals(this.carrier);
+        boolean tariff_equal = this.tariffNumber != null && other_data.tariffNumber != null ? other_data.tariffNumber.equals(this.tariffNumber) : true;
+        boolean origin_equal = this.origin != null && other_data.origin != null ? other_data.origin.equals(this.origin) : true;
+        boolean destination_equal = this.destination != null && other_data.destination != null ?  other_data.destination.equals(this.destination) : true;
+        boolean fareclass_equal = this.fareBasis != null && other_data.fareBasis != null ? other_data.fareBasis.equals(this.fareBasis) : true;
+        boolean owrt_equal = this.typeOfJourney != null && other_data.typeOfJourney != null ? other_data.typeOfJourney.equals(this.typeOfJourney) : true;
+        boolean currency_equal = this.currency != null && other_data.currency != null ? other_data.currency.equals(this.currency) : true;
+        boolean rtgno_equal = this.rtgno != null && other_data.rtgno != null ? other_data.rtgno.equals(this.rtgno) : true;
+        boolean ruleno_equal = this.ruleno != null && other_data.ruleno != null ? other_data.ruleno.equals(this.ruleno) : true;
+        boolean footnote_equal = this.footnote1 != null && other_data.footnote1 != null ? other_data.footnote1.equals(this.footnote1) : true;
+
+        return cxr_equal && tariff_equal && origin_equal && destination_equal && fareclass_equal && owrt_equal && currency_equal && rtgno_equal && ruleno_equal && footnote_equal;
+    }
+    
+    public boolean equalsAddon(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        return Objects.equals(getId(), fare.getId());
+        // compare strings to see if they are equal        
+        WorkPackageFare other_data = (WorkPackageFare) o;
+        boolean cxr_equal = other_data.carrier.equals(this.carrier);
+        boolean tariff_equal = other_data.tariffNumber.equals(this.tariffNumber);
+        boolean origin_equal = other_data.origin.equals(this.origin);
+        boolean destination_equal = other_data.destination.equals(this.destination);
+        boolean fareclass_equal = other_data.fareBasis.equals(this.fareBasis);
+        boolean owrt_equal = other_data.typeOfJourney.equals(this.typeOfJourney);
+        boolean currency_equal = other_data.currency.equals(this.currency);
+        boolean rtgno_equal = other_data.rtgno.equals(this.rtgno);
+        boolean ruleno_equal = other_data.ruleno.equals(this.ruleno);
+        boolean footnote_equal = other_data.footnote1.equals(this.footnote1);
+
+        return cxr_equal && tariff_equal && origin_equal && destination_equal && fareclass_equal && owrt_equal && currency_equal && rtgno_equal && ruleno_equal && footnote_equal;
     }
 
+    
 	@Override
     public int hashCode() {
         return Objects.hashCode(getId());

@@ -44,6 +44,7 @@ public class AfdQueryParam {
 	private boolean calculateTfc;
 	private int page;
 	private int size;
+	private int lastIndex;
 	
 	public AfdQueryParam() {
 		
@@ -377,6 +378,14 @@ public class AfdQueryParam {
 		this.size = size;
 	}
 
+	public int getLastIndex() {
+		return lastIndex;
+	}
+
+	public void setLastIndex(int lastIndex) {
+		this.lastIndex = lastIndex;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -399,6 +408,7 @@ public class AfdQueryParam {
 		result = prime * result + ((gaFareType == null) ? 0 : gaFareType.hashCode());
 		result = prime * result + ((globalIndicator == null) ? 0 : globalIndicator.hashCode());
 		result = prime * result + (includeConstructed ? 1231 : 1237);
+		result = prime * result + lastIndex;
 		result = prime * result + ((maxStay == null) ? 0 : maxStay.hashCode());
 		result = prime * result + ((minStay == null) ? 0 : minStay.hashCode());
 		result = prime * result + ((origin == null) ? 0 : origin.hashCode());
@@ -545,6 +555,9 @@ public class AfdQueryParam {
 			return false;
 		}
 		if (includeConstructed != other.includeConstructed) {
+			return false;
+		}
+		if (lastIndex != other.lastIndex) {
 			return false;
 		}
 		if (maxStay == null) {
@@ -718,6 +731,6 @@ public class AfdQueryParam {
 				+ ", cabin=" + cabin + ", bookingClass=" + bookingClass + ", advancePurchase=" + advancePurchase
 				+ ", minStay=" + minStay + ", maxStay=" + maxStay + ", includeConstructed=" + includeConstructed
 				+ ", appendResults=" + appendResults + ", biDirectional=" + biDirectional + ", calculateTfc="
-				+ calculateTfc + ", page=" + page + ", size=" + size + "]";
+				+ calculateTfc + ", page=" + page + ", size=" + size + ", lastIndex=" + lastIndex + "]";
 	}
 }

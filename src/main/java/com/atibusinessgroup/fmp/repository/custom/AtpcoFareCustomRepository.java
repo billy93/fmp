@@ -304,11 +304,16 @@ public class AtpcoFareCustomRepository {
     	footnotes.put("014", CategoryName.CAT_014);
     	footnotes.put("015", CategoryName.CAT_015);
     	
-    	int currentAggregationLoop = pageable.getPageNumber(), skipSize = 0, limitSize = pageable.getPageSize();
-    	boolean paramMatched = false, isLastPage = false, isCompleted = false;
+    	int index = 0, currentAggregationLoop = 0, skipSize = 0, limitSize = pageable.getPageSize();
+    	boolean isLastPage = false, isCompleted = false;
     	
     	while (!isCompleted) {
-    		skipSize = currentAggregationLoop * limitSize;
+    		skipSize = param.getLastIndex() + (currentAggregationLoop * limitSize);
+    		
+    		if (currentAggregationLoop > 0) {
+    			aggregationOperations.remove(aggregationOperations.size() - 1);
+    			aggregationOperations.remove(aggregationOperations.size() - 1);
+    		}
     		
     		SkipOperation skip = new SkipOperation(skipSize);
     		aggregationOperations.add(skip);
@@ -323,6 +328,9 @@ public class AtpcoFareCustomRepository {
     		if (a1fares.getMappedResults().size() == 0) {
     			isCompleted = true;
     			isLastPage = true;
+    			index = 0;
+    		} else {
+    			index = 1;
     		}
     		
         	for (AtpcoFareAfdQueryWithRecords a1fare:a1fares) {
@@ -430,9 +438,22 @@ public class AtpcoFareCustomRepository {
             	AfdQuery afdQuery = afdQueryMapper.convertAtpcoFare(afare, matchedRecord1, cat03s, cat05s, cat06s, cat07s, cat14s, cat15s, 
             			footnote14s, footnote15s, focusDate);
             	
-            	paramMatched = true;
-            	
-            	if (paramMatched) {
+            	if (atpcoRecordService.compareAfdQueryWithParamString(afdQuery.getFareType(), param.getFareType()) &&
+            			atpcoRecordService.compareAfdQueryWithParamString(afdQuery.getGlobalIndicator(), param.getGlobalIndicator()) &&
+            			atpcoRecordService.compareAfdQueryWithParamString(afdQuery.getPaxType(), param.getPaxType()) && 
+            			atpcoRecordService.compareAfdQueryWithParamString(afdQuery.getCabin(), param.getCabin()) && 
+            			atpcoRecordService.compareAfdQueryWithParamString(afdQuery.getBookingClass(), param.getBookingClass()) &&
+            			atpcoRecordService.compareAfdQueryWithParamString(afdQuery.getAdvancePurchase(), param.getAdvancePurchase()) &&
+            			atpcoRecordService.compareAfdQueryWithParamString(afdQuery.getMinStay(), param.getMinStay()) &&
+            			atpcoRecordService.compareAfdQueryWithParamString(afdQuery.getMaxStay(), param.getMaxStay()) &&
+            			atpcoRecordService.compareAfdQueryWithParamString(afdQuery.getWpId(), param.getWoId()) &&
+            			atpcoRecordService.compareAfdQueryWithParamString(afdQuery.getTourCode(), param.getTourCode()) &&
+            			atpcoRecordService.compareAfdQueryWithParamDate(afdQuery.getSaleStartDate(), afdQuery.getSaleEndDate(), param.getSaleDateFrom(), 
+            					param.getSaleDateTo(), param.getSaleDateOption()) &&
+            			atpcoRecordService.compareAfdQueryWithParamDate(afdQuery.getTravelStartDate(), afdQuery.getTravelEndDate(), param.getTravelDateFrom(), 
+            					param.getTravelDateTo(), param.getTravelDateOption()) &&
+            			atpcoRecordService.compareAfdQueryWithParamDate(afdQuery.getFirstSeasonDate(), afdQuery.getLastSeasonDate(), param.getSeasonDateFrom(), 
+            					param.getSeasonDateTo(), param.getSeasonDateOption())) {
             		afdQueries.add(afdQuery);
             	}
             	
@@ -440,6 +461,8 @@ public class AtpcoFareCustomRepository {
     				isCompleted = true;
     				break;
     			}
+    			
+    			index++;
         	}
         	
         	currentAggregationLoop++;
@@ -450,8 +473,9 @@ public class AtpcoFareCustomRepository {
     	}
     	
     	result.setLastPage(isLastPage);
+    	result.setLastIndex(skipSize + index);
     	result.setAfdQueries(afdQueries);
-    	
+		
 		return result;
 	}
 

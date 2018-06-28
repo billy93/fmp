@@ -1,27 +1,44 @@
 package com.atibusinessgroup.fmp.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.atibusinessgroup.fmp.domain.TariffNumber;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 
-import com.atibusinessgroup.fmp.repository.TariffNumberRepository;
-import com.atibusinessgroup.fmp.web.rest.errors.BadRequestAlertException;
-import com.atibusinessgroup.fmp.web.rest.util.HeaderUtil;
-import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOperationContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import com.atibusinessgroup.fmp.domain.TariffNumber;
+import com.atibusinessgroup.fmp.domain.dto.TariffNumberGlobal;
+import com.atibusinessgroup.fmp.repository.TariffNumberRepository;
+import com.atibusinessgroup.fmp.web.rest.errors.BadRequestAlertException;
+import com.atibusinessgroup.fmp.web.rest.util.HeaderUtil;
+import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
+import com.codahale.metrics.annotation.Timed;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 
-import java.util.List;
-import java.util.Optional;
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing TariffNumber.
@@ -36,8 +53,11 @@ public class TariffNumberResource {
 
     private final TariffNumberRepository tariffNumberRepository;
 
-    public TariffNumberResource(TariffNumberRepository tariffNumberRepository) {
+    private final MongoTemplate mongoTemplate;
+    
+    public TariffNumberResource(TariffNumberRepository tariffNumberRepository, MongoTemplate mongoTemplate) {
         this.tariffNumberRepository = tariffNumberRepository;
+        this.mongoTemplate = mongoTemplate;
     }
 
     /**
@@ -110,6 +130,40 @@ public class TariffNumberResource {
         List<TariffNumber> page = tariffNumberRepository.findAll();
 //        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/tariff-numbers");
         return new ResponseEntity<>(page, null, HttpStatus.OK);
+    }
+    
+    @GetMapping("/tariff-numbers/getAllGlobal")
+    @Timed
+    public ResponseEntity<List<TariffNumberGlobal>> getAllTariffNumbersGlobal() {
+        log.debug("REST request to get a page of TariffNumbers Global");
+        
+        List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject group = new BasicDBObject();
+				BasicDBObject query = new BasicDBObject();
+				query.append("_id", "$global");
+				group.append("$group", query);
+				return group;
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject project = new BasicDBObject();
+				project.append("$project", new BasicDBObject("_id", 0).append("global", "$_id"));
+				return project;
+			}
+		});
+		
+		Aggregation aggregation = newAggregation(aggregationOperations);
+		
+		List<TariffNumberGlobal> result = mongoTemplate.aggregate(aggregation, "tariff_number", TariffNumberGlobal.class).getMappedResults();
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     /**

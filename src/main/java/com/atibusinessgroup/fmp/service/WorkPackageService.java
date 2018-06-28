@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -29,9 +30,9 @@ import com.atibusinessgroup.fmp.domain.WorkPackage.Comment;
 import com.atibusinessgroup.fmp.domain.WorkPackage.FilingInstruction;
 import com.atibusinessgroup.fmp.domain.WorkPackage.MarketRules;
 import com.atibusinessgroup.fmp.domain.WorkPackage.WorkPackageFareSheet;
-import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
 import com.atibusinessgroup.fmp.domain.enumeration.Status;
 import com.atibusinessgroup.fmp.repository.AtpcoFareRepository;
 import com.atibusinessgroup.fmp.repository.CounterRepository;
@@ -83,17 +84,6 @@ public class WorkPackageService {
         		if(fare.getTravelComplete() != null)
 	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
         		
-//        		Optional<AtpcoFare> checkAtpcoFare = atpcoFareRepository.findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCityAndFareOriginCurrencyCodeAndFareClassCodeAndOwrtAndFootnoteAndRoutingNoAndRuleNo(
-//        				fare.getCarrier(), 
-//        				fare.getTariffNumber() != null ? fare.getTariffNumber().getTarNo() : null, 
-//        				fare.getOrigin(), 
-//        				fare.getDestination(), 
-//        				fare.getCurrency(), 
-//        				fare.getFareBasis(), 
-//        				fare.getTypeOfJourney(), 
-//        				fare.getFootnote1(), 
-//        				fare.getRtgno(), 
-//        				fare.getRuleno());
         		Optional<AtpcoFare> checkAtpcoFare = atpcoFareRepository.findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCity(fare.getCarrier(), fare.getTariffNumber() != null ? fare.getTariffNumber().getTarNo() : null, fare.getOrigin(), fare.getDestination());
         		if(checkAtpcoFare.isPresent()) {
         			//I, R, Y
@@ -120,6 +110,10 @@ public class WorkPackageService {
         		else {
         			fare.setAction("N");        		
         		}
+        		
+        		if(fare.getId() == null) {
+        			fare.setId(new ObjectId().toString());
+        		}
         	}
         }
         for(WorkPackageFareSheet sheet : workPackage.getAddonFareSheet()) {
@@ -134,7 +128,11 @@ public class WorkPackageService {
         		if(fare.getSaleEnd() != null)
             		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
         		if(fare.getTravelComplete() != null)
-	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
+	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));        		
+        		
+        		if(fare.getId() == null) {
+        			fare.setId(new ObjectId().toString());
+        		}
         	}
         }
         for(WorkPackageFareSheet sheet : workPackage.getMarketFareSheet()) {
@@ -150,6 +148,11 @@ public class WorkPackageService {
             		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
         		if(fare.getTravelComplete() != null)
 	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
+        		
+        		fare.setAction("N");   
+        		if(fare.getId() == null) {
+        			fare.setId(new ObjectId().toString());
+        		}
         	}
         }
         for(WorkPackageFareSheet sheet : workPackage.getDiscountFareSheet()) {
@@ -165,6 +168,10 @@ public class WorkPackageService {
             		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
         		if(fare.getTravelComplete() != null)
 	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
+        		
+        		if(fare.getId() == null) {
+        			fare.setId(new ObjectId().toString());
+        		}
         	}
         }
         for(WorkPackageFareSheet sheet : workPackage.getWaiverFareSheet()) {
@@ -180,6 +187,9 @@ public class WorkPackageService {
             		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
         		if(fare.getTravelComplete() != null)
 	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
+        		if(fare.getId() == null) {
+        			fare.setId(new ObjectId().toString());
+        		}
         	}
         }
         

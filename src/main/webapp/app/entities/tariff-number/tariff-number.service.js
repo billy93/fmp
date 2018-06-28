@@ -22,6 +22,7 @@
             },
             'update': { method:'PUT' },
             'getAll': { method: 'GET', isArray: true, url:"api/tariff-numbers/getAll"},
+            'getAllGlobal': { method: 'GET', isArray: true, url:"api/tariff-numbers/getAllGlobal"},
         });
     }
 })();
