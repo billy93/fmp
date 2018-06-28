@@ -1982,7 +1982,111 @@
 				                                    ng-class="{'must-fill': editForm.editFormDiscount.discountNewBookingCode{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
 				                                      ng-model="fare.newBookingCode"/>
 				                              </td>                            
-				                              
+				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'travelStart', $event)" ng-class="{highlighted:fare.field['travelStart'],changed : vm.diff[fare.id].indexOf('travelStart') > -1}">
+						               				<span class="input-group">
+														<input id="field_startDate" 
+															type="text"
+															name="discountTravelStartDate{{$parent.$index}}{{$index}}" id="field_discountTravelStartDate"
+							                				ng-disabled="!vm.isEditable('discountTravelStartDate')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"	
+							                				class="form-control input-date"					                				
+							                				ng-required="vm.isRequired('discountTravelStartDate')"
+								                    		ng-class="{'must-fill': editForm.editFormDiscount.discountTravelStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+												            ng-model="fare.travelStart" 
+												            datetime-picker="{{dateformat}}" 
+												            enable-time="false"
+												            is-open="vm.datePickerOpenStatus['discountTravelStartDate'+$parent.$index+''+$index]">
+														<span ng-click="vm.openCalendar('discountTravelStartDate'+$parent.$index+''+$index)" class="input-group-addon disabled" ng-class="{'poiv-none': !vm.isEditable('discountTravelStartDate')|| fare.status == 'APPROVED' || fare.status == 'REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}">
+															<i class="fa fa-calendar"></i>
+														</span>
+													</span>
+						               		  </td>
+											  <td ng-click="vm.tdClick(workPackageSheet, fare, 'travelEnd', $event)" ng-class="{highlighted:fare.field['travelEnd'],changed : vm.diff[fare.id].indexOf('travelEnd') > -1}">
+						               				<span class="input-group">
+														<input id="field_startDate" 
+															type="text"
+															name="discountTravelEndDate{{$parent.$index}}{{$index}}" id="field_discountTravelEndDate"
+							                				ng-disabled="!vm.isEditable('discountTravelEndDate')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"	
+							                				class="form-control input-date"					                				
+							                				ng-required="vm.isRequired('discountTravelEndDate')"
+								                    		ng-class="{'must-fill': editForm.editFormDiscount.discountTravelEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+												            ng-model="fare.travelEnd" 
+												            datetime-picker="{{dateformat}}" 
+												            enable-time="false"
+												            is-open="vm.datePickerOpenStatus['discountTravelEndDate'+$parent.$index+''+$index]">
+														<span ng-click="vm.openCalendar('discountTravelEndDate'+$parent.$index+''+$index)" class="input-group-addon disabled" ng-class="{'poiv-none': !vm.isEditable('discountTravelEndDate')|| fare.status == 'APPROVED' || fare.status == 'REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}">
+															<i class="fa fa-calendar"></i>
+														</span>
+													</span>
+						               		  </td>
+				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'saleStart', $event)" ng-class="{highlighted:fare.field['saleStart'],changed : vm.diff[fare.id].indexOf('saleStart') > -1}">
+						               				<span class="input-group">
+														<input id="field_startDate" 
+															type="text"
+															name="discountSaleStartDate{{$parent.$index}}{{$index}}" id="field_discountSaleStartDate"
+							                				ng-disabled="!vm.isEditable('discountSaleStartDate')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"	
+							                				class="form-control input-date"					                				
+							                				ng-required="vm.isRequired('discountSaleStartDate')"
+								                    		ng-class="{'must-fill': editForm.editFormDiscount.discountSaleStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+												            ng-model="fare.saleStart" 
+												            datetime-picker="{{dateformat}}" 
+												            enable-time="false"
+												            is-open="vm.datePickerOpenStatus['discountSaleStartDate'+$parent.$index+''+$index]">
+														<span ng-click="vm.openCalendar('discountSaleStartDate'+$parent.$index+''+$index)" class="input-group-addon disabled" ng-class="{'poiv-none': !vm.isEditable('discountSaleStartDate')|| fare.status == 'APPROVED' || fare.status == 'REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}">
+															<i class="fa fa-calendar"></i>
+														</span>
+													</span>
+						               		  </td>
+						               		  <td ng-click="vm.tdClick(workPackageSheet, fare, 'saleEnd', $event)" ng-class="{highlighted:fare.field['saleEnd'],changed : vm.diff[fare.id].indexOf('saleEnd') > -1}">
+						               				<span class="input-group">
+														<input id="field_startDate" 
+															type="text"
+															name="discountSaleEndDate{{$parent.$index}}{{$index}}" id="field_discountSaleEndDate"
+							                				ng-disabled="!vm.isEditable('discountSaleEndDate')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"	
+							                				class="form-control input-date"					                				
+							                				ng-required="vm.isRequired('discountSaleEndDate')"
+								                    		ng-class="{'must-fill': editForm.editFormDiscount.discountSaleEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+												            ng-model="fare.saleEnd" 
+												            datetime-picker="{{dateformat}}" 
+												            enable-time="false"
+												            is-open="vm.datePickerOpenStatus['discountSaleEndDate'+$parent.$index+''+$index]">
+														<span ng-click="vm.openCalendar('discountSaleEndDate'+$parent.$index+''+$index)" class="input-group-addon disabled" ng-class="{'poiv-none': !vm.isEditable('discountSaleEndDate')|| fare.status == 'APPROVED' || fare.status == 'REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}">
+															<i class="fa fa-calendar"></i>
+														</span>
+													</span>
+						               		  </td>
+				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'comment', $event)" ng-class="{highlighted:fare.field['comment'],changed : vm.diff[fare.id].indexOf('comment') > -1}">
+				                                 <input type="text" class="form-control" name="discountComment{{$parent.$index}}{{$index}}"
+				                                    ng-disabled="!vm.isEditable('discountComment')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+				                                    ng-click="$event.stopPropagation()"
+				                                    ng-required="vm.isRequired('discountComment') && fare.action != 'Canceled'" 
+				                                    ng-class="{'must-fill': editForm.editFormDiscount.discountComment{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+				                                      ng-model="fare.comment"/>	
+				                              </td>				                              
+				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'travelComplete', $event)" ng-class="{highlighted:fare.field['travelComplete'],changed : vm.diff[fare.id].indexOf('travelComplete') > -1}">
+						               				<span class="input-group">
+														<input id="field_startDate" 
+															type="text"
+															name="discountTravelComplete{{$parent.$index}}{{$index}}" id="field_discountTravelComplete"
+							                				ng-disabled="!vm.isEditable('discountTravelComplete')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"	
+							                				class="form-control input-date"					                				
+							                				ng-required="vm.isRequired('discountTravelComplete')"
+								                    		ng-class="{'must-fill': editForm.editFormDiscount.discountTravelComplete{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+												            ng-model="fare.travelComplete" 
+												            datetime-picker="{{dateformat}}" 
+												            enable-time="false"
+												            is-open="vm.datePickerOpenStatus['discountTravelComplete'+$parent.$index+''+$index]">
+														<span ng-click="vm.openCalendar('discountTravelComplete'+$parent.$index+''+$index)" class="input-group-addon disabled" ng-class="{'poiv-none': !vm.isEditable('discountTravelComplete')|| fare.status == 'APPROVED' || fare.status == 'REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}">
+															<i class="fa fa-calendar"></i>
+														</span>
+													</span>
+						               		  </td>
+				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'travelCompleteIndicator', $event)" ng-class="{highlighted:fare.field['travelCompleteIndicator'],changed : vm.diff[fare.id].indexOf('travelCompleteIndicator')}">
+				                                <input type="text" class="form-control" name="discountTravelCompleteIndicator{{$parent.$index}}{{$index}}"
+				                                    ng-disabled="!vm.isEditable('discountTravelCompleteIndicator')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+				                                    ng-required="vm.isRequired('discountTravelCompleteIndicator') && fare.action != 'Canceled'" 
+				                                    ng-class="{'must-fill': editForm.editFormDiscount.discountTravelCompleteIndicator{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+				                                      ng-model="fare.travelCompleteIndicator"/>	
+				                              </td>
 						                    </tr>
 						                    <tr class="datatable-action{{$index}}" ng-show="vm.discountFaresActionButton[$index]" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
 						                      <td colspan="18" class="">
