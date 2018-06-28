@@ -1276,6 +1276,28 @@ public class WorkPackageFare implements Serializable {
         return cxr_equal && tariff_equal && origin_equal && destination_equal && fareclass_equal && owrt_equal && currency_equal && rtgno_equal && ruleno_equal && footnote_equal;
     }
 
+    public boolean equalsMarket(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        // compare strings to see if they are equal        
+        WorkPackageFare other_data = (WorkPackageFare) o;
+        boolean cxr_equal = other_data.carrier.equals(this.carrier);
+        boolean tariff_equal = other_data.tariffNumber.equals(this.tariffNumber);
+        boolean origin_equal = other_data.origin.equals(this.origin);
+        boolean destination_equal = other_data.destination.equals(this.destination);
+        boolean fareclass_equal = other_data.fareBasis.equals(this.fareBasis);
+        boolean owrt_equal = other_data.typeOfJourney.equals(this.typeOfJourney);
+        boolean currency_equal = other_data.currency.equals(this.currency);
+        boolean rtgno_equal = other_data.rtgno.equals(this.rtgno);
+        boolean ruleno_equal = other_data.ruleno.equals(this.ruleno);
+        boolean footnote_equal = other_data.footnote1.equals(this.footnote1);
+
+        return cxr_equal && tariff_equal && origin_equal && destination_equal && fareclass_equal && owrt_equal && currency_equal && rtgno_equal && ruleno_equal && footnote_equal;
+    }
     
 	@Override
     public int hashCode() {
@@ -1305,4 +1327,6 @@ public class WorkPackageFare implements Serializable {
 				+ dealCode + ", ticketCode=" + ticketCode + ", ticketDesignator=" + ticketDesignator
 				+ ", newBookingCode=" + newBookingCode + ", workPackage=" + workPackage + ", added=" + added + "]";
 	}
+
+	
 }
