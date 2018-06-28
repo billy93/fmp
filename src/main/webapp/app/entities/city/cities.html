@@ -17,6 +17,7 @@
 		        </div>
 		    </div>
 		    <br/>
+ 		<div class="table-wrapper">
 		    <div class="table-responsive">
 		        <table class="jh-table table table-striped">
 		            <thead>
@@ -26,6 +27,9 @@
 		                    <th jh-sort-by="cityCode"><span>City Code</span> <span class="glyphicon glyphicon-sort"></span></th>
 		                    <th jh-sort-by="countryName"><span>Country Name</span> <span class="glyphicon glyphicon-sort"></span></th>
 		                    <th jh-sort-by="countryCode"><span>Country Code</span> <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th jh-sort-by="airportCode"><span>Airport Code</span> <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th jh-sort-by="airportName"><span>Airport Name</span> <span class="glyphicon glyphicon-sort"></span></th>
+		                    <th jh-sort-by="worldareaCode"><span>World Area Code</span> <span class="glyphicon glyphicon-sort"></span></th>
 		                    <th></th>
 		                </tr>
 		            </thead>
@@ -36,6 +40,9 @@
 		                    <td>{{city.cityCode}}</td>
 		                    <td>{{city.countryName}}</td>
 		                    <td>{{city.countryCode}}</td>
+		                    <td>{{city.airportCode}}</td>
+		                    <td>{{city.airportName}}</td>
+		                    <td>{{city.worldareaCode}}</td>
 		                    <td class="text-right">
 		                        <div class="btn-group flex-btn-group-container">
 		                            <button type="submit"
@@ -61,7 +68,9 @@
 		                </tr>
 		            </tbody>
 		        </table>
+		       </div>
 		    </div>
+		    
 		    <div class="text-center">
 		        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
 		        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>

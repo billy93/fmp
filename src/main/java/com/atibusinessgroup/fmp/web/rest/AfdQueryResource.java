@@ -112,7 +112,7 @@ public class AfdQueryResource {
         int lastIndex = 0;
         
         //ATPCO
-        if (param.getSource() == null || param.getSource().contentEquals("A")) {
+        if (param.getSource() == null || param.getSource().trim().isEmpty() || param.getSource().contentEquals("A")) {
         	AfdQueryWrapper atpco = atpcoFareCustomRepository.findAtpcoFareAfdQueryWithRecords(param, ruleCategories, pageable);
             afdQueries.addAll(atpco.getAfdQueries());
             isLastPage = atpco.isLastPage();
@@ -120,17 +120,17 @@ public class AfdQueryResource {
         }
         
         //Market
-        if (param.getSource() == null || param.getSource().contentEquals("M")) {
+        if (param.getSource() == null || param.getSource().trim().isEmpty() || param.getSource().contentEquals("M")) {
         	
         }
         
         //Web
-        if (param.getSource() == null || param.getSource().contentEquals("W")) {
+        if (param.getSource() == null || param.getSource().trim().isEmpty() || param.getSource().contentEquals("W")) {
         	
         }
         
         //Competitor
-        if (param.getSource() == null || param.getSource().contentEquals("C")) {
+        if (param.getSource() == null || param.getSource().trim().isEmpty() || param.getSource().contentEquals("C")) {
         	
         }
         

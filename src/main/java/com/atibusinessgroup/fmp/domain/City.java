@@ -13,113 +13,146 @@ import java.util.Objects;
 @Document(collection = "city")
 public class City implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @Id
-    private String id;
+	@Id
+	private String id;
 
-    @Field("city_name")
-    private String cityName;
+	@Field("city_name")
+	private String cityName;
 
-    @Field("city_code")
-    private String cityCode;
+	@Field("city_code")
+	private String cityCode;
 
-    @Field("country_name")
-    private String countryName;
+	@Field("country_name")
+	private String countryName;
 
-    @Field("country_code")
-    private String countryCode;
+	@Field("country_code")
+	private String countryCode;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
-    public String getId() {
-        return id;
-    }
+	@Field("airport_code")
+	private String airportCode;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	@Field("airport_name")
+	private String airportName;
 
-    public String getCityName() {
-        return cityName;
-    }
+	@Field("worldarea_code")
+	private String worldareaCode;
 
-    public City cityName(String cityName) {
-        this.cityName = cityName;
-        return this;
-    }
+	// jhipster-needle-entity-add-field - JHipster will add fields here, do not
+	// remove
+	public String getId() {
+		return id;
+	}
 
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public String getCityCode() {
-        return cityCode;
-    }
+	public String getCityName() {
+		return cityName;
+	}
 
-    public City cityCode(String cityCode) {
-        this.cityCode = cityCode;
-        return this;
-    }
+	public City cityName(String cityName) {
+		this.cityName = cityName;
+		return this;
+	}
 
-    public void setCityCode(String cityCode) {
-        this.cityCode = cityCode;
-    }
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
+	}
 
-    public String getCountryName() {
-        return countryName;
-    }
+	public String getCityCode() {
+		return cityCode;
+	}
 
-    public City countryName(String countryName) {
-        this.countryName = countryName;
-        return this;
-    }
+	public City cityCode(String cityCode) {
+		this.cityCode = cityCode;
+		return this;
+	}
 
-    public void setCountryName(String countryName) {
-        this.countryName = countryName;
-    }
+	public void setCityCode(String cityCode) {
+		this.cityCode = cityCode;
+	}
 
-    public String getCountryCode() {
-        return countryCode;
-    }
+	public String getCountryName() {
+		return countryName;
+	}
 
-    public City countryCode(String countryCode) {
-        this.countryCode = countryCode;
-        return this;
-    }
+	public City countryName(String countryName) {
+		this.countryName = countryName;
+		return this;
+	}
 
-    public void setCountryCode(String countryCode) {
-        this.countryCode = countryCode;
-    }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+	public void setCountryName(String countryName) {
+		this.countryName = countryName;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        City city = (City) o;
-        if (city.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), city.getId());
-    }
+	public String getCountryCode() {
+		return countryCode;
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
+	public City countryCode(String countryCode) {
+		this.countryCode = countryCode;
+		return this;
+	}
 
-    @Override
-    public String toString() {
-        return "City{" +
-            "id=" + getId() +
-            ", cityName='" + getCityName() + "'" +
-            ", cityCode='" + getCityCode() + "'" +
-            ", countryName='" + getCountryName() + "'" +
-            ", countryCode='" + getCountryCode() + "'" +
-            "}";
-    }
+	public void setCountryCode(String countryCode) {
+		this.countryCode = countryCode;
+	}
+
+	public String getAirportCode() {
+		return airportCode;
+	}
+
+	public void setAirportCode(String airportCode) {
+		this.airportCode = airportCode;
+	}
+
+	public String getAirportName() {
+		return airportName;
+	}
+
+	public void setAirportName(String airportName) {
+		this.airportName = airportName;
+	}
+
+	public String getWorldareaCode() {
+		return worldareaCode;
+	}
+
+	public void setWorldareaCode(String worldareaCode) {
+		this.worldareaCode = worldareaCode;
+	}
+
+	// jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+	// setters here, do not remove
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		City city = (City) o;
+		if (city.getId() == null || getId() == null) {
+			return false;
+		}
+		return Objects.equals(getId(), city.getId());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(getId());
+	}
+
+	@Override
+	public String toString() {
+		return "City [id=" + id + ", cityName=" + cityName + ", cityCode=" + cityCode + ", countryName=" + countryName
+				+ ", countryCode=" + countryCode + ", airportCode=" + airportCode + ", airportName=" + airportName
+				+ ", worldareaCode=" + worldareaCode + "]";
+	}
+
 }

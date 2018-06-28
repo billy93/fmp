@@ -252,7 +252,7 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr  ng-repeat="workPackage in vm.workPackages track by $index"  
+										<tr id="tr{{$index}}" ng-repeat="workPackage in vm.workPackages track by $index"  
 										    role="row" class="datatable-row"
 											ng-class="{selected: workPackage === vm.selectedRow}"
 											ng-click="vm.rowSelected($index, workPackage)">
@@ -294,7 +294,7 @@
 
 						                    	<table ng-if="workPackage.discount" class="sub-table">
 						                    		<thead>
-						                    			<tr><th  colspan="2"><center>Discount Fare</center></th></tr>
+						                    			<tr><th  colspan="2" style="padding-left:18px; padding-right:18px"><center>Discount Fare</center></th></tr>
 						                    			<tr class="sub-second-th">
 						                    				<th>Sheet</th>
 						                    				<th>Fare Type</th>
