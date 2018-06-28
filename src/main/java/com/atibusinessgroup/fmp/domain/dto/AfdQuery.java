@@ -57,6 +57,7 @@ public class AfdQuery {
 	private String fareType;
 	private String paxType;
 	private String wpId;
+	private String tourCode;
 	private String groupFare;
 	private double refAmount;
 	private double refYqyr;
@@ -562,6 +563,14 @@ public class AfdQuery {
 		this.tariffCode = tariffCode;
 	}
 
+	public String getTourCode() {
+		return tourCode;
+	}
+
+	public void setTourCode(String tourCode) {
+		this.tourCode = tourCode;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -588,6 +597,7 @@ public class AfdQuery {
 		result = prime * result + ((fareClassCode == null) ? 0 : fareClassCode.hashCode());
 		result = prime * result + ((fareType == null) ? 0 : fareType.hashCode());
 		result = prime * result + ((firstSeasonDate == null) ? 0 : firstSeasonDate.hashCode());
+		result = prime * result + ((focusDate == null) ? 0 : focusDate.hashCode());
 		result = prime * result + ((footnote == null) ? 0 : footnote.hashCode());
 		result = prime * result + ((gfsDate == null) ? 0 : gfsDate.hashCode());
 		result = prime * result + ((gfsReference == null) ? 0 : gfsReference.hashCode());
@@ -616,7 +626,6 @@ public class AfdQuery {
 		result = prime * result + ((resEndDate == null) ? 0 : resEndDate.hashCode());
 		result = prime * result + ((resStartDate == null) ? 0 : resStartDate.hashCode());
 		result = prime * result + ((routingNo == null) ? 0 : routingNo.hashCode());
-		result = prime * result + ((focusDate == null) ? 0 : focusDate.hashCode());
 		result = prime * result + ((ruleNo == null) ? 0 : ruleNo.hashCode());
 		result = prime * result + ((saleEndDate == null) ? 0 : saleEndDate.hashCode());
 		result = prime * result + ((saleStartDate == null) ? 0 : saleStartDate.hashCode());
@@ -632,6 +641,7 @@ public class AfdQuery {
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((tfcCalculationDate == null) ? 0 : tfcCalculationDate.hashCode());
 		result = prime * result + ((tfcFocusDate == null) ? 0 : tfcFocusDate.hashCode());
+		result = prime * result + ((tourCode == null) ? 0 : tourCode.hashCode());
 		result = prime * result + ((travelComplete == null) ? 0 : travelComplete.hashCode());
 		result = prime * result + ((travelDateRanges == null) ? 0 : travelDateRanges.hashCode());
 		result = prime * result + ((travelEndDate == null) ? 0 : travelEndDate.hashCode());
@@ -779,6 +789,13 @@ public class AfdQuery {
 		} else if (!firstSeasonDate.equals(other.firstSeasonDate)) {
 			return false;
 		}
+		if (focusDate == null) {
+			if (other.focusDate != null) {
+				return false;
+			}
+		} else if (!focusDate.equals(other.focusDate)) {
+			return false;
+		}
 		if (footnote == null) {
 			if (other.footnote != null) {
 				return false;
@@ -916,13 +933,6 @@ public class AfdQuery {
 		} else if (!routingNo.equals(other.routingNo)) {
 			return false;
 		}
-		if (focusDate == null) {
-			if (other.focusDate != null) {
-				return false;
-			}
-		} else if (!focusDate.equals(other.focusDate)) {
-			return false;
-		}
 		if (ruleNo == null) {
 			if (other.ruleNo != null) {
 				return false;
@@ -1002,6 +1012,13 @@ public class AfdQuery {
 		} else if (!tfcFocusDate.equals(other.tfcFocusDate)) {
 			return false;
 		}
+		if (tourCode == null) {
+			if (other.tourCode != null) {
+				return false;
+			}
+		} else if (!tourCode.equals(other.tourCode)) {
+			return false;
+		}
 		if (travelComplete == null) {
 			if (other.travelComplete != null) {
 				return false;
@@ -1063,7 +1080,7 @@ public class AfdQuery {
 				+ ", dowIn=" + dowIn + ", dowOut=" + dowOut + ", season=" + season + ", dayOfWeekType=" + dayOfWeekType
 				+ ", firstSeasonDate=" + firstSeasonDate + ", lastSeasonDate=" + lastSeasonDate + ", travelDateRanges="
 				+ travelDateRanges + ", fareType=" + fareType + ", paxType=" + paxType + ", wpId=" + wpId
-				+ ", groupFare=" + groupFare + ", refAmount=" + refAmount + ", refYqyr=" + refYqyr + ", refTaxes="
-				+ refTaxes + ", refTfc=" + refTfc + ", refAif=" + refAif + "]";
+				+ ", tourCode=" + tourCode + ", groupFare=" + groupFare + ", refAmount=" + refAmount + ", refYqyr="
+				+ refYqyr + ", refTaxes=" + refTaxes + ", refTfc=" + refTfc + ", refAif=" + refAif + "]";
 	}
 }

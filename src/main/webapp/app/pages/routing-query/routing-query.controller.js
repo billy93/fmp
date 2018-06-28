@@ -21,6 +21,7 @@
         vm.itemsPerPage = paginationConstants.itemsPerPage;
         vm.getDetails = getDetails;
         vm.getFullDetails = getFullDetails;
+        vm.changeItemsPerPage = changeItemsPerPage;
         
         vm.datePickerOpenStatus = {};
         vm.dateFormat = "yyyy-MM-dd";
@@ -28,16 +29,18 @@
         
         if($stateParams.routingQueryFilter != null){
         	vm.queryParams = $stateParams.routingQueryFilter;
+        	vm.itemsPerPage = vm.queryParams.size;
         } else {
         	vm.clearFilter();
+        	vm.itemsPerPage = "10";
         }
         
         vm.loadAll(false);
 
         function loadAll(isQueryClick) {
         	vm.queryParams.page = pagingParams.page - 1;
-			vm.queryParams.size= vm.itemsPerPage;
-			vm.queryParams.sort= sort();
+			vm.queryParams.size = vm.itemsPerPage;
+			vm.queryParams.sort = sort();
 			
             Routingquery.query(vm.queryParams, onSuccess, onError);
             
@@ -119,6 +122,10 @@
         	}, function(error) {
         		console.log(error);
         	});
+        }
+        
+        function changeItemsPerPage() {
+        	vm.loadAll();
         }
     }
 })();

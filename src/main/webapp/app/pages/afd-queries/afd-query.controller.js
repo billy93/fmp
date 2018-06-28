@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('AfdQueryController', AfdQueryController);
 
-    AfdQueryController.$inject = ['$state', 'AfdQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', 'tariffNumbers', 'cities', '$uibModal', 'Clipboard', 'Timezone'];
+    AfdQueryController.$inject = ['$state', 'AfdQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', 'tariffNumbers', 'cities', '$uibModal', 'Clipboard', 'Timezone', 'atpcoMasterFareType', 'globals', 'passengers', 'fareTypes'];
 
-    function AfdQueryController($state, AfdQuery, ParseLinks, AlertService, paginationConstants, queryParams, tariffNumbers, cities, $uibModal, Clipboard, Timezone) {
+    function AfdQueryController($state, AfdQuery, ParseLinks, AlertService, paginationConstants, queryParams, tariffNumbers, cities, $uibModal, Clipboard, Timezone, atpcoMasterFareType, globals, passengers, fareTypes) {
 
         var vm = this;
         vm.loadPage = loadPage;
@@ -29,14 +29,22 @@
         vm.selectedRows = [];
         vm.selectedFares = [];
         vm.timezone = Timezone.GMT7;
+        vm.infoMessage = null;
         
         vm.afdQueries = [];
         vm.reset = reset;
         vm.page = 0;
+        vm.disableInfiniteScroll = true;
         
         vm.datePickerOpenStatus = {};
         vm.dateFormat = "yyyy-MM-dd";
         vm.openCalendar = openCalendar;
+        
+        vm.tariffs = tariffNumbers;
+        vm.fareTypes = atpcoMasterFareType;
+        vm.globalIndicators = globals;
+        vm.paxTypes = passengers;
+        vm.cities = cities;
         
         vm.sources = [
         	{key: "", value: "Select Source"},
@@ -49,14 +57,14 @@
         vm.publicPrivate = [
         	{key: "", value: "Select Public/Private"},
         	{key: "Public", value: "Public"},
-        	{key: "Private", value: "Private"},
+        	{key: "Private", value: "Private"}
         ]
         
         vm.owrts = [
         	{key: "", value: "Select OW/RT"},
     		{key: "1", value: "1 - One Way"},
     		{key: "2", value: "2 - Rount Trip"},
-    		{key: "3", value: "3 - One Way Only"},
+    		{key: "3", value: "3 - One Way Only"}
         ]
         
         vm.dateOptions = [
@@ -64,68 +72,89 @@
         	{key: "E", value: "Exact Match"}
         ]
         
-        vm.tariffs = tariffNumbers;
+        vm.cabins = [
+        	{key: "F", value: "First"},
+        	{key: "J", value: "Business"},
+        	{key: "W", value: "Premium Economy"},
+        	{key: "Y", value: "Economy"}
+        ];
+       
+        vm.gaFareTypes = fareTypes;
         
-        vm.cities = cities;
-        
-        vm.globalIndicators = "?";
-        
-        vm.gaFareTypes = "?";
-        
-        vm.fareTypes = "?";
-        
-        vm.paxTypes = "?";
-        
-        vm.cabins = "?";
-        
-        vm.loadAll();
-
         function query() {
         	vm.afdQueries = [];
         	vm.page = 0;
+        	vm.lastIndex = 0;
+        	vm.isLastPage = false;
         	vm.loadAll();
         }
         
         function loadAll () {
-        	vm.isLoading = true;
-        	vm.isLastPage = false;
-        	vm.showLastPageInfo = false;
-        	
-        	if (!vm.checkValidParameters()) {
-        		vm.showErrorModal();
-        		return;
-        	}
-        	
-        	vm.categoryRules = null;
-        	vm.currentAfdQuery = null;
-        	
-        	vm.queryParams.page = vm.page;
-        	vm.queryParams.size = vm.itemsPerPage;
-        	
-        	AfdQuery.query(vm.queryParams, onSuccess, onError);
-        	
-            function onSuccess(data) {
-            	vm.isLastPage = data.lastPage;
+        	if (!vm.isLastPage) {
+        		vm.isLoading = true;
+            	vm.isLastPage = false;
+            	vm.showLastPageInfo = false;
+            	vm.noDataAvailable = false;
             	
-                for (var i = 0; i < data.afdQueries.length; i++) {
-                	vm.afdQueries.push(data.afdQueries[i]);
+            	vm.infoMessage = vm.checkValidParameters();
+            	
+            	if (vm.infoMessage != 'Valid') {
+            		vm.showErrorModal(vm.infoMessage);
+            		return;
+            	}
+            	
+            	vm.categoryRules = null;
+            	vm.currentAfdQuery = null;
+            	
+            	vm.queryParams.page = vm.page;
+            	vm.queryParams.size = vm.itemsPerPage;
+            	vm.queryParams.lastIndex = vm.lastIndex;
+            	
+            	console.log(vm.queryParams);
+            	
+            	AfdQuery.query(vm.queryParams, onSuccess, onError);
+            	
+                function onSuccess(data) {
+                	vm.isLastPage = data.lastPage;
+                	vm.lastIndex = data.lastIndex;
+                	
+                    for (var i = 0; i < data.afdQueries.length; i++) {
+                    	vm.afdQueries.push(data.afdQueries[i]);
+                    }
+                    
+                    vm.isLoading = false;
+                    vm.disableInfiniteScroll = false;
+                    
+                    if (vm.afdQueries.length == 0) {
+                    	vm.noDataAvailable = true;
+                    }
                 }
                 
-                vm.isLoading = false;
-            }
-            
-            function onError(error) {
-                AlertService.error(error.data.message);
-                vm.isLoading = false;
-            }
+                function onError(error) {
+                    AlertService.error(error.data.message);
+                    vm.isLoading = false;
+                }
+        	}
         }
         
         function checkValidParameters() {
-        	console.log(vm.queryParams);
+        	if ((vm.queryParams.carrier != null && vm.queryParams.origin != null) ||
+        			(vm.queryParams.carrier != null && vm.queryParams.destination != null) ||
+        			(vm.queryParams.origin != null && vm.queryParams.destination != null) ||
+        			(vm.queryParams.origin != null && vm.queryParams.fareBasis != null) ||
+        			(vm.queryParams.destination != null && vm.queryParams.fareBasis != null) || 
+        			(vm.queryParams.carrier != null && vm.queryParams.fareBasis != null) || 
+        			vm.queryParams.woId != null) {
+        		return 'Valid';
+        	} else {
+        		return "Error: One set of the following is required.\n\tCarrier and Origin\n\tCarrier and Destination\n\tCarrier and Fare Basis\n\tOrigin and Destination\n\tOrigin and Fare Basis\n\tDestination and Fare Basis\n\tWork Order ID\n";
+        	}
+        	
+//        	if (vm.effectiveDateFrom == null) {
+//        		
+//        	}
         	
         	//Effective to must be minimum of tommorrow when effective from is not filled
-        	
-        	return true;
         }
 
         function loadPage(page) {
@@ -336,18 +365,25 @@
             });
         }
         
-        function showErrorModal() {
-//        	$uibModal.open({
-//                templateUrl: 'app/pages/category-modals/legend-modal.html',
-//                controller: 'LegendModalController',
-//                controllerAs: 'vm',
-//                backdrop: 'static',
-//                size: 'md'
-//            }).result.then(function() {
-//                $state.go('afd-query', {}, { reload: false });
-//            }, function() {
-//                $state.go('afd-query');
-//            });
+        function showErrorModal(message) {
+        	console.log(message);
+        	
+        	$uibModal.open({
+                templateUrl: 'app/pages/modals/info-modal.html',
+                controller: 'InfoModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'md',
+                resolve: {
+                    entity: {
+                    	message: message
+                    }	
+                }
+            }).result.then(function() {
+                $state.go('afd-query', {}, { reload: false });
+            }, function() {
+                $state.go('afd-query');
+            });
         }
     }
 })();

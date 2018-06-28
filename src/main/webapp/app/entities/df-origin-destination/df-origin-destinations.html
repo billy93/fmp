@@ -1,66 +1,68 @@
 <div>
-    <h2>DF Origin Destinations</h2>
-    <jhi-alert></jhi-alert>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-xs-4 no-padding-left">
-                <button class="btn btn-primary" ui-sref="df-origin-destination.new" >
-                    <span class="glyphicon glyphicon-plus"></span>
-                    <span >
-                        Create new DF Origin Destination
-                    </span>
-                </button>
-            </div>
-        </div>
-    </div>
-    <br/>
-    <div class="table-responsive">
-        <table class="jh-table table table-striped">
-            <thead>
-                <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-                    <th jh-sort-by="id"><span>ID</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="origAirport"><span>Orig Airport</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="destAirport"><span>Dest Airport</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="origCity"><span>Orig City</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="destCity"><span>Dest City</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="dFOriginDestination in vm.dFOriginDestinations track by dFOriginDestination.id">
-                    <td><a ui-sref="df-origin-destination-detail({id:dFOriginDestination.id})">{{dFOriginDestination.id}}</a></td>
-                    <td>{{dFOriginDestination.origAirport}}</td>
-                    <td>{{dFOriginDestination.destAirport}}</td>
-                    <td>{{dFOriginDestination.origCity}}</td>
-                    <td>{{dFOriginDestination.destCity}}</td>
-                    <td class="text-right">
-                        <div class="btn-group flex-btn-group-container">
-                            <button type="submit"
-                                    ui-sref="df-origin-destination-detail({id:dFOriginDestination.id})"
-                                    class="btn btn-info btn-sm">
-                                <span class="glyphicon glyphicon-eye-open"></span>
-                                <span class="hidden-sm-down"></span>
-                            </button>
-                            <button type="submit"
-                                    ui-sref="df-origin-destination.edit({id:dFOriginDestination.id})"
-                                    class="btn btn-primary btn-sm">
-                                <span class="glyphicon glyphicon-pencil"></span>
-                                <span class="hidden-sm-down"></span>
-                            </button>
-                            <button type="submit"
-                                    ui-sref="df-origin-destination.delete({id:dFOriginDestination.id})"
-                                    class="btn btn-danger btn-sm">
-                                <span class="glyphicon glyphicon-remove-circle"></span>
-                                <span class="hidden-sm-down"></span>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="text-center">
-        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
-        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
-    </div>
+	<h2>DF Origin Destinations</h2>
+	<jhi-alert></jhi-alert>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-xs-4 no-padding-left">
+				<button class="btn btn-primary" ui-sref="df-origin-destination.new">
+					<span class="glyphicon glyphicon-plus"></span> <span> Create
+						new DF Origin Destination </span>
+				</button>
+			</div>
+		</div>
+	</div>
+	<br />
+	<div class="table-responsive">
+		<table class="jh-table table table-striped">
+			<thead>
+				<tr jh-sort="vm.predicate" ascending="vm.reverse"
+					callback="vm.transition()">
+					<th jh-sort-by="id"><span>ID</span> <span
+						class="glyphicon glyphicon-sort"></span></th>
+					<th jh-sort-by="origAirport"><span>Orig Airport</span> <span
+						class="glyphicon glyphicon-sort"></span></th>
+					<th jh-sort-by="destAirport"><span>Dest Airport</span> <span
+						class="glyphicon glyphicon-sort"></span></th>
+					<th jh-sort-by="origCity"><span>Orig City</span> <span
+						class="glyphicon glyphicon-sort"></span></th>
+					<th jh-sort-by="destCity"><span>Dest City</span> <span
+						class="glyphicon glyphicon-sort"></span></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr
+					ng-repeat="dFOriginDestination in vm.dFOriginDestinations track by dFOriginDestination.id">
+					<td>{{$index + 1}}</td>
+					<td>{{dFOriginDestination.origAirport}}</td>
+					<td>{{dFOriginDestination.destAirport}}</td>
+					<td>{{dFOriginDestination.origCity}}</td>
+					<td>{{dFOriginDestination.destCity}}</td>
+					<td class="text-right">
+						<div class="btn-group flex-btn-group-container">
+							<button type="submit"
+								ui-sref="df-origin-destination.edit({id:dFOriginDestination.id})"
+								class="btn btn-primary btn-sm">
+								<span class="glyphicon glyphicon-pencil"></span> <span
+									class="hidden-sm-down"></span>
+							</button>
+							<button type="submit"
+								ui-sref="df-origin-destination.delete({id:dFOriginDestination.id})"
+								class="btn btn-danger btn-sm">
+								<span class="glyphicon glyphicon-remove-circle"></span> <span
+									class="hidden-sm-down"></span>
+							</button>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="text-center">
+		<jhi-item-count page="vm.page" total="vm.queryCount"
+			items-per-page="vm.itemsPerPage"></jhi-item-count>
+		<uib-pagination class="pagination-sm" total-items="vm.totalItems"
+			items-per-page="vm.itemsPerPage" ng-model="vm.page"
+			ng-change="vm.loadAll()"></uib-pagination>
+	</div>
 </div>

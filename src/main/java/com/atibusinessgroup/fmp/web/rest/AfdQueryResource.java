@@ -109,14 +109,34 @@ public class AfdQueryResource {
         
         List<AfdQuery> afdQueries = new ArrayList<>();
         boolean isLastPage = false;
+        int lastIndex = 0;
         
         //ATPCO
-        AfdQueryWrapper atpco = atpcoFareCustomRepository.findAtpcoFareAfdQueryWithRecords(param, ruleCategories, pageable);
-        afdQueries.addAll(atpco.getAfdQueries());
-        isLastPage = atpco.isLastPage();
+        if (param.getSource() == null || param.getSource().trim().isEmpty() || param.getSource().contentEquals("A")) {
+        	AfdQueryWrapper atpco = atpcoFareCustomRepository.findAtpcoFareAfdQueryWithRecords(param, ruleCategories, pageable);
+            afdQueries.addAll(atpco.getAfdQueries());
+            isLastPage = atpco.isLastPage();
+            lastIndex = atpco.getLastIndex();
+        }
+        
+        //Market
+        if (param.getSource() == null || param.getSource().trim().isEmpty() || param.getSource().contentEquals("M")) {
+        	
+        }
+        
+        //Web
+        if (param.getSource() == null || param.getSource().trim().isEmpty() || param.getSource().contentEquals("W")) {
+        	
+        }
+        
+        //Competitor
+        if (param.getSource() == null || param.getSource().trim().isEmpty() || param.getSource().contentEquals("C")) {
+        	
+        }
         
         result.setAfdQueries(afdQueries);
         result.setLastPage(isLastPage);
+        result.setLastIndex(lastIndex);
         
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

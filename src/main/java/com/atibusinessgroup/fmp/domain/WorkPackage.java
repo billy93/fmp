@@ -249,10 +249,28 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 
 		public static class Tab{
     		private String name;
+    		private String type;
+    		private String index;
     		private List<Error> warning;
     		private List<Error> error;
     		
-    		public String getName() {
+    		public String getType() {
+				return type;
+			}
+
+			public void setType(String type) {
+				this.type = type;
+			}
+
+			public String getIndex() {
+				return index;
+			}
+
+			public void setIndex(String index) {
+				this.index = index;
+			}
+
+			public String getName() {
 				return name;
 			}
 
@@ -278,13 +296,31 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 
 			public static class Error{
     			private String message;
-
+    			private String index;
+    			private String field;
+    			
 				public String getMessage() {
 					return message;
 				}
 
 				public void setMessage(String message) {
 					this.message = message;
+				}
+
+				public String getIndex() {
+					return index;
+				}
+
+				public void setIndex(String index) {
+					this.index = index;
+				}
+
+				public String getField() {
+					return field;
+				}
+
+				public void setField(String field) {
+					this.field = field;
 				}
 
 				

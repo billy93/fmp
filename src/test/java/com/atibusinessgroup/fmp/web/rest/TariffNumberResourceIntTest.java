@@ -67,7 +67,7 @@ public class TariffNumberResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final TariffNumberResource tariffNumberResource = new TariffNumberResource(tariffNumberRepository);
+        final TariffNumberResource tariffNumberResource = new TariffNumberResource(tariffNumberRepository, null);
         this.restTariffNumberMockMvc = MockMvcBuilders.standaloneSetup(tariffNumberResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
