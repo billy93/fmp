@@ -35,7 +35,8 @@
                 		travelDateFrom: null,
                 		travelDateTo: null,
                 		completedDateFrom: null,
-                		travelOpt: null
+                		travelOpt: null,
+                		includeDisc : null
                 	}
             	}]
             }

@@ -113,6 +113,51 @@ public class FootnoteQueryResource {
 
 		return new ResponseEntity<>(arecords2, HttpStatus.OK);
 	}
+	
+	@PostMapping("/footnote-queries/available")
+	@Timed
+	public ResponseEntity<List<FootnoteQuery>> getFootnoteQueryRulesAvailable(@RequestBody FootnoteQueryParam param) {
+		log.debug("REST request to get a page of Footnote Queries: {}", param);
+
+		Pageable pageable = new PageRequest(param.getPage(), param.getSize());
+
+		Page<AtpcoFootnoteRecord2GroupByFtntCxrTarNo> page = atpcoFootnoteQueryCustomRepository.groupingFootnoteQueryAvailable(param, pageable);
+		List<FootnoteQuery> result = new ArrayList<>();
+
+		if (page != null) {
+			for (AtpcoFootnoteRecord2GroupByFtntCxrTarNo record2Group : page.getContent()) {
+				FootnoteQuery rq = footnoteQueryMapper.convertAndGroupFootnote(record2Group);
+				result.add(rq);
+			}
+		}
+
+		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/footnote-queries");
+
+		return new ResponseEntity<>(result, headers, HttpStatus.OK);
+	}
+	
+	
+	@PostMapping("/footnote-queries/expired")
+	@Timed
+	public ResponseEntity<List<FootnoteQuery>> getFootnoteQueryRulesExpired(@RequestBody FootnoteQueryParam param) {
+		log.debug("REST request to get a page of Footnote Queries: {}", param);
+
+		Pageable pageable = new PageRequest(param.getPage(), param.getSize());
+
+		Page<AtpcoFootnoteRecord2GroupByFtntCxrTarNo> page = atpcoFootnoteQueryCustomRepository.groupingFootnoteQueryExpired(param, pageable);
+		List<FootnoteQuery> result = new ArrayList<>();
+
+		if (page != null) {
+			for (AtpcoFootnoteRecord2GroupByFtntCxrTarNo record2Group : page.getContent()) {
+				FootnoteQuery rq = footnoteQueryMapper.convertAndGroupFootnote(record2Group);
+				result.add(rq);
+			}
+		}
+
+		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/footnote-queries");
+
+		return new ResponseEntity<>(result, headers, HttpStatus.OK);
+	}
 
 	/**
 	 * GET /footnote-queries/rules : get footnote query rules.

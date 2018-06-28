@@ -27,6 +27,19 @@
         vm.paramTarNo = null;
         vm.showTariffModal = showTariffModal;
         vm.showCarrierModal = showCarrierModal;
+        
+        vm.loadAvailable = loadAvailable;
+        vm.loadExpired = loadExpired;
+        
+        $("#catNo").change(function() {
+        	vm.queryParams.saleDateFrom = null;
+        	vm.queryParams.saleDateTo = null;
+        	vm.queryParams.travelDateFrom = null;
+        	vm.queryParams.travelDateTo = null;
+        	vm.queryParams.completedDateFrom = null;
+        	vm.queryParams.travelOpt = null;
+        	
+        });
 
 		function loadAll() {
 			vm.queryParams.page = vm.page - 1;
@@ -36,6 +49,48 @@
 			vm.queryParams.tarNo = vm.paramTarNo;
 
 			FootnoteQuery.query(vm.queryParams, onSuccess, onError);
+
+			function onSuccess(data, headers) {
+				vm.links = ParseLinks.parse(headers('link'));
+				vm.totalItems = headers('X-Total-Count');
+				vm.queryCount = vm.totalItems;
+				vm.footnoteQueries = data;
+			}
+
+			function onError(error) {
+				AlertService.error(error.data.message);
+			}
+		}
+		
+		function loadAvailable() {
+			vm.queryParams.page = vm.page - 1;
+			vm.queryParams.size = vm.itemsPerPage;
+			
+			vm.queryParams.cxr = vm.paramCarrier;
+			vm.queryParams.tarNo = vm.paramTarNo;
+
+			FootnoteQuery.queryAvailable(vm.queryParams, onSuccess, onError);
+
+			function onSuccess(data, headers) {
+				vm.links = ParseLinks.parse(headers('link'));
+				vm.totalItems = headers('X-Total-Count');
+				vm.queryCount = vm.totalItems;
+				vm.footnoteQueries = data;
+			}
+
+			function onError(error) {
+				AlertService.error(error.data.message);
+			}
+		}
+		
+		function loadExpired() {
+			vm.queryParams.page = vm.page - 1;
+			vm.queryParams.size = vm.itemsPerPage;
+			
+			vm.queryParams.cxr = vm.paramCarrier;
+			vm.queryParams.tarNo = vm.paramTarNo;
+
+			FootnoteQuery.queryExpired(vm.queryParams, onSuccess, onError);
 
 			function onSuccess(data, headers) {
 				vm.links = ParseLinks.parse(headers('link'));
@@ -87,11 +142,16 @@
 				travelDateFrom : null,
 				travelDateTo : null,
 				completedDateFrom : null,
-				travelOpt : null
+				travelOpt : null,
+				includeDisc : null
 			}
 
 			vm.footnoteQueries = null;
 			vm.footnoteQueryCategories = null;
+			
+			vm.paramCarrier = null;
+			vm.paramTarNo = null;
+			
 		}
 
 		function showCategoryDetail(category) {
