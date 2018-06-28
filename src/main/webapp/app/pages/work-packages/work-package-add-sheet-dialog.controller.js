@@ -28,6 +28,9 @@
         if(vm.workPackage.reviewLevel != 'DISTRIBUTION'){
 	        if(vm.workPackage.type == 'REGULAR' && vm.workPackage.targetDistribution == 'MARKET'){
 	        	 vm.types = ["Market Fares", "Add-Ons"];
+	        	 if(!vm.workPackage.filingInstruction){
+	     	         	vm.types.push("Filing Instruction");
+	     	         }
 	        }
 	        else if(vm.workPackage.type == 'DISCOUNT'){
 	        	 vm.types = ["Discount Fares"];

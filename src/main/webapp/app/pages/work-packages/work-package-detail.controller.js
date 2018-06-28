@@ -5927,6 +5927,7 @@
         				  f.origin = listCitiesOrigin[a].cityCode;
         				  f.destination = listCitiesDestination[b].cityCode;
         				  f.no = fares.length+1;
+        				  f.action="A";
         				  fares.push(f);
     				  }
     			  }
@@ -5946,6 +5947,7 @@
     				  var f = angular.copy(faresCityGroupOrigin[x]);
     				  f.origin = listCities[z].cityCode;
     				  f.no = fares.length+1;
+    				  f.action="A";
     				  fares.push(f);
     			  }
     		  }
@@ -5964,6 +5966,7 @@
     				  var f = angular.copy(faresCityGroupDestination[x]);
     				  f.destination = listCities[z].cityCode;
     				  f.no = fares.length+1;
+    				  f.action="A";
     				  fares.push(f);
     			  }
     		  }
