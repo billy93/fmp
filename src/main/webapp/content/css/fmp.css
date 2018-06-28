@@ -3525,6 +3525,24 @@ p {
   margin-right: 5px; }
   .btn:last-child {
     margin-right: 0; }
+  .btn.btn-home {
+    background-color: #ffc700;
+    /* Old browsers */
+    background-color: -moz-linear-gradient(top, #ffc700 0%, #ffc100 50%, #ffba00 100%);
+    /* FF3.6-15 */
+    background-color: -webkit-linear-gradient(top, #ffc700 0%, #ffc100 50%, #ffba00 100%);
+    /* Chrome10-25,Safari5.1-6 */
+    background-color: linear-gradient(to bottom, #ffc700 0%, #ffc100 50%, #ffba00 100%);
+    color: #4d3419;
+    border: 1px solid #e9b11c; }
+    .btn.btn-home:hover {
+      background-color: #ffd233;
+      /* Old browsers */
+      background-color: -moz-linear-gradient(top, #ffd233 0%, #ffcd33 50%, #ffc833 100%);
+      /* FF3.6-15 */
+      background-color: -webkit-linear-gradient(top, #ffd233 0%, #ffcd33 50%, #ffc833 100%);
+      /* Chrome10-25,Safari5.1-6 */
+      background-color: linear-gradient(to bottom, #ffd233 0%, #ffcd33 50%, #ffc833 100%); }
   .btn.btn-default {
     background-color: #5697ce;
     /* Old browsers */
@@ -3545,25 +3563,25 @@ p {
       background-color: linear-gradient(to bottom, #7eafd9 0%, #ffcd33 50%, #ffc833 100%); }
   .btn.btn-back {
     max-width: 120px;
-    background-color: #5697ce;
+    background-color: #d9534f;
     font-size: 11px;
     font-weight: 400;
     /* Old browsers */
-    background-color: -moz-linear-gradient(top, #5697ce 0%, #dd4b00 50%, #d73925 100%);
+    background-color: -moz-linear-gradient(top, #d9534f 0%, #dd4b00 50%, #d73925 100%);
     /* FF3.6-15 */
-    background-color: -webkit-linear-gradient(top, #5697ce 0%, #dd4b00 50%, #d73925 100%);
+    background-color: -webkit-linear-gradient(top, #d9534f 0%, #dd4b00 50%, #d73925 100%);
     /* Chrome10-25,Safari5.1-6 */
-    background-color: linear-gradient(to bottom, #5697ce 0%, #dd4b00 50%, #d73925 100%);
+    background-color: linear-gradient(to bottom, #d9534f 0%, #dd4b00 50%, #d73925 100%);
     color: #fff;
-    border: 1px solid #5d96df; }
+    border: 1px solid #d43f3a; }
     .btn.btn-back:hover {
-      background-color: #7eafd9;
+      background-color: #e27c79;
       /* Old browsers */
-      background-color: -moz-linear-gradient(top, #7eafd9 0%, #ff6211 50%, #e15f4e 100%);
+      background-color: -moz-linear-gradient(top, #e27c79 0%, #ff6211 50%, #e15f4e 100%);
       /* FF3.6-15 */
-      background-color: -webkit-linear-gradient(top, #7eafd9 0%, #ff6211 50%, #e15f4e 100%);
+      background-color: -webkit-linear-gradient(top, #e27c79 0%, #ff6211 50%, #e15f4e 100%);
       /* Chrome10-25,Safari5.1-6 */
-      background-color: linear-gradient(to bottom, #7eafd9 0%, #ff6211 50%, #e15f4e 100%); }
+      background-color: linear-gradient(to bottom, #e27c79 0%, #ff6211 50%, #e15f4e 100%); }
     .btn.btn-back.back {
       position: absolute;
       top: 15px;
