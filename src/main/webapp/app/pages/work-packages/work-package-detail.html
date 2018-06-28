@@ -1280,28 +1280,28 @@
 								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+vm.workPackage.addonFareSheet.length+1}}" ng-class="{active:vm.currentTabAttachment}" ng-if="vm.workPackage.attachment">
 									<div class="action-btn-wrapper">
 					     				<div class="col-md-12 text-right no-pad">
-					     					<button ng-click="vm.addAttachment()" class="btn btn-primary" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Add</button>
+					     					<button ng-click="vm.addAttachment()" class="btn btn-primary" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN' ">Add</button>
 					     				</div>
 					     			</div>
 									<div class="pull-left w50 two-column">
 						                <div class="form-group">
 						                  <label>Approval Reference</label>
 						                  <input type="text" name="attachmentApprovalReference{{$index}}" class="form-control" 
-						                  ng-model="vm.workPackage.attachmentApprovalReference" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
-						                  <button ng-click="vm.generateTourCodeAttachment()" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Generate Tour Code</button>
+						                  ng-model="vm.workPackage.attachmentApprovalReference" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN'">
+						                  <button ng-click="vm.generateTourCodeAttachment()" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN'">Generate Tour Code</button>
 						                </div>
 						              </div>
 						              
 					     			<div class="col-md-12">
 					     				<div class="text-center no-data" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">No Attachment Available</div>							
 						     			<div ng-repeat="attachment in vm.workPackage.attachmentData.slice().reverse() track by $index" class="form-repeat">
-					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION' || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION' || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}"></span></button>
+					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION' || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION' || vm.workPackage.status=='WITHDRAWN' || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}"></span></button>
 							       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'short'}}</label>
 							       			<div class="row mt1">
 								        		<div class="col-md-6">
 									      			<div class="form-group">
 									      				<label>Comment</label>
-									      				<textarea class="form-control" ng-model="attachment.comment" ng-disabled="attachment.isDeleted ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"></textarea>
+									      				<textarea class="form-control" ng-model="attachment.comment" ng-disabled="attachment.isDeleted || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN'"></textarea>
 									      			</div>
 								        		</div>
 								        		<div class="col-md-6">
@@ -1313,13 +1313,13 @@
 											                    Open
 											                </button>
 											                <button type="button" ngf-select class="btn btn-secondary"
-											                        ngf-change="vm.setFile($file, attachment)" ng-disabled="attachment.isDeleted||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
+											                        ngf-change="vm.setFile($file, attachment)" ng-disabled="attachment.isDeleted||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN'">
 											                    Add file
 											                </button>
 										                    <div class="form-group mt1">
 																<div class="checkbox-wrapper">
 																	<label class="black" for="inOnly">
-																		<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly" ng-disabled="attachment.isDeleted || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
+																		<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly" ng-disabled="attachment.isDeleted || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN'">
 																		Inter Office Notification
 																	</label>
 																	<label class="black" for="isDeleted">
@@ -2024,8 +2024,32 @@
 				                                    ng-required="vm.isRequired('discountComment') && fare.action != 'Canceled'" 
 				                                    ng-class="{'must-fill': editForm.editFormDiscount.discountComment{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
 				                                      ng-model="fare.comment"/>	
+				                              </td>				                              
+				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'travelComplete', $event)" ng-class="{highlighted:fare.field['travelComplete'],changed : vm.diff[fare.id].indexOf('travelComplete') > -1}">
+						               				<span class="input-group">
+														<input id="field_startDate" 
+															type="text"
+															name="discountTravelComplete{{$parent.$index}}{{$index}}" id="field_discountTravelComplete"
+							                				ng-disabled="!vm.isEditable('discountTravelComplete')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"	
+							                				class="form-control input-date"					                				
+							                				ng-required="vm.isRequired('discountTravelComplete')"
+								                    		ng-class="{'must-fill': editForm.editFormDiscount.discountTravelComplete{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
+												            ng-model="fare.travelComplete" 
+												            datetime-picker="{{dateformat}}" 
+												            enable-time="false"
+												            is-open="vm.datePickerOpenStatus['discountTravelComplete'+$parent.$index+''+$index]">
+														<span ng-click="vm.openCalendar('discountTravelComplete'+$parent.$index+''+$index)" class="input-group-addon disabled" ng-class="{'poiv-none': !vm.isEditable('discountTravelComplete')|| fare.status == 'APPROVED' || fare.status == 'REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}">
+															<i class="fa fa-calendar"></i>
+														</span>
+													</span>
+						               		  </td>
+				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'travelCompleteIndicator', $event)" ng-class="{highlighted:fare.field['travelCompleteIndicator'],changed : vm.diff[fare.id].indexOf('travelCompleteIndicator')}">
+				                                <input type="text" class="form-control" name="discountTravelCompleteIndicator{{$parent.$index}}{{$index}}"
+				                                    ng-disabled="!vm.isEditable('discountTravelCompleteIndicator')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+				                                    ng-required="vm.isRequired('discountTravelCompleteIndicator') && fare.action != 'Canceled'" 
+				                                    ng-class="{'must-fill': editForm.editFormDiscount.discountTravelCompleteIndicator{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"	
+				                                      ng-model="fare.travelCompleteIndicator"/>	
 				                              </td>
-				                              
 						                    </tr>
 						                    <tr class="datatable-action{{$index}}" ng-show="vm.discountFaresActionButton[$index]" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
 						                      <td colspan="18" class="">
