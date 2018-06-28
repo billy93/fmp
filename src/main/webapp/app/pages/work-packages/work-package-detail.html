@@ -436,7 +436,7 @@
 												</div>
 											</div>
 											<div class="table-responsive">
-												<table class="table table-stripped table-bordered datatable" jq-slider ng-init="vm.sort(workPackageSheet, '#')">
+												<table class="table table-stripped table-bordered datatable" ng-init="vm.sort(workPackageSheet, '#')">
 													<thead>
 														<tr role="row">
 															<th class="sorting_asc" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" aria-sort="ascending">No</th>
@@ -451,7 +451,6 @@
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tar No <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'tariffNumber.tarNo')"></span></th>
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tar Cd <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'tariffNumber.tarCd')"></span></th>
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Global <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'tariffNumber.global')"></span>
-																<div class="resize-div"></div>
 															</th>
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Origin <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'origin')"></span></th>
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Dest <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'destination')"></span></th>
@@ -459,11 +458,12 @@
 																<div class="resize-div"></div>
 															</th>
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Bkg Cls <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'bookingClass')"></span>
-																<div class="resize-div"></div>
 															</th>
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Cabin <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'cabin')"></span>
+																<div class="resize-div" style="min-width: 120px"></div>
 															</th>
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">OW/RT <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'typeOfJourney')"></span>
+																<div class="resize-div" style="min-width: 120px"></div>
 															</th>
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Ftnt <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'footnote')"></span>
 																<div class="resize-div"></div>
@@ -476,7 +476,7 @@
 															</th>
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Curr <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'currency')"></span></th>
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Base Amt <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'amount')"></span>
-																<div class="resize-div"></div>
+																<div class="resize-div" style="min-width: 120px"></div>
 															</th>
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Amt Diff</th>
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">% Amt Diff</th>															
@@ -525,7 +525,7 @@
 																	<input type="text" class="form-control" name="tarno{{$parent.$index}}{{$index}}" id="field_tarcd"
 											                    		ng-model="fare.tariffNumber.tarNo"
 											                    		ng-disabled="!vm.isEditable('tarno')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X'"  
-											                    		style="min-width:120px"
+											                    		style="min-width:60px"
 											                    		ng-class="{'must-fill': editForm.editFormATPCO.tarno{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('tarno')"
 															            ng-focus="tarno[$parent.$index][$index]=true" ng-blur="tarno[$parent.$index][$index]=false; vm.checkTariff(fare, 'tariffNumber', 'tarNo');"/>
@@ -540,7 +540,7 @@
 																	<input type="text" class="form-control" name="tarcd{{$parent.$index}}{{$index}}" id="field_tarcd"
 											                    		ng-model="fare.tariffNumber.tarCd"
 											                    		ng-disabled="!vm.isEditable('tarcd')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X'" 
-											                    		style="min-width:120px"
+											                    		style="min-width:60px"
 											                    		uppercase
 											                    		ng-class="{'must-fill': editForm.editFormATPCO.tarcd{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('tarcd')"
@@ -556,7 +556,7 @@
 																	<input type="text" class="form-control" name="origin{{$parent.$index}}{{$index}}" id="field_origin"
 											                    		ng-model="fare.origin"
 											                    		ng-disabled="!vm.isEditable('origin')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X'" 
-											                    		style="min-width:120px;"
+											                    		style="min-width:60px;"
 											                    		uppercase
 											                    		ng-class="{'must-fill': editForm.editFormATPCO.origin{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('origin')"
@@ -571,7 +571,7 @@
 																	<input type="text" class="form-control" name="destination{{$parent.$index}}{{$index}}" id="field_destination"
 											                    		ng-model="fare.destination"
 											                    		ng-disabled="!vm.isEditable('destination')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X'" 
-											                    		style="min-width:120px;"
+											                    		style="min-width:60px;"
 											                    		uppercase
 											                    		ng-class="{'must-fill': editForm.editFormATPCO.destination{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('destination')"
@@ -608,7 +608,7 @@
 										                    		ng-model="fare.bookingClass"/>	
 															</td>
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'cabin', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['cabin']}">
-										           				<select class="form-control" 
+										           				<select class="form-control inside-table" 
 														             name="cabin{{$parent.$index}}{{$index}}"
 														             ng-required="vm.isRequired('cabin')"
 														             ng-class="{'must-fill': !editForm.editFormATPCO.cabin{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"	
@@ -618,7 +618,7 @@
 										                			
 										           			</td>
 										           			<td ng-click="vm.tdClick(workPackageSheet, fare, 'typeOfJourney', $event)" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['typeOfJourney']}">
-										           				<select class="form-control" 
+										           				<select class="form-control inside-table" 
 														             name="typeOfJourney{{$parent.$index}}{{$index}}"
 														             ng-required="vm.isRequired('typeOfJourney')"
 														             ng-class="{'must-fill': !editForm.editFormATPCO.typeOfJourney{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"																			            
@@ -677,7 +677,7 @@
 																	<input type="text" class="form-control" name="currency{{$parent.$index}}{{$index}}" id="field_carrier"
 											                    		ng-model="fare.currency"
 											                    		ng-disabled="!vm.isEditable('currency')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X' "
-											                    		style="min-width:120px"
+											                    		style="min-width:60px"
 											                    		uppercase
 											                    		ng-class="{'must-fill': editForm.editFormATPCO.currency{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('currency')"
@@ -692,7 +692,7 @@
 								                				ng-disabled="!vm.isEditable('amount')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)||fare.action == 'X'"
 								                				ng-required="vm.isRequired('amount', fare)" 
 								                				ng-class="{'must-fill': editForm.editFormATPCO.amount{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
-													            ng-model="fare.amount"/>									                												                			
+													            ng-model="fare.amount"/  style="min-width: 80px">									                												                			
 									               			</td>
 									               			<td>
 									               				<input class="form-control" disabled ng-model="fare.amtDiff" style="min-width:100px"/>
@@ -802,7 +802,7 @@
 																</span>
 									               			</td>
 									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'travelCompleteIndicator', $event);" ng-class="{'poiv-none':fare.status != 'PENDING', highlighted:fare.field['travelCompleteIndicator']}">
-							               						<select class="form-control" name="travelIndicator{{$parent.$index}}{{$index}}" id="field_travelIndicator"
+							               						<select class="form-control inside-table" name="travelIndicator{{$parent.$index}}{{$index}}" id="field_travelIndicator"
 								                				ng-disabled="!vm.isEditable('travelIndicator')|| fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X' "
 								                				ng-required="vm.isRequired('travelIndicator')"
 									                    		ng-class="{'must-fill': !editForm.editFormATPCO.travelIndicator{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"									                    		
@@ -969,7 +969,7 @@
 																	<input type="text" class="form-control" name="addonFareTarno{{$parent.$index}}{{$index}}" id="field_tarcd"
 											                    		ng-model="fare.tariffNumber.tarNo"
 											                    		ng-disabled="!vm.isEditable('addonFareTarno') || fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)"
-											                    		style="min-width:120px"
+											                    		style="min-width:60px"
 											                    		uppercase
 											                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareTarno{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('addonFareTarno')"
@@ -984,7 +984,7 @@
 																		<input type="text" class="form-control" name="addonFareTarcd{{$parent.$index}}{{$index}}" id="field_tarcd"
 												                    		ng-model="fare.tariffNumber.tarCd"
 												                    		ng-disabled="!vm.isEditable('addonFareTarcd') || fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) "
-												                    		style="min-width:120px"
+												                    		style="min-width:60px"
 												                    		uppercase
 												                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareTarcd{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 																            ng-required="vm.isRequired('addonFareTarcd') && fare.action != 'Canceled'"
@@ -1001,7 +1001,7 @@
 												                    		ng-model="fare.origin"
 												                    		uppercase
 												                    		ng-disabled="!vm.isEditable('addonFareOrigin') || fare.status =='APPROVED' || fare.status =='REJECTED'"
-												                    		style="min-width:120px"
+												                    		style="min-width:60px"
 												                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareOrigin{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 																            ng-required="vm.isRequired('addonFareOrigin') && fare.action != 'Canceled'"
 																            ng-focus="origin[$parent.$index][$index]=true" ng-blur="origin[$parent.$index][$index]=false; vm.checkCity(fare, 'origin');"/>
@@ -1016,7 +1016,7 @@
 											                    		ng-model="fare.destination"
 											                    		uppercase
 											                    		ng-disabled="!vm.isEditable('addonFareDestination') || fare.status =='APPROVED' || fare.status =='REJECTED'"
-											                    		style="min-width:120px"
+											                    		style="min-width:60px"
 											                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareDestination{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('addonFareDestination') && fare.action != 'Canceled'"
 															            ng-focus="destination[$parent.$index][$index]=true" ng-blur="destination[$parent.$index][$index]=false; vm.checkCity(fare, 'destination');"/>
@@ -1090,7 +1090,7 @@
 																		<input type="text" class="form-control" name="addonFareCurrency{{$parent.$index}}{{$index}}" id="field_carrier"
 												                    		ng-model="fare.currency" uppercase
 												                    		ng-disabled="!vm.isEditable('addonFareCurrency') || fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
-												                    		style="min-width:120px"
+												                    		style="min-width:60px"
 												                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareCurrency{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled' }"											         		
 																            ng-required="vm.isRequired('addonFareCurrency') && fare.action != 'Canceled'"
 																            ng-focus="currency[$parent.$index][$index]=true" ng-blur="currency[$parent.$index][$index]=false; vm.checkCurrency(fare, 'currency');"/>
@@ -1651,34 +1651,70 @@
 						                    <tr role="row">
 				                     		 <th>No</th>
 				                              <th>Status</th>
-				                              <th>FBR Tariff Code</th>
-				                              <th>Loc 1 Type</th>		                	
+				                              <th>
+				                              	FBR Tariff Code
+				                              	<div class="resize-div" style="min-width: 130px"></div>
+				                              </th>
+				                              <th>
+				                              	Loc 1 Type
+				                              	<div class="resize-div" style="min-width: 120px"></div>
+				                              </th>		                	
 				                              <th>Loc 1</th>
-				                              <th>Loc 2 Type</th>
+				                              <th>
+				                              	Loc 2 Type
+				                              	<div class="resize-div" style="min-width: 120px"></div>
+				                              </th>
 				                              <th>Loc 2</th>
 				                              <th>Base FareCls</th>
 				                              <th>Base Rule No</th>
 				                              <th>Base Tariff Code</th>
-				                              <th>Calc Type</th>
+				                              <th>
+				                              	Calc Type
+				                              	<div class="resize-div" style="min-width: 120px"></div>
+				                              </th>
 				                              <th>% of Base Fare</th>
 				                              <th>Curr</th>
 				                              <th>Specified Amount</th>
 				                              <th>PAX Type</th>
-				                              <th>Fare Type</th>
-				                              <th>Tkt Code</th>
-				                              <th>Tkt Des</th>
-				                              <th>Base Fare OW/RT</th>
-				                              <th>Global</th>
-				                              <th>Rtg No</th>		               		
+				                              <th>
+				                              	Fare Type
+				                              	<div class="resize-div" style="min-width: 120px"></div>
+				                              </th>
+				                              <th>
+				                              	Tkt Code
+				                              	<div class="resize-div"></div>
+				                              </th>
+				                              <th>
+				                              	Tkt Des
+				                              	<div class="resize-div"></div>
+				                              </th>
+				                              <th>
+				                              	Base Fare OW/RT
+				                              	<div class="resize-div" style="min-width: 120px"></div>
+				                              </th>
+				                              <th>
+				                              	Global
+				                              	<div class="resize-div"></div>
+				                              </th>
+				                              <th>
+				                              	Rtg No
+				                              	<div class="resize-div"></div>
+				                              </th>		               		
 				                              <th>Rtg No Tarno</th>
 				                              <th>New FareCls</th>	
-				                              <th>New OW/RT</th>	 
+				                              <th>
+				                              	New OW/RT
+				                              	<div class="resize-div" style="min-width: 120px"></div>
+				                              </th>	 
 				                              <th>New BkgCd</th>	 
 				                              <th>Travel Start</th>	   
 				                              <th>Travel End</th>	   
 				                              <th>Sale Start</th>	   
 				                              <th>Sale End</th>	   
-				                              <th>Comment</th>	  
+				                              <th>
+				                              	Comment
+				                              	<div class="resize-div"></div>
+				                              </th>	  
 				                              <th>Travel Complete</th>	  
 				                              <th>Travel Complete Indicator</th>	
 						                    </tr>
@@ -1704,7 +1740,7 @@
 						                        <input type="text" class="form-control" name="discountTariffCode{{$parent.$index}}{{$index}}" id="field_farebasis"
 								                    		ng-model="fare.tarcd"
 								                    		ng-disabled="!vm.isEditable('discountTariffCode')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
-								                    		style="min-width:120px"
+								                    		style="min-width:60px"
 								                    		ng-class="{'must-fill': editForm.editFormDiscount.discountTariffCode{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 												            ng-required="vm.isRequired('discountTariffCode') && fare.action != 'Canceled'"
 												            ng-focus="tarcd[$parent.$index][$index]=true" ng-blur="tarcd[$parent.$index][$index]=false; vm.checkTariffDiscount(fare, 'tarcd', 'tarcd');"/>
@@ -1714,7 +1750,7 @@
 												</span> 	
 						                      </td>																
 						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'loc1Type', $event)" ng-class="{highlighted:fare.field['loc1Type']}">
-						                       	 <select class="form-control" 
+						                       	 <select class="form-control inside-table" 
 						                                   name="discountLoc1Type{{$parent.$index}}{{$index}}"
 						                                   ng-required="vm.isRequired('discountLoc1Type')"
 						                                   ng-class="{'must-fill': !editForm.editFormDiscount.discountLoc1Type{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"																			            
@@ -1728,7 +1764,7 @@
 															name="discountLoc1{{$parent.$index}}{{$index}}" 
 								                    		ng-model="fare.loc1"
 								                    		ng-disabled="!vm.isEditable('discountLoc1')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
-								                    		style="min-width:120px"
+								                    		style="min-width:60px"
 								                    		ng-class="{'must-fill': editForm.editFormDiscount.discountLoc1{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 												            ng-required="vm.isRequired('discountLoc1') && fare.action != 'Canceled'"
 												            ng-focus="discountLoc1[$parent.$index][$index]=true" 
@@ -1745,7 +1781,7 @@
 													</span>
 						                      </td>
 						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'loc2Type', $event)" ng-class="{highlighted:fare.field['loc2Type']}">
-						                         <select class="form-control" 
+						                         <select class="form-control inside-table" 
 						                                   name="discountLoc2Type{{$parent.$index}}{{$index}}"
 						                                   ng-required="vm.isRequired('discountLoc1Type')"
 						                                   ng-class="{'must-fill': !editForm.editFormDiscount.discountLoc2Type{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"																			            
@@ -1760,7 +1796,7 @@
 															name="discountLoc2{{$parent.$index}}{{$index}}" 
 								                    		ng-model="fare.loc2"
 								                    		ng-disabled="!vm.isEditable('discountLoc2')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
-								                    		style="min-width:120px"
+								                    		style="min-width:60px"
 								                    		ng-class="{'must-fill': editForm.editFormDiscount.discountLoc2{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 												            ng-required="vm.isRequired('discountLoc2') && fare.action != 'Canceled'"
 												            ng-focus="discountLoc2[$parent.$index][$index]=true" 
@@ -1811,7 +1847,7 @@
 						                                      ng-model="fare.baseTarcd"/>	
 						                      </td>	
 						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'calcType', $event)" ng-class="{highlighted:fare.field['calcType']}">
-						                         <select class="form-control" 
+						                         <select class="form-control inside-table" 
 						                                 name="discountCalcType{{$parent.$index}}{{$index}}"
 						                                 ng-required="vm.isRequired('discountCalcType', fare)"
 						                                 ng-class="{'must-fill': !editForm.editFormDiscount.discountCalcType{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"																			            
@@ -1831,7 +1867,7 @@
 														<input type="text" class="form-control" name="discountFareCurrency{{$parent.$index}}{{$index}}" id="field_carrier"
 								                    		ng-model="fare.currency"
 								                    		ng-disabled="!vm.isEditable('discountFareCurrency')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
-								                    		style="min-width:120px"
+								                    		style="min-width:60px"
 								                    		ng-class="{'must-fill': editForm.editFormDiscount.discountFareCurrency{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 												            ng-required="vm.isRequired('discountFareCurrency', fare) && fare.action != 'Canceled'"
 												            ng-focus="currency[$parent.$index][$index]=true" ng-blur="currency[$parent.$index][$index]=false; vm.checkCurrency(fare, 'currency');"/>
@@ -1852,7 +1888,7 @@
 														<input type="text" class="form-control" name="discountPaxType{{$parent.$index}}{{$index}}" id="field_carrier"
 								                    		ng-model="fare.passengerType"
 								                    		ng-disabled="!vm.isEditable('discountPaxType')|| fare.status =='APPROVED' || fare.status =='REJECTED'"
-								                    		style="min-width:120px"
+								                    		style="min-width:60px"
 								                    		ng-class="{'must-fill': editForm.editFormDiscount.discountPaxType{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 												            ng-required="vm.isRequired('discountPaxType') && fare.action != 'Canceled'"
 												            ng-focus="passengerType[$parent.$index][$index]=true" ng-blur="passengerType[$parent.$index][$index]=false; vm.checkpassengerType(fare, 'passengerType');"/>
@@ -1862,7 +1898,7 @@
 													</span>	
 				                              </td>
 				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'fareType', $event)" ng-class="{highlighted:fare.field['fareType']}">
-				                                   <select class="form-control" name="discountFareFareType{{$parent.$index}}{{$index}}" ng-model="fare.fareType" 
+				                                   <select class="form-control inside-table" name="discountFareFareType{{$parent.$index}}{{$index}}" ng-model="fare.fareType" 
 				                                   ng-class="{'must-fill': !editForm.editFormDiscount.discountFareFareType{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"
 														ng-required="vm.isRequired('discountFareFareType')" ng-disabled="!vm.isEditable('discountFareFareType')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
 														<option ng-repeat="fare in vm.atpcoFareTypes track by $index" value="{{fare.typeCode}}">
@@ -1887,7 +1923,7 @@
 				                                      ng-model="fare.ticketDesignator"/>	
 				                              </td>
 				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'typeOfJourney', $event)" ng-class="{highlighted:fare.field['typeOfJourney']}">
-				                                <select class="form-control" 
+				                                <select class="form-control inside-table" 
 				                                 name="discountBaseFareOwRt{{$parent.$index}}{{$index}}"
 				                                 ng-required="vm.isRequired('discountBaseFareOwRt')"
 				                                 ng-class="{'must-fill': !editForm.editFormDiscount.discountBaseFareOwRt{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"																			            
@@ -1924,7 +1960,7 @@
 				                                      ng-model="fare.newFareBasis"/>	
 				                              </td>
 				                              <td ng-click="vm.tdClick(workPackageSheet, fare, 'newTypeOfJourney', $event)" ng-class="{highlighted:fare.field['newTypeOfJourney']}">
-				                                <select class="form-control" 
+				                                <select class="form-control inside-table" 
 				                                 name="discountNewBaseFareOwRt{{$parent.$index}}{{$index}}"
 				                                 ng-required="vm.isRequired('discountNewBaseFareOwRt')"
 				                                 ng-class="{'must-fill': !editForm.editFormDiscount.discountNewBaseFareOwRt{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"																			            
@@ -2531,7 +2567,7 @@
 																	<input type="text" class="form-control" name="marketFareOrigin{{$parent.$index}}{{$index}}" id="field_carrier"
 											                    		ng-model="fare.origin"
 											                    		ng-disabled="!vm.isEditable('marketFareOrigin') || fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
-											                    		style="min-width:120px"
+											                    		style="min-width:60px"
 											                    		uppercase
 											                    		ng-class="{'must-fill': editForm.editFormMarket.marketFareOrigin{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('marketFareOrigin') && fare.action != 'Canceled'"
@@ -2546,7 +2582,7 @@
 																<input type="text" class="form-control" name="marketFareDestination{{$parent.$index}}{{$index}}" id="field_carrier"
 										                    		ng-model="fare.destination"
 										                    		ng-disabled="!vm.isEditable('marketFareDestination') || fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
-										                    		style="min-width:120px"
+										                    		style="min-width:60px"
 										                    		uppercase
 										                    		ng-class="{'must-fill': editForm.editFormMarket.marketFareDestination{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 														            ng-required="vm.isRequired('marketFareDestination') && fare.action != 'Canceled'"
@@ -2610,7 +2646,7 @@
 																<input type="text" class="form-control" name="marketFareCurrency{{$parent.$index}}{{$index}}" id="field_carrier"
 										                    		ng-model="fare.currency"
 										                    		ng-disabled="!vm.isEditable('marketFareCurrency') || fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
-										                    		style="min-width:120px"
+										                    		style="min-width:60px"
 										                    		ng-class="{'must-fill': editForm.editFormMarket.marketFareCurrency{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 														            ng-required="vm.isRequired('marketFareCurrency') && fare.action != 'Canceled'"
 														            ng-focus="currency[$parent.$index][$index]=true" ng-blur="currency[$parent.$index][$index]=false; vm.checkCurrency(fare, 'currency');"/>
@@ -2964,7 +3000,7 @@
 																	<input type="text" class="form-control" name="addonFareTarno{{$parent.$index}}{{$index}}" id="field_tarcd"
 											                    		ng-model="fare.tariffNumber.tarNo"
 											                    		ng-disabled="!vm.isEditable('addonFareTarno')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
-											                    		style="min-width:120px"
+											                    		style="min-width:60px"
 											                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareTarno{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('addonFareTarno')"
 															            ng-focus="tarno[$parent.$index][$index]=true" ng-blur="tarno[$parent.$index][$index]=false; vm.checkTariff(fare, 'tariffNumber', 'tarNo');"/>
@@ -2978,7 +3014,7 @@
 																		<input type="text" class="form-control" name="addonFareTarcd{{$parent.$index}}{{$index}}" id="field_tarcd"
 												                    		ng-model="fare.tariffNumber.tarCd"
 												                    		ng-disabled="!vm.isEditable('addonFareTarcd')|| fare.status =='APPROVED' || fare.status =='REJECTED'"
-												                    		style="min-width:120px"
+												                    		style="min-width:60px"
 												                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareTarcd{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 																            ng-required="vm.isRequired('addonFareTarcd') && fare.action != 'Canceled'"
 																            ng-focus="tarcd[$parent.$index][$index]=true" ng-blur="tarcd[$parent.$index][$index]=false; vm.checkTariff(fare, 'tariffNumber', 'tarCd');"/>
@@ -2993,7 +3029,7 @@
 																		<input type="text" class="form-control" name="addonFareOrigin{{$parent.$index}}{{$index}}" id="field_carrier"
 												                    		ng-model="fare.origin"
 												                    		ng-disabled="!vm.isEditable('addonFareOrigin')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
-												                    		style="min-width:120px"
+												                    		style="min-width:60px"
 												                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareOrigin{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 																            ng-required="vm.isRequired('addonFareOrigin') && fare.action != 'Canceled'"
 																            ng-focus="origin[$parent.$index][$index]=true" ng-blur="origin[$parent.$index][$index]=false; vm.checkCity(fare, 'origin');"/>
@@ -3007,7 +3043,7 @@
 																	<input type="text" class="form-control" name="addonFareDestination{{$parent.$index}}{{$index}}" id="field_carrier"
 											                    		ng-model="fare.destination"
 											                    		ng-disabled="!vm.isEditable('addonFareDestination')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
-											                    		style="min-width:120px"
+											                    		style="min-width:60px"
 											                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareDestination{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('addonFareDestination') && fare.action != 'Canceled'"
 															            ng-focus="destination[$parent.$index][$index]=true" ng-blur="destination[$parent.$index][$index]=false; vm.checkCity(fare, 'destination');"/>
@@ -3081,7 +3117,7 @@
 																		<input type="text" class="form-control" name="addonFareCurrency{{$parent.$index}}{{$index}}" id="field_carrier"
 												                    		ng-model="fare.currency"
 												                    		ng-disabled="!vm.isEditable('addonFareCurrency')|| fare.status =='APPROVED' || fare.status =='REJECTED'||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
-												                    		style="min-width:120px"
+												                    		style="min-width:60px"
 												                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareCurrency{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 																            ng-required="vm.isRequired('addonFareCurrency') && fare.action != 'Canceled'"
 																            ng-focus="currency[$parent.$index][$index]=true" ng-blur="currency[$parent.$index][$index]=false; vm.checkCurrency(fare, 'currency');"/>
@@ -3557,7 +3593,7 @@
 											                    		ng-model="fare.waiverOri"
 											                    		ng-disabled="!vm.isEditable('waiverOri')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 											                    		name="waiverOri{{$parent.$index}}{{$index}}"
-											                    		style="min-width:120px"
+											                    		style="min-width:60px"
 											                    		ng-class="{'must-fill': !editForm.editFormWaiver.waiverOri{{$parent.$index}}{{$index}}.$valid}"												         		
 															            ng-required="vm.isRequired('waiverOri')"
 															            ng-focus="origin[$parent.$index][$index]=true" ng-blur="origin[$parent.$index][$index]=false; vm.checkCity(fare, 'waiverOri');"/>
@@ -3572,7 +3608,7 @@
 											                    		ng-model="fare.waiverDest"
 											                    		name="waiverDest{{$parent.$index}}{{$index}}"
 											                    		ng-disabled="!vm.isEditable('waiverDest')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
-											                    		style="min-width:120px"
+											                    		style="min-width:60px"
 											                    		ng-class="{'must-fill': !editForm.editFormWaiver.waiverDest{{$parent.$index}}{{$index}}.$valid}"												         		
 															            ng-required="vm.isRequired('waiverDest')"
 															            ng-focus="destination[$parent.$index][$index]=true" ng-blur="destination[$parent.$index][$index]=false; vm.checkCity(fare, 'waiverDest');"/>
@@ -3663,7 +3699,7 @@
 																	<input type="text" class="form-control" name="waiverCurrency{{$parent.$index}}{{$index}}" id="field_carrier"
 											                    		ng-model="fare.waiverCurrency"
 											                    		ng-disabled="!vm.isEditable('waiverCurrency')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
-											                    		style="min-width:120px"
+											                    		style="min-width:60px"
 											                    		ng-class="{'must-fill': !editForm.editFormWaiver.waiverCurrency{{$parent.$index}}{{$index}}.$valid}"												         		
 															            ng-required="vm.isRequired('waiverCurrency')"
 															            ng-focus="currency[$parent.$index][$index]=true" ng-blur="currency[$parent.$index][$index]=false; vm.checkCurrency(fare, 'currency');"/>
