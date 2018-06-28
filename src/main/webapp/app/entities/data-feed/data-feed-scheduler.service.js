@@ -10,7 +10,8 @@
         var resourceUrl =  'api/data-feed-scheduler/';
 
         return $resource(resourceUrl, {}, {
-//        	'setParam': { method:'POST' }
+        	'getAll': { method: 'GET'},
+        	'setParam': { method:'PUT' }
         });
     }
 })();

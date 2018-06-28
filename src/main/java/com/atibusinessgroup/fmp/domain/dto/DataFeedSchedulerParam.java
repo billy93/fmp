@@ -1,15 +1,18 @@
 package com.atibusinessgroup.fmp.domain.dto;
 
+import java.time.ZonedDateTime;
+
 public class DataFeedSchedulerParam {
 	
 	private String delayDays;
 	private String delayHours;
 	private String delayMinutes;
-	private boolean faresAtpco;
-	private boolean faresMarket;
-	private Object startDate;
-	private Object endDate;
-	private String time;
+	private ZonedDateTime startDate;
+	private ZonedDateTime endDate;
+	private ZonedDateTime time;
+	private String type;
+	private boolean atpcoFares;
+	private boolean marketFares;
 	
 	public String getDelayDays() {
 		return delayDays;
@@ -29,38 +32,48 @@ public class DataFeedSchedulerParam {
 	public void setDelayMinutes(String delayMinutes) {
 		this.delayMinutes = delayMinutes;
 	}
-	public boolean isFaresAtpco() {
-		return faresAtpco;
-	}
-	public void setFaresAtpco(boolean faresAtpco) {
-		this.faresAtpco = faresAtpco;
-	}
-	public boolean isFaresMarket() {
-		return faresMarket;
-	}
-	public void setFaresMarket(boolean faresMarket) {
-		this.faresMarket = faresMarket;
-	}
-	public Object getStartDate() {
+	public ZonedDateTime getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(Object startDate) {
+	public void setStartDate(ZonedDateTime startDate) {
 		this.startDate = startDate;
 	}
-	public Object getEndDate() {
+	public ZonedDateTime getEndDate() {
 		return endDate;
 	}
-	public void setEndDate(Object endDate) {
+	public void setEndDate(ZonedDateTime endDate) {
 		this.endDate = endDate;
 	}
-	public String getTime() {
+	public ZonedDateTime getTime() {
 		return time;
 	}
-	public void setTime(String time) {
+	public void setTime(ZonedDateTime time) {
 		this.time = time;
 	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public boolean isAtpcoFares() {
+		return atpcoFares;
+	}
+	public void setAtpcoFares(boolean atpcoFares) {
+		this.atpcoFares = atpcoFares;
+	}
+	public boolean isMarketFares() {
+		return marketFares;
+	}
+	public void setMarketFares(boolean marketFares) {
+		this.marketFares = marketFares;
+	}
 	
+	@Override
+	public String toString() {
+		return "DataFeedSchedulerParam [delayDays=" + delayDays + ", delayHours=" + delayHours + ", delayMinutes="
+				+ delayMinutes + ", startDate=" + startDate + ", endDate=" + endDate + ", time=" + time + ", type="
+				+ type + ", atpcoFares=" + atpcoFares + ", marketFares=" + marketFares + "]";
+	}
 	
-	
-
 }

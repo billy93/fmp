@@ -24,17 +24,34 @@
                 }
             },
             resolve: {
-            	params: [function() {
+            	manualData: [function() {
             		return {
+            			id: null,
                 		delayDays: null,
                 		delayHours: null,
                 		delayMinutes: null,
-                		faresAtpco: null,
-                    	faresMarket: null,
                 		startDate: null,
-                		endDate: null
+                		endDate: null,
+                		type: null,
+                		startTime: null,
+                		atpcoFares: null,
+                		marketFares: null,
                 	}
-            	}]
+            	}],
+            	automaticData: [function() {
+            		return {
+            			id: null,
+                		delayDays: null,
+                		delayHours: null,
+                		delayMinutes: null,
+                		startDate: null,
+                		endDate: null,
+                		type: null,
+                		startTime: null,
+                		atpcoFares: null,
+                		marketFares: null,
+                	}
+            	}],
             }
         })
     }
