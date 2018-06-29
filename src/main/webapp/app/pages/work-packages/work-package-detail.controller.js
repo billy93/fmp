@@ -6221,6 +6221,13 @@
     			  disabled = true;
     		  }    		  
     	  }
+    	  if(!disabled){
+    		  if(vm.user.reviewLevels.indexOf(wp.reviewLevel) > -1){
+    			  disabled = false;
+    		  }else{
+    			  disabled = true;  
+    		  }
+    	  }
     	  return disabled;
       }
       

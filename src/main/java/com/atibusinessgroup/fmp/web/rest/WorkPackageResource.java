@@ -3590,11 +3590,11 @@ public class WorkPackageResource {
         	filter.setType(t);
         	
         	com.atibusinessgroup.fmp.domain.WorkPackageFilter.ReviewLevel rl = new WorkPackageFilter.ReviewLevel();
-        	rl.setDistribution(false);
-	    	rl.setHo(false);
-	    	rl.setLso(false);
-	    	rl.setRouteManagement(false); 
-        	Optional<User> userOptional = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
+        	rl.setDistribution(true);
+	    	rl.setHo(true);
+	    	rl.setLso(true);
+	    	rl.setRouteManagement(true); 
+        	/*Optional<User> userOptional = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
         	if(userOptional.isPresent()) {
             	User user = userOptional.get();
 	        	for(String reviewLevel : user.getReviewLevels()) {
@@ -3608,7 +3608,7 @@ public class WorkPackageResource {
 		        		rl.setRouteManagement(true); 
 		        	}
 	        	}
-        	}	        
+        	}*/	        
         	filter.setReviewLevel(rl);
         	
         	filter.setApprovalReference(null);
