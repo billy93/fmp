@@ -44,6 +44,11 @@
                         ascending: PaginationUtil.parseAscending($stateParams.sort),
                         search: $stateParams.search
                     };
+                }],
+                user: ['$stateParams', 'User', 'Principal', function($stateParams, User, Principal) {
+                	return Principal.identity().then(function(account) {
+                        return User.get({login : account.login}).$promise;
+                    });
                 }]
             }
         })
