@@ -3818,13 +3818,7 @@ p {
     background: #fff;
     font-size: 11px;
     border-spacing: 0;
-    border-collapse: collapse;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none; }
+    border-collapse: collapse; }
     .table-wrapper table thead:first-child tr:first-child th {
       border-top: 0; }
     .table-wrapper table thead:first-child tr th {
@@ -3919,13 +3913,13 @@ p {
         .table-wrapper table tbody tr td.locked:before {
           position: absolute;
           top: 50%;
-          left: 50%;
+          left: 20%;
           -webkit-transform: translate(-50%, -50%);
           -ms-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
           content: "\f023";
           font-family: FontAwesome;
-          font-size: 30px;
+          font-size: 23px;
           font-weight: 400;
           color: #dd4b39;
           z-index: 999;
@@ -4304,6 +4298,9 @@ table.uib-daypicker tbody td {
 
 .dropdown-menu.datetime-picker-dropdown {
   position: relative !important; }
+
+.absolute-datepicker .dropdown-menu.datetime-picker-dropdown {
+  position: absolute !important; }
 
 .form-control.input-date {
   min-width: 90px; }
