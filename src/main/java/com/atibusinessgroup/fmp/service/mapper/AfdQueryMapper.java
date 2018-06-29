@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.atibusinessgroup.fmp.domain.TariffNumber;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterFareMatrix;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord1;
@@ -22,6 +23,7 @@ import com.atibusinessgroup.fmp.domain.dto.AfdQuery;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord1FareClassInformation;
 import com.atibusinessgroup.fmp.domain.dto.CategoryObject;
 import com.atibusinessgroup.fmp.domain.dto.TextTable;
+import com.atibusinessgroup.fmp.repository.TariffNumberRepository;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoRecord3CategoryCustomRepository;
 import com.atibusinessgroup.fmp.service.AtpcoMasterFareMatrixService;
 import com.atibusinessgroup.fmp.service.util.AtpcoDataConverterUtil;
@@ -34,10 +36,12 @@ public class AfdQueryMapper {
 	
 	private final AtpcoMasterFareMatrixService atpcoMasterFareMatrixService;
 	private final AtpcoRecord3CategoryCustomRepository atpcoRecord3CategoryCustomRepository;
+	private final TariffNumberRepository tariffNumberRepository;
 	
-	public AfdQueryMapper(AtpcoMasterFareMatrixService atpcoMasterFareMatrixService, AtpcoRecord3CategoryCustomRepository atpcoRecord3CategoryCustomRepository) {
+	public AfdQueryMapper(AtpcoMasterFareMatrixService atpcoMasterFareMatrixService, AtpcoRecord3CategoryCustomRepository atpcoRecord3CategoryCustomRepository, TariffNumberRepository tariffNumberRepository) {
 		this.atpcoMasterFareMatrixService = atpcoMasterFareMatrixService;
 		this.atpcoRecord3CategoryCustomRepository = atpcoRecord3CategoryCustomRepository;
+		this.tariffNumberRepository = tariffNumberRepository;
 	}
 	
 	public AfdQuery convertAtpcoFare(AtpcoFare afare, AtpcoRecord1 record1, List<CategoryObject> cat03s, List<CategoryObject> cat05s, List<CategoryObject> cat06s, List<CategoryObject> cat07s, 
@@ -51,7 +55,12 @@ public class AfdQueryMapper {
 		result.setSource(afare.getSource());
 		result.setSc("S");
 		result.setTariffNo(afare.getTariffNo());
-//		result.setTariffCode(tariffCode);
+		
+		TariffNumber tn = tariffNumberRepository.findOneByTarNo(result.getTariffNo());
+		if (tn != null && tn.getTarCd() != null) {
+			result.setTariffCode(tn.getTarCd());
+		}
+		
 		result.setCarrierCode(afare.getCarrierCode());
 		result.setOriginCity(afare.getOriginCity());
 		result.setOriginCountry(afare.getOriginCountry());
