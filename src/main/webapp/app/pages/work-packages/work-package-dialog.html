@@ -12,19 +12,19 @@
 	        	<div class="col-md-12">	
 	        		<div class="form-group">
 			            <label>Workorder Name</label>
-			            <input type="text" class="form-control" name="name" id="field_name" ng-model="vm.workPackage.name"/>
+			            <input type="text" class="form-control" ng-class="{'must-fill': editForm.workpackageName.$error.required }" name="workpackageName" id="field_name" required ng-model="vm.workPackage.name"/>
 			        </div>
 			        
 			        <div class="form-group">
 			            <label for="field_businessArea">Business Area</label>
-			            <select class="form-control" name="businessArea" ng-model="vm.workPackage.businessArea" id="field_businessArea">
+			            <select class="form-control" name="businessArea" ng-class="{'must-fill': editForm.businessArea.$error.required }" ng-model="vm.workPackage.businessArea" required id="field_businessArea">
 							<option ng-repeat="x in vm.businessAreas track by $index">{{x}}</option>
 						</select>
 			        </div>
 			        
 			        <div class="form-group" ng-show="vm.workPackage.type=='REGULAR' || vm.workPackage.type=='DISCOUNT' || vm.workPackage.type=='WAIVER'">
 			        	<label>Distribution Type</label>
-			        	<select class="form-control" name="distributionType" ng-model="vm.workPackage.targetDistribution" id="field_distributionType">
+			        	<select class="form-control" required ng-class="{'must-fill': editForm.distributionType.$error.required }" name="distributionType" ng-model="vm.workPackage.targetDistribution" id="field_distributionType">
 							<option ng-repeat="x in vm.distributionTypes track by $index">{{x}}</option>
 						</select>
 			        </div>

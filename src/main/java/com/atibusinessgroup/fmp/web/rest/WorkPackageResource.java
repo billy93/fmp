@@ -20,11 +20,13 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.ss.usermodel.Cell;
@@ -66,6 +68,8 @@ import com.atibusinessgroup.fmp.domain.WorkPackage;
 import com.atibusinessgroup.fmp.domain.WorkPackage.ApproveConfig;
 import com.atibusinessgroup.fmp.domain.WorkPackage.Attachment;
 import com.atibusinessgroup.fmp.domain.WorkPackage.Comment;
+import com.atibusinessgroup.fmp.domain.WorkPackage.FilingDetail;
+import com.atibusinessgroup.fmp.domain.WorkPackage.FilingDetail.FilingDetailTariff;
 import com.atibusinessgroup.fmp.domain.WorkPackage.ImportFares;
 import com.atibusinessgroup.fmp.domain.WorkPackage.WorkPackageFareSheet;
 import com.atibusinessgroup.fmp.domain.WorkPackage.WorkPackageFareSheet.FareVersion;
@@ -4371,6 +4375,7 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<WorkPackage> createbatchWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
         log.debug("REST request to createbatch WorkPackage : {}", workPackage);
+        
         /*
         if (workPackage.getId() == null) {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
@@ -4444,11 +4449,86 @@ public class WorkPackageResource {
         
         //updateWorkPackage(workPackage);
 */
-        WorkPackage result = workPackageService.findOne(workPackage.getId());
         
-        return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        workPackage = validateWo(workPackage);
+        if(workPackage.getValidation() != null && workPackage.getValidation().getErrorsCount() > 0) {
+        	
+        }
+        else {
+	        workPackage.setLocked(false);
+	        workPackage.setLockedBy(null);
+	    	workPackage.setLockedSince(null);
+	        workPackage.setStatus(Status.READY_TO_RELEASE); //BUSY
+	        
+	        List<WorkPackageFareSheet> fareSheet = workPackage.getFareSheet();
+	        Set<TariffNumber> fareTariffNumber = new HashSet<TariffNumber>();
+	        for(WorkPackageFareSheet sheet : fareSheet) {
+	        	List<WorkPackageFare> fares = sheet.getFares();
+	        	for(WorkPackageFare fare : fares) {
+	        		fareTariffNumber.add(fare.getTariffNumber());
+	        	}
+	        }
+	        
+	        workPackage.setFilingDetail(new FilingDetail());
+	        for(TariffNumber tariff : fareTariffNumber) {
+	        	FilingDetailTariff fdt = new FilingDetailTariff();
+	        	fdt.cxr = "GA";
+	        	fdt.gov = "XX";
+	        	fdt.tarCd = tariff.getTarCd();
+	        	fdt.tarNo = tariff.getTarNo();
+	        	fdt.tarType = "Fare";
+	        	workPackage.getFilingDetail().getFilingDetailTarif().add(fdt);
+	        }
+	        workPackage = workPackageService.save(workPackage);
+	        
+	        WorkPackageHistory history = new WorkPackageHistory();
+	        history.setWorkPackage(new ObjectId(workPackage.getId()));
+	        history.setType("CREATEBATCH");
+	        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+	        workPackageHistoryService.save(history);
+        }
+        return ResponseEntity.created(new URI("/api/work-packages/" + workPackage.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, workPackage.getId().toString()))
+            .body(workPackage);
+    }
+    
+    
+    /**
+     * POST  /work-packages/refresh-tariff : refresh-tariff
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/work-packages/refresh-tariff")
+    @Timed
+    public ResponseEntity<WorkPackage> refreshTariffWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
+        log.debug("REST request to refresh tariff WorkPackage : {}", workPackage);
+        
+        List<WorkPackageFareSheet> fareSheet = workPackage.getFareSheet();
+        Set<TariffNumber> fareTariffNumber = new HashSet<TariffNumber>();
+        for(WorkPackageFareSheet sheet : fareSheet) {
+        	List<WorkPackageFare> fares = sheet.getFares();
+        	for(WorkPackageFare fare : fares) {
+        		fareTariffNumber.add(fare.getTariffNumber());
+        	}
+        }
+        
+        workPackage.setFilingDetail(new FilingDetail());
+        for(TariffNumber tariff : fareTariffNumber) {
+        	FilingDetailTariff fdt = new FilingDetailTariff();
+        	fdt.cxr = "GA";
+        	fdt.gov = "XX";
+        	fdt.tarCd = tariff.getTarCd();
+        	fdt.tarNo = tariff.getTarNo();
+        	fdt.tarType = "Fare";
+        	workPackage.getFilingDetail().getFilingDetailTarif().add(fdt);
+        }
+        workPackage = workPackageService.save(workPackage);
+        
+        return ResponseEntity.created(new URI("/api/work-packages/" + workPackage.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, workPackage.getId().toString()))
+            .body(workPackage);
     }
     
     
@@ -4467,23 +4547,27 @@ public class WorkPackageResource {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
         
-        WorkPackage result = workPackageService.findOne(workPackage.getId());
-        result.setStatus(Status.PENDING);
-        workPackage = workPackageService.save(result);
+//        WorkPackage result = workPackageService.findOne(workPackage.getId());
+        workPackage.setLocked(false);
+        workPackage.setLockedBy(null);
+    	workPackage.setLockedSince(null);
+        workPackage.setStatus(Status.READY_TO_RELEASE); //BUSY
+        workPackage.setStatus(Status.PENDING);
+        workPackage = workPackageService.save(workPackage);
         
         WorkPackageHistory history = new WorkPackageHistory();
-        history.setWorkPackage(new ObjectId(result.getId()));
+        history.setWorkPackage(new ObjectId(workPackage.getId()));
         history.setType("REVISEBATCH");
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
         
-        saveHistoryData(workPackage);
+//        saveHistoryData(workPackage);
         
         //updateWorkPackage(workPackage);
         
-        return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        return ResponseEntity.created(new URI("/api/work-packages/" + workPackage.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, workPackage.getId().toString()))
+            .body(workPackage);
     }
     
     /**
