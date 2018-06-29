@@ -29,7 +29,6 @@ import com.atibusinessgroup.fmp.service.AtpcoMasterFareMatrixService;
 import com.atibusinessgroup.fmp.service.util.AtpcoDataConverterUtil;
 import com.atibusinessgroup.fmp.service.util.DateUtil;
 import com.atibusinessgroup.fmp.service.util.TypeConverterUtil;
-import com.itextpdf.text.pdf.StringUtils;
 
 @Service
 public class AfdQueryMapper {
