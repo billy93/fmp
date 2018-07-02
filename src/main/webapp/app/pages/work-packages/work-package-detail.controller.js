@@ -6276,12 +6276,41 @@
 	    		  gfsRef:null,
 	    		  gfsDate:null
 	    	  });
-  		}
+  		  }
+    	  else{
+    		  alert('Please select a tariff');
+    	  }
       }
       
       vm.removeBatchNumber = function(){
-    	  var index = vm.selectedTariffRow.batch.indexOf(vm.selectedBatchRow);
-    	  vm.selectedTariffRow.batch.splice(index, 1);
+    	  if(vm.selectedBatchRow){
+	    	  var index = vm.selectedTariffRow.batch.indexOf(vm.selectedBatchRow);
+	    	  vm.selectedTariffRow.batch.splice(index, 1);
+    	  }
+    	  else{
+    		  alert('Please select batch row');
+    	  }
+      }
+      
+      vm.checkFilingDetailDisabled = function(){
+    	  return vm.workPackage.status == 'READY_TO_RELEASE';
+      }
+      
+      vm.applyText = function(){
+    	  if(vm.selectedTariffRow != null){
+    		  if(vm.selectedTariffRow.justificationText != null && vm.selectedTariffRow.justificationText != ""){
+	    		  for(var x=0;x<vm.workPackage.filingDetail.filingDetailTarif.length;x++){
+					  vm.workPackage.filingDetail.filingDetailTarif[x].justificationText = vm.selectedTariffRow.justificationText;
+	    		  }    		  
+    		  }
+  		  }
+    	  else{
+    		  alert('Please select a tariff');
+    	  }
+      }
+      
+      vm.previewUploadFile = function(){
+    	  alert(vm.workPackage.filingDetail.atpcoFile);
       }
     }
 })();
