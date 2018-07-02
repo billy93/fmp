@@ -12,6 +12,8 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -2288,7 +2290,7 @@ public class WorkPackageResource {
 					    		err1.setMessage("TarNo is required");
 					    		errors.add(err1);
 							}
-							if(fare.getFareType() == null || fare.getFareType().contentEquals("")) {
+							if(fare.getFareBasis() == null || fare.getFareBasis().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setIndex(index+"");
@@ -4376,21 +4378,141 @@ public class WorkPackageResource {
     public ResponseEntity<WorkPackage> createbatchWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
         log.debug("REST request to createbatch WorkPackage : {}", workPackage);
         
-        /*
+        
         if (workPackage.getId() == null) {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
                 
         StringBuilder batchBuilder = new StringBuilder();
+        NumberFormat nf = new DecimalFormat("0000000.00");
+
+        batchBuilder.append("W                          NN");
         
-        batchBuilder.append("W\t\t\tNN");
-        batchBuilder.append("\n");        
-        try {
-        batchBuilder.append(workPackage.getFilingDetail().getEmail());
-        }catch(Exception e) {}
+        if(workPackage.getFilingDetail().getEmail() != null && !workPackage.getFilingDetail().getEmail().contentEquals("")) {
+            batchBuilder.append("\n");      
+            batchBuilder.append("N"+workPackage.getFilingDetail().getEmail());
+        }
         
-        batchBuilder.append("\n");        
-        batchBuilder.append("B  N  "+workPackage.getSpecifiedFaresName());
+        batchBuilder.append("\n");    
+        
+        for(WorkPackageFareSheet sheet : workPackage.getFareSheet()) {
+        	 batchBuilder.append("B  NN "+sheet.getSpecifiedFaresName());
+             batchBuilder.append("\n");   
+             
+             for(WorkPackageFare fare : sheet.getFares()) {
+            	 if(fare.getAction().contentEquals("I") || fare.getAction().contentEquals("R")) {
+            		 batchBuilder.append("F");
+            		 batchBuilder.append(fare.getCarrier());
+            		 batchBuilder.append(fare.getTariffNumber().getTarNo());
+            		 batchBuilder.append(" ");
+            		 batchBuilder.append(fare.getOrigin());
+            		 batchBuilder.append(fare.getDestination());
+            		 batchBuilder.append(fare.getFareBasis());
+            		 if(8-fare.getFareBasis().length() > 0) {
+            			 for(int i=0;i<(8-fare.getFareBasis().length()); i++) {
+            				 batchBuilder.append(" ");
+            			 }
+            		 }
+            		 batchBuilder.append(fare.getTypeOfJourney());
+            		 batchBuilder.append(fare.getRtgno());
+            		 batchBuilder.append("  ");
+            		 batchBuilder.append(fare.getCurrency());
+            		 
+            		 batchBuilder.append(nf.format(Float.parseFloat(fare.getAmount())));
+            		 
+            		 //effective date
+//            		 batchBuilder.append("         ");
+//            		 batchBuilder.append(obj)            		 
+            		 batchBuilder.append("\n");   
+            	 } else if(fare.getAction().contentEquals("N")) {
+            		 batchBuilder.append("F");
+            		 batchBuilder.append(fare.getCarrier());
+            		 batchBuilder.append(fare.getTariffNumber().getTarNo());
+            		 batchBuilder.append("N");
+            		 batchBuilder.append(fare.getOrigin());
+            		 batchBuilder.append(fare.getDestination());
+            		 batchBuilder.append(fare.getFareBasis());
+            		 if(8-fare.getFareBasis().length() > 0) {
+            			 for(int i=0;i<(8-fare.getFareBasis().length()); i++) {
+            				 batchBuilder.append(" ");
+            			 }
+            		 }
+            		 batchBuilder.append(fare.getTypeOfJourney());
+            		 batchBuilder.append(fare.getRtgno());
+            		 batchBuilder.append("  ");
+            		 batchBuilder.append(fare.getCurrency());
+            		 
+            		 batchBuilder.append(nf.format(Float.parseFloat(fare.getAmount())));
+            		 
+            		 //effective date
+//            		 batchBuilder.append("         ");
+//            		 batchBuilder.append(obj)            		 
+            		 batchBuilder.append("\n");  
+            	 }
+             }
+        }
+        
+        
+        for(WorkPackageFareSheet sheet : workPackage.getAddonFareSheet()) {
+       	 batchBuilder.append("B  NN "+sheet.getAddonFaresName());
+            batchBuilder.append("\n");   
+            
+            for(WorkPackageFare fare : sheet.getFares()) {
+           	 if(fare.getAction().contentEquals("I") || fare.getAction().contentEquals("R")) {
+           		 batchBuilder.append("A");
+           		 batchBuilder.append(fare.getCarrier());
+           		 batchBuilder.append(fare.getTariffNumber().getTarNo());
+           		 batchBuilder.append(" ");
+           		 batchBuilder.append(fare.getOrigin());
+           		 batchBuilder.append(fare.getDestination());
+           		 batchBuilder.append(fare.getBucket());
+           		 if(8-fare.getBucket().length() > 0) {
+           			 for(int i=0;i<(8-fare.getBucket().length()); i++) {
+           				 batchBuilder.append(" ");
+           			 }
+           		 }
+           		 batchBuilder.append(fare.getTypeOfJourney());
+           		 batchBuilder.append(fare.getRtgno());
+           		 batchBuilder.append("  ");
+           		 batchBuilder.append(fare.getZone());
+           		 batchBuilder.append(fare.getCurrency());
+           		 batchBuilder.append("+");
+           		 batchBuilder.append(nf.format(Float.parseFloat(fare.getAmount())));
+           		 
+           		 //effective date
+//           		 batchBuilder.append("         ");
+//           		 batchBuilder.append(obj)            		 
+           		 batchBuilder.append("\n");   
+           	 } else if(fare.getAction().contentEquals("N")) {
+           		 batchBuilder.append("F");
+           		 batchBuilder.append(fare.getCarrier());
+           		 batchBuilder.append(fare.getTariffNumber().getTarNo());
+           		 batchBuilder.append("N");
+           		 batchBuilder.append(fare.getOrigin());
+           		 batchBuilder.append(fare.getDestination());
+           		 batchBuilder.append(fare.getFareBasis());
+           		 if(8-fare.getFareBasis().length() > 0) {
+           			 for(int i=0;i<(8-fare.getFareBasis().length()); i++) {
+           				 batchBuilder.append(" ");
+           			 }
+           		 }
+           		 batchBuilder.append(fare.getTypeOfJourney());
+           		 batchBuilder.append(fare.getRtgno());
+           		 batchBuilder.append("  ");
+           		 batchBuilder.append(fare.getCurrency());
+           		 
+           		 batchBuilder.append(nf.format(Float.parseFloat(fare.getAmount())));
+           		 
+           		 //effective date
+//           		 batchBuilder.append("         ");
+//           		 batchBuilder.append(obj)            		 
+           		 batchBuilder.append("\n");  
+           	 }
+            }
+       }
+        /*
+        
+        batchBuilder.append("B  NN "+workPackage.getSpecifiedFaresName());
         batchBuilder.append("\n");        
         for(WorkPackageFare fare : workPackage.getFares()) {
 	    		batchBuilder.append("F");
@@ -4470,6 +4592,7 @@ public class WorkPackageResource {
 	        }
 	        
 	        workPackage.setFilingDetail(new FilingDetail());
+	        workPackage.getFilingDetail().setAtpcoFile(batchBuilder.toString());
 	        for(TariffNumber tariff : fareTariffNumber) {
 	        	FilingDetailTariff fdt = new FilingDetailTariff();
 	        	fdt.cxr = "GA";

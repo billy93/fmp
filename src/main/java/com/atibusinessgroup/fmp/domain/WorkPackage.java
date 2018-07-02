@@ -1240,6 +1240,8 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     	private String workUnitType;
     	@Field("description")
     	private String description;
+    	@Field("atpcoFile")
+    	private String atpcoFile;
     	
     	@Field("work_unit_id")
     	private String workUnitId;
@@ -1363,6 +1365,14 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     	}
     	
     	
+		public String getAtpcoFile() {
+			return atpcoFile;
+		}
+
+		public void setAtpcoFile(String atpcoFile) {
+			this.atpcoFile = atpcoFile;
+		}
+
 		public String getOrganization() {
 			return organization;
 		}
