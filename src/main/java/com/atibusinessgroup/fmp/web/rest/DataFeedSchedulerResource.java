@@ -81,10 +81,8 @@ public class DataFeedSchedulerResource {
 			dfSchedulerService.updateDFManualScheduler(df);
 		}
 		dfSchedulerService.save(df);
-
-		return ResponseEntity.ok()
-	            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, param.getType()))
-	            .body(df);
+		
+		return new ResponseEntity<>(df, null, HttpStatus.OK);
 	}
 	
 	@PutMapping("/data-feed-scheduler/start")

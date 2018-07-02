@@ -1,6 +1,6 @@
 <div class="content-title">
 	<h2>Data Feed Extraction</h2>
-	<jhi-alert></jhi-alert>
+<!-- 	<jhi-alert></jhi-alert> -->
 </div>
 
 <div class="panel">
@@ -23,15 +23,9 @@
 									<div class="col-md-12 no-lpad">
 										<div class="col-md-3 no-lpad">
 											<div class="form-group">
-												<label>Day Of Week</label> 
+												<label>Day</label> 
 												<select class="form-control" name="dayOfWeek" id="dayOfWeek" ng-model="vm.automaticData.dayOfWeek">
-													<option value="SUN">Sunday</option>
-													<option value="MON">Monday</option>
-													<option value="TUE">Tuesday</option>
-													<option value="WED">Wednesday</option>
-													<option value="THU">Thursday</option>
-													<option value="FRI">Friday</option>
-													<option value="SAT">Saturday</option>
+													<option value="{{dayOfWeek.key}}" ng-repeat="dayOfWeek in vm.dayOfWeekList track by $index">{{dayOfWeek.value}}</option>
 												</select>
 											</div>
 										</div>
@@ -54,8 +48,17 @@
 										<br /> <br />
 										<div class="clearfix">
 											<button type="button" class="btn btn-default small" ng-click="vm.triggerAutomatic()">Trigger Automatic Extraction</button>
-		<!-- 									<button type="button" class="btn btn-default small" ng-click="vm.startScheduler()">Start All Scheduler</button> -->
-		<!-- 									<button type="button" class="btn btn-default small" ng-click="vm.stopScheduler()">Stop All Scheduler</button> -->
+<!-- 											<button type="button" class="btn btn-default small" ng-click="vm.startScheduler()">Start All Scheduler</button> -->
+<!-- 											<button type="button" class="btn btn-default small" ng-click="vm.stopScheduler()">Stop All Scheduler</button> -->
+										</div>
+									</div>
+									<div class="pull-right col-md-12 no-lpad text-left">
+										<br /> <br />
+										<div class="clearfix">
+											<label style="width: 7%">Extraction Day</label><span>: {{vm.automaticData.dayOfWeekValue}}</span><br/>
+											<label style="width: 7%">Time</label><span>: {{vm.automaticData.timeValue}}</span><br/>
+											<label style="width: 7%">Filepath</label><span>: {{vm.automaticData.filepathValue}}</span><br/>
+											</div>
 										</div>
 									</div>
 								</form>
@@ -153,6 +156,15 @@
 										<br /> <br />
 										<div class="clearfix">
 											<button type="button" class="btn btn-default small" ng-click="vm.triggerManual()">Trigger Manual Extraction</button>
+										</div>
+									</div>
+									<div class="pull-right col-md-12 no-lpad text-left">
+										<br /> <br />
+										<div class="clearfix">
+											<label style="width: 7%">Delay Time</label><span>: {{vm.manualData.delayTimeValue}}</span><br/>
+											<label style="width: 7%">Start Date</label><span>: {{vm.manualData.startDateValue}}</span><br/>
+											<label style="width: 7%">End Date</label><span>: {{vm.manualData.endDateValue}}</span><br/>
+											<label style="width: 7%">Filepath</label><span>: {{vm.manualData.filepathValue}}</span><br/>
 										</div>
 									</div>
 								</form>
