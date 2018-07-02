@@ -36,6 +36,8 @@
                 		startTime: null,
                 		atpcoFares: null,
                 		marketFares: null,
+                		dayOfWeek: null,
+                		filepath: null
                 	}
             	}],
             	automaticData: [function() {
@@ -50,6 +52,8 @@
                 		startTime: null,
                 		atpcoFares: null,
                 		marketFares: null,
+                		dayOfWeek: null,
+                		filepath: null
                 	}
             	}],
             }

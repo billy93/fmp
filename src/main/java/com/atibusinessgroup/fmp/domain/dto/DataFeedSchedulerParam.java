@@ -4,32 +4,35 @@ import java.time.ZonedDateTime;
 
 public class DataFeedSchedulerParam {
 	
-	private String delayDays;
-	private String delayHours;
-	private String delayMinutes;
+	private int delayDays;
+	private int delayHours;
+	private int delayMinutes;
 	private ZonedDateTime startDate;
 	private ZonedDateTime endDate;
-	private ZonedDateTime time;
-	private String type;
+	private ZonedDateTime startTime;
 	private boolean atpcoFares;
 	private boolean marketFares;
+	private String type;
+	private String dayOfWeek;
+	private String filepath;
 	
-	public String getDelayDays() {
+	
+	public int getDelayDays() {
 		return delayDays;
 	}
-	public void setDelayDays(String delayDays) {
+	public void setDelayDays(int delayDays) {
 		this.delayDays = delayDays;
 	}
-	public String getDelayHours() {
+	public int getDelayHours() {
 		return delayHours;
 	}
-	public void setDelayHours(String delayHours) {
+	public void setDelayHours(int delayHours) {
 		this.delayHours = delayHours;
 	}
-	public String getDelayMinutes() {
+	public int getDelayMinutes() {
 		return delayMinutes;
 	}
-	public void setDelayMinutes(String delayMinutes) {
+	public void setDelayMinutes(int delayMinutes) {
 		this.delayMinutes = delayMinutes;
 	}
 	public ZonedDateTime getStartDate() {
@@ -44,11 +47,11 @@ public class DataFeedSchedulerParam {
 	public void setEndDate(ZonedDateTime endDate) {
 		this.endDate = endDate;
 	}
-	public ZonedDateTime getTime() {
-		return time;
+	public ZonedDateTime getStartTime() {
+		return startTime;
 	}
-	public void setTime(ZonedDateTime time) {
-		this.time = time;
+	public void setStartTime(ZonedDateTime startTime) {
+		this.startTime = startTime;
 	}
 	public String getType() {
 		return type;
@@ -68,12 +71,24 @@ public class DataFeedSchedulerParam {
 	public void setMarketFares(boolean marketFares) {
 		this.marketFares = marketFares;
 	}
-	
+	public String getDayOfWeek() {
+		return dayOfWeek;
+	}
+	public void setDayOfWeek(String dayOfWeek) {
+		this.dayOfWeek = dayOfWeek;
+	}
+	public String getFilepath() {
+		return filepath;
+	}
+	public void setFilepath(String filepath) {
+		this.filepath = filepath;
+	}
 	@Override
 	public String toString() {
 		return "DataFeedSchedulerParam [delayDays=" + delayDays + ", delayHours=" + delayHours + ", delayMinutes="
-				+ delayMinutes + ", startDate=" + startDate + ", endDate=" + endDate + ", time=" + time + ", type="
-				+ type + ", atpcoFares=" + atpcoFares + ", marketFares=" + marketFares + "]";
+				+ delayMinutes + ", startDate=" + startDate + ", endDate=" + endDate + ", startTime=" + startTime
+				+ ", atpcoFares=" + atpcoFares + ", marketFares=" + marketFares + ", type=" + type + ", dayOfWeek="
+				+ dayOfWeek + ", filepath=" + filepath + "]";
 	}
 	
 }

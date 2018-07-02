@@ -19,6 +19,8 @@
         vm.triggerManual = triggerManual;
         vm.selectDataFeedSchedulerTab = selectDataFeedSchedulerTab;
         vm.tab = 1;
+        vm.startScheduler = startScheduler;
+        vm.stopScheduler = stopScheduler;
         
         vm.showData();
         
@@ -29,6 +31,7 @@
         		vm.automaticData = data.automatic;
         		vm.automaticData.startDate = DateUtils.convertDateTimeFromServer(data.automatic.startDate);
         		vm.automaticData.startTime = DateUtils.convertDateTimeFromServer(data.automatic.startTime);
+//        		vm.automaticData.dayOfWeek = data.automatic.dayOfWeek.toString();
         		
         		vm.manualData = data.manual;
         		vm.manualData.startDate = DateUtils.convertDateTimeFromServer(data.manual.startDate);
@@ -56,12 +59,20 @@
         
         function triggerAutomatic() {
         	vm.automaticData.type = "automatic";
-        	DFScheduler.setParam(vm.automaticData);
+        	DFScheduler.updateScheduler(vm.automaticData);
         }
         
         function triggerManual() {
         	vm.manualData.type = "manual";
-        	DFScheduler.setParam(vm.manualData);
+        	DFScheduler.updateScheduler(vm.manualData);
+        }
+        
+        function startScheduler() {
+        	DFScheduler.startScheduler();
+        }
+        
+        function stopScheduler() {
+        	DFScheduler.stopScheduler();
         }
 	}
 })();

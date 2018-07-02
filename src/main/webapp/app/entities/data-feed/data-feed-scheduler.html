@@ -18,30 +18,42 @@
 				<div class="panel-body" ng-if="vm.tab==1">
 					<div class="clearfix">
 						<form name="autoExtractForm" role="form" ng-model="vm.autoExtractForm" novalidate>
-							<div class="col-md-6 no-lpad">
-								<div class="col-md-6 no-lpad">
+							<div class="col-md-12 no-lpad">
+								<div class="col-md-3 no-lpad">
 									<div class="form-group">
-										<label>Start Date</label> 
-										<input type="text"
-											class="form-control"
-											ng-click="vm.openCalendar($event, 'automaticStartDate')"
-											is-open="vm.datePickerOpenStatus['automaticStartDate']"
-											datetime-picker="{{vm.dateFormat}}" 
-											enable-time="false"
-											name="automaticStartDate" id="automaticStartDate"
-											ng-model="vm.automaticData.startDate" placeholder="From" />
+										<label>Day Of Week</label> 
+										<select class="form-control" name="dayOfWeek" id="dayOfWeek" ng-model="vm.automaticData.dayOfWeek">
+											<option value="SUN">Sunday</option>
+											<option value="MON">Monday</option>
+											<option value="TUE">Tuesday</option>
+											<option value="WED">Wednesday</option>
+											<option value="THU">Thursday</option>
+											<option value="FRI">Friday</option>
+											<option value="SAT">Saturday</option>
+										</select>
 									</div>
 								</div>
 							</div>
-							<div class="col-md-6 no-lpad">
+							<div class="col-md-12 no-lpad">
 								<div class="form-inline">
+									<label>Time</label>
 									<div uib-timepicker ng-model="vm.automaticData.startTime" show-meridian="false"></div>
+								</div>
+							</div>
+							<div class="col-md-12 no-lpad">
+								<div class="col-md-3 no-lpad">
+									<div class="form-group">
+										<label>Filepath</label>
+										<input type="text" class="form-control" name="filepath" id="filepath" ng-model="vm.automaticData.filepath">
+									</div>
 								</div>
 							</div>
 							<div class="pull-right col-md-12 no-lpad text-left">
 								<br /> <br />
 								<div class="clearfix">
 									<button type="button" class="btn btn-default small" ng-click="vm.triggerAutomatic()">Trigger Automatic Extraction</button>
+<!-- 									<button type="button" class="btn btn-default small" ng-click="vm.startScheduler()">Start All Scheduler</button> -->
+<!-- 									<button type="button" class="btn btn-default small" ng-click="vm.stopScheduler()">Stop All Scheduler</button> -->
 								</div>
 							</div>
 						</form>
@@ -127,6 +139,14 @@
 									</div>
 								</div>
 							</div>
+							<div class="col-md-12 no-lpad">
+								<div class="col-md-3 no-lpad">
+									<div class="form-group">
+										<label>Filepath</label>
+										<input type="text" class="form-control" name="filepath" id="filepath" ng-model="vm.manualData.filepath">
+									</div>
+								</div>
+							</div>
 							<div class="pull-right col-md-12 no-lpad text-left">
 								<br /> <br />
 								<div class="clearfix">
@@ -141,4 +161,3 @@
 
 	</div>
 </div>
-
