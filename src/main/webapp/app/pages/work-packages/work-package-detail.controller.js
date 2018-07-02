@@ -4422,16 +4422,12 @@
 	     		data.filingDetail.releaseDate = DateUtils.convertDateTimeFromServer(data.filingDetail.releaseDate);
 	      }
           
+
+          
           
           vm.workPackage = data;
           
 
-          if(data.validation != null && ((data.validation.errorsCount > 0) || (data.validation.warningsCount > 0))){
-				alert('There is '+data.validation.errorsCount+' error(s) and '+data.validation.warningsCount+' warning(s)');		    				
-		  }       
-          
-          
-          
           if(vm.workPackage.fareSheet.length > 0){
             	for(var x=0;x<vm.workPackage.fareSheet.length;x++){
             		vm.changeVersion(vm.workPackage.fareSheet[x], vm.workPackage.fareSheet[x].version); 
@@ -4462,6 +4458,13 @@
             		vm.changeVersion(vm.workPackage.waiverFareSheet[x], vm.workPackage.waiverFareSheet[x].version);
             	}
             }
+            
+            if(vm.workPackage.validation != null && ((vm.workPackage.validation.errorsCount > 0) || (vm.workPackage.validation.warningsCount > 0))){
+				alert('There is '+vm.workPackage.validation.errorsCount+' error(s) and '+vm.workPackage.validation.warningsCount+' warning(s)');
+				return false;
+		  }       
+          
+            return true;
       }
       
       vm.importFareDiscount = function ($file) {
@@ -5989,8 +5992,11 @@
       
       vm.createBatch = function(){
     	  WorkPackage.createbatch(vm.workPackage, function(result){
-    		  alert('Create batch Success');
-  			  $state.go('work-package');
+    		  if(vm.mapWorkpackage(result)){
+	    		  alert('Create batch Success');
+	    		  vm.mapWorkpackage(result);
+	  			  $state.go('work-package');
+    		  }
     	  }, function(){
     		  alert('Error occured, please try again')
     	  });
@@ -5998,6 +6004,8 @@
       
       vm.reviseBatch = function(){
     	  WorkPackage.revisebatch(vm.workPackage, function(result){
+    		  vm.mapWorkpackage(result);
+
     		  alert('Revise batch Success');
   			  $state.go('work-package');
     	  }, function(){
