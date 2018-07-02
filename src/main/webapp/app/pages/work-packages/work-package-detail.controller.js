@@ -622,11 +622,7 @@
         		mandatoryExtraCondition:[
         			{
         				field:"calcType",
-        				isEqual:"M"
-        			},
-        			{
-        				field:"calcType",
-        				isEqual:"C"
+        				isEqual:"S"
         			}
         		],
         	},
@@ -698,7 +694,7 @@
         	},
         	{
         		name:"discountComment",
-        		editable:["LSO", "HO",  "DISTRIBUTION"],
+        		editable:["LSO", "HO",  "DISTRIBUTION", "ROUTE_MANAGEMENT"],
         		mandatory:[]
         	},
         	{
@@ -1105,18 +1101,18 @@
 	        					break;
         					}
         					else{
-        						for(var y=0;y<extraCondition.length;y++){
-        							var otherField = extraCondition[y].field;
-        							if(fare != null){
-        								if(fare[otherField] == extraCondition[y].isEqual){
-        									result = true;
-        									break;
-        								}
-        							}
-        							else{
-        								
-        							}        							
-        						}
+//        						for(var y=0;y<extraCondition.length;y++){
+//        							var otherField = extraCondition[y].field;
+//        							if(fare != null){
+//        								if(fare[otherField] == extraCondition[y].isEqual){
+//        									result = true;
+//        									break;
+//        								}
+//        							}
+//        							else{
+//        								
+//        							}        							
+//        						}
         					}
         				} else {        				
 	        				if(reviewLevels.indexOf(vm.workPackage.reviewLevel) > -1){
@@ -5271,8 +5267,10 @@
       }
       
       vm.marketPrevBaseAmount = function(fare){
-		  fare.prevAmountDiff = fare.amount - fare.prevAmount;
-		  fare.prevPercentAmountDiff = parseFloat((fare.prevAmountDiff/fare.prevAmount)*100).toFixed(2);
+    	  if(fare.prevAmount != null){
+			  fare.prevAmountDiff = fare.amount - fare.prevAmount;
+			  fare.prevPercentAmountDiff = parseFloat((fare.prevAmountDiff/fare.prevAmount)*100).toFixed(2);
+    	  }
       }
       
       vm.deleteSelectedFares = function(workPackageSheet){
@@ -6311,6 +6309,12 @@
       
       vm.previewUploadFile = function(){
     	  alert(vm.workPackage.filingDetail.atpcoFile);
+      }
+      
+      vm.resetCalculateField = function(fare){
+    	  fare.percentBaseFare = null;
+    	  fare.currency = null;
+    	  fare.discountSpecifiedAmount = null;
       }
     }
 })();
