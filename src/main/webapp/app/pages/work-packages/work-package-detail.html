@@ -1348,7 +1348,7 @@
 												<div class="form-group">
 													<div class="checkbox-wrapper">
 														<label class="black">
-															<input type="radio" name="radio1" ng-model="vm.workPackage.filingDetail.workUnitType" ng-change="vm.loadAll()" value="existing">
+															<input type="radio" name="radio1" ng-model="vm.workPackage.filingDetail.workUnitType" value="existing" ng-disabled="vm.checkFilingDetailDisabled()">
 															Use Existing Work Unit
 														</label>
 													</div>
@@ -1356,7 +1356,7 @@
 												<div class="form-group">
 													<div class="checkbox-wrapper">	
 														<label class="black">
-															<input type="radio" name="radio1" ng-model="vm.workPackage.filingDetail.workUnitType" ng-change="vm.loadAll()" value="new">
+															<input type="radio" name="radio1" ng-model="vm.workPackage.filingDetail.workUnitType" value="new" ng-disabled="vm.checkFilingDetailDisabled()">
 															Use New Work Unit
 														</label>
 													</div>
@@ -1365,11 +1365,11 @@
 											<div class="pull-left w20 ph5px">
 												<div class="form-group">
 													<label>Work Unit ID</label>
-													<input type="text" name="Work Unit ID" class="form-control" ng-model="vm.workPackage.filingDetail.workUnitId" ng-disabled="vm.workPackage.filingDetail.workUnitType != 'existing'">																
+													<input type="text" name="Work Unit ID" class="form-control" ng-model="vm.workPackage.filingDetail.workUnitId" ng-disabled="vm.workPackage.filingDetail.workUnitType != 'existing' || vm.checkFilingDetailDisabled()">																
 												</div>
 												<div class="form-group">
 													<label>New Work Unit</label>
-													<input type="text" name="New Work Unit" class="form-control" ng-model="vm.workPackage.filingDetail.workUnit" ng-disabled="vm.workPackage.filingDetail.workUnitType != 'new'">																
+													<input type="text" name="New Work Unit" class="form-control" ng-model="vm.workPackage.filingDetail.workUnit" ng-disabled="vm.workPackage.filingDetail.workUnitType != 'new' || vm.checkFilingDetailDisabled()">																
 												</div>
 											</div>
 											<div class="pull-left w20 ph5px">
@@ -1379,7 +1379,7 @@
 													<div class="form-group">
 		
 														<input type="text" id="field_gfsDate" name="gfsDate{{$index}}" class="form-control"
-														ng-disabled="vm.workPackage.filingDetail.workUnitType != 'existing'"
+														ng-disabled="vm.workPackage.filingDetail.workUnitType != 'existing' || vm.checkFilingDetailDisabled()"
 														enable-time="false"
 														datetime-picker="{{dateformat}}" ng-model="vm.workPackage.filingDetail.createdDate" is-open="vm.datePickerOpenStatus['filingDetailCreatedDate']" />
 														<span ng-click="vm.openCalendar('filingDetailCreatedDate')" class="input-group-addon" ng-class="{'poiv-none':vm.workPackage.filingDetail.workUnitType != 'existing'}">
@@ -1398,7 +1398,7 @@
 													<div class="form-group">
 		
 														<input type="text" id="field_gfsDate" name="gfsDate{{$index}}" class="form-control"
-														disabled
+														ng-disabled="vm.workPackage.filingDetail.releaseInstruction != 'release' || vm.checkFilingDetailDisabled()"
 														enable-time="false"
 														datetime-picker="{{dateformat}}" ng-model="vm.workPackage.filingDetail.releaseDate" is-open="vm.datePickerOpenStatus['filingDetailReleaseDate']" />
 														<span ng-click="vm.openCalendar('filingDetailCreatedDate')" class="input-group-addon poiv-none">
@@ -1412,12 +1412,12 @@
 											<div class="pull-left w20 ph5px">
 												<div class="form-group">
 													<label>Organization</label>
-													<input type="text" name="Organization" class="form-control" ng-model="vm.workPackage.filingDetail.organization" ng-disabled="vm.workPackage.filingDetail.workUnitType != 'existing'">		
+													<input type="text" name="Organization" class="form-control" ng-model="vm.workPackage.filingDetail.organization" ng-disabled="vm.workPackage.filingDetail.workUnitType != 'existing' || vm.checkFilingDetailDisabled()">		
 												</div>
 												<div class="form-group">
 													<div class="checkbox-wrapper">
 														<label class="black">
-															<input type="checkbox" ng-model="vm.workPackage.filingDetail.exclusiveAccess" ng-disabled="vm.workPackage.filingDetail.workUnitType != 'new'">
+															<input type="checkbox" ng-model="vm.workPackage.filingDetail.exclusiveAccess" ng-disabled="vm.workPackage.filingDetail.workUnitType != 'new' || vm.checkFilingDetailDisabled()">
 															Exclusive Access
 														</label>
 														<label class="black">
@@ -1431,11 +1431,13 @@
 												<div class="button-group dropdown" style="margin-top: 28px;
 												margin-left: 10px;">
 													<div class="button-group dropdown custom">
-														<button class="btn btn-default small">Action <i class="fa fa-caret-down"></i></button>
+														<button class="btn btn-default small" ng-disabled="vm.workPackage.reviewLevel == 'LSO' || vm.workPackage.reviewLevel == 'HO'">Actions <i class="fa fa-caret-down"></i></button>
 														<ul class="dropdown-menu custom" role="menu">
 														    <li>
 														    	<a>Copy Justification Text</a>
 														    	<a ng-click="vm.refreshTariff()">Refresh Tariff List</a>
+														    	<a ng-click="vm.applyText()">ApplyText for All tariffs</a>
+														    	<a ng-click="vm.previewUploadFile()">Preview Upload File</a>
 														    </li>
 														</ul>
 													</div>	
@@ -1454,11 +1456,11 @@
 										<div class="w60 ph5px">
 											<div class="form-group">
 												<label>Description</label>
-												<input type="text" name="Description" class="form-control" ng-model="vm.workPackage.filingDetail.description" ng-disabled="vm.workPackage.filingDetail.workUnitType != 'new'">	
+												<input type="text" name="Description" class="form-control" ng-model="vm.workPackage.filingDetail.description" ng-disabled="vm.workPackage.filingDetail.workUnitType != 'new' || vm.checkFilingDetailDisabled()">	
 											</div>
 											<div class="form-group">
 												<label>Email Notification</label>
-												<input type="text" name="Email Notification" class="form-control" ng-model="vm.workPackage.filingDetail.email">	
+												<input type="text" name="Email Notification" class="form-control" ng-model="vm.workPackage.filingDetail.email" ng-disabled="vm.checkFilingDetailDisabled()">	
 											</div>											
 										</div>
 										<div class="clearfix mb1">
@@ -1466,7 +1468,7 @@
 													<div class="form-group">
 														<label>Release Instruction</label>
 														<select class="form-control" 
-														ng-disabled="vm.workPackage.filingDetail.workUnitType != 'new'"
+														ng-disabled="vm.workPackage.filingDetail.workUnitType != 'new' || vm.checkFilingDetailDisabled()"
 														ng-model="vm.workPackage.filingDetail.releaseInstruction" id="field_status" ng-init="vm.workPackage.filingDetail.releaseInstruction == null ? vm.workPackage.filingDetail.releaseInstruction = 'notRelease' : vm.workPackage.filingDetail.releaseInstruction = vm.workPackage.filingDetail.releaseInstruction">
 															<option value="">Select Release Instruction</option>
 											                <option value="release">Release Work Unit / Batch</option>
@@ -1476,8 +1478,8 @@
 												</div>
 												<div class="pull-left w40 ph5px">
 													<div class="btn-wrapper-action text-right">
-														<button class="btn btn-default small btn-secondary" ng-click="vm.addBatchNumber()">Add Batch Number</button>
-														<button class="btn btn-default small btn-secondary" ng-click="vm.removeBatchNumber()">Remove Batch Number</button>
+														<button class="btn btn-default small btn-secondary" ng-click="vm.addBatchNumber()" ng-disabled="vm.workPackage.reviewLevel == 'LSO' || vm.workPackage.reviewLevel == 'HO'">Add Batch Number</button>
+														<button class="btn btn-default small btn-secondary" ng-click="vm.removeBatchNumber()" ng-disabled="vm.workPackage.reviewLevel == 'LSO' || vm.workPackage.reviewLevel == 'HO'">Remove Batch Number</button>
 													</div>												
 												</div>
 											</div>
@@ -2273,7 +2275,7 @@
 										<div class="form-group">
 											<div class="checkbox-wrapper">
 												<label class="black">
-													<input type="radio" name="radio1" ng-model="vm.workPackage.filingDetail.workUnitType" ng-change="vm.loadAll()" value="existing">
+													<input type="radio" name="radio1" ng-model="vm.workPackage.filingDetail.workUnitType" value="existing">
 													Use Existing Work Unit
 												</label>
 											</div>
@@ -2281,7 +2283,7 @@
 										<div class="form-group">
 											<div class="checkbox-wrapper">	
 												<label class="black">
-													<input type="radio" name="radio1" ng-model="vm.workPackage.filingDetail.workUnitType" ng-change="vm.loadAll()" value="new">
+													<input type="radio" name="radio1" ng-model="vm.workPackage.filingDetail.workUnitType" value="new">
 													Use New Work Unit
 												</label>
 											</div>
@@ -2438,6 +2440,7 @@
 										</div>
 									</div>
 					      	</div>
+
 
 					        </div>	
         					
