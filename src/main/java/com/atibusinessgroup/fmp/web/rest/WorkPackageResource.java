@@ -2433,6 +2433,7 @@ public class WorkPackageResource {
 					    		err1.setMessage("Base Amt is required");
 					    		errors.add(err1);						    		
 							}
+							
 							if(fare.getTravelStart() != null && fare.getTravelEnd() != null) {
 								if(fare.getTravelStart().isAfter(fare.getTravelEnd())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
@@ -2444,6 +2445,19 @@ public class WorkPackageResource {
 						    		errors.add(err1);
 								}
 							}
+							else {
+								if(fare.getTravelStart() == null) {
+									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+						    		err1.setMessage("Travel Start Date cannot be blank");
+						    		errors.add(err1);
+								}
+								if(fare.getTravelEnd() == null) {
+									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+						    		err1.setMessage("Travel End Date cannot be blank");
+						    		errors.add(err1);
+								}
+							}
+							
 							if(fare.getSaleStart() != null && fare.getSaleEnd() != null) {
 								if(fare.getSaleStart().isAfter(fare.getSaleEnd())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
@@ -2456,6 +2470,21 @@ public class WorkPackageResource {
 						    		errors.add(err1);
 								}
 							}
+							else {
+//								if(!workPackage.getTargetDistribution().contentEquals("MARKET")) {
+//									if(fare.getSaleStart() == null) {
+//										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+//							    		err1.setMessage("Sale Start Date cannot be blank");
+//							    		errors.add(err1);
+//									}
+//								}
+//								if(fare.getSaleEnd() == null) {
+//									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+//						    		err1.setMessage("Sale End Date cannot be blank");
+//						    		errors.add(err1);
+//								}
+							}
+							
 						}else if(workPackage.getReviewLevel().contentEquals("HO")) {
 							if(wpfs.getAddonFaresName() == null || wpfs.getAddonFaresName().contentEquals("")) {
 								//List Error
