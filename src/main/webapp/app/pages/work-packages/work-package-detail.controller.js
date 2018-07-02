@@ -2959,6 +2959,7 @@
         	  }else{
         		  vm.workPackage.validate = false;
         	  }
+        	  
               WorkPackage.update(vm.workPackage, onSaveSuccess, onSaveError);
           } else {
               WorkPackage.save(vm.workPackage, onSaveSuccess, onSaveError);
@@ -2969,115 +2970,10 @@
     	  alert("Save Success");
 	      $scope.$emit('fmpApp:workPackageUpdate', result);
 	      var data = result;
-    	      
-	      data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
-          data.newCreatedDate = DateUtils.convertDateTimeFromServer(data.createdDate);
-          data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
-          data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
-          data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
-          data.lockedSince = DateUtils.convertDateTimeFromServer(data.lockedSince);
-          data.saleDate = DateUtils.convertDateTimeFromServer(data.saleDate);
-          
-          if(data.fareSheet.length > 0){
-          	for(var x=0;x<data.fareSheet.length;x++){          		
-          		var fares = data.fareSheet[x].fares;
-          		
-          		for(var y=0;y<fares.length;y++){
-              		if(fares[y] != null){
-              			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
-              			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
-              			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
-              			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
-              			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
-              		}
-          		}
-          	}
-          }
-          
-          if(data.addonFareSheet.length > 0){
-          	for(var x=0;x<data.addonFareSheet.length;x++){
-          		var fares = data.addonFareSheet[x].fares;
-          		for(var y=0;y<fares.length;y++){
-              		if(fares[y] != null){
-              			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
-              			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
-              			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
-              			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
-              			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
-              		}
-          		}
-          	}
-          }
-          
-          if(data.marketFareSheet.length > 0){
-          	for(var x=0;x<data.marketFareSheet.length;x++){
-          		var fares = data.marketFareSheet[x].fares;
-          		for(var y=0;y<fares.length;y++){
-              		if(fares[y] != null){
-              			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
-              			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
-              			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
-              			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
-              			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
-              		}
-          		}
-          	}
-          }
-          
-          
-          if(data.discountFareSheet.length > 0){
-          	for(var x=0;x<data.discountFareSheet.length;x++){
-          		var fares = data.discountFareSheet[x].fares;
-          		for(var y=0;y<fares.length;y++){
-              		if(fares[y] != null){
-              			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
-              			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
-              			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
-              			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
-              			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
-              		}
-          		}
-          	}
-          }
-          vm.workPackage = data;
-          vm.isSaving = false;
-          
-          if(data.validation != null && ((data.validation.errorsCount > 0) || (data.validation.warningsCount > 0))){
-				alert('There is '+data.validation.errorsCount+' error(s) and '+data.validation.warningsCount+' warning(s)');		    				
-		  }       
-          
-          
-          
-          if(vm.workPackage.fareSheet.length > 0){
-            	for(var x=0;x<vm.workPackage.fareSheet.length;x++){
-            		vm.changeVersion(vm.workPackage.fareSheet[x], vm.workPackage.fareSheet[x].version); 
-            	}
-            }
-            
-            if(vm.workPackage.addonFareSheet.length > 0){
-            	for(var x=0;x<vm.workPackage.addonFareSheet.length;x++){
-            		vm.changeVersion(vm.workPackage.addonFareSheet[x], vm.workPackage.addonFareSheet[x].version); 
-            	}
-            }
-            
-            if(vm.workPackage.marketFareSheet.length > 0){
-            	for(var x=0;x<vm.workPackage.marketFareSheet.length;x++){
-            		vm.changeVersion(vm.workPackage.marketFareSheet[x], vm.workPackage.marketFareSheet[x].version);                	
-            	}
-            }
-            
-            
-            if(vm.workPackage.discountFareSheet.length > 0){
-            	for(var x=0;x<vm.workPackage.discountFareSheet.length;x++){
-            		vm.changeVersion(vm.workPackage.discountFareSheet[x], vm.workPackage.discountFareSheet[x].version);
-            	}
-            }
-            
-            if(vm.workPackage.waiverFareSheet.length > 0){
-            	for(var x=0;x<vm.workPackage.waiverFareSheet.length;x++){
-            		vm.changeVersion(vm.workPackage.waiverFareSheet[x], vm.workPackage.waiverFareSheet[x].version);
-            	}
-            }
+    	  
+	      vm.mapWorkpackage(data);
+	      
+          vm.isSaving = false;          
       }
 
       function onSaveError () {
@@ -4445,6 +4341,9 @@
       };
       
       vm.mapWorkpackage = function(result){
+    	  
+    	  
+    	  
     	  data = result;
   	  	  data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
           data.newCreatedDate = DateUtils.convertDateTimeFromServer(data.createdDate);
@@ -4514,8 +4413,60 @@
           		}
           	}
           }
+        
+          if(data.filingDetail != null && data.filingDetail.createdDate != null){
+	      		data.filingDetail.createdDate = DateUtils.convertDateTimeFromServer(data.filingDetail.createdDate);
+	      }
+	      
+          if(data.filingDetail != null &&  data.filingDetail.releaseDate != null){
+	     		data.filingDetail.releaseDate = DateUtils.convertDateTimeFromServer(data.filingDetail.releaseDate);
+	      }
+          
+
+          
+          
           vm.workPackage = data;
+          
+
+          if(vm.workPackage.fareSheet.length > 0){
+            	for(var x=0;x<vm.workPackage.fareSheet.length;x++){
+            		vm.changeVersion(vm.workPackage.fareSheet[x], vm.workPackage.fareSheet[x].version); 
+            	}
+            }
+            
+            if(vm.workPackage.addonFareSheet.length > 0){
+            	for(var x=0;x<vm.workPackage.addonFareSheet.length;x++){
+            		vm.changeVersion(vm.workPackage.addonFareSheet[x], vm.workPackage.addonFareSheet[x].version); 
+            	}
+            }
+            
+            if(vm.workPackage.marketFareSheet.length > 0){
+            	for(var x=0;x<vm.workPackage.marketFareSheet.length;x++){
+            		vm.changeVersion(vm.workPackage.marketFareSheet[x], vm.workPackage.marketFareSheet[x].version);                	
+            	}
+            }
+            
+            
+            if(vm.workPackage.discountFareSheet.length > 0){
+            	for(var x=0;x<vm.workPackage.discountFareSheet.length;x++){
+            		vm.changeVersion(vm.workPackage.discountFareSheet[x], vm.workPackage.discountFareSheet[x].version);
+            	}
+            }
+            
+            if(vm.workPackage.waiverFareSheet.length > 0){
+            	for(var x=0;x<vm.workPackage.waiverFareSheet.length;x++){
+            		vm.changeVersion(vm.workPackage.waiverFareSheet[x], vm.workPackage.waiverFareSheet[x].version);
+            	}
+            }
+            
+            if(vm.workPackage.validation != null && ((vm.workPackage.validation.errorsCount > 0) || (vm.workPackage.validation.warningsCount > 0))){
+				alert('There is '+vm.workPackage.validation.errorsCount+' error(s) and '+vm.workPackage.validation.warningsCount+' warning(s)');
+				return false;
+		  }       
+          
+            return true;
       }
+      
       vm.importFareDiscount = function ($file) {
           if ($file) {
               DataUtils.toBase64($file, function(base64Data) {
@@ -6221,6 +6172,13 @@
     			  disabled = true;
     		  }    		  
     	  }
+    	  if(!disabled){
+    		  if(vm.user.reviewLevels.indexOf(wp.reviewLevel) > -1){
+    			  disabled = false;
+    		  }else{
+    			  disabled = true;  
+    		  }
+    	  }
     	  return disabled;
       }
       
@@ -6275,6 +6233,84 @@
     		  var elmnt = $window.document.getElementsByName(fieldName)[0];
     		  elmnt.scrollIntoView();
     	  }
+      }
+      
+      
+      vm.createBatch = function(){
+    	  WorkPackage.createbatch(vm.workPackage, function(result){
+    		  if(vm.mapWorkpackage(result)){
+	    		  alert('Create batch Success');
+	    		  vm.mapWorkpackage(result);
+	  			  $state.go('work-package');
+    		  }
+    	  }, function(){
+    		  alert('Error occured, please try again')
+    	  });
+      }
+      
+      vm.reviseBatch = function(){
+    	  WorkPackage.revisebatch(vm.workPackage, function(result){
+    		  vm.mapWorkpackage(result);
+
+    		  alert('Revise batch Success');
+  			  $state.go('work-package');
+    	  }, function(){
+    		  alert('Error occured, please try again')
+    	  });
+      }
+      
+      vm.refreshTariff = function(){
+    	  WorkPackage.refreshTariff(vm.workPackage, function(result){
+    		  alert('Refresh Tariff Success');
+    		  vm.mapWorkpackage(result);
+//    		  onSaveSuccess(vm.workPackage);
+    	  }, function(){});
+      }
+      
+      vm.addBatchNumber = function(){
+    	  if(vm.selectedTariffRow != null){
+    		  if(vm.selectedTariffRow.batch == null) vm.selectedTariffRow.batch = [];
+    		  
+	    	  vm.selectedTariffRow.batch.push({
+	    		  batchNo:null,
+	    		  gfsRef:null,
+	    		  gfsDate:null
+	    	  });
+  		  }
+    	  else{
+    		  alert('Please select a tariff');
+    	  }
+      }
+      
+      vm.removeBatchNumber = function(){
+    	  if(vm.selectedBatchRow){
+	    	  var index = vm.selectedTariffRow.batch.indexOf(vm.selectedBatchRow);
+	    	  vm.selectedTariffRow.batch.splice(index, 1);
+    	  }
+    	  else{
+    		  alert('Please select batch row');
+    	  }
+      }
+      
+      vm.checkFilingDetailDisabled = function(){
+    	  return vm.workPackage.status == 'READY_TO_RELEASE';
+      }
+      
+      vm.applyText = function(){
+    	  if(vm.selectedTariffRow != null){
+    		  if(vm.selectedTariffRow.justificationText != null && vm.selectedTariffRow.justificationText != ""){
+	    		  for(var x=0;x<vm.workPackage.filingDetail.filingDetailTarif.length;x++){
+					  vm.workPackage.filingDetail.filingDetailTarif[x].justificationText = vm.selectedTariffRow.justificationText;
+	    		  }    		  
+    		  }
+  		  }
+    	  else{
+    		  alert('Please select a tariff');
+    	  }
+      }
+      
+      vm.previewUploadFile = function(){
+    	  alert(vm.workPackage.filingDetail.atpcoFile);
       }
     }
 })();

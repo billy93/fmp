@@ -12,6 +12,8 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -20,11 +22,13 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.ss.usermodel.Cell;
@@ -66,6 +70,8 @@ import com.atibusinessgroup.fmp.domain.WorkPackage;
 import com.atibusinessgroup.fmp.domain.WorkPackage.ApproveConfig;
 import com.atibusinessgroup.fmp.domain.WorkPackage.Attachment;
 import com.atibusinessgroup.fmp.domain.WorkPackage.Comment;
+import com.atibusinessgroup.fmp.domain.WorkPackage.FilingDetail;
+import com.atibusinessgroup.fmp.domain.WorkPackage.FilingDetail.FilingDetailTariff;
 import com.atibusinessgroup.fmp.domain.WorkPackage.ImportFares;
 import com.atibusinessgroup.fmp.domain.WorkPackage.WorkPackageFareSheet;
 import com.atibusinessgroup.fmp.domain.WorkPackage.WorkPackageFareSheet.FareVersion;
@@ -2284,7 +2290,7 @@ public class WorkPackageResource {
 					    		err1.setMessage("TarNo is required");
 					    		errors.add(err1);
 							}
-							if(fare.getFareType() == null || fare.getFareType().contentEquals("")) {
+							if(fare.getFareBasis() == null || fare.getFareBasis().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setIndex(index+"");
@@ -3590,11 +3596,11 @@ public class WorkPackageResource {
         	filter.setType(t);
         	
         	com.atibusinessgroup.fmp.domain.WorkPackageFilter.ReviewLevel rl = new WorkPackageFilter.ReviewLevel();
-        	rl.setDistribution(false);
-	    	rl.setHo(false);
-	    	rl.setLso(false);
-	    	rl.setRouteManagement(false); 
-        	Optional<User> userOptional = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
+        	rl.setDistribution(true);
+	    	rl.setHo(true);
+	    	rl.setLso(true);
+	    	rl.setRouteManagement(true); 
+        	/*Optional<User> userOptional = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
         	if(userOptional.isPresent()) {
             	User user = userOptional.get();
 	        	for(String reviewLevel : user.getReviewLevels()) {
@@ -3608,7 +3614,7 @@ public class WorkPackageResource {
 		        		rl.setRouteManagement(true); 
 		        	}
 	        	}
-        	}	        
+        	}*/	        
         	filter.setReviewLevel(rl);
         	
         	filter.setApprovalReference(null);
@@ -4371,21 +4377,142 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<WorkPackage> createbatchWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
         log.debug("REST request to createbatch WorkPackage : {}", workPackage);
-        /*
+        
+        
         if (workPackage.getId() == null) {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
                 
         StringBuilder batchBuilder = new StringBuilder();
+        NumberFormat nf = new DecimalFormat("0000000.00");
+
+        batchBuilder.append("W                          NN");
         
-        batchBuilder.append("W\t\t\tNN");
-        batchBuilder.append("\n");        
-        try {
-        batchBuilder.append(workPackage.getFilingDetail().getEmail());
-        }catch(Exception e) {}
+        if(workPackage.getFilingDetail().getEmail() != null && !workPackage.getFilingDetail().getEmail().contentEquals("")) {
+            batchBuilder.append("\n");      
+            batchBuilder.append("N"+workPackage.getFilingDetail().getEmail());
+        }
         
-        batchBuilder.append("\n");        
-        batchBuilder.append("B  N  "+workPackage.getSpecifiedFaresName());
+        batchBuilder.append("\n");    
+        
+        for(WorkPackageFareSheet sheet : workPackage.getFareSheet()) {
+        	 batchBuilder.append("B  NN "+sheet.getSpecifiedFaresName());
+             batchBuilder.append("\n");   
+             
+             for(WorkPackageFare fare : sheet.getFares()) {
+            	 if(fare.getAction().contentEquals("I") || fare.getAction().contentEquals("R")) {
+            		 batchBuilder.append("F");
+            		 batchBuilder.append(fare.getCarrier());
+            		 batchBuilder.append(fare.getTariffNumber().getTarNo());
+            		 batchBuilder.append(" ");
+            		 batchBuilder.append(fare.getOrigin());
+            		 batchBuilder.append(fare.getDestination());
+            		 batchBuilder.append(fare.getFareBasis());
+            		 if(8-fare.getFareBasis().length() > 0) {
+            			 for(int i=0;i<(8-fare.getFareBasis().length()); i++) {
+            				 batchBuilder.append(" ");
+            			 }
+            		 }
+            		 batchBuilder.append(fare.getTypeOfJourney());
+            		 batchBuilder.append(fare.getRtgno());
+            		 batchBuilder.append("  ");
+            		 batchBuilder.append(fare.getCurrency());
+            		 
+            		 batchBuilder.append(nf.format(Float.parseFloat(fare.getAmount())));
+            		 
+            		 //effective date
+//            		 batchBuilder.append("         ");
+//            		 batchBuilder.append(obj)            		 
+            		 batchBuilder.append("\n");   
+            	 } else if(fare.getAction().contentEquals("N")) {
+            		 batchBuilder.append("F");
+            		 batchBuilder.append(fare.getCarrier());
+            		 batchBuilder.append(fare.getTariffNumber().getTarNo());
+            		 batchBuilder.append("N");
+            		 batchBuilder.append(fare.getOrigin());
+            		 batchBuilder.append(fare.getDestination());
+            		 batchBuilder.append(fare.getFareBasis());
+            		 if(8-fare.getFareBasis().length() > 0) {
+            			 for(int i=0;i<(8-fare.getFareBasis().length()); i++) {
+            				 batchBuilder.append(" ");
+            			 }
+            		 }
+            		 batchBuilder.append(fare.getTypeOfJourney());
+            		 batchBuilder.append(fare.getRtgno());
+            		 batchBuilder.append("  ");
+            		 batchBuilder.append(fare.getCurrency());
+            		 
+            		 batchBuilder.append(nf.format(Float.parseFloat(fare.getAmount())));
+            		 
+            		 //effective date
+//            		 batchBuilder.append("         ");
+//            		 batchBuilder.append(obj)            		 
+            		 batchBuilder.append("\n");  
+            	 }
+             }
+        }
+        
+        
+        for(WorkPackageFareSheet sheet : workPackage.getAddonFareSheet()) {
+       	 batchBuilder.append("B  NN "+sheet.getAddonFaresName());
+            batchBuilder.append("\n");   
+            
+            for(WorkPackageFare fare : sheet.getFares()) {
+           	 if(fare.getAction().contentEquals("I") || fare.getAction().contentEquals("R")) {
+           		 batchBuilder.append("A");
+           		 batchBuilder.append(fare.getCarrier());
+           		 batchBuilder.append(fare.getTariffNumber().getTarNo());
+           		 batchBuilder.append(" ");
+           		 batchBuilder.append(fare.getOrigin());
+           		 batchBuilder.append(fare.getDestination());
+           		 batchBuilder.append(fare.getBucket());
+           		 if(8-fare.getBucket().length() > 0) {
+           			 for(int i=0;i<(8-fare.getBucket().length()); i++) {
+           				 batchBuilder.append(" ");
+           			 }
+           		 }
+           		 batchBuilder.append(fare.getTypeOfJourney());
+           		 batchBuilder.append(fare.getRtgno());
+           		 batchBuilder.append("  ");
+           		 batchBuilder.append(fare.getZone());
+           		 batchBuilder.append(fare.getCurrency());
+           		 batchBuilder.append("+");
+           		 batchBuilder.append(nf.format(Float.parseFloat(fare.getAmount())));
+           		 
+           		 //effective date
+//           		 batchBuilder.append("         ");
+//           		 batchBuilder.append(obj)            		 
+           		 batchBuilder.append("\n");   
+           	 } else if(fare.getAction().contentEquals("N")) {
+           		 batchBuilder.append("F");
+           		 batchBuilder.append(fare.getCarrier());
+           		 batchBuilder.append(fare.getTariffNumber().getTarNo());
+           		 batchBuilder.append("N");
+           		 batchBuilder.append(fare.getOrigin());
+           		 batchBuilder.append(fare.getDestination());
+           		 batchBuilder.append(fare.getFareBasis());
+           		 if(8-fare.getFareBasis().length() > 0) {
+           			 for(int i=0;i<(8-fare.getFareBasis().length()); i++) {
+           				 batchBuilder.append(" ");
+           			 }
+           		 }
+           		 batchBuilder.append(fare.getTypeOfJourney());
+           		 batchBuilder.append(fare.getRtgno());
+           		 batchBuilder.append("  ");
+           		 batchBuilder.append(fare.getCurrency());
+           		 
+           		 batchBuilder.append(nf.format(Float.parseFloat(fare.getAmount())));
+           		 
+           		 //effective date
+//           		 batchBuilder.append("         ");
+//           		 batchBuilder.append(obj)            		 
+           		 batchBuilder.append("\n");  
+           	 }
+            }
+       }
+        /*
+        
+        batchBuilder.append("B  NN "+workPackage.getSpecifiedFaresName());
         batchBuilder.append("\n");        
         for(WorkPackageFare fare : workPackage.getFares()) {
 	    		batchBuilder.append("F");
@@ -4444,11 +4571,87 @@ public class WorkPackageResource {
         
         //updateWorkPackage(workPackage);
 */
-        WorkPackage result = workPackageService.findOne(workPackage.getId());
         
-        return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        workPackage = validateWo(workPackage);
+        if(workPackage.getValidation() != null && workPackage.getValidation().getErrorsCount() > 0) {
+        	
+        }
+        else {
+	        workPackage.setLocked(false);
+	        workPackage.setLockedBy(null);
+	    	workPackage.setLockedSince(null);
+	        workPackage.setStatus(Status.READY_TO_RELEASE); //BUSY
+	        
+	        List<WorkPackageFareSheet> fareSheet = workPackage.getFareSheet();
+	        Set<TariffNumber> fareTariffNumber = new HashSet<TariffNumber>();
+	        for(WorkPackageFareSheet sheet : fareSheet) {
+	        	List<WorkPackageFare> fares = sheet.getFares();
+	        	for(WorkPackageFare fare : fares) {
+	        		fareTariffNumber.add(fare.getTariffNumber());
+	        	}
+	        }
+	        
+	        workPackage.setFilingDetail(new FilingDetail());
+	        workPackage.getFilingDetail().setAtpcoFile(batchBuilder.toString());
+	        for(TariffNumber tariff : fareTariffNumber) {
+	        	FilingDetailTariff fdt = new FilingDetailTariff();
+	        	fdt.cxr = "GA";
+	        	fdt.gov = "XX";
+	        	fdt.tarCd = tariff.getTarCd();
+	        	fdt.tarNo = tariff.getTarNo();
+	        	fdt.tarType = "Fare";
+	        	workPackage.getFilingDetail().getFilingDetailTarif().add(fdt);
+	        }
+	        workPackage = workPackageService.save(workPackage);
+	        
+	        WorkPackageHistory history = new WorkPackageHistory();
+	        history.setWorkPackage(new ObjectId(workPackage.getId()));
+	        history.setType("CREATEBATCH");
+	        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+	        workPackageHistoryService.save(history);
+        }
+        return ResponseEntity.created(new URI("/api/work-packages/" + workPackage.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, workPackage.getId().toString()))
+            .body(workPackage);
+    }
+    
+    
+    /**
+     * POST  /work-packages/refresh-tariff : refresh-tariff
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/work-packages/refresh-tariff")
+    @Timed
+    public ResponseEntity<WorkPackage> refreshTariffWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
+        log.debug("REST request to refresh tariff WorkPackage : {}", workPackage);
+        
+        List<WorkPackageFareSheet> fareSheet = workPackage.getFareSheet();
+        Set<TariffNumber> fareTariffNumber = new HashSet<TariffNumber>();
+        for(WorkPackageFareSheet sheet : fareSheet) {
+        	List<WorkPackageFare> fares = sheet.getFares();
+        	for(WorkPackageFare fare : fares) {
+        		fareTariffNumber.add(fare.getTariffNumber());
+        	}
+        }
+        
+        workPackage.setFilingDetail(new FilingDetail());
+        for(TariffNumber tariff : fareTariffNumber) {
+        	FilingDetailTariff fdt = new FilingDetailTariff();
+        	fdt.cxr = "GA";
+        	fdt.gov = "XX";
+        	fdt.tarCd = tariff.getTarCd();
+        	fdt.tarNo = tariff.getTarNo();
+        	fdt.tarType = "Fare";
+        	workPackage.getFilingDetail().getFilingDetailTarif().add(fdt);
+        }
+        workPackage = workPackageService.save(workPackage);
+        
+        return ResponseEntity.created(new URI("/api/work-packages/" + workPackage.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, workPackage.getId().toString()))
+            .body(workPackage);
     }
     
     
@@ -4467,23 +4670,27 @@ public class WorkPackageResource {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
         
-        WorkPackage result = workPackageService.findOne(workPackage.getId());
-        result.setStatus(Status.PENDING);
-        workPackage = workPackageService.save(result);
+//        WorkPackage result = workPackageService.findOne(workPackage.getId());
+        workPackage.setLocked(false);
+        workPackage.setLockedBy(null);
+    	workPackage.setLockedSince(null);
+        workPackage.setStatus(Status.READY_TO_RELEASE); //BUSY
+        workPackage.setStatus(Status.PENDING);
+        workPackage = workPackageService.save(workPackage);
         
         WorkPackageHistory history = new WorkPackageHistory();
-        history.setWorkPackage(new ObjectId(result.getId()));
+        history.setWorkPackage(new ObjectId(workPackage.getId()));
         history.setType("REVISEBATCH");
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
         
-        saveHistoryData(workPackage);
+//        saveHistoryData(workPackage);
         
         //updateWorkPackage(workPackage);
         
-        return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        return ResponseEntity.created(new URI("/api/work-packages/" + workPackage.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, workPackage.getId().toString()))
+            .body(workPackage);
     }
     
     /**

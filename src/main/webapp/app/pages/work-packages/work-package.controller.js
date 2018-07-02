@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('WorkPackageController', WorkPackageController);
 
-    WorkPackageController.$inject = ['Principal', '$uibModal', '$state', '$stateParams', 'WorkPackage', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', 'FileSaver', 'DateUtils'];
+    WorkPackageController.$inject = ['Principal', '$uibModal', '$state', '$stateParams', 'WorkPackage', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', 'FileSaver', 'DateUtils', 'user'];
 
-    function WorkPackageController(Principal, $uibModal, $state, $stateParams, WorkPackage, ParseLinks, AlertService, paginationConstants, pagingParams, FileSaver, DateUtils) {
+    function WorkPackageController(Principal, $uibModal, $state, $stateParams, WorkPackage, ParseLinks, AlertService, paginationConstants, pagingParams, FileSaver, DateUtils, user) {
         var vm = this;
         vm.reviewLevel = true;
         vm.woStatus = true;
@@ -25,6 +25,7 @@
         vm.reviewLevelDISTRIBUTION = null;
         vm.reviewLevelROUTEMANAGEMENT = null;
         vm.workPackageFilter =null;
+        vm.login =user;
 
         if($stateParams.size != null || $stateParams.size != undefined){
         	vm.itemsPerPage = $stateParams.size;
@@ -254,15 +255,19 @@
         	vm.loadAll();
         }
 
-        vm.unlock = function(wp){
-        	 vm.selectedRow.locked = false;
-	      	  WorkPackage.unlock(vm.selectedRow, onUnlockedSuccess, onUnlockedFailure);
-	      	  function onUnlockedSuccess (result) {
-	      		  alert('Work Package Successful Unlocked');
-	      	  }
-	      	  function onUnlockedFailure (error) {
+        vm.unlock = function(){
+        	if(vm.login.reviewLevels.indexOf(vm.selectedRow.reviewLevel) > -1){
+        	  vm.selectedRow.locked = false;
+   	      	  WorkPackage.unlock(vm.selectedRow, onUnlockedSuccess, onUnlockedFailure);
+   	      	  function onUnlockedSuccess (result) {
+   	      		  alert('Work Package Successful Unlocked');
+   	      	  }
+   	      	  function onUnlockedFailure (error) {
 
-	      	  }
+   	      	  }
+	  		}else{
+	  			alert('Your review level does not have access to unlock this workpackage');
+	  		}
         };
 
         vm.changeItemsPerPage = function(){
