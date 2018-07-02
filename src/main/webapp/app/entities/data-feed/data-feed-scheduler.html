@@ -1,163 +1,166 @@
-<div>
+<div class="content-title">
 	<h2>Data Feed Extraction</h2>
 	<jhi-alert></jhi-alert>
 </div>
 
-<div class="tab-wrapper">
-	<div class="clearfix tab-body">
-		<ul class="clearfix nav-responsive nav nav-tabs">
-			<li ng-class="{active:vm.tab == 1}">
-				<a ng-click="vm.selectDataFeedSchedulerTab('autoScheduler')">Automatic Data Feed Extraction</a>
-			</li>
-			<li ng-class="{active:vm.tab == 2}">
-				<a ng-click="vm.selectDataFeedSchedulerTab('manualScheduler')">Manual Data Feed Extraction</a>
-			</li>
-		</ul>
-		<div class="tab-content">
-			<div ng-class="{active:vm.tab == 1}" class="tab-pane" id="autoScheduler">
-				<div class="panel-body" ng-if="vm.tab==1">
-					<div class="clearfix">
-						<form name="autoExtractForm" role="form" ng-model="vm.autoExtractForm" novalidate>
-							<div class="col-md-12 no-lpad">
-								<div class="col-md-3 no-lpad">
-									<div class="form-group">
-										<label>Day Of Week</label> 
-										<select class="form-control" name="dayOfWeek" id="dayOfWeek" ng-model="vm.automaticData.dayOfWeek">
-											<option value="SUN">Sunday</option>
-											<option value="MON">Monday</option>
-											<option value="TUE">Tuesday</option>
-											<option value="WED">Wednesday</option>
-											<option value="THU">Thursday</option>
-											<option value="FRI">Friday</option>
-											<option value="SAT">Saturday</option>
-										</select>
+<div class="panel">
+	<div class="panel-body">
+		<div class="tab-wrapper">
+			<div class="clearfix tab-body">
+				<ul class="clearfix nav-responsive nav nav-tabs">
+					<li ng-class="{active:vm.tab == 1}">
+						<a ng-click="vm.selectDataFeedSchedulerTab('autoScheduler')">Automatic Data Feed Extraction</a>
+					</li>
+					<li ng-class="{active:vm.tab == 2}">
+						<a ng-click="vm.selectDataFeedSchedulerTab('manualScheduler')">Manual Data Feed Extraction</a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div ng-class="{active:vm.tab == 1}" class="tab-pane" id="autoScheduler">
+						<div class="panel-body" ng-if="vm.tab==1">
+							<div class="clearfix">
+								<form name="autoExtractForm" role="form" ng-model="vm.autoExtractForm" novalidate>
+									<div class="col-md-12 no-lpad">
+										<div class="col-md-3 no-lpad">
+											<div class="form-group">
+												<label>Day Of Week</label> 
+												<select class="form-control" name="dayOfWeek" id="dayOfWeek" ng-model="vm.automaticData.dayOfWeek">
+													<option value="SUN">Sunday</option>
+													<option value="MON">Monday</option>
+													<option value="TUE">Tuesday</option>
+													<option value="WED">Wednesday</option>
+													<option value="THU">Thursday</option>
+													<option value="FRI">Friday</option>
+													<option value="SAT">Saturday</option>
+												</select>
+											</div>
+										</div>
 									</div>
-								</div>
-							</div>
-							<div class="col-md-12 no-lpad">
-								<div class="form-inline">
-									<label>Time</label>
-									<div uib-timepicker ng-model="vm.automaticData.startTime" show-meridian="false"></div>
-								</div>
-							</div>
-							<div class="col-md-12 no-lpad">
-								<div class="col-md-3 no-lpad">
-									<div class="form-group">
-										<label>Filepath</label>
-										<input type="text" class="form-control" name="filepath" id="filepath" ng-model="vm.automaticData.filepath">
+									<div class="col-md-12 no-lpad">
+										<div class="form-inline">
+											<label>Time</label>
+											<div uib-timepicker ng-model="vm.automaticData.startTime" show-meridian="false"></div>
+										</div>
 									</div>
-								</div>
+									<div class="col-md-12 no-lpad">
+										<div class="col-md-3 no-lpad">
+											<div class="form-group">
+												<label>Filepath</label>
+												<input type="text" class="form-control" name="filepath" id="filepath" ng-model="vm.automaticData.filepath">
+											</div>
+										</div>
+									</div>
+									<div class="pull-right col-md-12 no-lpad text-left">
+										<br /> <br />
+										<div class="clearfix">
+											<button type="button" class="btn btn-default small" ng-click="vm.triggerAutomatic()">Trigger Automatic Extraction</button>
+		<!-- 									<button type="button" class="btn btn-default small" ng-click="vm.startScheduler()">Start All Scheduler</button> -->
+		<!-- 									<button type="button" class="btn btn-default small" ng-click="vm.stopScheduler()">Stop All Scheduler</button> -->
+										</div>
+									</div>
+								</form>
 							</div>
-							<div class="pull-right col-md-12 no-lpad text-left">
-								<br /> <br />
-								<div class="clearfix">
-									<button type="button" class="btn btn-default small" ng-click="vm.triggerAutomatic()">Trigger Automatic Extraction</button>
-<!-- 									<button type="button" class="btn btn-default small" ng-click="vm.startScheduler()">Start All Scheduler</button> -->
-<!-- 									<button type="button" class="btn btn-default small" ng-click="vm.stopScheduler()">Stop All Scheduler</button> -->
-								</div>
-							</div>
-						</form>
+						</div>
 					</div>
-				</div>
-			</div>
-			<div ng-class="{active:vm.tab == 2}" class="tab-pane" id="manualScheduler">
-				<div class="panel-body" ng-if="vm.tab==2">
-					<div class="clearfix">
-						<form name="manualExtractForm" role="form" ng-model="vm.manualExtractForm" novalidate>
-							<div class="col-md-6 no-lpad">
-								<div class="col-md-4 no-lpad">
-									<div class="form-group">
-										<label>Delay Days</label> 
-										<input type="text"
-											class="form-control" 
-											name="delayDays" 
-											id="delayDays"
-											ng-model="vm.manualData.delayDays" />
+					<div ng-class="{active:vm.tab == 2}" class="tab-pane" id="manualScheduler">
+						<div class="panel-body" ng-if="vm.tab==2">
+							<div class="clearfix">
+								<form name="manualExtractForm" role="form" ng-model="vm.manualExtractForm" novalidate>
+									<div class="col-md-6 no-lpad">
+										<div class="col-md-4 no-lpad">
+											<div class="form-group">
+												<label>Delay Days</label> 
+												<input type="text"
+													class="form-control" 
+													name="delayDays" 
+													id="delayDays"
+													ng-model="vm.manualData.delayDays" />
+											</div>
+										</div>
+										<div class="col-md-4 no-lpad">
+											<div class="form-group">
+												<label>Delay Hours</label> 
+												<input type="text"
+													class="form-control" 
+													name="delayHours" 
+													id="delayHours"
+													ng-model="vm.manualData.delayHours" />
+											</div>
+										</div>
+										<div class="col-md-4 no-lpad">
+											<div class="form-group">
+												<label>Delay Minutes</label> 
+												<input type="text"
+													class="form-control" 
+													name="delayMinutes" 
+													id="delayMinutes"
+													ng-model="vm.manualData.delayMinutes" />
+											</div>
+										</div>
 									</div>
-								</div>
-								<div class="col-md-4 no-lpad">
-									<div class="form-group">
-										<label>Delay Hours</label> 
-										<input type="text"
-											class="form-control" 
-											name="delayHours" 
-											id="delayHours"
-											ng-model="vm.manualData.delayHours" />
+									<div class="col-md-12 no-lpad">
+										<div class="form-group">
+											<div class=" semibold">
+												<label> 
+													<input type="checkbox" name="atpcoFares" ng-model="vm.manualData.atpcoFares"> &nbsp; ATPCO Fares
+												</label>
+											</div>
+											<div class=" semibold">
+												<label> 
+													<input type="checkbox" name="marketFares" ng-model="vm.manualData.marketFares"> &nbsp; Market Fares
+												</label>
+											</div>
+											<br />
+										</div>
 									</div>
-								</div>
-								<div class="col-md-4 no-lpad">
-									<div class="form-group">
-										<label>Delay Minutes</label> 
-										<input type="text"
-											class="form-control" 
-											name="delayMinutes" 
-											id="delayMinutes"
-											ng-model="vm.manualData.delayMinutes" />
+									<div class="col-md-6 no-lpad">
+										<div class="col-md-6 no-lpad">
+											<div class="form-group absolute-datepicker">
+												<label>Start Date</label> 
+												<input type="text"
+													class="form-control"
+													ng-click="vm.openCalendar($event, 'manualStartDate')"
+													is-open="vm.datePickerOpenStatus['manualStartDate']"
+													datetime-picker="{{vm.dateFormat}}" 
+													enable-time="false"
+													name="manualStartDate" id="manualStartDate"
+													ng-model="vm.manualData.startDate" placeholder="From" />
+											</div>
+										</div>
+										<div class="col-md-6 no-lpad">
+											<div class="form-group absolute-datepicker">
+												<label>End Date</label> 
+												<input type="text"
+													class="form-control"
+													ng-click="vm.openCalendar($event, 'manualEndDate')"
+													is-open="vm.datePickerOpenStatus['manualEndDate']"
+													datetime-picker="{{vm.dateFormat}}" 
+													enable-time="false"
+													name="manualEndDate" id="manualEndDate" ng-model="vm.manualData.endDate"
+													placeholder="To" />
+											</div>
+										</div>
+										<div class="col-md-12 no-lpad">
+											<div class="col-md-3 no-lpad">
+												<div class="form-group">
+													<label>Filepath</label>
+													<input type="text" class="form-control" name="filepath" id="filepath" ng-model="vm.manualData.filepath">
+												</div>
+											</div>
+										</div>
 									</div>
-								</div>
+									<div class="pull-right col-md-12 no-lpad text-left">
+										<br /> <br />
+										<div class="clearfix">
+											<button type="button" class="btn btn-default small" ng-click="vm.triggerManual()">Trigger Manual Extraction</button>
+										</div>
+									</div>
+								</form>
 							</div>
-							<div class="col-md-12 no-lpad">
-								<div class="form-group">
-									<div class=" semibold">
-										<label> 
-											<input type="checkbox" name="atpcoFares" ng-model="vm.manualData.atpcoFares"> &nbsp; ATPCO Fares
-										</label>
-									</div>
-									<div class=" semibold">
-										<label> 
-											<input type="checkbox" name="marketFares" ng-model="vm.manualData.marketFares"> &nbsp; Market Fares
-										</label>
-									</div>
-									<br />
-								</div>
-							</div>
-							<div class="col-md-6 no-lpad">
-								<div class="col-md-6 no-lpad">
-									<div class="form-group">
-										<label>Start Date</label> 
-										<input type="text"
-											class="form-control"
-											ng-click="vm.openCalendar($event, 'manualStartDate')"
-											is-open="vm.datePickerOpenStatus['manualStartDate']"
-											datetime-picker="{{vm.dateFormat}}" 
-											enable-time="false"
-											name="manualStartDate" id="manualStartDate"
-											ng-model="vm.manualData.startDate" placeholder="From" />
-									</div>
-								</div>
-								<div class="col-md-6 no-lpad">
-									<div class="form-group">
-										<label>End Date</label> 
-										<input type="text"
-											class="form-control"
-											ng-click="vm.openCalendar($event, 'manualEndDate')"
-											is-open="vm.datePickerOpenStatus['manualEndDate']"
-											datetime-picker="{{vm.dateFormat}}" 
-											enable-time="false"
-											name="manualEndDate" id="manualEndDate" ng-model="vm.manualData.endDate"
-											placeholder="To" />
-									</div>
-								</div>
-							</div>
-							<div class="col-md-12 no-lpad">
-								<div class="col-md-3 no-lpad">
-									<div class="form-group">
-										<label>Filepath</label>
-										<input type="text" class="form-control" name="filepath" id="filepath" ng-model="vm.manualData.filepath">
-									</div>
-								</div>
-							</div>
-							<div class="pull-right col-md-12 no-lpad text-left">
-								<br /> <br />
-								<div class="clearfix">
-									<button type="button" class="btn btn-default small" ng-click="vm.triggerManual()">Trigger Manual Extraction</button>
-								</div>
-							</div>
-						</form>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-
 	</div>
 </div>
