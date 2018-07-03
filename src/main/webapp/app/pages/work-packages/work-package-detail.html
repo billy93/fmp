@@ -3,7 +3,7 @@
 	min-width:30px;
 }
 .highlighted{
-	background-color:rgba(222, 255, 94, .7) !important;
+	background-color: rgba(255, 205, 94, 0.35) !important;
 }
 </style>
 
@@ -1374,11 +1374,9 @@
 												</div>
 											</div>
 											<div class="pull-left w20 ph5px">
-												<div class="form-group">
+												<div class="form-group absolute-datepicker">
 													<label>Created Date</label>
-													
-													<div class="form-group">
-		
+													<div class="input-group">
 														<input type="text" id="field_gfsDate" name="gfsDate{{$index}}" class="form-control"
 														ng-disabled="vm.workPackage.filingDetail.workUnitType != 'existing' || vm.checkFilingDetailDisabled()"
 														enable-time="false"
@@ -1386,18 +1384,15 @@
 														<span ng-click="vm.openCalendar('filingDetailCreatedDate')" class="input-group-addon" ng-class="{'poiv-none':vm.workPackage.filingDetail.workUnitType != 'existing'}">
 															<i class="fa fa-calendar"></i>
 														</span>
-														
 													</div>
 													<!-- <select class="form-control" ng-disabled="vm.workPackage.filingDetail.workUnitType != 'existing'" ng-model="vm.workPackage.filingDetail.workUnitId">
 														<option></option>
 														<option>Current</option>
 													</select> -->
 												</div>
-												<div class="form-group">
+												<div class="form-group absolute-datepicker">
 													<label>Release Date (EST)</label>
-													
-													<div class="form-group">
-		
+													<div class="input-group">
 														<input type="text" id="field_gfsDate" name="gfsDate{{$index}}" class="form-control"
 														ng-disabled="vm.workPackage.filingDetail.releaseInstruction != 'release' || vm.checkFilingDetailDisabled()"
 														enable-time="false"
@@ -1405,7 +1400,6 @@
 														<span ng-click="vm.openCalendar('filingDetailCreatedDate')" class="input-group-addon poiv-none">
 															<i class="fa fa-calendar"></i>
 														</span>
-														
 													</div>
 													<!-- <input type="text" class="form-control" ng-model="vm.workPackage.filingDetail.releaseDate" disabled> -->		
 												</div>
@@ -1429,7 +1423,7 @@
 												</div>
 											</div>
 											<div class="pull-left w20 ph5px">
-												<div class="button-group dropdown" style="margin-top: 28px;
+												<div class="button-group dropdown" style="margin-top: 23px;
 												margin-left: 10px;">
 													<div class="button-group dropdown custom">
 														<button class="btn btn-default small" ng-disabled="vm.workPackage.reviewLevel == 'LSO' || vm.workPackage.reviewLevel == 'HO'">Actions <i class="fa fa-caret-down"></i></button>
@@ -1551,15 +1545,15 @@
 																					<input type="text" ng-model="batch.gfsRef" maxlength="3" class="form-control"/>
 																					</td>
 																					<td>
-																						<div class="form-group">
-											
-																							<input type="text" id="field_gfsDate" name="gfsDate{{$index}}" class="form-control"
-																							enable-time="false"
-																							datetime-picker="{{dateformat}}" ng-model="batch.gfsDate" is-open="vm.datePickerOpenStatus['gfsDate'+$index]" />
-																							<span ng-click="vm.openCalendar('gfsDate'+$index)" class="input-group-addon">
-																								<i class="fa fa-calendar"></i>
-																							</span>
-																							
+																						<div class="form-group pm0">
+																							<div class="input-group">
+																								<input type="text" id="field_gfsDate" name="gfsDate{{$index}}" class="form-control"
+																								enable-time="false"
+																								datetime-picker="{{dateformat}}" ng-model="batch.gfsDate" is-open="vm.datePickerOpenStatus['gfsDate'+$index]" />
+																								<span ng-click="vm.openCalendar('gfsDate'+$index)" class="input-group-addon">
+																									<i class="fa fa-calendar"></i>
+																								</span>
+																							</div>
 																						</div>
 																					<!-- <input type="text" ng-model="batch.gfsDate" class="form-control"/> -->
 																					</td>
