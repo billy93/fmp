@@ -32,10 +32,12 @@
                 		catNo: null,
                 		saleDateFrom: null,
                 		saleDateTo: null,
+                		saleDateType : "1",
                 		travelDateFrom: null,
                 		travelDateTo: null,
+                		travelDateType : "1",
                 		completedDateFrom: null,
-                		travelOpt: null,
+                		travelOpt: "2",
                 		includeDisc : null
                 	}
             	}]

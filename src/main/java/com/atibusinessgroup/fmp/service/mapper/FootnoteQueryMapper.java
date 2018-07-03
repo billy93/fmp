@@ -2,21 +2,20 @@ package com.atibusinessgroup.fmp.service.mapper;
 
 import org.springframework.stereotype.Service;
 
-import com.atibusinessgroup.fmp.domain.atpco.AtpcoFootnoteRecord2;
-import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByFtntCxrTarNo;
+import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteQueryGroup;
 import com.atibusinessgroup.fmp.domain.dto.FootnoteQuery;
 
 @Service
 public class FootnoteQueryMapper {
 	
 	
-	public FootnoteQuery convertAndGroupFootnote(AtpcoFootnoteRecord2GroupByFtntCxrTarNo ftntRec2) {
+	public FootnoteQuery convertAndGroupFootnote(AtpcoFootnoteQueryGroup ftnt) {
 
 		FootnoteQuery result = new FootnoteQuery();
-		result.setCxr(ftntRec2.getCarrierCode());
-		result.setFtnt(ftntRec2.getFtnt());
-		result.setTarNo(ftntRec2.getTariffNumber());
-		result.setTarCd("");
+		result.setCxr(ftnt.getCxr());
+		result.setFtnt(ftnt.getFtnt());
+		result.setTarNo(ftnt.getTarNo());
+		result.setTarCd(ftnt.getTarCd());
 		result.setFareAddon("Fare");
 		result.setFareAddonCount("0");
 		
