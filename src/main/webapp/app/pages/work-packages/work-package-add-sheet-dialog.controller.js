@@ -72,29 +72,29 @@
         if(sheet != null){
         	if(sheet.type == 'fares'){
         		vm.option.type = "Fares";
-        		vm.option.name = sheet.sheet.specifiedFaresName;
+        		vm.option.name = "Copy of "+sheet.sheet.specifiedFaresName;
         		vm.sheet = sheet;
         	}
         	else if(sheet.type == 'addon-fares'){
         		vm.option.type = "Add-Ons";
-        		vm.option.name = sheet.sheet.addonFaresName;
+        		vm.option.name = "Copy of "+sheet.sheet.addonFaresName;
         		vm.sheet = sheet;
         	}
         	else if(sheet.type == 'discount'){
         		vm.option.type = "Discount Fares";
-        		vm.option.name = sheet.sheet.discountFaresName;
+        		vm.option.name = "Copy of "+sheet.sheet.discountFaresName;
         		vm.option.fareType = sheet.sheet.fareType;
 
         		vm.sheet = sheet;
         	}
         	else if(sheet.type == 'market'){
         		vm.option.type = "Market Fares";
-        		vm.option.name = sheet.sheet.marketFaresName;
+        		vm.option.name = "Copy of "+sheet.sheet.marketFaresName;
         		vm.sheet = sheet;
         	}
         	else if(sheet.type == 'waiver'){
         		vm.option.type = "Waiver Fares";
-        		vm.option.name = sheet.sheet.waiverFaresName;        		
+        		vm.option.name = "Copy of "+sheet.sheet.waiverFaresName;        		
         		vm.sheet = sheet;
         	}
         }
