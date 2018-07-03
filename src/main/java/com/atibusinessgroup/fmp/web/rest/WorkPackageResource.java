@@ -2014,6 +2014,11 @@ public class WorkPackageResource {
 		    		err1.setMessage("Name is required");
 		    		errorHeader.add(err1);
 				}
+				if(workPackage.getPriority() == null || workPackage.getPriority().contentEquals("")) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Priority is required");
+		    		errorHeader.add(err1);
+				}
 				if(workPackage.getDistributionDate() == null) {
 					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 		    		err1.setMessage("Distribution Date is required");
