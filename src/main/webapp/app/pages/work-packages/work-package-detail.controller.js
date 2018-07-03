@@ -1618,7 +1618,13 @@
 //	        			vm.workPackage.addonFareSheet.push(angular.copy(vm.workPackage.addonFareSheet[x]));
 	        			if(vm.workPackage.addonFareSheet[x].fares.length > 0){
 		        			clipboardSheet.sheet = angular.copy(vm.workPackage.addonFareSheet[x]);
-		        			clipboardSheet.type = "addon";
+		        			
+		        			if(vm.workPackage.type == 'REGULAR'){
+		        				clipboardSheet.type = "addon-fares";
+		        			}
+		        			else if(vm.workPackage.type == 'MARKET'){
+		        				clipboardSheet.type = "addon-market";
+		        			}
 	        			}
 	        			break;
 	        		}
@@ -1708,36 +1714,80 @@
         //END SHEET FUNCTION
         
         vm.pasteSheet = function(){
-//        	alert('Paste Sheet');
         	if(vm.workPackage.reviewLevel != 'DISTRIBUTION'){
-	        	$uibModal.open({
-	                templateUrl: 'app/pages/work-packages/work-package-add-sheet-dialog.html',
-	                controller: 'WorkPackageAddSheetDialogController',
-	                controllerAs: 'vm',
-	                backdrop: 'static',
-	                size: 'lg',
-	                windowClass: 'full-page-modal',
-	                resolve: {
-	                	workPackage: function(){
-	                		return vm.workPackage;
-	                	},
-	                    fareTypes: ['FareType', function(FareType) {
-	                        return FareType.getAll().$promise;
-	                    }],
-	                    sheet: function(){
-	                    	return ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
-	                    }
-	                }
-				}).result.then(function(option) {
-					var clipboardSheet = ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
-					clipboardSheet.then(function(result){
-						vm.addTab(option, result.sheet.fares);
-						alert('Paste Sheet Success');
-					});
-	            }, function() {
-	        			
-	            });
+        		ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise.then(function(sheet){
+        			if(sheet != null){
+        	        	if(vm.workPackage.type == 'REGULAR'){
+        		        	if(sheet.type == 'fares' || sheet.type == 'addon-fares'){
+        		        		vm.openAddSheetDialog();
+        		        	}
+        		        	else{
+        		        		alert('No sheet copied');   
+        		        	}
+        	        	}
+        	        	else if(vm.workPackage.type == 'MARKET'){
+        	        		if(sheet.type == 'market' || sheet.type == 'addon-market'){
+        		        		vm.openAddSheetDialog();        		        		
+        		        	}
+        	        		else{
+        		        		alert('No sheet copied');   
+        		        	}
+        	        	}
+        	        	else if(vm.workPackage.type == 'DISCOUNT'){
+        	        		if(sheet.type == 'discount'){
+        		        		vm.openAddSheetDialog();        		        		
+        		        	}
+        	        		else{
+        		        		alert('No sheet copied');   
+        		        	}
+        	        	}
+        	        	else if(vm.workPackage.type == 'WAIVER'){
+        	        		if(sheet.type == 'waiver'){
+        		        		vm.openAddSheetDialog();        		        		
+        		        	}
+        	        		else{
+        		        		alert('No sheet copied');   
+        		        	}
+        	        	}
+        	        	else{
+        	        		alert('No sheet copied');        	        		
+        	        	}
+        	        }
+        	        else{
+        	        	alert('No sheet copied');
+        	        }
+        		});	        	
         	}
+        };
+        
+        vm.openAddSheetDialog = function(){
+        	$uibModal.open({
+                templateUrl: 'app/pages/work-packages/work-package-add-sheet-dialog.html',
+                controller: 'WorkPackageAddSheetDialogController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full-page-modal',
+                resolve: {
+                	workPackage: function(){
+                		return vm.workPackage;
+                	},
+                    fareTypes: ['FareType', function(FareType) {
+                        return FareType.getAll().$promise;
+                    }],
+                    sheet: function(){
+                    	return ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
+                    }
+                }
+			}).result.then(function(option) {
+				var clipboardSheet = ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
+				clipboardSheet.then(function(result){
+					vm.addTab(option, result.sheet.fares);
+					alert('Paste Sheet Success');
+				});
+            }, function() {
+        			
+            });
         };
         
         vm.faresActionButton = [];
