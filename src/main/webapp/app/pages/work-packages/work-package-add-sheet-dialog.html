@@ -27,11 +27,12 @@
 				                ng-model="vm.option.name"
 				                />
 				</div>
-				<div ng-show="vm.option.type == 'Fares' || vm.option.type == 'Market Fares' || vm.option.type == 'Waiver Fares'" class="form-group">
+				<div ng-show="vm.option.type == 'Fares' || vm.option.type == 'Market Fares' || vm.option.type == 'Discount Fares' || vm.option.type == 'Waiver Fares'" class="form-group">
 					<label>Fare Type</label>
 					
-					<select class="form-control must-fill" 
-					ng-class="{'must-fill':vm.option.fareType==null || vm.option.fareType==''}"
+					<select class="form-control" 
+					ng-required="vm.option.type == 'Fares' || vm.option.type == 'Market Fares' || vm.option.type == 'Discount Fares' || vm.option.type == 'Waiver Fares'"
+					ng-class="{'must-fill': editForm.fareType.$error.$required}"
 					name="fareType" id="fareType" ng-model="vm.option.fareType">
 				      <option ng-repeat="option in vm.fareType" value="{{option.name}}">{{option.name}}</option>
 				    </select>					

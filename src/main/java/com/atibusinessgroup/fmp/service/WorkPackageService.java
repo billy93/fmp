@@ -95,13 +95,8 @@ public class WorkPackageService {
         				fare.getFootnote1(), 
         				fare.getRtgno(), 
         				fare.getRuleno());
-        		
-//        		log.debug("ORIGIN : {}, DESTINATION : {}", fare.getOrigin(), fare.getDestination());
-//        		Optional<AtpcoFare> checkAtpcoFare = atpcoFareRepository.findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCity(fare.getCarrier(), fare.getTariffNumber() != null ? fare.getTariffNumber().getTarNo() : null, fare.getOrigin(), fare.getDestination());
-//        		Optional<AtpcoFare> checkAtpcoFare = atpcoFareRepository.findOneByCarrierCodeAndTariffNo(fare.getCarrier(), fare.getTariffNumber() != null ? fare.getTariffNumber().getTarNo() : null);
+
         		if(checkAtpcoFare.isPresent()) {
-//        			log.debug("FARE EXIST");
-        			//I, R, Y
         			if(fare.getAmount() != null) {
         				float atpcoFareAmount = Float.parseFloat(checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().toString());
         				float fareAmount = Float.parseFloat(fare.getAmount());
@@ -123,8 +118,6 @@ public class WorkPackageService {
         			}        			
         		}
         		else {
-        			log.debug("FARE NOT EXIST");
-
         			fare.setAction("N");        		
         		}
         		
@@ -147,6 +140,7 @@ public class WorkPackageService {
         		if(fare.getTravelComplete() != null)
 	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));        		
         		
+        		fare.setAction("N");
         		if(fare.getId() == null) {
         			fare.setId(new ObjectId().toString());
         		}
