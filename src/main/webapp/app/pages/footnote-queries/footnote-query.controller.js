@@ -31,17 +31,19 @@
         vm.loadAvailable = loadAvailable;
         vm.loadExpired = loadExpired;
         
+        
         $("#catNo").change(function() {
         	vm.queryParams.saleDateFrom = null;
         	vm.queryParams.saleDateTo = null;
         	vm.queryParams.travelDateFrom = null;
         	vm.queryParams.travelDateTo = null;
         	vm.queryParams.completedDateFrom = null;
-        	vm.queryParams.travelOpt = null;
+        	vm.queryParams.travelOpt[0];
         	
         });
-
+        
 		function loadAll() {
+			vm.footnoteQueryCategories = null;
 			vm.queryParams.page = vm.page - 1;
 			vm.queryParams.size = vm.itemsPerPage;
 			
@@ -139,10 +141,12 @@
 				catNo : null,
 				saleDateFrom : null,
 				saleDateTo : null,
+				saleDateType : "1",
 				travelDateFrom : null,
 				travelDateTo : null,
+				travelDateType : "1",
 				completedDateFrom : null,
-				travelOpt : null,
+				travelOpt : "2",
 				includeDisc : null
 			}
 
