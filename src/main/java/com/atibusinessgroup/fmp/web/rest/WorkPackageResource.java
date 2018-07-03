@@ -3669,7 +3669,15 @@ public class WorkPackageResource {
         	workPackage.setStatus(Status.REVIEWING);
         	workPackageService.save(workPackage);
         }
-        if(!workPackage.isLocked()) {
+
+        Boolean needLocked = false;
+        Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());  
+		if(user.get().getReviewLevels().indexOf(workPackage.getReviewLevel()) > -1){
+			needLocked = true;
+		}
+		
+        if(!workPackage.isLocked() && needLocked) {
+        	log.debug("HARUS di-locked ya ? : {}", id);
         	workPackage.setLocked(true);
             workPackage.setLockedBy(SecurityUtils.getCurrentUserLogin().get());
             workPackage.setLockedSince(ZonedDateTime.now());
