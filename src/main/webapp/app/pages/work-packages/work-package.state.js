@@ -47,7 +47,7 @@
                 }]
             }
         })
-        
+
         .state('work-package-detail', {
             parent: 'work-package',
             url: '/{id}/edit',
@@ -106,7 +106,7 @@
                 }],
                 atpcoFareTypes: ['AtpcoMasterFareType', function(AtpcoMasterFareType) {
                     return AtpcoMasterFareType.getAll().$promise;
-                }],                
+                }],
                 previousState: ["$state", function ($state) {
                     var currentStateData = {
                         name: $state.current.name || 'work-package',
@@ -114,6 +114,26 @@
                         url: $state.href($state.current.name, $state.params)
                     };
                     return currentStateData;
+                }]
+            }
+        })
+
+        .state('work-package-ratesheet', {
+            parent: 'app',
+            url: '/work-package-detail/screen',
+            data: {
+                authorities: ['ROLE_USER'],
+            },
+            views: {
+                'content@': {
+                    templateUrl: 'app/pages/work-packages/work-package-rate-sheet-screen.html',
+                    controller: 'WorkPackageRateSheetScreenController',
+                    controllerAs: 'vm'
+                }
+            },
+            resolve: {
+                entity: ['$stateParams', function($stateParams){
+                    return $stateParams;
                 }]
             }
         })
@@ -196,7 +216,7 @@
                         }],
                         atpcoFareTypes: ['AtpcoMasterFareType', function(AtpcoMasterFareType) {
                             return AtpcoMasterFareType.getAll().$promise;
-                        }], 
+                        }],
                     }
                 }).result.then(function(workPackage) {
 	                	var params = {
