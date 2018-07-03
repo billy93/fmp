@@ -4853,7 +4853,7 @@
 	      });
 	  }
       
-      vm.agent = function(){
+      vm.agent = function(disabled){
 	    	  	var object = {
 	    			agents: vm.workPackage.agent
 	    	 	}
@@ -4865,7 +4865,8 @@
 	          backdrop: 'static',
 	          size: 'lg',
 	          resolve: {
-	              entity: object
+	              entity: object,
+		          isDisabled : disabled
 	          }
 	      }).result.then(function(agent) {
 	      	  vm.workPackage.agent = agent;
@@ -6178,6 +6179,28 @@
     		  }
     	  }
     	  return disabled;
+      }
+      
+      vm.lockedOnly = function(wp){
+    	  var disabled = false;
+    	  if(wp.locked == true && wp.locked !=null){
+    		  if( wp.lockedBy == vm.user.login){
+    			  disabled = false;
+    		  }else{
+    			  disabled = true;
+    		  }    		  
+    	  } 
+    	  return disabled;
+      }
+      
+      vm.reviewOnly = function(wp){
+    	  var disabled = false;
+    	  if(vm.user.reviewLevels.indexOf(wp.reviewLevel) > -1){
+			  disabled = false;
+		  }else{
+			  disabled = true;  
+		  }
+    	  return disabled;  
       }
       
       vm.getTooltip = function(value){
