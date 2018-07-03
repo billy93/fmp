@@ -47,7 +47,6 @@
         vm.cities = cities;
         
         vm.sources = [
-        	{key: "", value: "Select Source"},
         	{key: "A", value: "A - ATPCO"},
         	{key: "M", value: "M - Market"},
         	{key: "W", value: "W - Web"},
@@ -119,6 +118,8 @@
                     for (var i = 0; i < data.afdQueries.length; i++) {
                     	vm.afdQueries.push(data.afdQueries[i]);
                     }
+                    
+                    console.log(vm.afdQueries);
                     
                     vm.isLoading = false;
                     vm.disableInfiniteScroll = false;

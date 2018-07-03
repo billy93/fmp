@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.atibusinessgroup.fmp.domain.TariffNumber;
+import com.atibusinessgroup.fmp.domain.WorkPackageFare;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterFareMatrix;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord1;
@@ -50,7 +51,7 @@ public class AfdQueryMapper {
 		AfdQuery result = new AfdQuery();
 		
 		//AtpcoFare attributes
-		result.setAtpcoFareId(afare.getId());
+		result.setFareId(afare.getId());
 		result.setSource(afare.getSource());
 		result.setSc("S");
 		result.setTariffNo(afare.getTariffNo());
@@ -212,6 +213,51 @@ public class AfdQueryMapper {
 		}
 		
 		result.setFocusDate(focusDate);
+		
+		return result;
+	}
+
+	public AfdQuery convertMarketFare(WorkPackageFare fare, String wpObjectId, String fareId, String woId, String woName) {
+		AfdQuery result = new AfdQuery();
+		
+		//AtpcoFare attributes
+		result.setFareId(fareId);
+		result.setSource("M");
+		result.setSc("S");
+		result.setTariffNo("MKT");
+		result.setTariffCode("MARKET");
+		
+		result.setCarrierCode(fare.getCarrier());
+		result.setOriginCity(fare.getOrigin());
+		result.setOriginCountry(null);
+		result.setDestinationCity(fare.getDestination());
+		result.setDestinationCountry(null);
+		result.setFareClassCode(fare.getFareBasis());
+		result.setOwrt(fare.getTypeOfJourney());
+		result.setFootnote(fare.getFootnote1());
+		result.setRoutingNo(fare.getRtgno());
+		result.setRuleNo(fare.getRuleno());
+		result.setMaximumPermittedMileage(null);
+		result.setCurrencyCode(fare.getCurrency());
+		result.setBaseAmount(TypeConverterUtil.convertStringToDouble(fare.getAmount()));
+		result.setEffectiveDate(null);
+		result.setDiscontinueDate(null);
+		result.setGlobalIndicator(fare.getGlobal());
+		result.setSaleStartDate(fare.getSaleStart());
+		result.setSaleEndDate(fare.getSaleEnd());
+		result.setGfsReference(null);
+		result.setGfsDate(null);
+		result.setBookingClass(fare.getBookingClass());
+		result.setPaxType(fare.getPassengerType());
+		result.setSeason(fare.getSeasonType());
+		result.setFareType(fare.getFareType());
+		result.setCabin(fare.getCabin());
+		result.setTravelStartDate(fare.getTravelStart());
+		result.setTravelEndDate(fare.getTravelEnd());
+		result.setTravelComplete(fare.getTravelComplete());
+		result.setWpId(woId);
+		result.setWpObjectId(wpObjectId);
+		result.setWpName(woName);
 		
 		return result;
 	}

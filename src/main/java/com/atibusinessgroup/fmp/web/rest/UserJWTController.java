@@ -118,7 +118,6 @@ public class UserJWTController {
 
 		List<PasswordHistory> history = user.getPasswordHistory();
 
-		log.debug("BEFORE SORT");
 		for (PasswordHistory ph : history) {
 			log.debug(ph.toString());
 		}
@@ -130,11 +129,6 @@ public class UserJWTController {
 			}
 		});
 
-		log.debug("AFTER SORT");
-		for (PasswordHistory ph : history) {
-			log.debug(ph.toString());
-		}
-
 		if (history != null && history.size() > 0) {
 			PasswordHistory latest = history.get(0);
 
@@ -145,7 +139,6 @@ public class UserJWTController {
 			if (days > systemParameterService.getParameterNameValue(SystemParameter.MAX_PASSWORD_AGE_IN_DAYS)) {
 				result = true;
 			}
-
 		} else {
 			// PasswordHistory initPassword = new PasswordHistory();
 			// initPassword.setModifiedDateTime(user.getLastLoginDateTime());

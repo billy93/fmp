@@ -391,7 +391,7 @@
 			                </tr>
 			            </thead>
 			            <tbody infinite-scroll="vm.loadPage(vm.page + 1)" infinite-scroll-disabled="vm.disableInfiniteScroll || vm.isLastPage || vm.isLoading" infinite-scroll-container="'.table-responsive'">
-			                <tr ng-repeat="afdQuery in vm.afdQueries track by afdQuery.atpcoFareId" ng-click="vm.setSelectedRow($index, afdQuery); vm.getRules(afdQuery)" ng-class="{'selected': vm.selectedRows[$index] == afdQuery}">
+			                <tr ng-repeat="afdQuery in vm.afdQueries track by afdQuery.fareId" ng-click="vm.setSelectedRow($index, afdQuery); vm.getRules(afdQuery)" ng-class="{'selected': vm.selectedRows[$index] == afdQuery}">
 			                    <td><a ui-sref="system-parameter-detail({id:afdQuery.id})">{{$index + 1}}</a></td>
 			                    <td>{{afdQuery.source}}</td>
 			                    <td>{{afdQuery.sc}}</td>
@@ -448,10 +448,10 @@
 			                	</td>
 			               		<td>{{afdQuery.fareType}}</td>
 			                	<td>{{afdQuery.paxType}}</td>
-			                	<td></td>
-			                	<td></td>
-			                	<td></td>
-			                	<td></td>
+			                	<td><a ui-sref="work-package-detail({id:afdQuery.wpObjectId})">{{afdQuery.wpId}}</a></td>
+			                	<td>{{afdQuery.wpName}}</td>
+			                	<td>{{afdQuery.tourCode}}</td>
+			                	<td>{{afdQuery.cat50Title}}</td>
 			                	<td></td>
 <!-- 			                	<td></td> -->
 <!-- 			                	<td></td> -->
