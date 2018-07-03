@@ -217,6 +217,7 @@ public class WorkPackageService {
     		Counter c = counterRepository.findOneByIdAndYear("workpackageId", dfFull.format(Calendar.getInstance().getTime()));
     		if(c == null) {
     			c = new Counter();
+    			c.setId("workpackageId");
     			c.setSequenceValue(0);
     			c.setYear(dfFull.format(Calendar.getInstance().getTime()));
     			c = counterRepository.save(c);
@@ -226,7 +227,7 @@ public class WorkPackageService {
         	c = counterRepository.save(c);
         	
     		String year = df.format(Calendar.getInstance().getTime());
-    		workPackage.setWpid(year+nf.format(c.getSequenceValue()+1));
+    		workPackage.setWpid(year+nf.format(c.getSequenceValue()));
         }
     	
     	if(!workPackage.isSpecifiedFares()) {
