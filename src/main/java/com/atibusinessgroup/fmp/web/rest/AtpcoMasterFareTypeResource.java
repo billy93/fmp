@@ -105,7 +105,7 @@ public class AtpcoMasterFareTypeResource {
     @Timed
     public ResponseEntity<List<AtpcoMasterFareType>> getAllAtpcoMasterFareTypes() {
         log.debug("REST request to get all of AtpcoMasterFareTypes");
-        List<AtpcoMasterFareType> result = atpcoMasterFareTypeService.findAll();
+        List<AtpcoMasterFareType> result = atpcoMasterFareTypeService.findAllOrderByTypeCodeAsc();
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 

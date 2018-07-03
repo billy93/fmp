@@ -1,0 +1,45 @@
+<div>
+	<div class="content-title">
+		<h2>Data Feed Administartion</h2>
+		<jhi-alert></jhi-alert>
+	</div>
+	
+	<div class="panel">
+		<div class="panel-body">
+			<div class="tab-wrapper">
+				<div class="clearfix tab-body">
+					<ul class="clearfix nav-responsive nav nav-tabs">
+						<li ng-class="{active:vm.tab == 1}"><a
+							ng-click="vm.selectDataFeedTab('fareBasis')">Fare Basis Group
+								Mappings</a></li>
+						<li ng-class="{active:vm.tab == 2}"><a
+							ng-click="vm.selectDataFeedTab('cityCodes')">City Codes to
+								Airport Codes</a></li>
+						<li ng-class="{active:vm.tab == 3}"><a
+							ng-click="vm.selectDataFeedTab('publishedFare')">Published Fare
+								Commission Rates</a></li>
+						<li ng-class="{active:vm.tab == 4}"><a
+							ng-click="vm.selectDataFeedTab('significant')">Significant ODs
+						</a></li>
+					</ul>
+					<div class="tab-content">
+						<div ng-class="{active:vm.tab == 1}" class="tab-pane" id="fareBasis">
+							<div ui-view="fare-basis-group-mapping" ng-if="vm.tab == 1"></div>
+						</div>
+						<div ng-class="{active:vm.tab == 2}" class="tab-pane" id="cityCodes">
+							<div ui-view="city-codes-to-airport-codes" ng-if="vm.tab == 2"></div>
+						</div>
+						<div ng-class="{active:vm.tab == 3}" class="tab-pane"
+							id="publishedFare">
+							<div ui-view="published-fare-commission-rates" ng-if="vm.tab == 3"></div>
+						</div>
+						<div ng-class="{active:vm.tab == 4}" class="tab-pane"
+							id="significant">
+							<div ui-view="significant-od" ng-if="vm.tab == 4"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

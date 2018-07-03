@@ -9,7 +9,6 @@
 
     function WorkPackageRateSheetScreenController(Principal, $state, $stateParams, entity, $window) {
         var vm = this;
-        console.log($window.variable);
         vm.workPackage = $window.variable;
         vm.index = 0;
     }

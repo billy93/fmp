@@ -12,6 +12,6 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterSurchargeCode;
 @Repository
 public interface SurchargeCodeRepository extends MongoRepository<AtpcoMasterSurchargeCode, String> {
 
-	AtpcoMasterSurchargeCode findOneByCode(String trim);
+	AtpcoMasterSurchargeCode findOneByCode(String code);
 
 }

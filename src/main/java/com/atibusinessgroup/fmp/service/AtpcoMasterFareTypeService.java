@@ -69,8 +69,8 @@ public class AtpcoMasterFareTypeService {
         atpcoMasterFareTypeRepository.delete(id);
     }
 
-	public List<AtpcoMasterFareType> findAll() {
+	public List<AtpcoMasterFareType> findAllOrderByTypeCodeAsc() {
 		log.debug("Request to get all AtpcoMasterFareTypes");
-        return atpcoMasterFareTypeRepository.findAll();
+        return atpcoMasterFareTypeRepository.findAllByOrderByTypeCodeAsc();
 	}
 }

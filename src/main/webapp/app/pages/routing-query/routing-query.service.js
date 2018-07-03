@@ -19,9 +19,9 @@
                     }
                     return data;
                 }
-            },
+            },        
             'getDetails': { method: 'GET', url:'api/routingqueries/details', isArray: true },
-            'getFullDetails': { method: 'GET', url:'api/routingqueries/fulldetails', isArray: true },
+            'getMaps': { method: 'GET', url:'api/routingqueries/getmaps/:tarno/:crx/:rtg', isArray: true },
         });
     }
 })();

@@ -52,6 +52,9 @@
 						<li>
 		    		    	<a ui-sref="routingquery" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Routing Query </a>
 		    		    </li>
+		    		    <li>
+		    		    	<a ui-sref="rbdquery" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Rbd Query </a>
+		    		    </li>
 		    		</ul>
 		    	</div>
 		    	<div class="tooltip">Query</div>
@@ -69,18 +72,24 @@
 		    	</div>
 		    	<div class="tooltip">Competitor Monitoring</div>
 		    </li>
-		    <li class="menu-list" ng-click="vm.toggleMenu($event)">
-		    	<a href="#" class="linkClick">
-		    		<i class="fa fa-paper-plane-o"></i><span>Fare Recommendation</span>
-		    	</a>
-		    	<div class="tooltip">Fare Recommendation</div>
-		    </li>
+<!-- 		    <li class="menu-list" ng-click="vm.toggleMenu($event)"> -->
+<!-- 		    	<a href="#" class="linkClick"> -->
+<!-- 		    		<i class="fa fa-paper-plane-o"></i><span>Fare Recommendation</span> -->
+<!-- 		    	</a> -->
+<!-- 		    	<div class="tooltip">Fare Recommendation</div> -->
+<!-- 		    </li> -->
 		    <li class="menu-list has-sub" ng-click="vm.toggleMenu($event)">
 		    	<a>
 		    		<i class="fa fa-list"></i><span>Entities</span>
 		    	</a>
 		    	<div class="sub-menu">
 		    		<ul>
+		    			<li>
+		    		    	<a ui-sref="atpco-master-fare-type" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Atpco Fare Type </a>
+		    		    </li>
+		    		    <li>
+		    		    	<a ui-sref="atpco-master-fare-matrix" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Atpco Fare Matrix </a>
+		    		    </li>
 		    			<li>
 		    		    	<a ui-sref="agent" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Agent </a>
 		    		    </li>
@@ -124,6 +133,9 @@
 		    		    	<a ui-sref="tariff-number" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Tariff Number </a>
 		    		    </li>
 		    		    <li>
+		    		    	<a ui-sref="tariff-number-add-on" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Tariff Number AddOn</a>
+		    		    </li>
+		    		    <li>
 		    		    	<a ui-sref="user-management" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> User Management </a>
 		    		    </li>
 		    		     <li>
@@ -135,19 +147,19 @@
 		    </li>
 		    <li class="menu-list has-sub" ng-click="vm.toggleMenu($event)">
 		    	<a>
-		    		<i class="fa fa-archive"></i><span>ATPCO Entities</span>
+		    		<i class="fa fa-stack-overflow"></i><span>Data Feed</span>
 		    	</a>
 		    	<div class="sub-menu">
 		    		<ul>
 		    			<li>
-		    		    	<a ui-sref="atpco-master-fare-type" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Atpco Master Fare Type </a>
+		    		    	<a ui-sref="data-feed({tab: 1})" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> PROS Data Feed </a>
 		    		    </li>
 		    		    <li>
-		    		    	<a ui-sref="atpco-master-fare-matrix" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Atpco Master Fare Matrix </a>
+		    		    	<a ui-sref="data-feed-scheduler" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> PROS Data Feed Manual Extraction </a>
 		    		    </li>
-		    		</ul>
+		    		 </ul>
 		    	</div>
-		    	<div class="tooltip">ATPCO Entities</div>
+		    	<div class="tooltip">Data Feed</div>
 		    </li>
 		</ul>
 		</nav>
@@ -155,12 +167,13 @@
 
 	<div class="content-header">
 		<div class="clearfix">
-			<a class="sidebar-toggle pull-left showLeftPush" id="show" data-toggle="push-menu">
-			    <span class="sr-only">Toggle navigation</span>
-			    <span class="icon-bar"></span>
-			    <span class="icon-bar"></span>
-			    <span class="icon-bar"></span>
-			</a>
+			<div class="sidebar-toggle pull-left showLeftPush" id="show">
+                <div class="nav-icon-toggle">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </div>
+            </div>
 
 	      	<div class="pull-right">
 	            <ul class="top-right-nav">

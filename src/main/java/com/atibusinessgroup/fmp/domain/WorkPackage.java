@@ -1,6 +1,7 @@
 package com.atibusinessgroup.fmp.domain;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -120,7 +121,7 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     private ZonedDateTime distributionDate;
         
     @Field("queued_date")
-    private ZonedDateTime queuedDate;
+    private Instant queuedDate;
     
     @Field("filling_status")
     private Status fillingStatus;
@@ -184,11 +185,11 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 		this.attachmentApprovalReference = attachmentApprovalReference;
 	}
 	
-    public ZonedDateTime getQueuedDate() {
+    public Instant getQueuedDate() {
 		return queuedDate;
 	}
 
-	public void setQueuedDate(ZonedDateTime queuedDate) {
+	public void setQueuedDate(Instant queuedDate) {
 		this.queuedDate = queuedDate;
 	}
 
@@ -248,10 +249,28 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 
 		public static class Tab{
     		private String name;
+    		private String type;
+    		private String index;
     		private List<Error> warning;
     		private List<Error> error;
     		
-    		public String getName() {
+    		public String getType() {
+				return type;
+			}
+
+			public void setType(String type) {
+				this.type = type;
+			}
+
+			public String getIndex() {
+				return index;
+			}
+
+			public void setIndex(String index) {
+				this.index = index;
+			}
+
+			public String getName() {
 				return name;
 			}
 
@@ -277,13 +296,31 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 
 			public static class Error{
     			private String message;
-
+    			private String index;
+    			private String field;
+    			
 				public String getMessage() {
 					return message;
 				}
 
 				public void setMessage(String message) {
 					this.message = message;
+				}
+
+				public String getIndex() {
+					return index;
+				}
+
+				public void setIndex(String index) {
+					this.index = index;
+				}
+
+				public String getField() {
+					return field;
+				}
+
+				public void setField(String field) {
+					this.field = field;
 				}
 
 				
@@ -926,12 +963,28 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 	    @Field("username")	    
 	    private String username;
 	    
+	    @Field("file_name")	    
+	    private String fileName;
+	    
 	    @Field("createdTime")	    
 		private ZonedDateTime createdTime;
 	    
 	    @Field("inOnly")
 	    private Boolean inOnly;
+	    
+	    @Field("isDeleted")
+	    private Boolean isDeleted;
 		
+	    
+	    
+		public String getFileName() {
+			return fileName;
+		}
+
+		public void setFileName(String fileName) {
+			this.fileName = fileName;
+		}
+
 		public String getComment() {
 			return comment;
 		}
@@ -963,7 +1016,7 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 		public void setUsername(String username) {
 			this.username = username;
 		}
-
+		
 		public ZonedDateTime getCreatedTime() {
 			return createdTime;
 		}
@@ -978,6 +1031,14 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 
 		public void setInOnly(Boolean inOnly) {
 			this.inOnly = inOnly;
+		}
+
+		public Boolean getIsDeleted() {
+			return isDeleted;
+		}
+
+		public void setIsDeleted(Boolean isDeleted) {
+			this.isDeleted = isDeleted;
 		}	
 		
 	}
@@ -1171,7 +1232,226 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 	}
 	
     public static class FilingDetail{
-    		private String email;
+    	@Field("email")
+    	private String email;
+    	@Field("release_instruction")
+    	private String releaseInstruction;
+    	@Field("work_unit_type")
+    	private String workUnitType;
+    	@Field("description")
+    	private String description;
+    	@Field("atpcoFile")
+    	private String atpcoFile;
+    	
+    	@Field("work_unit_id")
+    	private String workUnitId;
+    	@Field("work_unit")
+    	private String workUnit;
+    	@Field("exclusive_access")
+    	private String exclusiveAccess;
+    	
+    	@Field("release_date")
+    	private Instant releaseDate;
+    	
+       	@Field("created_date")
+    	private Instant createdDate;
+
+       	@Field("organization")
+       	private String organization;
+       	
+       	@Field("filing_detail_tariff")
+    	private List<FilingDetailTariff> filingDetailTarif = new ArrayList<>();
+    	
+    	public static class FilingDetailTariff{
+    		@Field("tar_type")
+    		public String tarType;
+    		@Field("tar_no")
+    		public String tarNo;
+    		@Field("tar_cd")
+    		public String tarCd;
+    		@Field("cxr")
+    		public String cxr;
+    		@Field("gov")
+    		public String gov;
+    		@Field("justrification_text")
+    		public String justificationText;
+    		@Field("batch")    		
+    		public List<Batch> batch  = new ArrayList<>();
+    		
+    		public static class Batch{
+    			@Field("batch")    		
+    			public String batchNo;
+    			@Field("gfs_ref")    		
+    			public String gfsRef;
+    			@Field("gfs_date")    		
+    			public Instant gfsDate;
+    			
+				public String getBatchNo() {
+					return batchNo;
+				}
+				public void setBatchNo(String batchNo) {
+					this.batchNo = batchNo;
+				}
+				public String getGfsRef() {
+					return gfsRef;
+				}
+				public void setGfsRef(String gfsRef) {
+					this.gfsRef = gfsRef;
+				}
+				public Instant getGfsDate() {
+					return gfsDate;
+				}
+				public void setGfsDate(Instant gfsDate) {
+					this.gfsDate = gfsDate;
+				}
+    		}
+
+			public String getTarType() {
+				return tarType;
+			}
+
+			public void setTarType(String tarType) {
+				this.tarType = tarType;
+			}
+
+			public String getTarNo() {
+				return tarNo;
+			}
+
+			public void setTarNo(String tarNo) {
+				this.tarNo = tarNo;
+			}
+
+			public String getTarCd() {
+				return tarCd;
+			}
+
+			public void setTarCd(String tarCd) {
+				this.tarCd = tarCd;
+			}
+
+			public String getCxr() {
+				return cxr;
+			}
+
+			public void setCxr(String cxr) {
+				this.cxr = cxr;
+			}
+
+			public String getGov() {
+				return gov;
+			}
+
+			public void setGov(String gov) {
+				this.gov = gov;
+			}
+
+			public String getJustificationText() {
+				return justificationText;
+			}
+
+			public void setJustificationText(String justificationText) {
+				this.justificationText = justificationText;
+			}
+
+			public List<Batch> getBatch() {
+				return batch;
+			}
+
+			public void setBatch(List<Batch> batch) {
+				this.batch = batch;
+			}
+    		
+    	}
+    	
+    	
+		public String getAtpcoFile() {
+			return atpcoFile;
+		}
+
+		public void setAtpcoFile(String atpcoFile) {
+			this.atpcoFile = atpcoFile;
+		}
+
+		public String getOrganization() {
+			return organization;
+		}
+
+		public void setOrganization(String organization) {
+			this.organization = organization;
+		}
+
+		public String getExclusiveAccess() {
+			return exclusiveAccess;
+		}
+
+		public void setExclusiveAccess(String exclusiveAccess) {
+			this.exclusiveAccess = exclusiveAccess;
+		}
+
+		public Instant getReleaseDate() {
+			return releaseDate;
+		}
+
+		public void setReleaseDate(Instant releaseDate) {
+			this.releaseDate = releaseDate;
+		}
+
+		public Instant getCreatedDate() {
+			return createdDate;
+		}
+
+		public void setCreatedDate(Instant createdDate) {
+			this.createdDate = createdDate;
+		}
+
+		public String getDescription() {
+			return description;
+		}
+
+		public void setDescription(String description) {
+			this.description = description;
+		}
+
+		public String getWorkUnitId() {
+			return workUnitId;
+		}
+
+		public void setWorkUnitId(String workUnitId) {
+			this.workUnitId = workUnitId;
+		}
+
+		public String getWorkUnit() {
+			return workUnit;
+		}
+
+		public void setWorkUnit(String workUnit) {
+			this.workUnit = workUnit;
+		}
+
+		public String getWorkUnitType() {
+			return workUnitType;
+		}
+
+		public void setWorkUnitType(String workUnitType) {
+			this.workUnitType = workUnitType;
+		}
+
+		public String getReleaseInstruction() {
+			return releaseInstruction;
+		}
+
+		public void setReleaseInstruction(String releaseInstruction) {
+			this.releaseInstruction = releaseInstruction;
+		}
+
+		public List<FilingDetailTariff> getFilingDetailTarif() {
+			return filingDetailTarif;
+		}
+
+		public void setFilingDetailTarif(List<FilingDetailTariff> filingDetailTarif) {
+			this.filingDetailTarif = filingDetailTarif;
+		}
 
 		public String getEmail() {
 			return email;
@@ -1495,5 +1775,4 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 	public void setDistributionReviewLevel(String distributionReviewLevel) {
 		this.distributionReviewLevel = distributionReviewLevel;
 	}
-	
 }

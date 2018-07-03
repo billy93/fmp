@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('WorkPackageController', WorkPackageController);
 
-    WorkPackageController.$inject = ['Principal', '$uibModal', '$state', '$stateParams', 'WorkPackage', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', 'FileSaver', 'DateUtils'];
+    WorkPackageController.$inject = ['Principal', '$uibModal', '$state', '$stateParams', 'WorkPackage', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', 'FileSaver', 'DateUtils', 'user'];
 
-    function WorkPackageController(Principal, $uibModal, $state, $stateParams, WorkPackage, ParseLinks, AlertService, paginationConstants, pagingParams, FileSaver, DateUtils) {
+    function WorkPackageController(Principal, $uibModal, $state, $stateParams, WorkPackage, ParseLinks, AlertService, paginationConstants, pagingParams, FileSaver, DateUtils, user) {
         var vm = this;
         vm.reviewLevel = true;
         vm.woStatus = true;
@@ -25,6 +25,7 @@
         vm.reviewLevelDISTRIBUTION = null;
         vm.reviewLevelROUTEMANAGEMENT = null;
         vm.workPackageFilter =null;
+        vm.login =user;
 
         if($stateParams.size != null || $stateParams.size != undefined){
         	vm.itemsPerPage = $stateParams.size;
@@ -77,6 +78,7 @@
                
         });
         
+       
         function loadAll () {
             WorkPackage.query({
             	"reviewLevel.ho": vm.workPackageFilter.reviewLevel.ho,
@@ -147,7 +149,6 @@
 
         vm.reuse = function(){
         	vm.selectedRow.reuseReplaceConfig = {};
-        	if(vm.selectedRow.status == 'NEW'){
         		$uibModal.open({
                     templateUrl: 'app/pages/work-packages/work-package-reuse-replace-confirm-dialog.html',
                     controller: 'WorkPackageReuseReplaceConfirmDialogController',
@@ -175,24 +176,10 @@
     	        		alert("An error occured, please try again");
     	        	}
     			});
-        	}
-        	else{
-        		WorkPackage.reuse(vm.selectedRow, onReuseSuccess, onReuseFailed);
-
-				function onReuseSuccess(result){
-	        		alert('Reuse Success');
-	        		$state.go('work-package-detail', {id:result.id});
-	        	}
-
-	        	function onReuseFailed(error){
-	        		alert("An error occured, please try again");
-	        	}
-        	}
         }
 
         vm.replace = function(){
         	vm.selectedRow.reuseReplaceConfig = {};
-        	if(vm.selectedRow.status == 'NEW'){
         		$uibModal.open({
                     templateUrl: 'app/pages/work-packages/work-package-reuse-replace-confirm-dialog.html',
                     controller: 'WorkPackageReuseReplaceConfirmDialogController',
@@ -203,7 +190,10 @@
                     resolve: {
                     	workPackage: function(){
                     		return vm.selectedRow;
-                    	}
+                    	},
+	                   	 businessAreas: ['User', function(User) {
+	                         return User.getBusinessArea().$promise;
+	                     }],
                     }
     			}).result.then(function(option) {
     				vm.selectedRow.reuseReplaceConfig.attachment = option.attachment;
@@ -219,21 +209,7 @@
     	        	function onReplceFailed(error){
 
     	        	}
-    			});
-        	}
-        	else{
-	        	WorkPackage.replace(vm.selectedRow, onReplaceSuccess, onReplceFailed);
-
-	        	function onReplaceSuccess(result){
-	        		alert('Replace Success');
-	        		$state.go('work-package-detail', {id:result.id});
-
-	        	}
-
-	        	function onReplceFailed(error){
-
-	        	}
-        	}
+    			});        	
         }
         vm.withdraw = function(){
         	WorkPackage.withdraw(vm.selectedRow, onWithdrawSuccess, onWithdrawFailed);
@@ -279,15 +255,19 @@
         	vm.loadAll();
         }
 
-        vm.unlock = function(wp){
-        	 vm.selectedRow.locked = false;
-	      	  WorkPackage.unlock(vm.selectedRow, onUnlockedSuccess, onUnlockedFailure);
-	      	  function onUnlockedSuccess (result) {
-	      		  alert('Work Package Successful Unlocked');
-	      	  }
-	      	  function onUnlockedFailure (error) {
+        vm.unlock = function(){
+        	if(vm.login.reviewLevels.indexOf(vm.selectedRow.reviewLevel) > -1){
+        	  vm.selectedRow.locked = false;
+   	      	  WorkPackage.unlock(vm.selectedRow, onUnlockedSuccess, onUnlockedFailure);
+   	      	  function onUnlockedSuccess (result) {
+   	      		  alert('Work Package Successful Unlocked');
+   	      	  }
+   	      	  function onUnlockedFailure (error) {
 
-	      	  }
+   	      	  }
+	  		}else{
+	  			alert('Your review level does not have access to unlock this workpackage');
+	  		}
         };
 
         vm.changeItemsPerPage = function(){
@@ -321,11 +301,19 @@
         }
 
         vm.discontinue = function(){
-//        	console.log(vm.selectedRow);
-//        	alert('Discontinue');
-        	WorkPackage.discontinue(vm.selectedRow, function onSuccess(){
-        		alert("Work Package successfully discontinued");
-        	}, function onError(){});
+        	if(vm.selectedRow.targetDistribution == 'MARKET' && vm.selectedRow.status == 'DISTRIBUTED'){
+        		WorkPackage.discontinue(vm.selectedRow, function onSuccess(){
+            		alert("Work Package successfully discontinued");
+            	}, function onError(){});
+        	}        	
+        }
+        
+        vm.checkDisabled = function(bakso){
+        	if(bakso.targetDistribution == 'MARKET' && bakso.status == 'DISTRIBUTED'){
+        		return false;
+        	}else {
+        		return true;
+        	}
         }
         
         vm.printExport = function(){

@@ -44,6 +44,11 @@
                         ascending: PaginationUtil.parseAscending($stateParams.sort),
                         search: $stateParams.search
                     };
+                }],
+                user: ['$stateParams', 'User', 'Principal', function($stateParams, User, Principal) {
+                	return Principal.identity().then(function(account) {
+                        return User.get({login : account.login}).$promise;
+                    });
                 }]
             }
         })
@@ -74,6 +79,11 @@
                 tariffNumber: ['$stateParams', 'TariffNumber', 'Principal', function($stateParams, TariffNumber, Principal) {
                 	return Principal.identity().then(function(account) {
                         return TariffNumber.getAll().$promise;
+                    });
+                }],
+                tariffNumberAddOn: ['$stateParams', 'TariffNumberAddOn', 'Principal', function($stateParams, TariffNumberAddOn, Principal) {
+                	return Principal.identity().then(function(account) {
+                        return TariffNumberAddOn.getAll().$promise;
                     });
                 }],
                 cities: ['$stateParams', 'City', 'Principal', function($stateParams, City, Principal) {

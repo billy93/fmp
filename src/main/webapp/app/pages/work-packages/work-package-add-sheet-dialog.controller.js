@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('WorkPackageAddSheetDialogController', WorkPackageAddSheetDialogController);
 
-    WorkPackageAddSheetDialogController.$inject = ['workPackage', '$scope', '$uibModalInstance', '$state', 'fareTypes'];
+    WorkPackageAddSheetDialogController.$inject = ['workPackage', '$scope', '$uibModalInstance', '$state', 'fareTypes', 'sheet'];
 
-    function WorkPackageAddSheetDialogController(workPackage, $scope, $uibModalInstance, $state, fareTypes) {
+    function WorkPackageAddSheetDialogController(workPackage, $scope, $uibModalInstance, $state, fareTypes, sheet) {
 
         var vm = this;     
         vm.clear = clear;
@@ -17,41 +17,48 @@
         };
         vm.types = [];
         
-        console.log(fareTypes);
         vm.fareType = [];
         
-//        vm.fareType[""] = "Select Fare Type";
-//        vm.fareType["1"] = "Select Fare Type1";
-//        vm.fareType["2"] = "Select Fare Type2";
         for(var x=0;x<fareTypes.length;x++){
         	vm.fareType.push({
         		name:fareTypes[x].name
         	});
-//        	vm.fareType[fareTypes[x].name+""+x] = fareTypes[x].name;
-        }
-
-        if(vm.workPackage.type == 'REGULAR' && vm.workPackage.targetDistribution == 'MARKET'){
-        	 vm.types = ["Market Fares", "Add-Ons"];
-        }
-        else if(vm.workPackage.type == 'DISCOUNT'){
-        	 vm.types = ["Discount Fares"];
-        }
-        else if(vm.workPackage.type == 'REGULAR'){
-        	 vm.types = ["Fares", "Add-Ons"];
-        	 if(!vm.workPackage.attachment){
-             	vm.types.push("Attachment");
-             }
-             if(!vm.workPackage.filingInstruction){
-             	vm.types.push("Filing Instruction");
-             }
-        }
-        else if(vm.workPackage.type == 'WAIVER'){
-        	 vm.types = ["Waiver Fares"];
         }
         
-        
+        if(vm.workPackage.reviewLevel != 'DISTRIBUTION'){
+	        if(vm.workPackage.type == 'REGULAR' && vm.workPackage.targetDistribution == 'MARKET'){
+	        	 vm.types = ["Market Fares", "Add-Ons"];
+	        	 if(!vm.workPackage.filingInstruction){
+	     	         	vm.types.push("Filing Instruction");
+	     	         }
+	        }
+	        else if(vm.workPackage.type == 'DISCOUNT'){
+	        	 vm.types = ["Discount Fares"];
+	        	 if(vm.workPackage.targetDistribution == 'ATPCO'){
+	        		 if(!vm.workPackage.filingInstruction){
+	     	         	vm.types.push("Filing Instruction");
+	     	         }
+	        	 }
+	        }
+	        else if(vm.workPackage.type == 'REGULAR'){
+	        	 vm.types = ["Fares", "Add-Ons"];    
+	        	 if(vm.workPackage.targetDistribution == 'ATPCO'){
+	        		 if(!vm.workPackage.filingInstruction){
+	     	         	vm.types.push("Filing Instruction");
+	     	         }
+	        	 }
+	        }
+	        else if(vm.workPackage.type == 'WAIVER'){
+	        	 vm.types = ["Waiver Fares"];
+	        }
+        }
+        	if(!vm.workPackage.attachment){
+         	vm.types.push("Attachment");
+	         }
+	         
         
         vm.save = function(){
+        	console.log(vm.option);
         	$uibModalInstance.close(vm.option);
         }
         vm.loadAll = function(){
@@ -62,5 +69,20 @@
             $uibModalInstance.dismiss('cancel');
         }
 
+        if(sheet != null){
+        	if(sheet.type == 'fares'){
+        		vm.option.type = "Fares";
+        		vm.option.name = sheet.sheet.specifiedFaresName;
+        		vm.sheet = sheet;
+        	}
+        	else if(sheet.type == 'market'){
+        		vm.option.type = "Market Fares";
+        		vm.option.name = sheet.sheet.marketFaresName;
+        		vm.sheet = sheet;
+        	}
+        }
+        else{
+        	vm.sheet = null;
+        }
     }
 })();

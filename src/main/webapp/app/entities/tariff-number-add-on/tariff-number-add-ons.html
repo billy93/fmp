@@ -1,0 +1,75 @@
+<div>
+    <div class="content-title">
+		<h2>Tariff Number Add Ons</h2>
+		<jhi-alert></jhi-alert>
+	</div>
+	<div class="panel">
+		<div class="panel-body">
+			<div class="container-fluid">
+		        <div class="row">
+		        	<div class="col-md-12 no-pad text-right">
+		                <button class="btn btn-default" ui-sref="tariff-number-add-on.new">
+		                    <span>
+		                        Create new Tariff Number Add On
+		                    </span>
+		                </button>
+		            </div>
+		        </div>
+		    </div>
+		    <br/>
+		    <div class="table-wrapper">
+		    	<div class="table-responsive">
+			        <table class="jh-table table table-striped">
+			            <thead>
+			                <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+			                    <th jh-sort-by="id"><span>ID</span> <span class="glyphicon glyphicon-sort"></span></th>
+			                    <th jh-sort-by="tarNo"><span>Tar No Add On</span> <span class="glyphicon glyphicon-sort"></span></th>
+			                    <th jh-sort-by="tarCd"><span>Tar Cd Add On</span> <span class="glyphicon glyphicon-sort"></span></th>
+			                    <th jh-sort-by="global"><span>Global Add On</span> <span class="glyphicon glyphicon-sort"></span></th>
+			                    <th jh-sort-by="description"><span>Description Add On</span> <span class="glyphicon glyphicon-sort"></span></th>
+			                    <th></th>
+			                </tr>
+			            </thead>
+			            <tbody>
+			                <tr ng-repeat="tariffNumberAddOn in vm.tariffNumberAddOns track by tariffNumberAddOn.id">
+			                    <td><a ui-sref="tariff-number-add-on-detail({id:tariffNumberAddOn.id})">{{tariffNumberAddOn.id}}</a></td>
+			                    <td>{{tariffNumberAddOn.tarNo}}</td>
+			                    <td>{{tariffNumberAddOn.tarCd}}</td>
+			                    <td>{{tariffNumberAddOn.global}}</td>
+			                    <td>{{tariffNumberAddOn.description}}</td>
+			                    <td class="text-right">
+			                        <div class="btn-group flex-btn-group-container">
+			                            <button type="submit"
+			                                    ui-sref="tariff-number-add-on-detail({id:tariffNumberAddOn.id})"
+			                                    class="btn btn-info btn-sm linkClick">
+			                                <span class="glyphicon glyphicon-eye-open"></span>
+			                                <span class="hidden-sm-down"></span>
+			                            </button>
+			                            <button type="submit"
+			                                    ui-sref="tariff-number-add-on.edit({id:tariffNumberAddOn.id})"
+			                                    class="btn btn-primary btn-sm">
+			                                <span class="glyphicon glyphicon-pencil"></span>
+			                                <span class="hidden-sm-down"></span>
+			                            </button>
+			                            <button type="submit"
+			                                    ui-sref="tariff-number-add-on.delete({id:tariffNumberAddOn.id})"
+			                                    class="btn btn-danger btn-sm">
+			                                <span class="glyphicon glyphicon-remove-circle"></span>
+			                                <span class="hidden-sm-down"></span>
+			                            </button>
+			                        </div>
+			                    </td>
+			                </tr>
+			            </tbody>
+			        </table>
+			    </div>
+		    </div>
+		    
+		    <div class="text-center">
+		        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
+		        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
+		    </div>
+		</div>
+	</div>
+    
+</div>

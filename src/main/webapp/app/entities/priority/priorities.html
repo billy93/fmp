@@ -17,51 +17,54 @@
 		        </div>
 		    </div>
 		    <br/>
-		    <div class="table-responsive">
-		        <table class="jh-table table table-striped">
-		            <thead>
-		                <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-		                    <th jh-sort-by="id"><span>ID</span> <span class="glyphicon glyphicon-sort"></span></th>
-		                    <th jh-sort-by="name"><span>Name</span> <span class="glyphicon glyphicon-sort"></span></th>
-		                    <th jh-sort-by="type"><span>Type</span> <span class="glyphicon glyphicon-sort"></span></th>
-		                    <th jh-sort-by="value"><span>Value</span> <span class="glyphicon glyphicon-sort"></span></th>
-		                    <th jh-sort-by="priority"><span>Priority</span> <span class="glyphicon glyphicon-sort"></span></th>
-		                    <th></th>
-		                </tr>
-		            </thead>
-		            <tbody>
-		                <tr ng-repeat="priority in vm.priorities track by priority.id">
-		                    <td><a ui-sref="priority-detail({id:priority.id})">{{priority.id}}</a></td>
-		                    <td>{{priority.name}}</td>
-		                    <td>{{priority.type}}</td>
-		                    <td>{{priority.value}}</td>
-		                    <td>{{priority.priority}}</td>
-		                    <td class="text-right">
-		                        <div class="btn-group flex-btn-group-container">
-		                            <button type="submit"
-		                                    ui-sref="priority-detail({id:priority.id})"
-		                                    class="btn btn-info btn-sm">
-		                                <span class="glyphicon glyphicon-eye-open"></span>
-		                                <span class="hidden-sm-down"></span>
-		                            </button>
-		                            <button type="submit"
-		                                    ui-sref="priority.edit({id:priority.id})"
-		                                    class="btn btn-primary btn-sm">
-		                                <span class="glyphicon glyphicon-pencil"></span>
-		                                <span class="hidden-sm-down"></span>
-		                            </button>
-		                            <button type="submit"
-		                                    ui-sref="priority.delete({id:priority.id})"
-		                                    class="btn btn-danger btn-sm">
-		                                <span class="glyphicon glyphicon-remove-circle"></span>
-		                                <span class="hidden-sm-down"></span>
-		                            </button>
-		                        </div>
-		                    </td>
-		                </tr>
-		            </tbody>
-		        </table>
+		    <div class="table-wrapper">
+		    	<div class="table-responsive">
+			        <table class="jh-table table table-striped">
+			            <thead>
+			                <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+			                    <th jh-sort-by="id"><span>ID</span> <span class="glyphicon glyphicon-sort"></span></th>
+			                    <th jh-sort-by="name"><span>Name</span> <span class="glyphicon glyphicon-sort"></span></th>
+			                    <th jh-sort-by="type"><span>Type</span> <span class="glyphicon glyphicon-sort"></span></th>
+			                    <th jh-sort-by="value"><span>Value</span> <span class="glyphicon glyphicon-sort"></span></th>
+			                    <th jh-sort-by="priority"><span>Priority</span> <span class="glyphicon glyphicon-sort"></span></th>
+			                    <th></th>
+			                </tr>
+			            </thead>
+			            <tbody>
+			                <tr ng-repeat="priority in vm.priorities track by priority.id">
+			                    <td><a ui-sref="priority-detail({id:priority.id})">{{priority.id}}</a></td>
+			                    <td>{{priority.name}}</td>
+			                    <td>{{priority.type}}</td>
+			                    <td>{{priority.value}}</td>
+			                    <td>{{priority.priority}}</td>
+			                    <td class="text-right">
+			                        <div class="btn-group flex-btn-group-container">
+			                            <button type="submit"
+			                                    ui-sref="priority-detail({id:priority.id})"
+			                                    class="btn btn-info btn-sm linkClick">
+			                                <span class="glyphicon glyphicon-eye-open"></span>
+			                                <span class="hidden-sm-down"></span>
+			                            </button>
+			                            <button type="submit"
+			                                    ui-sref="priority.edit({id:priority.id})"
+			                                    class="btn btn-primary btn-sm">
+			                                <span class="glyphicon glyphicon-pencil"></span>
+			                                <span class="hidden-sm-down"></span>
+			                            </button>
+			                            <button type="submit"
+			                                    ui-sref="priority.delete({id:priority.id})"
+			                                    class="btn btn-danger btn-sm">
+			                                <span class="glyphicon glyphicon-remove-circle"></span>
+			                                <span class="hidden-sm-down"></span>
+			                            </button>
+			                        </div>
+			                    </td>
+			                </tr>
+			            </tbody>
+			        </table>
+			    </div>
 		    </div>
+		    
 		    <div class="text-center">
 		        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
 		        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>

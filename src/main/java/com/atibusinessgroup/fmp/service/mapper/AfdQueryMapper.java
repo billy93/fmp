@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.atibusinessgroup.fmp.domain.TariffNumber;
+import com.atibusinessgroup.fmp.domain.WorkPackageFare;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterFareMatrix;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord1;
@@ -14,10 +16,18 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat06;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat07;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat14;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat15;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat27;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat35;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat35Ticketing;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat50;
 import com.atibusinessgroup.fmp.domain.dto.AfdQuery;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord1FareClassInformation;
 import com.atibusinessgroup.fmp.domain.dto.CategoryObject;
+import com.atibusinessgroup.fmp.domain.dto.TextTable;
+import com.atibusinessgroup.fmp.repository.TariffNumberRepository;
+import com.atibusinessgroup.fmp.repository.custom.AtpcoRecord3CategoryCustomRepository;
 import com.atibusinessgroup.fmp.service.AtpcoMasterFareMatrixService;
+import com.atibusinessgroup.fmp.service.util.AtpcoDataConverterUtil;
 import com.atibusinessgroup.fmp.service.util.DateUtil;
 import com.atibusinessgroup.fmp.service.util.TypeConverterUtil;
 
@@ -25,22 +35,32 @@ import com.atibusinessgroup.fmp.service.util.TypeConverterUtil;
 public class AfdQueryMapper {
 	
 	private final AtpcoMasterFareMatrixService atpcoMasterFareMatrixService;
+	private final AtpcoRecord3CategoryCustomRepository atpcoRecord3CategoryCustomRepository;
+	private final TariffNumberRepository tariffNumberRepository;
 	
-	public AfdQueryMapper(AtpcoMasterFareMatrixService atpcoMasterFareMatrixService) {
+	public AfdQueryMapper(AtpcoMasterFareMatrixService atpcoMasterFareMatrixService, AtpcoRecord3CategoryCustomRepository atpcoRecord3CategoryCustomRepository, TariffNumberRepository tariffNumberRepository) {
 		this.atpcoMasterFareMatrixService = atpcoMasterFareMatrixService;
+		this.atpcoRecord3CategoryCustomRepository = atpcoRecord3CategoryCustomRepository;
+		this.tariffNumberRepository = tariffNumberRepository;
 	}
 	
 	public AfdQuery convertAtpcoFare(AtpcoFare afare, AtpcoRecord1 record1, List<CategoryObject> cat03s, List<CategoryObject> cat05s, List<CategoryObject> cat06s, List<CategoryObject> cat07s, 
-			List<CategoryObject> cat14s, List<CategoryObject> cat15s, List<CategoryObject> footnote14s, List<CategoryObject> footnote15s, Date queryDateFrom, Date queryDateTo) {
+			List<CategoryObject> cat14s, List<CategoryObject> cat15s, List<CategoryObject> cat27s, List<CategoryObject> cat35s, List<CategoryObject> cat50s, List<CategoryObject> footnote14s, 
+			List<CategoryObject> footnote15s, Date focusDate) {
 
 		AfdQuery result = new AfdQuery();
 		
 		//AtpcoFare attributes
-		result.setAtpcoFareId(afare.getId());
+		result.setFareId(afare.getId());
 		result.setSource(afare.getSource());
 		result.setSc("S");
 		result.setTariffNo(afare.getTariffNo());
-//		result.setTariffCode(tariffCode);
+		
+		TariffNumber tn = tariffNumberRepository.findOneByTarNo(result.getTariffNo());
+		if (tn != null && tn.getTarCd() != null) {
+			result.setTariffCode(tn.getTarCd());
+		}
+		
 		result.setCarrierCode(afare.getCarrierCode());
 		result.setOriginCity(afare.getOriginCity());
 		result.setOriginCountry(afare.getOriginCountry());
@@ -65,16 +85,24 @@ public class AfdQueryMapper {
 		//AtpcoRecord1 attributes
 		if (record1 != null) {
 			for (AtpcoRecord1FareClassInformation fci:record1.getFareClassInformation()) {
-				result.setBookingClass(fci.getRbd1());
+				String rbds = "";
+				for (String rbd:fci.getRbd()) {
+					if (rbd != null && !rbd.trim().isEmpty()) {
+						rbds += rbd + ", ";
+					}
+				}
+				result.setBookingClass(!rbds.isEmpty() ? rbds.substring(0, rbds.length() - 2) : "");
 				result.setPaxType(fci.getPassengerType());
 			}
 			
 			result.setSeason(record1.getSeasonType());
 			result.setFareType(record1.getFareType());
 			
-			if (result.getFareType() != null && !result.getFareType().isEmpty()) {
-				AtpcoMasterFareMatrix fareMatrix = atpcoMasterFareMatrixService.findOneByFareTypeCode(result.getFareType());
-				result.setCabin(fareMatrix.getCabinCode());
+			if (result.getFareType() != null && !result.getFareType().trim().isEmpty()) {
+				AtpcoMasterFareMatrix fareMatrix = atpcoMasterFareMatrixService.findOneByFareTypeCode(result.getFareType().trim());
+				if (fareMatrix != null) {
+					result.setCabin(fareMatrix.getCabinCode());
+				}
 			}
 		}
 		
@@ -133,6 +161,37 @@ public class AfdQueryMapper {
 			}
 		}
 		
+		if (cat35s != null) {
+			for (CategoryObject cat35o:cat35s) {
+				AtpcoRecord3Cat35 cat35 = (AtpcoRecord3Cat35) cat35o.getCategory();
+				for (AtpcoRecord3Cat35Ticketing ticketing:cat35.getTicketing()) {
+					if (ticketing.getTour_car_value_code() != null && !ticketing.getTour_car_value_code().trim().isEmpty()) {
+						result.setTourCode(ticketing.getTour_car_value_code());
+					}
+				}
+			}
+		}
+		
+		if (result.getTourCode() != null && cat27s != null) {
+			for (CategoryObject cat27o:cat27s) {
+				AtpcoRecord3Cat27 cat27 = (AtpcoRecord3Cat27) cat27o.getCategory();
+				if (cat27.getText_table_no_996() != null && !cat27.getText_table_no_996().trim().isEmpty()) {
+					TextTable textTable996 = atpcoRecord3CategoryCustomRepository.findRecord3TextTable(cat27.getText_table_no_996().trim());
+					String textTable = AtpcoDataConverterUtil.convertTextTableToText(textTable996);
+					result.setTourCode(textTable);
+				}
+			}
+		}
+		
+		if (cat50s != null) {
+			for (CategoryObject cat50o:cat50s) {
+				AtpcoRecord3Cat50 cat50 = (AtpcoRecord3Cat50) cat50o.getCategory();
+				if (cat50.getApplication_title() != null && !cat50.getApplication_title().trim().isEmpty()) {
+					result.setCat50Title(cat50.getApplication_title());
+				}
+			}
+		}
+		
 		//Footnote attributes
 		if (footnote14s != null) {
 			for (CategoryObject footnote14:footnote14s) {
@@ -153,24 +212,52 @@ public class AfdQueryMapper {
 			}
 		}
 		
-		//Rule Focus Date
-//		Date ruleFocusDate = null;
-//		Date effDate = DateUtil.convertObjectToDate(result.getEffectiveDate());
-//		Date discDate = DateUtil.convertObjectToDate(result.getDiscontinueDate());
-//		
-//		if (queryDateFrom != null && queryDateTo != null) {
-//			
-//		}
-//		
-//		if (queryDateFrom == null && queryDateTo == null) {
-//			ruleFocusDate = new Date();
-//		} else {
-//			if (queryDateFrom != null && queryDateTo == null) {
-//				
-//			}
-//		}
+		result.setFocusDate(focusDate);
 		
-//		result.setRuleFocusDate(ruleFocusDate);
+		return result;
+	}
+
+	public AfdQuery convertMarketFare(WorkPackageFare fare, String wpObjectId, String fareId, String woId, String woName) {
+		AfdQuery result = new AfdQuery();
+		
+		//AtpcoFare attributes
+		result.setFareId(fareId);
+		result.setSource("M");
+		result.setSc("S");
+		result.setTariffNo("MKT");
+		result.setTariffCode("MARKET");
+		
+		result.setCarrierCode(fare.getCarrier());
+		result.setOriginCity(fare.getOrigin());
+		result.setOriginCountry(null);
+		result.setDestinationCity(fare.getDestination());
+		result.setDestinationCountry(null);
+		result.setFareClassCode(fare.getFareBasis());
+		result.setOwrt(fare.getTypeOfJourney());
+		result.setFootnote(fare.getFootnote1());
+		result.setRoutingNo(fare.getRtgno());
+		result.setRuleNo(fare.getRuleno());
+		result.setMaximumPermittedMileage(null);
+		result.setCurrencyCode(fare.getCurrency());
+		result.setBaseAmount(TypeConverterUtil.convertStringToDouble(fare.getAmount()));
+		result.setEffectiveDate(null);
+		result.setDiscontinueDate(null);
+		result.setGlobalIndicator(fare.getGlobal());
+		result.setSaleStartDate(fare.getSaleStart());
+		result.setSaleEndDate(fare.getSaleEnd());
+		result.setGfsReference(null);
+		result.setGfsDate(null);
+		result.setBookingClass(fare.getBookingClass());
+		result.setPaxType(fare.getPassengerType());
+		result.setSeason(fare.getSeasonType());
+		result.setFareType(fare.getFareType());
+		result.setCabin(fare.getCabin());
+		result.setTravelStartDate(fare.getTravelStart());
+		result.setTravelEndDate(fare.getTravelEnd());
+		result.setTravelComplete(fare.getTravelComplete());
+		result.setWpId(woId);
+		result.setWpObjectId(wpObjectId);
+		result.setWpName(woName);
 		
 		return result;
 	}

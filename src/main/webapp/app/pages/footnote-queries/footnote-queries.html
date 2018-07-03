@@ -1,16 +1,32 @@
+<div class="content-title">
+	<h2>Footnote Query</h2>
+	<jhi-alert></jhi-alert>
+</div>
 <div class="panel">
 	<div class="panel-body">
 		<div class="filter-hero">
 			<div class="filter-label semibold show">Hide Filter</div>
 			<div class="filter-area">
 				<div class="clearfix">
-					<form name="queryForm" role="form" novalidate>
+					<form name="ftntQueryForm" role="form" novalidate>
 						<div class="col-md-3 no-lpad">
 							<div class="form-group">
 								<div class="custom-label semibold">Carrier</div>
-								<div class="no-rpad">
-									<input type="text" class="form-control" name="carrier" id="cxr"
-										ng-model="vm.queryParams.cxr" uppercase />
+								<div class="input-group">
+									<input type="text" class="form-control" name="cxr" id="cxr"
+										ng-minlength="2" ng-model="vm.paramCarrier" uppercase required />
+
+									<span ng-click="vm.showCarrierModal()"
+										class="input-group-addon"><i class="fa fa-folder"></i>
+									</span>
+								</div>
+								<div ng-show="ftntQueryForm.cxr.$invalid">
+									<p class="help-block"
+										ng-show="ftntQueryForm.cxr.$error.required">This field is
+										required.</p>
+									<p class="help-block"
+										ng-show="ftntQueryForm.cxr.$error.minlength">Minimum 2
+										letters</p>
 								</div>
 							</div>
 							<div class="form-group">
@@ -20,14 +36,25 @@
 										id="ftnt" ng-model="vm.queryParams.ftnt" uppercase />
 								</div>
 							</div>
+							<div class="form-group">
+							<div class="checkbox-wrapper">
+								<label> <input type="checkbox" name="includeDisc"
+									ng-model="vm.queryParams.includeDisc"> Include
+									Discontinued Sequences
+								</label>
+							</div>
+							</div>
 						</div>
 
 						<div class="col-md-3 no-lpad">
 							<div class="form-group">
-								<div class="custom-label semibold">Tariff</div>
-								<div class="no-rpad">
-									<input type="text" class="form-control" name="tariff"
-										id="tarNo" ng-model="vm.queryParams.tarNo" uppercase />
+								<div class="custom-label semibold">Tariff Number</div>
+								<div class="input-group">
+									<input id="ftntTarNo" type="text" name="ftntTarNo"
+										class="form-control" ng-model="vm.paramTarNo" uppercase>
+
+									<span ng-click="vm.showTariffModal()" class="input-group-addon"><i
+										class="fa fa-folder"></i> </span>
 								</div>
 							</div>
 							<div class="form-group">
@@ -59,7 +86,8 @@
 											is-open="vm.datePickerOpenStatus['saleDateFrom']"
 											datetime-picker="{{vm.dateFormat}}" enable-time="false"
 											name="saleDateFrom" id="dtpSaleStart"
-											ng-model="vm.queryParams.saleDateFrom" placeholder="From" />
+											ng-model="vm.queryParams.saleDateFrom" placeholder="From"
+											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '014'" />
 									</div>
 									<div class="col-md-4 no-lpad">
 										<input type="text" class="form-control"
@@ -67,11 +95,13 @@
 											is-open="vm.datePickerOpenStatus['saleDateTo']"
 											datetime-picker="{{vm.dateFormat}}" enable-time="false"
 											name="saleDateTo" id="dtpSaleEnd"
-											ng-model="vm.queryParams.saleDateTo" placeholder="To" />
+											ng-model="vm.queryParams.saleDateTo" placeholder="To"
+											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '014'" />
 									</div>
 									<div class="col-md-4 no-pad">
 										<select class="form-control" name="saleOption" id="saleOpt"
-											ng-model="vm.queryParams.saleOpt">
+											ng-model="vm.queryParams.saleOpt"
+											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '014'">
 											<option value="1">Active In</option>
 											<option value="2">Exact Match</option>
 										</select>
@@ -88,7 +118,8 @@
 											is-open="vm.datePickerOpenStatus['travelDateFrom']"
 											datetime-picker="{{vm.dateFormat}}" enable-time="false"
 											name="travelDateFrom" id="dtpTravelStart"
-											ng-model="vm.queryParams.travelDateFrom" placeholder="From" />
+											ng-model="vm.queryParams.travelDateFrom" placeholder="From"
+											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '015'" />
 									</div>
 									<div class="col-md-4 no-lpad">
 										<input type="text" class="form-control"
@@ -96,11 +127,13 @@
 											is-open="vm.datePickerOpenStatus['travelDateTo']"
 											datetime-picker="{{vm.dateFormat}}" enable-time="false"
 											name="travelDateTo" id="dtpTravelEnd"
-											ng-model="vm.queryParams.travelDateTo" placeholder="To" />
+											ng-model="vm.queryParams.travelDateTo" placeholder="To"
+											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '015'" />
 									</div>
 									<div class="col-md-4 no-pad">
 										<select class="form-control" name="travelOption"
-											id="travelOpt" ng-model="vm.queryParams.travelOpt">
+											id="travelOpt" ng-model="vm.queryParams.travelOpt"
+											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '015'">
 											<option value="1">Active In</option>
 											<option value="2">Exact Match</option>
 										</select>
@@ -118,29 +151,40 @@
 											datetime-picker="{{vm.dateFormat}}" enable-time="false"
 											name="travelDateFrom" id="completedByStart"
 											ng-model="vm.queryParams.completedDateFrom"
-											placeholder="From" />
+											placeholder="From"
+											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '015'" />
 									</div>
 									<div class="col-md-4 no-lpad">
 										<select class="form-control" name="travelOption"
-											id="travelOpt" ng-model="vm.queryParams.travelOpt">
+											id="travelOpt" ng-model="vm.queryParams.travelOpt"
+											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '015'">
 											<option value="P">P - Trip Completed</option>
 											<option value="C">C - Trip Commence</option>
 										</select>
 									</div>
 									<div class="col-md-4 no-pad">
 										<select class="form-control" name="travelOption"
-											id="travelOpt" ng-model="vm.queryParams.travelOpt">
+											id="travelOpt" ng-model="vm.queryParams.travelOpt"
+											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '015'">
 											<option value="2">Exact Match</option>
 										</select>
 									</div>
 								</div>
 							</div>
 						</div>
-						
+
 						<div class="clearfix">
 							<div class="pull-right pv1">
-								<button type="button" class="btn btn-default small" ng-click="vm.loadAll()">Query</button>
-								<button type="reset" ng-click="vm.reset()" class="btn btn-default small">Reset</button>
+								<button type="button" class="btn btn-default small"
+									ng-disabled="ftntQueryForm.$invalid"
+									ng-click="vm.loadAvailable()">Show Available Footnotes</button>
+								<button type="button" class="btn btn-default small"
+									ng-disabled="ftntQueryForm.$invalid"
+									ng-click="vm.loadExpired()">Show Expired Footnotes</button>
+								<button type="button" class="btn btn-default small"
+									ng-disabled="ftntQueryForm.$invalid" ng-click="vm.loadAll()">Query</button>
+								<button type="reset" ng-click="vm.reset()"
+									class="btn btn-default small">Reset</button>
 							</div>
 						</div>
 					</form>
@@ -222,25 +266,30 @@
 								<td>{{rq.routingNo}}</td>
 								<td>{{rq.footnote}}</td>
 								<td>{{rq.effectiveDateObject | date:'medium'}}</td>
-								<td>
-									<span ng-if="rq.discontinueDateObject=='indef'"></span>
-									<span ng-if="rq.discontinueDateObject!='indef'">{{rq.discontinueDateObject | date:'medium'}}</span>
-								</td>
+								<td><span ng-if="rq.discontinueDateObject=='indef'"></span>
+									<span ng-if="rq.discontinueDateObject!='indef'">{{rq.discontinueDateObject
+										| date:'medium'}}</span></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 			</div>
 		</div>
-		
-		<div class="additional-info-wrapper" id="vm.footnoteQueryCategories2">
-			<div class="additional-info" ng-click="vm.showCategoryDetail(cat)" ng-class="{'yellow': cat.catAttributes.length > 0 && cat.type != 'G', 'blue': cat.catAttributes.length > 0 && cat.type == 'G'}"
-				ng-repeat="cat in vm.footnoteQueryCategories2 track by cat.catNo">
-				{{cat.catNo}} {{cat.catName}} 
-				<span ng-if="cat.catAttributes.length > 0">({{cat.type}})</span>
+
+		<div class="additional-info-wrapper" id="vm.footnoteQueryCategories2"
+			ng-if="vm.footnoteQueryCategories != null">
+			<div class="clearfix">
+				<div class="pull-left ph5px additional-container"
+					ng-repeat="cat in vm.footnoteQueryCategories2 track by cat.catNo">
+					<div class="additional-info" ng-click="vm.showCategoryDetail(cat)"
+						ng-class="{'yellow': cat.catAttributes.length > 0 && cat.type != 'G', 'blue': cat.catAttributes.length > 0 && cat.type == 'G'}">
+						{{cat.catNo}} {{cat.catName}} <span
+							ng-if="cat.catAttributes.length > 0">({{cat.type}})</span>
+					</div>
+				</div>
 			</div>
 		</div>
-		
+
 		<div class="text-center" ng-if="vm.footnoteQueries">
 			<jhi-item-count page="vm.page" total="vm.queryCount"
 				items-per-page="vm.itemsPerPage"></jhi-item-count>

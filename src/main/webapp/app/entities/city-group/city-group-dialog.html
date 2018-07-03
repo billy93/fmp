@@ -1,4 +1,11 @@
-
+<style>
+.ui-select-dropdown{
+	min-width:30px;
+}
+.highlighted{
+	background-color:rgba(222, 255, 94, .7) !important;
+}
+</style>
 <form name="editForm" role="form" novalidate ng-submit="vm.save()">
 
     <div class="modal-header">
@@ -16,7 +23,7 @@
         <div class="form-group">
             <label class="control-label" for="field_code">Code</label>
             <input type="text" class="form-control" name="code" id="field_code"
-                    ng-model="vm.cityGroup.code"
+                    ng-model="vm.cityGroup.code" required ng-class="{'must-fill': editForm.$invalid}"
                     />
         </div>
         <div class="form-group">
@@ -26,16 +33,21 @@
                     />
         </div>
 		<div class="form-group">
-			<label class="control-label" for="field_description">Search City</label>            
+			<label class="control-label" for="field_description">Search City/Country</label>            
 
 			<input autocomplete="off" type="text" name="select_city" ng-model="vm.selectCity" class="form-control"
-           		uib-typeahead="o as o.cityCode for o in vm.cities | filter:{cityCode:$viewValue} | limitTo:5">
-           	<span class="input-group-addon add-agent" ng-click="vm.addCities()">
-           		<i class="fa fa-plus"></i>
+			 ng-change="vm.search()" >
+           		
+           		<!-- <input autocomplete="off" type="text" name="select_city" ng-model="vm.selectCity" class="form-control"
+			 ng-change="vm.search()"
+           		uib-typeahead="o as o.cityCode for o in vm.cities | filter:{cityCode:$viewValue} | limitTo:5"> -->
+           	<span class="input-group-addon add-agent" ng-click="vm.searchCities()">
+           		<i class="fa fa-search"></i>
              </span>
 		</div>
 		<div class="form-group">
-			<div class="box-detail">
+			<div class="pull-left w40 two-column">
+				<div class="box-detail">
       				<div class="box-header">List Cities</div>	
       				<div class="box-body">
       					<div class="table-wrapper">
@@ -64,13 +76,82 @@
 										            <span ng-show="vm.sortType == 'countryCode' && !vm.sortReverse" class="fa fa-caret-down"></span>
 										            <span ng-show="vm.sortType == 'countryCode' && vm.sortReverse" class="fa fa-caret-up"></span>
 												</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr role="row" ng-class="{highlighted: city === vm.selectedCityRow}"
+											ng-click="vm.rowListCityHighlighted(city)"
+											class="datatable-row" ng-repeat="city in (vm.filteredCities = (vm.cities | filter:vm.selectCity | orderBy:vm.sortType:vm.sortReverse))  track by $index">
+												<td>
+													{{city.cityName}}
+												</td>
+												<td>
+													{{city.cityCode}}
+												</td>
+												<td>
+													{{city.countryName}}
+												</td>
+												<td>
+													{{city.countryCode}}
+												</td>	
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+      				</div>		      				
+      			</div>
+  			</div>
+  			
+  			<div class="pull-left w20">
+				<div class="ph5px">
+					<div class="text-center action-ratesheet-wrapper">
+						<div class="action-ratesheet js-addAll-ratesheet" ng-click="vm.addAll()">ADD ALL</div>
+						<div class="action-ratesheet js-add-ratesheet" ng-click="vm.add()">ADD</div>
+						<div class="action-ratesheet js-removeAll-ratesheet" ng-click="vm.removeAll()">REMOVE ALL</div>
+						<div class="action-ratesheet js-remove-ratesheet" ng-click="vm.remove()">REMOVE</div>
+					</div>
+				</div>									
+			</div>
+			
+  			<div class="pull-left w40 two-column">
+				<div class="box-detail">
+      				<div class="box-header">List Selected Cities</div>	
+      				<div class="box-body">
+      					<div class="table-wrapper">
+							<div class="datatable-wrapper form-inline">
+								<div class="table-responsive">
+									<table class="table table-stripped table-bordered datatable">
+										<thead>
+											<tr role="row">
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" ng-click="vm.sortCityType = 'cityName'; vm.sortCityReverse = !vm.sortCityReverse">
+										            City Name
+										            <span ng-show="vm.sortCityType == 'cityName' && !vm.sortReverse" class="fa fa-caret-down"></span>
+										            <span ng-show="vm.sortCityType == 'cityName' && vm.sortReverse" class="fa fa-caret-up"></span>
+												</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" ng-click="vm.sortCityType = 'cityCode'; vm.sortCityReverse = !vm.sortCityReverse">
+										            City Code
+										            <span ng-show="vm.sortCityType == 'cityCode' && !vm.sortCityReverse" class="fa fa-caret-down"></span>
+										            <span ng-show="vm.sortCityType == 'cityCode' && vm.sortCityReverse" class="fa fa-caret-up"></span>
+												</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" ng-click="vm.sortCityType = 'countryName'; vm.sortCityReverse = !vm.sortCityReverse">
+										            Country Name
+										            <span ng-show="vm.sortCityType == 'countryName' && !vm.sortCityReverse" class="fa fa-caret-down"></span>
+										            <span ng-show="vm.sortCityType == 'countryName' && vm.sortCityReverse" class="fa fa-caret-up"></span>
+												</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" ng-click="vm.sortCityType = 'countryCode'; vm.sortCityReverse = !vm.sortCityReverse">
+										            Country Code
+										            <span ng-show="vm.sortCityType == 'countryCode' && !vm.sortCityReverse" class="fa fa-caret-down"></span>
+										            <span ng-show="vm.sortCityType == 'countryCode' && vm.sortCityReverse" class="fa fa-caret-up"></span>
+												</th>
 												<th>Action</th>
 											</tr>
 										</thead>
 										<tbody>
 											<tr role="row" 
 											ng-click="vm.rowHighlighted(city)" ng-class="{highlighted: city === vm.selectedRow}"
-											class="datatable-row" ng-repeat="city in  vm.cityGroup.cities track by $index">
+											class="datatable-row" ng-repeat="city in (vm.filteredCities = (vm.cityGroup.cities | orderBy:vm.sortType:vm.sortReverse)) track by $index">
 												<td>
 													{{city.cityName}}
 												</td>
@@ -84,7 +165,7 @@
 													{{city.countryCode}}
 												</td>												
 												<td>
-													<button ng-click="vm.removeCities(city)"><i class="fa fa-remove" style="color:red"></i></button>
+													<button type="button" ng-click="vm.removeCities(city)"><i class="fa fa-remove" style="color:red"></i></button>
 												</td>
 											</tr>
 										</tbody>
@@ -94,13 +175,15 @@
 						</div>
       				</div>		      				
       			</div>
+  			</div>
+  			
 		</div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+        <button type="button" class="btn btn-back" data-dismiss="modal" ng-click="vm.clear()">
             <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
         </button>
-        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-primary">
+        <button type="submit" ng-disabled="editForm.$invalid || vm.isSaving" class="btn btn-secondary">
             <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
         </button>
     </div>

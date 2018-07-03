@@ -17,7 +17,7 @@ public class RuleQueryMapper {
 		result.setRuleNo(record2Group.getRuleNo());
 		result.setTarNo(record2Group.getRuleTariffNo());
 		result.setSrc("A");
-		result.setType("Rule");
+		result.setType(record2Group.getType());
 		
 		return result;
 	}

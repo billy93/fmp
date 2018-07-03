@@ -20,11 +20,23 @@
         <dd>
             <span>{{vm.city.countryCode}}</span>
         </dd>
+        <dt><span>Airport Code</span></dt>
+        <dd>
+            <span>{{vm.city.airportCode}}</span>
+        </dd>
+        <dt><span>Airport Name</span></dt>
+        <dd>
+            <span>{{vm.city.airportName}}</span>
+        </dd>
+        <dt><span>World Area Code</span></dt>
+        <dd>
+            <span>{{vm.city.worldareaCode}}</span>
+        </dd>
     </dl>
 
     <button type="submit"
             ui-sref="{{ vm.previousState }}"
-            class="btn btn-info">
+            class="btn btn-back linkClick">
         <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
     </button>
 

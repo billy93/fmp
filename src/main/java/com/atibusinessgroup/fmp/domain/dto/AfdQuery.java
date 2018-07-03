@@ -1,7 +1,7 @@
 package com.atibusinessgroup.fmp.domain.dto;
 
 public class AfdQuery {
-	private String atpcoFareId;
+	private String fareId;
 	private String source;
 	private String sc;
 	private String tariffNo;
@@ -35,7 +35,7 @@ public class AfdQuery {
 	private String gfsReference;
 	private Object gfsDate;
 	private String globalIndicator;
-	private Object ruleFocusDate;
+	private Object focusDate;
 	private boolean sellable;
 	private Object travelStartDate;
 	private Object travelEndDate;
@@ -56,7 +56,11 @@ public class AfdQuery {
 	private String travelDateRanges;
 	private String fareType;
 	private String paxType;
+	private String wpObjectId;
 	private String wpId;
+	private String wpName;
+	private String tourCode;
+	private String cat50Title;
 	private String groupFare;
 	private double refAmount;
 	private double refYqyr;
@@ -64,494 +68,38 @@ public class AfdQuery {
 	private double refTfc;
 	private double refAif;
 	
-	public AfdQuery() {};
-	
-	public String getDayOfWeekType() {
-		return dayOfWeekType;
+	public AfdQuery() {}
+
+	public String getFareId() {
+		return fareId;
 	}
 
-	public void setDayOfWeekType(String dayOfWeekType) {
-		this.dayOfWeekType = dayOfWeekType;
-	}
-
-	public String getAtpcoFareId() {
-		return atpcoFareId;
-	}
-
-	public void setAtpcoFareId(String atpcoFareId) {
-		this.atpcoFareId = atpcoFareId;
+	public void setFareId(String fareId) {
+		this.fareId = fareId;
 	}
 
 	public String getSource() {
 		return source;
 	}
-	
+
 	public void setSource(String source) {
 		this.source = source;
 	}
-	
+
 	public String getSc() {
 		return sc;
 	}
-	
+
 	public void setSc(String sc) {
 		this.sc = sc;
 	}
-	
+
 	public String getTariffNo() {
 		return tariffNo;
 	}
-	
+
 	public void setTariffNo(String tariffNo) {
 		this.tariffNo = tariffNo;
-	}
-	
-	public String getCarrierCode() {
-		return carrierCode;
-	}
-	
-	public void setCarrierCode(String carrierCode) {
-		this.carrierCode = carrierCode;
-	}
-	
-	public String getOriginCity() {
-		return originCity;
-	}
-	
-	public void setOriginCity(String originCity) {
-		this.originCity = originCity;
-	}
-	
-	public String getOriginCountry() {
-		return originCountry;
-	}
-	
-	public void setOriginCountry(String originCountry) {
-		this.originCountry = originCountry;
-	}
-	
-	public String getDestinationCity() {
-		return destinationCity;
-	}
-	
-	public void setDestinationCity(String destinationCity) {
-		this.destinationCity = destinationCity;
-	}
-	
-	public String getDestinationCountry() {
-		return destinationCountry;
-	}
-	
-	public void setDestinationCountry(String destinationCountry) {
-		this.destinationCountry = destinationCountry;
-	}
-	
-	public String getFareClassCode() {
-		return fareClassCode;
-	}
-	
-	public void setFareClassCode(String fareClassCode) {
-		this.fareClassCode = fareClassCode;
-	}
-	
-	public String getBookingClass() {
-		return bookingClass;
-	}
-	
-	public void setBookingClass(String bookingClass) {
-		this.bookingClass = bookingClass;
-	}
-	
-	public String getCabin() {
-		return cabin;
-	}
-	
-	public void setCabin(String cabin) {
-		this.cabin = cabin;
-	}
-	
-	public String getOwrt() {
-		return owrt;
-	}
-	
-	public void setOwrt(String owrt) {
-		this.owrt = owrt;
-	}
-	
-	public String getFootnote() {
-		return footnote;
-	}
-	
-	public void setFootnote(String footnote) {
-		this.footnote = footnote;
-	}
-	
-	public String getRoutingNo() {
-		return routingNo;
-	}
-	
-	public void setRoutingNo(String routingNo) {
-		this.routingNo = routingNo;
-	}
-	
-	public String getRuleNo() {
-		return ruleNo;
-	}
-	
-	public void setRuleNo(String ruleNo) {
-		this.ruleNo = ruleNo;
-	}
-	
-	public String getMaximumPermittedMileage() {
-		return maximumPermittedMileage;
-	}
-	
-	public void setMaximumPermittedMileage(String maximumPermittedMileage) {
-		this.maximumPermittedMileage = maximumPermittedMileage;
-	}
-	
-	public String getCurrencyCode() {
-		return currencyCode;
-	}
-	
-	public void setCurrencyCode(String currencyCode) {
-		this.currencyCode = currencyCode;
-	}
-	
-	public double getBaseAmount() {
-		return baseAmount;
-	}
-	
-	public void setBaseAmount(double baseAmount) {
-		this.baseAmount = baseAmount;
-	}
-	
-	public String getError() {
-		return error;
-	}
-	
-	public void setError(String error) {
-		this.error = error;
-	}
-	
-	public String getTfcCalculationDate() {
-		return tfcCalculationDate;
-	}
-	
-	public void setTfcCalculationDate(String tfcCalculationDate) {
-		this.tfcCalculationDate = tfcCalculationDate;
-	}
-	
-	public Object getTfcFocusDate() {
-		return tfcFocusDate;
-	}
-	
-	public void setTfcFocusDate(Object tfcFocusDate) {
-		this.tfcFocusDate = tfcFocusDate;
-	}
-	
-	public double getYqyr() {
-		return yqyr;
-	}
-	
-	public void setYqyr(double yqyr) {
-		this.yqyr = yqyr;
-	}
-	
-	public double getTaxes() {
-		return taxes;
-	}
-	
-	public void setTaxes(double taxes) {
-		this.taxes = taxes;
-	}
-	
-	public double getTfc() {
-		return tfc;
-	}
-	
-	public void setTfc(double tfc) {
-		this.tfc = tfc;
-	}
-	
-	public double getAif() {
-		return aif;
-	}
-	
-	public void setAif(double aif) {
-		this.aif = aif;
-	}
-	
-	public String getItinerary() {
-		return itinerary;
-	}
-	
-	public void setItinerary(String itinerary) {
-		this.itinerary = itinerary;
-	}
-	
-	public boolean isOverrideIndicator() {
-		return overrideIndicator;
-	}
-	
-	public void setOverrideIndicator(boolean overrideIndicator) {
-		this.overrideIndicator = overrideIndicator;
-	}
-	
-	public Object getEffectiveDate() {
-		return effectiveDate;
-	}
-	
-	public void setEffectiveDate(Object effectiveDate) {
-		this.effectiveDate = effectiveDate;
-	}
-	
-	public Object getDiscontinueDate() {
-		return discontinueDate;
-	}
-	
-	public void setDiscontinueDate(Object discontinueDate) {
-		this.discontinueDate = discontinueDate;
-	}
-	
-	public String getGfsReference() {
-		return gfsReference;
-	}
-	
-	public void setGfsReference(String gfsReference) {
-		this.gfsReference = gfsReference;
-	}
-	
-	public String getGlobalIndicator() {
-		return globalIndicator;
-	}
-	
-	public void setGlobalIndicator(String globalIndicator) {
-		this.globalIndicator = globalIndicator;
-	}
-	
-	public Object getRuleFocusDate() {
-		return ruleFocusDate;
-	}
-	
-	public void setRuleFocusDate(Object ruleFocusDate) {
-		this.ruleFocusDate = ruleFocusDate;
-	}
-	
-	public boolean isSellable() {
-		return sellable;
-	}
-	
-	public void setSellable(boolean sellable) {
-		this.sellable = sellable;
-	}
-	
-	public Object getTravelStartDate() {
-		return travelStartDate;
-	}
-	
-	public void setTravelStartDate(Object travelStartDate) {
-		this.travelStartDate = travelStartDate;
-	}
-	
-	public Object getTravelEndDate() {
-		return travelEndDate;
-	}
-	
-	public void setTravelEndDate(Object travelEndDate) {
-		this.travelEndDate = travelEndDate;
-	}
-	
-	public Object getTravelComplete() {
-		return travelComplete;
-	}
-	
-	public void setTravelComplete(Object travelComplete) {
-		this.travelComplete = travelComplete;
-	}
-	
-	public Object getSaleStartDate() {
-		return saleStartDate;
-	}
-	
-	public void setSaleStartDate(Object saleStartDate) {
-		this.saleStartDate = saleStartDate;
-	}
-	
-	public Object getSaleEndDate() {
-		return saleEndDate;
-	}
-	
-	public void setSaleEndDate(Object saleEndDate) {
-		this.saleEndDate = saleEndDate;
-	}
-	
-	public Object getResStartDate() {
-		return resStartDate;
-	}
-	
-	public void setResStartDate(Object resStartDate) {
-		this.resStartDate = resStartDate;
-	}
-	
-	public Object getResEndDate() {
-		return resEndDate;
-	}
-	
-	public void setResEndDate(Object resEndDate) {
-		this.resEndDate = resEndDate;
-	}
-	
-	public String getMinStay() {
-		return minStay;
-	}
-	
-	public void setMinStay(String minStay) {
-		this.minStay = minStay;
-	}
-	
-	public String getMaxStay() {
-		return maxStay;
-	}
-	
-	public void setMaxStay(String maxStay) {
-		this.maxStay = maxStay;
-	}
-	
-	public String getAdvancePurchase() {
-		return advancePurchase;
-	}
-	
-	public void setAdvancePurchase(String advancePurchase) {
-		this.advancePurchase = advancePurchase;
-	}
-	
-	public String getDowIn() {
-		return dowIn;
-	}
-	
-	public void setDowIn(String dowIn) {
-		this.dowIn = dowIn;
-	}
-	
-	public String getDowOut() {
-		return dowOut;
-	}
-	
-	public void setDowOut(String dowOut) {
-		this.dowOut = dowOut;
-	}
-	
-	public String getSeason() {
-		return season;
-	}
-	
-	public void setSeason(String season) {
-		this.season = season;
-	}
-	
-	public Object getFirstSeasonDate() {
-		return firstSeasonDate;
-	}
-	
-	public void setFirstSeasonDate(Object firstSeasonDate) {
-		this.firstSeasonDate = firstSeasonDate;
-	}
-	
-	public Object getLastSeasonDate() {
-		return lastSeasonDate;
-	}
-	
-	public void setLastSeasonDate(Object lastSeasonDate) {
-		this.lastSeasonDate = lastSeasonDate;
-	}
-	
-	public String getTravelDateRanges() {
-		return travelDateRanges;
-	}
-	
-	public void setTravelDateRanges(String travelDateRanges) {
-		this.travelDateRanges = travelDateRanges;
-	}
-	
-	public String getFareType() {
-		return fareType;
-	}
-	
-	public void setFareType(String fareType) {
-		this.fareType = fareType;
-	}
-	
-	public String getPaxType() {
-		return paxType;
-	}
-	
-	public void setPaxType(String paxType) {
-		this.paxType = paxType;
-	}
-	
-	public String getWpId() {
-		return wpId;
-	}
-	
-	public void setWpId(String wpId) {
-		this.wpId = wpId;
-	}
-	
-	public String getGroupFare() {
-		return groupFare;
-	}
-	
-	public void setGroupFare(String groupFare) {
-		this.groupFare = groupFare;
-	}
-	
-	public double getRefAmount() {
-		return refAmount;
-	}
-	
-	public void setRefAmount(double refAmount) {
-		this.refAmount = refAmount;
-	}
-	
-	public double getRefYqyr() {
-		return refYqyr;
-	}
-	
-	public void setRefYqyr(double refYqyr) {
-		this.refYqyr = refYqyr;
-	}
-	
-	public double getRefTaxes() {
-		return refTaxes;
-	}
-	
-	public void setRefTaxes(double refTaxes) {
-		this.refTaxes = refTaxes;
-	}
-	
-	public double getRefTfc() {
-		return refTfc;
-	}
-	
-	public void setRefTfc(double refTfc) {
-		this.refTfc = refTfc;
-	}
-	
-	public double getRefAif() {
-		return refAif;
-	}
-	
-	public void setRefAif(double refAif) {
-		this.refAif = refAif;
-	}
-	
-	public Object getGfsDate() {
-		return gfsDate;
-	}
-
-	public void setGfsDate(Object gfsDate) {
-		this.gfsDate = gfsDate;
 	}
 
 	public String getTariffCode() {
@@ -562,6 +110,494 @@ public class AfdQuery {
 		this.tariffCode = tariffCode;
 	}
 
+	public String getCarrierCode() {
+		return carrierCode;
+	}
+
+	public void setCarrierCode(String carrierCode) {
+		this.carrierCode = carrierCode;
+	}
+
+	public String getOriginCity() {
+		return originCity;
+	}
+
+	public void setOriginCity(String originCity) {
+		this.originCity = originCity;
+	}
+
+	public String getOriginCountry() {
+		return originCountry;
+	}
+
+	public void setOriginCountry(String originCountry) {
+		this.originCountry = originCountry;
+	}
+
+	public String getDestinationCity() {
+		return destinationCity;
+	}
+
+	public void setDestinationCity(String destinationCity) {
+		this.destinationCity = destinationCity;
+	}
+
+	public String getDestinationCountry() {
+		return destinationCountry;
+	}
+
+	public void setDestinationCountry(String destinationCountry) {
+		this.destinationCountry = destinationCountry;
+	}
+
+	public String getFareClassCode() {
+		return fareClassCode;
+	}
+
+	public void setFareClassCode(String fareClassCode) {
+		this.fareClassCode = fareClassCode;
+	}
+
+	public String getBookingClass() {
+		return bookingClass;
+	}
+
+	public void setBookingClass(String bookingClass) {
+		this.bookingClass = bookingClass;
+	}
+
+	public String getCabin() {
+		return cabin;
+	}
+
+	public void setCabin(String cabin) {
+		this.cabin = cabin;
+	}
+
+	public String getOwrt() {
+		return owrt;
+	}
+
+	public void setOwrt(String owrt) {
+		this.owrt = owrt;
+	}
+
+	public String getFootnote() {
+		return footnote;
+	}
+
+	public void setFootnote(String footnote) {
+		this.footnote = footnote;
+	}
+
+	public String getRoutingNo() {
+		return routingNo;
+	}
+
+	public void setRoutingNo(String routingNo) {
+		this.routingNo = routingNo;
+	}
+
+	public String getRuleNo() {
+		return ruleNo;
+	}
+
+	public void setRuleNo(String ruleNo) {
+		this.ruleNo = ruleNo;
+	}
+
+	public String getMaximumPermittedMileage() {
+		return maximumPermittedMileage;
+	}
+
+	public void setMaximumPermittedMileage(String maximumPermittedMileage) {
+		this.maximumPermittedMileage = maximumPermittedMileage;
+	}
+
+	public String getCurrencyCode() {
+		return currencyCode;
+	}
+
+	public void setCurrencyCode(String currencyCode) {
+		this.currencyCode = currencyCode;
+	}
+
+	public double getBaseAmount() {
+		return baseAmount;
+	}
+
+	public void setBaseAmount(double baseAmount) {
+		this.baseAmount = baseAmount;
+	}
+
+	public String getError() {
+		return error;
+	}
+
+	public void setError(String error) {
+		this.error = error;
+	}
+
+	public String getTfcCalculationDate() {
+		return tfcCalculationDate;
+	}
+
+	public void setTfcCalculationDate(String tfcCalculationDate) {
+		this.tfcCalculationDate = tfcCalculationDate;
+	}
+
+	public Object getTfcFocusDate() {
+		return tfcFocusDate;
+	}
+
+	public void setTfcFocusDate(Object tfcFocusDate) {
+		this.tfcFocusDate = tfcFocusDate;
+	}
+
+	public double getYqyr() {
+		return yqyr;
+	}
+
+	public void setYqyr(double yqyr) {
+		this.yqyr = yqyr;
+	}
+
+	public double getTaxes() {
+		return taxes;
+	}
+
+	public void setTaxes(double taxes) {
+		this.taxes = taxes;
+	}
+
+	public double getTfc() {
+		return tfc;
+	}
+
+	public void setTfc(double tfc) {
+		this.tfc = tfc;
+	}
+
+	public double getAif() {
+		return aif;
+	}
+
+	public void setAif(double aif) {
+		this.aif = aif;
+	}
+
+	public String getItinerary() {
+		return itinerary;
+	}
+
+	public void setItinerary(String itinerary) {
+		this.itinerary = itinerary;
+	}
+
+	public boolean isOverrideIndicator() {
+		return overrideIndicator;
+	}
+
+	public void setOverrideIndicator(boolean overrideIndicator) {
+		this.overrideIndicator = overrideIndicator;
+	}
+
+	public Object getEffectiveDate() {
+		return effectiveDate;
+	}
+
+	public void setEffectiveDate(Object effectiveDate) {
+		this.effectiveDate = effectiveDate;
+	}
+
+	public Object getDiscontinueDate() {
+		return discontinueDate;
+	}
+
+	public void setDiscontinueDate(Object discontinueDate) {
+		this.discontinueDate = discontinueDate;
+	}
+
+	public String getGfsReference() {
+		return gfsReference;
+	}
+
+	public void setGfsReference(String gfsReference) {
+		this.gfsReference = gfsReference;
+	}
+
+	public Object getGfsDate() {
+		return gfsDate;
+	}
+
+	public void setGfsDate(Object gfsDate) {
+		this.gfsDate = gfsDate;
+	}
+
+	public String getGlobalIndicator() {
+		return globalIndicator;
+	}
+
+	public void setGlobalIndicator(String globalIndicator) {
+		this.globalIndicator = globalIndicator;
+	}
+
+	public Object getFocusDate() {
+		return focusDate;
+	}
+
+	public void setFocusDate(Object focusDate) {
+		this.focusDate = focusDate;
+	}
+
+	public boolean isSellable() {
+		return sellable;
+	}
+
+	public void setSellable(boolean sellable) {
+		this.sellable = sellable;
+	}
+
+	public Object getTravelStartDate() {
+		return travelStartDate;
+	}
+
+	public void setTravelStartDate(Object travelStartDate) {
+		this.travelStartDate = travelStartDate;
+	}
+
+	public Object getTravelEndDate() {
+		return travelEndDate;
+	}
+
+	public void setTravelEndDate(Object travelEndDate) {
+		this.travelEndDate = travelEndDate;
+	}
+
+	public Object getTravelComplete() {
+		return travelComplete;
+	}
+
+	public void setTravelComplete(Object travelComplete) {
+		this.travelComplete = travelComplete;
+	}
+
+	public Object getSaleStartDate() {
+		return saleStartDate;
+	}
+
+	public void setSaleStartDate(Object saleStartDate) {
+		this.saleStartDate = saleStartDate;
+	}
+
+	public Object getSaleEndDate() {
+		return saleEndDate;
+	}
+
+	public void setSaleEndDate(Object saleEndDate) {
+		this.saleEndDate = saleEndDate;
+	}
+
+	public Object getResStartDate() {
+		return resStartDate;
+	}
+
+	public void setResStartDate(Object resStartDate) {
+		this.resStartDate = resStartDate;
+	}
+
+	public Object getResEndDate() {
+		return resEndDate;
+	}
+
+	public void setResEndDate(Object resEndDate) {
+		this.resEndDate = resEndDate;
+	}
+
+	public String getMinStay() {
+		return minStay;
+	}
+
+	public void setMinStay(String minStay) {
+		this.minStay = minStay;
+	}
+
+	public String getMaxStay() {
+		return maxStay;
+	}
+
+	public void setMaxStay(String maxStay) {
+		this.maxStay = maxStay;
+	}
+
+	public String getAdvancePurchase() {
+		return advancePurchase;
+	}
+
+	public void setAdvancePurchase(String advancePurchase) {
+		this.advancePurchase = advancePurchase;
+	}
+
+	public String getDowIn() {
+		return dowIn;
+	}
+
+	public void setDowIn(String dowIn) {
+		this.dowIn = dowIn;
+	}
+
+	public String getDowOut() {
+		return dowOut;
+	}
+
+	public void setDowOut(String dowOut) {
+		this.dowOut = dowOut;
+	}
+
+	public String getSeason() {
+		return season;
+	}
+
+	public void setSeason(String season) {
+		this.season = season;
+	}
+
+	public String getDayOfWeekType() {
+		return dayOfWeekType;
+	}
+
+	public void setDayOfWeekType(String dayOfWeekType) {
+		this.dayOfWeekType = dayOfWeekType;
+	}
+
+	public Object getFirstSeasonDate() {
+		return firstSeasonDate;
+	}
+
+	public void setFirstSeasonDate(Object firstSeasonDate) {
+		this.firstSeasonDate = firstSeasonDate;
+	}
+
+	public Object getLastSeasonDate() {
+		return lastSeasonDate;
+	}
+
+	public void setLastSeasonDate(Object lastSeasonDate) {
+		this.lastSeasonDate = lastSeasonDate;
+	}
+
+	public String getTravelDateRanges() {
+		return travelDateRanges;
+	}
+
+	public void setTravelDateRanges(String travelDateRanges) {
+		this.travelDateRanges = travelDateRanges;
+	}
+
+	public String getFareType() {
+		return fareType;
+	}
+
+	public void setFareType(String fareType) {
+		this.fareType = fareType;
+	}
+
+	public String getPaxType() {
+		return paxType;
+	}
+
+	public void setPaxType(String paxType) {
+		this.paxType = paxType;
+	}
+
+	public String getWpObjectId() {
+		return wpObjectId;
+	}
+
+	public void setWpObjectId(String wpObjectId) {
+		this.wpObjectId = wpObjectId;
+	}
+
+	public String getWpId() {
+		return wpId;
+	}
+
+	public void setWpId(String wpId) {
+		this.wpId = wpId;
+	}
+
+	public String getWpName() {
+		return wpName;
+	}
+
+	public void setWpName(String wpName) {
+		this.wpName = wpName;
+	}
+
+	public String getTourCode() {
+		return tourCode;
+	}
+
+	public void setTourCode(String tourCode) {
+		this.tourCode = tourCode;
+	}
+
+	public String getCat50Title() {
+		return cat50Title;
+	}
+
+	public void setCat50Title(String cat50Title) {
+		this.cat50Title = cat50Title;
+	}
+
+	public String getGroupFare() {
+		return groupFare;
+	}
+
+	public void setGroupFare(String groupFare) {
+		this.groupFare = groupFare;
+	}
+
+	public double getRefAmount() {
+		return refAmount;
+	}
+
+	public void setRefAmount(double refAmount) {
+		this.refAmount = refAmount;
+	}
+
+	public double getRefYqyr() {
+		return refYqyr;
+	}
+
+	public void setRefYqyr(double refYqyr) {
+		this.refYqyr = refYqyr;
+	}
+
+	public double getRefTaxes() {
+		return refTaxes;
+	}
+
+	public void setRefTaxes(double refTaxes) {
+		this.refTaxes = refTaxes;
+	}
+
+	public double getRefTfc() {
+		return refTfc;
+	}
+
+	public void setRefTfc(double refTfc) {
+		this.refTfc = refTfc;
+	}
+
+	public double getRefAif() {
+		return refAif;
+	}
+
+	public void setRefAif(double refAif) {
+		this.refAif = refAif;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -570,12 +606,12 @@ public class AfdQuery {
 		long temp;
 		temp = Double.doubleToLongBits(aif);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + ((atpcoFareId == null) ? 0 : atpcoFareId.hashCode());
 		temp = Double.doubleToLongBits(baseAmount);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((bookingClass == null) ? 0 : bookingClass.hashCode());
 		result = prime * result + ((cabin == null) ? 0 : cabin.hashCode());
 		result = prime * result + ((carrierCode == null) ? 0 : carrierCode.hashCode());
+		result = prime * result + ((cat50Title == null) ? 0 : cat50Title.hashCode());
 		result = prime * result + ((currencyCode == null) ? 0 : currencyCode.hashCode());
 		result = prime * result + ((dayOfWeekType == null) ? 0 : dayOfWeekType.hashCode());
 		result = prime * result + ((destinationCity == null) ? 0 : destinationCity.hashCode());
@@ -586,8 +622,10 @@ public class AfdQuery {
 		result = prime * result + ((effectiveDate == null) ? 0 : effectiveDate.hashCode());
 		result = prime * result + ((error == null) ? 0 : error.hashCode());
 		result = prime * result + ((fareClassCode == null) ? 0 : fareClassCode.hashCode());
+		result = prime * result + ((fareId == null) ? 0 : fareId.hashCode());
 		result = prime * result + ((fareType == null) ? 0 : fareType.hashCode());
 		result = prime * result + ((firstSeasonDate == null) ? 0 : firstSeasonDate.hashCode());
+		result = prime * result + ((focusDate == null) ? 0 : focusDate.hashCode());
 		result = prime * result + ((footnote == null) ? 0 : footnote.hashCode());
 		result = prime * result + ((gfsDate == null) ? 0 : gfsDate.hashCode());
 		result = prime * result + ((gfsReference == null) ? 0 : gfsReference.hashCode());
@@ -616,7 +654,6 @@ public class AfdQuery {
 		result = prime * result + ((resEndDate == null) ? 0 : resEndDate.hashCode());
 		result = prime * result + ((resStartDate == null) ? 0 : resStartDate.hashCode());
 		result = prime * result + ((routingNo == null) ? 0 : routingNo.hashCode());
-		result = prime * result + ((ruleFocusDate == null) ? 0 : ruleFocusDate.hashCode());
 		result = prime * result + ((ruleNo == null) ? 0 : ruleNo.hashCode());
 		result = prime * result + ((saleEndDate == null) ? 0 : saleEndDate.hashCode());
 		result = prime * result + ((saleStartDate == null) ? 0 : saleStartDate.hashCode());
@@ -632,11 +669,14 @@ public class AfdQuery {
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((tfcCalculationDate == null) ? 0 : tfcCalculationDate.hashCode());
 		result = prime * result + ((tfcFocusDate == null) ? 0 : tfcFocusDate.hashCode());
+		result = prime * result + ((tourCode == null) ? 0 : tourCode.hashCode());
 		result = prime * result + ((travelComplete == null) ? 0 : travelComplete.hashCode());
 		result = prime * result + ((travelDateRanges == null) ? 0 : travelDateRanges.hashCode());
 		result = prime * result + ((travelEndDate == null) ? 0 : travelEndDate.hashCode());
 		result = prime * result + ((travelStartDate == null) ? 0 : travelStartDate.hashCode());
 		result = prime * result + ((wpId == null) ? 0 : wpId.hashCode());
+		result = prime * result + ((wpName == null) ? 0 : wpName.hashCode());
+		result = prime * result + ((wpObjectId == null) ? 0 : wpObjectId.hashCode());
 		temp = Double.doubleToLongBits(yqyr);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
@@ -664,13 +704,6 @@ public class AfdQuery {
 		if (Double.doubleToLongBits(aif) != Double.doubleToLongBits(other.aif)) {
 			return false;
 		}
-		if (atpcoFareId == null) {
-			if (other.atpcoFareId != null) {
-				return false;
-			}
-		} else if (!atpcoFareId.equals(other.atpcoFareId)) {
-			return false;
-		}
 		if (Double.doubleToLongBits(baseAmount) != Double.doubleToLongBits(other.baseAmount)) {
 			return false;
 		}
@@ -693,6 +726,13 @@ public class AfdQuery {
 				return false;
 			}
 		} else if (!carrierCode.equals(other.carrierCode)) {
+			return false;
+		}
+		if (cat50Title == null) {
+			if (other.cat50Title != null) {
+				return false;
+			}
+		} else if (!cat50Title.equals(other.cat50Title)) {
 			return false;
 		}
 		if (currencyCode == null) {
@@ -765,6 +805,13 @@ public class AfdQuery {
 		} else if (!fareClassCode.equals(other.fareClassCode)) {
 			return false;
 		}
+		if (fareId == null) {
+			if (other.fareId != null) {
+				return false;
+			}
+		} else if (!fareId.equals(other.fareId)) {
+			return false;
+		}
 		if (fareType == null) {
 			if (other.fareType != null) {
 				return false;
@@ -777,6 +824,13 @@ public class AfdQuery {
 				return false;
 			}
 		} else if (!firstSeasonDate.equals(other.firstSeasonDate)) {
+			return false;
+		}
+		if (focusDate == null) {
+			if (other.focusDate != null) {
+				return false;
+			}
+		} else if (!focusDate.equals(other.focusDate)) {
 			return false;
 		}
 		if (footnote == null) {
@@ -916,13 +970,6 @@ public class AfdQuery {
 		} else if (!routingNo.equals(other.routingNo)) {
 			return false;
 		}
-		if (ruleFocusDate == null) {
-			if (other.ruleFocusDate != null) {
-				return false;
-			}
-		} else if (!ruleFocusDate.equals(other.ruleFocusDate)) {
-			return false;
-		}
 		if (ruleNo == null) {
 			if (other.ruleNo != null) {
 				return false;
@@ -1002,6 +1049,13 @@ public class AfdQuery {
 		} else if (!tfcFocusDate.equals(other.tfcFocusDate)) {
 			return false;
 		}
+		if (tourCode == null) {
+			if (other.tourCode != null) {
+				return false;
+			}
+		} else if (!tourCode.equals(other.tourCode)) {
+			return false;
+		}
 		if (travelComplete == null) {
 			if (other.travelComplete != null) {
 				return false;
@@ -1037,6 +1091,20 @@ public class AfdQuery {
 		} else if (!wpId.equals(other.wpId)) {
 			return false;
 		}
+		if (wpName == null) {
+			if (other.wpName != null) {
+				return false;
+			}
+		} else if (!wpName.equals(other.wpName)) {
+			return false;
+		}
+		if (wpObjectId == null) {
+			if (other.wpObjectId != null) {
+				return false;
+			}
+		} else if (!wpObjectId.equals(other.wpObjectId)) {
+			return false;
+		}
 		if (Double.doubleToLongBits(yqyr) != Double.doubleToLongBits(other.yqyr)) {
 			return false;
 		}
@@ -1045,7 +1113,7 @@ public class AfdQuery {
 
 	@Override
 	public String toString() {
-		return "AfdQuery [atpcoFareId=" + atpcoFareId + ", source=" + source + ", sc=" + sc + ", tariffNo=" + tariffNo
+		return "AfdQuery [fareId=" + fareId + ", source=" + source + ", sc=" + sc + ", tariffNo=" + tariffNo
 				+ ", tariffCode=" + tariffCode + ", carrierCode=" + carrierCode + ", originCity=" + originCity
 				+ ", originCountry=" + originCountry + ", destinationCity=" + destinationCity + ", destinationCountry="
 				+ destinationCountry + ", fareClassCode=" + fareClassCode + ", bookingClass=" + bookingClass
@@ -1056,13 +1124,14 @@ public class AfdQuery {
 				+ ", tfc=" + tfc + ", aif=" + aif + ", itinerary=" + itinerary + ", overrideIndicator="
 				+ overrideIndicator + ", effectiveDate=" + effectiveDate + ", discontinueDate=" + discontinueDate
 				+ ", gfsReference=" + gfsReference + ", gfsDate=" + gfsDate + ", globalIndicator=" + globalIndicator
-				+ ", ruleFocusDate=" + ruleFocusDate + ", sellable=" + sellable + ", travelStartDate=" + travelStartDate
+				+ ", focusDate=" + focusDate + ", sellable=" + sellable + ", travelStartDate=" + travelStartDate
 				+ ", travelEndDate=" + travelEndDate + ", travelComplete=" + travelComplete + ", saleStartDate="
 				+ saleStartDate + ", saleEndDate=" + saleEndDate + ", resStartDate=" + resStartDate + ", resEndDate="
 				+ resEndDate + ", minStay=" + minStay + ", maxStay=" + maxStay + ", advancePurchase=" + advancePurchase
 				+ ", dowIn=" + dowIn + ", dowOut=" + dowOut + ", season=" + season + ", dayOfWeekType=" + dayOfWeekType
 				+ ", firstSeasonDate=" + firstSeasonDate + ", lastSeasonDate=" + lastSeasonDate + ", travelDateRanges="
-				+ travelDateRanges + ", fareType=" + fareType + ", paxType=" + paxType + ", wpId=" + wpId
+				+ travelDateRanges + ", fareType=" + fareType + ", paxType=" + paxType + ", wpObjectId=" + wpObjectId
+				+ ", wpId=" + wpId + ", wpName=" + wpName + ", tourCode=" + tourCode + ", cat50Title=" + cat50Title
 				+ ", groupFare=" + groupFare + ", refAmount=" + refAmount + ", refYqyr=" + refYqyr + ", refTaxes="
 				+ refTaxes + ", refTfc=" + refTfc + ", refAif=" + refAif + "]";
 	}

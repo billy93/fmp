@@ -68,7 +68,8 @@ public class CompetitorMonitoringResource {
     @PostMapping("/competitor-monitoring")
     @Timed
     public ResponseEntity<List<AfdQuery>> getAllAfdQueries(@RequestBody AfdQueryParam param) {
-        return afdQueryResource.getAllAfdQueries(param);
+//        return afdQueryResource.getAllAfdQueries(param);
+    	return null;
     }
     
 //    /**
@@ -107,18 +108,18 @@ public class CompetitorMonitoringResource {
     public ResponseEntity<String> getChartData(AfdQueryParam param) {
     	
     	JSONArray listObj = new JSONArray();
-    	for (AfdQuery afd : afdQueryResource.getAllAfdQueries(param).getBody()) {
-    		JSONObject json = new JSONObject();
-    		try {
-    			json.put("carrierCode", afd.getCarrierCode());
-    			json.put("cabin", afd.getCabin());
-    			json.put("bookingClass", afd.getBookingClass());
-    			json.put("amount", afd.getBaseAmount());
-    			listObj.put(json);
-    		}catch (Exception e) {
-				// TODO: handle exception
-			}
-    	}
+//    	for (AfdQuery afd : afdQueryResource.getAllAfdQueries(param).getBody()) {
+//    		JSONObject json = new JSONObject();
+//    		try {
+//    			json.put("carrierCode", afd.getCarrierCode());
+//    			json.put("cabin", afd.getCabin());
+//    			json.put("bookingClass", afd.getBookingClass());
+//    			json.put("amount", afd.getBaseAmount());
+//    			listObj.put(json);
+//    		}catch (Exception e) {
+//				// TODO: handle exception
+//			}
+//    	}
     	
     	String result = listObj.toString();
     	return new ResponseEntity<>(result, HttpStatus.OK);

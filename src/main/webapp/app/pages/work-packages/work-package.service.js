@@ -13,7 +13,8 @@
         	if (data) {
                 data = angular.fromJson(data);
                 data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
-                data.createdDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+                data.newCreatedDate = DateUtils.convertDateTimeFromServer(data.createdDate);
+                
                 data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
                 data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
                 data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
@@ -80,6 +81,24 @@
                 		}
                 	}
                 }
+                
+            	if(data.filingDetail != null && data.filingDetail.filingDetailTarif != null){
+            		for(var x=0;x<data.filingDetail.filingDetailTarif.length;x++){
+		                if(data.filingDetail.filingDetailTarif[x].batch.length > 0){
+		                	for(var y=0;y<data.filingDetail.filingDetailTarif[x].batch.length;y++){
+		                		data.filingDetail.filingDetailTarif[x].batch[y].gfsDate = DateUtils.convertDateTimeFromServer(data.filingDetail.filingDetailTarif[x].batch[y].gfsDate);
+		                	}
+		                }
+            		}
+            	}
+            	
+            	if(data.filingDetail != null && data.filingDetail.createdDate != null){
+            		data.filingDetail.createdDate = DateUtils.convertDateTimeFromServer(data.filingDetail.createdDate);
+            	}
+            	if(data.filingDetail != null && data.filingDetail.releaseDate != null){
+            		data.filingDetail.releaseDate = DateUtils.convertDateTimeFromServer(data.filingDetail.releaseDate);
+            	}
+                
             }
         	return data;
         }
@@ -166,7 +185,10 @@
 	        'exportRateSheetWordWaiver': { method: 'POST',  url:'api/work-packages/export-ratesheet-word-waiver'},
 	        'downloadMarketRules': { method: 'POST',  url:'api/work-packages/download-market-rules'},
 	        'workPackagefilter': { method: 'GET',  url:'api/work-packages/byname'},
-	        'discontinue': { method: 'POST',  url:'api/work-packages/discontinue'}
+	        'discontinue': { method: 'POST',  url:'api/work-packages/discontinue'},
+	        'updateLatestFare' : { method: 'POST',  url:'api/work-packages/update-latest-fare'},
+	        'updateActionCodes' : { method: 'POST',  url:'api/work-packages/update-action-codes'},
+	        'refreshTariff' : { method: 'POST',  url:'api/work-packages/refresh-tariff'},
         });
     }
 })();

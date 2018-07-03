@@ -12,6 +12,7 @@ public class FootnoteQueryParam {
 	private Object travelDateTo;
 	private Object completedDateFrom;
 	private String travelOpt;
+	private boolean includeDiscDate;
 	
 	private int page;
 	private int size;
@@ -87,6 +88,14 @@ public class FootnoteQueryParam {
 	public void setSize(int size) {
 		this.size = size;
 	}
+	public boolean isIncludeDiscDate() {
+		return includeDiscDate;
+	}
+	public void setIncludeDiscDate(boolean includeDiscDate) {
+		this.includeDiscDate = includeDiscDate;
+	}
+	
+	
 	
 	
 	

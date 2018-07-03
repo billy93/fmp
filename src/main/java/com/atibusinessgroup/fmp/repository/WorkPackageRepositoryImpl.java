@@ -1,16 +1,23 @@
 package com.atibusinessgroup.fmp.repository;
 
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
+
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOperationContext;
+import org.springframework.data.mongodb.core.aggregation.LimitOperation;
+import org.springframework.data.mongodb.core.aggregation.SkipOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.repository.support.PageableExecutionUtils;
@@ -18,12 +25,14 @@ import org.springframework.data.repository.support.PageableExecutionUtils;
 import com.atibusinessgroup.fmp.domain.User;
 import com.atibusinessgroup.fmp.domain.WorkPackage;
 import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
+import com.atibusinessgroup.fmp.domain.dto.AfdQueryParam;
+import com.atibusinessgroup.fmp.domain.dto.WorkPackageMarketFare;
 import com.atibusinessgroup.fmp.security.SecurityUtils;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 
 
 public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAnyName {
-
-	  private final Logger log = LoggerFactory.getLogger(WorkPackageRepositoryImpl.class);
 
 	@Autowired
     MongoTemplate mongoTemplate;
@@ -276,7 +285,6 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		//BUSINESS AREA 
 		List<String> businessArea = new ArrayList<>();
 		User u = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
-		log.debug("USER : {}", u);
 		businessArea.addAll(u.getBusinessAreas());
 		if(businessArea.isEmpty()) {
 			businessArea.add(null);
@@ -327,4 +335,110 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		return workPackages;
 	}
 
+	@Override
+	public Page<WorkPackageMarketFare> findAllMarketFare(AfdQueryParam param, Pageable pageable) {
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject match = new BasicDBObject();
+				match.append("$match", new BasicDBObject("type", "REGULAR").append("target_distribution", "MARKET"));
+				return match;
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject unwind = new BasicDBObject();
+				unwind.append("$unwind", new BasicDBObject("path", "$market_fare_sheet"));
+				return unwind;
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject project = new BasicDBObject();
+				project.append("$project", new BasicDBObject("fares", "$market_fare_sheet.fares").append("wpid", "$wpid").append("wpname", "$name"));
+				return project;
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject unwind = new BasicDBObject();
+				unwind.append("$unwind", new BasicDBObject("path", "$fares"));
+				return unwind;
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject match = new BasicDBObject();
+				BasicDBObject and = new BasicDBObject();
+				List<BasicDBObject> queries = new ArrayList<>();
+				
+				if (param.getCarrier() != null && !param.getCarrier().isEmpty()) {
+					BasicDBObject carrier = new BasicDBObject();
+					carrier.append("fares.carrier", new BasicDBObject("$in",  Arrays.stream(param.getCarrier().split(",")).map(String::trim).toArray(String[]::new)));
+					queries.add(carrier);
+				}
+				
+				if (param.getOrigin() != null && !param.getOrigin().isEmpty()) {
+					BasicDBObject origin = new BasicDBObject();
+					origin.append("fares.origin", new BasicDBObject("$in",  Arrays.stream(param.getOrigin().split(",")).map(String::trim).toArray(String[]::new)));
+					queries.add(origin);
+				}
+				
+				if (param.getDestination() != null && !param.getDestination().isEmpty()) {
+					BasicDBObject destination = new BasicDBObject();
+					destination.append("fares.destination", new BasicDBObject("$in",  Arrays.stream(param.getDestination().split(",")).map(String::trim).toArray(String[]::new)));
+					queries.add(destination);
+				}
+				
+				if (queries.size() > 0) {
+					and.append("$and", queries);
+				}
+				
+				match.append("$match", and);
+				
+				return match;
+			}
+		});
+		
+//		{
+//	        $match: {
+//	            $and: [
+//	                {
+//	                    'fares.carrier': 'GA'
+//	                },
+//	                {
+//	                    'fares.origin': 'JKT'
+//	                },
+//	                {
+//	                    'fares.destination': 'SIN'
+//	                }  
+//	            ]
+//	        }
+//	    }
+		
+		
+		Aggregation aggregation = newAggregation(aggregationOperations);
+		
+		SkipOperation skip = new SkipOperation(pageable.getPageNumber() * pageable.getPageSize());
+		aggregationOperations.add(skip);
+
+		LimitOperation limit = new LimitOperation(pageable.getPageSize());
+		aggregationOperations.add(limit);
+
+		Aggregation aggregationPagination = newAggregation(aggregationOperations);
+		
+		List<WorkPackageMarketFare> result = mongoTemplate.aggregate(aggregationPagination, "work_package", WorkPackageMarketFare.class).getMappedResults();
+		
+		return new PageImpl<>(result, pageable, mongoTemplate.aggregate(aggregation, "work_package", WorkPackageMarketFare.class).getMappedResults().size());
+	}
 }

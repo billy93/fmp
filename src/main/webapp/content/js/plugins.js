@@ -50,6 +50,12 @@ var Anterec;
                 $('.resize-div').on("mouseup touchend", function (event) {
                     event.stopPropagation();
                 });
+                $('.glyphicon').on("mousedown touchstart", function (event) {
+                    event.stopPropagation();
+                });
+                $('.glyphicon').on("mouseup touchend", function (event) {
+                    event.stopPropagation();
+                });
             };
 
             JsDragTable.prototype.selectColumn = function (header, event) {

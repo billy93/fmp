@@ -4,6 +4,8 @@ import org.springframework.stereotype.Repository;
 
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterFareType;
 
+import java.util.List;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
@@ -12,5 +14,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 @SuppressWarnings("unused")
 @Repository
 public interface AtpcoMasterFareTypeRepository extends MongoRepository<AtpcoMasterFareType, String> {
+
+	List<AtpcoMasterFareType> findAllByOrderByTypeCodeAsc();
 
 }

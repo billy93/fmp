@@ -206,4 +206,56 @@ $(function(){
 			_th.last().css('width', _width+_scrollwidth)
 	});
 	
+	
+	$(document).on('keydown','.number-only',function(e){
+		 var key = e.which || e.keyCode;
+
+         if (!e.shiftKey && !e.altKey && !e.ctrlKey &&
+         // numbers   
+             key >= 48 && key <= 57 ||
+         // Numeric keypad
+             key >= 96 && key <= 105 ||
+         // comma, period and minus, . on keypad
+            key == 190 || key == 188 || key == 109 || key == 110 ||
+         // Backspace and Tab and Enter
+            key == 8 || key == 9 || key == 13 ||
+         // Home and End
+            key == 35 || key == 36 ||
+         // left and right arrows
+            key == 37 || key == 39 ||
+         // Del and Ins
+            key == 46 || key == 45)
+             return true;
+
+         return false;
+	});
+	
+//	$(document).on('click','.table-wrapper tbody tr',function(e){
+//		e.preventDefault();
+//		var _parent = $(this).parents('.table');
+//		var _tbody = _parent.find('tbody');
+//		if ( e.ctrlKey ) {
+//	        //is ctrl + click
+//			 $(this).toggleClass('selected');
+//	    }
+//		
+//		else if (e.shiftKey){
+//	        var lastSelected = _parent.find('tr.selected').last().index();
+//	        var curSelected = $(this).index();
+//	        for(var i= lastSelected; i <= curSelected; i++){
+//	        	$('#tr' + i).addClass('selected');
+//	        }
+//	    }
+//		else {
+//	        //normal click
+//	    	if($(this).hasClass('selected')){
+//	    		$('.table-wrapper tbody tr').removeClass('selected');
+//				$(this).removeClass('selected');
+//			}
+//			else{
+//				$('.table-wrapper tbody tr').removeClass('selected');
+//				$(this).addClass('selected');
+//			}
+//	    }
+//	});
 });

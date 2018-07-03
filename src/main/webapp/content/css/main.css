@@ -151,8 +151,14 @@ label i {
 	font-size: 13px !important;
 }
 
-.category-header {
-	
+.detail-group {
+	margin: 5px 0;
+    display: inline-block;
+    width: 100%;
+}
+
+.detail-group .header {
+	font-weight: bold;
 }
 
 /* ==========================================================================
@@ -175,7 +181,7 @@ Development Ribbon
     o-transform: rotate(-45deg);
     overflow: hidden;
     position: absolute;
-    top: 40px;
+    top: 30px;
     transform: rotate(-45deg);
     webkit-box-shadow: 0 0 10px #888;
     webkit-transform: rotate(-45deg);
