@@ -2577,6 +2577,7 @@
 														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()" ng-disabled="vm.workPackage.status=='WITHDRAWN'|| vm.lockedOnly(vm.workPackage)">Rate Sheet</button>
 														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.moveUpFare(workPackageSheet)" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Move Up</button>
 														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.moveDownFare(workPackageSheet)" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Move Down</button> 
+														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.footnote(workPackageSheet)">Footnote</button> 																													
 												  </div>
 												</div>	
 											</div>
@@ -3030,6 +3031,7 @@
 															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN'  ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Rate Sheet</button>
 															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.moveUpFare(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Move Up</button>
 															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.moveDownFare(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Move Down</button> 
+															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.footnote(workPackageSheet)">Footnote</button> 																													
 														</div>
 													</div>																						
 												</div>
