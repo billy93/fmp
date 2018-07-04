@@ -1040,7 +1040,7 @@
 																	<input type="text" class="form-control" name="addonFareDestination{{$parent.$index}}{{$index}}" id="field_carrier"
 											                    		ng-model="fare.destination"
 											                    		uppercase
-											                    		ng-disabled="!vm.isEditable('addonFareDestination') "
+											                    		ng-disabled="!vm.isEditable('addonFareDestination')"
 											                    		style="min-width:60px"
 											                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareDestination{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('addonFareDestination') && fare.action != 'Canceled'"
