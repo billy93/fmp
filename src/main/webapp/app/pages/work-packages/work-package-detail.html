@@ -61,7 +61,7 @@
 									</div>
 									<div class="form-group">
 										<label for="field_reviewLevel">Review Level</label>
-										<input autocomplete="off" ng-required="vm.isRequired('reviewLevel')"  type="text" name="review_level" ng-model="vm.workPackage.reviewLevel" class="form-control" disabled>
+										<input autocomplete="off" ng-required="vm.isRequired('reviewLevel')"  type="text" name="reviewLevel" ng-model="vm.workPackage.reviewLevel" class="form-control" disabled>
 									</div>
 									<div class="form-group">
 										<label for="field_distributionType">Distribution Type</label>
@@ -169,7 +169,7 @@
 								<div class="tab-content">
 									<div ng-class="{active:vm.currentTabComment}" class="tab-pane" id="comment">																		
 										<div class="form-group" ng-class="{'poiv-none' :vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)}">
-											<wysiwyg-edit content="vm.commentString" config="vm.editorConfig"></wysiwyg-edit>
+											<wysiwyg-edit content="vm.commentString" name="comment" config="vm.editorConfig"></wysiwyg-edit>
 										</div>
 										<div class="clearfix">
 											<div class="pull-right">
@@ -195,7 +195,7 @@
 									<div ng-class="{active:vm.currentTabInterofficeComment, 'poiv-none' : (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') 
 											|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO'&& vm.workPackage.status=='DISTRIBUTED')  || vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'}" class="tab-pane" id="inter-office">
 										<div class="form-group" ng-class="{'poiv-none' :vm.workPackage.status =='DISCONTINUED' || vm.workPackage.reviewLevel == 'DISTRIBUTION'|| vm.disabledField(vm.workPackage)}">
-											<wysiwyg-edit content="vm.ioString" config="vm.editorConfig"></wysiwyg-edit>
+											<wysiwyg-edit content="vm.ioString" name="interofficeComment" config="vm.editorConfig"></wysiwyg-edit>
 										</div> 
 										<div class="clearfix">
 											<div class="pull-right">
@@ -437,6 +437,8 @@
 															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.routemap()" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Route Map</button>
 															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.moveUpFare(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Move Up</button>
 															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.moveDownFare(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Move Down</button> 
+															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.footnote(workPackageSheet)">Footnote</button> 
+															
 														</div>
 													</div>																						
 												</div>
@@ -461,7 +463,7 @@
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Origin <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'origin')"></span></th>
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Dest <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'destination')"></span></th>
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Fare Cls <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'fareBasis')"></span>
-																<div class="resize-div"></div>
+																<div class="resize-div" style="min-width: 100px"></div>
 															</th>
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Bkg Cls <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'bookingClass')"></span>
 															</th>
@@ -914,6 +916,7 @@
 															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN'  ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Rate Sheet</button>
 															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.moveUpFare(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Move Up</button>
 															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.moveDownFare(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Move Down</button> 
+															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.footnote(workPackageSheet)">Footnote</button> 															
 														</div>
 													</div>																						
 												</div>
@@ -924,18 +927,32 @@
 														<tr role="row">																	
 															<th>No</th>
 									                		<th>Status</th>
-										                	<th>Carrier</th>		                	
-									                		<th>Action</th>
+										                	<th>Carrier
+										                		<div class="resize-div"></div>
+										                	</th>		                	
+									                		<th>Action
+									                			<div class="resize-div"></div>
+									                		</th>
 										                	<th>Tar No</th>
 										                	<th>Tar Cd</th>
 										                	<th>Global</th>
 										                	<th>Origin</th>
 										                	<th>Dest</th>
-										                	<th>Addon Bucket/Fare Class</th>
-										                	<th>OW/RT</th>
-										                	<th>Ftnt</th>
-										                	<th>Zone</th>
-										                	<th>Rtg No</th>
+										                	<th>Addon Bucket/Fare Class
+										                		<div class="resize-div" style="min-width: 165px"></div>
+										                	</th>
+										                	<th>OW/RT
+										                		<div class="resize-div" style="min-width: 120px"></div>
+										                	</th>
+										                	<th>Ftnt
+										                		<div class="resize-div"></div>
+										                	</th>
+										                	<th>Zone
+										                		<div class="resize-div"></div>
+										                	</th>
+										                	<th>Rtg No
+										                		<div class="resize-div"></div>
+										                	</th>
 										                	<th>Filing Curr</th>
 										                	<th>Base Amt</th>
 										                	<th>Amt Diff</th>
@@ -944,7 +961,9 @@
 										               		<th>Travel End</th>		               		
 										               		<th>Sale Start</th>
 										               		<th>Sale End</th>	
-										               		<th>Comment</th>	               		
+										               		<th>Comment
+										               			<div class="resize-div" style="min-width: 200px;"></div>
+										               		</th>	               		
 										               		<th>Travel Complete</th>	               		
 										               		<th>Travel Complete Indicator</th>		
 														</tr>
@@ -1001,7 +1020,7 @@
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'global', $event)" ng-class="{highlighted:fare.field['global'], changed : vm.diff[fare.id].indexOf('global') > -1}">{{fare.tariffNumber.global}}</td>
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'origin', $event)" ng-class="{highlighted:fare.field['origin'], changed : vm.diff[fare.id].indexOf('origin') > -1}">
 																<span class="input-group">
-																		<input type="text" class="form-control" name="addonFareOrigin{{$parent.$index}}{{$index}}" id="field_carrier"
+																		<input type="text" class="form-control" name="addonFareOrigin{{$parent.$index}}{{$index}}" id="field_origin"
 												                    		ng-model="fare.origin"
 												                    		uppercase
 												                    		ng-disabled="!vm.isEditable('addonFareOrigin') "
@@ -2574,6 +2593,7 @@
 														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()" ng-disabled="vm.workPackage.status=='WITHDRAWN'|| vm.lockedOnly(vm.workPackage)">Rate Sheet</button>
 														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.moveUpFare(workPackageSheet)" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Move Up</button>
 														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.moveDownFare(workPackageSheet)" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Move Down</button> 
+														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.footnote(workPackageSheet)">Footnote</button> 																													
 												  </div>
 												</div>	
 											</div>
@@ -2584,18 +2604,32 @@
 													<tr>
 								                		<th>No</th>
 								                		<th>Status</th>
-								                		<th>Action</th>
-									                	<th>Carrier</th>		                	
+								                		<th>Action
+								                			<div class="resize-div"></div>
+								                		</th>
+									                	<th>Carrier
+									                		<div class="resize-div"></div>
+									                	</th>		                	
 									                	<th>Origin</th>
 									                	<th>Dest</th>
-									                	<th>Fare Cls</th>
+									                	<th>Fare Cls
+									                		<div class="resize-div" style="min-width: 100px"></div>
+									                	</th>
 									                	<th>Bkg Cls</th>
 									                	<th>SSN</th>
-									                	<th>Cabin</th>
-									                	<th>OW/RT</th>
-									                	<th>Rule Id</th>
+									                	<th>Cabin
+									                		<div class="resize-div" style="min-width: 120px"></div>
+									                	</th>
+									                	<th>OW/RT
+									                		<div class="resize-div" style="min-width: 120px"></div>
+									                	</th>
+									                	<th>Rule Id
+									                		<div class="resize-div"></div>
+									                	</th>
 									                	<th>Curr</th>
-									                	<th>Base Amt</th>
+									                	<th>Base Amt
+									                		<div class="resize-div" style="min-width: 120px"></div>
+									                	</th>
 									                  	<th>Prev Base Amt</th>
 									                	<th>Prev Base Amt Diff</th>
 									                	<th>% Prev Base Amt Diff</th>
@@ -2603,10 +2637,14 @@
 									               		<th>Travel End</th>		               		
 									               		<th>Sale Start</th>
 									               		<th>Sale End</th>	
-									               		<th>Comment</th>	               		
+									               		<th>Comment
+									               			<div class="resize-div" style="min-width: 200px;"></div>
+									               		</th>	               		
 									               		<th>Travel Complete</th>	               		
 									               		<th>Travel Complete Indicator</th>	               		
-									               		<th>RateSheet Comment</th>	        		
+									               		<th>RateSheet Comment
+									               			<div class="resize-div" style="min-width: 200px;"></div>
+									               		</th>	        		
 									                </tr>
 												</thead>
 												<tbody ng-class="{'poiv-none' : vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO'&& vm.workPackage.status=='DISTRIBUTED' }">
@@ -2941,7 +2979,7 @@
 			       			</div>
 							
 							<div class="tab-pane" ng-class="{active:vm.currentAddonTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.addonFareSheet track by $index">
-										<div class="pb1 mb1 bbgrey">
+									<div class="pb1 mb1 bbgrey">
 										<div class="clearfix">
 											<div class="pull-left w50 two-column">
 												<div class="form-group">
@@ -3027,6 +3065,7 @@
 															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN'  ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Rate Sheet</button>
 															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.moveUpFare(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Move Up</button>
 															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.moveDownFare(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Move Down</button> 
+															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.footnote(workPackageSheet)">Footnote</button> 																													
 														</div>
 													</div>																						
 												</div>
@@ -3037,12 +3076,20 @@
 														<tr role="row">																	
 															<th>No</th>
 									                		<th>Status</th>
-										                	<th>Carrier</th>		                	
-									                		<th>Action</th>
-									                		<th>Origin</th>
+										                	<th>Carrier
+										                		<div class="resize-div"></div>
+										                	</th>		                	
+									                		<th>Action
+									                			<div class="resize-div"></div>
+									                		</th>
+										                	<th>Origin</th>
 										                	<th>Dest</th>
-										                	<th>Addon Bucket/Fare Class</th>
-										                	<th>OW/RT</th>
+										                	<th>Addon Bucket/Fare Class
+										                		<div class="resize-div" style="min-width: 165px"></div>
+										                	</th>
+										                	<th>OW/RT
+										                		<div class="resize-div" style="min-width: 120px"></div>
+										                	</th>
 										                	<th>Filing Curr</th>
 										                	<th>Base Amt</th>
 										                	<th>Prev Base Amt</th>
@@ -3052,7 +3099,9 @@
 										               		<th>Travel End</th>		               		
 										               		<th>Sale Start</th>
 										               		<th>Sale End</th>	
-										               		<th>Comment</th>	               		
+										               		<th>Comment
+										               			<div class="resize-div" style="min-width: 200px;"></div>
+										               		</th>	               		
 										               		<th>Travel Complete</th>	               		
 										               		<th>Travel Complete Indicator</th>		
 														</tr>
@@ -3556,29 +3605,65 @@
 												<thead>
 													<tr>
 								                		<th>No</th>
-								                		<th>Type</th>
-									                	<th>Full/Partial</th>		                	
-									                	<th>PNR</th>
-									                	<th>Tkt From</th>
-									                	<th>Tkt To</th>
+								                		<th>Type
+								                			<div class="resize-div"></div>
+								                		</th>
+									                	<th>Full/Partial
+									                		<div class="resize-div"></div>
+									                	</th>		                	
+									                	<th>PNR
+									                		<div class="resize-div"></div>
+									                	</th>
+									                	<th>Tkt From
+									                		<div class="resize-div"></div>
+									                	</th>
+									                	<th>Tkt To
+									                		<div class="resize-div"></div>
+									                	</th>
 									                	<th>Ori</th>
 									                	<th>Dest</th>
-									                	<th>Original Itinerary</th>
-									                	<th>New Itinerary</th>
-									                	<th>Original Basic Fare</th>
-									                	<th>New Basic Fare</th>
-									                	<th>Approved Fares</th>
-										                <th>Fare Lost</th>
-									               		<th>Calculated PN</th>		               		
-									               		<th>Original PN</th>
-									               		<th>Approved PN</th>	
+									                	<th>Original Itinerary
+									                		<div class="resize-div"></div>
+									                	</th>
+									                	<th>New Itinerary
+									                		<div class="resize-div"></div>
+									                	</th>
+									                	<th>Original Basic Fare
+									                		<div class="resize-div"></div>
+									                	</th>
+									                	<th>New Basic Fare
+									                		<div class="resize-div"></div>
+									                	</th>
+									                	<th>Approved Fares
+									                		<div class="resize-div"></div>
+									                	</th>
+										                <th>Fare Lost
+										                	<div class="resize-div"></div>
+										                </th>
+									               		<th>Calculated PN
+									               			<div class="resize-div"></div>
+									               		</th>		               		
+									               		<th>Original PN
+									               			<div class="resize-div"></div>
+									               		</th>
+									               		<th>Approved PN
+									               			<div class="resize-div"></div>
+									               		</th>	
 									               		<th>Penalty Lost %</th>	               		
 									               		<th>Penalty Lost Amount</th>	               		
 									               		<th>Currency</th>	               		
-									               		<th>Total Pax</th>	        	
-									               		<th>Total Lost</th>	 
-									               		<th>Approver</th>
-									               		<th>Remark</th>	        		        	       		
+									               		<th>Total Pax
+									               			<div class="resize-div"></div>
+									               		</th>	        	
+									               		<th>Total Lost
+									               			<div class="resize-div"></div>
+									               		</th>	 
+									               		<th>Approver
+									               			<div class="resize-div"></div>
+									               		</th>
+									               		<th>Remark
+									               			<div class="resize-div"></div>
+									               		</th>	        		        	       		
 									                </tr>
 												</thead>
 												<tbody>
@@ -3944,16 +4029,22 @@
 						<div class="tab-pane active" id="validation">
 							<ul class="tree">
 								<li>
-							    	<input type="checkbox" checked="checked" id="c1" />
+							    	<input type="checkbox" id="c1" />
 							    	<label class="tree_label main-label" for="c1">There is {{vm.workPackage.validation.errorsCount}} error(s) and {{vm.workPackage.validation.warningsCount}} warning(s)</label>
 								    <ul ng-repeat="workPackageTab in vm.workPackage.validation.tab track by $index">
 								    	<li>
-								        	<input type="checkbox" checked="checked" id="c2" />
-								        	<label for="c2" class="tree_label second-label">{{workPackageTab.name}}</label>
+								        	<input type="checkbox" id="c2{{$index}}" />
+								        	
+								        	
+									        <label for="c2{{$index}}" class="tree_label second-label">
+									        	<label ng-if="workPackageTab.type != null">{{workPackageTab.type}}</label>
+									        	<label ng-if="workPackageTab.type != null && workPackageTab.name != null"> - </label>
+									        	<label ng-if="workPackageTab.name != null">{{workPackageTab.name}}</label>
+									        </label>
 									        <ul>
 									          	<li ng-if="workPackageTab.warning.length > 0">
-									          		<input type="checkbox" checked="checked" id="c3" />
-								        			<label for="c3" class="tree_label warning-label">Warnings</label>
+									          		<input type="checkbox" id="c3{{$parent.$index}}{{$index}}" />
+								        			<label for="c3{{$parent.$index}}{{$index}}" class="tree_label warning-label">Warnings</label>
 								        			<ul>
 								        			    <li ng-repeat="warning in workPackageTab.warning track by $index">
 								        			    	<span ng-click="vm.selectErrorField(workPackageTab.type, workPackageTab.index, warning.index, warning.field)" class="tree_label tree-detail">{{warning.message}}</span>
@@ -3961,8 +4052,8 @@
 								        			</ul>
 									          	</li>
 									          	<li ng-if="workPackageTab.error.length > 0">
-									          		<input type="checkbox" checked="checked" id="c5" />
-								        			<label for="c5" class="tree_label error-label">Errors</label>
+									          		<input type="checkbox" id="c5{{$parent.$index}}{{$index}}" />
+								        			<label for="c5{{$parent.$index}}{{$index}}" class="tree_label error-label">Errors</label>
 								        			<ul>
 								        			    <li ng-repeat="error in workPackageTab.error track by $index">
 								        			    	<span ng-click="vm.selectErrorField(workPackageTab.type, workPackageTab.index, error.index, error.field)" class="tree_label tree-detail">{{error.message}}</span>

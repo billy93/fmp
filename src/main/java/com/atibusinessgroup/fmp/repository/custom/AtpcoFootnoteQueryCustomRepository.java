@@ -23,11 +23,11 @@ import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.SkipOperation;
 import org.springframework.data.mongodb.core.aggregation.SortOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import com.atibusinessgroup.fmp.constant.CollectionName;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFootnoteRecord2;
+import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteQueryDetails;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteQueryGroup;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.FootnoteQueryParam;
@@ -45,6 +45,8 @@ public class AtpcoFootnoteQueryCustomRepository {
 		
 		Date today = getCalendarDate(0);
 		Date twoYearsBefore = getCalendarDate(1);
+		
+		System.out.println(param.getCatNo());
 
 		List<AggregationOperation> aggregationOperations = new ArrayList<>();
 
@@ -253,8 +255,8 @@ public class AtpcoFootnoteQueryCustomRepository {
 				}
 			});
 			
-		} else if ((param.getSaleDateFrom() == null || param.getSaleDateTo() == null)
-				&& (param.getTravelDateFrom() != null || param.getTravelDateTo() != null || param.getCompletedDateFrom() != null || param.getTravelOpt() != null)) {
+		} else if (((param.getTravelDateFrom() == null || param.getTravelDateTo() == null)
+				&& (param.getTravelDateFrom() != null || param.getTravelDateTo() != null || param.getCompletedDateFrom() != null || param.getTravelOpt() != null))) {
 			//travel cat 014
 			
 			aggregationOperations.add(new AggregationOperation() {
@@ -968,7 +970,6 @@ public class AtpcoFootnoteQueryCustomRepository {
 		return new PageImpl<>(data, pageable, total);
 	}
 
-
 	public Page<AtpcoFootnoteQueryGroup> groupingFootnoteQueryExpired(FootnoteQueryParam param, Pageable pageable) {
 		
 		Date today = getCalendarDate(0);
@@ -1210,11 +1211,215 @@ public class AtpcoFootnoteQueryCustomRepository {
 		return new PageImpl<>(data, pageable, total);
 	}
 	
-	public List<AtpcoFootnoteRecord2> getListFtntRecord2(String recordId) {
-		List<AtpcoFootnoteRecord2> result = new ArrayList<>();
-		Query query = new Query();
-		query.addCriteria(Criteria.where("record_id").is(recordId));
-		result = mongoTemplate.find(query, AtpcoFootnoteRecord2.class);
+	public List<AtpcoFootnoteQueryDetails> getListFtntRecord2(String recordId, String catNo) {
+		
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
+		
+		aggregationOperations.add(new AggregationOperation() {
+			
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject query = new BasicDBObject();
+				query.append("record_id", recordId);
+				if(catNo != null) {
+					if(catNo.equalsIgnoreCase("comb")) {
+
+						query.append("cat_no", new BasicDBObject("$in", Arrays.asList("014","015")));
+					} else {
+
+						query.append("cat_no", catNo);
+					}
+				} else {
+					query.append("cat_no", new BasicDBObject("$exists", true));
+				}
+				BasicDBObject match = new BasicDBObject("$match", query);
+				return match;
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject unwind = new BasicDBObject("$unwind", "$data_table");
+				return unwind;
+			}
+		});
+		
+		if(catNo == null || catNo.equalsIgnoreCase("comb")) {
+			
+			aggregationOperations.add(new AggregationOperation() {
+				
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					BasicDBObject lookup = new BasicDBObject();
+					BasicDBObject query = new BasicDBObject();
+					
+					query.append("from", CollectionName.ATPCO_FOOTNOTE_RECORD_3_CAT_014);
+					query.append("localField", "data_table.tbl_no");
+					query.append("foreignField", "tbl_no");
+					query.append("as", "cat014");
+					lookup.append("$lookup", query);
+					
+					return lookup;
+				}
+			});
+			
+			aggregationOperations.add(new AggregationOperation() {
+				
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					BasicDBObject lookup = new BasicDBObject();
+					BasicDBObject query = new BasicDBObject();
+					
+					query.append("from", CollectionName.ATPCO_FOOTNOTE_RECORD_3_CAT_015);
+					query.append("localField", "data_table.tbl_no");
+					query.append("foreignField", "tbl_no");
+					query.append("as", "cat015");
+					lookup.append("$lookup", query);
+					
+					return lookup;
+				}
+			});
+			
+			
+			aggregationOperations.add(new AggregationOperation() {
+
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					BasicDBObject unwind = new BasicDBObject("$unwind", 
+							new BasicDBObject("path", "$cat014")
+							.append("preserveNullAndEmptyArrays", true)
+						);
+					return unwind;
+				}
+				
+			});
+			
+			aggregationOperations.add(new AggregationOperation() {
+
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					BasicDBObject unwind = new BasicDBObject("$unwind", 
+							new BasicDBObject("path", "$cat015")
+							.append("preserveNullAndEmptyArrays", true)
+						);
+					return unwind;
+				}
+				
+			});
+			
+			aggregationOperations.add(new AggregationOperation() {
+				
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					BasicDBObject match = new BasicDBObject();
+					BasicDBObject or = new BasicDBObject("$or", Arrays.asList( 
+							new BasicDBObject("cat014", new BasicDBObject("$ne", Arrays.asList())),
+							new BasicDBObject("cat015", new BasicDBObject("$ne", Arrays.asList()))
+							));
+					
+					match.append("$match", or);
+					return match;
+				}
+			});
+			
+		} 
+		
+		if (catNo != null && (catNo.equalsIgnoreCase("014") || catNo.equalsIgnoreCase("015")))  {
+
+			
+			aggregationOperations.add(new AggregationOperation() {
+				
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					BasicDBObject lookup = new BasicDBObject();
+					BasicDBObject query = new BasicDBObject();
+					
+					query.append("from", "atpco_footnote_record_3_cat_"+catNo);
+					query.append("localField", "data_table.tbl_no");
+					query.append("foreignField", "tbl_no");
+					query.append("as", "cat"+catNo);
+					lookup.append("$lookup", query);
+					
+					return lookup;
+				}
+			});
+			
+			
+			aggregationOperations.add(new AggregationOperation() {
+
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					BasicDBObject unwind = new BasicDBObject("$unwind", 
+							new BasicDBObject("path", "$cat"+catNo)
+							.append("preserveNullAndEmptyArrays", true)
+						);
+					return unwind;
+				}
+				
+			});
+			
+
+			aggregationOperations.add(new AggregationOperation() {
+				
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					BasicDBObject match = new BasicDBObject();
+					BasicDBObject or = new BasicDBObject(catNo, new BasicDBObject("$ne", Arrays.asList()));
+					
+					match.append("$match", or);
+					return match;
+				}
+			});
+			
+		
+			
+		}
+		
+		
+		aggregationOperations.add(new AggregationOperation() {
+
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject project = new BasicDBObject();
+				BasicDBObject query = new BasicDBObject();
+				
+				query.append("catNo", "$cat_no" );
+				query.append("seqNo", "$seq_no");
+				query.append("locType1", "$geo_spec_1_type");
+				query.append("loc1", "$geo_spec_1_value");
+				query.append("locType2", "$geo_spec_2_type");
+				query.append("loc2", "$geo_spec_2_value");
+				query.append("fareClass", "$fare_class");
+				query.append("owrt", "$ow_rt");
+				query.append("routingNo", "$rtg_no");
+				query.append("ftnt","$ftnt");
+				query.append("effDate", "$dates_eff");
+				query.append("discDate", "$dates_disc");
+				if (catNo != null && (catNo.equalsIgnoreCase("014") || catNo.equalsIgnoreCase("015")))  {
+					query.append("travelStart","$cat014.travel_dates_comm");
+					query.append("travelEnd", "$cat014.travel_dates_exp");
+					query.append("saleStart", "$cat015.sales_dates_earliest_tktg");
+					query.append("saleEnd","$cat015.sales_dates_latest_tktg");
+					query.append("travelComplete","$cat014.travel_dates_commence_complete");
+					query.append("travelCompInd", "$cat014.travel_appl");
+				}
+				
+		        
+				project.append("$project", query);
+				return project;
+			}
+			
+		});
+		
+		Aggregation aggregation = newAggregation(aggregationOperations);
+		
+		System.out.println(aggregation);
+		
+		List<AtpcoFootnoteQueryDetails> result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_FOOTNOTE_RECORD_2, AtpcoFootnoteQueryDetails.class).getMappedResults();
+		System.out.println("result : "+result.size());
 		return result;
 	}
 

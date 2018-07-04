@@ -9,7 +9,7 @@ import com.atibusinessgroup.fmp.domain.dto.FootnoteQuery;
 public class FootnoteQueryMapper {
 	
 	
-	public FootnoteQuery convertAndGroupFootnote(AtpcoFootnoteQueryGroup ftnt) {
+	public FootnoteQuery convertAndGroupFootnote(AtpcoFootnoteQueryGroup ftnt, String catNo) {
 
 		FootnoteQuery result = new FootnoteQuery();
 		result.setCxr(ftnt.getCxr());
@@ -18,6 +18,7 @@ public class FootnoteQueryMapper {
 		result.setTarCd(ftnt.getTarCd());
 		result.setFareAddon("Fare");
 		result.setFareAddonCount("0");
+		result.setCatNo(catNo);
 		
 		return result;
 	}

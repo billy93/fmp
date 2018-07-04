@@ -191,20 +191,26 @@ $(function(){
 		}
 	});
 	
-	$( ".th-fixed" ).each(function() {
-    	var _parents = $(this).parents('thead');
-    	var _th = _parents.find('th');
-		var _index = $(this).index();
-		var _tr = _parents.siblings('tbody').find('tr:first-child');
-		var _td = _tr.find('td');
-		var _scrollwidth = _parents.width() - _tr.width();
-		var _index2 = _td.eq(_index);
-		var _width = _index2.outerWidth();
-		if(_th.length == _td.length){
-			$(this).css('width', _width);
-		}
-			_th.last().css('width', _width+_scrollwidth)
-	});
+	
+//	$(document).on('click','#btn-afd-query',function(){
+//		if ($('.table-afd').length > 0){
+//			console.log('ada')
+//			$( ".th-fixed" ).each(function() {
+//		    	var _parents = $(this).closest('thead');
+//		    	var _th = _parents.find('th');
+//				var _index = $(this).index();
+//				var _tr = _parents.siblings('tbody').find('tr:first-child');
+//				var _td = _tr.find('td');
+//				var _scrollwidth = _parents.width() - _tr.width();
+//				var _index2 = _td.eq(_index);
+//				var _width = _index2.outerWidth();
+//				if(_th.length == _td.length){
+//					$(this).css('width', _width);
+//				}
+//					_th.last().css('width', _width+_scrollwidth)
+//			});
+//		}
+//	});
 	
 	
 	$(document).on('keydown','.number-only',function(e){
