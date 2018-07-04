@@ -1,5 +1,8 @@
 package com.atibusinessgroup.fmp.service.mapper;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -108,10 +111,28 @@ public class AfdQueryMapper {
 		
 		//Rule attributes
 		if (cat03s != null) {
+			List<Date> firsts = new ArrayList<>();
+			List<Date> lasts = new ArrayList<>();
 			for (CategoryObject cat03o:cat03s) {
 				AtpcoRecord3Cat03 cat03 = (AtpcoRecord3Cat03) cat03o.getCategory();
-				result.setFirstSeasonDate(DateUtil.convertSeasonDayMonthYearFormat(cat03.getDate_start_dd(), cat03.getDate_start_mm(), cat03.getDate_start_yy()));
-				result.setLastSeasonDate(DateUtil.convertSeasonDayMonthYearFormat(cat03.getDate_stop_dd(), cat03.getDate_stop_mm(), cat03.getDate_stop_yy()));
+				String first = DateUtil.convertSeasonDayMonthYearFormat(cat03.getDate_start_dd(), cat03.getDate_start_mm(), cat03.getDate_start_yy());
+				try {
+					Date dfirst = new SimpleDateFormat("ddMMMyyyy").parse(first);
+					firsts.add(dfirst);
+				} catch (Exception e) {
+				}
+				String last = DateUtil.convertSeasonDayMonthYearFormat(cat03.getDate_stop_dd(), cat03.getDate_stop_mm(), cat03.getDate_stop_yy());
+				try {
+					Date dlast = new SimpleDateFormat("ddMMMyyyy").parse(last);
+					lasts.add(dlast);
+				} catch (Exception e) {
+				}
+			}
+			if (firsts.size() > 0) {
+				result.setFirstSeasonDate(Collections.min(firsts));
+			}
+			if (lasts.size() > 0) {
+				result.setLastSeasonDate(Collections.max(lasts));
 			}
 		}
 		
@@ -172,13 +193,19 @@ public class AfdQueryMapper {
 			}
 		}
 		
-		if (result.getTourCode() != null && cat27s != null) {
+		if (result.getTourCode() == null && cat27s != null) {
 			for (CategoryObject cat27o:cat27s) {
 				AtpcoRecord3Cat27 cat27 = (AtpcoRecord3Cat27) cat27o.getCategory();
 				if (cat27.getText_table_no_996() != null && !cat27.getText_table_no_996().trim().isEmpty()) {
 					TextTable textTable996 = atpcoRecord3CategoryCustomRepository.findRecord3TextTable(cat27.getText_table_no_996().trim());
 					String textTable = AtpcoDataConverterUtil.convertTextTableToText(textTable996);
-					result.setTourCode(textTable);
+					for (String word:textTable.split("\\W")) {
+						word = word.replaceAll("[\n\r\t]", "").trim();
+						if (word.startsWith("RZ")) {
+							result.setTourCode(word);
+							break;
+						}
+					}
 				}
 			}
 		}

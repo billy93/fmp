@@ -279,8 +279,8 @@
 						<ul class="dropdown-menu custom" role="menu">
 						    <li>
 						    	<a ng-click="vm.save(true)">Save and Validate</a>
-						    	<a ng-click="vm.createBatch()" ng-show="vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.workPackage.status != 'READY_TO_RELEASE'" ng-disabled="vm.workPackage.status == 'READY_TO_RELEASE'">Create Batches</a>
-						    	<a ng-click="vm.reviseBatch()" ng-show="vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.workPackage.status == 'READY_TO_RELEASE'" ng-disabled="vm.workPackage.status != 'READY_TO_RELEASE'">Revise Batches</a>
+						    	<a ng-click="vm.createBatch()" ng-show="vm.workPackage.type == 'REGULAR' && vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.workPackage.status != 'READY_TO_RELEASE'" ng-disabled="vm.workPackage.status == 'READY_TO_RELEASE'">Create Batches</a>
+						    	<a ng-click="vm.reviseBatch()" ng-show="vm.workPackage.type == 'REGULAR' && vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.workPackage.status == 'READY_TO_RELEASE'" ng-disabled="vm.workPackage.status != 'READY_TO_RELEASE'">Revise Batches</a>
 						    </li>
 						</ul>
 					</div>	
@@ -1819,6 +1819,7 @@
 						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'loc1', $event)" ng-class="{highlighted:fare.field['loc1'], changed : vm.diff[fare.id].indexOf('loc1') > -1}">						                      
 						                     		 <span class="input-group">
 														<input type="text" class="form-control" 
+															uppercase
 															name="discountLoc1{{$parent.$index}}{{$index}}" 
 								                    		ng-model="fare.loc1"
 								                    		ng-disabled="!vm.isEditable('discountLoc1')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
@@ -1852,6 +1853,7 @@
 														<input type="text" class="form-control" 
 															name="discountLoc2{{$parent.$index}}{{$index}}" 
 								                    		ng-model="fare.loc2"
+								                    		uppercase
 								                    		ng-disabled="!vm.isEditable('discountLoc2')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 								                    		style="min-width:60px"
 								                    		ng-class="{'must-fill': editForm.editFormDiscount.discountLoc2{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
@@ -3622,6 +3624,7 @@
 											             	<span class="input-group">
 																	<input type="text" class="form-control" name="waiverOri{{$parent.$index}}{{$index}}" id="field_carrier"
 											                    		ng-model="fare.waiverOri"
+											                    		uppercase
 											                    		ng-disabled="!vm.isEditable('waiverOri')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 											                    		name="waiverOri{{$parent.$index}}{{$index}}"
 											                    		style="min-width:60px"
@@ -3637,6 +3640,7 @@
 											             	<span class="input-group">
 																	<input type="text" class="form-control" name="waiverDest{{$parent.$index}}{{$index}}" id="field_carrier"
 											                    		ng-model="fare.waiverDest"
+											                    		uppercase
 											                    		name="waiverDest{{$parent.$index}}{{$index}}"
 											                    		ng-disabled="!vm.isEditable('waiverDest')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 											                    		style="min-width:60px"
@@ -3731,6 +3735,7 @@
 											                    		ng-model="fare.waiverCurrency"
 											                    		ng-disabled="!vm.isEditable('waiverCurrency')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 											                    		style="min-width:60px"
+											                    		uppercase
 											                    		ng-class="{'must-fill': !editForm.editFormWaiver.waiverCurrency{{$parent.$index}}{{$index}}.$valid}"												         		
 															            ng-required="vm.isRequired('waiverCurrency')"
 															            ng-focus="currency[$parent.$index][$index]=true" ng-blur="currency[$parent.$index][$index]=false; vm.checkCurrency(fare, 'currency');"/>

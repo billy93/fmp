@@ -5,6 +5,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.newA
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,7 @@ import com.atibusinessgroup.fmp.domain.dto.AtpcoFareAfdQueryWithRecords;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.CategoryObject;
+import com.atibusinessgroup.fmp.domain.dto.DataTable;
 import com.atibusinessgroup.fmp.service.AtpcoRecordService;
 import com.atibusinessgroup.fmp.service.mapper.AfdQueryMapper;
 import com.atibusinessgroup.fmp.service.util.DateUtil;
@@ -50,22 +52,48 @@ import com.mongodb.DBObject;
 public class AtpcoFareCustomRepository {	
 	
 	private final AfdQueryMapper afdQueryMapper;
-	
 	private final AtpcoRecordService atpcoRecordService;
-	
 	private final MongoTemplate mongoTemplate;
+	
+	private Date minimumDate = null, maximumDate = null;
 
 	public AtpcoFareCustomRepository(AfdQueryMapper afdQueryMapper, AtpcoRecordService atpcoRecordService, MongoTemplate mongoTemplate) {
 		this.afdQueryMapper = afdQueryMapper;
 		this.atpcoRecordService = atpcoRecordService;
 		this.mongoTemplate = mongoTemplate;
+		
+		minimumDate = DateUtil.getMinOrMaxDate("Min");
+		maximumDate = DateUtil.getMinOrMaxDate("Max");
 	}
 	
-	public AfdQueryWrapper findAtpcoFareAfdQueryWithRecords(AfdQueryParam param, String[] ruleCategories, Pageable pageable) {
+	public AfdQueryWrapper findAtpcoFareAfdQueryWithRecords(AfdQueryParam param, Pageable pageable) {
 		AfdQueryWrapper result = new AfdQueryWrapper();
 		
 		List<AfdQuery> afdQueries = new ArrayList<>();
 		
+		LinkedHashMap<String, String> fareCategories = new LinkedHashMap<>();
+		LinkedHashMap<String, String> fareFootnotes = new LinkedHashMap<>();
+		LinkedHashMap<String, String> footnotes = new LinkedHashMap<>();
+    	fareCategories.put("003", CategoryName.CAT_003);
+    	fareCategories.put("005", CategoryName.CAT_005);
+    	fareCategories.put("006", CategoryName.CAT_006);
+    	fareCategories.put("007", CategoryName.CAT_007);
+    	fareCategories.put("014", CategoryName.CAT_014);
+    	fareCategories.put("015", CategoryName.CAT_015);
+    	fareCategories.put("027", CategoryName.CAT_027);
+    	fareCategories.put("035", CategoryName.CAT_035);
+    	fareCategories.put("050", CategoryName.CAT_050);
+    	fareFootnotes.put("014", CategoryName.CAT_014);
+    	fareFootnotes.put("015", CategoryName.CAT_015);
+    	footnotes.put("014", CategoryName.CAT_014);
+    	footnotes.put("015", CategoryName.CAT_015);
+    	
+    	List<String> ruleCategories = new ArrayList<>();
+    	
+    	for (Map.Entry<String, String> entry:fareCategories.entrySet()) {
+    		ruleCategories.add(entry.getKey());
+    	}
+    	
 		List<AggregationOperation> aggregationOperations = new ArrayList<>();
 		
 		aggregationOperations.add(new AggregationOperation() {
@@ -194,24 +222,21 @@ public class AtpcoFareCustomRepository {
 				
 				Date paramFrom = DateUtil.convertObjectToDate(param.getEffectiveDateFrom());
 				Date paramTo = DateUtil.convertObjectToDate(param.getEffectiveDateTo());
-
+			
+				if (paramFrom == null) {
+					paramFrom = minimumDate;
+				}
+				
+				if (paramTo == null) {
+					paramTo = maximumDate;
+				}
+				
 				if (param.getEffectiveDateOption() != null && param.getEffectiveDateOption().contentEquals("A")) {
-					if (paramFrom != null && paramTo != null) {
-						BasicDBObject effective = new BasicDBObject();
-						effective.append("$and", Arrays.asList(new BasicDBObject("tar_eff_date", new BasicDBObject("$lte", paramFrom)), 
-								new BasicDBObject("dates_discontinue", new BasicDBObject("$gte", paramTo))));
-						queries.add(effective);
-					} else {
-						if (paramFrom == null && paramTo != null) {
-							BasicDBObject effective = new BasicDBObject();
-							effective.append("dates_discontinue", new BasicDBObject("$gte", paramTo));
-							queries.add(effective);
-						} else if (paramFrom != null && paramTo == null) {
-							BasicDBObject effective = new BasicDBObject();
-							effective.append("tar_eff_date", new BasicDBObject("$lte", paramFrom));
-							queries.add(effective);
-						}
-					}
+					BasicDBObject effective = new BasicDBObject();
+					effective.append("$and", 
+							Arrays.asList(new BasicDBObject("$or", Arrays.asList(new BasicDBObject("tar_eff_date", "indef"), new BasicDBObject("tar_eff_date", new BasicDBObject("$lte", paramTo)))), 
+									new BasicDBObject("$or", Arrays.asList(new BasicDBObject("dates_discontinue", "indef"), new BasicDBObject("dates_discontinue", new BasicDBObject("$gte", paramFrom))))));
+					queries.add(effective);
 				} else if (param.getEffectiveDateOption() != null && param.getEffectiveDateOption().contentEquals("E")) {
 					BasicDBObject effective = new BasicDBObject();
 					effective.append("$and", Arrays.asList(new BasicDBObject("tar_eff_date", new BasicDBObject("$eq", paramFrom)), 
@@ -305,23 +330,6 @@ public class AtpcoFareCustomRepository {
 			}
 		});
 		
-		LinkedHashMap<String, String> fareCategories = new LinkedHashMap<>();
-		LinkedHashMap<String, String> fareFootnotes = new LinkedHashMap<>();
-		LinkedHashMap<String, String> footnotes = new LinkedHashMap<>();
-    	fareCategories.put("003", CategoryName.CAT_003);
-    	fareCategories.put("005", CategoryName.CAT_005);
-    	fareCategories.put("006", CategoryName.CAT_006);
-    	fareCategories.put("007", CategoryName.CAT_007);
-    	fareCategories.put("014", CategoryName.CAT_014);
-    	fareCategories.put("015", CategoryName.CAT_015);
-    	fareCategories.put("027", CategoryName.CAT_027);
-    	fareCategories.put("035", CategoryName.CAT_035);
-    	fareCategories.put("050", CategoryName.CAT_050);
-    	fareFootnotes.put("014", CategoryName.CAT_014);
-    	fareFootnotes.put("015", CategoryName.CAT_015);
-    	footnotes.put("014", CategoryName.CAT_014);
-    	footnotes.put("015", CategoryName.CAT_015);
-    	
     	int index = 0, currentAggregationLoop = 0, skipSize = 0, limitSize = pageable.getPageSize();
     	boolean isLastPage = false, isCompleted = false;
     	
@@ -402,7 +410,16 @@ public class AtpcoFareCustomRepository {
                     }	
             		
             		if (matchedRecord2 != null && matchedRecord2.getDataTables() != null && matchedRecord2.getDataTables().size() > 0) {
-                		List<CategoryObject> rules = atpcoRecordService.getAndConvertCategoryObjectDataTable(entry.getKey(), matchedRecord2.getDataTables(), "Rule");
+            			List<DataTable> rec2DataTables = matchedRecord2.getDataTables();
+            			
+            			for (Iterator<DataTable> iterator = rec2DataTables.iterator(); iterator.hasNext();) {
+            				DataTable dt = iterator.next();
+            				if (!dt.getCatNo().contentEquals(entry.getKey())) {
+            					iterator.remove();
+            				}
+            			}
+            			
+                		List<CategoryObject> rules = atpcoRecordService.getAndConvertCategoryObjectDataTable(entry.getKey(), rec2DataTables, "Rule");
                 		
                 		switch (entry.getKey()) {
     	            		case "003": cat03s = rules;
@@ -474,7 +491,7 @@ public class AtpcoFareCustomRepository {
             			atpcoRecordService.compareValueWithParamString(afdQuery.getMinStay(), param.getMinStay()) &&
             			atpcoRecordService.compareValueWithParamString(afdQuery.getMaxStay(), param.getMaxStay()) &&
             			atpcoRecordService.compareValueWithParamString(afdQuery.getWpId(), param.getWoId()) &&
-            			atpcoRecordService.compareValueWithParamString(afdQuery.getTourCode(), param.getTourCode()) &&
+            			atpcoRecordService.compareValueWithParamTourCode(afdQuery.getTourCode(), param.getTourCode()) &&
             			atpcoRecordService.compareValueWithParamDate(afdQuery.getSaleStartDate(), afdQuery.getSaleEndDate(), param.getSaleDateFrom(), 
             					param.getSaleDateTo(), param.getSaleDateOption()) &&
             			atpcoRecordService.compareValueWithParamDate(afdQuery.getTravelStartDate(), afdQuery.getTravelEndDate(), param.getTravelDateFrom(), 

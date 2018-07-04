@@ -32,7 +32,8 @@ public class DateUtil {
 
 		try {
 			if (year != null && !year.isEmpty()) {
-				int yearInt = Integer.parseInt(year);
+				String currentYear = (Calendar.getInstance().get(Calendar.YEAR) + "").substring(0, 2);
+				int yearInt = Integer.parseInt(currentYear + year);
 				calendar.set(Calendar.YEAR, yearInt);
 				result += new SimpleDateFormat("yyyy").format(calendar.getTime());
 			} else {
@@ -45,8 +46,6 @@ public class DateUtil {
 	}
 	
 	public static boolean firstDateIsLessThanEqualSecondDate(Date firstDate, Date secondDate) {
-		System.out.println(firstDate + " " + secondDate);
-		
 		if (firstDate == null || secondDate == null) {
 			return true;
 		}
@@ -72,6 +71,60 @@ public class DateUtil {
 			calendar.set(Calendar.SECOND, 0);
 			calendar.set(Calendar.MILLISECOND, 0);
 			calendar.setTime(paramDate);
+			
+			result = calendar.getTime();
+		} catch (Exception e) {
+		}
+		
+		if (result == null) {
+			try {
+				String dateString = date.toString();
+				if (dateString.contains("T") && dateString.contains("+")) {
+					String tempDate = dateString.substring(0, 10);
+					result = new SimpleDateFormat("yyyy-MM-dd").parse(tempDate);
+				}
+			} catch (Exception e) {
+			}
+		}
+		
+		if (result == null) {
+			try {
+				String dateString = date.toString();
+				result = new SimpleDateFormat("ddMMMyyyy").parse(dateString);
+			} catch (Exception e) {
+			}
+		}
+		
+		return result;
+	}
+	
+	public static Date getMinOrMaxDate(String type) {
+		if (type != null && type.contentEquals("Min")) {
+			return new Date(Long.MIN_VALUE);
+		} else if (type != null && type.contentEquals("Max")) {
+			return new Date(Long.MAX_VALUE);
+		} else {
+			return null;
+		}
+	}
+		
+	public static Date convertObjectToDateWithParam(Object date, int day, int month, int year) {
+		Date result = null;
+		
+		try {
+			Date paramDate = (Date) date;
+			
+			Calendar calendar = Calendar.getInstance();
+			calendar.set(Calendar.HOUR_OF_DAY, 0);
+			calendar.set(Calendar.MINUTE, 0);
+			calendar.set(Calendar.SECOND, 0);
+			calendar.set(Calendar.MILLISECOND, 0);
+			calendar.setTime(paramDate);
+			
+			
+			calendar.add(Calendar.DATE, day);
+			calendar.add(Calendar.MONTH, day);
+			calendar.add(Calendar.YEAR, day);
 			
 			result = calendar.getTime();
 		} catch (Exception e) {

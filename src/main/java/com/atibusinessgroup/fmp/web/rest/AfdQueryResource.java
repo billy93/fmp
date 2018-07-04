@@ -1,6 +1,7 @@
 package com.atibusinessgroup.fmp.web.rest;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,8 +48,6 @@ public class AfdQueryResource {
 
 	private final LinkedHashMap<String, String> categories = new LinkedHashMap<>();
 	private final LinkedHashMap<String, String> footnotes = new LinkedHashMap<>();
-	private final String[] ruleCategories = new String[] {"003", "005", "006", "007", "014", "015"};
-	
 	private final Logger log = LoggerFactory.getLogger(AfdQueryResource.class);
 
 	private final AtpcoRecord0Repository atpcoRecord0Repository;
@@ -121,7 +120,7 @@ public class AfdQueryResource {
             
             //ATPCO
             if (param.getSource() != null && param.getSource().contentEquals("A")) {
-            	AfdQueryWrapper atpco = atpcoFareCustomRepository.findAtpcoFareAfdQueryWithRecords(param, ruleCategories, pageable);
+            	AfdQueryWrapper atpco = atpcoFareCustomRepository.findAtpcoFareAfdQueryWithRecords(param, pageable);
                 afdQueries.addAll(atpco.getAfdQueries());
                 isLastPage = atpco.isLastPage();
                 lastIndex = atpco.getLastIndex();
@@ -253,7 +252,41 @@ public class AfdQueryResource {
         		cat.getCatAttributes().addAll(ctfa.getAttributes());
         	}
         	
+        	LinkedHashMap<String, List<DataTable>> unmatchedCatDataTables = new LinkedHashMap<>();
+        	
         	if (matchedRecord2 != null && matchedRecord2.getDataTables() != null && matchedRecord2.getDataTables().size() > 0) {
+        		List<DataTable> rec2DataTables = matchedRecord2.getDataTables();
+    			
+        		System.out.println();
+    			for (Iterator<DataTable> iterator = rec2DataTables.iterator(); iterator.hasNext();) {
+    				DataTable dt = iterator.next();
+    				System.out.println(dt.toString());
+    				if (!dt.getCatNo().contentEquals(entry.getKey())) {
+    					for (Map.Entry<String, List<DataTable>> ucdt:unmatchedCatDataTables.entrySet()) {
+    						if (ucdt.getKey().contentEquals(entry.getKey())) {
+    							if (ucdt.getValue() == null) {
+    								ucdt.setValue(new ArrayList<DataTable>());
+    							}
+    							
+    							ucdt.getValue().add(dt);
+    							break;
+    						}
+    					}
+    					iterator.remove();
+    				}
+    			}
+    			
+            	for (Map.Entry<String, List<DataTable>> ucdt:unmatchedCatDataTables.entrySet()) {
+            		System.out.println();
+            		System.out.println("unmatched");
+            		System.out.println(ucdt.getKey());
+            		for (DataTable dt:ucdt.getValue()) {
+            			System.out.println(dt.toString());
+            		}
+            		System.out.println();
+            		System.out.println();
+            	}
+    			
         		type += CategoryType.RULE;
         		textFormat += atpcoRecordService.generateCategoryTextHeader(CategoryType.RULE, afdQuery.getTariffNo(), afdQuery.getTariffCode(), afdQuery.getRuleNo(), matchedRecord2.getSequenceNo(), matchedRecord2.getEffectiveDateObject());
         		CategoryTextFormatAndAttribute ctfa = atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), matchedRecord2.getDataTables(), CategoryType.RULE);

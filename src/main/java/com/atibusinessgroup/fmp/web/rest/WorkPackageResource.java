@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import com.atibusinessgroup.fmp.service.util.CsvUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
@@ -150,7 +151,7 @@ public class WorkPackageResource {
     private final TariffNumberRepository tariffNumberRepository;
     private final WorkPackageFilterRepository packagefilterRepository;
     private final AtpcoFareRepository atpcoFareRepository;
-    
+
     public WorkPackageResource(WorkPackageService workPackageService, WorkPackageFareService workPackageFareService, TargetDistributionService targetDistributionService, BusinessAreaService businessAreaService, ReviewLevelService reviewLevelService, UserService userService, UserRepository userRepository, WorkPackageHistoryService workPackageHistoryService,
     		ContractFMPRepository contractFMPRepository, FormRepository formRepository, WorkPackageHistoryDataRepository workPackageHistoryDataRepository,
     		WorkPackageFareHistoryDataRepository workPackageFareHistoryDataRepository, ContractFareFMPRepository contractFareFMPRepository, CounterRepository counterRepository, PriorityRepository priorityRepository, MailService mailService, TariffNumberRepository tariffNumberRepository, WorkPackageFilterRepository packagefilterRepository, AtpcoFareRepository atpcoFareRepository) {
@@ -161,7 +162,7 @@ public class WorkPackageResource {
         this.reviewLevelService = reviewLevelService;
         this.userService = userService;
         this.userRepository = userRepository;
-        this.workPackageHistoryService = workPackageHistoryService;  
+        this.workPackageHistoryService = workPackageHistoryService;
         this.contractFMPRepository = contractFMPRepository;
         this.formRepository = formRepository;
         this.workPackageHistoryDataRepository = workPackageHistoryDataRepository;
@@ -189,11 +190,11 @@ public class WorkPackageResource {
         if (workPackage.getId() != null) {
             throw new BadRequestAlertException("A new workPackage cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        
-        Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());   
-        
+
+        Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
+
         if(user.get().getReviewLevels().size()==1) {
-        	workPackage.setReviewLevel(user.get().getReviewLevels().get(0));	
+        	workPackage.setReviewLevel(user.get().getReviewLevels().get(0));
         }else {
         	if(user.get().getReviewLevels().indexOf("HO") > -1){
         		workPackage.setReviewLevel("HO");
@@ -202,44 +203,44 @@ public class WorkPackageResource {
             		workPackage.setReviewLevel("LSO");
             	}
         	}
-        	
+
         }
-        
-        
+
+
         if(workPackage.isSpecifiedFares()) {
         	workPackage.setFilingDetails(true);
         }
         else {
-        	
+
         }
         if(workPackage.isAddon()) {
-        	
+
         }
         else {
         	workPackage.getAddonFareSheet().clear();
         }
         if(workPackage.isMarketFares()) {
-        	
+
         } else {
         	workPackage.getMarketFareSheet().clear();
         }
         if(workPackage.isDiscount()) {
-        	
+
         } else {
         	workPackage.getDiscountFareSheet().clear();
         }
-        
+
         workPackage.setStatus(Status.NEW);
         workPackage.setQueuedDate(Instant.now());
-        
+
         WorkPackage result = workPackageService.save(workPackage);
-        
+
         WorkPackageHistory history = new WorkPackageHistory();
         history.setWorkPackage(new ObjectId(result.getId()));
         history.setType("CREATE");
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
-        
+
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -248,7 +249,7 @@ public class WorkPackageResource {
     static long zonedDateTimeDifference(ZonedDateTime d1, ZonedDateTime d2, ChronoUnit unit){
         return unit.between(d1, d2);
     }
-    
+
     /**
      * POST  /work-packages/discontinue : Discontinue a workPackage.
      *
@@ -260,7 +261,7 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<WorkPackage> discontinueWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
         log.debug("REST request to discontinue WorkPackage : {}", workPackage);
-        
+
         workPackage = workPackageService.findOne(workPackage.getId());
         List<WorkPackageFareSheet> sheets = workPackage.getMarketFareSheet();
         for(WorkPackageFareSheet sheet : sheets) {
@@ -270,23 +271,23 @@ public class WorkPackageResource {
 //        				fare.setSaleStart(ZonedDateTime.now());
 //        			}
 //        		}
-        		
+
         		if(fare.getSaleEnd() != null) {
         			if(zonedDateTimeDifference(ZonedDateTime.now(), fare.getSaleEnd(), ChronoUnit.DAYS) > 0) {
         				fare.setSaleEnd(ZonedDateTime.now());
         			}
-        		}        		
-        	}        			
+        		}
+        	}
         }
         workPackage.setStatus(Status.DISCONTINUED);
         WorkPackage result = workPackageService.save(workPackage);
-        
+
         WorkPackageHistory history = new WorkPackageHistory();
         history.setWorkPackage(new ObjectId(result.getId()));
         history.setType("DISCONTINUED");
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
-        
+
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -303,22 +304,22 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<WorkPackage> reuseWorkPackage(@RequestBody WorkPackage wp) throws URISyntaxException {
         log.debug("REST request to save reuse WorkPackage : {}", wp);
-        
+
         WorkPackageHistory history = new WorkPackageHistory();
         history.setWorkPackage(new ObjectId(wp.getId()));
         history.setType("REUSE");
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
-        
+
         wp.setReuseFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
-        
+
         User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
         wp.setReviewLevel(user.getReviewLevels().get(0));
         wp.setComment(null);
         wp.setInterofficeComment(null);
-        wp.setFilingInstructionData(null);     
+        wp.setFilingInstructionData(null);
         wp.setCreatedBy(null);
         wp.setCreatedDate(null);
         wp.setLocked(false);
@@ -360,18 +361,18 @@ public class WorkPackageResource {
         		fare.setStatus("PENDING");
         	}
         }
-        
+
         wp.setStatus(Status.NEW);
         wp.setQueuedDate(Instant.now());
-                
+
         WorkPackage result = workPackageService.save(wp);
-        
-        
+
+
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
-    
+
     /**
      * POST  /work-packages/replace : Reuse a new workPackage.
      *
@@ -383,29 +384,29 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<WorkPackage> replaceWorkPackage(@RequestBody WorkPackage wp) throws URISyntaxException {
         log.debug("REST request to save reuse WorkPackage : {}", wp);
-        
+
         WorkPackageHistory history = new WorkPackageHistory();
         history.setWorkPackage(new ObjectId(wp.getId()));
         history.setType("REPLACE");
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
-               
+
         wp.setReplaceFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
-        
+
         User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
         wp.setReviewLevel(user.getReviewLevels().get(0));
         wp.setCreatedBy(null);
         wp.setCreatedDate(null);
         wp.setLastModifiedBy(null);
         wp.setLastModifiedDate(null);
-        wp.setPriority(null);        
+        wp.setPriority(null);
     	wp.setLocked(false);
     	wp.setLockedBy(null);
     	wp.setLockedSince(null);
 
-        
+
 //        if(!workPackage.getReuseReplaceConfig().isAttachment()) {
 //        	wp.setAttachment(false);
 //        	wp.getAttachmentData().clear();
@@ -435,18 +436,18 @@ public class WorkPackageResource {
         		fare.setStatus("PENDING");
         	}
         }
-        
+
         wp.setStatus(Status.NEW);
         wp.setQueuedDate(Instant.now());
-        
-        WorkPackage result = workPackageService.save(wp);        
-        
-        
+
+        WorkPackage result = workPackageService.save(wp);
+
+
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
-    
+
 
     /**
      * This method for the type of data in the cell, extracts the data and
@@ -481,26 +482,26 @@ public class WorkPackageResource {
         }
         return strCellValue;
     }
-    
-    
+
+
     static class ImportHeader{
     	int index;
     	String name;
     }
-    
+
     public LinkedHashMap<ImportHeader, List<Object>> importExcel(byte[] file) throws IOException{
     	InputStream input = new ByteArrayInputStream(file);
-		
+
 		Workbook workbook = new XSSFWorkbook(input);
-		Sheet datatypeSheet = workbook.getSheetAt(0);	
-		
+		Sheet datatypeSheet = workbook.getSheetAt(0);
+
 		Iterator<Row> rowIterator = datatypeSheet.iterator();
 		Row row = rowIterator.next();
 
 		LinkedHashMap<ImportHeader, List<Object>> map = new LinkedHashMap<>();
 		Map<Integer, ImportHeader> importHeaderList = new HashMap<>();
 		int rowIndex = 0;
-		
+
         while (rowIterator.hasNext()){
             if(rowIndex == 0) {
         		log.debug("ROW INDEX : {}", rowIndex);
@@ -508,39 +509,39 @@ public class WorkPackageResource {
 	            for (Iterator<Cell> iter = row.cellIterator(); iter.hasNext(); ) {
 	            	log.debug("ROW HEADER INDEX : {}", headerIndex);
 				    Cell element = iter.next();
-				    
+
 				    ImportHeader importHeader = new ImportHeader();
 				    importHeader.index = headerIndex;
 				    importHeader.name = element.getStringCellValue();
 	            	log.debug("ROW HEADER NAME : {}", importHeader.name);
 				    importHeaderList.put(headerIndex, importHeader);
 				    map.put(importHeader, new ArrayList<>());
-				    
+
 				    headerIndex++;
 				}
         	}
         	else {
         		row = rowIterator.next();
-            	
+
         		int cellIndex = 0;
-        		for (Iterator<Cell> iter = row.cellIterator(); iter.hasNext(); ) {	 
+        		for (Iterator<Cell> iter = row.cellIterator(); iter.hasNext(); ) {
         			Cell element = iter.next();
         			List<Object> value = map.get(importHeaderList.get(cellIndex));
     				value.add(getCellValueAsString(element));
         			cellIndex++;
-        		}        		
+        		}
         	}
             rowIndex++;
         }
-        
+
     	return map;
     }
-    
+
     public Object getElementByIndex(LinkedHashMap map,int index){
         return map.get( (map.keySet().toArray())[ index ] );
     }
-    
-    
+
+
     public static ZonedDateTime toZonedDateTime(Date utilDate) {
         if (utilDate == null) {
           return null;
@@ -548,7 +549,7 @@ public class WorkPackageResource {
         final ZoneId systemDefault = ZoneId.systemDefault();
         return ZonedDateTime.ofInstant(utilDate.toInstant(), systemDefault);
       }
-    
+
     /**
      * POST  /work-packages/import-fares : Import a new fares workPackage.
      *
@@ -565,18 +566,18 @@ public class WorkPackageResource {
             ImportFares importData = workPackage.getImportFares();
             int importIndex = workPackage.getImportIndex();
             LinkedHashMap<ImportHeader, List<Object>> mapValue = importExcel(importData.getFile());
-            
+
             List<Object> rows = (List<Object>) getElementByIndex(mapValue, 0);
             List<WorkPackageFare> fares = new ArrayList<>();
             for(int i=0;i<rows.size();i++) {
             	fares.add(new WorkPackageFare());
             }
-            
+
             for (Map.Entry<ImportHeader, List<Object>> entry : mapValue.entrySet()) {
                 ImportHeader key = entry.getKey();
             	String header = key.name;
                 List<Object> value = entry.getValue();
-                
+
                 int i=0;
                 TariffNumber tfNumber = new TariffNumber();
                 for(Object o : value) {
@@ -594,12 +595,12 @@ public class WorkPackageResource {
 	                		if(fares.get(i).getTariffNumber() == null) {
 	                			if(String.valueOf(o) != null) {
 	                				fares.get(i).setTariffNumber(tariffNumberRepository.findOneByTarNo(String.valueOf(o)));
-	                			}                			
+	                			}
 	                		}
 	                		else {
 	                		}
                 		}catch(Exception e) {
-                			
+
                 		}
                 	}
                 	else if(header.contentEquals("Tar Cd")) {
@@ -608,12 +609,12 @@ public class WorkPackageResource {
 	                		if(fares.get(i).getTariffNumber() == null) {
 	                			if(String.valueOf(o) != null) {
 	                				fares.get(i).setTariffNumber(tariffNumberRepository.findOneByTarCd(String.valueOf(o)));
-	                			}                			
+	                			}
 	                		}
 	                		else {
 	                		}
                 		}catch(Exception e) {
-                			
+
                 		}
                 	}
                 	else if(header.contentEquals("Global")) {
@@ -622,12 +623,12 @@ public class WorkPackageResource {
 	                		if(fares.get(i).getTariffNumber() == null) {
 	                			if(String.valueOf(o) != null) {
 	                				fares.get(i).setTariffNumber(tariffNumberRepository.findOneByGlobal(String.valueOf(o)));
-	                			}                			
+	                			}
 	                		}
 	                		else {
 	                		}
                 		}catch(Exception e) {
-                			
+
                 		}
                 	}
                 	else if(header.contentEquals("Origin")) {
@@ -668,25 +669,25 @@ public class WorkPackageResource {
                 	}
                 	else if(header.contentEquals("Travel Start")) {
                 		if(o != null && !String.valueOf(o).contentEquals("")) {
-	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));
 	                		fares.get(i).setTravelStart(toZonedDateTime(date1));
                 		}
                 	}
                 	else if(header.contentEquals("Travel End")) {
                 		if(o != null && !String.valueOf(o).contentEquals("")) {
-	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));
 	                		fares.get(i).setTravelEnd(toZonedDateTime(date1));
                 		}
                 	}
                 	else if(header.contentEquals("Sales Start")) {
                 		if(o != null && !String.valueOf(o).contentEquals("")) {
-	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));
 	                		fares.get(i).setSaleStart(toZonedDateTime(date1));
                 		}
                 	}
                 	else if(header.contentEquals("Sales End")) {
                 		if(o != null && !String.valueOf(o).contentEquals("")) {
-	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));
 	                		fares.get(i).setSaleEnd(toZonedDateTime(date1));
                 		}
                 	}
@@ -695,7 +696,7 @@ public class WorkPackageResource {
                 	}
                 	else if(header.contentEquals("Travel Complete")) {
                 		if(o != null && !String.valueOf(o).contentEquals("")) {
-	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));
 	                		fares.get(i).setTravelComplete(toZonedDateTime(date1));
                 		}
                 	}
@@ -718,7 +719,7 @@ public class WorkPackageResource {
 
         return getWorkPackage(workPackage.getId());
     }
-    
+
     /**
      * POST  /work-packages/import-fares-addon : Import a new fares addon workPackage.
      *
@@ -735,18 +736,18 @@ public class WorkPackageResource {
             ImportFares importData = workPackage.getImportFares();
             int importIndex = workPackage.getImportIndex();
             LinkedHashMap<ImportHeader, List<Object>> mapValue = importExcel(importData.getFile());
-            
+
             List<Object> rows = (List<Object>) getElementByIndex(mapValue, 0);
             List<WorkPackageFare> fares = new ArrayList<>();
             for(int i=0;i<rows.size();i++) {
             	fares.add(new WorkPackageFare());
             }
-            
+
             for (Map.Entry<ImportHeader, List<Object>> entry : mapValue.entrySet()) {
                 ImportHeader key = entry.getKey();
             	String header = key.name;
                 List<Object> value = entry.getValue();
-                
+
                 int i=0;
                 TariffNumber tfNumber = new TariffNumber();
                 for(Object o : value) {
@@ -764,12 +765,12 @@ public class WorkPackageResource {
 	                		if(fares.get(i).getTariffNumber() == null) {
 	                			if(String.valueOf(o) != null) {
 	                				fares.get(i).setTariffNumber(tariffNumberRepository.findOneByTarNo(String.valueOf(o)));
-	                			}                			
+	                			}
 	                		}
 	                		else {
 	                		}
                 		}catch(Exception e) {
-                			
+
                 		}
                 	}
                 	else if(header.contentEquals("Tar Cd")) {
@@ -778,12 +779,12 @@ public class WorkPackageResource {
 	                		if(fares.get(i).getTariffNumber() == null) {
 	                			if(String.valueOf(o) != null) {
 	                				fares.get(i).setTariffNumber(tariffNumberRepository.findOneByTarCd(String.valueOf(o)));
-	                			}                			
+	                			}
 	                		}
 	                		else {
 	                		}
                 		}catch(Exception e) {
-                			
+
                 		}
                 	}
                 	else if(header.contentEquals("Global")) {
@@ -792,12 +793,12 @@ public class WorkPackageResource {
 	                		if(fares.get(i).getTariffNumber() == null) {
 	                			if(String.valueOf(o) != null) {
 	                				fares.get(i).setTariffNumber(tariffNumberRepository.findOneByGlobal(String.valueOf(o)));
-	                			}                			
+	                			}
 	                		}
 	                		else {
 	                		}
                 		}catch(Exception e) {
-                			
+
                 		}
                 	}
                 	else if(header.contentEquals("Origin")) {
@@ -832,25 +833,25 @@ public class WorkPackageResource {
                 	}
                 	else if(header.contentEquals("Travel Start")) {
                 		if(o != null && !String.valueOf(o).contentEquals("")) {
-	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));
 	                		fares.get(i).setTravelStart(toZonedDateTime(date1));
                 		}
                 	}
                 	else if(header.contentEquals("Travel End")) {
                 		if(o != null && !String.valueOf(o).contentEquals("")) {
-	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));
 	                		fares.get(i).setTravelEnd(toZonedDateTime(date1));
                 		}
                 	}
                 	else if(header.contentEquals("Sales Start")) {
                 		if(o != null && !String.valueOf(o).contentEquals("")) {
-	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));
 	                		fares.get(i).setSaleStart(toZonedDateTime(date1));
                 		}
                 	}
                 	else if(header.contentEquals("Sales End")) {
                 		if(o != null && !String.valueOf(o).contentEquals("")) {
-	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));
 	                		fares.get(i).setSaleEnd(toZonedDateTime(date1));
                 		}
                 	}
@@ -859,7 +860,7 @@ public class WorkPackageResource {
                 	}
                 	else if(header.contentEquals("Travel Complete")) {
                 		if(o != null && !String.valueOf(o).contentEquals("")) {
-	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));
 	                		fares.get(i).setTravelComplete(toZonedDateTime(date1));
                 		}
                 	}
@@ -879,8 +880,8 @@ public class WorkPackageResource {
 
         return getWorkPackage(workPackage.getId());
     }
-    
-    
+
+
     /**
      * POST  /work-packages/import-fares-market : Import a new market fares workPackage.
      *
@@ -897,18 +898,18 @@ public class WorkPackageResource {
                ImportFares importData = workPackage.getImportFares();
                int importIndex = workPackage.getImportIndex();
                LinkedHashMap<ImportHeader, List<Object>> mapValue = importExcel(importData.getFile());
-               
+
                List<Object> rows = (List<Object>) getElementByIndex(mapValue, 0);
                List<WorkPackageFare> fares = new ArrayList<>();
                for(int i=0;i<rows.size();i++) {
                	fares.add(new WorkPackageFare());
                }
-               
+
                for (Map.Entry<ImportHeader, List<Object>> entry : mapValue.entrySet()) {
                    ImportHeader key = entry.getKey();
                	String header = key.name;
                    List<Object> value = entry.getValue();
-                   
+
                    int i=0;
                    TariffNumber tfNumber = new TariffNumber();
                    for(Object o : value) {
@@ -953,25 +954,25 @@ public class WorkPackageResource {
                    	}
                    	else if(header.contentEquals("Travel Start")) {
                    		if(o != null && !String.valueOf(o).contentEquals("")) {
-   	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+   	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));
    	                		fares.get(i).setTravelStart(toZonedDateTime(date1));
                    		}
                    	}
                    	else if(header.contentEquals("Travel End")) {
                    		if(o != null && !String.valueOf(o).contentEquals("")) {
-   	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+   	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));
    	                		fares.get(i).setTravelEnd(toZonedDateTime(date1));
                    		}
                    	}
                    	else if(header.contentEquals("Sales Start")) {
                    		if(o != null && !String.valueOf(o).contentEquals("")) {
-   	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+   	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));
    	                		fares.get(i).setSaleStart(toZonedDateTime(date1));
                    		}
                    	}
                    	else if(header.contentEquals("Sales End")) {
                    		if(o != null && !String.valueOf(o).contentEquals("")) {
-   	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+   	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));
    	                		fares.get(i).setSaleEnd(toZonedDateTime(date1));
                    		}
                    	}
@@ -980,7 +981,7 @@ public class WorkPackageResource {
                    	}
                    	else if(header.contentEquals("Travel Complete")) {
                    		if(o != null && !String.valueOf(o).contentEquals("")) {
-   	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+   	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));
    	                		fares.get(i).setTravelComplete(toZonedDateTime(date1));
                    		}
                    	}
@@ -1003,7 +1004,7 @@ public class WorkPackageResource {
 
         return getWorkPackage(workPackage.getId());
     }
-   
+
     /**
      * POST  /work-packages/import-fares-discount : Import a new discount fares workPackage.
      *
@@ -1020,18 +1021,18 @@ public class WorkPackageResource {
             ImportFares importData = workPackage.getImportFares();
             int importIndex = workPackage.getImportIndex();
             LinkedHashMap<ImportHeader, List<Object>> mapValue = importExcel(importData.getFile());
-            
+
             List<Object> rows = (List<Object>) getElementByIndex(mapValue, 0);
             List<WorkPackageFare> fares = new ArrayList<>();
             for(int i=0;i<rows.size();i++) {
             	fares.add(new WorkPackageFare());
             }
-            
+
             for (Map.Entry<ImportHeader, List<Object>> entry : mapValue.entrySet()) {
                 ImportHeader key = entry.getKey();
             	String header = key.name;
                 List<Object> value = entry.getValue();
-                
+
                 int i=0;
                 TariffNumber tfNumber = new TariffNumber();
                 for(Object o : value) {
@@ -1066,7 +1067,7 @@ public class WorkPackageResource {
                 		fares.get(i).setCalcType(String.valueOf(o));
                 	}
                 	else if(header.contentEquals("% of Base Fare")) {
-                		
+
                 	}
                 	else if(header.contentEquals("Curr")) {
                 		//log.debug("CURRENCY : {}", String.valueOf(o));
@@ -1111,25 +1112,25 @@ public class WorkPackageResource {
 
                 	else if(header.contentEquals("Travel Start")) {
                 		if(o != null && !String.valueOf(o).contentEquals("")) {
-	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));
 	                		fares.get(i).setTravelStart(toZonedDateTime(date1));
                 		}
                 	}
                 	else if(header.contentEquals("Travel End")) {
                 		if(o != null && !String.valueOf(o).contentEquals("")) {
-	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));
 	                		fares.get(i).setTravelEnd(toZonedDateTime(date1));
                 		}
                 	}
                 	else if(header.contentEquals("Sale Start")) {
                 		if(o != null && !String.valueOf(o).contentEquals("")) {
-	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));
 	                		fares.get(i).setSaleStart(toZonedDateTime(date1));
                 		}
                 	}
                 	else if(header.contentEquals("Sale End")) {
                 		if(o != null && !String.valueOf(o).contentEquals("")) {
-	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));
 	                		fares.get(i).setSaleEnd(toZonedDateTime(date1));
                 		}
                 	}
@@ -1138,7 +1139,7 @@ public class WorkPackageResource {
                 	}
                 	else if(header.contentEquals("Travel Complete")) {
                 		if(o != null && !String.valueOf(o).contentEquals("")) {
-	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));                  		
+	                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));
 	                		fares.get(i).setTravelComplete(toZonedDateTime(date1));
                 		}
                 	}
@@ -1158,7 +1159,7 @@ public class WorkPackageResource {
 
         return getWorkPackage(workPackage.getId());
     }
-   
+
     /**
      * POST  /work-packages/import-fares : Import a new fares workPackage.
      *
@@ -1175,18 +1176,18 @@ public class WorkPackageResource {
             ImportFares importData = workPackage.getImportFares();
             int importIndex = workPackage.getImportIndex();
             LinkedHashMap<ImportHeader, List<Object>> mapValue = importExcel(importData.getFile());
-            
+
             List<Object> rows = (List<Object>) getElementByIndex(mapValue, 0);
             List<WorkPackageFare> fares = new ArrayList<>();
             for(int i=0;i<rows.size();i++) {
             	fares.add(new WorkPackageFare());
             }
-            
+
             for (Map.Entry<ImportHeader, List<Object>> entry : mapValue.entrySet()) {
                 ImportHeader key = entry.getKey();
             	String header = key.name;
                 List<Object> value = entry.getValue();
-                
+
                 int i=0;
                 TariffNumber tfNumber = new TariffNumber();
                 for(Object o : value) {
@@ -1272,13 +1273,13 @@ public class WorkPackageResource {
 
         return getWorkPackage(workPackage.getId());
     }
-    
+
 
     public Attachment createWorkbook(String sheetName, LinkedHashMap<String, Object> data) {
-    	
-    	XSSFWorkbook workbook = new XSSFWorkbook(); 
+
+    	XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet spreadsheet = workbook.createSheet(sheetName);
-        
+
     	int index = 0;
 
     	XSSFRow row = spreadsheet.createRow(0);
@@ -1289,14 +1290,14 @@ public class WorkPackageResource {
 
             cell = row.createCell(index);
             cell.setCellValue(key);
-            
+
             if(value != null) {
             	List<Object> val = (List<Object>) value;
             	for(int x=0;x<val.size();x++) {
             		XSSFRow rows = null;
             		if(spreadsheet.getRow(x+1) != null) {
             			rows = spreadsheet.getRow(x+1);
-            		}    
+            		}
             		else {
             			rows = spreadsheet.createRow(x+1);
             		}
@@ -1304,12 +1305,12 @@ public class WorkPackageResource {
             		cellData.setCellValue(val.get(x) != null ? val.get(x).toString() : "");
             	}
             }
-            
+
 //            XSSFRow rows = spreadsheet.createRow(i+2);
 //            cell = rows.createCell(1);
             index++;
     	}
-    	
+
 
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         try {
@@ -1318,13 +1319,13 @@ public class WorkPackageResource {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        
+
         Attachment att = new Attachment();
         att.setFile(output.toByteArray());
-        
+
         return att;
     }
-    
+
     /**
      * POST  /work-packages/export-fares : Export work package fares
      *
@@ -1336,9 +1337,9 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<Attachment> exportFaresWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
     	log.debug("REST request to save exportFares : {}", workPackage.getExportIndex());
-    	
+
     	LinkedHashMap<String, Object> data = new LinkedHashMap<>();
-    	
+
     	data.put("Status", new ArrayList<>());
     	data.put("Carrier", new ArrayList<>());
     	data.put("Action", new ArrayList<>());
@@ -1365,11 +1366,11 @@ public class WorkPackageResource {
     	data.put("Travel Complete", new ArrayList<>());
     	data.put("Travel Complete Indicator", new ArrayList<>());
     	data.put("Ratesheet Comment", new ArrayList<>());
-    	
+
     	WorkPackage wp = workPackageService.findOne(workPackage.getId());
         List<WorkPackageFare> fares = wp.getFareSheet().get(workPackage.getExportIndex()).getFares();
 
-        DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy"); 
+        DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy");
         for(int i=0; i<fares.size(); i++) {
         	putValue(data.get("Status"), fares.get(i).getStatus());
         	putValue(data.get("Carrier"), fares.get(i).getCarrier());
@@ -1390,7 +1391,7 @@ public class WorkPackageResource {
         	putValue(data.get("Base Amt"), fares.get(i).getAmount());
         	putValue(data.get("Target AIF"), fares.get(i).getAif());
 //        	Date.from(
-        	
+
         	putValue(data.get("Travel Start"), fares.get(i).getTravelStart() != null ? dfFull.format(Date.from(fares.get(i).getTravelStart().toInstant())) : null);
         	putValue(data.get("Travel End"), fares.get(i).getTravelEnd() != null ? dfFull.format(Date.from(fares.get(i).getTravelEnd().toInstant())) : null);
         	putValue(data.get("Sales Start"), fares.get(i).getSaleStart() != null ? dfFull.format(Date.from(fares.get(i).getSaleStart().toInstant())) : null);
@@ -1400,13 +1401,13 @@ public class WorkPackageResource {
         	putValue(data.get("Travel Complete Indicator"), fares.get(i).getTravelCompleteIndicator());
         	putValue(data.get("Ratesheet Comment"), fares.get(i).getRatesheetComment());
         }
-    	
+
     	Attachment att = createWorkbook("Workorder Fare", data);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
             .body(att);
     }
-    
+
     /**
      * POST  /work-packages/export-fares-waiver : Export work package fares waiver
      *
@@ -1418,9 +1419,9 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<Attachment> exportFaresWaiverWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
     	log.debug("REST request to save exportFares : {}", workPackage.getExportIndex());
-    	
+
     	LinkedHashMap<String, Object> data = new LinkedHashMap<>();
-    	
+
     	data.put("Type", new ArrayList<>());
     	data.put("Full/Partial", new ArrayList<>());
     	data.put("PNR", new ArrayList<>());
@@ -1444,11 +1445,11 @@ public class WorkPackageResource {
     	data.put("Total Lost", new ArrayList<>());
     	data.put("Approver", new ArrayList<>());
     	data.put("Remark", new ArrayList<>());
-    	
+
     	WorkPackage wp = workPackageService.findOne(workPackage.getId());
         List<WorkPackageFare> fares = wp.getWaiverFareSheet().get(workPackage.getExportIndex()).getFares();
 
-        DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy"); 
+        DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy");
         for(int i=0; i<fares.size(); i++) {
         	putValue(data.get("Type"), fares.get(i).getWaiverType());
         	putValue(data.get("Full/Partial"), fares.get(i).getWaiverFullPartial());
@@ -1474,13 +1475,13 @@ public class WorkPackageResource {
         	putValue(data.get("Approver"), fares.get(i).getWaiverApprover());
         	putValue(data.get("Remark"), fares.get(i).getWaiverRemark());
         }
-    	
+
     	Attachment att = createWorkbook("Workorder Waiver Fare", data);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
             .body(att);
     }
-    
+
     /**
      * POST  /work-packages/export-fares-addon : Export Addon work package fares
      *
@@ -1492,9 +1493,9 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<Attachment> exportFaresAddonWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
     	log.debug("REST request to save exportAddonFares : {}", workPackage.getExportIndex());
-    	
+
     	LinkedHashMap<String, Object> data = new LinkedHashMap<>();
-    	
+
     	data.put("Status", new ArrayList<>());
     	data.put("Carrier", new ArrayList<>());
     	data.put("Action", new ArrayList<>());
@@ -1519,11 +1520,11 @@ public class WorkPackageResource {
     	data.put("Comment", new ArrayList<>());
     	data.put("Travel Complete", new ArrayList<>());
     	data.put("Travel Complete Indicator", new ArrayList<>());
-    	
+
     	WorkPackage wp = workPackageService.findOne(workPackage.getId());
         List<WorkPackageFare> fares = wp.getAddonFareSheet().get(workPackage.getExportIndex()).getFares();
 
-        DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy"); 
+        DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy");
         for(int i=0; i<fares.size(); i++) {
         	putValue(data.get("Status"), fares.get(i).getStatus());
         	putValue(data.get("Carrier"), fares.get(i).getCarrier());
@@ -1550,13 +1551,13 @@ public class WorkPackageResource {
         	putValue(data.get("Travel Complete"), fares.get(i).getTravelComplete() != null ? dfFull.format(Date.from(fares.get(i).getTravelComplete().toInstant())): null);
         	putValue(data.get("Travel Complete Indicator"), fares.get(i).getTravelCompleteIndicator());
         }
-    	
+
     	Attachment att = createWorkbook("Workorder Addon Fare", data);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
             .body(att);
     }
-    
+
 
     private void putValue(Object obj, String status) {
 		// TODO Auto-generated method stub
@@ -1580,9 +1581,9 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<Attachment> exportFaresMarketWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
     	log.debug("REST request to save exportMarketFares : {}", workPackage.getExportIndex());
-    	
+
     	LinkedHashMap<String, Object> data = new LinkedHashMap<>();
-    	
+
     	data.put("Status", new ArrayList<>());
     	data.put("Carrier", new ArrayList<>());
     	data.put("Action", new ArrayList<>());
@@ -1604,11 +1605,11 @@ public class WorkPackageResource {
     	data.put("Travel Complete", new ArrayList<>());
     	data.put("Travel Complete Indicator", new ArrayList<>());
     	data.put("Ratesheet Comment", new ArrayList<>());
-    	
+
     	WorkPackage wp = workPackageService.findOne(workPackage.getId());
         List<WorkPackageFare> fares = wp.getMarketFareSheet().get(workPackage.getExportIndex()).getFares();
 
-        DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy"); 
+        DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy");
         for(int i=0; i<fares.size(); i++) {
         	putValue(data.get("Status"), fares.get(i).getStatus());
         	putValue(data.get("Carrier"), fares.get(i).getCarrier());
@@ -1632,13 +1633,13 @@ public class WorkPackageResource {
         	putValue(data.get("Travel Complete Indicator"), fares.get(i).getTravelCompleteIndicator());
         	putValue(data.get("Ratesheet Comment"), fares.get(i).getRatesheetComment());
         }
-    	
+
     	Attachment att = createWorkbook("Workorder Addon Fare", data);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
             .body(att);
     }
-    
+
 
     /**
      * POST  /work-packages/export-fares-discount : Export work package fares discount
@@ -1651,9 +1652,9 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<Attachment> exportFaresDiscountWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
     	log.debug("REST request to save exportFaresDiscount : {}", workPackage.getExportIndex());
-    	
+
     	LinkedHashMap<String, Object> data = new LinkedHashMap<>();
-    	
+
     	data.put("Status", new ArrayList<>());
     	data.put("FBR Tariff Code", new ArrayList<>());
     	data.put("Loc 1 Type", new ArrayList<>());
@@ -1685,11 +1686,11 @@ public class WorkPackageResource {
     	data.put("Comment", new ArrayList<>());
     	data.put("Travel Complete", new ArrayList<>());
     	data.put("Travel Complete Indicator", new ArrayList<>());
-    	
+
     	WorkPackage wp = workPackageService.findOne(workPackage.getId());
         List<WorkPackageFare> fares = wp.getDiscountFareSheet().get(workPackage.getExportIndex()).getFares();
 
-        DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy"); 
+        DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy");
         for(int i=0; i<fares.size(); i++) {
         	putValue(data.get("Status"), fares.get(i).getStatus());
         	putValue(data.get("FBR Tariff Code"), fares.get(i).getTarcd());
@@ -1701,7 +1702,7 @@ public class WorkPackageResource {
         	putValue(data.get("Base Rule No"), fares.get(i).getBaseRuleNo());
         	putValue(data.get("Base Tariff Code"), fares.get(i).getBaseTarcd());
         	putValue(data.get("Calc Type"), fares.get(i).getCalcType());
-        	
+
         	putValue(data.get("% of Base Fare"), fares.get(i).getPercentBaseFare());
         	putValue(data.get("Curr"), fares.get(i).getCurrency());
         	putValue(data.get("Specified Amount"), fares.get(i).getDiscountSpecifiedAmount());
@@ -1716,7 +1717,7 @@ public class WorkPackageResource {
         	putValue(data.get("New FareCls"), fares.get(i).getNewFareBasis());
         	putValue(data.get("New OW/RT"), fares.get(i).getNewTypeOfJourney());
         	putValue(data.get("New BkgCd"), fares.get(i).getNewBookingCode());
-        	
+
         	putValue(data.get("Travel Start"), fares.get(i).getTravelStart() != null ? dfFull.format(Date.from(fares.get(i).getTravelStart().toInstant())) : null);
         	putValue(data.get("Travel End"), fares.get(i).getTravelEnd() != null ? dfFull.format(Date.from(fares.get(i).getTravelEnd().toInstant())) : null);
         	putValue(data.get("Sale Start"), fares.get(i).getSaleStart() != null ? dfFull.format(Date.from(fares.get(i).getSaleStart().toInstant())) : null);
@@ -1726,22 +1727,22 @@ public class WorkPackageResource {
         	putValue(data.get("Travel Complete Indicator"), fares.get(i).getTravelCompleteIndicator());
         	//putValue(data.get("Ratesheet Comment"), fares.get(i).getRatesheetComment());
         }
-    	
+
     	Attachment att = createWorkbook("Workorder Market Fare", data);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
             .body(att);
     }
-    
+
     public static class WorkPackageExportOption{
     	public WorkPackageFilter workPackageFilter;
-    	
+
     	public String outputTo;
     	public boolean gridLines;
     	public boolean columnHeaders;
     	public boolean onlySelectedRows;
-    	
-    	
+
+
 		public WorkPackageFilter getWorkPackageFilter() {
 			return workPackageFilter;
 		}
@@ -1778,7 +1779,7 @@ public class WorkPackageResource {
 					+ ", gridLines=" + gridLines + ", columnHeaders=" + columnHeaders + ", onlySelectedRows="
 					+ onlySelectedRows + "]";
 		}
-		
+
     }
     /**
      * POST  /work-packages/export-fares : Export work package fares
@@ -1791,9 +1792,9 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<Attachment> exportQueueWorkPackage(@RequestBody WorkPackageExportOption workPackageExportOption) throws URISyntaxException {
     	log.debug("REST request to exportWorkqueue : {}", workPackageExportOption);
-    	
+
     	LinkedHashMap<String, Object> data = new LinkedHashMap<>();
-    	
+
     	data.put("WO Type", new ArrayList<>());
     	data.put("Distribution Type", new ArrayList<>());
     	data.put("Status", new ArrayList<>());
@@ -1814,15 +1815,15 @@ public class WorkPackageResource {
     	data.put("Locked Since", new ArrayList<>());
     	data.put("Last Modified Date", new ArrayList<>());
     	data.put("Last Modified By", new ArrayList<>());
-    	
-    	
+
+
 //    	WorkPackage wp = workPackageService.findOne(workPackage.getId());
 //        List<WorkPackageFare> fares = wp.getDiscountFareSheet().get(workPackage.getExportIndex()).getFares();
-    	
-    	
-    	List<WorkPackage> wp = workPackageService.findCustom(workPackageExportOption.getWorkPackageFilter());       
-         
-        DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy"); 
+
+
+    	List<WorkPackage> wp = workPackageService.findCustom(workPackageExportOption.getWorkPackageFilter());
+
+        DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy");
         for(int i=0; i<wp.size(); i++) {
         	putValue(data.get("WO Type"), wp.get(i).getType().name());
         	putValue(data.get("Distribution Type"), wp.get(i).getTargetDistribution());
@@ -1853,7 +1854,7 @@ public class WorkPackageResource {
         	putValue(data.get("Base Rule No"), fares.get(i).getBaseRuleNo());
         	putValue(data.get("Base Tariff Code"), fares.get(i).getBaseTarcd());
         	putValue(data.get("Calc Type"), fares.get(i).getCalcType());
-        	
+
 //        	putValue(data.get("% of Base Fare", new ArrayList<>());
         	putValue(data.get("Curr"), fares.get(i).getCurrency());
         	putValue(data.get("Specified Amount"), fares.get(i).getDiscountSpecifiedAmount());
@@ -1868,7 +1869,7 @@ public class WorkPackageResource {
         	putValue(data.get("New FareCls"), fares.get(i).getNewFareBasis());
         	putValue(data.get("New OW/RT"), fares.get(i).getNewTypeOfJourney());
         	putValue(data.get("New BkgCd"), fares.get(i).getNewBookingCode());
-        	
+
         	putValue(data.get("Travel Start"), fares.get(i).getTravelStart() != null ? dfFull.format(Date.from(fares.get(i).getTravelStart().toInstant())) : null);
         	putValue(data.get("Travel End"), fares.get(i).getTravelEnd() != null ? dfFull.format(Date.from(fares.get(i).getTravelEnd().toInstant())) : null);
         	putValue(data.get("Sale Start"), fares.get(i).getSaleStart() != null ? dfFull.format(Date.from(fares.get(i).getSaleStart().toInstant())) : null);
@@ -1879,14 +1880,14 @@ public class WorkPackageResource {
         	//putValue(data.get("Ratesheet Comment"), fares.get(i).getRatesheetComment());
         	 */
         }
-    	
+
     	Attachment att = createWorkbook("Workorder Queue", data);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
             .body(att);
     }
-    
-    
+
+
     /**
      * POST  /work-packages/download-market-rules : Download Market Rules Template
      *
@@ -1903,7 +1904,7 @@ public class WorkPackageResource {
 //    	String filename = "/Users/billy/Downloads/" + namaFile;
     	String filename = "/home/development/xml/" + namaFile;
     	byte[] templateFile = null;
-    	if (new File(filename).exists()) {            
+    	if (new File(filename).exists()) {
             try {
                 templateFile = Files.readAllBytes(Paths.get(filename));
             } catch (IOException e) {
@@ -1916,7 +1917,7 @@ public class WorkPackageResource {
 	        .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
 	        .body(att);
     }
-    
+
     /**
      * PUT  /work-packages : Updates an existing workPackage.
      *
@@ -1930,31 +1931,31 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<WorkPackage> updateWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
         log.debug("REST request to update WorkPackage : {}", workPackage.toString());
-        
+
         if (workPackage.getId() == null) {
             return createWorkPackage(workPackage);
         }
     	workPackageService.save(workPackage);
     	if(workPackage.isValidate()) {
-    		workPackage = validateWo(workPackage);    		
+    		workPackage = validateWo(workPackage);
     	}
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(workPackage));    	
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(workPackage));
     }
-    
+
     private WorkPackage validateWo(WorkPackage workPackage) {
 		// TODO Auto-generated method stub
     	WorkPackage.Validation validation = new WorkPackage.Validation();
-		
-		
+
+
 		int errorsCount = 0;
 		int warningsCount = 0;
 		List<WorkPackage.Validation.Tab> tabs = new ArrayList<WorkPackage.Validation.Tab>();
-		
+
 		//Validasi Header
 		WorkPackage.Validation.Tab tabHeader = new WorkPackage.Validation.Tab();
 		tabHeader.setName("HEADER");
 		List<WorkPackage.Validation.Tab.Error> errorHeader = new ArrayList<>();
-		
+
 		if(workPackage.getTargetDistribution().toUpperCase().contentEquals("ATPCO")) {
 			if(workPackage.getReviewLevel().toUpperCase().contentEquals("LSO")) {
 				if(workPackage.getSaleDate() == null) {
@@ -1999,21 +2000,21 @@ public class WorkPackageResource {
 		    		errorHeader.add(err1);
 				}
 			}
-			
+
 			tabHeader.setError(errorHeader);
-			
+
 			errorsCount += errorHeader.size();
 	    	if(errorHeader.size() > 0 || errorHeader.size() > 0) {
 	    		tabs.add(tabHeader);
 	    	}
-			
+
 		}else if(workPackage.getTargetDistribution().toUpperCase().contentEquals("MARKET")) {
 			if(workPackage.getReviewLevel().toUpperCase().contentEquals("LSO")) {
 				if(workPackage.getName() == null || workPackage.getName().contentEquals("")) {
 					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 		    		err1.setMessage("Name is required");
 		    		errorHeader.add(err1);
-				}		
+				}
 			}else if(workPackage.getReviewLevel().toUpperCase().contentEquals("HO")) {
 				if(workPackage.getName() == null || workPackage.getName().contentEquals("")) {
 					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
@@ -2036,17 +2037,17 @@ public class WorkPackageResource {
 		    		errorHeader.add(err1);
 				}
 			}
-			
+
 			tabHeader.setError(errorHeader);
-			
+
 			errorsCount += errorHeader.size();
 	    	if(errorHeader.size() > 0 || errorHeader.size() > 0) {
 	    		tabs.add(tabHeader);
 	    	}
 		}
-		
-		
-					
+
+
+
 		//Validasi Fare
 		int sheetIndex = 0;
 		for(WorkPackageFareSheet wpfs : workPackage.getFareSheet()) {
@@ -2054,13 +2055,13 @@ public class WorkPackageResource {
 	    		tab1.setName(wpfs.getSpecifiedFaresName());
 	    		tab1.setType("Fares");
 	    		tab1.setIndex(sheetIndex+"");
-	    		
-	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();	 
+
+	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
 	    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
-	    		
-		    		List<WorkPackageFare> fares = wpfs.getFares();		    		
+
+		    		List<WorkPackageFare> fares = wpfs.getFares();
 		    		List<String> rejectStatus = new ArrayList<>();
-		    		
+
 		    		int index = 0;
 					for(WorkPackageFare fare : fares) {
 						if(fare.getStatus() != null || !fare.getStatus().contentEquals("")) {
@@ -2068,7 +2069,7 @@ public class WorkPackageResource {
 								rejectStatus.add("REJECTED");
 							}
 						}
-						
+
 						if(workPackage.getReviewLevel().contentEquals("LSO")) {
 							if(fare.getOrigin() == null || fare.getOrigin().contentEquals("")) {
 								//List Error
@@ -2110,7 +2111,7 @@ public class WorkPackageResource {
 					    		err1.setMessage("Currency is required");
 					    		errors.add(err1);
 							}
-							if(fare.getAmount() == null || fare.getAmount().contentEquals("")) {									
+							if(fare.getAmount() == null || fare.getAmount().contentEquals("")) {
 								if(fare.getAif() == null || fare.getAif().contentEquals("")) {
 									//List Error
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
@@ -2118,7 +2119,7 @@ public class WorkPackageResource {
 						    		err1.setField("aif");
 						    		err1.setMessage("Either Base Amt or Target AIF must be specified");
 						    		errors.add(err1);
-								}						    		
+								}
 							}
 							if(fare.getTravelStart() != null && fare.getTravelEnd() != null) {
 								if(fare.getTravelStart().isAfter(fare.getTravelEnd())) {
@@ -2243,7 +2244,7 @@ public class WorkPackageResource {
 					    		err1.setMessage("Currency is required");
 					    		errors.add(err1);
 							}
-							if(fare.getAmount() == null || fare.getAmount().contentEquals("")) {									
+							if(fare.getAmount() == null || fare.getAmount().contentEquals("")) {
 								if(fare.getAif() == null || fare.getAif().contentEquals("")) {
 									//List Error
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
@@ -2251,7 +2252,7 @@ public class WorkPackageResource {
 						    		err1.setField("aif");
 						    		err1.setMessage("Either Base Amt or Target AIF must be specified");
 						    		errors.add(err1);
-								}						    		
+								}
 							}
 							if(fare.getTravelStart() != null && fare.getTravelEnd() != null) {
 								if(fare.getTravelStart().isAfter(fare.getTravelEnd())) {
@@ -2349,7 +2350,7 @@ public class WorkPackageResource {
 					    		err1.setMessage("Currency is required");
 					    		errors.add(err1);
 							}
-						}						
+						}
 						index++;
 					}
 					if(rejectStatus.size() == fares.size()) {
@@ -2358,7 +2359,7 @@ public class WorkPackageResource {
 			    		errors.add(err1);
 					}
 	    		tab1.setError(errors);
-	    		
+
 	    		// check for duplicates
 	    		for(int i =0; i < fares.size(); i++){
 	    		    for(int j=0; j< fares.size(); j++){
@@ -2377,9 +2378,9 @@ public class WorkPackageResource {
 	    		        }
 	    		    }
 	    		}
-	    		
-	    		
-	    		
+
+
+
 	    		if(warnings.size() > 0) {
 	    			tab1.setWarning(warnings);
 	    		}
@@ -2390,14 +2391,14 @@ public class WorkPackageResource {
 	    	}
 	    	sheetIndex++;
 		}
-		
+
 		//Validasi Addon Fare
 		for(WorkPackageFareSheet wpfs : workPackage.getAddonFareSheet()) {
 			WorkPackage.Validation.Tab tab1 = new WorkPackage.Validation.Tab();
 	    		tab1.setName(wpfs.getAddonFaresName());
-	    		
+
 	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
-	    		
+
 	    			List<String> rejectStatus = new ArrayList<>();
 		    		List<WorkPackageFare> fares = wpfs.getFares();
 					for(WorkPackageFare fare : fares) {
@@ -2406,7 +2407,7 @@ public class WorkPackageResource {
 								rejectStatus.add("REJECTED");
 							}
 						}
-						
+
 						if(workPackage.getReviewLevel().contentEquals("LSO")) {
 							if(wpfs.getAddonFaresName() == null || wpfs.getAddonFaresName().contentEquals("")) {
 								//List Error
@@ -2438,13 +2439,13 @@ public class WorkPackageResource {
 					    		err1.setMessage("Currency is required");
 					    		errors.add(err1);
 							}
-							if(fare.getAmount() == null || fare.getAmount().contentEquals("")) {									
+							if(fare.getAmount() == null || fare.getAmount().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Base Amt is required");
-					    		errors.add(err1);						    		
+					    		errors.add(err1);
 							}
-							
+
 							if(fare.getTravelStart() != null && fare.getTravelEnd() != null) {
 								if(fare.getTravelStart().isAfter(fare.getTravelEnd())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
@@ -2468,7 +2469,7 @@ public class WorkPackageResource {
 						    		errors.add(err1);
 								}
 							}
-							
+
 							if(fare.getSaleStart() != null && fare.getSaleEnd() != null) {
 								if(fare.getSaleStart().isAfter(fare.getSaleEnd())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
@@ -2495,7 +2496,7 @@ public class WorkPackageResource {
 //						    		errors.add(err1);
 //								}
 							}
-							
+
 						}else if(workPackage.getReviewLevel().contentEquals("HO")) {
 							if(wpfs.getAddonFaresName() == null || wpfs.getAddonFaresName().contentEquals("")) {
 								//List Error
@@ -2527,11 +2528,11 @@ public class WorkPackageResource {
 					    		err1.setMessage("Currency is required");
 					    		errors.add(err1);
 							}
-							if(fare.getAmount() == null || fare.getAmount().contentEquals("")) {									
+							if(fare.getAmount() == null || fare.getAmount().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Base Amt is required");
-					    		errors.add(err1);						    		
+					    		errors.add(err1);
 							}
 							if(fare.getTravelStart() != null && fare.getTravelEnd() != null) {
 								if(fare.getTravelStart().isAfter(fare.getTravelEnd())) {
@@ -2634,7 +2635,7 @@ public class WorkPackageResource {
 						    		errors.add(err1);
 								}
 							}
-						}						
+						}
 					}
 					if(rejectStatus.size() == fares.size()) {
 						WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
@@ -2642,7 +2643,7 @@ public class WorkPackageResource {
 			    		errors.add(err1);
 					}
 	    		tab1.setError(errors);
-	    		
+
 
 	    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
 	    		// check for duplicates
@@ -2661,25 +2662,25 @@ public class WorkPackageResource {
 //	    		        }
 //	    		    }
 //	    		}
-	    		
+
 	    		if(warnings.size() > 0) {
 	    			tab1.setWarning(warnings);
 	    		}
-	    		
+
 	    		errorsCount += errors.size();
 	    		warningsCount += warnings.size();
 	    	if(errors.size() > 0 || warnings.size() > 0) {
 	    		tabs.add(tab1);
 	    	}
 		}
-		
+
 		//Validasi Discount
 		for(WorkPackageFareSheet wpfs : workPackage.getDiscountFareSheet()) {
 			WorkPackage.Validation.Tab tab1 = new WorkPackage.Validation.Tab();
 	    		tab1.setName(wpfs.getDiscountFaresName());
-	    		
+
 	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
-	    		
+
 		    		List<String> rejectStatus = new ArrayList<>();
 		    		List<WorkPackageFare> fares = wpfs.getFares();
 					for(WorkPackageFare fare : fares) {
@@ -2725,73 +2726,73 @@ public class WorkPackageResource {
 					    		err1.setMessage("Loc2 is required");
 					    		errors.add(err1);
 							}
-							if(fare.getCalcType() == null || fare.getCalcType().contentEquals("")) {									
+							if(fare.getCalcType() == null || fare.getCalcType().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Calc Type is required");
-					    		errors.add(err1);						    		
+					    		errors.add(err1);
 							}
-							if(fare.getCalcType() != null ) {									
+							if(fare.getCalcType() != null ) {
 								if(fare.getCalcType().contentEquals("C")) {
-									if(fare.getPercentBaseFare() == null || fare.getPercentBaseFare().contentEquals("")) {									
+									if(fare.getPercentBaseFare() == null || fare.getPercentBaseFare().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("% Base Fare is  required when 'Calculated'  Calc Type is used");
-							    		errors.add(err1);						    		
+							    		errors.add(err1);
 									}
-								}else if(fare.getCalcType().contentEquals("S")) {										
-									if(fare.getCurrency() == null || fare.getCurrency().contentEquals("")) {									
+								}else if(fare.getCalcType().contentEquals("S")) {
+									if(fare.getCurrency() == null || fare.getCurrency().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Currency is  required when 'Specified'  Calc Type is used");
-							    		errors.add(err1);						    		
+							    		errors.add(err1);
 									}
-									if(fare.getDiscountSpecifiedAmount() == null || fare.getDiscountSpecifiedAmount().contentEquals("")) {									
+									if(fare.getDiscountSpecifiedAmount() == null || fare.getDiscountSpecifiedAmount().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Specified Amount is  required when 'Specified'  Calc Type is used");
-							    		errors.add(err1);						    		
-									}if(fare.getFareType() == null || fare.getFareType().contentEquals("")) {									
+							    		errors.add(err1);
+									}if(fare.getFareType() == null || fare.getFareType().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Fare Type Code is required when 'Specified'  Calc Type is used");
-							    		errors.add(err1);						    		
-									}if(fare.getTypeOfJourney() == null || fare.getTypeOfJourney().contentEquals("")) {									
+							    		errors.add(err1);
+									}if(fare.getTypeOfJourney() == null || fare.getTypeOfJourney().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Base Fare OW/RT is required when 'Specified'  Calc Type is used");
-							    		errors.add(err1);						    		
-									}if(fare.getGlobal() == null || fare.getGlobal().contentEquals("")) {									
+							    		errors.add(err1);
+									}if(fare.getGlobal() == null || fare.getGlobal().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Global is required when 'Specified'  Calc Type is used");
-							    		errors.add(err1);						    		
+							    		errors.add(err1);
 									}
 								}else if(fare.getCalcType().contentEquals("M")) {
-									if(fare.getPercentBaseFare() == null || fare.getPercentBaseFare().contentEquals("")) {									
+									if(fare.getPercentBaseFare() == null || fare.getPercentBaseFare().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("% Base Fare is  required when 'Subtract Specified'  Calc Type is used");
-							    		errors.add(err1);						    		
+							    		errors.add(err1);
 									}
-									if(fare.getCurrency() == null || fare.getCurrency().contentEquals("")) {									
+									if(fare.getCurrency() == null || fare.getCurrency().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Currency is  required when 'Subtract Specified'  Calc Type is used");
-							    		errors.add(err1);						    		
+							    		errors.add(err1);
 									}
-									if(fare.getDiscountSpecifiedAmount() == null || fare.getDiscountSpecifiedAmount().contentEquals("")) {									
+									if(fare.getDiscountSpecifiedAmount() == null || fare.getDiscountSpecifiedAmount().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Specified Amount is  required when 'Subtract Specified'  Calc Type is used");
-							    		errors.add(err1);						    		
+							    		errors.add(err1);
 									}
 								}
-							}if(fare.getPassengerType() == null || fare.getPassengerType().contentEquals("")) {									
+							}if(fare.getPassengerType() == null || fare.getPassengerType().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("PAX Type is required");
-					    		errors.add(err1);						    		
+					    		errors.add(err1);
 							}
 							if(fare.getTravelStart() != null && fare.getTravelEnd() != null) {
 								if(fare.getTravelStart().isAfter(fare.getTravelEnd())) {
@@ -2829,11 +2830,11 @@ public class WorkPackageResource {
 					    		err1.setMessage("Fare Type is required");
 					    		errors.add(err1);
 							}
-							if(fare.getTarcd()== null || fare.getTarcd().contentEquals("")) {									
+							if(fare.getTarcd()== null || fare.getTarcd().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("FBR Tariff Code is required");
-					    		errors.add(err1);						    		
+					    		errors.add(err1);
 							}
 							if(fare.getLoc1Type() == null || fare.getLoc1Type().contentEquals("")) {
 								//List Error
@@ -2859,79 +2860,79 @@ public class WorkPackageResource {
 					    		err1.setMessage("Loc2 is required");
 					    		errors.add(err1);
 							}
-							if(fare.getBaseFareBasis() == null || fare.getBaseFareBasis().contentEquals("")) {									
+							if(fare.getBaseFareBasis() == null || fare.getBaseFareBasis().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Base Fare Cls is required");
-					    		errors.add(err1);						    		
+					    		errors.add(err1);
 							}
-							if(fare.getCalcType() == null || fare.getCalcType().contentEquals("")) {									
+							if(fare.getCalcType() == null || fare.getCalcType().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Calc Type is required");
-					    		errors.add(err1);						    		
+					    		errors.add(err1);
 							}
-							if(fare.getCalcType() != null ) {									
+							if(fare.getCalcType() != null ) {
 								if(fare.getCalcType().contentEquals("C")) {
-									if(fare.getPercentBaseFare() == null || fare.getPercentBaseFare().contentEquals("")) {									
+									if(fare.getPercentBaseFare() == null || fare.getPercentBaseFare().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("% Base Fare is  required when 'Calculated'  Calc Type is used");
-							    		errors.add(err1);						    		
+							    		errors.add(err1);
 									}
-								}else if(fare.getCalcType().contentEquals("S")) {										
-									if(fare.getCurrency() == null || fare.getCurrency().contentEquals("")) {									
+								}else if(fare.getCalcType().contentEquals("S")) {
+									if(fare.getCurrency() == null || fare.getCurrency().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Currency is  required when 'Specified'  Calc Type is used");
-							    		errors.add(err1);						    		
+							    		errors.add(err1);
 									}
-									if(fare.getDiscountSpecifiedAmount() == null || fare.getDiscountSpecifiedAmount().contentEquals("")) {									
+									if(fare.getDiscountSpecifiedAmount() == null || fare.getDiscountSpecifiedAmount().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Specified Amount is  required when 'Specified'  Calc Type is used");
-							    		errors.add(err1);						    		
-									}if(fare.getFareType() == null || fare.getFareType().contentEquals("")) {									
+							    		errors.add(err1);
+									}if(fare.getFareType() == null || fare.getFareType().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Fare Type Code is required when 'Specified'  Calc Type is used");
-							    		errors.add(err1);						    		
-									}if(fare.getTypeOfJourney() == null || fare.getTypeOfJourney().contentEquals("")) {									
+							    		errors.add(err1);
+									}if(fare.getTypeOfJourney() == null || fare.getTypeOfJourney().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Base Fare OW/RT is required when 'Specified'  Calc Type is used");
-							    		errors.add(err1);						    		
-									}if(fare.getGlobal() == null || fare.getGlobal().contentEquals("")) {									
+							    		errors.add(err1);
+									}if(fare.getGlobal() == null || fare.getGlobal().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Global is required when 'Specified'  Calc Type is used");
-							    		errors.add(err1);						    		
+							    		errors.add(err1);
 									}
 								}else if(fare.getCalcType().contentEquals("M")) {
-									if(fare.getPercentBaseFare() == null || fare.getPercentBaseFare().contentEquals("")) {									
+									if(fare.getPercentBaseFare() == null || fare.getPercentBaseFare().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("% Base Fare is  required when 'Subtract Specified'  Calc Type is used");
-							    		errors.add(err1);						    		
+							    		errors.add(err1);
 									}
-									if(fare.getCurrency() == null || fare.getCurrency().contentEquals("")) {									
+									if(fare.getCurrency() == null || fare.getCurrency().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Currency is  required when 'Subtract Specified'  Calc Type is used");
-							    		errors.add(err1);						    		
+							    		errors.add(err1);
 									}
-									if(fare.getDiscountSpecifiedAmount() == null || fare.getDiscountSpecifiedAmount().contentEquals("")) {									
+									if(fare.getDiscountSpecifiedAmount() == null || fare.getDiscountSpecifiedAmount().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Specified Amount is  required when 'Subtract Specified'  Calc Type is used");
-							    		errors.add(err1);						    		
+							    		errors.add(err1);
 									}
 								}
-							}if(fare.getPassengerType() == null || fare.getPassengerType().contentEquals("")) {									
+							}if(fare.getPassengerType() == null || fare.getPassengerType().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("PAX Type is required");
-					    		errors.add(err1);						    		
+					    		errors.add(err1);
 							}
 							if(fare.getTravelStart() != null && fare.getTravelEnd() != null) {
 								if(fare.getTravelStart().isAfter(fare.getTravelEnd())) {
@@ -2957,11 +2958,11 @@ public class WorkPackageResource {
 								}
 							}
 						}else if(workPackage.getReviewLevel().toUpperCase().contentEquals("DISTRIBUTION")) {
-							if(fare.getTarcd()== null || fare.getTarcd().contentEquals("")) {									
+							if(fare.getTarcd()== null || fare.getTarcd().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("FBR Tariff Code is required");
-					    		errors.add(err1);						    		
+					    		errors.add(err1);
 							}
 							if(fare.getLoc1Type() == null || fare.getLoc1Type().contentEquals("")) {
 								//List Error
@@ -2987,45 +2988,45 @@ public class WorkPackageResource {
 					    		err1.setMessage("Loc2 is required");
 					    		errors.add(err1);
 							}
-							if(fare.getBaseFareBasis() == null || fare.getBaseFareBasis().contentEquals("")) {									
+							if(fare.getBaseFareBasis() == null || fare.getBaseFareBasis().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Base Fare Cls is required");
-					    		errors.add(err1);						    		
+					    		errors.add(err1);
 							}
-							
-							if(fare.getCalcType() != null ) {									
-								if(fare.getCalcType().contentEquals("S")) {										
-									if(fare.getCurrency() == null || fare.getCurrency().contentEquals("")) {									
+
+							if(fare.getCalcType() != null ) {
+								if(fare.getCalcType().contentEquals("S")) {
+									if(fare.getCurrency() == null || fare.getCurrency().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Currency is  required when 'Specified'  Calc Type is used");
-							    		errors.add(err1);						    		
+							    		errors.add(err1);
 									}
-									if(fare.getFareType() == null || fare.getFareType().contentEquals("")) {									
+									if(fare.getFareType() == null || fare.getFareType().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Fare Type Code is required when 'Specified'  Calc Type is used");
-							    		errors.add(err1);						    		
+							    		errors.add(err1);
 									}
-									if(fare.getTypeOfJourney() == null || fare.getTypeOfJourney().contentEquals("")) {									
+									if(fare.getTypeOfJourney() == null || fare.getTypeOfJourney().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Base Fare OW/RT is required when 'Specified'  Calc Type is used");
-							    		errors.add(err1);						    		
+							    		errors.add(err1);
 									}
-									if(fare.getGlobal() == null || fare.getGlobal().contentEquals("")) {									
+									if(fare.getGlobal() == null || fare.getGlobal().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Global is required when 'Specified'  Calc Type is used");
-							    		errors.add(err1);						    		
+							    		errors.add(err1);
 									}
 								}
-							}if(fare.getPassengerType() == null || fare.getPassengerType().contentEquals("")) {									
+							}if(fare.getPassengerType() == null || fare.getPassengerType().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("PAX Type is required");
-					    		errors.add(err1);						    		
+					    		errors.add(err1);
 							}
 							if(fare.getTravelStart() != null && fare.getTravelEnd() != null) {
 								if(fare.getTravelStart().isAfter(fare.getTravelEnd())) {
@@ -3058,7 +3059,7 @@ public class WorkPackageResource {
 			    		errors.add(err1);
 					}
 	    		tab1.setError(errors);
-	    		
+
 	    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
 	    		errorsCount += errors.size();
 	    		warningsCount += warnings.size();
@@ -3066,15 +3067,15 @@ public class WorkPackageResource {
 	    		tabs.add(tab1);
 	    	}
 		}
-		
+
 		//Validasi Market Fare
 		for(WorkPackageFareSheet wpfs : workPackage.getMarketFareSheet()) {
 			WorkPackage.Validation.Tab tab1 = new WorkPackage.Validation.Tab();
 	    		tab1.setName(wpfs.getMarketFaresName());
-	    		
+
 	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
 	    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
-	    		
+
 		    		List<String> rejectStatus = new ArrayList<>();
 		    		List<WorkPackageFare> fares = wpfs.getFares();
 					for(WorkPackageFare fare : fares) {
@@ -3126,35 +3127,35 @@ public class WorkPackageResource {
 					    		err1.setMessage("Currency is required");
 					    		errors.add(err1);
 							}
-							if(fare.getAmount() == null || fare.getAmount().contentEquals("")) {									
+							if(fare.getAmount() == null || fare.getAmount().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Base Amt is required");
-					    		errors.add(err1);						    		
+					    		errors.add(err1);
 							}
 							if(fare.getTravelStart() == null) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Travel Start is required");
-					    		errors.add(err1);	
+					    		errors.add(err1);
 							}
 							if(fare.getTravelEnd() == null) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Travel End is required");
-					    		errors.add(err1);	
+					    		errors.add(err1);
 							}
 							if(fare.getSaleStart() == null) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Sale Start is required");
-					    		errors.add(err1);	
+					    		errors.add(err1);
 							}
 							if(fare.getSaleEnd() == null) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Sale End is required");
-					    		errors.add(err1);	
+					    		errors.add(err1);
 							}
 							if(fare.getTravelStart() != null && fare.getTravelEnd() != null) {
 								if(fare.getTravelStart().isAfter(fare.getTravelEnd())) {
@@ -3240,35 +3241,35 @@ public class WorkPackageResource {
 					    		err1.setMessage("Currency is required");
 					    		errors.add(err1);
 							}
-							if(fare.getAmount() == null || fare.getAmount().contentEquals("")) {									
+							if(fare.getAmount() == null || fare.getAmount().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Base Amt is required");
-					    		errors.add(err1);						    		
+					    		errors.add(err1);
 							}
 							if(fare.getTravelStart() == null) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Travel Start is required");
-					    		errors.add(err1);	
+					    		errors.add(err1);
 							}
 							if(fare.getTravelEnd() == null) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Travel End is required");
-					    		errors.add(err1);	
+					    		errors.add(err1);
 							}
 							if(fare.getSaleStart() == null) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Sale Start is required");
-					    		errors.add(err1);	
+					    		errors.add(err1);
 							}
 							if(fare.getSaleEnd() == null) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Sale End is required");
-					    		errors.add(err1);	
+					    		errors.add(err1);
 							}
 							if(fare.getTravelStart() != null && fare.getTravelEnd() != null) {
 								if(fare.getTravelStart().isAfter(fare.getTravelEnd())) {
@@ -3301,7 +3302,7 @@ public class WorkPackageResource {
 			    		errors.add(err1);
 					}
 	    		tab1.setError(errors);
-	    		
+
 	    		// check for duplicates
 //	    		for(int i =0; i < fares.size(); i++){
 //	    		    for(int j=0; j< fares.size(); j++){
@@ -3326,14 +3327,14 @@ public class WorkPackageResource {
 	    		tabs.add(tab1);
 	    	}
 		}
-		
+
 		//Validasi Waiver Fare
 		for(WorkPackageFareSheet wpfs : workPackage.getWaiverFareSheet()) {
 			WorkPackage.Validation.Tab tab1 = new WorkPackage.Validation.Tab();
 	    		tab1.setName(wpfs.getWaiverFaresName());
-	    		
+
 	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
-	    		
+
 		    		List<String> rejectStatus = new ArrayList<>();
 		    		List<WorkPackageFare> fares = wpfs.getFares();
 					for(WorkPackageFare fare : fares) {
@@ -3391,53 +3392,53 @@ public class WorkPackageResource {
 					    		err1.setMessage("Tkt To is required");
 					    		errors.add(err1);
 							}
-							if(fare.getWaiverOri() == null || fare.getWaiverOri().contentEquals("")) {									
+							if(fare.getWaiverOri() == null || fare.getWaiverOri().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Ori is required");
-					    		errors.add(err1);						    		
+					    		errors.add(err1);
 							}
 							if(fare.getWaiverDest() == null|| fare.getWaiverDest().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Dest is required");
-					    		errors.add(err1);	
+					    		errors.add(err1);
 							}
 							if(fare.getWaiverOriginalItinerary() == null|| fare.getWaiverOriginalItinerary().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Original Itinerary Start is required");
-					    		errors.add(err1);	
+					    		errors.add(err1);
 							}
 							if(fare.getWaiverOriginalBasicFare() == null|| fare.getWaiverOriginalBasicFare().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Original Basic Fare is required");
-					    		errors.add(err1);	
+					    		errors.add(err1);
 							}
 							if(fare.getWaiverCalculatedPn() == null|| fare.getWaiverCalculatedPn().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Calculated PN is required");
-					    		errors.add(err1);	
+					    		errors.add(err1);
 							}
 							if(fare.getWaiverOriginalPn() == null|| fare.getWaiverOriginalPn().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Original PN   is required");
-					    		errors.add(err1);	
+					    		errors.add(err1);
 							}
 							if(fare.getWaiverApprovedPn() == null|| fare.getWaiverApprovedPn().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Aprrove PN is required");
-					    		errors.add(err1);	
+					    		errors.add(err1);
 							}
 							if(fare.getWaiverTotalPax() == null|| fare.getWaiverTotalPax().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Total Pax is required");
-					    		errors.add(err1);	
+					    		errors.add(err1);
 							}
 						}else if(workPackage.getReviewLevel().contentEquals("HO")) {
 							if(wpfs.getWaiverFaresName() == null || wpfs.getWaiverFaresName().contentEquals("")) {
@@ -3488,53 +3489,53 @@ public class WorkPackageResource {
 					    		err1.setMessage("Tkt To is required");
 					    		errors.add(err1);
 							}
-							if(fare.getWaiverOri() == null || fare.getWaiverOri().contentEquals("")) {									
+							if(fare.getWaiverOri() == null || fare.getWaiverOri().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Ori is required");
-					    		errors.add(err1);						    		
+					    		errors.add(err1);
 							}
 							if(fare.getWaiverDest() == null|| fare.getWaiverDest().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Dest is required");
-					    		errors.add(err1);	
+					    		errors.add(err1);
 							}
 							if(fare.getWaiverOriginalItinerary() == null|| fare.getWaiverOriginalItinerary().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Original Itinerary Start is required");
-					    		errors.add(err1);	
+					    		errors.add(err1);
 							}
 							if(fare.getWaiverOriginalBasicFare() == null|| fare.getWaiverOriginalBasicFare().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Original Basic Fare is required");
-					    		errors.add(err1);	
+					    		errors.add(err1);
 							}
 							if(fare.getWaiverCalculatedPn() == null|| fare.getWaiverCalculatedPn().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Calculated PN is required");
-					    		errors.add(err1);	
+					    		errors.add(err1);
 							}
 							if(fare.getWaiverOriginalPn() == null|| fare.getWaiverOriginalPn().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Original PN   is required");
-					    		errors.add(err1);	
+					    		errors.add(err1);
 							}
 							if(fare.getWaiverApprovedPn() == null|| fare.getWaiverApprovedPn().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Aprrove PN is required");
-					    		errors.add(err1);	
+					    		errors.add(err1);
 							}
 							if(fare.getWaiverTotalPax() == null|| fare.getWaiverTotalPax().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Total Pax is required");
-					    		errors.add(err1);	
+					    		errors.add(err1);
 							}
 						}
 					}
@@ -3544,7 +3545,7 @@ public class WorkPackageResource {
 			    		errors.add(err1);
 					}
 	    		tab1.setError(errors);
-	    		
+
 	    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
 	    		errorsCount += errors.size();
 	    		warningsCount += warnings.size();
@@ -3570,26 +3571,26 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<List<WorkPackage>> getAllWorkPackages(WorkPackageFilter filter, Pageable pageable) {
         log.debug("REST request to get a page of WorkPackages {}", filter);
-        
+
         Optional<WorkPackageFilter> initFilter = packagefilterRepository.findOneByLoginName(SecurityUtils.getCurrentUserLogin().get());
-      
+
         if(initFilter.isPresent()) {
         	WorkPackageFilter temp = initFilter.get();
         	filter.setLoginName(SecurityUtils.getCurrentUserLogin().get());
         	filter.setId(temp.getId());
-        	temp = packagefilterRepository.save(filter);  
+        	temp = packagefilterRepository.save(filter);
         	filter = temp;
         }else {
         	filter.setLoginName(SecurityUtils.getCurrentUserLogin().get());
 	        packagefilterRepository.save(filter);
         }
-                
-//        Page<WorkPackage> page = workPackageService.findAllByOrderByLastModifiedDate(pageable);       
-        Page<WorkPackage> page = workPackageService.findCustom(filter, pageable);       
+
+//        Page<WorkPackage> page = workPackageService.findAllByOrderByLastModifiedDate(pageable);
+        Page<WorkPackage> page = workPackageService.findCustom(filter, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/work-packages");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
-    
+
     /**
      * GET  /workPackagefilter/:id : get the "id" workPackagefilter.
      *
@@ -3607,17 +3608,17 @@ public class WorkPackageResource {
         	 result = workPackagefilter.get();
         }
         else {
-        	WorkPackageFilter filter = new WorkPackageFilter();    
-        		
+        	WorkPackageFilter filter = new WorkPackageFilter();
+
         	com.atibusinessgroup.fmp.domain.WorkPackageFilter.DistributionType dt = new WorkPackageFilter.DistributionType();
         	dt.setAtpco(true);
         	dt.setMarket(true);
         	dt.setWaiver(true);
         	filter.setDistributionType(dt);
-        	
+
         	com.atibusinessgroup.fmp.domain.WorkPackageFilter.Status s = new WorkPackageFilter.Status();
         	s.setCompleted(true);
-        	s.setDistributed(true);        	
+        	s.setDistributed(true);
         	s.setPending(true);
         	s.setReadyToRelease(true);
         	s.setReferred(true);
@@ -3628,18 +3629,18 @@ public class WorkPackageResource {
         	s.setNewStatus(true);
         	s.setDiscontinued(true);
         	filter.setStatus(s);
-        	
+
         	com.atibusinessgroup.fmp.domain.WorkPackageFilter.Type t = new WorkPackageFilter.Type();
         	t.setDiscount(true);
         	t.setRegular(true);
-        	t.setWaiver(true);        	
+        	t.setWaiver(true);
         	filter.setType(t);
-        	
+
         	com.atibusinessgroup.fmp.domain.WorkPackageFilter.ReviewLevel rl = new WorkPackageFilter.ReviewLevel();
         	rl.setDistribution(true);
 	    	rl.setHo(true);
 	    	rl.setLso(true);
-	    	rl.setRouteManagement(true); 
+	    	rl.setRouteManagement(true);
         	/*Optional<User> userOptional = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
         	if(userOptional.isPresent()) {
             	User user = userOptional.get();
@@ -3651,12 +3652,12 @@ public class WorkPackageResource {
 		        	}else if(reviewLevel.equals("DISTRIBUTION")) {
 		        		rl.setDistribution(true);
 		        	}else if(reviewLevel.equals("ROUTE_MANAGEMENT")) {
-		        		rl.setRouteManagement(true); 
+		        		rl.setRouteManagement(true);
 		        	}
 	        	}
-        	}*/	        
+        	}*/
         	filter.setReviewLevel(rl);
-        	
+
         	filter.setApprovalReference(null);
         	filter.setCreatedTime("10");
         	filter.setLoginName(SecurityUtils.getCurrentUserLogin().get());
@@ -3682,40 +3683,40 @@ public class WorkPackageResource {
         }
 
         Boolean needLocked = false;
-        Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());  
+        Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
 		if(user.get().getReviewLevels().indexOf(workPackage.getReviewLevel()) > -1){
 			needLocked = true;
 		}
-		
+
         if(!workPackage.isLocked() && needLocked) {
         	log.debug("HARUS di-locked ya ? : {}", id);
         	workPackage.setLocked(true);
             workPackage.setLockedBy(SecurityUtils.getCurrentUserLogin().get());
             workPackage.setLockedSince(ZonedDateTime.now());
-            workPackage = workPackageService.save(workPackage);	
-        }        
+            workPackage = workPackageService.save(workPackage);
+        }
 //        List<WorkPackageFare> fares = workPackageFareService.findAllByWorkPackageAndFareType(workPackage.getId(), null);
 //        log.debug("REST request to set WorkPackageFARES : {}", fares.size());
 //        workPackage.setFares(fares);
-//       
+//
 //        List<WorkPackageFare> addonFares = workPackageFareService.findAllByWorkPackageAndFareType(workPackage.getId(), "ADDON");
 //        log.debug("REST request to set WorkPackageFARES Addon : {}", addonFares.size());
 //        workPackage.setAddonFares(addonFares);
-//        
+//
 //        List<WorkPackageFare> marketFares = workPackageFareService.findAllByWorkPackageAndFareType(workPackage.getId(), "MARKET");
 //        log.debug("REST request to set WorkPackageFARES Market: {}", marketFares.size());
 //        workPackage.setMarketFares(marketFares);
-//        
+//
 //        List<WorkPackageFare> discountFares = workPackageFareService.findAllByWorkPackageAndFareType(workPackage.getId(), "DISCOUNT");
 //        log.debug("REST request to set WorkPackageFARES Discount: {}", discountFares.size());
 //        workPackage.setDiscountFares(discountFares);
-        
+
 //        if(workPackage.getVersion() == null) {
 //        	workPackage.setVersion("current");
 //        }
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(workPackage));
     }
-    
+
     /**
      * GET  /work-packages/history/:id : get the "id" workPackage.
      *
@@ -3727,13 +3728,13 @@ public class WorkPackageResource {
     public ResponseEntity<List<WorkPackageHistory>> getWorkPackageHistory(@PathVariable String id) {
         log.debug("REST request to get WorkPackage : {}", id);
         WorkPackage workPackage = workPackageService.findOne(id);
-        
+
         List<WorkPackageHistory> history = workPackageHistoryService.findAllByWorkPackage(new ObjectId(workPackage.getId()));
-        
+
 //        List<WorkPackageFare> fares = workPackageFareService.findAllByWorkPackage(workPackage.getId());
 //        log.debug("REST request to get WorkPackageFARES : {}", fares.size());
 //        workPackage.setFares(fares);
-//       
+//
 //        List<WorkPackageFare> addonFares = workPackageFareService.findAllByWorkPackageAndFareType(workPackage.getId(), "ADDON");
 //        log.debug("REST request to get WorkPackageFARES : {}", fares.size());
 //        workPackage.setFares(fares);
@@ -3750,7 +3751,7 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<Void> deleteWorkPackage(@PathVariable String id) {
         log.debug("REST request to delete WorkPackage : {}", id);
-        
+
         List<WorkPackageFare> fares = workPackageFareService.findAllByWorkPackage(id);
         for(WorkPackageFare wp : fares){
         		workPackageFareService.delete(wp.getId());
@@ -3758,7 +3759,7 @@ public class WorkPackageResource {
         workPackageService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
     }
-    
+
     /**
      * POST  /work-packages/passup : Passup
      *
@@ -3773,12 +3774,12 @@ public class WorkPackageResource {
         if (workPackage.getId() == null) {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
-        
-        workPackage = workPackageService.save(workPackage);        
-            
+
+        workPackage = workPackageService.save(workPackage);
+
         workPackage = validateWo(workPackage);
         if(workPackage.getValidation() != null && workPackage.getValidation().getErrorsCount() > 0) {
-        	
+
         }
         else {
 	        WorkPackage result = workPackageService.findOne(workPackage.getId());
@@ -3797,7 +3798,7 @@ public class WorkPackageResource {
 	        	fareVersion.version = sheet.fareVersion.size() + 1;
 	        	sheet.fareVersion.add(fareVersion);
 	        }
-	        
+
 	        List<WorkPackageFareSheet> addOnFareSheet = result.getAddonFareSheet();
 	        for(WorkPackageFareSheet sheet : addOnFareSheet) {
 	        	FareVersion fareVersion = new FareVersion();
@@ -3807,7 +3808,7 @@ public class WorkPackageResource {
 	        	fareVersion.version = sheet.fareVersion.size() + 1;
 	        	sheet.fareVersion.add(fareVersion);
 	        }
-	        
+
 	        List<WorkPackageFareSheet> discountFareSheet = result.getDiscountFareSheet();
 	        for(WorkPackageFareSheet sheet : discountFareSheet) {
 	        	FareVersion fareVersion = new FareVersion();
@@ -3817,7 +3818,7 @@ public class WorkPackageResource {
 	        	fareVersion.version = sheet.fareVersion.size() + 1;
 	        	sheet.fareVersion.add(fareVersion);
 	        }
-	        
+
 	        List<WorkPackageFareSheet> marketFareSheet = result.getMarketFareSheet();
 	        for(WorkPackageFareSheet sheet : marketFareSheet) {
 	        	FareVersion fareVersion = new FareVersion();
@@ -3827,7 +3828,7 @@ public class WorkPackageResource {
 	        	fareVersion.version = sheet.fareVersion.size() + 1;
 	        	sheet.fareVersion.add(fareVersion);
 	        }
-	        
+
 	        List<WorkPackageFareSheet> waiverFareSheet = result.getWaiverFareSheet();
 	        for(WorkPackageFareSheet sheet : waiverFareSheet) {
 	        	FareVersion fareVersion = new FareVersion();
@@ -3838,23 +3839,23 @@ public class WorkPackageResource {
 	        	sheet.fareVersion.add(fareVersion);
 	        }
 	        result.setQueuedDate(Instant.now());
-	        workPackageService.save(result);  
-	        
+	        workPackageService.save(result);
+
 	        saveHistoryData(workPackage);
-	        
+
 	        WorkPackageHistory history = new WorkPackageHistory();
 	        history.setWorkPackage(new ObjectId(result.getId()));
 	        history.setType("PASSUP");
 	        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
-	        workPackageHistoryService.save(history);	        
+	        workPackageHistoryService.save(history);
         }
-        
-        
+
+
         return ResponseEntity.created(new URI("/api/work-packages/" + workPackage.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, workPackage.getId().toString()))
             .body(workPackage);
     }
-    
+
     /**
      * POST  /work-packages/unlock : unlock
      *
@@ -3869,17 +3870,17 @@ public class WorkPackageResource {
         if (workPackage.getId() == null) {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
-        
+
         WorkPackage result = workPackageService.findOne(workPackage.getId());
-        
+
         result.setLocked(false);
         workPackageService.save(result);
-        
+
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
                 .body(result);
     }
-    
+
     /**
      * POST  /work-packages/withdraw : withdraw
      *
@@ -3894,16 +3895,16 @@ public class WorkPackageResource {
         if (workPackage.getId() == null) {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
-        
+
         WorkPackage result = workPackageService.findOne(workPackage.getId());
         result.setStatus(Status.WITHDRAWN);
         result.setQueuedDate(Instant.now());
         workPackageService.save(result);
         /*
         saveHistoryData(workPackage);
-        
+
         //updateWorkPackage(workPackage);
-                        
+
         WorkPackage result = workPackageService.findOne(workPackage.getId());
         String reviewLevel = result.getReviewLevel();
         if(reviewLevel.contentEquals("LSO")) {
@@ -3921,36 +3922,36 @@ public class WorkPackageResource {
 //        else if(reviewLevel.contentEquals("HO2")) {
 //        		//cannot passup
 //        }
-        
+
         workPackageService.save(result);
-        
-        
+
+
         WorkPackageHistory history = new WorkPackageHistory();
         history.setWorkPackage(new ObjectId(result.getId()));
         history.setType("PASSUP");
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
         */
-        
+
         WorkPackageHistory history = new WorkPackageHistory();
         history.setWorkPackage(new ObjectId(result.getId()));
         history.setType("WITHDRAW");
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
-        
+
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
-    
+
     private void saveHistoryData(WorkPackage workPackage) {
 		// TODO Auto-generated method stub
-//    		String woId = workPackage.getId();        
+//    		String woId = workPackage.getId();
 //        long count = workPackageHistoryDataRepository.countByWorkPackage(new ObjectId(woId));
 //        count = count+1;
-//        
-//        WorkPackageHistoryData wphd = new WorkPackageHistoryData(workPackage, String.valueOf(count));        
-//        wphd.setWorkPackage(new ObjectId(woId));       
+//
+//        WorkPackageHistoryData wphd = new WorkPackageHistoryData(workPackage, String.valueOf(count));
+//        wphd.setWorkPackage(new ObjectId(woId));
 //        log.debug("REST request to save WorkPackage History Data : {}", wphd);
 //        workPackageHistoryDataRepository.save(wphd);
 
@@ -3970,11 +3971,11 @@ public class WorkPackageResource {
         if (workPackage.getId() == null) {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
-        
+
         saveHistoryData(workPackage);
-        
+
         //updateWorkPackage(workPackage);
-        
+
         WorkPackage result = workPackageService.findOne(workPackage.getId());
         String reviewLevel = result.getReviewLevel();
         if(reviewLevel.contentEquals("HO")) {
@@ -3982,7 +3983,7 @@ public class WorkPackageResource {
     		result.setStatus(Status.PENDING);
     		result.setLocked(false);
         }
-        
+
         List<WorkPackageFareSheet> fareSheet = result.getFareSheet();
         for(WorkPackageFareSheet sheet : fareSheet) {
         	FareVersion fareVersion = new FareVersion();
@@ -3992,7 +3993,7 @@ public class WorkPackageResource {
         	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
         	sheet.fareVersion.add(fareVersion);
         }
-        
+
         List<WorkPackageFareSheet> addOnFareSheet = result.getAddonFareSheet();
         for(WorkPackageFareSheet sheet : addOnFareSheet) {
         	FareVersion fareVersion = new FareVersion();
@@ -4002,7 +4003,7 @@ public class WorkPackageResource {
         	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
         	sheet.fareVersion.add(fareVersion);
         }
-               
+
         List<WorkPackageFareSheet> discountFareSheet = result.getDiscountFareSheet();
         for(WorkPackageFareSheet sheet : discountFareSheet) {
         	FareVersion fareVersion = new FareVersion();
@@ -4012,7 +4013,7 @@ public class WorkPackageResource {
         	fareVersion.version = sheet.fareVersion.size() + 1;
         	sheet.fareVersion.add(fareVersion);
         }
-        
+
         List<WorkPackageFareSheet> marketFareSheet = result.getMarketFareSheet();
         for(WorkPackageFareSheet sheet : marketFareSheet) {
         	FareVersion fareVersion = new FareVersion();
@@ -4022,7 +4023,7 @@ public class WorkPackageResource {
         	fareVersion.version = sheet.fareVersion.size() + 1;
         	sheet.fareVersion.add(fareVersion);
         }
-        
+
         List<WorkPackageFareSheet> waiverFareSheet = result.getWaiverFareSheet();
         for(WorkPackageFareSheet sheet : waiverFareSheet) {
         	FareVersion fareVersion = new FareVersion();
@@ -4034,19 +4035,19 @@ public class WorkPackageResource {
         }
         result.setQueuedDate(Instant.now());
         workPackageService.save(result);
-        
+
         WorkPackageHistory history = new WorkPackageHistory();
         history.setWorkPackage(new ObjectId(result.getId()));
         history.setType("PASSDOWN");
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
-        
-        
+
+
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
-    
+
     /**
      * POST  /work-packages/passsideway : Passsideway
      *
@@ -4061,10 +4062,10 @@ public class WorkPackageResource {
         if (workPackage.getId() == null) {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
-        
+
         WorkPackage result = workPackageService.findOne(workPackage.getId());
         String reviewLevel = result.getReviewLevel();
-        
+
         if(result.getSidewayReviewLevel() == null) {
     		result.setSidewayReviewLevel(reviewLevel);
     		result.setReviewLevel("ROUTE_MANAGEMENT");
@@ -4077,18 +4078,18 @@ public class WorkPackageResource {
         result.setStatus(Status.PENDING);
         result.setQueuedDate(Instant.now());
         workPackageService.save(result);
-        
+
         WorkPackageHistory history = new WorkPackageHistory();
         history.setWorkPackage(new ObjectId(result.getId()));
         history.setType("PASSSIDEWAY");
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
-        
+
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
-    
+
     /**
      * POST  /work-packages/approve : Approve
      *
@@ -4103,16 +4104,16 @@ public class WorkPackageResource {
         if (workPackage.getId() == null) {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
-        
+
         saveHistoryData(workPackage);
-        
+
         //updateWorkPackage(workPackage);
-        
+
 //        WorkPackage result = workPackageService.findOne(workPackage.getId());
         String reviewLevel = workPackage.getReviewLevel();
         String distribution = workPackage.getTargetDistribution();
         String type = workPackage.getType().name();
-        
+
         if(reviewLevel.contentEquals("HO") && distribution.contentEquals("MARKET") && type.contentEquals("REGULAR")) {
         	workPackage.setDistributionReviewLevel(reviewLevel);
         	workPackage.setReviewLevel("LSO");
@@ -4122,25 +4123,25 @@ public class WorkPackageResource {
         	workPackage.setDistributionReviewLevel(reviewLevel);
         	workPackage.setReviewLevel("DISTRIBUTION");
     		workPackage.setLocked(false);
-    		workPackage.setStatus(Status.PENDING);        		
+    		workPackage.setStatus(Status.PENDING);
 	    }
 //        if(reviewLevel.contentEquals("HO")) {
 //    		result.setDistributionReviewLevel(reviewLevel);
 //    		result.setReviewLevel("DISTRIBUTION");
 //    		result.setLocked(false);
-//    		result.setStatus(Status.PENDING);        		
+//    		result.setStatus(Status.PENDING);
 //	    }
         workPackage.setQueuedDate(Instant.now());
         workPackageService.save(workPackage);
-        
+
         WorkPackageHistory history = new WorkPackageHistory();
         history.setWorkPackage(new ObjectId(workPackage.getId()));
         history.setType("APPROVE");
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
-        
+
         ApproveConfig x = new ApproveConfig();
-        
+
         String[] emailData = null;
         if(workPackage.getApproveConfig().getEmail() != null && workPackage.getApproveConfig().getEmail().size() > 0) {
 	        emailData = new String[workPackage.getApproveConfig().getEmail().size()];
@@ -4148,36 +4149,36 @@ public class WorkPackageResource {
 	        	emailData[i] = workPackage.getApproveConfig().getEmail().get(i);
 	        }
         }
-        
-        x.setEmail(workPackage.getApproveConfig().getEmail()); 
+
+        x.setEmail(workPackage.getApproveConfig().getEmail());
         workPackage.setApproveConfig(x);
-        
+
         String[] emailDataCc = null;
         if(workPackage.getApproveConfig().getCcEmail() != null && workPackage.getApproveConfig().getCcEmail().size() > 0) {
-	        emailDataCc = new String[workPackage.getApproveConfig().getCcEmail().size()];        
+	        emailDataCc = new String[workPackage.getApproveConfig().getCcEmail().size()];
 	        for (int i=0;i<workPackage.getApproveConfig().getCcEmail().size();i++) {
 	        	emailDataCc[i] = workPackage.getApproveConfig().getCcEmail().get(i);
 	        }
         }
-        
-        x.setCcEmail(workPackage.getApproveConfig().getCcEmail()); 
+
+        x.setCcEmail(workPackage.getApproveConfig().getCcEmail());
         workPackage.setApproveConfig(x);
-        
+
         workPackageService.save(workPackage);
         User u = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
-        
+
         String content = "<h2>Inter Office Comment</h2>";
         content += "<br/></br>";
         content += "<table>";
-        	content += "<thead>";        
+        	content += "<thead>";
 	        content += "<tr>";
 	        	content += 	"<th>Message</th>";
 	        	content += 	"<th>Username</th>";
 	        	content += 	"<th>Date</th>";
 	        content += "</tr>";
-	        content += "</thead>";  
-	        
-	        content += "<tbody>";  
+	        content += "</thead>";
+
+	        content += "<tbody>";
 	        	if(workPackage.getInterofficeComment() != null) {
 		        	for(Comment c : workPackage.getInterofficeComment()) {
 				        content += "<tr>";
@@ -4192,9 +4193,9 @@ public class WorkPackageResource {
 		        		content += 	"<td colspan='3'>No Interoffice Comment</td>";
 		        	content += "</tr>";
 	        	}
-        	content += "</tbody>";  
+        	content += "</tbody>";
         content += "</table>";
-        
+
         List<Attachment> sendAttachments = new ArrayList<>();
         List<Attachment> attachments = workPackage.getAttachmentData();
         for (Attachment attachment : attachments) {
@@ -4226,7 +4227,7 @@ public class WorkPackageResource {
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, workPackage.getId().toString()))
             .body(workPackage);
     }
-    
+
     /**
      * POST  /work-packages/resend-approve : Approve
      *
@@ -4241,14 +4242,14 @@ public class WorkPackageResource {
         if (workPackage.getId() == null) {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
-        
+
         WorkPackage result = workPackageService.findOne(workPackage.getId());
         result.setLocked(false);
         workPackageService.save(result);
-        
+
         ApproveConfig x = new ApproveConfig();
-        
-        
+
+
         String[] emailData = null;
         if(workPackage.getApproveConfig().getEmail() != null && workPackage.getApproveConfig().getEmail().size() > 0) {
 	        emailData = new String[workPackage.getApproveConfig().getEmail().size()];
@@ -4257,37 +4258,37 @@ public class WorkPackageResource {
 	        	log.debug("cek : "+emailData[i]);
 	        }
         }
-        
-        
-        x.setEmail(workPackage.getApproveConfig().getEmail()); 
+
+
+        x.setEmail(workPackage.getApproveConfig().getEmail());
         workPackage.setApproveConfig(x);
-        
+
         String[] emailDataCc = null;
         if(workPackage.getApproveConfig().getCcEmail() != null && workPackage.getApproveConfig().getCcEmail().size() > 0) {
-	        emailDataCc = new String[workPackage.getApproveConfig().getCcEmail().size()];        
+	        emailDataCc = new String[workPackage.getApproveConfig().getCcEmail().size()];
 	        for (int i=0;i<workPackage.getApproveConfig().getCcEmail().size();i++) {
 	        	emailDataCc[i] = workPackage.getApproveConfig().getCcEmail().get(i);
 	        }
         }
-        
-        x.setCcEmail(workPackage.getApproveConfig().getCcEmail()); 
+
+        x.setCcEmail(workPackage.getApproveConfig().getCcEmail());
         workPackage.setApproveConfig(x);
-        
+
         workPackageService.save(workPackage);
         User u = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
-        
+
         String content = "<h2>Inter Office Comment</h2>";
         content += "<br/></br>";
         content += "<table>";
-        	content += "<thead>";        
+        	content += "<thead>";
 	        content += "<tr>";
 	        	content += 	"<th>Message</th>";
 	        	content += 	"<th>Username</th>";
 	        	content += 	"<th>Date</th>";
 	        content += "</tr>";
-	        content += "</thead>";  
-	        
-	        content += "<tbody>";  
+	        content += "</thead>";
+
+	        content += "<tbody>";
 	        	if(workPackage.getInterofficeComment() != null) {
 		        	for(Comment c : workPackage.getInterofficeComment()) {
 				        content += "<tr>";
@@ -4302,9 +4303,9 @@ public class WorkPackageResource {
 		        		content += 	"<td colspan='3'>No Interoffice Comment</td>";
 		        	content += "</tr>";
 	        	}
-        	content += "</tbody>";  
+        	content += "</tbody>";
         content += "</table>";
-        
+
         List<Attachment> sendAttachments = new ArrayList<>();
         List<Attachment> attachments = workPackage.getAttachmentData();
         for (Attachment attachment : attachments) {
@@ -4312,7 +4313,7 @@ public class WorkPackageResource {
         		if(attachment.getInOnly().equals(true)) {
             		sendAttachments.add(attachment);
             	}
-			} catch (Exception e) {	}        	
+			} catch (Exception e) {	}
 		}
         if(!sendAttachments.isEmpty()) {
         	log.debug("SEND EMAIL WITH ATTACHMENT");
@@ -4322,7 +4323,7 @@ public class WorkPackageResource {
         	log.debug("SEND EMAIL WITHOUT ATTACHMENT");
         	mailService.sendEmailWithoutAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true);
         }
-        
+
 //        if(workPackage.getApproveConfig().attachment) {
 //        	log.debug("SEND EMAIL WITH ATTACHMENT");
 //        	mailService.sendEmailWithAttachment(u.getEmail(), emailData, emailDataCc, "Approve", content, true, true, workPackage.getAttachmentData());
@@ -4335,7 +4336,7 @@ public class WorkPackageResource {
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
-    
+
     /**
      * POST  /work-packages/referback : referback
      *
@@ -4350,11 +4351,11 @@ public class WorkPackageResource {
         if (workPackage.getId() == null) {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
-        
+
         saveHistoryData(workPackage);
-        
+
         //updateWorkPackage(workPackage);
-        
+
         WorkPackage result = workPackageService.findOne(workPackage.getId());
 
         result.setReviewLevel(result.getDistributionReviewLevel());
@@ -4363,18 +4364,18 @@ public class WorkPackageResource {
 		result.setLocked(false);
 		result.setQueuedDate(Instant.now());
         workPackageService.save(result);
-        
+
         WorkPackageHistory history = new WorkPackageHistory();
         history.setWorkPackage(new ObjectId(result.getId()));
         history.setType("REFERBACK");
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
-        
+
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
-    
+
     /**
      * POST  /work-packages/complete : complete
      *
@@ -4389,11 +4390,11 @@ public class WorkPackageResource {
         if (workPackage.getId() == null) {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
-        
+
         saveHistoryData(workPackage);
-        
+
         //updateWorkPackage(workPackage);
-        
+
         WorkPackage result = workPackageService.findOne(workPackage.getId());
 
         result.setReviewLevel(result.getReviewLevel());
@@ -4402,18 +4403,18 @@ public class WorkPackageResource {
 		result.setLocked(false);
 		result.setQueuedDate(Instant.now());
         workPackageService.save(result);
-        
+
         WorkPackageHistory history = new WorkPackageHistory();
         history.setWorkPackage(new ObjectId(result.getId()));
         history.setType("COMPLETE");
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
-        
+
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
-    
+
     /**
      * POST  /work-packages/createbatch : createbatch
      *
@@ -4425,15 +4426,15 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<WorkPackage> createbatchWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
         log.debug("REST request to createbatch WorkPackage : {}", workPackage);
-        
-        
+
+
         if (workPackage.getId() == null) {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
-                
+
         workPackage = validateWo(workPackage);
         if(workPackage.getValidation() != null && workPackage.getValidation().getErrorsCount() > 0) {
-        	
+
         }
         else {
 
@@ -4441,18 +4442,18 @@ public class WorkPackageResource {
             NumberFormat nf = new DecimalFormat("0000000.00");
 
             batchBuilder.append("W                          NN");
-            
+
             if(workPackage.getFilingDetail().getEmail() != null && !workPackage.getFilingDetail().getEmail().contentEquals("")) {
-                batchBuilder.append("\n");      
+                batchBuilder.append("\n");
                 batchBuilder.append("N"+workPackage.getFilingDetail().getEmail());
             }
-            
-            batchBuilder.append("\n");    
-            
+
+            batchBuilder.append("\n");
+
             for(WorkPackageFareSheet sheet : workPackage.getFareSheet()) {
             	 batchBuilder.append("B  NN "+sheet.getSpecifiedFaresName());
-                 batchBuilder.append("\n");   
-                 
+                 batchBuilder.append("\n");
+
                  for(WorkPackageFare fare : sheet.getFares()) {
                 	 if(fare.getAction().contentEquals("I") || fare.getAction().contentEquals("R")) {
                 		 batchBuilder.append("F");
@@ -4471,13 +4472,13 @@ public class WorkPackageResource {
                 		 batchBuilder.append(fare.getRtgno());
                 		 batchBuilder.append("  ");
                 		 batchBuilder.append(fare.getCurrency());
-                		 
+
                 		 batchBuilder.append(nf.format(Float.parseFloat(fare.getAmount())));
-                		 
+
                 		 //effective date
 //                		 batchBuilder.append("         ");
-//                		 batchBuilder.append(obj)            		 
-                		 batchBuilder.append("\n");   
+//                		 batchBuilder.append(obj)
+                		 batchBuilder.append("\n");
                 	 } else if(fare.getAction().contentEquals("N")) {
                 		 batchBuilder.append("F");
                 		 batchBuilder.append(fare.getCarrier());
@@ -4495,22 +4496,22 @@ public class WorkPackageResource {
                 		 batchBuilder.append(fare.getRtgno());
                 		 batchBuilder.append("  ");
                 		 batchBuilder.append(fare.getCurrency());
-                		 
+
                 		 batchBuilder.append(nf.format(Float.parseFloat(fare.getAmount())));
-                		 
+
                 		 //effective date
 //                		 batchBuilder.append("         ");
-//                		 batchBuilder.append(obj)            		 
-                		 batchBuilder.append("\n");  
+//                		 batchBuilder.append(obj)
+                		 batchBuilder.append("\n");
                 	 }
                  }
             }
-            
-            
+
+
             for(WorkPackageFareSheet sheet : workPackage.getAddonFareSheet()) {
            	 batchBuilder.append("B  NN "+sheet.getAddonFaresName());
-                batchBuilder.append("\n");   
-                
+                batchBuilder.append("\n");
+
                 for(WorkPackageFare fare : sheet.getFares()) {
                	 if(fare.getAction().contentEquals("I") || fare.getAction().contentEquals("R")) {
                		 batchBuilder.append("A");
@@ -4532,11 +4533,11 @@ public class WorkPackageResource {
                		 batchBuilder.append(fare.getCurrency());
                		 batchBuilder.append("+");
                		 batchBuilder.append(nf.format(Float.parseFloat(fare.getAmount())));
-               		 
+
                		 //effective date
 //               		 batchBuilder.append("         ");
-//               		 batchBuilder.append(obj)            		 
-               		 batchBuilder.append("\n");   
+//               		 batchBuilder.append(obj)
+               		 batchBuilder.append("\n");
                	 } else if(fare.getAction().contentEquals("N")) {
                		 batchBuilder.append("F");
                		 batchBuilder.append(fare.getCarrier());
@@ -4554,25 +4555,25 @@ public class WorkPackageResource {
                		 batchBuilder.append(fare.getRtgno());
                		 batchBuilder.append("  ");
                		 batchBuilder.append(fare.getCurrency());
-               		 
+
                		 batchBuilder.append(nf.format(Float.parseFloat(fare.getAmount())));
-               		 
+
                		 //effective date
 //               		 batchBuilder.append("         ");
-//               		 batchBuilder.append(obj)            		 
-               		 batchBuilder.append("\n");  
+//               		 batchBuilder.append(obj)
+               		 batchBuilder.append("\n");
                	 }
                 }
            }
             /*
-            
+
             batchBuilder.append("B  NN "+workPackage.getSpecifiedFaresName());
-            batchBuilder.append("\n");        
+            batchBuilder.append("\n");
             for(WorkPackageFare fare : workPackage.getFares()) {
     	    		batchBuilder.append("F");
     	    		batchBuilder.append(fare.getCarrier());
     	    		batchBuilder.append(fare.getTarno());
-    	    		
+
     	    		try {
     		    		if(fare.getAction().contentEquals("New")) {
     		    			batchBuilder.append("N");
@@ -4587,12 +4588,12 @@ public class WorkPackageResource {
     	    		batchBuilder.append(fare.getFareBasis());
     	    		batchBuilder.append("  ");
     	    		if(fare.getTypeOfJourney().contentEquals("One Way") || fare.getTypeOfJourney().contentEquals("One Way Only") ) {
-    	    			batchBuilder.append("1");            			
+    	    			batchBuilder.append("1");
     	    		}
     	    		if(fare.getTypeOfJourney().contentEquals("Return") || fare.getTypeOfJourney().contentEquals("Round Trip")) {
-    	    			batchBuilder.append("2");            			
+    	    			batchBuilder.append("2");
     	    		}
-    	
+
     	    		if(fare.getRtgno() == null) {
     	    			batchBuilder.append("0000");
     	    		}
@@ -4602,36 +4603,36 @@ public class WorkPackageResource {
     	    		batchBuilder.append("  ");
     	    		batchBuilder.append(fare.getCurrency());
     	    		batchBuilder.append(fare.getAmount());
-    	    		
-    	    		batchBuilder.append("\n");           		
+
+    	    		batchBuilder.append("\n");
             }
-            
+
             if(workPackage.getAddonFares() != null && workPackage.getAddonFares().size() > 0) {
-            	
+
             }
             WorkPackage result = workPackageService.findOne(workPackage.getId());
             result.setStatus(Status.READY_TO_RELEASE);
             workPackage = workPackageService.save(result);
-            
+
             WorkPackageHistory history = new WorkPackageHistory();
             history.setWorkPackage(new ObjectId(result.getId()));
             history.setType("CREATEBATCH");
             history.setUsername(SecurityUtils.getCurrentUserLogin().get());
             workPackageHistoryService.save(history);
-            
+
             result.setBatchString(batchBuilder.toString());
-            
+
             saveHistoryData(workPackage);
-            
+
             //updateWorkPackage(workPackage);
     */
-            
-           
+
+
 	        workPackage.setLocked(false);
 	        workPackage.setLockedBy(null);
 	    	workPackage.setLockedSince(null);
 	        workPackage.setStatus(Status.READY_TO_RELEASE); //BUSY
-	        
+
 	        List<WorkPackageFareSheet> fareSheet = workPackage.getFareSheet();
 	        Set<TariffNumber> fareTariffNumber = new HashSet<TariffNumber>();
 	        for(WorkPackageFareSheet sheet : fareSheet) {
@@ -4640,7 +4641,7 @@ public class WorkPackageResource {
 	        		fareTariffNumber.add(fare.getTariffNumber());
 	        	}
 	        }
-	        
+
 	        workPackage.setFilingDetail(new FilingDetail());
 	        workPackage.getFilingDetail().setAtpcoFile(batchBuilder.toString());
 	        for(TariffNumber tariff : fareTariffNumber) {
@@ -4653,20 +4654,20 @@ public class WorkPackageResource {
 	        	workPackage.getFilingDetail().getFilingDetailTarif().add(fdt);
 	        }
 	        workPackage = workPackageService.save(workPackage);
-	        
+
 	        WorkPackageHistory history = new WorkPackageHistory();
 	        history.setWorkPackage(new ObjectId(workPackage.getId()));
 	        history.setType("CREATEBATCH");
 	        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
 	        workPackageHistoryService.save(history);
         }
-        
+
         return ResponseEntity.created(new URI("/api/work-packages/" + workPackage.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, workPackage.getId().toString()))
             .body(workPackage);
     }
-    
-    
+
+
     /**
      * POST  /work-packages/refresh-tariff : refresh-tariff
      *
@@ -4678,7 +4679,7 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<WorkPackage> refreshTariffWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
         log.debug("REST request to refresh tariff WorkPackage : {}", workPackage);
-        
+
         List<WorkPackageFareSheet> fareSheet = workPackage.getFareSheet();
         Set<TariffNumber> fareTariffNumber = new HashSet<TariffNumber>();
         for(WorkPackageFareSheet sheet : fareSheet) {
@@ -4687,7 +4688,7 @@ public class WorkPackageResource {
         		fareTariffNumber.add(fare.getTariffNumber());
         	}
         }
-        
+
         workPackage.setFilingDetail(new FilingDetail());
         for(TariffNumber tariff : fareTariffNumber) {
         	FilingDetailTariff fdt = new FilingDetailTariff();
@@ -4699,13 +4700,13 @@ public class WorkPackageResource {
         	workPackage.getFilingDetail().getFilingDetailTarif().add(fdt);
         }
         workPackage = workPackageService.save(workPackage);
-        
+
         return ResponseEntity.created(new URI("/api/work-packages/" + workPackage.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, workPackage.getId().toString()))
             .body(workPackage);
     }
-    
-    
+
+
     /**
      * POST  /work-packages/revisebatch : revisebatch
      *
@@ -4720,7 +4721,7 @@ public class WorkPackageResource {
         if (workPackage.getId() == null) {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
-        
+
 //        WorkPackage result = workPackageService.findOne(workPackage.getId());
         workPackage.setLocked(false);
         workPackage.setLockedBy(null);
@@ -4728,22 +4729,22 @@ public class WorkPackageResource {
         workPackage.setStatus(Status.READY_TO_RELEASE); //BUSY
         workPackage.setStatus(Status.PENDING);
         workPackage = workPackageService.save(workPackage);
-        
+
         WorkPackageHistory history = new WorkPackageHistory();
         history.setWorkPackage(new ObjectId(workPackage.getId()));
         history.setType("REVISEBATCH");
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
-        
+
 //        saveHistoryData(workPackage);
-        
+
         //updateWorkPackage(workPackage);
-        
+
         return ResponseEntity.created(new URI("/api/work-packages/" + workPackage.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, workPackage.getId().toString()))
             .body(workPackage);
     }
-    
+
     /**
      * POST  /work-packages/completebatch : completebatch
      *
@@ -4758,27 +4759,27 @@ public class WorkPackageResource {
         if (workPackage.getId() == null) {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
-        
+
         WorkPackage result = workPackageService.findOne(workPackage.getId());
         result.setStatus(Status.DISTRIBUTED);
         workPackage = workPackageService.save(result);
-        
+
         WorkPackageHistory history = new WorkPackageHistory();
         history.setWorkPackage(new ObjectId(result.getId()));
         history.setType("COMPLETEBATCH");
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
-        
+
 
         saveHistoryData(workPackage);
-        
+
         //updateWorkPackage(workPackage);
-        
+
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
-    
+
     /**
      * POST  /work-packages/changeVersion : Create a new workPackage.
      *
@@ -4794,16 +4795,16 @@ public class WorkPackageResource {
         if(workPackage.getVersion().contentEquals("current")) {
         	updateWorkPackage(workPackage);
         }
-        
+
         if(workPackage.getChangeType() != null && !workPackage.getChangeType().contentEquals("")) {
         	String version = "current";
         	String currentVersion = workPackage.getVersion();
-    		
+
         	if(workPackage.getChangeType().contentEquals("previous")) {
                 if(currentVersion.contentEquals("current")) {
         			version = workPackageHistoryDataRepository.countByWorkPackage(new ObjectId(workPackage.getId()))+"";
                 }
-                else if(Long.parseLong(currentVersion) > 1){                	                	
+                else if(Long.parseLong(currentVersion) > 1){
                 	version = (Long.parseLong(currentVersion) - 1)+"";
                 }
         	}
@@ -4820,13 +4821,13 @@ public class WorkPackageResource {
         	    		version = "1";
         	    }
         	}
-        	
-        	if(version.contentEquals("current")) {        		
+
+        	if(version.contentEquals("current")) {
         		workPackage = getWorkPackage(workPackage.getId()).getBody();
         	}
         	else {
-        		workPackage = workPackageHistoryDataRepository.findByWorkPackageAndVersion(new ObjectId(workPackage.getId()), version);        	
-        		
+        		workPackage = workPackageHistoryDataRepository.findByWorkPackageAndVersion(new ObjectId(workPackage.getId()), version);
+
         		//get fare
         		List<WorkPackageFare> fares = workPackageFareHistoryDataRepository.findAllByWorkPackageAndFareType(new ObjectId(workPackage.getId()), null);
         		workPackage.setFares(fares);
@@ -4843,7 +4844,7 @@ public class WorkPackageResource {
     	private String ruleText;
     	private String index;
     	private String[] header;
-    	
+
 		public WorkPackage getWp() {
 			return wp;
 		}
@@ -4868,31 +4869,31 @@ public class WorkPackageResource {
 		public void setHeader(String[] header) {
 			this.header = header;
 		}
-		
+
     }
-    
+
 	/**
      * POST  /work-packages/export-ratesheet : Export work package fares
      *
      * @param workPackage the workPackage to create
      * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
-	 * @throws IOException 
-	 * @throws MalformedURLException 
-	 * @throws DocumentException 
+	 * @throws IOException
+	 * @throws MalformedURLException
+	 * @throws DocumentException
      */
     @PostMapping("/work-packages/export-ratesheet")
     @Timed
     public ResponseEntity<Attachment> exportRateSheetWorkPackage(@RequestBody WorkPackageRateSheet wprs) throws URISyntaxException, MalformedURLException, IOException, DocumentException {
     	log.debug("REST request to save exportFares : {}{}", wprs.getWp(), wprs.getRuleText());
-        
+
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         WorkPackage workPackage = wprs.getWp();
         String ruleText = wprs.getRuleText();
         int idx = Integer.parseInt(wprs.getIndex());
         String[] header = wprs.getHeader();
-        
+
         Integer count = header.length;
         PdfPTable table;
         Document document;
@@ -4902,18 +4903,18 @@ public class WorkPackageResource {
     		document = new Document(PageSize.A4.rotate());
     		document.setMargins(60, 30, 30, 30);
     	}
-    	
-    	PdfWriter.getInstance(document, output);    	
+
+    	PdfWriter.getInstance(document, output);
     	InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("images/logo_ga.png");
-    	byte[] imageByte = IOUtils.toByteArray(inputStream);    	
+    	byte[] imageByte = IOUtils.toByteArray(inputStream);
     	document.open();
     	Font font = FontFactory.getFont(FontFactory.TIMES_BOLD, 12, BaseColor.BLACK);
-    	Image image = Image.getInstance(imageByte); 
-    	
+    	Image image = Image.getInstance(imageByte);
+
     	image.scaleToFit(PageSize.A4.getWidth()/4, PageSize.A4.getHeight()/4);
     	image.setAlignment(Image.MIDDLE);
     	String[] content = {"WORK ID : ","TITLE FARE SHEET : ","DESCRIPTION OF GA FARES : ","NOTES RATESHEET : ", "FARES : ", "RULE TEXT : "};
-    	document.add(image); 
+    	document.add(image);
     	document.add(new Chunk(" "));
 
         Paragraph p1 = new Paragraph();
@@ -4923,26 +4924,26 @@ public class WorkPackageResource {
         Paragraph p5 = new Paragraph();
         Paragraph p6 = new Paragraph();
 
-        p1.setFont(font);               
-        p1.add(content[0]+" "+ workPackage.getWpid());        
+        p1.setFont(font);
+        p1.add(content[0]+" "+ workPackage.getWpid());
     	document.add(p1);
     	document.add(new Chunk(" "));
-        p2.setFont(font);               
+        p2.setFont(font);
         p2.add(content[1]+" "+workPackage.getName());
         document.add(p2);
     	document.add(new Chunk(" "));
 
-        p3.setFont(font);               
+        p3.setFont(font);
         p3.add(content[2]+" "+workPackage.getFareSheet().get(idx).getSpecifiedFaresName());
     	document.add(p3);
     	document.add(new Chunk(" "));
 
-        p4.setFont(font);               
+        p4.setFont(font);
         p4.add(content[3]+" "+workPackage.getRatesheetComment());
     	document.add(p4);
     	document.add(new Chunk(" "));
 
-        p5.setFont(font);               
+        p5.setFont(font);
         p5.add(content[4]);
     	document.add(p5);
     	document.add(new Chunk(" "));
@@ -4953,9 +4954,9 @@ public class WorkPackageResource {
 			table.addCell(header[l]);
 		}
 		table.setHeaderRows(1);
-        
+
 		if(workPackage.getTargetDistribution().contentEquals("ATPCO")) {
-			PdfPCell[] cells = table.getRow(0).getCells(); 
+			PdfPCell[] cells = table.getRow(0).getCells();
         	for (int j=0;j<cells.length;j++){
         			cells[j].setBackgroundColor(BaseColor.GRAY);
         	}
@@ -4974,21 +4975,21 @@ public class WorkPackageResource {
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.addCell("-");
-						}            			
+						}
             		}else if(header[i].contentEquals("Tar Cd")) {
             			try {
             				table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getTariffNumber().getTarCd());
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.addCell("-");
-						}            			
+						}
             		}else if(header[i].contentEquals("Global")) {
             			try {
             				table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getTariffNumber().getGlobal());
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.addCell("-");
-						}            			
+						}
             		}else if(header[i].contentEquals("Origin")) {
             			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getOrigin());
             		}else if(header[i].contentEquals("Destination")) {
@@ -5027,14 +5028,14 @@ public class WorkPackageResource {
             			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getItinerary());
             		}else if(header[i].contentEquals("Override Indicator")) {
             			try {
-                			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getOverrideIndicator().toString());							
+                			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getOverrideIndicator().toString());
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.addCell("-");
 						}
             		}else if(header[i].contentEquals("Travel Start")) {
             			try {
-                			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getTravelStart().toString());							
+                			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getTravelStart().toString());
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.addCell("-");
@@ -5042,7 +5043,7 @@ public class WorkPackageResource {
             		}else if(header[i].contentEquals("Travel End")) {
             			try {
                 			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getTravelEnd().toString());
-							
+
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.addCell("-");
@@ -5050,14 +5051,14 @@ public class WorkPackageResource {
             		}else if(header[i].contentEquals("Sales Start")) {
             			try {
                 			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getSaleStart().toString());
-							
+
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.addCell("-");
 						}
             		}else if(header[i].contentEquals("Sales End")) {
             			try {
-                			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getSaleEnd().toString());							
+                			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getSaleEnd().toString());
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.addCell("-");
@@ -5068,7 +5069,7 @@ public class WorkPackageResource {
             			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getComment());
             		}else if(header[i].contentEquals("Travel Complete")) {
             			try {
-                			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getTravelComplete().toString());							
+                			table.addCell(workPackage.getFareSheet().get(idx).getFares().get(l).getTravelComplete().toString());
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.addCell("-");
@@ -5081,12 +5082,12 @@ public class WorkPackageResource {
             		else {
             			table.addCell("-");
             		}
-            	}        		
+            	}
         	}
-        	
+
           document.add(table);
 		}else if(workPackage.getTargetDistribution().contentEquals("MARKET")){
-			PdfPCell[] cells = table.getRow(0).getCells(); 
+			PdfPCell[] cells = table.getRow(0).getCells();
         	for (int j=0;j<cells.length;j++){
         			cells[j].setBackgroundColor(BaseColor.GRAY);
         	}
@@ -5105,21 +5106,21 @@ public class WorkPackageResource {
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.addCell("-");
-						}            			
+						}
             		}else if(header[i].contentEquals("Tar Cd")) {
             			try {
             				table.addCell(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTariffNumber().getTarCd());
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.addCell("-");
-						}            			
+						}
             		}else if(header[i].contentEquals("Global")) {
             			try {
             				table.addCell(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTariffNumber().getGlobal());
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.addCell("-");
-						}            			
+						}
             		}else if(header[i].contentEquals("Origin")) {
             			table.addCell(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getOrigin());
             		}else if(header[i].contentEquals("Destination")) {
@@ -5158,14 +5159,14 @@ public class WorkPackageResource {
             			table.addCell(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getItinerary());
             		}else if(header[i].contentEquals("Override Indicator")) {
             			try {
-                			table.addCell(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getOverrideIndicator().toString());							
+                			table.addCell(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getOverrideIndicator().toString());
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.addCell("-");
 						}
             		}else if(header[i].contentEquals("Travel Start")) {
             			try {
-                			table.addCell(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTravelStart().toString());							
+                			table.addCell(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTravelStart().toString());
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.addCell("-");
@@ -5173,7 +5174,7 @@ public class WorkPackageResource {
             		}else if(header[i].contentEquals("Travel End")) {
             			try {
                 			table.addCell(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTravelEnd().toString());
-							
+
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.addCell("-");
@@ -5181,14 +5182,14 @@ public class WorkPackageResource {
             		}else if(header[i].contentEquals("Sales Start")) {
             			try {
                 			table.addCell(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getSaleStart().toString());
-							
+
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.addCell("-");
 						}
             		}else if(header[i].contentEquals("Sales End")) {
             			try {
-                			table.addCell(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getSaleEnd().toString());							
+                			table.addCell(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getSaleEnd().toString());
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.addCell("-");
@@ -5199,7 +5200,7 @@ public class WorkPackageResource {
             			table.addCell(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getComment());
             		}else if(header[i].contentEquals("Travel Complete")) {
             			try {
-                			table.addCell(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTravelComplete().toString());							
+                			table.addCell(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTravelComplete().toString());
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.addCell("-");
@@ -5212,67 +5213,67 @@ public class WorkPackageResource {
             		else {
             			table.addCell("-");
             		}
-            	}        		
+            	}
         	}
-        	
+
           document.add(table);
 		}
-	  
-        
-	
-        p6.setFont(font);               
+
+
+
+        p6.setFont(font);
         p6.add(content[5]+" "+ruleText);
     	document.add(p6);
     	document.add(new Chunk(" "));
 
     	document.close();
-        
+
         Attachment att = new Attachment();
         att.setFile(output.toByteArray());
-        
+
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
             .body(att);
     }
-    
+
     /**
      * POST  /work-packages/export-ratesheet-excel : Export work package fares
      *
      * @param workPackage the workPackage to create
      * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
-	 * @throws IOException 
-	 * @throws MalformedURLException 
-	 * @throws DocumentException 
+	 * @throws IOException
+	 * @throws MalformedURLException
+	 * @throws DocumentException
      */
     @PostMapping("/work-packages/export-ratesheet-excel")
     @Timed
     public ResponseEntity<Attachment> exportRateSheetWorkPackageExcel(@RequestBody WorkPackageRateSheet wprs) throws URISyntaxException, MalformedURLException, IOException, DocumentException {
     	log.debug("REST request to save exportFaresExcel : {}{}", wprs.getWp(), wprs.getRuleText());
-    	
+
     	WorkPackage workPackage = wprs.getWp();
         String ruleText = wprs.getRuleText();
         int idx = Integer.parseInt(wprs.getIndex());
         String[] header = wprs.getHeader();
-    	
-    	XSSFWorkbook workbook = new XSSFWorkbook(); 
+
+    	XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet spreadsheet = workbook.createSheet("Rate Sheet");
-        
+
         XSSFRow row = spreadsheet.createRow(1);
         XSSFCell cell;
-        
+
         cell = row.createCell(0);
         cell.setCellValue("WORK ID :");
         cell = row.createCell(1);
         cell.setCellValue(workPackage.getWpid());
-        
+
         XSSFRow row2 = spreadsheet.createRow(2);
         XSSFCell cell2;
         cell2 = row2.createCell(0);
         cell2.setCellValue("TITLE FARE SHEET :");
         cell2 = row2.createCell(1);
         cell2.setCellValue(workPackage.getName());
-        
+
         if(workPackage.getTargetDistribution().contentEquals("ATPCO")) {
         	 XSSFRow row3 = spreadsheet.createRow(3);
              XSSFCell cell3;
@@ -5287,28 +5288,28 @@ public class WorkPackageResource {
              cell3.setCellValue("DESCRIPTION OF GA FARES :");
              cell3 = row3.createCell(1);
              cell3.setCellValue(workPackage.getFareSheet().get(idx).getMarketFaresName());
-        }       
-        
+        }
+
         XSSFRow row4 = spreadsheet.createRow(4);
         XSSFCell cell4;
         cell4 = row4.createCell(0);
         cell4.setCellValue("NOTES RATESHEET : ");
         cell4 = row4.createCell(1);
         cell4.setCellValue(workPackage.getRatesheetComment());
-        
+
         XSSFRow row5 = spreadsheet.createRow(5);
         XSSFCell cell5;
         for(int l=0; l<header.length ;l++) {
         	cell5 = row5.createCell(l);
 			cell5.setCellValue(header[l]);
 		}
-        
+
         if(workPackage.getTargetDistribution().contentEquals("ATPCO")) {
         	for(int l=0; l<workPackage.getFareSheet().get(idx).getFares().size();l++) {
             	XSSFRow rows = spreadsheet.createRow(l+6);
         		for (int i=0;i<header.length;i++){
         			cell = rows.createCell(i);
-        			
+
         			if(header[i].contentEquals("Status")) {
         				cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getStatus());
         			} else if(header[i].contentEquals("Carrier")) {
@@ -5321,17 +5322,17 @@ public class WorkPackageResource {
     					} catch (Exception e) {
     						// TODO: handle exception
     						cell.setCellValue("-");
-    					}    				
+    					}
         			} else if(header[i].contentEquals("Tar Cd")) {
         				try {
-            				cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getTariffNumber().getTarCd());						
+            				cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getTariffNumber().getTarCd());
     					} catch (Exception e) {
     						// TODO: handle exception
     						cell.setCellValue("-");
     					}
         			} else if(header[i].contentEquals("Global")) {
         				try {
-            				cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getTariffNumber().getGlobal());						
+            				cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getTariffNumber().getGlobal());
     					} catch (Exception e) {
     						// TODO: handle exception
     						cell.setCellValue("-");
@@ -5378,28 +5379,28 @@ public class WorkPackageResource {
         				cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getOverrideIndicator());
         			} else if(header[i].contentEquals("Travel Start")) {
         				try {
-            				cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getTravelStart().toString());						
+            				cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getTravelStart().toString());
     					} catch (Exception e) {
     						// TODO: handle exception
     						cell.setCellValue("-");
     					}
         			} else if(header[i].contentEquals("Travel End")) {
         				try {
-            				cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getTravelEnd().toString());						
+            				cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getTravelEnd().toString());
     					} catch (Exception e) {
     						// TODO: handle exception
     						cell.setCellValue("-");
     					}
         			} else if(header[i].contentEquals("Sales Start")) {
         				try {
-            				cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getSaleStart().toString());						
+            				cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getSaleStart().toString());
     					} catch (Exception e) {
     						// TODO: handle exception
     						cell.setCellValue("-");
     					}
         			} else if(header[i].contentEquals("Sales End")) {
         				try {
-            				cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getSaleEnd().toString());						
+            				cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getSaleEnd().toString());
     					} catch (Exception e) {
     						// TODO: handle exception
     						cell.setCellValue("-");
@@ -5414,16 +5415,16 @@ public class WorkPackageResource {
     					} catch (Exception e) {
     						cell.setCellValue("-");
     					}
-        				
+
         			} else if(header[i].contentEquals("Travel Complete Indicator")) {
         				cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getTravelCompleteIndicator());
         			} else if(header[i].contentEquals("RateSheet Comment")) {
         				cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getRatesheetComment());
-        			} 
+        			}
         		}
             }
-            
-            
+
+
             XSSFRow rowRuleText = spreadsheet.createRow(workPackage.getFareSheet().get(idx).getFares().size()+7);
             XSSFCell cellRuleText;
             cellRuleText = rowRuleText.createCell(0);
@@ -5435,7 +5436,7 @@ public class WorkPackageResource {
             	XSSFRow rows = spreadsheet.createRow(l+6);
         		for (int i=0;i<header.length;i++){
         			cell = rows.createCell(i);
-        			
+
         			if(header[i].contentEquals("Status")) {
         				cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getStatus());
         			} else if(header[i].contentEquals("Carrier")) {
@@ -5448,17 +5449,17 @@ public class WorkPackageResource {
     					} catch (Exception e) {
     						// TODO: handle exception
     						cell.setCellValue("-");
-    					}    				
+    					}
         			} else if(header[i].contentEquals("Tar Cd")) {
         				try {
-            				cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTariffNumber().getTarCd());						
+            				cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTariffNumber().getTarCd());
     					} catch (Exception e) {
     						// TODO: handle exception
     						cell.setCellValue("-");
     					}
         			} else if(header[i].contentEquals("Global")) {
         				try {
-            				cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTariffNumber().getGlobal());						
+            				cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTariffNumber().getGlobal());
     					} catch (Exception e) {
     						// TODO: handle exception
     						cell.setCellValue("-");
@@ -5505,28 +5506,28 @@ public class WorkPackageResource {
         				cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getOverrideIndicator());
         			} else if(header[i].contentEquals("Travel Start")) {
         				try {
-            				cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTravelStart().toString());						
+            				cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTravelStart().toString());
     					} catch (Exception e) {
     						// TODO: handle exception
     						cell.setCellValue("-");
     					}
         			} else if(header[i].contentEquals("Travel End")) {
         				try {
-            				cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTravelEnd().toString());						
+            				cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTravelEnd().toString());
     					} catch (Exception e) {
     						// TODO: handle exception
     						cell.setCellValue("-");
     					}
         			} else if(header[i].contentEquals("Sales Start")) {
         				try {
-            				cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getSaleStart().toString());						
+            				cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getSaleStart().toString());
     					} catch (Exception e) {
     						// TODO: handle exception
     						cell.setCellValue("-");
     					}
         			} else if(header[i].contentEquals("Sales End")) {
         				try {
-            				cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getSaleEnd().toString());						
+            				cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getSaleEnd().toString());
     					} catch (Exception e) {
     						// TODO: handle exception
     						cell.setCellValue("-");
@@ -5541,16 +5542,16 @@ public class WorkPackageResource {
     					} catch (Exception e) {
     						cell.setCellValue("-");
     					}
-        				
+
         			} else if(header[i].contentEquals("Travel Complete Indicator")) {
         				cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTravelCompleteIndicator());
         			} else if(header[i].contentEquals("RateSheet Comment")) {
         				cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getRatesheetComment());
-        			} 
+        			}
         		}
             }
-            
-            
+
+
             XSSFRow rowRuleText = spreadsheet.createRow(workPackage.getMarketFareSheet().get(idx).getFares().size()+7);
             XSSFCell cellRuleText;
             cellRuleText = rowRuleText.createCell(0);
@@ -5558,9 +5559,9 @@ public class WorkPackageResource {
             cellRuleText = rowRuleText.createCell(1);
             cellRuleText.setCellValue(ruleText);
         }
-        
-        
-        
+
+
+
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         try {
 			workbook.write(output);
@@ -5574,29 +5575,375 @@ public class WorkPackageResource {
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
             .body(att);
     }
-        
+
+    /**
+     * POST  /work-packages/export-ratesheet-csv : Export work package fares
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     * @throws IOException
+     * @throws MalformedURLException
+     * @throws DocumentException
+     */
+    @PostMapping("/work-packages/export-ratesheet-csv")
+    @Timed
+    public ResponseEntity<Attachment> exportRateSheetWorkPackageCsv(@RequestBody WorkPackageRateSheet wprs) throws URISyntaxException, MalformedURLException, IOException, DocumentException {
+        log.debug("REST request to save exportFaresCSV : {}{}", wprs.getWp(), wprs.getRuleText());
+
+        WorkPackage workPackage = wprs.getWp();
+        String ruleText = wprs.getRuleText();
+        int idx = Integer.parseInt(wprs.getIndex());
+        String[] header = wprs.getHeader();
+
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet spreadsheet = workbook.createSheet("Rate Sheet");
+
+        XSSFRow row = spreadsheet.createRow(1);
+        XSSFCell cell;
+
+        cell = row.createCell(0);
+        cell.setCellValue("WORK ID :");
+        cell = row.createCell(1);
+        cell.setCellValue(workPackage.getWpid());
+
+        XSSFRow row2 = spreadsheet.createRow(2);
+        XSSFCell cell2;
+        cell2 = row2.createCell(0);
+        cell2.setCellValue("TITLE FARE SHEET :");
+        cell2 = row2.createCell(1);
+        cell2.setCellValue(workPackage.getName());
+
+        if(workPackage.getTargetDistribution().contentEquals("ATPCO")) {
+            XSSFRow row3 = spreadsheet.createRow(3);
+            XSSFCell cell3;
+            cell3 = row3.createCell(0);
+            cell3.setCellValue("DESCRIPTION OF GA FARES :");
+            cell3 = row3.createCell(1);
+            cell3.setCellValue(workPackage.getFareSheet().get(idx).getSpecifiedFaresName());
+        }else if(workPackage.getTargetDistribution().contentEquals("MARKET")) {
+            XSSFRow row3 = spreadsheet.createRow(3);
+            XSSFCell cell3;
+            cell3 = row3.createCell(0);
+            cell3.setCellValue("DESCRIPTION OF GA FARES :");
+            cell3 = row3.createCell(1);
+            cell3.setCellValue(workPackage.getFareSheet().get(idx).getMarketFaresName());
+        }
+
+        XSSFRow row4 = spreadsheet.createRow(4);
+        XSSFCell cell4;
+        cell4 = row4.createCell(0);
+        cell4.setCellValue("NOTES RATESHEET : ");
+        cell4 = row4.createCell(1);
+        cell4.setCellValue(workPackage.getRatesheetComment());
+
+        XSSFRow row5 = spreadsheet.createRow(5);
+        XSSFCell cell5;
+        for(int l=0; l<header.length ;l++) {
+            cell5 = row5.createCell(l);
+            cell5.setCellValue(header[l]);
+        }
+
+        if(workPackage.getTargetDistribution().contentEquals("ATPCO")) {
+            for(int l=0; l<workPackage.getFareSheet().get(idx).getFares().size();l++) {
+                XSSFRow rows = spreadsheet.createRow(l+6);
+                for (int i=0;i<header.length;i++){
+                    cell = rows.createCell(i);
+
+                    if(header[i].contentEquals("Status")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getStatus());
+                    } else if(header[i].contentEquals("Carrier")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getCarrier());
+                    } else if(header[i].contentEquals("Action")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getAction());
+                    } else if(header[i].contentEquals("Tar No")) {
+                        try {
+                            cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getTariffNumber().getTarNo());
+                        } catch (Exception e) {
+                            // TODO: handle exception
+                            cell.setCellValue("-");
+                        }
+                    } else if(header[i].contentEquals("Tar Cd")) {
+                        try {
+                            cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getTariffNumber().getTarCd());
+                        } catch (Exception e) {
+                            // TODO: handle exception
+                            cell.setCellValue("-");
+                        }
+                    } else if(header[i].contentEquals("Global")) {
+                        try {
+                            cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getTariffNumber().getGlobal());
+                        } catch (Exception e) {
+                            // TODO: handle exception
+                            cell.setCellValue("-");
+                        }
+                    } else if(header[i].contentEquals("Origin")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getOrigin());
+                    } else if(header[i].contentEquals("Destination")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getDestination());
+                    } else if(header[i].contentEquals("Fare Class")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getFareBasis());
+                    } else if(header[i].contentEquals("Booking Class")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getBookingClass());
+                    } else if(header[i].contentEquals("Cabin")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getCabin());
+                    } else if(header[i].contentEquals("OW/RT")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getTypeOfJourney());
+                    } else if(header[i].contentEquals("Footnote")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getFootnote1());
+                    } else if(header[i].contentEquals("Routing No")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getRtgno());
+                    } else if(header[i].contentEquals("Rule No")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getRuleno());
+                    } else if(header[i].contentEquals("Currency")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getCurrency());
+                    } else if(header[i].contentEquals("Base Amt")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getAmount());
+                    } else if(header[i].contentEquals("Amt Different")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getBaseRuleNo());
+                    } else if(header[i].contentEquals("% Amt Different")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getBaseRuleNo());
+                    } else if(header[i].contentEquals("YQYR")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getYqyr());
+                    } else if(header[i].contentEquals("Cat 12")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getCat12());
+                    } else if(header[i].contentEquals("Taxes")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getTotalTax());
+                    } else if(header[i].contentEquals("TFC")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getTfc());
+                    } else if(header[i].contentEquals("Target AIF")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getAif());
+                    } else if(header[i].contentEquals("Itinerary")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getItinerary());
+                    } else if(header[i].contentEquals("Override Indicator")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getOverrideIndicator());
+                    } else if(header[i].contentEquals("Travel Start")) {
+                        try {
+                            cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getTravelStart().toString());
+                        } catch (Exception e) {
+                            // TODO: handle exception
+                            cell.setCellValue("-");
+                        }
+                    } else if(header[i].contentEquals("Travel End")) {
+                        try {
+                            cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getTravelEnd().toString());
+                        } catch (Exception e) {
+                            // TODO: handle exception
+                            cell.setCellValue("-");
+                        }
+                    } else if(header[i].contentEquals("Sales Start")) {
+                        try {
+                            cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getSaleStart().toString());
+                        } catch (Exception e) {
+                            // TODO: handle exception
+                            cell.setCellValue("-");
+                        }
+                    } else if(header[i].contentEquals("Sales End")) {
+                        try {
+                            cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getSaleEnd().toString());
+                        } catch (Exception e) {
+                            // TODO: handle exception
+                            cell.setCellValue("-");
+                        }
+                    } else if(header[i].contentEquals("EffDt")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getEffDt());
+                    } else if(header[i].contentEquals("Comment")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getComment());
+                    } else if(header[i].contentEquals("Travel Complete")) {
+                        try {
+                            cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getTravelComplete().toString());
+                        } catch (Exception e) {
+                            cell.setCellValue("-");
+                        }
+
+                    } else if(header[i].contentEquals("Travel Complete Indicator")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getTravelCompleteIndicator());
+                    } else if(header[i].contentEquals("RateSheet Comment")) {
+                        cell.setCellValue(workPackage.getFareSheet().get(idx).getFares().get(l).getRatesheetComment());
+                    }
+                }
+            }
+
+
+            XSSFRow rowRuleText = spreadsheet.createRow(workPackage.getFareSheet().get(idx).getFares().size()+7);
+            XSSFCell cellRuleText;
+            cellRuleText = rowRuleText.createCell(0);
+            cellRuleText.setCellValue("RULE TEXT : ");
+            cellRuleText = rowRuleText.createCell(1);
+            cellRuleText.setCellValue(ruleText);
+        }else if(workPackage.getTargetDistribution().contentEquals("MARKET")) {
+            for(int l=0; l<workPackage.getMarketFareSheet().get(idx).getFares().size();l++) {
+                XSSFRow rows = spreadsheet.createRow(l+6);
+                for (int i=0;i<header.length;i++){
+                    cell = rows.createCell(i);
+
+                    if(header[i].contentEquals("Status")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getStatus());
+                    } else if(header[i].contentEquals("Carrier")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getCarrier());
+                    } else if(header[i].contentEquals("Action")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getAction());
+                    } else if(header[i].contentEquals("Tar No")) {
+                        try {
+                            cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTariffNumber().getTarNo());
+                        } catch (Exception e) {
+                            // TODO: handle exception
+                            cell.setCellValue("-");
+                        }
+                    } else if(header[i].contentEquals("Tar Cd")) {
+                        try {
+                            cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTariffNumber().getTarCd());
+                        } catch (Exception e) {
+                            // TODO: handle exception
+                            cell.setCellValue("-");
+                        }
+                    } else if(header[i].contentEquals("Global")) {
+                        try {
+                            cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTariffNumber().getGlobal());
+                        } catch (Exception e) {
+                            // TODO: handle exception
+                            cell.setCellValue("-");
+                        }
+                    } else if(header[i].contentEquals("Origin")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getOrigin());
+                    } else if(header[i].contentEquals("Destination")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getDestination());
+                    } else if(header[i].contentEquals("Fare Class")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getFareBasis());
+                    } else if(header[i].contentEquals("Booking Class")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getBookingClass());
+                    } else if(header[i].contentEquals("Cabin")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getCabin());
+                    } else if(header[i].contentEquals("OW/RT")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTypeOfJourney());
+                    } else if(header[i].contentEquals("Footnote")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getFootnote1());
+                    } else if(header[i].contentEquals("Routing No")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getRtgno());
+                    } else if(header[i].contentEquals("Rule No")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getRuleno());
+                    } else if(header[i].contentEquals("Currency")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getCurrency());
+                    } else if(header[i].contentEquals("Base Amt")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getAmount());
+                    } else if(header[i].contentEquals("Amt Different")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getBaseRuleNo());
+                    } else if(header[i].contentEquals("% Amt Different")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getBaseRuleNo());
+                    } else if(header[i].contentEquals("YQYR")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getYqyr());
+                    } else if(header[i].contentEquals("Cat 12")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getCat12());
+                    } else if(header[i].contentEquals("Taxes")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTotalTax());
+                    } else if(header[i].contentEquals("TFC")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTfc());
+                    } else if(header[i].contentEquals("Target AIF")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getAif());
+                    } else if(header[i].contentEquals("Itinerary")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getItinerary());
+                    } else if(header[i].contentEquals("Override Indicator")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getOverrideIndicator());
+                    } else if(header[i].contentEquals("Travel Start")) {
+                        try {
+                            cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTravelStart().toString());
+                        } catch (Exception e) {
+                            // TODO: handle exception
+                            cell.setCellValue("-");
+                        }
+                    } else if(header[i].contentEquals("Travel End")) {
+                        try {
+                            cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTravelEnd().toString());
+                        } catch (Exception e) {
+                            // TODO: handle exception
+                            cell.setCellValue("-");
+                        }
+                    } else if(header[i].contentEquals("Sales Start")) {
+                        try {
+                            cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getSaleStart().toString());
+                        } catch (Exception e) {
+                            // TODO: handle exception
+                            cell.setCellValue("-");
+                        }
+                    } else if(header[i].contentEquals("Sales End")) {
+                        try {
+                            cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getSaleEnd().toString());
+                        } catch (Exception e) {
+                            // TODO: handle exception
+                            cell.setCellValue("-");
+                        }
+                    } else if(header[i].contentEquals("EffDt")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getEffDt());
+                    } else if(header[i].contentEquals("Comment")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getComment());
+                    } else if(header[i].contentEquals("Travel Complete")) {
+                        try {
+                            cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTravelComplete().toString());
+                        } catch (Exception e) {
+                            cell.setCellValue("-");
+                        }
+
+                    } else if(header[i].contentEquals("Travel Complete Indicator")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTravelCompleteIndicator());
+                    } else if(header[i].contentEquals("RateSheet Comment")) {
+                        cell.setCellValue(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getRatesheetComment());
+                    }
+                }
+            }
+
+
+            XSSFRow rowRuleText = spreadsheet.createRow(workPackage.getMarketFareSheet().get(idx).getFares().size()+7);
+            XSSFCell cellRuleText;
+            cellRuleText = rowRuleText.createCell(0);
+            cellRuleText.setCellValue("RULE TEXT : ");
+            cellRuleText = rowRuleText.createCell(1);
+            cellRuleText.setCellValue(ruleText);
+        }
+
+//        Convert XLSX to CSV
+        StringBuilder stringBuilder = new StringBuilder();
+        Iterator<Row> rowIterator = spreadsheet.iterator();
+        while(rowIterator.hasNext()){
+            Row row1 = rowIterator.next();
+
+            Iterator<Cell> cellIterator = row1.cellIterator();
+            List<String> list = new ArrayList<>();
+
+            while (cellIterator.hasNext()) {
+                Cell cell1 = cellIterator.next();
+                list.add(cell1.getStringCellValue());
+            }
+            CsvUtil.writeLine(stringBuilder, list);
+        }
+        Attachment att = new Attachment();
+        att.setFile(stringBuilder.toString().getBytes());
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
+            .body(att);
+    }
+
     /**
      * POST  /work-packages/export-fares-discount : Export work package fares-discount
      *
      * @param workPackage the workPackage to create
      * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
-	 * @throws IOException 
-	 * @throws MalformedURLException 
-	 * @throws DocumentException 
+	 * @throws IOException
+	 * @throws MalformedURLException
+	 * @throws DocumentException
      */
     @PostMapping("/work-packages/export-ratesheet-discount")
     @Timed
     public ResponseEntity<Attachment> exportRateSheetWorkPackageDiscount(@RequestBody WorkPackageRateSheet wprs) throws URISyntaxException, MalformedURLException, IOException, DocumentException {
     	log.debug("REST request to save exportFares-discount : {}{}", wprs.getWp(), wprs.getRuleText());
-        
+
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         WorkPackage workPackage = wprs.getWp();
         String ruleText = wprs.getRuleText();
         int idx = Integer.parseInt(wprs.getIndex());
         String[] header = wprs.getHeader();
-        
+
         Integer count = header.length;
         PdfPTable table;
         Document document;
@@ -5606,17 +5953,17 @@ public class WorkPackageResource {
     		document = new Document(PageSize.A4.rotate());
     		document.setMargins(60, 30, 30, 30);
     	}
-    	
+
     	PdfWriter.getInstance(document, output);
     	InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("images/logo_ga.png");
-    	byte[] imageByte = IOUtils.toByteArray(inputStream);    	
+    	byte[] imageByte = IOUtils.toByteArray(inputStream);
     	document.open();
     	Font font = FontFactory.getFont(FontFactory.TIMES_BOLD, 12, BaseColor.BLACK);
-    	Image image = Image.getInstance(imageByte); 
+    	Image image = Image.getInstance(imageByte);
     	image.scaleToFit(PageSize.A4.getWidth()/4, PageSize.A4.getHeight()/4);
     	image.setAlignment(Image.MIDDLE);
     	String[] content = {"WORK ID : ","TITLE FARE SHEET : ", "FARE NAME : ","NOTES RATESHEET : ", "FARES : ", "RULE TEXT : "};
-    	document.add(image); 
+    	document.add(image);
     	document.add(new Chunk(" "));
 
         Paragraph p1 = new Paragraph();
@@ -5626,26 +5973,26 @@ public class WorkPackageResource {
         Paragraph p5 = new Paragraph();
         Paragraph p6 = new Paragraph();
 
-        p1.setFont(font);               
-        p1.add(content[0]+" "+ workPackage.getWpid());        
+        p1.setFont(font);
+        p1.add(content[0]+" "+ workPackage.getWpid());
     	document.add(p1);
     	document.add(new Chunk(" "));
-        p2.setFont(font);               
+        p2.setFont(font);
         p2.add(content[1]+" "+workPackage.getName());
         document.add(p2);
     	document.add(new Chunk(" "));
 
-        p3.setFont(font);               
+        p3.setFont(font);
         p3.add(content[2]+" "+workPackage.getDiscountFareSheet().get(idx).getDiscountFaresName());
     	document.add(p3);
     	document.add(new Chunk(" "));
 
-        p4.setFont(font);               
+        p4.setFont(font);
         p4.add(content[3]+" "+workPackage.getRatesheetComment());
     	document.add(p4);
     	document.add(new Chunk(" "));
 
-        p5.setFont(font);               
+        p5.setFont(font);
         p5.add(content[4]);
     	document.add(p5);
     	document.add(new Chunk(" "));
@@ -5656,9 +6003,9 @@ public class WorkPackageResource {
 			table.addCell(header[l]);
 		}
 		table.setHeaderRows(1);
-        
-		
-		PdfPCell[] cells = table.getRow(0).getCells(); 
+
+
+		PdfPCell[] cells = table.getRow(0).getCells();
     	for (int j=0;j<cells.length;j++){
     			cells[j].setBackgroundColor(BaseColor.GRAY);
     	}
@@ -5670,7 +6017,7 @@ public class WorkPackageResource {
             		}else if(header[i].contentEquals("FBR Tariff Code")) {
             			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTarcd());
             		}else if(header[i].contentEquals("Loc 1 Type")) {
-            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getLoc1Type());       			
+            			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getLoc1Type());
             		}else if(header[i].contentEquals("Loc 1")) {
             			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getLoc1());
             		}else if(header[i].contentEquals("Loc 2 Type")) {
@@ -5715,7 +6062,7 @@ public class WorkPackageResource {
             			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getNewBookingCode());
             		}else if(header[i].contentEquals("Travel Start")) {
             			try {
-                			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTravelStart().toString());							
+                			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTravelStart().toString());
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.addCell("-");
@@ -5723,7 +6070,7 @@ public class WorkPackageResource {
             		}else if(header[i].contentEquals("Travel End")) {
             			try {
                 			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTravelEnd().toString());
-							
+
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.addCell("-");
@@ -5731,14 +6078,14 @@ public class WorkPackageResource {
             		}else if(header[i].contentEquals("Sales Start")) {
             			try {
                 			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getSaleStart().toString());
-							
+
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.addCell("-");
 						}
             		}else if(header[i].contentEquals("Sales End")) {
             			try {
-                			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getSaleEnd().toString());							
+                			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getSaleEnd().toString());
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.addCell("-");
@@ -5747,7 +6094,7 @@ public class WorkPackageResource {
             			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getComment());
             		}else if(header[i].contentEquals("Travel Complete")) {
             			try {
-                			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTravelComplete().toString());							
+                			table.addCell(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTravelComplete().toString());
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.addCell("-");
@@ -5758,99 +6105,99 @@ public class WorkPackageResource {
             		else {
             			table.addCell("-");
             		}
-            	}        		
+            	}
         	}
-        	
-          document.add(table);  
-        
-	
-        p6.setFont(font);               
+
+          document.add(table);
+
+
+        p6.setFont(font);
         p6.add(content[5]+" "+ruleText);
     	document.add(p6);
     	document.add(new Chunk(" "));
 
     	document.close();
-        
+
         Attachment att = new Attachment();
         att.setFile(output.toByteArray());
-        
+
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
             .body(att);
     }
-    
+
     /**
      * POST  /work-packages/export-ratesheet-excel : Export work package fares
      *
      * @param workPackage the workPackage to create
      * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
-	 * @throws IOException 
-	 * @throws MalformedURLException 
-	 * @throws DocumentException 
+	 * @throws IOException
+	 * @throws MalformedURLException
+	 * @throws DocumentException
      */
     @PostMapping("/work-packages/export-ratesheet-excel-discount")
     @Timed
     public ResponseEntity<Attachment> exportRateSheetWorkPackageExcelDiscount(@RequestBody WorkPackageRateSheet wprs) throws URISyntaxException, MalformedURLException, IOException, DocumentException {
     	log.debug("REST request to save exportFaresExcel : {}{}", wprs.getWp(), wprs.getRuleText());
-    	
+
     	WorkPackage workPackage = wprs.getWp();
         String ruleText = wprs.getRuleText();
         int idx = Integer.parseInt(wprs.getIndex());
         String[] header = wprs.getHeader();
-    	
-    	XSSFWorkbook workbook = new XSSFWorkbook(); 
+
+    	XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet spreadsheet = workbook.createSheet("Rate Sheet");
-        
+
         XSSFRow row = spreadsheet.createRow(1);
         XSSFCell cell;
-        
+
         cell = row.createCell(0);
         cell.setCellValue("WORK ID :");
         cell = row.createCell(1);
         cell.setCellValue(workPackage.getWpid());
-        
+
         XSSFRow row2 = spreadsheet.createRow(2);
         XSSFCell cell2;
         cell2 = row2.createCell(0);
         cell2.setCellValue("TITLE FARE SHEET :");
         cell2 = row2.createCell(1);
         cell2.setCellValue(workPackage.getName());
-        
+
 		 XSSFRow row3 = spreadsheet.createRow(3);
 	     XSSFCell cell3;
 	     cell3 = row3.createCell(0);
 	     cell3.setCellValue("FARE NAME :");
 	     cell3 = row3.createCell(1);
 	     cell3.setCellValue(workPackage.getDiscountFareSheet().get(idx).getDiscountFaresName());
-          
-        
+
+
         XSSFRow row4 = spreadsheet.createRow(4);
         XSSFCell cell4;
         cell4 = row4.createCell(0);
         cell4.setCellValue("NOTES RATESHEET : ");
         cell4 = row4.createCell(1);
         cell4.setCellValue(workPackage.getRatesheetComment());
-        
+
         XSSFRow row5 = spreadsheet.createRow(5);
         XSSFCell cell5;
         for(int l=0; l<header.length ;l++) {
         	cell5 = row5.createCell(l);
 			cell5.setCellValue(header[l]);
 		}
-        
-    
+
+
     	for(int l=0; l<workPackage.getDiscountFareSheet().get(idx).getFares().size();l++) {
         	XSSFRow rows = spreadsheet.createRow(l+6);
     		for (int i=0;i<header.length;i++){
     			cell = rows.createCell(i);
-    	
+
     			if(header[i].contentEquals("Status")) {
         			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getStatus());
         		}else if(header[i].contentEquals("FBR Tariff Code")) {
         			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTarcd());
         		}else if(header[i].contentEquals("Loc 1 Type")) {
-        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getLoc1Type());       			
+        			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getLoc1Type());
         		}else if(header[i].contentEquals("Loc 1")) {
         			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getLoc1());
         		}else if(header[i].contentEquals("Loc 2 Type")) {
@@ -5895,7 +6242,7 @@ public class WorkPackageResource {
         			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getNewBookingCode());
         		}else if(header[i].contentEquals("Travel Start")) {
         			try {
-            			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTravelStart().toString());							
+            			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTravelStart().toString());
 					} catch (Exception e) {
 						// TODO: handle exception
 						cell.setCellValue("-");
@@ -5903,7 +6250,7 @@ public class WorkPackageResource {
         		}else if(header[i].contentEquals("Travel End")) {
         			try {
             			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTravelEnd().toString());
-						
+
 					} catch (Exception e) {
 						// TODO: handle exception
 						cell.setCellValue("-");
@@ -5911,14 +6258,14 @@ public class WorkPackageResource {
         		}else if(header[i].contentEquals("Sales Start")) {
         			try {
             			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getSaleStart().toString());
-						
+
 					} catch (Exception e) {
 						// TODO: handle exception
 						cell.setCellValue("-");
 					}
         		}else if(header[i].contentEquals("Sales End")) {
         			try {
-            			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getSaleEnd().toString());							
+            			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getSaleEnd().toString());
 					} catch (Exception e) {
 						// TODO: handle exception
 						cell.setCellValue("-");
@@ -5927,7 +6274,7 @@ public class WorkPackageResource {
         			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getComment());
         		}else if(header[i].contentEquals("Travel Complete")) {
         			try {
-            			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTravelComplete().toString());							
+            			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTravelComplete().toString());
 					} catch (Exception e) {
 						// TODO: handle exception
 						cell.setCellValue("-");
@@ -5935,23 +6282,23 @@ public class WorkPackageResource {
         		}else if(header[i].contentEquals("Travel Complete Indicator")) {
         			cell.setCellValue(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTravelCompleteIndicator());
         		}
-    			
-    			
-    			
+
+
+
     		}
         }
-        
-        
+
+
         XSSFRow rowRuleText = spreadsheet.createRow(workPackage.getDiscountFareSheet().get(idx).getFares().size()+7);
         XSSFCell cellRuleText;
         cellRuleText = rowRuleText.createCell(0);
         cellRuleText.setCellValue("RULE TEXT : ");
         cellRuleText = rowRuleText.createCell(1);
         cellRuleText.setCellValue(ruleText);
-        
-        
-        
-        
+
+
+
+
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         try {
 			workbook.write(output);
@@ -5965,29 +6312,29 @@ public class WorkPackageResource {
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
             .body(att);
     }
-        
+
     /**
      * POST  /work-packages/export-fares-discount : Export work package fares-discount
      *
      * @param workPackage the workPackage to create
      * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
-	 * @throws IOException 
-	 * @throws MalformedURLException 
-	 * @throws DocumentException 
+	 * @throws IOException
+	 * @throws MalformedURLException
+	 * @throws DocumentException
      */
     @PostMapping("/work-packages/export-ratesheet-waiver")
     @Timed
     public ResponseEntity<Attachment> exportRateSheetWorkPackageWaiver(@RequestBody WorkPackageRateSheet wprs) throws URISyntaxException, MalformedURLException, IOException, DocumentException {
     	log.debug("REST request to save exportFares-discount : {}{}", wprs.getWp(), wprs.getRuleText());
-        
+
         ByteArrayOutputStream output = new ByteArrayOutputStream();
 
         WorkPackage workPackage = wprs.getWp();
         String ruleText = wprs.getRuleText();
         int idx = Integer.parseInt(wprs.getIndex());
         String[] header = wprs.getHeader();
-        
+
         Integer count = header.length;
         PdfPTable table;
         Document document;
@@ -5997,17 +6344,17 @@ public class WorkPackageResource {
     		document = new Document(PageSize.A4.rotate());
     		document.setMargins(60, 30, 30, 30);
     	}
-             
-    	PdfWriter.getInstance(document, output);    	
+
+    	PdfWriter.getInstance(document, output);
     	InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("images/logo_ga.png");
-    	byte[] imageByte = IOUtils.toByteArray(inputStream);    	
+    	byte[] imageByte = IOUtils.toByteArray(inputStream);
     	document.open();
     	Font font = FontFactory.getFont(FontFactory.TIMES_BOLD, 12, BaseColor.BLACK);
-    	Image image = Image.getInstance(imageByte); 
+    	Image image = Image.getInstance(imageByte);
     	image.scaleToFit(PageSize.A4.getWidth()/4, PageSize.A4.getHeight()/4);
     	image.setAlignment(Image.MIDDLE);
     	String[] content = {"WORK ID : ","TITLE FARE SHEET : ", "FARE NAME : ","NOTES RATESHEET : ", "FARES : ", "RULE TEXT : "};
-    	document.add(image); 
+    	document.add(image);
     	document.add(new Chunk(" "));
 
         Paragraph p1 = new Paragraph();
@@ -6017,26 +6364,26 @@ public class WorkPackageResource {
         Paragraph p5 = new Paragraph();
         Paragraph p6 = new Paragraph();
 
-        p1.setFont(font);               
-        p1.add(content[0]+" "+ workPackage.getWpid());        
+        p1.setFont(font);
+        p1.add(content[0]+" "+ workPackage.getWpid());
     	document.add(p1);
     	document.add(new Chunk(" "));
-        p2.setFont(font);               
+        p2.setFont(font);
         p2.add(content[1]+" "+workPackage.getName());
         document.add(p2);
     	document.add(new Chunk(" "));
 
-        p3.setFont(font);               
+        p3.setFont(font);
         p3.add(content[2]+" "+workPackage.getWaiverFareSheet().get(idx).getWaiverFaresName());
     	document.add(p3);
     	document.add(new Chunk(" "));
 
-        p4.setFont(font);               
+        p4.setFont(font);
         p4.add(content[3]+" "+workPackage.getRatesheetComment());
     	document.add(p4);
     	document.add(new Chunk(" "));
 
-        p5.setFont(font);               
+        p5.setFont(font);
         p5.add(content[4]);
     	document.add(p5);
     	document.add(new Chunk(" "));
@@ -6047,9 +6394,9 @@ public class WorkPackageResource {
 			table.addCell(header[l]);
 		}
 		table.setHeaderRows(1);
-        
-		
-		PdfPCell[] cells = table.getRow(0).getCells(); 
+
+
+		PdfPCell[] cells = table.getRow(0).getCells();
     	for (int j=0;j<cells.length;j++){
     			cells[j].setBackgroundColor(BaseColor.GRAY);
     	}
@@ -6061,7 +6408,7 @@ public class WorkPackageResource {
             		}else if(header[i].contentEquals("Full/Partial")) {
             			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverFullPartial());
             		}else if(header[i].contentEquals("PNR")) {
-            			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverPnr());       			
+            			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverPnr());
             		}else if(header[i].contentEquals("Tkt From")) {
             			table.addCell(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverTktFrom());
             		}else if(header[i].contentEquals("Tkt To")) {
@@ -6106,99 +6453,99 @@ public class WorkPackageResource {
             		else {
             			table.addCell("-");
             		}
-            	}        		
+            	}
         	}
-        	
-          document.add(table);  
-        
-	
-        p6.setFont(font);               
+
+          document.add(table);
+
+
+        p6.setFont(font);
         p6.add(content[5]+" "+ruleText);
     	document.add(p6);
     	document.add(new Chunk(" "));
 
     	document.close();
-        
+
         Attachment att = new Attachment();
         att.setFile(output.toByteArray());
-        
+
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
             .body(att);
     }
-    
+
     /**
      * POST  /work-packages/export-ratesheet-excel : Export work package fares
      *
      * @param workPackage the workPackage to create
      * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
-	 * @throws IOException 
-	 * @throws MalformedURLException 
-	 * @throws DocumentException 
+	 * @throws IOException
+	 * @throws MalformedURLException
+	 * @throws DocumentException
      */
     @PostMapping("/work-packages/export-ratesheet-excel-waiver")
     @Timed
     public ResponseEntity<Attachment> exportRateSheetWorkPackageExcelWaiver(@RequestBody WorkPackageRateSheet wprs) throws URISyntaxException, MalformedURLException, IOException, DocumentException {
     	log.debug("REST request to save exportFaresExcel : {}{}", wprs.getWp(), wprs.getRuleText());
-    	
+
     	WorkPackage workPackage = wprs.getWp();
         String ruleText = wprs.getRuleText();
         int idx = Integer.parseInt(wprs.getIndex());
         String[] header = wprs.getHeader();
-    	
-    	XSSFWorkbook workbook = new XSSFWorkbook(); 
+
+    	XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet spreadsheet = workbook.createSheet("Rate Sheet");
-        
+
         XSSFRow row = spreadsheet.createRow(1);
         XSSFCell cell;
-        
+
         cell = row.createCell(0);
         cell.setCellValue("WORK ID :");
         cell = row.createCell(1);
         cell.setCellValue(workPackage.getWpid());
-        
+
         XSSFRow row2 = spreadsheet.createRow(2);
         XSSFCell cell2;
         cell2 = row2.createCell(0);
         cell2.setCellValue("TITLE FARE SHEET :");
         cell2 = row2.createCell(1);
         cell2.setCellValue(workPackage.getName());
-        
+
 		 XSSFRow row3 = spreadsheet.createRow(3);
 	     XSSFCell cell3;
 	     cell3 = row3.createCell(0);
 	     cell3.setCellValue("FARE NAME :");
 	     cell3 = row3.createCell(1);
 	     cell3.setCellValue(workPackage.getWaiverFareSheet().get(idx).getDiscountFaresName());
-          
-        
+
+
         XSSFRow row4 = spreadsheet.createRow(4);
         XSSFCell cell4;
         cell4 = row4.createCell(0);
         cell4.setCellValue("NOTES RATESHEET : ");
         cell4 = row4.createCell(1);
         cell4.setCellValue(workPackage.getRatesheetComment());
-        
+
         XSSFRow row5 = spreadsheet.createRow(5);
         XSSFCell cell5;
         for(int l=0; l<header.length ;l++) {
         	cell5 = row5.createCell(l);
 			cell5.setCellValue(header[l]);
 		}
-        
-    
+
+
     	for(int l=0; l<workPackage.getWaiverFareSheet().get(idx).getFares().size();l++) {
         	XSSFRow rows = spreadsheet.createRow(l+6);
     		for (int i=0;i<header.length;i++){
     			cell = rows.createCell(i);
-    	
+
     			if(header[i].contentEquals("Type")) {
         			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverType());
         		}else if(header[i].contentEquals("Full/Partial")) {
         			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverFullPartial());
         		}else if(header[i].contentEquals("PNR")) {
-        			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverPnr());       			
+        			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverPnr());
         		}else if(header[i].contentEquals("Tkt From")) {
         			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverTktFrom());
         		}else if(header[i].contentEquals("Tkt To")) {
@@ -6239,22 +6586,22 @@ public class WorkPackageResource {
         			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverApprover());
         		}else if(header[i].contentEquals("Remark")) {
         			cell.setCellValue(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverRemark());
-        		}  			
-    			    			
+        		}
+
     		}
         }
-        
-        
+
+
         XSSFRow rowRuleText = spreadsheet.createRow(workPackage.getWaiverFareSheet().get(idx).getFares().size()+7);
         XSSFCell cellRuleText;
         cellRuleText = rowRuleText.createCell(0);
         cellRuleText.setCellValue("RULE TEXT : ");
         cellRuleText = rowRuleText.createCell(1);
         cellRuleText.setCellValue(ruleText);
-        
-        
-        
-        
+
+
+
+
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         try {
 			workbook.write(output);
@@ -6268,56 +6615,56 @@ public class WorkPackageResource {
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
             .body(att);
     }
-    
+
     /**
      * POST  /work-packages/export-ratesheet-word : Export work package fares
      *
      * @param workPackage the workPackage to create
      * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
-	 * @throws IOException 
-	 * @throws MalformedURLException 
-	 * @throws DocumentException 
-     * @throws org.apache.poi.openxml4j.exceptions.InvalidFormatException 
+	 * @throws IOException
+	 * @throws MalformedURLException
+	 * @throws DocumentException
+     * @throws org.apache.poi.openxml4j.exceptions.InvalidFormatException
      */
     @PostMapping("/work-packages/export-ratesheet-word")
     @Timed
     public ResponseEntity<Attachment> exportRateSheetWorkPackageWord(@RequestBody WorkPackageRateSheet wprs) throws URISyntaxException, MalformedURLException, IOException, DocumentException, org.apache.poi.openxml4j.exceptions.InvalidFormatException {
     	log.debug("REST request to save exportFaresWord : {}{}", wprs.getWp(), wprs.getRuleText());
-    	
+
     	WorkPackage workPackage = wprs.getWp();
         String ruleText = wprs.getRuleText();
         int idx = Integer.parseInt(wprs.getIndex());
         String[] header = wprs.getHeader();
-        
-        XWPFDocument document = new XWPFDocument();  
-        
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("images/logo_ga.png"); 	
-    	
+
+        XWPFDocument document = new XWPFDocument();
+
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("images/logo_ga.png");
+
         XWPFParagraph img_header = document.createParagraph();
         img_header.setAlignment(ParagraphAlignment.CENTER);
         XWPFRun paragraphFiveRunOne = img_header.createRun();
         paragraphFiveRunOne.addPicture(inputStream, XWPFDocument.PICTURE_TYPE_JPEG, "logo_ga.png", Units.toEMU(50), Units.toEMU(50));
-        
+
         XWPFParagraph paragraph = document.createParagraph();
         XWPFRun title = paragraph.createRun();
         title.setText("Work ID : "+workPackage.getWpid());
         title.addBreak();
-        
+
         XWPFRun name = paragraph.createRun();
         name.setText("Title Fare Sheet : "+workPackage.getName());
         name.addBreak();
-        
+
         XWPFRun specname = paragraph.createRun();
         specname.setText("Specified Name : "+workPackage.getFareSheet().get(idx).getSpecifiedFaresName());
         specname.addBreak();
-        
+
         XWPFRun comment = paragraph.createRun();
         comment.setText("Ratesheet Comment : "+workPackage.getRatesheetComment());
         comment.addBreak();
-        
+
         XWPFTable table = document.createTable();
-        
+
         for(int l=0; l<header.length ;l++) {
         	XWPFTableRow header_title = table.getRow(0);
         	if(l==0) {
@@ -6327,10 +6674,10 @@ public class WorkPackageResource {
         	}
         	table.getRow(0).getCell(l).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1000));
 		}
-        
+
         if(workPackage.getTargetDistribution().contentEquals("ATPCO")) {
-        	for(int l=0; l<workPackage.getFareSheet().get(idx).getFares().size();l++) {  
-    			XWPFTableRow row = table.createRow(); 
+        	for(int l=0; l<workPackage.getFareSheet().get(idx).getFares().size();l++) {
+    			XWPFTableRow row = table.createRow();
         		for (int i=0;i<header.length;i++){
         			if(header[i].contentEquals("Status")) {
         				table.getRow(l+1).getCell(i).setText(workPackage.getFareSheet().get(idx).getFares().get(l).getStatus());
@@ -6344,21 +6691,21 @@ public class WorkPackageResource {
     					} catch (Exception e) {
     						// TODO: handle exception
     						table.getRow(l+1).getCell(i).setText("-");
-    					}            			
+    					}
             		}else if(header[i].contentEquals("Tar Cd")) {
             			try {
             				table.getRow(l+1).getCell(i).setText(workPackage.getFareSheet().get(idx).getFares().get(l).getTariffNumber().getTarCd());
     					} catch (Exception e) {
     						// TODO: handle exception
     						table.getRow(l+1).getCell(i).setText("-");
-    					}            			
+    					}
             		}else if(header[i].contentEquals("Global")) {
             			try {
             				table.getRow(l+1).getCell(i).setText(workPackage.getFareSheet().get(idx).getFares().get(l).getTariffNumber().getGlobal());
     					} catch (Exception e) {
     						// TODO: handle exception
     						table.getRow(l+1).getCell(i).setText("-");
-    					}            			
+    					}
             		}else if(header[i].contentEquals("Origin")) {
             			table.getRow(l+1).getCell(i).setText(workPackage.getFareSheet().get(idx).getFares().get(l).getOrigin());
             		}else if(header[i].contentEquals("Destination")) {
@@ -6397,14 +6744,14 @@ public class WorkPackageResource {
             			table.getRow(l+1).getCell(i).setText(workPackage.getFareSheet().get(idx).getFares().get(l).getItinerary());
             		}else if(header[i].contentEquals("Override Indicator")) {
             			try {
-                			table.getRow(l+1).getCell(i).setText(workPackage.getFareSheet().get(idx).getFares().get(l).getOverrideIndicator().toString());							
+                			table.getRow(l+1).getCell(i).setText(workPackage.getFareSheet().get(idx).getFares().get(l).getOverrideIndicator().toString());
     					} catch (Exception e) {
     						// TODO: handle exception
     						table.getRow(l+1).getCell(i).setText("-");
     					}
             		}else if(header[i].contentEquals("Travel Start")) {
             			try {
-                			table.getRow(l+1).getCell(i).setText(workPackage.getFareSheet().get(idx).getFares().get(l).getTravelStart().toString());							
+                			table.getRow(l+1).getCell(i).setText(workPackage.getFareSheet().get(idx).getFares().get(l).getTravelStart().toString());
     					} catch (Exception e) {
     						// TODO: handle exception
     						table.getRow(l+1).getCell(i).setText("-");
@@ -6412,7 +6759,7 @@ public class WorkPackageResource {
             		}else if(header[i].contentEquals("Travel End")) {
             			try {
                 			table.getRow(l+1).getCell(i).setText(workPackage.getFareSheet().get(idx).getFares().get(l).getTravelEnd().toString());
-    						
+
     					} catch (Exception e) {
     						// TODO: handle exception
     						table.getRow(l+1).getCell(i).setText("-");
@@ -6420,14 +6767,14 @@ public class WorkPackageResource {
             		}else if(header[i].contentEquals("Sales Start")) {
             			try {
                 			table.getRow(l+1).getCell(i).setText(workPackage.getFareSheet().get(idx).getFares().get(l).getSaleStart().toString());
-    						
+
     					} catch (Exception e) {
     						// TODO: handle exception
     						table.getRow(l+1).getCell(i).setText("-");
     					}
             		}else if(header[i].contentEquals("Sales End")) {
             			try {
-                			table.getRow(l+1).getCell(i).setText(workPackage.getFareSheet().get(idx).getFares().get(l).getSaleEnd().toString());							
+                			table.getRow(l+1).getCell(i).setText(workPackage.getFareSheet().get(idx).getFares().get(l).getSaleEnd().toString());
     					} catch (Exception e) {
     						// TODO: handle exception
     						table.getRow(l+1).getCell(i).setText("-");
@@ -6438,7 +6785,7 @@ public class WorkPackageResource {
             			table.getRow(l+1).getCell(i).setText(workPackage.getFareSheet().get(idx).getFares().get(l).getComment());
             		}else if(header[i].contentEquals("Travel Complete")) {
             			try {
-                			table.getRow(l+1).getCell(i).setText(workPackage.getFareSheet().get(idx).getFares().get(l).getTravelComplete().toString());							
+                			table.getRow(l+1).getCell(i).setText(workPackage.getFareSheet().get(idx).getFares().get(l).getTravelComplete().toString());
     					} catch (Exception e) {
     						// TODO: handle exception
     						table.getRow(l+1).getCell(i).setText("-");
@@ -6452,7 +6799,7 @@ public class WorkPackageResource {
         		}
             }
         }else if(workPackage.getTargetDistribution().contentEquals("MARKET")){
-        	XWPFTableRow row = table.createRow(); 
+        	XWPFTableRow row = table.createRow();
         	for(int l=0; l<workPackage.getMarketFareSheet().get(idx).getFares().size();l++) {
         		for (int i=0;i<header.length;i++){
             		if(header[i].contentEquals("Status")) {
@@ -6467,21 +6814,21 @@ public class WorkPackageResource {
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.getRow(l+1).getCell(i).setText("-");
-						}            			
+						}
             		}else if(header[i].contentEquals("Tar Cd")) {
             			try {
             				table.getRow(l+1).getCell(i).setText(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTariffNumber().getTarCd());
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.getRow(l+1).getCell(i).setText("-");
-						}            			
+						}
             		}else if(header[i].contentEquals("Global")) {
             			try {
             				table.getRow(l+1).getCell(i).setText(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTariffNumber().getGlobal());
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.getRow(l+1).getCell(i).setText("-");
-						}            			
+						}
             		}else if(header[i].contentEquals("Origin")) {
             			table.getRow(l+1).getCell(i).setText(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getOrigin());
             		}else if(header[i].contentEquals("Destination")) {
@@ -6520,14 +6867,14 @@ public class WorkPackageResource {
             			table.getRow(l+1).getCell(i).setText(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getItinerary());
             		}else if(header[i].contentEquals("Override Indicator")) {
             			try {
-                			table.getRow(l+1).getCell(i).setText(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getOverrideIndicator().toString());							
+                			table.getRow(l+1).getCell(i).setText(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getOverrideIndicator().toString());
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.getRow(l+1).getCell(i).setText("-");
 						}
             		}else if(header[i].contentEquals("Travel Start")) {
             			try {
-                			table.getRow(l+1).getCell(i).setText(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTravelStart().toString());							
+                			table.getRow(l+1).getCell(i).setText(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTravelStart().toString());
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.getRow(l+1).getCell(i).setText("-");
@@ -6535,7 +6882,7 @@ public class WorkPackageResource {
             		}else if(header[i].contentEquals("Travel End")) {
             			try {
                 			table.getRow(l+1).getCell(i).setText(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTravelEnd().toString());
-							
+
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.getRow(l+1).getCell(i).setText("-");
@@ -6543,14 +6890,14 @@ public class WorkPackageResource {
             		}else if(header[i].contentEquals("Sales Start")) {
             			try {
                 			table.getRow(l+1).getCell(i).setText(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getSaleStart().toString());
-							
+
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.getRow(l+1).getCell(i).setText("-");
 						}
             		}else if(header[i].contentEquals("Sales End")) {
             			try {
-                			table.getRow(l+1).getCell(i).setText(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getSaleEnd().toString());							
+                			table.getRow(l+1).getCell(i).setText(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getSaleEnd().toString());
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.getRow(l+1).getCell(i).setText("-");
@@ -6561,7 +6908,7 @@ public class WorkPackageResource {
             			table.getRow(l+1).getCell(i).setText(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getComment());
             		}else if(header[i].contentEquals("Travel Complete")) {
             			try {
-                			table.getRow(l+1).getCell(i).setText(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTravelComplete().toString());							
+                			table.getRow(l+1).getCell(i).setText(workPackage.getMarketFareSheet().get(idx).getFares().get(l).getTravelComplete().toString());
 						} catch (Exception e) {
 							// TODO: handle exception
 							table.getRow(l+1).getCell(i).setText("-");
@@ -6574,15 +6921,15 @@ public class WorkPackageResource {
             		else {
             			table.getRow(l+1).getCell(i).setText("-");
             		}
-            	}        		
+            	}
         	}
         }
-        
+
 
    	 XWPFRun ruletext = paragraph.createRun();
    	 ruletext.setText("Rule Text : "+ruleText);
    	 ruletext.addBreak();
-        
+
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         try {
         	document.write(output);
@@ -6592,63 +6939,63 @@ public class WorkPackageResource {
 		}
 
     	document.close();
-    	
+
     	Attachment att = new Attachment();
     	att.setFile(output.toByteArray());
     	return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
                 .body(att);
     }
-    
+
     /**
      * POST  /work-packages/export-ratesheet-discount-word : Export work package fares
      *
      * @param workPackage the workPackage to create
      * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
-	 * @throws IOException 
-	 * @throws MalformedURLException 
-	 * @throws DocumentException 
-     * @throws org.apache.poi.openxml4j.exceptions.InvalidFormatException 
+	 * @throws IOException
+	 * @throws MalformedURLException
+	 * @throws DocumentException
+     * @throws org.apache.poi.openxml4j.exceptions.InvalidFormatException
      */
     @PostMapping("/work-packages/export-ratesheet-word-discount")
     @Timed
     public ResponseEntity<Attachment> exportRateSheetWorkPackageWordDiscount(@RequestBody WorkPackageRateSheet wprs) throws URISyntaxException, MalformedURLException, IOException, DocumentException, org.apache.poi.openxml4j.exceptions.InvalidFormatException {
     	log.debug("REST request to save exportFaresWord : {}{}", wprs.getWp(), wprs.getRuleText());
-    	
+
     	WorkPackage workPackage = wprs.getWp();
         String ruleText = wprs.getRuleText();
         int idx = Integer.parseInt(wprs.getIndex());
         String[] header = wprs.getHeader();
-        
-        XWPFDocument document = new XWPFDocument();   
-        
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("images/logo_ga.png"); 	
-    	
+
+        XWPFDocument document = new XWPFDocument();
+
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("images/logo_ga.png");
+
         XWPFParagraph img_header = document.createParagraph();
         img_header.setAlignment(ParagraphAlignment.CENTER);
         XWPFRun paragraphFiveRunOne = img_header.createRun();
-        paragraphFiveRunOne.addPicture(inputStream, XWPFDocument.PICTURE_TYPE_JPEG, "logo_ga.png", Units.toEMU(50), Units.toEMU(50));    
-        
+        paragraphFiveRunOne.addPicture(inputStream, XWPFDocument.PICTURE_TYPE_JPEG, "logo_ga.png", Units.toEMU(50), Units.toEMU(50));
+
         XWPFParagraph paragraph = document.createParagraph();
         XWPFRun title = paragraph.createRun();
         title.setText("Work ID : "+workPackage.getWpid());
         title.addBreak();
-        
+
         XWPFRun name = paragraph.createRun();
         name.setText("Title Fare Sheet : "+workPackage.getName());
         name.addBreak();
-        
+
         XWPFRun specname = paragraph.createRun();
         specname.setText("Specified Name : "+workPackage.getDiscountFareSheet().get(idx).getDiscountFaresName());
         specname.addBreak();
-        
+
         XWPFRun comment = paragraph.createRun();
         comment.setText("Ratesheet Comment : "+workPackage.getRatesheetComment());
         comment.addBreak();
-        
+
         XWPFTable table = document.createTable();
-        
+
         for(int l=0; l<header.length ;l++) {
         	XWPFTableRow header_title = table.getRow(0);
         	if(l==0) {
@@ -6658,17 +7005,17 @@ public class WorkPackageResource {
         	}
         	table.getRow(0).getCell(l).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1000));
 		}
-        
 
-    	for(int l=0; l<workPackage.getDiscountFareSheet().get(idx).getFares().size();l++) {  
-			XWPFTableRow row = table.createRow(); 
+
+    	for(int l=0; l<workPackage.getDiscountFareSheet().get(idx).getFares().size();l++) {
+			XWPFTableRow row = table.createRow();
     		for (int i=0;i<header.length;i++){
     			if(header[i].contentEquals("Status")) {
         			table.getRow(l+1).getCell(i).setText(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getStatus());
         		}else if(header[i].contentEquals("FBR Tariff Code")) {
         			table.getRow(l+1).getCell(i).setText(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTarcd());
         		}else if(header[i].contentEquals("Loc 1 Type")) {
-        			table.getRow(l+1).getCell(i).setText(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getLoc1Type());       			
+        			table.getRow(l+1).getCell(i).setText(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getLoc1Type());
         		}else if(header[i].contentEquals("Loc 1")) {
         			table.getRow(l+1).getCell(i).setText(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getLoc1());
         		}else if(header[i].contentEquals("Loc 2 Type")) {
@@ -6713,7 +7060,7 @@ public class WorkPackageResource {
         			table.getRow(l+1).getCell(i).setText(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getNewBookingCode());
         		}else if(header[i].contentEquals("Travel Start")) {
         			try {
-            			table.getRow(l+1).getCell(i).setText(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTravelStart().toString());							
+            			table.getRow(l+1).getCell(i).setText(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTravelStart().toString());
 					} catch (Exception e) {
 						// TODO: handle exception
 						table.getRow(l+1).getCell(i).setText("-");
@@ -6721,7 +7068,7 @@ public class WorkPackageResource {
         		}else if(header[i].contentEquals("Travel End")) {
         			try {
             			table.getRow(l+1).getCell(i).setText(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTravelEnd().toString());
-						
+
 					} catch (Exception e) {
 						// TODO: handle exception
 						table.getRow(l+1).getCell(i).setText("-");
@@ -6729,14 +7076,14 @@ public class WorkPackageResource {
         		}else if(header[i].contentEquals("Sales Start")) {
         			try {
             			table.getRow(l+1).getCell(i).setText(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getSaleStart().toString());
-						
+
 					} catch (Exception e) {
 						// TODO: handle exception
 						table.getRow(l+1).getCell(i).setText("-");
 					}
         		}else if(header[i].contentEquals("Sales End")) {
         			try {
-            			table.getRow(l+1).getCell(i).setText(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getSaleEnd().toString());							
+            			table.getRow(l+1).getCell(i).setText(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getSaleEnd().toString());
 					} catch (Exception e) {
 						// TODO: handle exception
 						table.getRow(l+1).getCell(i).setText("-");
@@ -6745,7 +7092,7 @@ public class WorkPackageResource {
         			table.getRow(l+1).getCell(i).setText(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getComment());
         		}else if(header[i].contentEquals("Travel Complete")) {
         			try {
-            			table.getRow(l+1).getCell(i).setText(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTravelComplete().toString());							
+            			table.getRow(l+1).getCell(i).setText(workPackage.getDiscountFareSheet().get(idx).getFares().get(l).getTravelComplete().toString());
 					} catch (Exception e) {
 						// TODO: handle exception
 						table.getRow(l+1).getCell(i).setText("-");
@@ -6756,12 +7103,12 @@ public class WorkPackageResource {
 				table.getRow(l+1).getCell(i).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1000));
     		}
         }
-        
+
     	 XWPFRun ruletext = paragraph.createRun();
     	 ruletext.setText("Rule Text : "+ruleText);
     	 ruletext.addBreak();
-    	 
-    	 
+
+
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         try {
         	document.write(output);
@@ -6771,63 +7118,63 @@ public class WorkPackageResource {
 		}
 
     	document.close();
-    	
+
     	Attachment att = new Attachment();
     	att.setFile(output.toByteArray());
     	return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
                 .body(att);
     }
-    
+
     /**
      * POST  /work-packages/export-ratesheet-waiver-word : Export work package fares
      *
      * @param workPackage the workPackage to create
      * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
-	 * @throws IOException 
-	 * @throws MalformedURLException 
-	 * @throws DocumentException 
-     * @throws org.apache.poi.openxml4j.exceptions.InvalidFormatException 
+	 * @throws IOException
+	 * @throws MalformedURLException
+	 * @throws DocumentException
+     * @throws org.apache.poi.openxml4j.exceptions.InvalidFormatException
      */
     @PostMapping("/work-packages/export-ratesheet-word-waiver")
     @Timed
     public ResponseEntity<Attachment> exportRateSheetWorkPackageWordWaiver(@RequestBody WorkPackageRateSheet wprs) throws URISyntaxException, MalformedURLException, IOException, DocumentException, org.apache.poi.openxml4j.exceptions.InvalidFormatException {
     	log.debug("REST request to save exportFaresWord : {}{}", wprs.getWp(), wprs.getRuleText());
-    	
+
     	WorkPackage workPackage = wprs.getWp();
         String ruleText = wprs.getRuleText();
         int idx = Integer.parseInt(wprs.getIndex());
         String[] header = wprs.getHeader();
-        
-        XWPFDocument document = new XWPFDocument();       
-                       
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("images/logo_ga.png"); 	
-    	
+
+        XWPFDocument document = new XWPFDocument();
+
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("images/logo_ga.png");
+
         XWPFParagraph img_header = document.createParagraph();
         img_header.setAlignment(ParagraphAlignment.CENTER);
         XWPFRun paragraphFiveRunOne = img_header.createRun();
         paragraphFiveRunOne.addPicture(inputStream, XWPFDocument.PICTURE_TYPE_JPEG, "logo_ga.png", Units.toEMU(50), Units.toEMU(50));
-        
+
         XWPFParagraph paragraph = document.createParagraph();
         XWPFRun title = paragraph.createRun();
         title.setText("Work ID : "+workPackage.getWpid());
         title.addBreak();
-        
+
         XWPFRun name = paragraph.createRun();
         name.setText("Title Fare Sheet : "+workPackage.getName());
         name.addBreak();
-        
+
         XWPFRun specname = paragraph.createRun();
         specname.setText("Specified Name : "+workPackage.getWaiverFareSheet().get(idx).getDiscountFaresName());
         specname.addBreak();
-        
+
         XWPFRun comment = paragraph.createRun();
         comment.setText("Ratesheet Comment : "+workPackage.getRatesheetComment());
         comment.addBreak();
-        
+
         XWPFTable table = document.createTable();
-        
+
         for(int l=0; l<header.length ;l++) {
         	XWPFTableRow header_title = table.getRow(0);
         	if(l==0) {
@@ -6837,17 +7184,17 @@ public class WorkPackageResource {
         	}
         	table.getRow(0).getCell(l).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1000));
 		}
-        
 
-    	for(int l=0; l<workPackage.getWaiverFareSheet().get(idx).getFares().size();l++) {  
-			XWPFTableRow row = table.createRow(); 
+
+    	for(int l=0; l<workPackage.getWaiverFareSheet().get(idx).getFares().size();l++) {
+			XWPFTableRow row = table.createRow();
     		for (int i=0;i<header.length;i++){
     			if(header[i].contentEquals("Type")) {
         			table.getRow(l+1).getCell(i).setText(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverType());
         		}else if(header[i].contentEquals("Full/Partial")) {
         			table.getRow(l+1).getCell(i).setText(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverFullPartial());
         		}else if(header[i].contentEquals("PNR")) {
-        			table.getRow(l+1).getCell(i).setText(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverPnr());       			
+        			table.getRow(l+1).getCell(i).setText(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverPnr());
         		}else if(header[i].contentEquals("Tkt From")) {
         			table.getRow(l+1).getCell(i).setText(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverTktFrom());
         		}else if(header[i].contentEquals("Tkt To")) {
@@ -6888,15 +7235,15 @@ public class WorkPackageResource {
         			table.getRow(l+1).getCell(i).setText(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverApprover());
         		}else if(header[i].contentEquals("Remark")) {
         			table.getRow(l+1).getCell(i).setText(workPackage.getWaiverFareSheet().get(idx).getFares().get(l).getWaiverRemark());
-        		}  	
+        		}
 				table.getRow(l+1).getCell(i).getCTTc().addNewTcPr().addNewTcW().setW(BigInteger.valueOf(1000));
     		}
         }
-        
+
     	 XWPFRun ruletext = paragraph.createRun();
     	 ruletext.setText("Rule Text : "+ruleText);
     	 ruletext.addBreak();
-        
+
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         try {
         	document.write(output);
@@ -6904,16 +7251,16 @@ public class WorkPackageResource {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        
+
         document.close();
-        
+
     	Attachment att = new Attachment();
     	att.setFile(output.toByteArray());
     	return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
                 .body(att);
     }
-  
+
     /**
      * POST  /work-packages/update-latest-fare : Update Latest Fare
      *
@@ -6925,25 +7272,25 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<WorkPackageFareSheet> updateLatestFare(@RequestBody WorkPackageFareSheet workPackageSheet) throws URISyntaxException {
         log.debug("REST request to update latest fare WorkPackageSheet : {}", workPackageSheet);
-       
+
         List<WorkPackageFare> fares = workPackageSheet.getFares();
         for(WorkPackageFare fare : fares) {
 	        Optional<AtpcoFare> checkAtpcoFare = atpcoFareRepository.findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCity(fare.getCarrier(), fare.getTariffNumber() != null ? fare.getTariffNumber().getTarNo() : null, fare.getOrigin(), fare.getDestination());
 			if(checkAtpcoFare.isPresent()) {
 				float atpcoFareAmount = Float.parseFloat(checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().toString());
-				fare.setAmount(String.valueOf(atpcoFareAmount));		
-				fare.setAction("Y");      
+				fare.setAmount(String.valueOf(atpcoFareAmount));
+				fare.setAction("Y");
 				fare.setAmtDiff("0");
 				fare.setAmtPercentDiff("0");
 			}
 			else {
-//				fare.setAction("N");        		
+//				fare.setAction("N");
 			}
         }
         return ResponseEntity.ok().body(workPackageSheet);
     }
-    
-    
+
+
     /**
      * POST  /work-packages/update-action-codes : Update Action Codes
      *
@@ -6955,7 +7302,7 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<WorkPackageFareSheet> updateActionCodes(@RequestBody WorkPackageFareSheet workPackageSheet) throws URISyntaxException {
         log.debug("REST request to update action code WorkPackageSheet : {}", workPackageSheet);
-       
+
         List<WorkPackageFare> fares = workPackageSheet.getFares();
         for(WorkPackageFare fare : fares) {
         	Optional<AtpcoFare> checkAtpcoFare = atpcoFareRepository.findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCity(fare.getCarrier(), fare.getTariffNumber() != null ? fare.getTariffNumber().getTarNo() : null, fare.getOrigin(), fare.getDestination());
@@ -6968,26 +7315,26 @@ public class WorkPackageResource {
         				fare.setAction("R");
         			}
         			else if(fareAmount > atpcoFareAmount) {
-        				fare.setAction("I");        				
+        				fare.setAction("I");
         			}
         			else if(fareAmount== atpcoFareAmount){
-        				fare.setAction("Y");        				        				
+        				fare.setAction("Y");
         			}
-        			
+
         			float amtDiff = ((Float.parseFloat(fare.getAmount())) - Float.parseFloat(checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().toString()));
         			fare.setAmtDiff(String.format("%.02f",amtDiff));
-        			
+
         			float percentDiff = (amtDiff / atpcoFareAmount) * 100;
         			fare.setAmtPercentDiff(String.format("%.02f", percentDiff));
-    			}        			
+    			}
     		}
     		else {
-    			fare.setAction("N");        		
+    			fare.setAction("N");
     		}
         }
         return ResponseEntity.ok().body(workPackageSheet);
     }
-    
-    
+
+
 }
 

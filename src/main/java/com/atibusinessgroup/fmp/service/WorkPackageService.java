@@ -95,13 +95,8 @@ public class WorkPackageService {
         				fare.getFootnote1(), 
         				fare.getRtgno(), 
         				fare.getRuleno());
-        		
-//        		log.debug("ORIGIN : {}, DESTINATION : {}", fare.getOrigin(), fare.getDestination());
-//        		Optional<AtpcoFare> checkAtpcoFare = atpcoFareRepository.findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCity(fare.getCarrier(), fare.getTariffNumber() != null ? fare.getTariffNumber().getTarNo() : null, fare.getOrigin(), fare.getDestination());
-//        		Optional<AtpcoFare> checkAtpcoFare = atpcoFareRepository.findOneByCarrierCodeAndTariffNo(fare.getCarrier(), fare.getTariffNumber() != null ? fare.getTariffNumber().getTarNo() : null);
+
         		if(checkAtpcoFare.isPresent()) {
-//        			log.debug("FARE EXIST");
-        			//I, R, Y
         			if(fare.getAmount() != null) {
         				float atpcoFareAmount = Float.parseFloat(checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().toString());
         				float fareAmount = Float.parseFloat(fare.getAmount());
@@ -123,8 +118,6 @@ public class WorkPackageService {
         			}        			
         		}
         		else {
-        			log.debug("FARE NOT EXIST");
-
         			fare.setAction("N");        		
         		}
         		
@@ -147,6 +140,7 @@ public class WorkPackageService {
         		if(fare.getTravelComplete() != null)
 	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));        		
         		
+        		fare.setAction("N");
         		if(fare.getId() == null) {
         			fare.setId(new ObjectId().toString());
         		}
@@ -217,6 +211,7 @@ public class WorkPackageService {
     		Counter c = counterRepository.findOneByIdAndYear("workpackageId", dfFull.format(Calendar.getInstance().getTime()));
     		if(c == null) {
     			c = new Counter();
+    			c.setId("workpackageId");
     			c.setSequenceValue(0);
     			c.setYear(dfFull.format(Calendar.getInstance().getTime()));
     			c = counterRepository.save(c);
@@ -226,7 +221,7 @@ public class WorkPackageService {
         	c = counterRepository.save(c);
         	
     		String year = df.format(Calendar.getInstance().getTime());
-    		workPackage.setWpid(year+nf.format(c.getSequenceValue()+1));
+    		workPackage.setWpid(year+nf.format(c.getSequenceValue()));
         }
     	
     	if(!workPackage.isSpecifiedFares()) {
