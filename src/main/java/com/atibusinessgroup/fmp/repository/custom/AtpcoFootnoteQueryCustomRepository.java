@@ -1230,6 +1230,8 @@ public class AtpcoFootnoteQueryCustomRepository {
 
 						query.append("cat_no", catNo);
 					}
+				} else {
+					query.append("cat_no", new BasicDBObject("$exists", true));
 				}
 				BasicDBObject match = new BasicDBObject("$match", query);
 				return match;
@@ -1245,10 +1247,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 			}
 		});
 		
-		
-		if(catNo == null ) {
-			
-
+		if(catNo == null || catNo.equalsIgnoreCase("comb")) {
 			
 			aggregationOperations.add(new AggregationOperation() {
 				
@@ -1260,7 +1259,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 					query.append("from", CollectionName.ATPCO_FOOTNOTE_RECORD_3_CAT_014);
 					query.append("localField", "data_table.tbl_no");
 					query.append("foreignField", "tbl_no");
-					query.append("as", "014");
+					query.append("as", "cat014");
 					lookup.append("$lookup", query);
 					
 					return lookup;
@@ -1277,7 +1276,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 					query.append("from", CollectionName.ATPCO_FOOTNOTE_RECORD_3_CAT_015);
 					query.append("localField", "data_table.tbl_no");
 					query.append("foreignField", "tbl_no");
-					query.append("as", "015");
+					query.append("as", "cat015");
 					lookup.append("$lookup", query);
 					
 					return lookup;
@@ -1290,7 +1289,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 				@Override
 				public DBObject toDBObject(AggregationOperationContext context) {
 					BasicDBObject unwind = new BasicDBObject("$unwind", 
-							new BasicDBObject("path", "$014")
+							new BasicDBObject("path", "$cat014")
 							.append("preserveNullAndEmptyArrays", true)
 						);
 					return unwind;
@@ -1303,7 +1302,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 				@Override
 				public DBObject toDBObject(AggregationOperationContext context) {
 					BasicDBObject unwind = new BasicDBObject("$unwind", 
-							new BasicDBObject("path", "$015")
+							new BasicDBObject("path", "$cat015")
 							.append("preserveNullAndEmptyArrays", true)
 						);
 					return unwind;
@@ -1317,8 +1316,8 @@ public class AtpcoFootnoteQueryCustomRepository {
 				public DBObject toDBObject(AggregationOperationContext context) {
 					BasicDBObject match = new BasicDBObject();
 					BasicDBObject or = new BasicDBObject("$or", Arrays.asList( 
-							new BasicDBObject("014", new BasicDBObject("$ne", Arrays.asList())),
-							new BasicDBObject("015", new BasicDBObject("$ne", Arrays.asList()))
+							new BasicDBObject("cat014", new BasicDBObject("$ne", Arrays.asList())),
+							new BasicDBObject("cat015", new BasicDBObject("$ne", Arrays.asList()))
 							));
 					
 					match.append("$match", or);
@@ -1341,7 +1340,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 					query.append("from", "atpco_footnote_record_3_cat_"+catNo);
 					query.append("localField", "data_table.tbl_no");
 					query.append("foreignField", "tbl_no");
-					query.append("as", catNo);
+					query.append("as", "cat"+catNo);
 					lookup.append("$lookup", query);
 					
 					return lookup;
@@ -1354,7 +1353,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 				@Override
 				public DBObject toDBObject(AggregationOperationContext context) {
 					BasicDBObject unwind = new BasicDBObject("$unwind", 
-							new BasicDBObject("path", "$"+catNo)
+							new BasicDBObject("path", "$cat"+catNo)
 							.append("preserveNullAndEmptyArrays", true)
 						);
 					return unwind;
@@ -1368,7 +1367,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 				@Override
 				public DBObject toDBObject(AggregationOperationContext context) {
 					BasicDBObject match = new BasicDBObject();
-					BasicDBObject or = new BasicDBObject("$eq", new BasicDBObject(catNo, new BasicDBObject("$ne", Arrays.asList())));
+					BasicDBObject or = new BasicDBObject(catNo, new BasicDBObject("$ne", Arrays.asList()));
 					
 					match.append("$match", or);
 					return match;
@@ -1400,12 +1399,12 @@ public class AtpcoFootnoteQueryCustomRepository {
 				query.append("effDate", "$dates_eff");
 				query.append("discDate", "$dates_disc");
 				if (catNo != null && (catNo.equalsIgnoreCase("014") || catNo.equalsIgnoreCase("015")))  {
-					query.append("travelStart","$cat14.travel_dates_comm");
-					query.append("travelEnd", "$cat14.travel_dates_exp");
-					query.append("saleStart", "$cat15.sales_dates_earliest_tktg");
-					query.append("saleEnd","$cat15.sales_dates_latest_tktg");
-					query.append("travelComplete","$cat14.travel_dates_commence_complete");
-					query.append("travelCompInd", "$cat14.travel_appl");
+					query.append("travelStart","$cat014.travel_dates_comm");
+					query.append("travelEnd", "$cat014.travel_dates_exp");
+					query.append("saleStart", "$cat015.sales_dates_earliest_tktg");
+					query.append("saleEnd","$cat015.sales_dates_latest_tktg");
+					query.append("travelComplete","$cat014.travel_dates_commence_complete");
+					query.append("travelCompInd", "$cat014.travel_appl");
 				}
 				
 		        
