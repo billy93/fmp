@@ -53,7 +53,9 @@
 	        }
         }
         	if(!vm.workPackage.attachment){
-         	vm.types.push("Attachment");
+        		 if(vm.workPackage.type != 'WAIVER'){
+        			 vm.types.push("Attachment");
+        		 }
 	         }
 	         
         
