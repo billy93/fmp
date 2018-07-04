@@ -323,8 +323,11 @@ public class WorkPackageResource {
         wp.setCreatedBy(null);
         wp.setCreatedDate(null);
         wp.setLocked(false);
+        wp.setOpened(false);
     	wp.setLockedBy(null);
+    	wp.setOpenedBy(null);
     	wp.setLockedSince(null);
+    	wp.setOpenedSince(null);
         wp.setLastModifiedBy(null);
         wp.setLastModifiedDate(null);
         wp.setFilingInstruction(false);
@@ -403,8 +406,11 @@ public class WorkPackageResource {
         wp.setLastModifiedDate(null);
         wp.setPriority(null);
     	wp.setLocked(false);
+    	wp.setOpened(false);
     	wp.setLockedBy(null);
+    	wp.setOpenedBy(null);
     	wp.setLockedSince(null);
+    	wp.setOpenedSince(null);
 
 
 //        if(!workPackage.getReuseReplaceConfig().isAttachment()) {
@@ -3761,12 +3767,19 @@ public class WorkPackageResource {
 		}
 
         if(!workPackage.isLocked() && needLocked) {
-        	log.debug("HARUS di-locked ya ? : {}", id);
         	workPackage.setLocked(true);
             workPackage.setLockedBy(SecurityUtils.getCurrentUserLogin().get());
             workPackage.setLockedSince(ZonedDateTime.now());
             workPackage = workPackageService.save(workPackage);
         }
+        
+        if(!workPackage.isOpened()) {
+        	workPackage.setOpened(true);
+        	workPackage.setOpenedBy(SecurityUtils.getCurrentUserLogin().get());
+        	workPackage.setOpenedSince(ZonedDateTime.now());
+        	workPackage = workPackageService.save(workPackage);
+        }
+        
 //        List<WorkPackageFare> fares = workPackageFareService.findAllByWorkPackageAndFareType(workPackage.getId(), null);
 //        log.debug("REST request to set WorkPackageFARES : {}", fares.size());
 //        workPackage.setFares(fares);
@@ -3860,6 +3873,7 @@ public class WorkPackageResource {
 	    		result.setReviewLevel("HO");
 	    		result.setStatus(Status.PENDING);
 	    		result.setLocked(false);
+	    		result.setOpened(false);
 	        }
 	        List<WorkPackageFareSheet> fareSheet = result.getFareSheet();
 	        for(WorkPackageFareSheet sheet : fareSheet) {
@@ -3946,6 +3960,31 @@ public class WorkPackageResource {
         WorkPackage result = workPackageService.findOne(workPackage.getId());
 
         result.setLocked(false);
+        workPackageService.save(result);
+
+        return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                .body(result);
+    }
+    
+    /**
+     * POST  /work-packages/closed : closed
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/work-packages/closed")
+    @Timed
+    public ResponseEntity<WorkPackage> closedWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
+        log.debug("REST request to closed WorkPackage : {}", workPackage);
+        if (workPackage.getId() == null) {
+            throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
+        }
+
+        WorkPackage result = workPackageService.findOne(workPackage.getId());
+
+        result.setOpened(false);
         workPackageService.save(result);
 
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
@@ -4054,6 +4093,7 @@ public class WorkPackageResource {
     		result.setReviewLevel("LSO");
     		result.setStatus(Status.PENDING);
     		result.setLocked(false);
+    		result.setOpened(false);
         }
 
         List<WorkPackageFareSheet> fareSheet = result.getFareSheet();
@@ -4147,6 +4187,7 @@ public class WorkPackageResource {
     		result.setSidewayReviewLevel(null);
         }
 		result.setLocked(false);
+		result.setOpened(false);
         result.setStatus(Status.PENDING);
         result.setQueuedDate(Instant.now());
         workPackageService.save(result);
@@ -4190,11 +4231,13 @@ public class WorkPackageResource {
         	workPackage.setDistributionReviewLevel(reviewLevel);
         	workPackage.setReviewLevel("LSO");
         	workPackage.setLocked(false);
+        	workPackage.setOpened(false);
         	workPackage.setStatus(Status.DISTRIBUTED);
         }else if(reviewLevel.contentEquals("HO")) {
         	workPackage.setDistributionReviewLevel(reviewLevel);
         	workPackage.setReviewLevel("DISTRIBUTION");
     		workPackage.setLocked(false);
+    		workPackage.setOpened(false);
     		workPackage.setStatus(Status.PENDING);
 	    }
 //        if(reviewLevel.contentEquals("HO")) {
@@ -4317,6 +4360,7 @@ public class WorkPackageResource {
 
         WorkPackage result = workPackageService.findOne(workPackage.getId());
         result.setLocked(false);
+        result.setOpened(false);
         workPackageService.save(result);
 
         ApproveConfig x = new ApproveConfig();
@@ -4434,6 +4478,7 @@ public class WorkPackageResource {
         result.setDistributionReviewLevel(null);
         result.setStatus(Status.REFERRED);
 		result.setLocked(false);
+		result.setOpened(false);
 		result.setQueuedDate(Instant.now());
         workPackageService.save(result);
 
@@ -4473,6 +4518,7 @@ public class WorkPackageResource {
         result.setDistributionReviewLevel(result.getDistributionReviewLevel());
         result.setStatus(Status.DISTRIBUTED);
 		result.setLocked(false);
+		result.setOpened(false);
 		result.setQueuedDate(Instant.now());
         workPackageService.save(result);
 
@@ -4701,6 +4747,7 @@ public class WorkPackageResource {
 
 
 	        workPackage.setLocked(false);
+	        workPackage.setOpened(false);
 	        workPackage.setLockedBy(null);
 	    	workPackage.setLockedSince(null);
 	        workPackage.setStatus(Status.READY_TO_RELEASE); //BUSY
@@ -4796,6 +4843,7 @@ public class WorkPackageResource {
 
 //        WorkPackage result = workPackageService.findOne(workPackage.getId());
         workPackage.setLocked(false);
+        workPackage.setOpened(false);
         workPackage.setLockedBy(null);
     	workPackage.setLockedSince(null);
         workPackage.setStatus(Status.READY_TO_RELEASE); //BUSY

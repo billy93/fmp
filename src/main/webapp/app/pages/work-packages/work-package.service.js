@@ -158,6 +158,9 @@
 	        'unlock': {
 				method:'POST', url:'api/work-packages/unlock'
 	        },
+	        'closeEditor': {
+				method:'POST', url:'api/work-packages/closed'
+	        },
 	        'history': { method: 'GET', isArray: true, url:'api/work-packages/history/:id'},
 	        'changeVersion': { method: 'POST', url:'api/work-packages/changeVersion'},
 	        'exportQueue': {method:'POST', url:'api/work-packages/exportQueue'},

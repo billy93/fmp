@@ -256,18 +256,33 @@
         }
 
         vm.unlock = function(){
-        	if(vm.login.reviewLevels.indexOf(vm.selectedRow.reviewLevel) > -1){
-        	  vm.selectedRow.locked = false;
-   	      	  WorkPackage.unlock(vm.selectedRow, onUnlockedSuccess, onUnlockedFailure);
-   	      	  function onUnlockedSuccess (result) {
-   	      		  alert('Work Package Successful Unlocked');
-   	      	  }
-   	      	  function onUnlockedFailure (error) {
+        	console.log(vm.login);
+        	if(vm.selectedRow.opened){
+        		if(vm.login.login == vm.selectedRow.openedBy){
+        			vm.selectedRow.locked = false;
+	       	      	WorkPackage.unlock(vm.selectedRow, onUnlockedSuccess, onUnlockedFailure);
+	       	      	 function onUnlockedSuccess (result) {
+	       	      	  alert('Work Package Successful Unlocked');
+	       	      	 }
+	       	      	 function onUnlockedFailure (error) {
+	       	      	  }
+        		}else{
+        			alert('This workpackage in edit mode by '+vm.selectedRow.openedBy);
+        		}
+        	}else{
+        		if(vm.login.reviewLevels.indexOf(vm.selectedRow.reviewLevel) > -1){
+              	  vm.selectedRow.locked = false;
+         	      	  WorkPackage.unlock(vm.selectedRow, onUnlockedSuccess, onUnlockedFailure);
+         	      	  function onUnlockedSuccess (result) {
+         	      		  alert('Work Package Successful Unlocked');
+         	      	  }
+         	      	  function onUnlockedFailure (error) {
 
-   	      	  }
-	  		}else{
-	  			alert('Your review level does not have access to unlock this workpackage');
-	  		}
+         	      	  }
+      	  		}else{
+      	  			alert('Your review level does not have access to unlock this workpackage');
+      	  		}
+        	}
         };
 
         vm.changeItemsPerPage = function(){
