@@ -329,7 +329,13 @@ public class WorkPackageResource {
         wp.setLastModifiedDate(null);
         wp.setFilingInstruction(false);
         wp.setPriority(null);
-
+        wp.setFilingDetail(null);
+        
+        for(Attachment attachment : wp.getAttachmentData()) {
+        	attachment.setUsername(user.getLogin());
+        	attachment.setCreatedTime(ZonedDateTime.now());
+        }
+        
         for(WorkPackageFareSheet wps : wp.getFareSheet()) {
         	for(WorkPackageFare fare : wps.getFares()) {
         		fare.setStatus("PENDING");
