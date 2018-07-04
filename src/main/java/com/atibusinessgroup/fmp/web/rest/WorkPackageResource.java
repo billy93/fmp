@@ -4726,9 +4726,9 @@ public class WorkPackageResource {
                		 batchBuilder.append("N");
                		 batchBuilder.append(fare.getOrigin());
                		 batchBuilder.append(fare.getDestination());
-               		 batchBuilder.append(fare.getFareBasis());
-               		 if(8-fare.getFareBasis().length() > 0) {
-               			 for(int i=0;i<(8-fare.getFareBasis().length()); i++) {
+               		 batchBuilder.append(fare.getBucket());
+               		 if(8-fare.getBucket().length() > 0) {
+               			 for(int i=0;i<(8-fare.getBucket().length()); i++) {
                				 batchBuilder.append(" ");
                			 }
                		 }
@@ -4816,11 +4816,20 @@ public class WorkPackageResource {
 	        workPackage.setStatus(Status.READY_TO_RELEASE); //BUSY
 
 	        List<WorkPackageFareSheet> fareSheet = workPackage.getFareSheet();
+	        List<WorkPackageFareSheet> addonFareSheet = workPackage.getAddonFareSheet();
 	        Set<TariffNumber> fareTariffNumber = new HashSet<TariffNumber>();
+	        Set<TariffNumber> addonFareTariffNumber = new HashSet<TariffNumber>();
 	        for(WorkPackageFareSheet sheet : fareSheet) {
 	        	List<WorkPackageFare> fares = sheet.getFares();
 	        	for(WorkPackageFare fare : fares) {
 	        		fareTariffNumber.add(fare.getTariffNumber());
+	        	}
+	        }
+	        
+	        for(WorkPackageFareSheet sheet : addonFareSheet) {
+	        	List<WorkPackageFare> fares = sheet.getFares();
+	        	for(WorkPackageFare fare : fares) {
+	        		addonFareTariffNumber.add(fare.getTariffNumber());
 	        	}
 	        }
 
@@ -4833,6 +4842,15 @@ public class WorkPackageResource {
 	        	fdt.tarCd = tariff.getTarCd();
 	        	fdt.tarNo = tariff.getTarNo();
 	        	fdt.tarType = "Fare";
+	        	workPackage.getFilingDetail().getFilingDetailTarif().add(fdt);
+	        }
+	        for(TariffNumber tariff : addonFareTariffNumber) {
+	        	FilingDetailTariff fdt = new FilingDetailTariff();
+	        	fdt.cxr = "GA";
+	        	fdt.gov = "XX";
+	        	fdt.tarCd = tariff.getTarCd();
+	        	fdt.tarNo = tariff.getTarNo();
+	        	fdt.tarType = "Addon";
 	        	workPackage.getFilingDetail().getFilingDetailTarif().add(fdt);
 	        }
 	        workPackage = workPackageService.save(workPackage);
@@ -4863,15 +4881,23 @@ public class WorkPackageResource {
         log.debug("REST request to refresh tariff WorkPackage : {}", workPackage);
 
         List<WorkPackageFareSheet> fareSheet = workPackage.getFareSheet();
+        List<WorkPackageFareSheet> addonFareSheet = workPackage.getAddonFareSheet();
         Set<TariffNumber> fareTariffNumber = new HashSet<TariffNumber>();
+        Set<TariffNumber> addonFareTariffNumber = new HashSet<TariffNumber>();
         for(WorkPackageFareSheet sheet : fareSheet) {
         	List<WorkPackageFare> fares = sheet.getFares();
         	for(WorkPackageFare fare : fares) {
         		fareTariffNumber.add(fare.getTariffNumber());
         	}
         }
-
+        for(WorkPackageFareSheet sheet : addonFareSheet) {
+        	List<WorkPackageFare> fares = sheet.getFares();
+        	for(WorkPackageFare fare : fares) {
+        		addonFareTariffNumber.add(fare.getTariffNumber());
+        	}
+        }
         workPackage.setFilingDetail(new FilingDetail());
+        
         for(TariffNumber tariff : fareTariffNumber) {
         	FilingDetailTariff fdt = new FilingDetailTariff();
         	fdt.cxr = "GA";
@@ -4879,6 +4905,15 @@ public class WorkPackageResource {
         	fdt.tarCd = tariff.getTarCd();
         	fdt.tarNo = tariff.getTarNo();
         	fdt.tarType = "Fare";
+        	workPackage.getFilingDetail().getFilingDetailTarif().add(fdt);
+        }
+        for(TariffNumber tariff : addonFareTariffNumber) {
+        	FilingDetailTariff fdt = new FilingDetailTariff();
+        	fdt.cxr = "GA";
+        	fdt.gov = "XX";
+        	fdt.tarCd = tariff.getTarCd();
+        	fdt.tarNo = tariff.getTarNo();
+        	fdt.tarType = "Addon";
         	workPackage.getFilingDetail().getFilingDetailTarif().add(fdt);
         }
         workPackage = workPackageService.save(workPackage);

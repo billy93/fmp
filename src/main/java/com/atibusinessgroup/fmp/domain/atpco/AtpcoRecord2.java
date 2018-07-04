@@ -56,13 +56,13 @@ public class AtpcoRecord2 {
 	@Field("geo_type_1")
     private String geoType1;
 	
-	@Field("geo_loc_1")
+	@Field("geo_value_1")
     private String geoLoc1;
 	
 	@Field("geo_type_2")
     private String geoType2;
 	
-	@Field("geo_loc_2")
+	@Field("geo_value_2")
     private String geoLoc2;
 	
 	@Field("fare_class")

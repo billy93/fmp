@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -47,6 +48,7 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat12;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat13;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat14;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat15;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat15Locale;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat16;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat17;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat18;
@@ -63,10 +65,8 @@ import com.atibusinessgroup.fmp.domain.dto.CategoryAttributeObject;
 import com.atibusinessgroup.fmp.domain.dto.CategoryObject;
 import com.atibusinessgroup.fmp.domain.dto.CategoryTextFormatAndAttribute;
 import com.atibusinessgroup.fmp.domain.dto.DataTable;
-import com.atibusinessgroup.fmp.domain.dto.DateTable;
 import com.atibusinessgroup.fmp.domain.dto.FlightTable;
 import com.atibusinessgroup.fmp.domain.dto.Record3ReflectionObject;
-import com.atibusinessgroup.fmp.domain.dto.TextTable;
 import com.atibusinessgroup.fmp.repository.PassengerRepository;
 import com.atibusinessgroup.fmp.repository.SurchargeCodeRepository;
 import com.atibusinessgroup.fmp.repository.TourTypeCodeRepository;
@@ -80,6 +80,8 @@ import com.mongodb.DBObject;
 
 @Service
 public class AtpcoRecordService {
+	
+	private final boolean log = false;
 	
 	private final AtpcoCcfParcityCustomRepository atpcoCcfParcityCustomRepository;
 	private final AtpcoRecord3CategoryCustomRepository atpcoRecord3CategoryCustomRepository;
@@ -250,7 +252,7 @@ public class AtpcoRecordService {
 				&& compareFootnote(fFootnote, rFootnote) && compareGeoSpec(fGeoType1, fGeoLoc1, fGeoType2, fGeoLoc2, rGeoType1, rGeoLoc1, rGeoType2, rGeoLoc2)) {
 			match = true;
 		}
-
+		
 		return match;
 	}
 
@@ -277,11 +279,18 @@ public class AtpcoRecordService {
 		boolean match = false;
 
 		if (frn != null && rrn != null) {
+			frn = frn.trim();
+			rrn = rrn.trim();
+			
 			if (rrn.contentEquals("99999") || frn.contentEquals(rrn)) {
 				match = true;
 			}
 		} else {
 			match = true;
+		}
+		
+		if (log) {
+			System.out.println("Routing no: " + frn + " | " + rrn + "\t" + match);
 		}
 		
 		return match;
@@ -331,6 +340,10 @@ public class AtpcoRecordService {
 			match = true;
 		}
 		
+		if (log) {
+			System.out.println("Fare class: " + fFareClass + " | " + rFareClass + "\t" + match);
+		}
+		
 		return match;
 	}
 
@@ -338,11 +351,18 @@ public class AtpcoRecordService {
 		boolean match = false;
 
 		if (fFareType != null && rFareType != null) {
-			if (rFareType.trim().isEmpty() || fFareType.contentEquals(rFareType)) {
+			fFareType = fFareType.trim();
+			rFareType = rFareType.trim();
+			
+			if (rFareType.isEmpty() || fFareType.contentEquals(rFareType)) {
 				match = true;
 			}
 		} else {
 			match = true;
+		}
+		
+		if (log) {
+			System.out.println("Fare type: " + fFareType + " | " + rFareType + "\t" + match);
 		}
 		
 		return match;
@@ -352,10 +372,17 @@ public class AtpcoRecordService {
 		boolean match = false;
 		
 		if (fSeasonType != null && rSeasonType != null) {
-			if (rSeasonType.trim().isEmpty() || fSeasonType.contentEquals(rSeasonType)) {
+			fSeasonType = fSeasonType.trim();
+			rSeasonType = rSeasonType.trim();
+			
+			if (rSeasonType.isEmpty() || fSeasonType.contentEquals(rSeasonType)) {
 				match = true;
 			}
 		} 
+		
+		if (log) {
+			System.out.println("Season type: " + fSeasonType + " | " + rSeasonType + "\t" + match);
+		}
 		
 		return match;
 	}
@@ -364,11 +391,18 @@ public class AtpcoRecordService {
 		boolean match = false;
 
 		if (fDayOfWeekType != null && rDayOfWeekType != null) {
-			if (rDayOfWeekType.trim().isEmpty() || fDayOfWeekType.contentEquals(rDayOfWeekType)) {
+			fDayOfWeekType = fDayOfWeekType.trim();
+			rDayOfWeekType = rDayOfWeekType.trim();
+			
+			if (rDayOfWeekType.isEmpty() || fDayOfWeekType.contentEquals(rDayOfWeekType)) {
 				match = true;
 			}
 		} else {
 			match = true;
+		}
+		
+		if (log) {
+			System.out.println("DOW type: " + fDayOfWeekType + " | " + rDayOfWeekType + "\t" + match);
 		}
 		
 		return match;
@@ -378,13 +412,20 @@ public class AtpcoRecordService {
 		boolean match = false;
 
 		if (fowrt != null && rowrt != null) {
-			if (rowrt.trim().isEmpty() || fowrt.contentEquals(rowrt)) {
+			fowrt = fowrt.trim();
+			rowrt = rowrt.trim();
+			
+			if (rowrt.isEmpty() || fowrt.contentEquals(rowrt)) {
 				match = true;
 			} else if ((fowrt.contentEquals("1") || fowrt.contentEquals("3")) && (rowrt.contentEquals("1") || rowrt.contentEquals("3"))) {
 				match = true;
 			}
 		} else {
 			match = true;
+		}
+		
+		if (log) {
+			System.out.println("OW/RT: " + fowrt + " | " + rowrt + "\t" + match);
 		}
 		
 		return match;
@@ -394,11 +435,18 @@ public class AtpcoRecordService {
 		boolean match = false;
 
 		if (ffnt != null && rfnt != null) {
-			if (rfnt.trim().isEmpty() || ffnt.contentEquals(rfnt)) {
+			ffnt = ffnt.trim();
+			rfnt = rfnt.trim();
+			
+			if (rfnt.isEmpty() || ffnt.contentEquals(rfnt)) {
 				match = true;
 			}
 		} else {
 			match = true;
+		}
+		
+		if (log) {
+			System.out.println("Footnote: " + ffnt + " | " + rfnt + "\t" + match);
 		}
 		
 		return match;
@@ -451,6 +499,10 @@ public class AtpcoRecordService {
 			}
 		}
 		
+		if (log) {
+			System.out.println("Dates: " + focusDate + " | " + effective + " | " + discontinue + "\t" + match);
+		}
+		
 		return match;
 	}
 	
@@ -458,10 +510,14 @@ public class AtpcoRecordService {
 			String rl2) {
 		boolean match = false;
 		
-		if (compareLocations(ft1, fl1, rt1, rl1) || compareLocations(ft1, fl1, rt2, rl2)) {
+		if (compareLocations(ft1, fl1, rt1, rl1) && compareLocations(ft2, fl2, rt2, rl2)) {
 			match = true;
-		} else if (compareLocations(ft2, fl2, rt1, rl1) || compareLocations(ft2, fl2, rt2, rl2)) {
+		} else if (compareLocations(ft1, fl1, rt2, rl2) && compareLocations(ft2, fl2, rt1, rl1)) {
 			match = true;
+		}
+		
+		if (log) {
+			System.out.println("Geo spec: " + ft1 + " " +  fl1 + " | " + ft2 + " " + fl2 + " | " + rt1 + " " +  rl1 + " | " + rt2 + " " + rl2 + "\t" + match);
 		}
 		
 		return match;
@@ -557,77 +613,90 @@ public class AtpcoRecordService {
 			ro = getCategorySettingInfo(classBasePackage, category);
 		}
 		
-		String textFormat = "";
-		String relationship = null;
-		TextTable textTable996 = null;
-		DateTable dateTable994 = null;
+		String textFormat = "", textTable = "", dateTable = "";
 		
 		if (ro.getCollectionName() != null) {
 			List<AtpcoRecord3CategoryWithDataTable> catdts = atpcoRecord3CategoryCustomRepository
 					.findAllRecord3ByDataTable(ro.getCollectionName(),
 							dataTables.stream().map(DataTable::getTableNo).collect(Collectors.toList()));
 			
-			for (AtpcoRecord3CategoryWithDataTable catdt : catdts) {
-				try {
-					textTable996 = null;
-					
-					Class<?> c = Class.forName(ro.getClassName());
-					Object cat = convertDBObjectToPOJO(c, catdt.getCategory());
-					
-					if (ro.getGetTableNoMethodName() != null) {
-						Method tableNoMethod = c.getMethod(ro.getGetTableNoMethodName(), null);
-						String tableNo = (String) tableNoMethod.invoke(cat);
-						
-						for (DataTable dt : dataTables) {
-							if (dt.getTableNo().contentEquals(tableNo)) {
-								relationship = dt.getRelationalIndicator();
-								break;
+			LinkedHashMap<String, String> textTables = new LinkedHashMap<>();
+			LinkedHashMap<String, String> dateTables = new LinkedHashMap<>();
+			
+			for (DataTable dt:dataTables) {
+				for (AtpcoRecord3CategoryWithDataTable catdt : catdts) {
+					if (dt.getTableNo().contentEquals(catdt.getTableNo())) {
+						try {
+							textTable = "";
+							dateTable = "";
+							
+							Class<?> c = Class.forName(ro.getClassName());
+							Object cat = convertDBObjectToPOJO(c, catdt.getCategory());
+							
+							if (cat != null) {
+								if (ro.getGetTextTable996NoMethodName() != null) {
+									Method textTable996NoMethod = c.getMethod(ro.getGetTextTable996NoMethodName(), null);
+									String textTable996No = (String) textTable996NoMethod.invoke(cat);
+									
+									if (textTable996No != null && !textTable996No.isEmpty() && !textTable996No.contentEquals("00000000")) {
+										if (!textTables.containsKey(textTable996No)) {
+											textTable = AtpcoDataConverterUtil.convertTextTableToText(atpcoRecord3CategoryCustomRepository.findRecord3TextTable(textTable996No));
+											if (!textTable.isEmpty()) {
+												textTables.put(textTable996No, textTable);
+											}
+										} else {
+											textTable = textTables.get(textTable996No);
+										}
+									}
+								}
+								
+								if (ro.getGetDateTable994NoMethodName() != null) {
+									Method dateTable994NoMethod = c.getMethod(ro.getGetDateTable994NoMethodName(), null);
+									String dateTable994No = (String) dateTable994NoMethod.invoke(cat);
+									
+									if (dateTable994No != null && !dateTable994No.isEmpty() && !dateTable994No.contentEquals("00000000")) {
+										if (!dateTables.containsKey(dateTable994No)) {
+											dateTable = AtpcoDataConverterUtil.convertDateTableToText(atpcoRecord3CategoryCustomRepository.findRecord3DateTable(dateTable994No));
+											if (!dateTable.isEmpty()) {
+												dateTables.put(dateTable994No, dateTable);
+											}
+										} else {
+											dateTable = dateTables.get(dateTable994No);
+										}
+									}
+								}
 							}
+							
+							//Generate text
+							//Relationship
+							if (!textFormat.trim().isEmpty()) {
+								textFormat += AtpcoDataConverterUtil.convertRelationshipToName(dt.getRelationalIndicator()) + "\n\n";
+							}
+							
+							//Date table 994 text
+							if (!dateTable.isEmpty()) {
+								textFormat += dateTable + "\n";
+							}
+							
+							//Coded value in text
+							String text = convertCodedCategoryValueToText(category, cat);
+							if (!text.trim().isEmpty()) {
+								textFormat += text;
+							}
+							
+							//Text table 996 text
+							if (!textTable.isEmpty()) {
+								textFormat += textTable + "\n";
+							}
+							
+							attributes.add(convertObjectToCategoryAttribute(AtpcoDataConverterUtil.convertCategoryTypeToName(type), AtpcoDataConverterUtil.convertRelationshipToName(dt.getRelationalIndicator()), category, cat));
+						} catch (Exception e) {
+							System.out.println(category);
+							e.printStackTrace();
 						}
-					}
-					
-					if (ro.getGetTextTable996NoMethodName() != null) {
-						Method textTable996NoMethod = c.getMethod(ro.getGetTextTable996NoMethodName(), null);
-						String textTable996No = (String) textTable996NoMethod.invoke(cat);
 						
-						if (textTable996No != null && !textTable996No.isEmpty() && !textTable996No.contentEquals("00000000")) {
-							textTable996 = atpcoRecord3CategoryCustomRepository.findRecord3TextTable(textTable996No);
-						}
+						break;
 					}
-					
-					if (ro.getGetDateTable994NoMethodName() != null) {
-						Method dateTable994NoMethod = c.getMethod(ro.getGetDateTable994NoMethodName(), null);
-						String dateTable994No = (String) dateTable994NoMethod.invoke(cat);
-						
-						if (dateTable994No != null && !dateTable994No.isEmpty() && !dateTable994No.contentEquals("00000000")) {
-							dateTable994 = atpcoRecord3CategoryCustomRepository.findRecord3DateTable(dateTable994No);
-						}
-					}
-					
-					if (!textFormat.trim().isEmpty()) {
-						textFormat += AtpcoDataConverterUtil.convertRelationshipToName(relationship) + "\n\n";
-					}
-					
-					String dateTable = AtpcoDataConverterUtil.convertDateTableToText(dateTable994);
-					if (!dateTable.isEmpty()) {
-						textFormat += dateTable + "\n";
-					}
-					
-					String text = convertCodedCategoryValueToText(category, cat);
-					
-					if (!text.trim().isEmpty()) {
-						textFormat += text;
-					}
-					
-					String textTable = AtpcoDataConverterUtil.convertTextTableToText(textTable996);
-					if (!textTable.isEmpty()) {
-						textFormat += textTable + "\n";
-					}
-					
-					attributes.add(convertObjectToCategoryAttribute(AtpcoDataConverterUtil.convertCategoryTypeToName(type), AtpcoDataConverterUtil.convertRelationshipToName(relationship), category, cat));
-				} catch (Exception e) {
-					System.out.println(category);
-					e.printStackTrace();
 				}
 			}
 		}
@@ -992,7 +1061,10 @@ public class AtpcoRecordService {
 					result += "\tMAXIMUM AGE: " + cat01.getAge_max() + "\n";
 				}
 				if (cat01.getAccount_code() != null && !cat01.getAccount_code().isEmpty()) {
-					result += "\tACCOUNT CODE: " + cat01.getAccount_code() + "\n\n";
+					result += "\tACCOUNT CODE: " + cat01.getAccount_code() + "\n";
+				}
+				if (!result.isEmpty()) {
+					result += "\n";
 				}
 				break;
 			case "002":
@@ -1009,7 +1081,10 @@ public class AtpcoRecordService {
 					time += " - " + cat02.getTime_of_day_stop();
 				}
 				if (!time.isEmpty()) {
-					result += "\tTIME: " + time + " HOURS ON APPLICABLE DAYS OF WEEK\n\n";
+					result += "\tTIME: " + time + " HOURS ON APPLICABLE DAYS OF WEEK\n";
+				}
+				if (!result.isEmpty()) {
+					result += "\n";
 				}
 				break;
 			case "003":
@@ -1099,7 +1174,7 @@ public class AtpcoRecordService {
 					firstAdv += AtpcoDataConverterUtil.convertUnitToName(cat05.getAdvancedReservationFirstUnit()) + " ";	
 				}
 				if (!firstAdv.isEmpty()) {
-					result += "\tRESERVATION NO EARLIER THAN " + firstAdv + " BEFORE DEPARTURE\n";
+					result += "\tRESERVATION NO EARLIER THAN " + firstAdv + "BEFORE DEPARTURE\n";
 				}
 				String lastAdv = "";
 				if (cat05.getAdvancedReservationLastTimeOfDay() != null && !cat05.getAdvancedReservationLastTimeOfDay().isEmpty()) {
@@ -1112,7 +1187,7 @@ public class AtpcoRecordService {
 					lastAdv += AtpcoDataConverterUtil.convertUnitToName(cat05.getAdvancedReservationLastUnit()) + " ";	
 				}
 				if (!lastAdv.isEmpty()) {
-					result += "\tRESERVATION AT LEAST " + lastAdv + " BEFORE DEPARTURE\n";
+					result += "\tRESERVATION AT LEAST " + lastAdv + "BEFORE DEPARTURE\n";
 				}
 				String tkt = "";
 				if (cat05.getAdvancedTicketingTimeOfDay() != null && !cat05.getAdvancedTicketingTimeOfDay().isEmpty()) {
@@ -1125,7 +1200,7 @@ public class AtpcoRecordService {
 					tkt += AtpcoDataConverterUtil.convertUnitToName(cat05.getAdvancedTicketingUnit1()) + " ";	
 				}
 				if (!tkt.isEmpty()) {
-					result += "\tTICKETING MUST BE WITHIN " + tkt + " OF MAKING RESERVATION\n";
+					result += "\tTICKETING MUST BE WITHIN " + tkt + "OF MAKING RESERVATION\n";
 				}
 				if (!result.isEmpty()) {
 					result += "\n";
@@ -1576,6 +1651,31 @@ public class AtpcoRecordService {
 						if (cat15.getCxr_gds_oth() != null && !cat15.getCxr_gds_oth().isEmpty()) {
 							result += "\tTICKETS MUST BE SOLD BY AIRLINE " + cat15.getCxr_gds_oth() + "\n"; 
 						}
+					}
+				}
+				for (AtpcoRecord3Cat15Locale locale:cat15.getLocale()) {
+					String li = "";
+					if (locale.getAppl() != null && locale.getAppl().trim().contentEquals("Y")) {
+						li += "\tTICKETS MAY ONLY BE SOLD AT ";
+					} else if (locale.getAppl() != null && locale.getAppl().trim().contentEquals("N")) {
+						li += "\tTICKETS MAY NOT BE SOLD AT ";
+					}
+					String geoType = AtpcoDataConverterUtil.convertSalesGeoTypeToName(locale.getGeo_type());
+					String location = "";
+					if (!geoType.isEmpty()) {
+						location += geoType + ": ";
+					}
+					if (locale.getGeo_loc_1() != null && !locale.getGeo_loc_1().isEmpty()) {
+						location += locale.getGeo_loc_1();
+					}
+					if (locale.getGeo_loc_2() != null && !locale.getGeo_loc_2().isEmpty()) {
+						location += ", " + locale.getGeo_loc_2();
+					}
+					if (!location.isEmpty()) {
+						li += location + "\n";
+					}
+					if (!li.isEmpty()) {
+						result += li;
 					}
 				}
 				if (!result.isEmpty()) {

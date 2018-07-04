@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.atibusinessgroup.fmp.constant.CategoryName;
 import com.atibusinessgroup.fmp.constant.CategoryType;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFootnoteRecord2;
+import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteQueryDetails;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteQueryGroup;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.Category;
@@ -88,7 +89,7 @@ public class FootnoteQueryResource {
 		if (page != null) {
 			
 			for (AtpcoFootnoteQueryGroup ftntData : page) {
-				FootnoteQuery rq = footnoteQueryMapper.convertAndGroupFootnote(ftntData);
+				FootnoteQuery rq = footnoteQueryMapper.convertAndGroupFootnote(ftntData, param.getCatNo());
 				result.add(rq);
 			}
 		}
@@ -111,7 +112,7 @@ public class FootnoteQueryResource {
 		if (page != null) {
 			
 			for (AtpcoFootnoteQueryGroup ftntData : page) {
-				FootnoteQuery rq = footnoteQueryMapper.convertAndGroupFootnote(ftntData);
+				FootnoteQuery rq = footnoteQueryMapper.convertAndGroupFootnote(ftntData, param.getCatNo());
 				result.add(rq);
 			}
 		}
@@ -133,7 +134,7 @@ public class FootnoteQueryResource {
 		if (page != null) {
 			
 			for (AtpcoFootnoteQueryGroup ftntData : page) {
-				FootnoteQuery rq = footnoteQueryMapper.convertAndGroupFootnote(ftntData);
+				FootnoteQuery rq = footnoteQueryMapper.convertAndGroupFootnote(ftntData,  param.getCatNo());
 				result.add(rq);
 			}
 		}
@@ -151,12 +152,12 @@ public class FootnoteQueryResource {
 	 */
 	@GetMapping("/footnote-queries/rules")
 	@Timed
-	public ResponseEntity<List<AtpcoFootnoteRecord2>> getFootnoteQueryRules(FootnoteQuery footnoteQuery) {
+	public ResponseEntity<List<AtpcoFootnoteQueryDetails>> getFootnoteQueryRules(FootnoteQuery footnoteQuery) {
 		log.debug("REST request to get footnoteQueries rules: {}", footnoteQuery);
 
 		String recordId = footnoteQuery.getTarNo() + footnoteQuery.getCxr() + footnoteQuery.getFtnt() + "";
 
-		List<AtpcoFootnoteRecord2> arecords2 = atpcoFootnoteQueryCustomRepository.getListFtntRecord2(recordId);
+		List<AtpcoFootnoteQueryDetails> arecords2 = atpcoFootnoteQueryCustomRepository.getListFtntRecord2(recordId, footnoteQuery.getCatNo());
 
 		return new ResponseEntity<>(arecords2, HttpStatus.OK);
 	}

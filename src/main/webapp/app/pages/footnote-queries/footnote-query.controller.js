@@ -4,9 +4,9 @@
 	angular.module('fmpApp').controller('FootnoteQueryController',
 			FootnoteQueryController);
 
-	FootnoteQueryController.$inject = [ '$state', 'FootnoteQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', '$uibModal' ];
+	FootnoteQueryController.$inject = [ '$state', '$stateParams', 'FootnoteQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', '$uibModal' ];
 
-	function FootnoteQueryController($state, FootnoteQuery, ParseLinks, AlertService, paginationConstants, queryParams, $uibModal) {
+	function FootnoteQueryController($state, $stateParams, FootnoteQuery, ParseLinks, AlertService, paginationConstants, queryParams, $uibModal) {
 
 		var vm = this;
 		vm.loadPage = loadPage;
@@ -24,23 +24,19 @@
 		vm.openCalendar = openCalendar;
 		
 		vm.paramCarrier = null;
-        vm.paramTarNo = null;
+		vm.paramTarNo = null;
+		if($stateParams.cxr != null){
+			vm.paramCarrier = $stateParams.cxr;
+		}
+		if($stateParams.tariff != null){
+			vm.paramTarNo = $stateParams.tariff;
+		}
         vm.showTariffModal = showTariffModal;
         vm.showCarrierModal = showCarrierModal;
         
         vm.loadAvailable = loadAvailable;
         vm.loadExpired = loadExpired;
-        
-        
-        $("#catNo").change(function() {
-        	vm.queryParams.saleDateFrom = null;
-        	vm.queryParams.saleDateTo = null;
-        	vm.queryParams.travelDateFrom = null;
-        	vm.queryParams.travelDateTo = null;
-        	vm.queryParams.completedDateFrom = null;
-        	vm.queryParams.travelOpt[0];
-        	
-        });
+        vm.loadAll();
         
 		function loadAll() {
 			vm.footnoteQueryCategories = null;
@@ -110,9 +106,10 @@
 			vm.page = page;
 		}
 
-		function getFtnt(footnoteQuery) {
+		function getFtnt(footnoteQuery, catNo) {
 			FootnoteQuery.getFtnt(footnoteQuery, function(data) {
 				vm.footnoteQueryCategories = data;
+				console.log(data);
 			}, function(error) {
 				console.log(error);
 			});
@@ -141,12 +138,12 @@
 				catNo : null,
 				saleDateFrom : null,
 				saleDateTo : null,
-				saleDateType : "1",
+				saleDateType : null,
 				travelDateFrom : null,
 				travelDateTo : null,
-				travelDateType : "1",
+				travelDateType : null,
 				completedDateFrom : null,
-				travelOpt : "2",
+				travelOpt : null,
 				includeDisc : null
 			}
 

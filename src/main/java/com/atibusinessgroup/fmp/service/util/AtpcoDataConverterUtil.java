@@ -391,7 +391,7 @@ public class AtpcoDataConverterUtil {
 			result = "COUNTRY";
 			break;
 		case "S": 
-			result = "STATE/COUNTRY";
+			result = "COUNTRY/STATE";
 			break;
 		case "C": 
 			result = "CITY";
@@ -488,6 +488,51 @@ public class AtpcoDataConverterUtil {
 		}
 		
 		return result.toUpperCase();
+	}
+	
+	public static String convertSalesGeoTypeToName(String type) {
+		String result = "";
+		
+		switch (type) {
+		case "A": 
+			result = "AREA";
+			break;
+		case "C": 
+			result = "CITY";
+			break;
+		case "H": 
+			result = "HOME IATA AGENCY NO";
+			break;
+		case "I": 
+			result = "IATA TRAVEL AGENT NO";
+			break;	
+		case "N": 
+			result = "COUNTRY";
+			break;
+		case "P": 
+			result = "AIRPORT";
+			break;
+		case "S": 
+			result = "COUNTRY/STATE";
+			break;
+		case "T": 
+			result = "TRAVEL AGENCY";
+			break;
+		case "U": 
+			result = "HOME TRAVEL AGENCY CODE";
+			break;
+		case "V": 
+			result = "CRS/CXR DEPARTMENT CODE";
+			break;
+		case "X": 
+			result = "DEPARTMENT/IDENTIFIER";
+			break;
+		case "Z": 
+			result = "ZONE";
+			break;
+		}
+		
+		return result;
 	}
 	
 	public static String convertDateObjectToText(Object dateObj) {
