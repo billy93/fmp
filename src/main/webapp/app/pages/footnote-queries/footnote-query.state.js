@@ -11,7 +11,7 @@
         $stateProvider
         .state('footnote-query', {
         	parent: 'app',
-            url: '/footnote-query',
+            url: '/footnote-query?cxr&tariff',
             data: {
                 authorities: ['ROLE_USER'],
                 pageTitle: 'Footnote Query'
@@ -22,6 +22,10 @@
                     controller: 'FootnoteQueryController',
                     controllerAs: 'vm'
                 }
+            },
+            params: {
+            	cxr:null,
+            	tariff:null
             },
             resolve: {
             	queryParams: [function() {
