@@ -46,7 +46,7 @@ public class AtpcoRecord3CategoryCustomRepository {
 			@Override
 			public DBObject toDBObject(AggregationOperationContext context) {
 				BasicDBObject project = new BasicDBObject();
-				project.append("$project", new BasicDBObject("category", "$$ROOT"));
+				project.append("$project", new BasicDBObject("category", "$$ROOT").append("tbl_no", "$tbl_no"));
 				return project;
 			}
 		});

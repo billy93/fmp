@@ -60,16 +60,16 @@ public class AtpcoRecord3Cat22 {
     private String fbr_fare_class;
 
     @Field("fbr_fare_amount_1")
-    private String fbr_fare_amount_1;
+    private Decimal128 fbr_fare_amount_1;
 
     @Field("fbr_fare_amount_2")
-    private String fbr_fare_amount_2;
+    private Decimal128 fbr_fare_amount_2;
 
     @Field("fbr_fare_number_of_decimals_2")
-    private Decimal128 fbr_fare_number_of_decimals_2;
+    private String fbr_fare_number_of_decimals_2;
 
     @Field("fbr_fare_number_of_decimals_1")
-    private Decimal128 fbr_fare_number_of_decimals_1;
+    private String fbr_fare_number_of_decimals_1;
 
     @Field("fbr_ticket_designator")
     private String fbr_ticket_designator;
@@ -289,35 +289,35 @@ public class AtpcoRecord3Cat22 {
 		this.fbr_fare_class = fbr_fare_class;
 	}
 
-	public String getFbr_fare_amount_1() {
+	public Decimal128 getFbr_fare_amount_1() {
 		return fbr_fare_amount_1;
 	}
 
-	public void setFbr_fare_amount_1(String fbr_fare_amount_1) {
+	public void setFbr_fare_amount_1(Decimal128 fbr_fare_amount_1) {
 		this.fbr_fare_amount_1 = fbr_fare_amount_1;
 	}
 
-	public String getFbr_fare_amount_2() {
+	public Decimal128 getFbr_fare_amount_2() {
 		return fbr_fare_amount_2;
 	}
 
-	public void setFbr_fare_amount_2(String fbr_fare_amount_2) {
+	public void setFbr_fare_amount_2(Decimal128 fbr_fare_amount_2) {
 		this.fbr_fare_amount_2 = fbr_fare_amount_2;
 	}
 
-	public Decimal128 getFbr_fare_number_of_decimals_2() {
+	public String getFbr_fare_number_of_decimals_2() {
 		return fbr_fare_number_of_decimals_2;
 	}
 
-	public void setFbr_fare_number_of_decimals_2(Decimal128 fbr_fare_number_of_decimals_2) {
+	public void setFbr_fare_number_of_decimals_2(String fbr_fare_number_of_decimals_2) {
 		this.fbr_fare_number_of_decimals_2 = fbr_fare_number_of_decimals_2;
 	}
 
-	public Decimal128 getFbr_fare_number_of_decimals_1() {
+	public String getFbr_fare_number_of_decimals_1() {
 		return fbr_fare_number_of_decimals_1;
 	}
 
-	public void setFbr_fare_number_of_decimals_1(Decimal128 fbr_fare_number_of_decimals_1) {
+	public void setFbr_fare_number_of_decimals_1(String fbr_fare_number_of_decimals_1) {
 		this.fbr_fare_number_of_decimals_1 = fbr_fare_number_of_decimals_1;
 	}
 

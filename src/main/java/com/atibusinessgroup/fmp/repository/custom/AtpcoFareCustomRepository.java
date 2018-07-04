@@ -180,6 +180,16 @@ public class AtpcoFareCustomRepository {
 					queries.add(destination);
 				}
 				
+				if (param.getGlobalIndicator() != null && !param.getGlobalIndicator().isEmpty()) {
+					BasicDBObject global = new BasicDBObject();
+					global.append("global_indicator", param.getGlobalIndicator());
+					queries.add(global);
+				} else {
+					BasicDBObject global = new BasicDBObject();
+					global.append("global_indicator", new BasicDBObject("$exists", "true"));
+					queries.add(global);
+				}
+				
 				if (param.getOwrt() != null && !param.getOwrt().isEmpty()) {
 					BasicDBObject owrt = new BasicDBObject();
 					owrt.append("ow_rt", param.getOwrt());
@@ -483,7 +493,6 @@ public class AtpcoFareCustomRepository {
             			footnote14s, footnote15s, focusDate);
             	
             	if (atpcoRecordService.compareValueWithParamString(afdQuery.getFareType(), param.getFareType()) &&
-            			atpcoRecordService.compareValueWithParamString(afdQuery.getGlobalIndicator(), param.getGlobalIndicator()) &&
             			atpcoRecordService.compareValueWithParamString(afdQuery.getPaxType(), param.getPaxType()) && 
             			atpcoRecordService.compareValueWithParamString(afdQuery.getCabin(), param.getCabin()) && 
             			atpcoRecordService.compareValueWithParamString(afdQuery.getBookingClass(), param.getBookingClass()) &&

@@ -37,7 +37,7 @@
         vm.disableInfiniteScroll = true;
         
         vm.datePickerOpenStatus = {};
-        vm.dateFormat = "ddMMMyyyy";
+        vm.dateFormat = "dd/MM/yyyy";
         vm.openCalendar = openCalendar;
         
         vm.tariffs = tariffNumbers;
@@ -168,6 +168,7 @@
         		AfdQuery.getRules(afdQuery, function(data) {
             		vm.categoryRules = data;
             		vm.currentAfdQuery = afdQuery;
+            		console.log(vm.categoryRules);
             	}, function(error) {
             		console.log(error);
             	});
@@ -184,7 +185,7 @@
         function reset() {
         	vm.queryParams = {
         		carrier: null,
-        		source: null,
+        		source: vm.sources[0].key,
         		publicPrivate: null,
         		tariff: null,
         		globalIndicator: null,
@@ -223,8 +224,6 @@
         		biDirectional: false,
         		calculateTfc: false
         	}
-        	
-        	vm.loadAll();
         }
         
         function setSelectedRow(index, afdQuery) {
