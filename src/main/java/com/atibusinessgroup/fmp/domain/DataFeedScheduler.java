@@ -1,6 +1,7 @@
 package com.atibusinessgroup.fmp.domain;
 
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,22 +19,22 @@ public class DataFeedScheduler implements Serializable {
 	private String id;
 	
 	@Field("delay_days")
-	private String delayDays;
+	private int delayDays;
 	
 	@Field("delay_hours")
-	private String delayHours;
+	private int delayHours;
 	
 	@Field("delay_minutes")
-	private String delayMinutes;
+	private int delayMinutes;
 	
 	@Field("start_date")
-	private Object startDate;
+	private ZonedDateTime startDate;
 	
 	@Field("end_date")
-	private Object endDate;
+	private ZonedDateTime endDate;
 	
 	@Field("start_time")
-	private Object startTime;
+	private ZonedDateTime startTime;
 	
 	@Field("atpco_fares")
 	private boolean atpcoFares;
@@ -43,7 +44,13 @@ public class DataFeedScheduler implements Serializable {
 	
 	@Field("type")
 	private String type;
-
+	
+	@Field("day_of_week")
+	private String dayOfWeek;
+	
+	@Field("file_path")
+	private String filepath;
+	
 	public String getId() {
 		return id;
 	}
@@ -52,60 +59,52 @@ public class DataFeedScheduler implements Serializable {
 		this.id = id;
 	}
 
-	public String getDelayDays() {
+	public int getDelayDays() {
 		return delayDays;
 	}
 
-	public void setDelayDays(String delayDays) {
+	public void setDelayDays(int delayDays) {
 		this.delayDays = delayDays;
 	}
 
-	public String getDelayHours() {
+	public int getDelayHours() {
 		return delayHours;
 	}
 
-	public void setDelayHours(String delayHours) {
+	public void setDelayHours(int delayHours) {
 		this.delayHours = delayHours;
 	}
 
-	public String getDelayMinutes() {
+	public int getDelayMinutes() {
 		return delayMinutes;
 	}
 
-	public void setDelayMinutes(String delayMinutes) {
+	public void setDelayMinutes(int delayMinutes) {
 		this.delayMinutes = delayMinutes;
 	}
 
-	public Object getStartDate() {
+	public ZonedDateTime getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Object startDate) {
+	public void setStartDate(ZonedDateTime startDate) {
 		this.startDate = startDate;
 	}
 
-	public Object getEndDate() {
+	public ZonedDateTime getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Object endDate) {
+	public void setEndDate(ZonedDateTime endDate) {
 		this.endDate = endDate;
 	}
 
-	public Object getStartTime() {
+	public ZonedDateTime getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Object startTime) {
+	public void setStartTime(ZonedDateTime startTime) {
 		this.startTime = startTime;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
 	}
 
 	public boolean isAtpcoFares() {
@@ -124,12 +123,36 @@ public class DataFeedScheduler implements Serializable {
 		this.marketFares = marketFares;
 	}
 
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getDayOfWeek() {
+		return dayOfWeek;
+	}
+
+	public void setDayOfWeek(String dayOfWeek) {
+		this.dayOfWeek = dayOfWeek;
+	}
+
+	public String getFilepath() {
+		return filepath;
+	}
+
+	public void setFilepath(String filepath) {
+		this.filepath = filepath;
+	}
+
 	@Override
 	public String toString() {
 		return "DataFeedScheduler [id=" + id + ", delayDays=" + delayDays + ", delayHours=" + delayHours
 				+ ", delayMinutes=" + delayMinutes + ", startDate=" + startDate + ", endDate=" + endDate
 				+ ", startTime=" + startTime + ", atpcoFares=" + atpcoFares + ", marketFares=" + marketFares + ", type="
-				+ type + "]";
+				+ type + ", dayOfWeek=" + dayOfWeek + ", filepath=" + filepath + "]";
 	}
 
 }

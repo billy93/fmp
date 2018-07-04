@@ -58,7 +58,7 @@ public class WebsocketConfiguration extends AbstractWebSocketMessageBrokerConfig
 
             @Override
             public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
-                if (request instanceof ServletServerHttpRequest) {
+            	if (request instanceof ServletServerHttpRequest) {
                     ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
                     attributes.put(IP_ADDRESS, servletRequest.getRemoteAddress());
                 }
@@ -67,11 +67,10 @@ public class WebsocketConfiguration extends AbstractWebSocketMessageBrokerConfig
 
             @Override
             public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Exception exception) {
-
             }
         };
     }
-
+    
     private DefaultHandshakeHandler defaultHandshakeHandler() {
         return new DefaultHandshakeHandler() {
             @Override

@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="theme-color" content="#000000">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css content/css/vendor.css -->
     <!-- bower:css -->
@@ -17,22 +17,22 @@
     <link rel="stylesheet" href="bower_components/ngWYSIWYG/dist/editor.min.css">
     <!-- endinject -->
     <!-- endbuild -->
-    
+
     <!-- build:css content/css/main.css -->
     <link rel="stylesheet" href="content/css/main.css">
     <!-- endbuild -->
-    
+
     <!-- build:css content/css/fmp-ext.css -->
     <link rel="stylesheet" href="content/css/animate.css">
     <link rel="stylesheet" href="content/css/font-awesome.min.css">
-    <link rel="stylesheet" href="content/css/select2.css">    
+    <link rel="stylesheet" href="content/css/select2.css">
     <link rel="stylesheet" href="content/css/selectize.default.css">
     <!-- endbuild -->
-    
+
     <!-- build:css content/css/fmp.css -->
     <link rel="stylesheet" href="content/css/fmp.css">
     <!-- endbuild -->
-    
+
     <link rel="shortcut icon" href="favicon.ico" />
     <link rel="manifest" href="manifest.webapp" />
 </head>
@@ -41,11 +41,11 @@
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     <page-ribbon></page-ribbon>
-    
+
 	<div ui-view="login" ng-if="!isAuthenticated()" ng-cloak></div>
-    
+
     <div ui-view="navbar" ng-if="isAuthenticated()" ng-cloak></div>
-    
+
     <div class="loading" style="display: none">
         <div class="svg-loader">
             <svg xmlns="http://www.w3.org/2000/svg" width="135" height="140" viewBox="0 0 135 140" fill="#dc1156">
@@ -70,9 +70,9 @@
                     <animate attributeName="y" begin="0.5s" dur="1s" values="10;15;20;25;30;35;40;45;50;0;10" calcMode="linear" repeatCount="indefinite"/>
                 </rect>
             </svg>
-        </div>                    
+        </div>
     </div>
-    
+
     <div ng-if="isAuthenticated() || exceptionalState">
 		<div class="main-container clearfix">
 			<div class="page-wrapper">
@@ -81,12 +81,12 @@
 		        </div>
 			</div>
 		</div>
-		
+
         <div class="footer" ng-cloak>
-           
+
         </div>
     </div>
-    
+
     <noscript>
         <h1>You must enable javascript to view this page.</h1>
     </noscript>
@@ -169,6 +169,7 @@
     <script src="app/pages/work-packages/work-package-search-replace-dialog.controller.js"></script>
     <script src="app/pages/work-packages/work-package-routemap-dialog.controller.js"></script>
     <script src="app/pages/work-packages/work-package-reuse-replace-confirm-dialog.controller.js"></script>
+    <script src="app/pages/work-packages/work-package-rate-sheet-screen.controller.js"></script>
     <script src="app/pages/work-packages/work-package-rate-sheet-dialog.controller.js"></script>
     <script src="app/pages/work-packages/work-package-history-dialog.controller.js"></script>
     <script src="app/pages/work-packages/work-package-generate-tourcode-dialog.controller.js"></script>
@@ -201,6 +202,9 @@
     <script src="app/pages/rbd-query/rbd-query.state.js"></script>
     <script src="app/pages/rbd-query/rbd-query.service.js"></script>
     <script src="app/pages/rbd-query/rbd-query.controller.js"></script>
+    <script src="app/pages/exchange-rates-query/exchange-rates-query.controller.js"></script>
+    <script src="app/pages/exchange-rates-query/exchange-rates-query.service.js"></script>
+    <script src="app/pages/exchange-rates-query/exchange-rates-query.state.js"></script>
     <script src="app/pages/modals/tariff-modal.controller.js"></script>
     <script src="app/pages/modals/legend-modal.controller.js"></script>
     <script src="app/pages/modals/info-modal.controller.js"></script>
@@ -469,30 +473,30 @@
     <script src="app/account/account.state.js"></script>
     <!-- endinject -->
     <!-- endbuild -->
-    
+
     <!-- build:js app/js.js  -->
     <script src="content/js/modernizr-custom.js"></script>
     <script src="content/js/plugins.js"></script>
     <script src="content/js/revealer.js"></script>
-    <script src="content/js/main.js"></script>    
-    <script src="content/js/highcharts.js"></script>  
-    <script src="content/js/highcharts-more.js"></script>  
+    <script src="content/js/main.js"></script>
+    <script src="content/js/highcharts.js"></script>
+    <script src="content/js/highcharts-more.js"></script>
     <script src="content/js/exporting.js"></script>
-    <!-- endbuild -->  
+    <!-- endbuild -->
 </body>
 </html>
 
 <script>
 function get_browser() {
-    var ua=navigator.userAgent,tem,M=ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || []; 
+    var ua=navigator.userAgent,tem,M=ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
     if(/trident/i.test(M[1])){
-        tem=/\brv[ :]+(\d+)/g.exec(ua) || []; 
+        tem=/\brv[ :]+(\d+)/g.exec(ua) || [];
         return {name:'IE',version:(tem[1]||'')};
-        }   
+        }
     if(M[1]==='Chrome'){
         tem=ua.match(/\bOPR|Edge\/(\d+)/)
         if(tem!=null)   {return {name:'Opera', version:tem[1]};}
-        }   
+        }
     M=M[2]? [M[1], M[2]]: [navigator.appName, navigator.appVersion, '-?'];
     if((tem=ua.match(/version\/(\d+)/i))!=null) {M.splice(1,1,tem[1]);}
     return {
@@ -500,7 +504,7 @@ function get_browser() {
       version: M[1]
     };
  }
- 
+
  var browser = get_browser();
  console.log(get_browser());
 </script>

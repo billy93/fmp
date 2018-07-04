@@ -3811,7 +3811,7 @@ p {
     position: relative;
     margin-bottom: 15px;
     max-height: 390px;
-    padding-bottom: 30px;
+    padding-bottom: 10px;
     overflow: auto; }
     .table-wrapper .table-responsive.main-table {
       max-height: 550px; }

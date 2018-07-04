@@ -22,8 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.atibusinessgroup.fmp.constant.CategoryName;
 import com.atibusinessgroup.fmp.constant.CategoryType;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFootnoteRecord2;
+import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteQueryDetails;
+import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteQueryGroup;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByCatNo;
-import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByFtntCxrTarNo;
 import com.atibusinessgroup.fmp.domain.dto.Category;
 import com.atibusinessgroup.fmp.domain.dto.DataTable;
 import com.atibusinessgroup.fmp.domain.dto.FootnoteQuery;
@@ -82,12 +83,13 @@ public class FootnoteQueryResource {
 
 		Pageable pageable = new PageRequest(param.getPage(), param.getSize());
 
-		Page<AtpcoFootnoteRecord2GroupByFtntCxrTarNo> page = atpcoFootnoteQueryCustomRepository.groupingFootnoteQuery(param, pageable);
+		Page<AtpcoFootnoteQueryGroup> page = atpcoFootnoteQueryCustomRepository.groupingFootnoteQueryAll(param, pageable);
 		List<FootnoteQuery> result = new ArrayList<>();
 
 		if (page != null) {
-			for (AtpcoFootnoteRecord2GroupByFtntCxrTarNo record2Group : page.getContent()) {
-				FootnoteQuery rq = footnoteQueryMapper.convertAndGroupFootnote(record2Group);
+			
+			for (AtpcoFootnoteQueryGroup ftntData : page) {
+				FootnoteQuery rq = footnoteQueryMapper.convertAndGroupFootnote(ftntData, param.getCatNo());
 				result.add(rq);
 			}
 		}
@@ -97,6 +99,52 @@ public class FootnoteQueryResource {
 		return new ResponseEntity<>(result, headers, HttpStatus.OK);
 	}
 
+	@PostMapping("/footnote-queries/available")
+	@Timed
+	public ResponseEntity<List<FootnoteQuery>> getAllFootnoteQueriesAvailable(@RequestBody FootnoteQueryParam param) {
+		log.debug("REST request to get a page of Footnote Queries: {}", param);
+
+		Pageable pageable = new PageRequest(param.getPage(), param.getSize());
+
+		Page<AtpcoFootnoteQueryGroup> page = atpcoFootnoteQueryCustomRepository.groupingFootnoteQueryAvailable(param, pageable);
+		List<FootnoteQuery> result = new ArrayList<>();
+
+		if (page != null) {
+			
+			for (AtpcoFootnoteQueryGroup ftntData : page) {
+				FootnoteQuery rq = footnoteQueryMapper.convertAndGroupFootnote(ftntData, param.getCatNo());
+				result.add(rq);
+			}
+		}
+
+		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/footnote-queries");
+
+		return new ResponseEntity<>(result, headers, HttpStatus.OK);
+	}
+	
+	@PostMapping("/footnote-queries/expired")
+	@Timed
+	public ResponseEntity<List<FootnoteQuery>> getAllFootnoteQueriesExpired(@RequestBody FootnoteQueryParam param) {
+		log.debug("REST request to get a page of Footnote Queries: {}", param);
+
+		Pageable pageable = new PageRequest(param.getPage(), param.getSize());
+
+		Page<AtpcoFootnoteQueryGroup> page = atpcoFootnoteQueryCustomRepository.groupingFootnoteQueryExpired(param, pageable);
+		List<FootnoteQuery> result = new ArrayList<>();
+		if (page != null) {
+			
+			for (AtpcoFootnoteQueryGroup ftntData : page) {
+				FootnoteQuery rq = footnoteQueryMapper.convertAndGroupFootnote(ftntData,  param.getCatNo());
+				result.add(rq);
+			}
+		}
+		
+
+		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/footnote-queries");
+
+		return new ResponseEntity<>(result, headers, HttpStatus.OK);
+	}
+	
 	/**
 	 * GET /footnote-queries/rules : get footnote query rules.
 	 *
@@ -104,60 +152,18 @@ public class FootnoteQueryResource {
 	 */
 	@GetMapping("/footnote-queries/rules")
 	@Timed
-	public ResponseEntity<List<AtpcoFootnoteRecord2>> getFootnoteQueryRules(FootnoteQuery footnoteQuery) {
+	public ResponseEntity<List<AtpcoFootnoteQueryDetails>> getFootnoteQueryRules(FootnoteQuery footnoteQuery) {
 		log.debug("REST request to get footnoteQueries rules: {}", footnoteQuery);
 
-		String recordId = footnoteQuery.getTarNo() + footnoteQuery.getCxr() + footnoteQuery.getFtnt();
+		String recordId = footnoteQuery.getTarNo() + footnoteQuery.getCxr() + footnoteQuery.getFtnt() + "";
 
-		List<AtpcoFootnoteRecord2> arecords2 = atpcoFootnoteQueryCustomRepository.getListFtntRecord2(recordId);
+		List<AtpcoFootnoteQueryDetails> arecords2 = atpcoFootnoteQueryCustomRepository.getListFtntRecord2(recordId, footnoteQuery.getCatNo());
 
 		return new ResponseEntity<>(arecords2, HttpStatus.OK);
 	}
 	
-	@PostMapping("/footnote-queries/available")
-	@Timed
-	public ResponseEntity<List<FootnoteQuery>> getFootnoteQueryRulesAvailable(@RequestBody FootnoteQueryParam param) {
-		log.debug("REST request to get a page of Footnote Queries: {}", param);
-
-		Pageable pageable = new PageRequest(param.getPage(), param.getSize());
-
-		Page<AtpcoFootnoteRecord2GroupByFtntCxrTarNo> page = atpcoFootnoteQueryCustomRepository.groupingFootnoteQueryAvailable(param, pageable);
-		List<FootnoteQuery> result = new ArrayList<>();
-
-		if (page != null) {
-			for (AtpcoFootnoteRecord2GroupByFtntCxrTarNo record2Group : page.getContent()) {
-				FootnoteQuery rq = footnoteQueryMapper.convertAndGroupFootnote(record2Group);
-				result.add(rq);
-			}
-		}
-
-		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/footnote-queries");
-
-		return new ResponseEntity<>(result, headers, HttpStatus.OK);
-	}
 	
 	
-	@PostMapping("/footnote-queries/expired")
-	@Timed
-	public ResponseEntity<List<FootnoteQuery>> getFootnoteQueryRulesExpired(@RequestBody FootnoteQueryParam param) {
-		log.debug("REST request to get a page of Footnote Queries: {}", param);
-
-		Pageable pageable = new PageRequest(param.getPage(), param.getSize());
-
-		Page<AtpcoFootnoteRecord2GroupByFtntCxrTarNo> page = atpcoFootnoteQueryCustomRepository.groupingFootnoteQueryExpired(param, pageable);
-		List<FootnoteQuery> result = new ArrayList<>();
-
-		if (page != null) {
-			for (AtpcoFootnoteRecord2GroupByFtntCxrTarNo record2Group : page.getContent()) {
-				FootnoteQuery rq = footnoteQueryMapper.convertAndGroupFootnote(record2Group);
-				result.add(rq);
-			}
-		}
-
-		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/footnote-queries");
-
-		return new ResponseEntity<>(result, headers, HttpStatus.OK);
-	}
 
 	/**
 	 * GET /footnote-queries/rules : get footnote query rules.

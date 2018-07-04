@@ -11,7 +11,7 @@
         $stateProvider
         .state('footnote-query', {
         	parent: 'app',
-            url: '/footnote-query',
+            url: '/footnote-query?cxr&tariff',
             data: {
                 authorities: ['ROLE_USER'],
                 pageTitle: 'Footnote Query'
@@ -23,6 +23,10 @@
                     controllerAs: 'vm'
                 }
             },
+            params: {
+            	cxr:null,
+            	tariff:null
+            },
             resolve: {
             	queryParams: [function() {
             		return {
@@ -32,8 +36,10 @@
                 		catNo: null,
                 		saleDateFrom: null,
                 		saleDateTo: null,
+                		saleDateType : null,
                 		travelDateFrom: null,
                 		travelDateTo: null,
+                		travelDateType : null,
                 		completedDateFrom: null,
                 		travelOpt: null,
                 		includeDisc : null

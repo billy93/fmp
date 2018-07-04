@@ -37,7 +37,7 @@
         vm.disableInfiniteScroll = true;
         
         vm.datePickerOpenStatus = {};
-        vm.dateFormat = "yyyy-MM-dd";
+        vm.dateFormat = "ddMMMyyyy";
         vm.openCalendar = openCalendar;
         
         vm.tariffs = tariffNumbers;
@@ -47,7 +47,6 @@
         vm.cities = cities;
         
         vm.sources = [
-        	{key: "", value: "Select Source"},
         	{key: "A", value: "A - ATPCO"},
         	{key: "M", value: "M - Market"},
         	{key: "W", value: "W - Web"},
@@ -91,19 +90,17 @@
         
         function loadAll () {
         	if (!vm.isLastPage) {
+        		vm.infoMessage = vm.checkValidParameters();
+        		
+        		if (vm.infoMessage != 'Valid') {
+            		vm.showErrorModal(vm.infoMessage);
+            		return;
+            	}
+        		
         		vm.isLoading = true;
             	vm.isLastPage = false;
             	vm.showLastPageInfo = false;
             	vm.noDataAvailable = false;
-            	
-            	vm.infoMessage = vm.checkValidParameters();
-            	
-            	if (vm.infoMessage != 'Valid') {
-            		vm.showErrorModal(vm.infoMessage);
-            		return;
-            	}
-            	
-            	vm.categoryRules = null;
             	vm.currentAfdQuery = null;
             	
             	vm.queryParams.page = vm.page;
@@ -119,6 +116,8 @@
                     for (var i = 0; i < data.afdQueries.length; i++) {
                     	vm.afdQueries.push(data.afdQueries[i]);
                     }
+                    
+                    console.log(data);
                     
                     vm.isLoading = false;
                     vm.disableInfiniteScroll = false;

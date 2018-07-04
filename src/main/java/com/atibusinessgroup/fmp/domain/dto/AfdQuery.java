@@ -1,7 +1,7 @@
 package com.atibusinessgroup.fmp.domain.dto;
 
 public class AfdQuery {
-	private String atpcoFareId;
+	private String fareId;
 	private String source;
 	private String sc;
 	private String tariffNo;
@@ -56,6 +56,7 @@ public class AfdQuery {
 	private String travelDateRanges;
 	private String fareType;
 	private String paxType;
+	private String wpObjectId;
 	private String wpId;
 	private String wpName;
 	private String tourCode;
@@ -69,12 +70,12 @@ public class AfdQuery {
 	
 	public AfdQuery() {}
 
-	public String getAtpcoFareId() {
-		return atpcoFareId;
+	public String getFareId() {
+		return fareId;
 	}
 
-	public void setAtpcoFareId(String atpcoFareId) {
-		this.atpcoFareId = atpcoFareId;
+	public void setFareId(String fareId) {
+		this.fareId = fareId;
 	}
 
 	public String getSource() {
@@ -509,6 +510,14 @@ public class AfdQuery {
 		this.paxType = paxType;
 	}
 
+	public String getWpObjectId() {
+		return wpObjectId;
+	}
+
+	public void setWpObjectId(String wpObjectId) {
+		this.wpObjectId = wpObjectId;
+	}
+
 	public String getWpId() {
 		return wpId;
 	}
@@ -597,7 +606,6 @@ public class AfdQuery {
 		long temp;
 		temp = Double.doubleToLongBits(aif);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + ((atpcoFareId == null) ? 0 : atpcoFareId.hashCode());
 		temp = Double.doubleToLongBits(baseAmount);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((bookingClass == null) ? 0 : bookingClass.hashCode());
@@ -614,6 +622,7 @@ public class AfdQuery {
 		result = prime * result + ((effectiveDate == null) ? 0 : effectiveDate.hashCode());
 		result = prime * result + ((error == null) ? 0 : error.hashCode());
 		result = prime * result + ((fareClassCode == null) ? 0 : fareClassCode.hashCode());
+		result = prime * result + ((fareId == null) ? 0 : fareId.hashCode());
 		result = prime * result + ((fareType == null) ? 0 : fareType.hashCode());
 		result = prime * result + ((firstSeasonDate == null) ? 0 : firstSeasonDate.hashCode());
 		result = prime * result + ((focusDate == null) ? 0 : focusDate.hashCode());
@@ -667,6 +676,7 @@ public class AfdQuery {
 		result = prime * result + ((travelStartDate == null) ? 0 : travelStartDate.hashCode());
 		result = prime * result + ((wpId == null) ? 0 : wpId.hashCode());
 		result = prime * result + ((wpName == null) ? 0 : wpName.hashCode());
+		result = prime * result + ((wpObjectId == null) ? 0 : wpObjectId.hashCode());
 		temp = Double.doubleToLongBits(yqyr);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
@@ -692,13 +702,6 @@ public class AfdQuery {
 			return false;
 		}
 		if (Double.doubleToLongBits(aif) != Double.doubleToLongBits(other.aif)) {
-			return false;
-		}
-		if (atpcoFareId == null) {
-			if (other.atpcoFareId != null) {
-				return false;
-			}
-		} else if (!atpcoFareId.equals(other.atpcoFareId)) {
 			return false;
 		}
 		if (Double.doubleToLongBits(baseAmount) != Double.doubleToLongBits(other.baseAmount)) {
@@ -800,6 +803,13 @@ public class AfdQuery {
 				return false;
 			}
 		} else if (!fareClassCode.equals(other.fareClassCode)) {
+			return false;
+		}
+		if (fareId == null) {
+			if (other.fareId != null) {
+				return false;
+			}
+		} else if (!fareId.equals(other.fareId)) {
 			return false;
 		}
 		if (fareType == null) {
@@ -1088,6 +1098,13 @@ public class AfdQuery {
 		} else if (!wpName.equals(other.wpName)) {
 			return false;
 		}
+		if (wpObjectId == null) {
+			if (other.wpObjectId != null) {
+				return false;
+			}
+		} else if (!wpObjectId.equals(other.wpObjectId)) {
+			return false;
+		}
 		if (Double.doubleToLongBits(yqyr) != Double.doubleToLongBits(other.yqyr)) {
 			return false;
 		}
@@ -1096,7 +1113,7 @@ public class AfdQuery {
 
 	@Override
 	public String toString() {
-		return "AfdQuery [atpcoFareId=" + atpcoFareId + ", source=" + source + ", sc=" + sc + ", tariffNo=" + tariffNo
+		return "AfdQuery [fareId=" + fareId + ", source=" + source + ", sc=" + sc + ", tariffNo=" + tariffNo
 				+ ", tariffCode=" + tariffCode + ", carrierCode=" + carrierCode + ", originCity=" + originCity
 				+ ", originCountry=" + originCountry + ", destinationCity=" + destinationCity + ", destinationCountry="
 				+ destinationCountry + ", fareClassCode=" + fareClassCode + ", bookingClass=" + bookingClass
@@ -1113,9 +1130,9 @@ public class AfdQuery {
 				+ resEndDate + ", minStay=" + minStay + ", maxStay=" + maxStay + ", advancePurchase=" + advancePurchase
 				+ ", dowIn=" + dowIn + ", dowOut=" + dowOut + ", season=" + season + ", dayOfWeekType=" + dayOfWeekType
 				+ ", firstSeasonDate=" + firstSeasonDate + ", lastSeasonDate=" + lastSeasonDate + ", travelDateRanges="
-				+ travelDateRanges + ", fareType=" + fareType + ", paxType=" + paxType + ", wpId=" + wpId + ", wpName="
-				+ wpName + ", tourCode=" + tourCode + ", cat50Title=" + cat50Title + ", groupFare=" + groupFare
-				+ ", refAmount=" + refAmount + ", refYqyr=" + refYqyr + ", refTaxes=" + refTaxes + ", refTfc=" + refTfc
-				+ ", refAif=" + refAif + "]";
-	};
+				+ travelDateRanges + ", fareType=" + fareType + ", paxType=" + paxType + ", wpObjectId=" + wpObjectId
+				+ ", wpId=" + wpId + ", wpName=" + wpName + ", tourCode=" + tourCode + ", cat50Title=" + cat50Title
+				+ ", groupFare=" + groupFare + ", refAmount=" + refAmount + ", refYqyr=" + refYqyr + ", refTaxes="
+				+ refTaxes + ", refTfc=" + refTfc + ", refAif=" + refAif + "]";
+	}
 }

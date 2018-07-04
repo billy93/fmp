@@ -67,7 +67,8 @@
         vm.passengers = passengers;
         vm.currencies = currencies;
         vm.indexSelectedTab = 0;
-        $scope.dateformat = "yyyy-MM-dd";
+//        $scope.dateformat = "yyyy-MM-dd";
+        $scope.dateformat = "dd-MM-yyyy";
         vm.optionFare = fareTypes;
         vm.atpcoFareTypes = atpcoFareTypes;
                            
@@ -622,11 +623,7 @@
         		mandatoryExtraCondition:[
         			{
         				field:"calcType",
-        				isEqual:"M"
-        			},
-        			{
-        				field:"calcType",
-        				isEqual:"C"
+        				isEqual:"S"
         			}
         		],
         	},
@@ -698,7 +695,7 @@
         	},
         	{
         		name:"discountComment",
-        		editable:["LSO", "HO",  "DISTRIBUTION"],
+        		editable:["LSO", "HO",  "DISTRIBUTION", "ROUTE_MANAGEMENT"],
         		mandatory:[]
         	},
         	{
@@ -1105,18 +1102,18 @@
 	        					break;
         					}
         					else{
-        						for(var y=0;y<extraCondition.length;y++){
-        							var otherField = extraCondition[y].field;
-        							if(fare != null){
-        								if(fare[otherField] == extraCondition[y].isEqual){
-        									result = true;
-        									break;
-        								}
-        							}
-        							else{
-        								
-        							}        							
-        						}
+//        						for(var y=0;y<extraCondition.length;y++){
+//        							var otherField = extraCondition[y].field;
+//        							if(fare != null){
+//        								if(fare[otherField] == extraCondition[y].isEqual){
+//        									result = true;
+//        									break;
+//        								}
+//        							}
+//        							else{
+//        								
+//        							}        							
+//        						}
         					}
         				} else {        				
 	        				if(reviewLevels.indexOf(vm.workPackage.reviewLevel) > -1){
@@ -1622,7 +1619,13 @@
 //	        			vm.workPackage.addonFareSheet.push(angular.copy(vm.workPackage.addonFareSheet[x]));
 	        			if(vm.workPackage.addonFareSheet[x].fares.length > 0){
 		        			clipboardSheet.sheet = angular.copy(vm.workPackage.addonFareSheet[x]);
-		        			clipboardSheet.type = "addon";
+		        			
+		        			if(vm.workPackage.type == 'REGULAR'){
+		        				clipboardSheet.type = "addon-fares";
+		        			}
+		        			else if(vm.workPackage.type == 'MARKET'){
+		        				clipboardSheet.type = "addon-market";
+		        			}
 	        			}
 	        			break;
 	        		}
@@ -1712,36 +1715,80 @@
         //END SHEET FUNCTION
         
         vm.pasteSheet = function(){
-//        	alert('Paste Sheet');
         	if(vm.workPackage.reviewLevel != 'DISTRIBUTION'){
-	        	$uibModal.open({
-	                templateUrl: 'app/pages/work-packages/work-package-add-sheet-dialog.html',
-	                controller: 'WorkPackageAddSheetDialogController',
-	                controllerAs: 'vm',
-	                backdrop: 'static',
-	                size: 'lg',
-	                windowClass: 'full-page-modal',
-	                resolve: {
-	                	workPackage: function(){
-	                		return vm.workPackage;
-	                	},
-	                    fareTypes: ['FareType', function(FareType) {
-	                        return FareType.getAll().$promise;
-	                    }],
-	                    sheet: function(){
-	                    	return ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
-	                    }
-	                }
-				}).result.then(function(option) {
-					var clipboardSheet = ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
-					clipboardSheet.then(function(result){
-						vm.addTab(option, result.sheet.fares);
-						alert('Paste Sheet Success');
-					});
-	            }, function() {
-	        			
-	            });
+        		ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise.then(function(sheet){
+        			if(sheet != null){
+        	        	if(vm.workPackage.type == 'REGULAR'){
+        		        	if(sheet.type == 'fares' || sheet.type == 'addon-fares'){
+        		        		vm.openAddSheetDialog();
+        		        	}
+        		        	else{
+        		        		alert('No sheet copied');   
+        		        	}
+        	        	}
+        	        	else if(vm.workPackage.type == 'MARKET'){
+        	        		if(sheet.type == 'market' || sheet.type == 'addon-market'){
+        		        		vm.openAddSheetDialog();        		        		
+        		        	}
+        	        		else{
+        		        		alert('No sheet copied');   
+        		        	}
+        	        	}
+        	        	else if(vm.workPackage.type == 'DISCOUNT'){
+        	        		if(sheet.type == 'discount'){
+        		        		vm.openAddSheetDialog();        		        		
+        		        	}
+        	        		else{
+        		        		alert('No sheet copied');   
+        		        	}
+        	        	}
+        	        	else if(vm.workPackage.type == 'WAIVER'){
+        	        		if(sheet.type == 'waiver'){
+        		        		vm.openAddSheetDialog();        		        		
+        		        	}
+        	        		else{
+        		        		alert('No sheet copied');   
+        		        	}
+        	        	}
+        	        	else{
+        	        		alert('No sheet copied');        	        		
+        	        	}
+        	        }
+        	        else{
+        	        	alert('No sheet copied');
+        	        }
+        		});	        	
         	}
+        };
+        
+        vm.openAddSheetDialog = function(){
+        	$uibModal.open({
+                templateUrl: 'app/pages/work-packages/work-package-add-sheet-dialog.html',
+                controller: 'WorkPackageAddSheetDialogController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full-page-modal',
+                resolve: {
+                	workPackage: function(){
+                		return vm.workPackage;
+                	},
+                    fareTypes: ['FareType', function(FareType) {
+                        return FareType.getAll().$promise;
+                    }],
+                    sheet: function(){
+                    	return ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
+                    }
+                }
+			}).result.then(function(option) {
+				var clipboardSheet = ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
+				clipboardSheet.then(function(result){
+					vm.addTab(option, result.sheet.fares);
+					alert('Paste Sheet Success');
+				});
+            }, function() {
+        			
+            });
         };
         
         vm.faresActionButton = [];
@@ -4857,7 +4904,7 @@
 	      });
 	  }
       
-      vm.agent = function(){
+      vm.agent = function(disabled){
 	    	  	var object = {
 	    			agents: vm.workPackage.agent
 	    	 	}
@@ -4869,7 +4916,8 @@
 	          backdrop: 'static',
 	          size: 'lg',
 	          resolve: {
-	              entity: object
+	              entity: object,
+		          isDisabled : disabled
 	          }
 	      }).result.then(function(agent) {
 	      	  vm.workPackage.agent = agent;
@@ -4973,7 +5021,7 @@
       
       //Waiver Function
       vm.calculateFareLost = function(fare){
-    	  if(fare.waiverApprovedFare != null && fare.waiverNewBasicFare != null){
+    	  if(fare.waiverApprovedFare != null || fare.waiverNewBasicFare != null){
     		  fare.waiverFareLost = parseInt(fare.waiverApprovedFare) - parseInt(fare.waiverNewBasicFare);
     		  if(fare.waiverTotalPax !=null && fare.waiverPenaltyLostAmount != null){
         		  fare.waiverTotalLost = (parseInt(fare.waiverFareLost)+parseInt(fare.waiverPenaltyLostAmount))*parseInt(fare.waiverTotalPax);
@@ -4981,7 +5029,7 @@
     	  }
       }
       vm.calculatePenaltyLost = function(fare){
-    	  if(fare.waiverApprovedPn != null && fare.waiverOriginalPn != null){
+    	  if(fare.waiverApprovedPn != null || fare.waiverApprovedPn != undefined || fare.waiverOriginalPn != null || fare.waiverOriginalPn != undefined){
     		  fare.waiverPenaltyLostPercent = (parseInt(fare.waiverApprovedPn) - parseInt(fare.waiverOriginalPn))/parseInt(fare.waiverApprovedPn)*100;
     		  fare.waiverPenaltyLostAmount = parseInt(fare.waiverApprovedPn) - parseInt(fare.waiverOriginalPn);
     		  if(fare.waiverTotalPax !=null && fare.waiverFareLost != null){
@@ -5271,8 +5319,10 @@
       }
       
       vm.marketPrevBaseAmount = function(fare){
-		  fare.prevAmountDiff = fare.amount - fare.prevAmount;
-		  fare.prevPercentAmountDiff = parseFloat((fare.prevAmountDiff/fare.prevAmount)*100).toFixed(2);
+    	  if(fare.prevAmount != null){
+			  fare.prevAmountDiff = fare.amount - fare.prevAmount;
+			  fare.prevPercentAmountDiff = parseFloat((fare.prevAmountDiff/fare.prevAmount)*100).toFixed(2);
+    	  }
       }
       
       vm.deleteSelectedFares = function(workPackageSheet){
@@ -6182,6 +6232,28 @@
     	  return disabled;
       }
       
+      vm.lockedOnly = function(wp){
+    	  var disabled = false;
+    	  if(wp.locked == true && wp.locked !=null){
+    		  if( wp.lockedBy == vm.user.login){
+    			  disabled = false;
+    		  }else{
+    			  disabled = true;
+    		  }    		  
+    	  } 
+    	  return disabled;
+      }
+      
+      vm.reviewOnly = function(wp){
+    	  var disabled = false;
+    	  if(vm.user.reviewLevels.indexOf(wp.reviewLevel) > -1){
+			  disabled = false;
+		  }else{
+			  disabled = true;  
+		  }
+    	  return disabled;  
+      }
+      
       vm.getTooltip = function(value){
     	  var listCity = [];
     	  for(var y=0;y<vm.cityGroups.length;y++){
@@ -6223,6 +6295,7 @@
       
       vm.selectErrorField = function(sheetType, sheetIndex, fareIndex, field){
     	  if(sheetType == 'Fares'){
+    		  vm.selectTab(sheetIndex);
     		  for(var x=0;x<vm.workPackage.fareSheet[sheetIndex].fares.length;x++){
     			  vm.workPackage.fareSheet[sheetIndex].fares[x].field = {};
         	  }
@@ -6231,7 +6304,47 @@
     		  
     		  var fieldName = ""+field+sheetIndex+fareIndex;
     		  var elmnt = $window.document.getElementsByName(fieldName)[0];
-    		  elmnt.scrollIntoView();
+    		  var offset_top = elmnt.offsetTop;
+//    		  var offset_left = elmnt.offsetLeft;
+    		  var elmntPage = $window.document.querySelector(".table-wrapper");
+    		  elmntPage.scrollTop = offset_top;
+//    		  elmntPage.scrollLeft = offset_left;
+    		  elmnt.focus();
+    	  }
+    	  else if(sheetType == 'Addon'){
+    		  vm.selectAddonTab(sheetIndex);
+    		  for(var x=0;x<vm.workPackage.addonFareSheet[sheetIndex].fares.length;x++){
+    			  vm.workPackage.addonFareSheet[sheetIndex].fares[x].field = {};
+        	  }
+    		  
+    		  vm.workPackage.addonFareSheet[sheetIndex].fares[fareIndex].field[field] = !vm.workPackage.addonFareSheet[sheetIndex].fares[fareIndex].field[field]; 
+    		  
+    		  var fieldName = ""+field+sheetIndex+fareIndex;
+    		  alert(fieldName);
+    		  var elmnt = $window.document.getElementsByName(fieldName)[0];
+    		  var offset_top = elmnt.offsetTop;
+//    		  var offset_left = elmnt.offsetLeft;
+    		  var elmntPage = $window.document.querySelector(".table-wrapper");
+    		  elmntPage.scrollTop = offset_top;
+//    		  elmntPage.scrollLeft = offset_left;
+    		  elmnt.focus();
+    	  }
+    	  else if(sheetType == 'Header'){
+    		  var elmnt = $window.document.getElementsByName(field)[0];
+    		  var offset_top = elmnt.offsetTop;
+    		  var elmntPage = $window.document.querySelector(".page-wrapper");
+    		  elmntPage.scrollTop = offset_top;
+    		  elmnt.focus();
+    	  }
+    	  else if(sheetType == 'Comment'){
+    		  if(field == 'interofficeComment'){
+    			  vm.selectCommentTab('interofficeComment');
+    		  }
+    		  var elmnt = $window.document.getElementsByName(field)[0];
+    		  var offset_top = elmnt.offsetTop;
+    		  var elmntPage = $window.document.querySelector(".page-wrapper");
+    		  elmntPage.scrollTop = offset_top;
+    		  elmnt.focus();
     	  }
       }
       
@@ -6276,12 +6389,92 @@
 	    		  gfsRef:null,
 	    		  gfsDate:null
 	    	  });
-  		}
+  		  }
+    	  else{
+    		  alert('Please select a tariff');
+    	  }
       }
       
       vm.removeBatchNumber = function(){
-    	  var index = vm.selectedTariffRow.batch.indexOf(vm.selectedBatchRow);
-    	  vm.selectedTariffRow.batch.splice(index, 1);
+    	  if(vm.selectedBatchRow){
+	    	  var index = vm.selectedTariffRow.batch.indexOf(vm.selectedBatchRow);
+	    	  vm.selectedTariffRow.batch.splice(index, 1);
+    	  }
+    	  else{
+    		  alert('Please select batch row');
+    	  }
+      }
+      
+      vm.checkFilingDetailDisabled = function(){
+    	  return vm.workPackage.status == 'READY_TO_RELEASE';
+      }
+      
+      vm.applyText = function(){
+    	  if(vm.selectedTariffRow != null){
+    		  if(vm.selectedTariffRow.justificationText != null && vm.selectedTariffRow.justificationText != ""){
+	    		  for(var x=0;x<vm.workPackage.filingDetail.filingDetailTarif.length;x++){
+					  vm.workPackage.filingDetail.filingDetailTarif[x].justificationText = vm.selectedTariffRow.justificationText;
+	    		  }    		  
+    		  }
+  		  }
+    	  else{
+    		  alert('Please select a tariff');
+    	  }
+      }
+      
+      vm.previewUploadFile = function(){
+    	  alert(vm.workPackage.filingDetail.atpcoFile);
+      }
+      
+      vm.resetCalculateField = function(fare){
+    	  fare.percentBaseFare = null;
+    	  fare.currency = null;
+    	  fare.discountSpecifiedAmount = null;
+      }
+      
+      vm.footnote = function(workPackageSheet){
+    	  var selectedSize = 0;
+    	  var tariff = null;
+    	  for(var x=0;x<workPackageSheet.fares.length;x++){
+    		  if(workPackageSheet.fares[x].field != undefined){
+    			  var selected = false;
+    			  Object.keys(workPackageSheet.fares[x].field).forEach(function(key,index) {
+    				  if(workPackageSheet.fares[x].field[key]){
+    					  selected = true;
+    				  }
+    			 });
+    			  if(selected){
+    				  selectedSize++;
+    			  }
+    		  }
+    	  }    	  
+    	  if(selectedSize == 1){
+    		  for(var x=0;x<workPackageSheet.fares.length;x++){
+        		  if(workPackageSheet.fares[x].field != undefined){
+        			  var selected = false;
+        			  Object.keys(workPackageSheet.fares[x].field).forEach(function(key,index) {
+        				  if(workPackageSheet.fares[x].field[key]){
+        					  selected = true;
+        				  }
+        			 });
+        			  if(selected){
+        				  var copiedFare = angular.copy(workPackageSheet.fares[x]);
+        				  if(copiedFare.tariffNumber != null){
+        					  tariff = copiedFare.tariffNumber.tarNo;
+        				  }
+        				  else{
+        					 
+        				  }
+        			  }
+        		  }
+        	  }  
+    		  var url = $state.href('footnote-query', {cxr: "GA", tariff:tariff});
+        	  window.open(url,'_blank');
+    	  }
+    	  else{
+    		  alert('Please select one row');
+    	  }
+    	  
       }
     }
 })();

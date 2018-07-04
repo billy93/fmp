@@ -1,7 +1,8 @@
 <div class="content-title">
 	<h2>Data Feed Extraction</h2>
-	<jhi-alert></jhi-alert>
+<!-- 	<jhi-alert></jhi-alert> -->
 </div>
+
 <div class="panel">
 	<div class="panel-body">
 		<div class="tab-wrapper">
@@ -19,30 +20,45 @@
 						<div class="panel-body" ng-if="vm.tab==1">
 							<div class="clearfix">
 								<form name="autoExtractForm" role="form" ng-model="vm.autoExtractForm" novalidate>
-									<div class="col-md-6 no-lpad">
-										<div class="col-md-6 no-lpad">
-											<div class="form-group absolute-datepicker">
-												<label>Start Date</label> 
-												<input type="text"
-													class="form-control"
-													ng-click="vm.openCalendar($event, 'automaticStartDate')"
-													is-open="vm.datePickerOpenStatus['automaticStartDate']"
-													datetime-picker="{{vm.dateFormat}}" 
-													enable-time="false"
-													name="automaticStartDate" id="automaticStartDate"
-													ng-model="vm.automaticData.startDate" placeholder="From" />
+									<div class="col-md-12 no-lpad">
+										<div class="col-md-3 no-lpad">
+											<div class="form-group">
+												<label>Day</label> 
+												<select class="form-control" name="dayOfWeek" id="dayOfWeek" ng-model="vm.automaticData.dayOfWeek">
+													<option value="{{dayOfWeek.key}}" ng-repeat="dayOfWeek in vm.dayOfWeekList track by $index">{{dayOfWeek.value}}</option>
+												</select>
 											</div>
 										</div>
 									</div>
-									<div class="col-md-6 no-lpad">
+									<div class="col-md-12 no-lpad">
 										<div class="form-inline">
+											<label>Time</label>
 											<div uib-timepicker ng-model="vm.automaticData.startTime" show-meridian="false"></div>
+										</div>
+									</div>
+									<div class="col-md-12 no-lpad">
+										<div class="col-md-3 no-lpad">
+											<div class="form-group">
+												<label>Filepath</label>
+												<input type="text" class="form-control" name="filepath" id="filepath" ng-model="vm.automaticData.filepath">
+											</div>
 										</div>
 									</div>
 									<div class="pull-right col-md-12 no-lpad text-left">
 										<br /> <br />
 										<div class="clearfix">
 											<button type="button" class="btn btn-default small" ng-click="vm.triggerAutomatic()">Trigger Automatic Extraction</button>
+<!-- 											<button type="button" class="btn btn-default small" ng-click="vm.startScheduler()">Start All Scheduler</button> -->
+<!-- 											<button type="button" class="btn btn-default small" ng-click="vm.stopScheduler()">Stop All Scheduler</button> -->
+										</div>
+									</div>
+									<div class="pull-right col-md-12 no-lpad text-left">
+										<br /> <br />
+										<div class="clearfix">
+											<label style="width: 7%">Extraction Day</label><span>: {{vm.automaticData.dayOfWeekValue}}</span><br/>
+											<label style="width: 7%">Time</label><span>: {{vm.automaticData.timeValue}}</span><br/>
+											<label style="width: 7%">Filepath</label><span>: {{vm.automaticData.filepathValue}}</span><br/>
+											</div>
 										</div>
 									</div>
 								</form>
@@ -127,6 +143,14 @@
 													placeholder="To" />
 											</div>
 										</div>
+										<div class="col-md-12 no-lpad">
+											<div class="col-md-3 no-lpad">
+												<div class="form-group">
+													<label>Filepath</label>
+													<input type="text" class="form-control" name="filepath" id="filepath" ng-model="vm.manualData.filepath">
+												</div>
+											</div>
+										</div>
 									</div>
 									<div class="pull-right col-md-12 no-lpad text-left">
 										<br /> <br />
@@ -134,15 +158,21 @@
 											<button type="button" class="btn btn-default small" ng-click="vm.triggerManual()">Trigger Manual Extraction</button>
 										</div>
 									</div>
+									<div class="pull-right col-md-12 no-lpad text-left">
+										<br /> <br />
+										<div class="clearfix">
+											<label style="width: 7%">Delay Time</label><span>: {{vm.manualData.delayTimeValue}}</span><br/>
+											<label style="width: 7%">Start Date</label><span>: {{vm.manualData.startDateValue}}</span><br/>
+											<label style="width: 7%">End Date</label><span>: {{vm.manualData.endDateValue}}</span><br/>
+											<label style="width: 7%">Filepath</label><span>: {{vm.manualData.filepathValue}}</span><br/>
+										</div>
+									</div>
 								</form>
 							</div>
 						</div>
 					</div>
 				</div>
-		
 			</div>
 		</div>
 	</div>
 </div>
-
-

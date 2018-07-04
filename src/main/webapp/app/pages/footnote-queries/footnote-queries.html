@@ -100,7 +100,7 @@
 									</div>
 									<div class="col-md-4 no-pad">
 										<select class="form-control" name="saleOption" id="saleOpt"
-											ng-model="vm.queryParams.saleOpt"
+											ng-model="vm.queryParams.saleDateType"
 											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '014'">
 											<option value="1">Active In</option>
 											<option value="2">Exact Match</option>
@@ -132,7 +132,7 @@
 									</div>
 									<div class="col-md-4 no-pad">
 										<select class="form-control" name="travelOption"
-											id="travelOpt" ng-model="vm.queryParams.travelOpt"
+											id="travelOpt" ng-model="vm.queryParams.travelDateType"
 											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '015'">
 											<option value="1">Active In</option>
 											<option value="2">Exact Match</option>
@@ -158,13 +158,14 @@
 										<select class="form-control" name="travelOption"
 											id="travelOpt" ng-model="vm.queryParams.travelOpt"
 											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '015'">
+											
 											<option value="P">P - Trip Completed</option>
 											<option value="C">C - Trip Commence</option>
 										</select>
 									</div>
 									<div class="col-md-4 no-pad">
-										<select class="form-control" name="travelOption"
-											id="travelOpt" ng-model="vm.queryParams.travelOpt"
+										<select class="form-control" name="completedOption"
+											id="completedOption"
 											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '015'">
 											<option value="2">Exact Match</option>
 										</select>
@@ -209,13 +210,13 @@
 						</thead>
 						<tbody>
 							<tr ng-repeat="ftntQuery in vm.footnoteQueries"
-								ng-click="vm.selectedRow = ftntQuery; vm.getFtnt(ftntQuery); vm.getFtnt2(ftntQuery); vm.showDetail()"
+								ng-click="vm.selectedRow = ftntQuery; vm.getFtnt(ftntQuery); vm.getFtnt2(ftntQuery);  vm.showDetail()"
 								ng-class="{'selected': vm.selectedRow == ftntQuery}">
 								<td>{{$index + 1}}</td>
 								<td>{{ftntQuery.cxr}}</td>
 								<td>{{ftntQuery.fareAddon}}</td>
 								<td>{{ftntQuery.tarNo}}</td>
-								<td>{{ftntQuery.trcd}}</td>
+								<td>{{ftntQuery.tarCd}}</td>
 								<td>{{ftntQuery.ftnt}}</td>
 								<td>{{ftntQuery.fareAddonCount}}</td>
 							</tr>
@@ -223,6 +224,14 @@
 					</table>
 				</div>
 			</div>
+		</div>
+		
+		<div class="text-center" ng-if="vm.footnoteQueries">
+			<jhi-item-count page="vm.page" total="vm.queryCount"
+				items-per-page="vm.itemsPerPage"></jhi-item-count>
+			<uib-pagination class="pagination-sm" total-items="vm.totalItems"
+				items-per-page="vm.itemsPerPage" ng-model="vm.page"
+				ng-change="vm.loadAll()"></uib-pagination>
 		</div>
 
 		<div class="table-wrapper" ng-if="vm.footnoteQueryCategories">
@@ -247,28 +256,45 @@
 								<th>Footnote</th>
 								<th>Effective Date</th>
 								<th>Discontinue Date</th>
+								<th>Travel Start</th>
+								<th>Travel End</th>
+								<th>Sale Start</th>
+								<th>Sale End</th>
+								<th>Travel Complete</th>
+								<th>Travel Comp. Ind</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr ng-repeat="rq in vm.footnoteQueryCategories">
 								<td>{{$index + 1}}</td>
 								<td>{{rq.catNo}}</td>
-								<td>{{rq.sequenceNo}}</td>
-								<td>{{rq.geoType1}}</td>
-								<td>{{rq.geoLoc1}}</td>
-								<td>{{rq.geoType2}}</td>
-								<td>{{rq.geoLoc2}}</td>
+								<td>{{rq.seqNo}}</td>
+								<td>{{rq.locType1}}</td>
+								<td>{{rq.loc1}}</td>
+								<td>{{rq.locType2}}</td>
+								<td>{{rq.loc2}}</td>
 								<td>{{rq.fareClass}}</td>
 								<td>{{rq.fareType}}</td>
 								<td>{{rq.seasonType}}</td>
 								<td>{{rq.dayOfWeekType}}</td>
 								<td>{{rq.owrt}}</td>
 								<td>{{rq.routingNo}}</td>
-								<td>{{rq.footnote}}</td>
-								<td>{{rq.effectiveDateObject | date:'medium'}}</td>
-								<td><span ng-if="rq.discontinueDateObject=='indef'"></span>
-									<span ng-if="rq.discontinueDateObject!='indef'">{{rq.discontinueDateObject
-										| date:'medium'}}</span></td>
+								<td>{{rq.ftnt}}</td>
+								<td><span ng-if="rq.effDate=='indef'">NONE</span>
+									<span ng-if="rq.effDate!='indef'">{{rq.effDate | date:'medium'}}</span></td>
+								<td><span ng-if="rq.discDate=='indef'">NONE</span>
+									<span ng-if="rq.discDate!='indef'">{{rq.discDate | date:'medium'}}</span></td>
+								<td><span ng-if="rq.travelStart=='indef'">NONE</span>
+									<span ng-if="rq.travelStart!='indef'">{{rq.travelStart | date:'medium'}}</span></td>
+								<td><span ng-if="rq.travelEnd=='indef'">NONE</span>
+									<span ng-if="rq.travelEnd!='indef'">{{rq.travelEnd | date:'medium'}}</span></td>
+								<td><span ng-if="rq.saleStart=='indef'">NONE</span>
+									<span ng-if="rq.saleStart!='indef'">{{rq.saleStart | date:'medium'}}</span></td>
+								<td><span ng-if="rq.saleEnd=='indef'">NONE</span>
+									<span ng-if="rq.saleEnd!='indef'">{{rq.saleEnd | date:'medium'}}</span></td>
+								<td><span ng-if="rq.travelComplete=='indef'">NONE</span>
+									<span ng-if="rq.travelComplete!='indef'">{{rq.travelComplete | date:'medium'}}</span></td>
+								<td>{{rq.travelCompInd}}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -290,12 +316,6 @@
 			</div>
 		</div>
 
-		<div class="text-center" ng-if="vm.footnoteQueries">
-			<jhi-item-count page="vm.page" total="vm.queryCount"
-				items-per-page="vm.itemsPerPage"></jhi-item-count>
-			<uib-pagination class="pagination-sm" total-items="vm.totalItems"
-				items-per-page="vm.itemsPerPage" ng-model="vm.page"
-				ng-change="vm.loadAll()"></uib-pagination>
-		</div>
+		
 	</div>
 </div>
