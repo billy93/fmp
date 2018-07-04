@@ -39,6 +39,11 @@
 		    ]
 		};
     	
+    	$scope.$on("$destroy", function() {
+	    	WorkPackage.closeEditor(vm.workPackage, closedSuccess, closedFailure);
+	      	  function closedSuccess (result) {}
+	      	  function closedFailure (error) {} 
+    	   });
     	
         vm.currentTab = [];
         vm.currentAddonTab = [];
