@@ -80,6 +80,7 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
 import com.atibusinessgroup.fmp.domain.WorkPackageHistory;
+import com.atibusinessgroup.fmp.domain.enumeration.PackageType;
 import com.atibusinessgroup.fmp.domain.enumeration.Status;
 import com.atibusinessgroup.fmp.repository.AtpcoFareRepository;
 import com.atibusinessgroup.fmp.repository.ContractFMPRepository;
@@ -1502,61 +1503,109 @@ public class WorkPackageResource {
 
     	LinkedHashMap<String, Object> data = new LinkedHashMap<>();
 
-    	data.put("Status", new ArrayList<>());
-    	data.put("Carrier", new ArrayList<>());
-    	data.put("Action", new ArrayList<>());
-    	data.put("Tar No", new ArrayList<>());
-    	data.put("Tar Cd", new ArrayList<>());
-    	data.put("Global", new ArrayList<>());
-    	data.put("Origin", new ArrayList<>());
-    	data.put("Dest", new ArrayList<>());
-    	data.put("Addon Bucket", new ArrayList<>());
-    	data.put("OW/RT", new ArrayList<>());
-    	data.put("Ftnt", new ArrayList<>());
-    	data.put("Zone", new ArrayList<>());
-    	data.put("Rtg No", new ArrayList<>());
-    	data.put("Filing Curr", new ArrayList<>());
-    	data.put("Base Amt", new ArrayList<>());
-    	data.put("Amt Diff", new ArrayList<>());
-    	data.put("% Amt Diff", new ArrayList<>());
-    	data.put("Travel Start", new ArrayList<>());
-    	data.put("Travel End", new ArrayList<>());
-    	data.put("Sales Start", new ArrayList<>());
-    	data.put("Sales End", new ArrayList<>());
-    	data.put("Comment", new ArrayList<>());
-    	data.put("Travel Complete", new ArrayList<>());
-    	data.put("Travel Complete Indicator", new ArrayList<>());
+    	if(workPackage.getTargetDistribution().contentEquals("MARKET")) {
+    		data.put("Status", new ArrayList<>());
+        	data.put("Carrier", new ArrayList<>());
+        	data.put("Action", new ArrayList<>());
+        	data.put("Origin", new ArrayList<>());
+        	data.put("Dest", new ArrayList<>());
+        	data.put("Addon Bucket", new ArrayList<>());
+        	data.put("OW/RT", new ArrayList<>());
+        	data.put("Filing Curr", new ArrayList<>());
+        	data.put("Base Amt", new ArrayList<>());
+        	data.put("Amt Diff", new ArrayList<>());
+        	data.put("% Amt Diff", new ArrayList<>());
+        	data.put("Travel Start", new ArrayList<>());
+        	data.put("Travel End", new ArrayList<>());
+        	data.put("Sales Start", new ArrayList<>());
+        	data.put("Sales End", new ArrayList<>());
+        	data.put("Comment", new ArrayList<>());
+        	data.put("Travel Complete", new ArrayList<>());
+        	data.put("Travel Complete Indicator", new ArrayList<>());
 
-    	WorkPackage wp = workPackageService.findOne(workPackage.getId());
-        List<WorkPackageFare> fares = wp.getAddonFareSheet().get(workPackage.getExportIndex()).getFares();
+        	WorkPackage wp = workPackageService.findOne(workPackage.getId());
+            List<WorkPackageFare> fares = wp.getAddonFareSheet().get(workPackage.getExportIndex()).getFares();
 
-        DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy");
-        for(int i=0; i<fares.size(); i++) {
-        	putValue(data.get("Status"), fares.get(i).getStatus());
-        	putValue(data.get("Carrier"), fares.get(i).getCarrier());
-        	putValue(data.get("Action"), fares.get(i).getAction());
-        	putValue(data.get("Tar No"), fares.get(i).getTariffNumber() != null ? fares.get(i).getTariffNumber().getTarNo() : null);
-        	putValue(data.get("Tar Cd"), fares.get(i).getTariffNumber() != null ?  fares.get(i).getTariffNumber().getTarCd() : null);
-        	putValue(data.get("Global"), fares.get(i).getTariffNumber() != null ? fares.get(i).getTariffNumber().getGlobal() : null);
-        	putValue(data.get("Origin"), fares.get(i).getOrigin());
-        	putValue(data.get("Dest"), fares.get(i).getDestination());
-        	putValue(data.get("Addon Bucket"), fares.get(i).getBucket());
-        	putValue(data.get("OW/RT"), fares.get(i).getTypeOfJourney());
-        	putValue(data.get("Ftnt"), fares.get(i).getFootnote1());
-        	putValue(data.get("Zone"), fares.get(i).getZone());
-        	putValue(data.get("Rtg No"), fares.get(i).getRtgno());
-        	putValue(data.get("Filing Curr"), fares.get(i).getCurrency());
-        	putValue(data.get("Base Amt"), fares.get(i).getAmount());
-        	putValue(data.get("Amt Diff"), fares.get(i).getAmount());
-        	putValue(data.get("% Amt Diff"), fares.get(i).getAmount());
-        	putValue(data.get("Travel Start"), fares.get(i).getTravelStart() != null ? dfFull.format(Date.from(fares.get(i).getTravelStart().toInstant())) : null);
-        	putValue(data.get("Travel End"), fares.get(i).getTravelEnd() != null ? dfFull.format(Date.from(fares.get(i).getTravelEnd().toInstant())) : null);
-        	putValue(data.get("Sales Start"), fares.get(i).getSaleStart() != null ? dfFull.format(Date.from(fares.get(i).getSaleStart().toInstant())) : null);
-        	putValue(data.get("Sales End"), fares.get(i).getSaleEnd() != null ? dfFull.format(Date.from(fares.get(i).getSaleEnd().toInstant())) : null);
-        	putValue(data.get("Comment"), fares.get(i).getComment());
-        	putValue(data.get("Travel Complete"), fares.get(i).getTravelComplete() != null ? dfFull.format(Date.from(fares.get(i).getTravelComplete().toInstant())): null);
-        	putValue(data.get("Travel Complete Indicator"), fares.get(i).getTravelCompleteIndicator());
-        }
+            DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy");
+            for(int i=0; i<fares.size(); i++) {
+            	putValue(data.get("Status"), fares.get(i).getStatus());
+            	putValue(data.get("Carrier"), fares.get(i).getCarrier());
+            	putValue(data.get("Action"), fares.get(i).getAction());
+            	putValue(data.get("Origin"), fares.get(i).getOrigin());
+            	putValue(data.get("Dest"), fares.get(i).getDestination());
+            	putValue(data.get("Addon Bucket"), fares.get(i).getBucket());
+            	putValue(data.get("OW/RT"), fares.get(i).getTypeOfJourney());
+            	putValue(data.get("Filing Curr"), fares.get(i).getCurrency());
+            	putValue(data.get("Base Amt"), fares.get(i).getAmount());
+            	putValue(data.get("Amt Diff"), fares.get(i).getAmtDiff());
+            	putValue(data.get("% Amt Diff"), fares.get(i).getAmtPercentDiff());
+            	putValue(data.get("Travel Start"), fares.get(i).getTravelStart() != null ? dfFull.format(Date.from(fares.get(i).getTravelStart().toInstant())) : null);
+            	putValue(data.get("Travel End"), fares.get(i).getTravelEnd() != null ? dfFull.format(Date.from(fares.get(i).getTravelEnd().toInstant())) : null);
+            	putValue(data.get("Sales Start"), fares.get(i).getSaleStart() != null ? dfFull.format(Date.from(fares.get(i).getSaleStart().toInstant())) : null);
+            	putValue(data.get("Sales End"), fares.get(i).getSaleEnd() != null ? dfFull.format(Date.from(fares.get(i).getSaleEnd().toInstant())) : null);
+            	putValue(data.get("Comment"), fares.get(i).getComment());
+            	putValue(data.get("Travel Complete"), fares.get(i).getTravelComplete() != null ? dfFull.format(Date.from(fares.get(i).getTravelComplete().toInstant())): null);
+            	putValue(data.get("Travel Complete Indicator"), fares.get(i).getTravelCompleteIndicator());
+            }
+    	}else {
+    		data.put("Status", new ArrayList<>());
+        	data.put("Carrier", new ArrayList<>());
+        	data.put("Action", new ArrayList<>());
+        	data.put("Tar No", new ArrayList<>());
+        	data.put("Tar Cd", new ArrayList<>());
+        	data.put("Global", new ArrayList<>());
+        	data.put("Origin", new ArrayList<>());
+        	data.put("Dest", new ArrayList<>());
+        	data.put("Addon Bucket", new ArrayList<>());
+        	data.put("OW/RT", new ArrayList<>());
+        	data.put("Ftnt", new ArrayList<>());
+        	data.put("Zone", new ArrayList<>());
+        	data.put("Rtg No", new ArrayList<>());
+        	data.put("Filing Curr", new ArrayList<>());
+        	data.put("Base Amt", new ArrayList<>());
+        	data.put("Amt Diff", new ArrayList<>());
+        	data.put("% Amt Diff", new ArrayList<>());
+        	data.put("Travel Start", new ArrayList<>());
+        	data.put("Travel End", new ArrayList<>());
+        	data.put("Sales Start", new ArrayList<>());
+        	data.put("Sales End", new ArrayList<>());
+        	data.put("Comment", new ArrayList<>());
+        	data.put("Travel Complete", new ArrayList<>());
+        	data.put("Travel Complete Indicator", new ArrayList<>());
+
+        	WorkPackage wp = workPackageService.findOne(workPackage.getId());
+            List<WorkPackageFare> fares = wp.getAddonFareSheet().get(workPackage.getExportIndex()).getFares();
+
+            DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy");
+            for(int i=0; i<fares.size(); i++) {
+            	putValue(data.get("Status"), fares.get(i).getStatus());
+            	putValue(data.get("Carrier"), fares.get(i).getCarrier());
+            	putValue(data.get("Action"), fares.get(i).getAction());
+            	putValue(data.get("Tar No"), fares.get(i).getTariffNumber() != null ? fares.get(i).getTariffNumber().getTarNo() : null);
+            	putValue(data.get("Tar Cd"), fares.get(i).getTariffNumber() != null ?  fares.get(i).getTariffNumber().getTarCd() : null);
+            	putValue(data.get("Global"), fares.get(i).getTariffNumber() != null ? fares.get(i).getTariffNumber().getGlobal() : null);
+            	putValue(data.get("Origin"), fares.get(i).getOrigin());
+            	putValue(data.get("Dest"), fares.get(i).getDestination());
+            	putValue(data.get("Addon Bucket"), fares.get(i).getBucket());
+            	putValue(data.get("OW/RT"), fares.get(i).getTypeOfJourney());
+            	putValue(data.get("Ftnt"), fares.get(i).getFootnote1());
+            	putValue(data.get("Zone"), fares.get(i).getZone());
+            	putValue(data.get("Rtg No"), fares.get(i).getRtgno());
+            	putValue(data.get("Filing Curr"), fares.get(i).getCurrency());
+            	putValue(data.get("Base Amt"), fares.get(i).getAmount());
+            	putValue(data.get("Amt Diff"), fares.get(i).getAmtDiff());
+            	putValue(data.get("% Amt Diff"), fares.get(i).getAmtPercentDiff());
+            	putValue(data.get("Travel Start"), fares.get(i).getTravelStart() != null ? dfFull.format(Date.from(fares.get(i).getTravelStart().toInstant())) : null);
+            	putValue(data.get("Travel End"), fares.get(i).getTravelEnd() != null ? dfFull.format(Date.from(fares.get(i).getTravelEnd().toInstant())) : null);
+            	putValue(data.get("Sales Start"), fares.get(i).getSaleStart() != null ? dfFull.format(Date.from(fares.get(i).getSaleStart().toInstant())) : null);
+            	putValue(data.get("Sales End"), fares.get(i).getSaleEnd() != null ? dfFull.format(Date.from(fares.get(i).getSaleEnd().toInstant())) : null);
+            	putValue(data.get("Comment"), fares.get(i).getComment());
+            	putValue(data.get("Travel Complete"), fares.get(i).getTravelComplete() != null ? dfFull.format(Date.from(fares.get(i).getTravelComplete().toInstant())): null);
+            	putValue(data.get("Travel Complete Indicator"), fares.get(i).getTravelCompleteIndicator());
+            }
+    	}
+    	
+    	
 
     	Attachment att = createWorkbook("Workorder Addon Fare", data);
         return ResponseEntity.ok()
