@@ -463,7 +463,7 @@
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Origin <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'origin')"></span></th>
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Dest <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'destination')"></span></th>
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Fare Cls <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'fareBasis')"></span>
-																<div class="resize-div"></div>
+																<div class="resize-div" style="min-width: 100px"></div>
 															</th>
 															<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Bkg Cls <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'bookingClass')"></span>
 															</th>
@@ -927,18 +927,32 @@
 														<tr role="row">																	
 															<th>No</th>
 									                		<th>Status</th>
-										                	<th>Carrier</th>		                	
-									                		<th>Action</th>
+										                	<th>Carrier
+										                		<div class="resize-div"></div>
+										                	</th>		                	
+									                		<th>Action
+									                			<div class="resize-div"></div>
+									                		</th>
 										                	<th>Tar No</th>
 										                	<th>Tar Cd</th>
 										                	<th>Global</th>
 										                	<th>Origin</th>
 										                	<th>Dest</th>
-										                	<th>Addon Bucket/Fare Class</th>
-										                	<th>OW/RT</th>
-										                	<th>Ftnt</th>
-										                	<th>Zone</th>
-										                	<th>Rtg No</th>
+										                	<th>Addon Bucket/Fare Class
+										                		<div class="resize-div" style="min-width: 165px"></div>
+										                	</th>
+										                	<th>OW/RT
+										                		<div class="resize-div" style="min-width: 120px"></div>
+										                	</th>
+										                	<th>Ftnt
+										                		<div class="resize-div"></div>
+										                	</th>
+										                	<th>Zone
+										                		<div class="resize-div"></div>
+										                	</th>
+										                	<th>Rtg No
+										                		<div class="resize-div"></div>
+										                	</th>
 										                	<th>Filing Curr</th>
 										                	<th>Base Amt</th>
 										                	<th>Amt Diff</th>
@@ -947,7 +961,9 @@
 										               		<th>Travel End</th>		               		
 										               		<th>Sale Start</th>
 										               		<th>Sale End</th>	
-										               		<th>Comment</th>	               		
+										               		<th>Comment
+										               			<div class="resize-div" style="min-width: 200px;"></div>
+										               		</th>	               		
 										               		<th>Travel Complete</th>	               		
 										               		<th>Travel Complete Indicator</th>		
 														</tr>
@@ -2588,18 +2604,32 @@
 													<tr>
 								                		<th>No</th>
 								                		<th>Status</th>
-								                		<th>Action</th>
-									                	<th>Carrier</th>		                	
+								                		<th>Action
+								                			<div class="resize-div"></div>
+								                		</th>
+									                	<th>Carrier
+									                		<div class="resize-div"></div>
+									                	</th>		                	
 									                	<th>Origin</th>
 									                	<th>Dest</th>
-									                	<th>Fare Cls</th>
+									                	<th>Fare Cls
+									                		<div class="resize-div" style="min-width: 100px"></div>
+									                	</th>
 									                	<th>Bkg Cls</th>
 									                	<th>SSN</th>
-									                	<th>Cabin</th>
-									                	<th>OW/RT</th>
-									                	<th>Rule Id</th>
+									                	<th>Cabin
+									                		<div class="resize-div" style="min-width: 120px"></div>
+									                	</th>
+									                	<th>OW/RT
+									                		<div class="resize-div" style="min-width: 120px"></div>
+									                	</th>
+									                	<th>Rule Id
+									                		<div class="resize-div"></div>
+									                	</th>
 									                	<th>Curr</th>
-									                	<th>Base Amt</th>
+									                	<th>Base Amt
+									                		<div class="resize-div" style="min-width: 120px"></div>
+									                	</th>
 									                  	<th>Prev Base Amt</th>
 									                	<th>Prev Base Amt Diff</th>
 									                	<th>% Prev Base Amt Diff</th>
@@ -2607,10 +2637,14 @@
 									               		<th>Travel End</th>		               		
 									               		<th>Sale Start</th>
 									               		<th>Sale End</th>	
-									               		<th>Comment</th>	               		
+									               		<th>Comment
+									               			<div class="resize-div" style="min-width: 200px;"></div>
+									               		</th>	               		
 									               		<th>Travel Complete</th>	               		
 									               		<th>Travel Complete Indicator</th>	               		
-									               		<th>RateSheet Comment</th>	        		
+									               		<th>RateSheet Comment
+									               			<div class="resize-div" style="min-width: 200px;"></div>
+									               		</th>	        		
 									                </tr>
 												</thead>
 												<tbody ng-class="{'poiv-none' : vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO'&& vm.workPackage.status=='DISTRIBUTED' }">
@@ -2945,7 +2979,7 @@
 			       			</div>
 							
 							<div class="tab-pane" ng-class="{active:vm.currentAddonTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.addonFareSheet track by $index">
-										<div class="pb1 mb1 bbgrey">
+									<div class="pb1 mb1 bbgrey">
 										<div class="clearfix">
 											<div class="pull-left w50 two-column">
 												<div class="form-group">
@@ -3042,12 +3076,20 @@
 														<tr role="row">																	
 															<th>No</th>
 									                		<th>Status</th>
-										                	<th>Carrier</th>		                	
-									                		<th>Action</th>
-									                		<th>Origin</th>
+										                	<th>Carrier
+										                		<div class="resize-div"></div>
+										                	</th>		                	
+									                		<th>Action
+									                			<div class="resize-div"></div>
+									                		</th>
+										                	<th>Origin</th>
 										                	<th>Dest</th>
-										                	<th>Addon Bucket/Fare Class</th>
-										                	<th>OW/RT</th>
+										                	<th>Addon Bucket/Fare Class
+										                		<div class="resize-div" style="min-width: 165px"></div>
+										                	</th>
+										                	<th>OW/RT
+										                		<div class="resize-div" style="min-width: 120px"></div>
+										                	</th>
 										                	<th>Filing Curr</th>
 										                	<th>Base Amt</th>
 										                	<th>Prev Base Amt</th>
@@ -3057,7 +3099,9 @@
 										               		<th>Travel End</th>		               		
 										               		<th>Sale Start</th>
 										               		<th>Sale End</th>	
-										               		<th>Comment</th>	               		
+										               		<th>Comment
+										               			<div class="resize-div" style="min-width: 200px;"></div>
+										               		</th>	               		
 										               		<th>Travel Complete</th>	               		
 										               		<th>Travel Complete Indicator</th>		
 														</tr>
@@ -3561,29 +3605,65 @@
 												<thead>
 													<tr>
 								                		<th>No</th>
-								                		<th>Type</th>
-									                	<th>Full/Partial</th>		                	
-									                	<th>PNR</th>
-									                	<th>Tkt From</th>
-									                	<th>Tkt To</th>
+								                		<th>Type
+								                			<div class="resize-div"></div>
+								                		</th>
+									                	<th>Full/Partial
+									                		<div class="resize-div"></div>
+									                	</th>		                	
+									                	<th>PNR
+									                		<div class="resize-div"></div>
+									                	</th>
+									                	<th>Tkt From
+									                		<div class="resize-div"></div>
+									                	</th>
+									                	<th>Tkt To
+									                		<div class="resize-div"></div>
+									                	</th>
 									                	<th>Ori</th>
 									                	<th>Dest</th>
-									                	<th>Original Itinerary</th>
-									                	<th>New Itinerary</th>
-									                	<th>Original Basic Fare</th>
-									                	<th>New Basic Fare</th>
-									                	<th>Approved Fares</th>
-										                <th>Fare Lost</th>
-									               		<th>Calculated PN</th>		               		
-									               		<th>Original PN</th>
-									               		<th>Approved PN</th>	
+									                	<th>Original Itinerary
+									                		<div class="resize-div"></div>
+									                	</th>
+									                	<th>New Itinerary
+									                		<div class="resize-div"></div>
+									                	</th>
+									                	<th>Original Basic Fare
+									                		<div class="resize-div"></div>
+									                	</th>
+									                	<th>New Basic Fare
+									                		<div class="resize-div"></div>
+									                	</th>
+									                	<th>Approved Fares
+									                		<div class="resize-div"></div>
+									                	</th>
+										                <th>Fare Lost
+										                	<div class="resize-div"></div>
+										                </th>
+									               		<th>Calculated PN
+									               			<div class="resize-div"></div>
+									               		</th>		               		
+									               		<th>Original PN
+									               			<div class="resize-div"></div>
+									               		</th>
+									               		<th>Approved PN
+									               			<div class="resize-div"></div>
+									               		</th>	
 									               		<th>Penalty Lost %</th>	               		
 									               		<th>Penalty Lost Amount</th>	               		
 									               		<th>Currency</th>	               		
-									               		<th>Total Pax</th>	        	
-									               		<th>Total Lost</th>	 
-									               		<th>Approver</th>
-									               		<th>Remark</th>	        		        	       		
+									               		<th>Total Pax
+									               			<div class="resize-div"></div>
+									               		</th>	        	
+									               		<th>Total Lost
+									               			<div class="resize-div"></div>
+									               		</th>	 
+									               		<th>Approver
+									               			<div class="resize-div"></div>
+									               		</th>
+									               		<th>Remark
+									               			<div class="resize-div"></div>
+									               		</th>	        		        	       		
 									                </tr>
 												</thead>
 												<tbody>
