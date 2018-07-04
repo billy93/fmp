@@ -12,8 +12,8 @@ public class AtpcoFootnoteQueryDetails {
 	private String owrt;
 	private String routingNo;
 	private String ftnt;
-	private Object effObject;
-	private Object discObject;
+	private Object effDate;
+	private Object discDate;
 	private Object travelStart;
 	private Object travelEnd;
 	private Object saleStart;
@@ -74,18 +74,6 @@ public class AtpcoFootnoteQueryDetails {
 	public void setFtnt(String ftnt) {
 		this.ftnt = ftnt;
 	}
-	public Object getEffObject() {
-		return effObject;
-	}
-	public void setEffObject(Object effObject) {
-		this.effObject = effObject;
-	}
-	public Object getDiscObject() {
-		return discObject;
-	}
-	public void setDiscObject(Object discObject) {
-		this.discObject = discObject;
-	}
 	public Object getTravelStart() {
 		return travelStart;
 	}
@@ -121,6 +109,18 @@ public class AtpcoFootnoteQueryDetails {
 	}
 	public void setTravelCompInd(String travelCompInd) {
 		this.travelCompInd = travelCompInd;
+	}
+	public Object getEffDate() {
+		return effDate;
+	}
+	public void setEffDate(Object effDate) {
+		this.effDate = effDate;
+	}
+	public Object getDiscDate() {
+		return discDate;
+	}
+	public void setDiscDate(Object discDate) {
+		this.discDate = discDate;
 	} 
 	
 	

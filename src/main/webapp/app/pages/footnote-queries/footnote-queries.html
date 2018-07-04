@@ -210,7 +210,7 @@
 						</thead>
 						<tbody>
 							<tr ng-repeat="ftntQuery in vm.footnoteQueries"
-								ng-click="vm.selectedRow = ftntQuery; vm.getFtnt(ftntQuery);  vm.showDetail()"
+								ng-click="vm.selectedRow = ftntQuery; vm.getFtnt(ftntQuery); vm.getFtnt2(ftntQuery);  vm.showDetail()"
 								ng-class="{'selected': vm.selectedRow == ftntQuery}">
 								<td>{{$index + 1}}</td>
 								<td>{{ftntQuery.cxr}}</td>
@@ -280,19 +280,19 @@
 								<td>{{rq.owrt}}</td>
 								<td>{{rq.routingNo}}</td>
 								<td>{{rq.ftnt}}</td>
-								<td><span ng-if="rq.effDate=='indef'"></span>
+								<td><span ng-if="rq.effDate=='indef'">NONE</span>
 									<span ng-if="rq.effDate!='indef'">{{rq.effDate | date:'medium'}}</span></td>
-								<td><span ng-if="rq.discDate=='indef'"></span>
+								<td><span ng-if="rq.discDate=='indef'">NONE</span>
 									<span ng-if="rq.discDate!='indef'">{{rq.discDate | date:'medium'}}</span></td>
-								<td><span ng-if="rq.travelStart=='indef'"></span>
+								<td><span ng-if="rq.travelStart=='indef'">NONE</span>
 									<span ng-if="rq.travelStart!='indef'">{{rq.travelStart | date:'medium'}}</span></td>
-								<td><span ng-if="rq.travelEnd=='indef'"></span>
+								<td><span ng-if="rq.travelEnd=='indef'">NONE</span>
 									<span ng-if="rq.travelEnd!='indef'">{{rq.travelEnd | date:'medium'}}</span></td>
-								<td><span ng-if="rq.saleStart=='indef'"></span>
+								<td><span ng-if="rq.saleStart=='indef'">NONE</span>
 									<span ng-if="rq.saleStart!='indef'">{{rq.saleStart | date:'medium'}}</span></td>
-								<td><span ng-if="rq.saleEnd=='indef'"></span>
+								<td><span ng-if="rq.saleEnd=='indef'">NONE</span>
 									<span ng-if="rq.saleEnd!='indef'">{{rq.saleEnd | date:'medium'}}</span></td>
-								<td><span ng-if="rq.travelComplete=='indef'"></span>
+								<td><span ng-if="rq.travelComplete=='indef'">NONE</span>
 									<span ng-if="rq.travelComplete!='indef'">{{rq.travelComplete | date:'medium'}}</span></td>
 								<td>{{rq.travelCompInd}}</td>
 							</tr>
