@@ -6431,5 +6431,50 @@
     	  fare.currency = null;
     	  fare.discountSpecifiedAmount = null;
       }
+      
+      vm.footnote = function(workPackageSheet){
+    	  var selectedSize = 0;
+    	  var tariff = null;
+    	  for(var x=0;x<workPackageSheet.fares.length;x++){
+    		  if(workPackageSheet.fares[x].field != undefined){
+    			  var selected = false;
+    			  Object.keys(workPackageSheet.fares[x].field).forEach(function(key,index) {
+    				  if(workPackageSheet.fares[x].field[key]){
+    					  selected = true;
+    				  }
+    			 });
+    			  if(selected){
+    				  selectedSize++;
+    			  }
+    		  }
+    	  }    	  
+    	  if(selectedSize == 1){
+    		  for(var x=0;x<workPackageSheet.fares.length;x++){
+        		  if(workPackageSheet.fares[x].field != undefined){
+        			  var selected = false;
+        			  Object.keys(workPackageSheet.fares[x].field).forEach(function(key,index) {
+        				  if(workPackageSheet.fares[x].field[key]){
+        					  selected = true;
+        				  }
+        			 });
+        			  if(selected){
+        				  var copiedFare = angular.copy(workPackageSheet.fares[x]);
+        				  if(copiedFare.tariffNumber != null){
+        					  tariff = copiedFare.tariffNumber.tarNo;
+        				  }
+        				  else{
+        					 
+        				  }
+        			  }
+        		  }
+        	  }  
+    		  var url = $state.href('footnote-query', {cxr: "GA", tariff:tariff});
+        	  window.open(url,'_blank');
+    	  }
+    	  else{
+    		  alert('Please select one row');
+    	  }
+    	  
+      }
     }
 })();

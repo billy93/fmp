@@ -4,9 +4,9 @@
 	angular.module('fmpApp').controller('FootnoteQueryController',
 			FootnoteQueryController);
 
-	FootnoteQueryController.$inject = [ '$state', 'FootnoteQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', '$uibModal' ];
+	FootnoteQueryController.$inject = [ '$state', '$stateParams', 'FootnoteQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', '$uibModal' ];
 
-	function FootnoteQueryController($state, FootnoteQuery, ParseLinks, AlertService, paginationConstants, queryParams, $uibModal) {
+	function FootnoteQueryController($state, $stateParams, FootnoteQuery, ParseLinks, AlertService, paginationConstants, queryParams, $uibModal) {
 
 		var vm = this;
 		vm.loadPage = loadPage;
@@ -24,13 +24,19 @@
 		vm.openCalendar = openCalendar;
 		
 		vm.paramCarrier = null;
-        vm.paramTarNo = null;
+		vm.paramTarNo = null;
+		if($stateParams.cxr != null){
+			vm.paramCarrier = $stateParams.cxr;
+		}
+		if($stateParams.tariff != null){
+			vm.paramTarNo = $stateParams.tariff;
+		}
         vm.showTariffModal = showTariffModal;
         vm.showCarrierModal = showCarrierModal;
         
         vm.loadAvailable = loadAvailable;
         vm.loadExpired = loadExpired;
-        
+        vm.loadAll();
         
 		function loadAll() {
 			vm.footnoteQueryCategories = null;
