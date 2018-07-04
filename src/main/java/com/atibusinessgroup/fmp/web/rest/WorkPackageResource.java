@@ -305,13 +305,7 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<WorkPackage> reuseWorkPackage(@RequestBody WorkPackage wp) throws URISyntaxException {
         log.debug("REST request to save reuse WorkPackage : {}", wp);
-
-        WorkPackageHistory history = new WorkPackageHistory();
-        history.setWorkPackage(new ObjectId(wp.getId()));
-        history.setType("REUSE");
-        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
-        workPackageHistoryService.save(history);
-
+       
         wp.setReuseFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
@@ -370,6 +364,12 @@ public class WorkPackageResource {
         wp.setQueuedDate(Instant.now());
 
         WorkPackage result = workPackageService.save(wp);
+        
+        WorkPackageHistory history = new WorkPackageHistory();
+        history.setWorkPackage(new ObjectId(result.getId()));
+        history.setType("REUSE");
+        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        workPackageHistoryService.save(history);
 
 
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
@@ -388,13 +388,7 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<WorkPackage> replaceWorkPackage(@RequestBody WorkPackage wp) throws URISyntaxException {
         log.debug("REST request to save reuse WorkPackage : {}", wp);
-
-        WorkPackageHistory history = new WorkPackageHistory();
-        history.setWorkPackage(new ObjectId(wp.getId()));
-        history.setType("REPLACE");
-        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
-        workPackageHistoryService.save(history);
-
+       
         wp.setReplaceFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
@@ -449,6 +443,11 @@ public class WorkPackageResource {
 
         WorkPackage result = workPackageService.save(wp);
 
+        WorkPackageHistory history = new WorkPackageHistory();
+        history.setWorkPackage(new ObjectId(result.getId()));
+        history.setType("REPLACE");
+        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        workPackageHistoryService.save(history);
 
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
