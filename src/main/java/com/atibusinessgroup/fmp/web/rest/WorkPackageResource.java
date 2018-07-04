@@ -3960,16 +3960,18 @@ public class WorkPackageResource {
         
         WorkPackage result = workPackageService.findOne(workPackage.getId());
         
-        if(!result.getLockedBy().contentEquals(SecurityUtils.getCurrentUserLogin().get())) {
-        	if(result.isOpened()) {
-            	throw new UnlockAlertException("Can not unlock because workpackage in edit mode by "+result.getLockedBy());
+        if(result.isLocked()) {
+        	if(!result.getLockedBy().contentEquals(SecurityUtils.getCurrentUserLogin().get())) {
+            	if(result.isOpened()) {
+                	throw new UnlockAlertException("Can not unlock because workpackage in edit mode by "+result.getLockedBy());
+                }
             }
-        }
-        
-        Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
-       	if(user.get().getReviewLevels().indexOf(result.getReviewLevel()) < 0){
-       		throw new UnlockAlertException("Your review level "+user.get().getReviewLevels()+" does not have access to unlock this workpackage");
-        }
+            
+            Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
+           	if(user.get().getReviewLevels().indexOf(result.getReviewLevel()) < 0){
+           		throw new UnlockAlertException("Your review level "+user.get().getReviewLevels()+" does not have access to unlock this workpackage");
+            }
+        }        
         
         result.setLocked(false);
         workPackageService.save(result);
