@@ -61,7 +61,7 @@
 									</div>
 									<div class="form-group">
 										<label for="field_reviewLevel">Review Level</label>
-										<input autocomplete="off" ng-required="vm.isRequired('reviewLevel')"  type="text" name="review_level" ng-model="vm.workPackage.reviewLevel" class="form-control" disabled>
+										<input autocomplete="off" ng-required="vm.isRequired('reviewLevel')"  type="text" name="reviewLevel" ng-model="vm.workPackage.reviewLevel" class="form-control" disabled>
 									</div>
 									<div class="form-group">
 										<label for="field_distributionType">Distribution Type</label>
@@ -169,7 +169,7 @@
 								<div class="tab-content">
 									<div ng-class="{active:vm.currentTabComment}" class="tab-pane" id="comment">																		
 										<div class="form-group" ng-class="{'poiv-none' :vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)}">
-											<wysiwyg-edit content="vm.commentString" config="vm.editorConfig"></wysiwyg-edit>
+											<wysiwyg-edit content="vm.commentString" name="comment" config="vm.editorConfig"></wysiwyg-edit>
 										</div>
 										<div class="clearfix">
 											<div class="pull-right">
@@ -195,7 +195,7 @@
 									<div ng-class="{active:vm.currentTabInterofficeComment, 'poiv-none' : (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') 
 											|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO'&& vm.workPackage.status=='DISTRIBUTED')  || vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'}" class="tab-pane" id="inter-office">
 										<div class="form-group" ng-class="{'poiv-none' :vm.workPackage.status =='DISCONTINUED' || vm.workPackage.reviewLevel == 'DISTRIBUTION'|| vm.disabledField(vm.workPackage)}">
-											<wysiwyg-edit content="vm.ioString" config="vm.editorConfig"></wysiwyg-edit>
+											<wysiwyg-edit content="vm.ioString" name="interofficeComment" config="vm.editorConfig"></wysiwyg-edit>
 										</div> 
 										<div class="clearfix">
 											<div class="pull-right">
@@ -1003,7 +1003,7 @@
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'global', $event)" ng-class="{highlighted:fare.field['global'], changed : vm.diff[fare.id].indexOf('global') > -1}">{{fare.tariffNumber.global}}</td>
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'origin', $event)" ng-class="{highlighted:fare.field['origin'], changed : vm.diff[fare.id].indexOf('origin') > -1}">
 																<span class="input-group">
-																		<input type="text" class="form-control" name="addonFareOrigin{{$parent.$index}}{{$index}}" id="field_carrier"
+																		<input type="text" class="form-control" name="addonFareOrigin{{$parent.$index}}{{$index}}" id="field_origin"
 												                    		ng-model="fare.origin"
 												                    		uppercase
 												                    		ng-disabled="!vm.isEditable('addonFareOrigin') "
@@ -3952,16 +3952,22 @@
 						<div class="tab-pane active" id="validation">
 							<ul class="tree">
 								<li>
-							    	<input type="checkbox" checked="checked" id="c1" />
+							    	<input type="checkbox" id="c1" />
 							    	<label class="tree_label main-label" for="c1">There is {{vm.workPackage.validation.errorsCount}} error(s) and {{vm.workPackage.validation.warningsCount}} warning(s)</label>
 								    <ul ng-repeat="workPackageTab in vm.workPackage.validation.tab track by $index">
 								    	<li>
-								        	<input type="checkbox" checked="checked" id="c2" />
-								        	<label for="c2" class="tree_label second-label">{{workPackageTab.name}}</label>
+								        	<input type="checkbox" id="c2{{$index}}" />
+								        	
+								        	
+									        <label for="c2{{$index}}" class="tree_label second-label">
+									        	<label ng-if="workPackageTab.type != null">{{workPackageTab.type}}</label>
+									        	<label ng-if="workPackageTab.type != null && workPackageTab.name != null"> - </label>
+									        	<label ng-if="workPackageTab.name != null">{{workPackageTab.name}}</label>
+									        </label>
 									        <ul>
 									          	<li ng-if="workPackageTab.warning.length > 0">
-									          		<input type="checkbox" checked="checked" id="c3" />
-								        			<label for="c3" class="tree_label warning-label">Warnings</label>
+									          		<input type="checkbox" id="c3{{$parent.$index}}{{$index}}" />
+								        			<label for="c3{{$parent.$index}}{{$index}}" class="tree_label warning-label">Warnings</label>
 								        			<ul>
 								        			    <li ng-repeat="warning in workPackageTab.warning track by $index">
 								        			    	<span ng-click="vm.selectErrorField(workPackageTab.type, workPackageTab.index, warning.index, warning.field)" class="tree_label tree-detail">{{warning.message}}</span>
@@ -3969,8 +3975,8 @@
 								        			</ul>
 									          	</li>
 									          	<li ng-if="workPackageTab.error.length > 0">
-									          		<input type="checkbox" checked="checked" id="c5" />
-								        			<label for="c5" class="tree_label error-label">Errors</label>
+									          		<input type="checkbox" id="c5{{$parent.$index}}{{$index}}" />
+								        			<label for="c5{{$parent.$index}}{{$index}}" class="tree_label error-label">Errors</label>
 								        			<ul>
 								        			    <li ng-repeat="error in workPackageTab.error track by $index">
 								        			    	<span ng-click="vm.selectErrorField(workPackageTab.type, workPackageTab.index, error.index, error.field)" class="tree_label tree-detail">{{error.message}}</span>

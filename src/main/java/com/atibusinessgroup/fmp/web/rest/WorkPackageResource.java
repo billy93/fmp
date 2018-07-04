@@ -1947,18 +1947,27 @@ public class WorkPackageResource {
 		//Validasi Header
 		WorkPackage.Validation.Tab tabHeader = new WorkPackage.Validation.Tab();
 		tabHeader.setName("HEADER");
+		tabHeader.setType("Header");
+		
+		WorkPackage.Validation.Tab tabComment = new WorkPackage.Validation.Tab();
+		tabComment.setName("Comment");
+		tabComment.setType("Comment");
+		
 		List<WorkPackage.Validation.Tab.Error> errorHeader = new ArrayList<>();
+		List<WorkPackage.Validation.Tab.Error> errorsComment = new ArrayList<>();
 		
 		if(workPackage.getTargetDistribution().toUpperCase().contentEquals("ATPCO")) {
 			if(workPackage.getReviewLevel().toUpperCase().contentEquals("LSO")) {
 				if(workPackage.getSaleDate() == null) {
 					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 		    		err1.setMessage("Sale start date is required");
+		    		err1.setField("saleDate");
 		    		errorHeader.add(err1);
 				}
 				if(workPackage.getBusinessArea() == null || workPackage.getBusinessArea().contentEquals("")) {
 					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 		    		err1.setMessage("Business area is required");
+		    		err1.setField("businessArea");
 		    		errorHeader.add(err1);
 				}
 				if(workPackage.getName() == null || workPackage.getName().contentEquals("")) {
@@ -1969,38 +1978,49 @@ public class WorkPackageResource {
 			}else if(workPackage.getReviewLevel().toUpperCase().contentEquals("HO")) {
 				if(workPackage.getSaleDate() == null) {
 					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					err1.setField("saleDate");
 		    		err1.setMessage("Sale start date is required");
 		    		errorHeader.add(err1);
 				}
 				if(workPackage.getBusinessArea() == null || workPackage.getBusinessArea().contentEquals("")) {
 					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 		    		err1.setMessage("Business area is required");
+		    		err1.setField("businessArea");
 		    		errorHeader.add(err1);
 				}
 				if(workPackage.getName() == null || workPackage.getName().contentEquals("")) {
 					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 		    		err1.setMessage("Name is required");
+		    		err1.setField("name");
 		    		errorHeader.add(err1);
 				}
 				if(workPackage.getFilingDate() == null) {
 					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 		    		err1.setMessage("Filing date is required");
+		    		err1.setField("filingDate");
 		    		errorHeader.add(err1);
 				}
 				if(workPackage.getInterofficeComment() == null || workPackage.getInterofficeComment().size() < 1) {
 					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 		    		err1.setMessage("IN is required");
-		    		errorHeader.add(err1);
+		    		err1.setField("interofficeComment");
+//		    		errorHeader.add(err1);
+		    		errorsComment.add(err1);
 				}
 			}
 			
+			tabComment.setError(errorsComment);
 			tabHeader.setError(errorHeader);
 			
 			errorsCount += errorHeader.size();
-	    	if(errorHeader.size() > 0 || errorHeader.size() > 0) {
+			errorsCount += errorsComment.size();
+			
+	    	if(errorHeader.size() > 0) {
 	    		tabs.add(tabHeader);
 	    	}
-			
+	    	if(errorsComment.size() > 0) {
+	    		tabs.add(tabComment);
+	    	}
 		}else if(workPackage.getTargetDistribution().toUpperCase().contentEquals("MARKET")) {
 			if(workPackage.getReviewLevel().toUpperCase().contentEquals("LSO")) {
 				if(workPackage.getName() == null || workPackage.getName().contentEquals("")) {
@@ -2381,14 +2401,18 @@ public class WorkPackageResource {
 		}
 		
 		//Validasi Addon Fare
+		sheetIndex = 0;
 		for(WorkPackageFareSheet wpfs : workPackage.getAddonFareSheet()) {
 			WorkPackage.Validation.Tab tab1 = new WorkPackage.Validation.Tab();
 	    		tab1.setName(wpfs.getAddonFaresName());
-	    		
+	    		tab1.setType("Addon");
+	    		tab1.setIndex(sheetIndex+"");
 	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
 	    		
 	    			List<String> rejectStatus = new ArrayList<>();
 		    		List<WorkPackageFare> fares = wpfs.getFares();
+		    		
+		    		int index = 0;
 					for(WorkPackageFare fare : fares) {
 						if(fare.getStatus() != null || !fare.getStatus().contentEquals("")) {
 							if(fare.getStatus().contentEquals("REJECTED")) {
@@ -2401,36 +2425,44 @@ public class WorkPackageResource {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Description is required");
+					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
 							if(fare.getOrigin() == null || fare.getOrigin().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Origin is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareOrigin");
 					    		errors.add(err1);
 							}
 							if(fare.getDestination() == null || fare.getDestination().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Destination is required");
+					    		err1.setField("addonFareDestination");
+					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
 							if(fare.getTypeOfJourney() == null || fare.getTypeOfJourney().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("OW/RT is required");
+					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
 							if(fare.getCurrency() == null || fare.getCurrency().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Currency is required");
+					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
 							if(fare.getAmount() == null || fare.getAmount().contentEquals("")) {									
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Base Amt is required");
+					    		err1.setIndex(index+"");
 					    		errors.add(err1);						    		
 							}
 							
@@ -2438,10 +2470,12 @@ public class WorkPackageResource {
 								if(fare.getTravelStart().isAfter(fare.getTravelEnd())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Travel Start Date must be less than or equal to Travel End Date");
+						    		err1.setIndex(index+"");
 						    		errors.add(err1);
 								}else if(fare.getTravelEnd().isBefore(fare.getTravelStart())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Travel End Date cannot be earlier than Sales End Date");
+						    		err1.setIndex(index+"");
 						    		errors.add(err1);
 								}
 							}
@@ -2449,11 +2483,13 @@ public class WorkPackageResource {
 								if(fare.getTravelStart() == null) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Travel Start Date cannot be blank");
+						    		err1.setIndex(index+"");
 						    		errors.add(err1);
 								}
 								if(fare.getTravelEnd() == null) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Travel End Date cannot be blank");
+						    		err1.setIndex(index+"");
 						    		errors.add(err1);
 								}
 							}
@@ -2462,11 +2498,13 @@ public class WorkPackageResource {
 								if(fare.getSaleStart().isAfter(fare.getSaleEnd())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Sale Start Date must be less than or equal to Sale End Date");
+						    		err1.setIndex(index+"");
 						    		errors.add(err1);
 								}
 								if(fare.getSaleStart().isAfter(fare.getTravelStart())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Sale Start Date must be before  or equal to Travel Starte Date");
+						    		err1.setIndex(index+"");
 						    		errors.add(err1);
 								}
 							}
@@ -2490,46 +2528,54 @@ public class WorkPackageResource {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Description is required");
+					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
 							if(fare.getOrigin() == null || fare.getOrigin().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Origin is required");
+					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
 							if(fare.getDestination() == null || fare.getDestination().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Destination is required");
+					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
 							if(fare.getTypeOfJourney() == null || fare.getTypeOfJourney().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("OW/RT is required");
+					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
 							if(fare.getCurrency() == null || fare.getCurrency().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Currency is required");
+					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
 							if(fare.getAmount() == null || fare.getAmount().contentEquals("")) {									
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Base Amt is required");
+					    		err1.setIndex(index+"");
 					    		errors.add(err1);						    		
 							}
 							if(fare.getTravelStart() != null && fare.getTravelEnd() != null) {
 								if(fare.getTravelStart().isAfter(fare.getTravelEnd())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Travel Start Date must be less than or equal to Travel End Date");
+						    		err1.setIndex(index+"");
 						    		errors.add(err1);
 								}else if(fare.getTravelEnd().isBefore(fare.getTravelStart())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Travel End Date cannot be earlier than Sales End Date");
+						    		err1.setIndex(index+"");
 						    		errors.add(err1);
 								}
 							}
@@ -2537,11 +2583,13 @@ public class WorkPackageResource {
 								if(fare.getSaleStart().isAfter(fare.getSaleEnd())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Sale Start Date must be less than or equal to Sale End Date");
+						    		err1.setIndex(index+"");
 						    		errors.add(err1);
 								}
 								if(fare.getSaleStart().isAfter(fare.getTravelStart())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Sale Start Date must be before  or equal to Travel Starte Date");
+						    		err1.setIndex(index+"");
 						    		errors.add(err1);
 								}
 							}
@@ -2550,64 +2598,75 @@ public class WorkPackageResource {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Tarno is required");
+					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
 							if(fare.getTariffNumber().getTarCd() == null || fare.getTariffNumber().getTarCd().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("TarCd is required");
+					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
 							if(fare.getOrigin() == null || fare.getOrigin().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Origin is required");
+					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
 							if(fare.getDestination() == null || fare.getDestination().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Destination is required");
+					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
 							if(fare.getBucket() == null || fare.getBucket().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Add On Bucket is required");
+					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
 							if(fare.getTypeOfJourney() == null || fare.getTypeOfJourney().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("OW/RT is required");
+					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
 							if(fare.getZone() == null || fare.getZone().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Zone is required");
+					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
 							if(fare.getRtgno() == null || fare.getRtgno().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("RtgNo is required");
+					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
 							if(fare.getCurrency() == null || fare.getCurrency().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Currency is required");
+					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
 							if(fare.getTravelStart() != null && fare.getTravelEnd() != null) {
 								if(fare.getTravelStart().isAfter(fare.getTravelEnd())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Travel Start Date must be less than or equal to Travel End Date");
+						    		err1.setIndex(index+"");
 						    		errors.add(err1);
 								}else if(fare.getTravelEnd().isBefore(fare.getTravelStart())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Travel End Date cannot be earlier than Sales End Date");
+						    		err1.setIndex(index+"");
 						    		errors.add(err1);
 								}
 							}
@@ -2615,15 +2674,18 @@ public class WorkPackageResource {
 								if(fare.getSaleStart().isAfter(fare.getSaleEnd())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Sale Start Date must be less than or equal to Sale End Date");
+						    		err1.setIndex(index+"");
 						    		errors.add(err1);
 								}
 								if(fare.getSaleStart().isAfter(fare.getTravelStart())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Sale Start Date must be before  or equal to Travel Starte Date");
+						    		err1.setIndex(index+"");
 						    		errors.add(err1);
 								}
 							}
-						}						
+						}
+						index++;
 					}
 					if(rejectStatus.size() == fares.size()) {
 						WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
@@ -2660,13 +2722,16 @@ public class WorkPackageResource {
 	    	if(errors.size() > 0 || warnings.size() > 0) {
 	    		tabs.add(tab1);
 	    	}
+	    	sheetIndex++;
 		}
 		
 		//Validasi Discount
+		sheetIndex = 0;
 		for(WorkPackageFareSheet wpfs : workPackage.getDiscountFareSheet()) {
 			WorkPackage.Validation.Tab tab1 = new WorkPackage.Validation.Tab();
 	    		tab1.setName(wpfs.getDiscountFaresName());
-	    		
+	    		tab1.setType("Discount");
+	    		tab1.setIndex(sheetIndex+"");
 	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
 	    		
 		    		List<String> rejectStatus = new ArrayList<>();
@@ -3054,13 +3119,16 @@ public class WorkPackageResource {
 	    	if(errors.size() > 0 || warnings.size() > 0) {
 	    		tabs.add(tab1);
 	    	}
+	    	sheetIndex++;
 		}
 		
 		//Validasi Market Fare
+		sheetIndex = 0;
 		for(WorkPackageFareSheet wpfs : workPackage.getMarketFareSheet()) {
 			WorkPackage.Validation.Tab tab1 = new WorkPackage.Validation.Tab();
 	    		tab1.setName(wpfs.getMarketFaresName());
-	    		
+	    		tab1.setType("Market");
+	    		tab1.setIndex(sheetIndex+"");
 	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
 	    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
 	    		
@@ -3314,13 +3382,16 @@ public class WorkPackageResource {
 	    	if(errors.size() > 0 || warnings.size() > 0) {
 	    		tabs.add(tab1);
 	    	}
+	    	sheetIndex++;
 		}
 		
 		//Validasi Waiver Fare
+		sheetIndex = 0;
 		for(WorkPackageFareSheet wpfs : workPackage.getWaiverFareSheet()) {
 			WorkPackage.Validation.Tab tab1 = new WorkPackage.Validation.Tab();
 	    		tab1.setName(wpfs.getWaiverFaresName());
-	    		
+	    		tab1.setType("Waiver");
+	    		tab1.setIndex(sheetIndex+"");
 	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
 	    		
 		    		List<String> rejectStatus = new ArrayList<>();
@@ -3540,6 +3611,7 @@ public class WorkPackageResource {
 	    	if(errors.size() > 0 || warnings.size() > 0) {
 	    		tabs.add(tab1);
 	    	}
+	    	sheetIndex++;
 		}
 		validation.setTab(tabs);
 		validation.setErrorsCount(errorsCount);

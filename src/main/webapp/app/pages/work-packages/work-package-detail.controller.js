@@ -6272,6 +6272,7 @@
       
       vm.selectErrorField = function(sheetType, sheetIndex, fareIndex, field){
     	  if(sheetType == 'Fares'){
+    		  vm.selectTab(sheetIndex);
     		  for(var x=0;x<vm.workPackage.fareSheet[sheetIndex].fares.length;x++){
     			  vm.workPackage.fareSheet[sheetIndex].fares[x].field = {};
         	  }
@@ -6280,7 +6281,47 @@
     		  
     		  var fieldName = ""+field+sheetIndex+fareIndex;
     		  var elmnt = $window.document.getElementsByName(fieldName)[0];
-    		  elmnt.scrollIntoView();
+    		  var offset_top = elmnt.offsetTop;
+//    		  var offset_left = elmnt.offsetLeft;
+    		  var elmntPage = $window.document.querySelector(".table-wrapper");
+    		  elmntPage.scrollTop = offset_top;
+//    		  elmntPage.scrollLeft = offset_left;
+    		  elmnt.focus();
+    	  }
+    	  else if(sheetType == 'Addon'){
+    		  vm.selectAddonTab(sheetIndex);
+    		  for(var x=0;x<vm.workPackage.addonFareSheet[sheetIndex].fares.length;x++){
+    			  vm.workPackage.addonFareSheet[sheetIndex].fares[x].field = {};
+        	  }
+    		  
+    		  vm.workPackage.addonFareSheet[sheetIndex].fares[fareIndex].field[field] = !vm.workPackage.addonFareSheet[sheetIndex].fares[fareIndex].field[field]; 
+    		  
+    		  var fieldName = ""+field+sheetIndex+fareIndex;
+    		  alert(fieldName);
+    		  var elmnt = $window.document.getElementsByName(fieldName)[0];
+    		  var offset_top = elmnt.offsetTop;
+//    		  var offset_left = elmnt.offsetLeft;
+    		  var elmntPage = $window.document.querySelector(".table-wrapper");
+    		  elmntPage.scrollTop = offset_top;
+//    		  elmntPage.scrollLeft = offset_left;
+    		  elmnt.focus();
+    	  }
+    	  else if(sheetType == 'Header'){
+    		  var elmnt = $window.document.getElementsByName(field)[0];
+    		  var offset_top = elmnt.offsetTop;
+    		  var elmntPage = $window.document.querySelector(".page-wrapper");
+    		  elmntPage.scrollTop = offset_top;
+    		  elmnt.focus();
+    	  }
+    	  else if(sheetType == 'Comment'){
+    		  if(field == 'interofficeComment'){
+    			  vm.selectCommentTab('interofficeComment');
+    		  }
+    		  var elmnt = $window.document.getElementsByName(field)[0];
+    		  var offset_top = elmnt.offsetTop;
+    		  var elmntPage = $window.document.querySelector(".page-wrapper");
+    		  elmntPage.scrollTop = offset_top;
+    		  elmnt.focus();
     	  }
       }
       
