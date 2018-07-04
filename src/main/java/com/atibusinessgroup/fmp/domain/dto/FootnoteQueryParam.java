@@ -1,16 +1,20 @@
 package com.atibusinessgroup.fmp.domain.dto;
 
+import java.util.Date;
+
 public class FootnoteQueryParam {
 	
 	private String cxr;
 	private String tarNo;
 	private String ftnt;
 	private String catNo;
-	private Object saleDateFrom;
-	private Object saleDateTo;
-	private Object travelDateFrom;
-	private Object travelDateTo;
-	private Object completedDateFrom;
+	private Date saleDateFrom;
+	private Date saleDateTo;
+	private String saleDateType;
+	private Date travelDateFrom;
+	private Date travelDateTo;
+	private String travelDateType;
+	private Date completedDateFrom;
 	private String travelOpt;
 	private boolean includeDiscDate;
 	
@@ -43,31 +47,43 @@ public class FootnoteQueryParam {
 	public Object getSaleDateFrom() {
 		return saleDateFrom;
 	}
-	public void setSaleDateFrom(Object saleDateFrom) {
+	public void setSaleDateFrom(Date saleDateFrom) {
 		this.saleDateFrom = saleDateFrom;
 	}
 	public Object getSaleDateTo() {
 		return saleDateTo;
 	}
-	public void setSaleDateTo(Object saleDateTo) {
+	public void setSaleDateTo(Date saleDateTo) {
 		this.saleDateTo = saleDateTo;
+	}
+	public String getSaleDateType() {
+		return saleDateType;
+	}
+	public void setSaleDateType(String saleDateType) {
+		this.saleDateType = saleDateType;
 	}
 	public Object getTravelDateFrom() {
 		return travelDateFrom;
 	}
-	public void setTravelDateFrom(Object travelDateFrom) {
+	public void setTravelDateFrom(Date travelDateFrom) {
 		this.travelDateFrom = travelDateFrom;
 	}
 	public Object getTravelDateTo() {
 		return travelDateTo;
 	}
-	public void setTravelDateTo(Object travelDateTo) {
+	public void setTravelDateTo(Date travelDateTo) {
 		this.travelDateTo = travelDateTo;
+	}
+	public String getTravelDateType() {
+		return travelDateType;
+	}
+	public void setTravelDateType(String travelDateType) {
+		this.travelDateType = travelDateType;
 	}
 	public Object getCompletedDateFrom() {
 		return completedDateFrom;
 	}
-	public void setCompletedDateFrom(Object completedDateFrom) {
+	public void setCompletedDateFrom(Date completedDateFrom) {
 		this.completedDateFrom = completedDateFrom;
 	}
 	public String getTravelOpt() {
@@ -75,6 +91,12 @@ public class FootnoteQueryParam {
 	}
 	public void setTravelOpt(String travelOpt) {
 		this.travelOpt = travelOpt;
+	}
+	public boolean isIncludeDiscDate() {
+		return includeDiscDate;
+	}
+	public void setIncludeDiscDate(boolean includeDiscDate) {
+		this.includeDiscDate = includeDiscDate;
 	}
 	public int getPage() {
 		return page;
@@ -88,16 +110,6 @@ public class FootnoteQueryParam {
 	public void setSize(int size) {
 		this.size = size;
 	}
-	public boolean isIncludeDiscDate() {
-		return includeDiscDate;
-	}
-	public void setIncludeDiscDate(boolean includeDiscDate) {
-		this.includeDiscDate = includeDiscDate;
-	}
-	
-	
-	
-	
 	
 	
 }

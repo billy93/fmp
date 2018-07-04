@@ -100,7 +100,7 @@
 									</div>
 									<div class="col-md-4 no-pad">
 										<select class="form-control" name="saleOption" id="saleOpt"
-											ng-model="vm.queryParams.saleOpt"
+											ng-model="vm.queryParams.saleDateType"
 											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '014'">
 											<option value="1">Active In</option>
 											<option value="2">Exact Match</option>
@@ -132,7 +132,7 @@
 									</div>
 									<div class="col-md-4 no-pad">
 										<select class="form-control" name="travelOption"
-											id="travelOpt" ng-model="vm.queryParams.travelOpt"
+											id="travelOpt" ng-model="vm.queryParams.travelDateType"
 											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '015'">
 											<option value="1">Active In</option>
 											<option value="2">Exact Match</option>
@@ -163,8 +163,8 @@
 										</select>
 									</div>
 									<div class="col-md-4 no-pad">
-										<select class="form-control" name="travelOption"
-											id="travelOpt" ng-model="vm.queryParams.travelOpt"
+										<select class="form-control" name="completedOption"
+											id="travelOpt"
 											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '015'">
 											<option value="2">Exact Match</option>
 										</select>
@@ -209,13 +209,13 @@
 						</thead>
 						<tbody>
 							<tr ng-repeat="ftntQuery in vm.footnoteQueries"
-								ng-click="vm.selectedRow = ftntQuery; vm.getFtnt(ftntQuery); vm.getFtnt2(ftntQuery); vm.showDetail()"
+								ng-click="vm.selectedRow = ftntQuery; vm.getFtnt(ftntQuery);  vm.showDetail()"
 								ng-class="{'selected': vm.selectedRow == ftntQuery}">
 								<td>{{$index + 1}}</td>
 								<td>{{ftntQuery.cxr}}</td>
 								<td>{{ftntQuery.fareAddon}}</td>
 								<td>{{ftntQuery.tarNo}}</td>
-								<td>{{ftntQuery.trcd}}</td>
+								<td>{{ftntQuery.tarCd}}</td>
 								<td>{{ftntQuery.ftnt}}</td>
 								<td>{{ftntQuery.fareAddonCount}}</td>
 							</tr>
@@ -247,6 +247,12 @@
 								<th>Footnote</th>
 								<th>Effective Date</th>
 								<th>Discontinue Date</th>
+								<th>Travel Start</th>
+								<th>Travel End</th>
+								<th>Sale Start</th>
+								<th>Sale End</th>
+								<th>Travel Complete</th>
+								<th>Travel Comp. Ind</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -269,6 +275,12 @@
 								<td><span ng-if="rq.discontinueDateObject=='indef'"></span>
 									<span ng-if="rq.discontinueDateObject!='indef'">{{rq.discontinueDateObject
 										| date:'medium'}}</span></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
 							</tr>
 						</tbody>
 					</table>

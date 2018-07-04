@@ -1,11 +1,15 @@
 package com.atibusinessgroup.fmp.service.mapper;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.atibusinessgroup.fmp.domain.TariffNumber;
+import com.atibusinessgroup.fmp.domain.WorkPackageFare;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterFareMatrix;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord1;
@@ -50,7 +54,7 @@ public class AfdQueryMapper {
 		AfdQuery result = new AfdQuery();
 		
 		//AtpcoFare attributes
-		result.setAtpcoFareId(afare.getId());
+		result.setFareId(afare.getId());
 		result.setSource(afare.getSource());
 		result.setSc("S");
 		result.setTariffNo(afare.getTariffNo());
@@ -107,10 +111,28 @@ public class AfdQueryMapper {
 		
 		//Rule attributes
 		if (cat03s != null) {
+			List<Date> firsts = new ArrayList<>();
+			List<Date> lasts = new ArrayList<>();
 			for (CategoryObject cat03o:cat03s) {
 				AtpcoRecord3Cat03 cat03 = (AtpcoRecord3Cat03) cat03o.getCategory();
-				result.setFirstSeasonDate(DateUtil.convertSeasonDayMonthYearFormat(cat03.getDate_start_dd(), cat03.getDate_start_mm(), cat03.getDate_start_yy()));
-				result.setLastSeasonDate(DateUtil.convertSeasonDayMonthYearFormat(cat03.getDate_stop_dd(), cat03.getDate_stop_mm(), cat03.getDate_stop_yy()));
+				String first = DateUtil.convertSeasonDayMonthYearFormat(cat03.getDate_start_dd(), cat03.getDate_start_mm(), cat03.getDate_start_yy());
+				try {
+					Date dfirst = new SimpleDateFormat("ddMMMyyyy").parse(first);
+					firsts.add(dfirst);
+				} catch (Exception e) {
+				}
+				String last = DateUtil.convertSeasonDayMonthYearFormat(cat03.getDate_stop_dd(), cat03.getDate_stop_mm(), cat03.getDate_stop_yy());
+				try {
+					Date dlast = new SimpleDateFormat("ddMMMyyyy").parse(last);
+					lasts.add(dlast);
+				} catch (Exception e) {
+				}
+			}
+			if (firsts.size() > 0) {
+				result.setFirstSeasonDate(Collections.min(firsts));
+			}
+			if (lasts.size() > 0) {
+				result.setLastSeasonDate(Collections.max(lasts));
 			}
 		}
 		
@@ -171,13 +193,19 @@ public class AfdQueryMapper {
 			}
 		}
 		
-		if (result.getTourCode() != null && cat27s != null) {
+		if (result.getTourCode() == null && cat27s != null) {
 			for (CategoryObject cat27o:cat27s) {
 				AtpcoRecord3Cat27 cat27 = (AtpcoRecord3Cat27) cat27o.getCategory();
 				if (cat27.getText_table_no_996() != null && !cat27.getText_table_no_996().trim().isEmpty()) {
 					TextTable textTable996 = atpcoRecord3CategoryCustomRepository.findRecord3TextTable(cat27.getText_table_no_996().trim());
 					String textTable = AtpcoDataConverterUtil.convertTextTableToText(textTable996);
-					result.setTourCode(textTable);
+					for (String word:textTable.split("\\W")) {
+						word = word.replaceAll("[\n\r\t]", "").trim();
+						if (word.startsWith("RZ")) {
+							result.setTourCode(word);
+							break;
+						}
+					}
 				}
 			}
 		}
@@ -212,6 +240,51 @@ public class AfdQueryMapper {
 		}
 		
 		result.setFocusDate(focusDate);
+		
+		return result;
+	}
+
+	public AfdQuery convertMarketFare(WorkPackageFare fare, String wpObjectId, String fareId, String woId, String woName) {
+		AfdQuery result = new AfdQuery();
+		
+		//AtpcoFare attributes
+		result.setFareId(fareId);
+		result.setSource("M");
+		result.setSc("S");
+		result.setTariffNo("MKT");
+		result.setTariffCode("MARKET");
+		
+		result.setCarrierCode(fare.getCarrier());
+		result.setOriginCity(fare.getOrigin());
+		result.setOriginCountry(null);
+		result.setDestinationCity(fare.getDestination());
+		result.setDestinationCountry(null);
+		result.setFareClassCode(fare.getFareBasis());
+		result.setOwrt(fare.getTypeOfJourney());
+		result.setFootnote(fare.getFootnote1());
+		result.setRoutingNo(fare.getRtgno());
+		result.setRuleNo(fare.getRuleno());
+		result.setMaximumPermittedMileage(null);
+		result.setCurrencyCode(fare.getCurrency());
+		result.setBaseAmount(TypeConverterUtil.convertStringToDouble(fare.getAmount()));
+		result.setEffectiveDate(null);
+		result.setDiscontinueDate(null);
+		result.setGlobalIndicator(fare.getGlobal());
+		result.setSaleStartDate(fare.getSaleStart());
+		result.setSaleEndDate(fare.getSaleEnd());
+		result.setGfsReference(null);
+		result.setGfsDate(null);
+		result.setBookingClass(fare.getBookingClass());
+		result.setPaxType(fare.getPassengerType());
+		result.setSeason(fare.getSeasonType());
+		result.setFareType(fare.getFareType());
+		result.setCabin(fare.getCabin());
+		result.setTravelStartDate(fare.getTravelStart());
+		result.setTravelEndDate(fare.getTravelEnd());
+		result.setTravelComplete(fare.getTravelComplete());
+		result.setWpId(woId);
+		result.setWpObjectId(wpObjectId);
+		result.setWpName(woName);
 		
 		return result;
 	}

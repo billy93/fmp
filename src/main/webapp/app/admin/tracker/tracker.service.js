@@ -14,7 +14,7 @@
         var listener = $q.defer();
         var connected = $q.defer();
         var alreadyConnectedOnce = false;
-
+        var headers = {};
         var service = {
             connect: connect,
             disconnect: disconnect,
@@ -30,16 +30,11 @@
             //building absolute path so that websocket doesn't fail when deploying with a context path
             var loc = $window.location;
             var url = '//' + loc.host + loc.pathname + 'websocket/tracker';
-            var authToken = AuthServerProvider.getToken();
-            if(authToken){
-                url += '?access_token=' + authToken;
-            }
-            console.log(url);
             var socket = new SockJS(url, {transports: ['websocket']});
             stompClient = Stomp.over(socket);
+            stompClient.debug = null;
             var stateChangeStart;
-            var headers = {};
-            stompClient.connect(headers, function() {
+            stompClient.connect({}, function() {
                 connected.resolve('success');
                 sendActivity();
                 if (!alreadyConnectedOnce) {
@@ -69,9 +64,15 @@
 
         function sendActivity() {
             if (stompClient !== null && stompClient.connected) {
+            	var authToken = AuthServerProvider.getToken();
+            	if(authToken){
+                	headers = {
+                			'Authorization': 'Bearer ' + authToken
+                	}
+                }
                 stompClient
                     .send('/topic/activity',
-                    {},
+                  	headers,
                     angular.toJson({'page': $rootScope.toState.name}));
             }
         }

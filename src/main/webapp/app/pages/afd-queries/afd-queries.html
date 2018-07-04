@@ -257,7 +257,7 @@
 <!-- 							</div> -->
 							<div class="clearfix">
 								<div class="pull-right pv1">
-									<button type="button" class="btn btn-default small" ng-click="vm.query()">Query</button>
+									<button type="button" class="btn btn-default small" ng-click="vm.categoryRules = null; vm.query()">Query</button>
 									<button type="reset" ng-click="vm.reset()" class="btn btn-default small">Reset</button>
 								</div>
 							</div>
@@ -266,10 +266,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-12 text-center">
-			<label ng-if="vm.noDataAvailable">No Data Available</label>
-		</div>
-		<div class="table-wrapper mb2" ng-if="vm.afdQueries.length > 0">
+		<div class="table-wrapper mb2">
 			<div class="datatable-wrapper form-inline">
 				<div class="clearfix">
 					<div class="pull-right w50">
@@ -391,7 +388,7 @@
 			                </tr>
 			            </thead>
 			            <tbody infinite-scroll="vm.loadPage(vm.page + 1)" infinite-scroll-disabled="vm.disableInfiniteScroll || vm.isLastPage || vm.isLoading" infinite-scroll-container="'.table-responsive'">
-			                <tr ng-repeat="afdQuery in vm.afdQueries track by afdQuery.atpcoFareId" ng-click="vm.setSelectedRow($index, afdQuery); vm.getRules(afdQuery)" ng-class="{'selected': vm.selectedRows[$index] == afdQuery}">
+			                <tr ng-repeat="afdQuery in vm.afdQueries track by afdQuery.fareId" ng-click="vm.setSelectedRow($index, afdQuery); vm.getRules(afdQuery)" ng-class="{'selected': vm.selectedRows[$index] == afdQuery}">
 			                    <td><a ui-sref="system-parameter-detail({id:afdQuery.id})">{{$index + 1}}</a></td>
 			                    <td>{{afdQuery.source}}</td>
 			                    <td>{{afdQuery.sc}}</td>
@@ -448,10 +445,10 @@
 			                	</td>
 			               		<td>{{afdQuery.fareType}}</td>
 			                	<td>{{afdQuery.paxType}}</td>
-			                	<td></td>
-			                	<td></td>
-			                	<td></td>
-			                	<td></td>
+			                	<td><a ui-sref="work-package-detail({id:afdQuery.wpObjectId})">{{afdQuery.wpId}}</a></td>
+			                	<td>{{afdQuery.wpName}}</td>
+			                	<td>{{afdQuery.tourCode}}</td>
+			                	<td>{{afdQuery.cat50Title}}</td>
 			                	<td></td>
 <!-- 			                	<td></td> -->
 <!-- 			                	<td></td> -->
@@ -461,7 +458,16 @@
 			                </tr>
 			            </tbody>
 			        </table>
-			   		<label ng-if="vm.isLastPage" style="width: 100%; text-align: center;">You have reached the end of the page &nbsp;<i style="font-size: 10px !important;" class="glyphicon glyphicon-chevron-up"></i></label>
+			        <div class="col-md-12 text-center" ng-if="vm.isLoading">
+						<div class="spinner">
+						  <div class="double-bounce1"></div>
+						  <div class="double-bounce2"></div>
+						</div>
+					</div>
+					<div class="col-md-12 text-center">
+						<label ng-if="(vm.noDataAvailable || vm.afdQueries.length == 0) && !vm.isLoading" style="text-align: center; margin: 0">No Data Available</label>
+						<label ng-if="vm.isLastPage && !vm.noDataAvailable" style="text-align: center; margin: 0">You have reached the end of the page &nbsp;<i style="font-size: 10px !important;" class="glyphicon glyphicon-chevron-up"></i></label>
+					</div>
 			    </div>
 			</div>
 		</div>

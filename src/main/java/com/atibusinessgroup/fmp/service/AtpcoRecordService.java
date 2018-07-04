@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.CharUtils;
@@ -86,6 +88,8 @@ public class AtpcoRecordService {
 	private final PassengerRepository passengerRepository;
 	private final MongoTemplate mongoTemplate;
 
+	private Date minimumDate = null, maximumDate = null;
+	
 	public AtpcoRecordService(AtpcoCcfParcityCustomRepository atpcoCcfParcityCustomRepository, AtpcoRecord3CategoryCustomRepository atpcoRecord3CategoryCustomRepository, SurchargeCodeRepository surchargeCodeRepository,
 			TourTypeCodeRepository tourTypeCodeRepository, PassengerRepository passengerRepository, MongoTemplate mongoTemplate) {
 		this.atpcoCcfParcityCustomRepository = atpcoCcfParcityCustomRepository;
@@ -94,6 +98,9 @@ public class AtpcoRecordService {
 		this.tourTypeCodeRepository = tourTypeCodeRepository;
 		this.passengerRepository = passengerRepository;
 		this.mongoTemplate = mongoTemplate;
+		
+		minimumDate = DateUtil.getMinOrMaxDate("Min");
+		maximumDate = DateUtil.getMinOrMaxDate("Max");
 	}
 
 	public Date resolveFocusDate(Date paramFrom, Object effective, Object discontinue) {
@@ -161,6 +168,30 @@ public class AtpcoRecordService {
 		return match;
 	}
 	
+	public boolean compareValueWithParamTourCode(String value, String param) {
+		boolean match = false;
+		
+		if (param != null && !param.trim().isEmpty()) {
+			if (value != null && !value.trim().isEmpty()) {
+				if (param.contains("*")) {
+					String ptn = "^" + param.replace("*", ".*") + "$";
+					Pattern pattern = Pattern.compile(ptn);
+					Matcher matcher = pattern.matcher(value);
+					match = matcher.find();
+				}
+				
+				if (value.trim().contentEquals(param.trim())) {
+					match = true;
+				}
+			}
+		} else {
+			match = true;
+		}
+		
+		
+		return match;
+	}
+	
 	public boolean compareValueWithParamDate(Object startDate, Object endDate, Date paramFrom,
 			Date paramTo, String option) {
 		boolean match = false;
@@ -168,30 +199,29 @@ public class AtpcoRecordService {
 		Date start = DateUtil.convertObjectToDate(startDate);
 		Date end = DateUtil.convertObjectToDate(endDate);
 		
+		if (start == null) {
+			start = minimumDate;
+		}
+		
+		if (end == null) {
+			end = maximumDate;
+		}
+		
+		if (paramFrom == null) {
+			paramFrom = minimumDate;
+		}
+		
+		if (paramTo == null) {
+			paramTo = maximumDate;
+		}
+		
 		if (option != null && option.contentEquals("A")) {
-			if (paramFrom != null && paramTo != null) {
-				if ((start == null || start.before(paramFrom) || start.equals(paramFrom)) &&
-						(end == null || end.after(paramTo) || end.equals(paramTo))) {
-					match = true;
-				}
-			} else {
-				if (paramFrom == null && paramTo != null) {
-					if (end == null || end.after(paramTo) || end.equals(paramTo) && (start == null || start.before(paramTo) || start.equals(paramTo))) {
-						match = true;
-					}
-				} else if (paramFrom != null && paramTo == null) {
-					if ((start == null || start.before(paramFrom) || start.equals(paramFrom)) && (end == null || end.after(paramFrom) || end.equals(paramFrom))) {
-						match = true;
-					}
-				} else {
-					match = true;
-				}
+			if (!start.after(paramTo) && !end.before(paramFrom)) {
+				match = true;
 			}
 		} else if (option != null && option.contentEquals("E")) {
-			if (paramFrom != null && paramTo != null && start != null && end != null) {
-				if (paramFrom.equals(start) && paramTo.equals(end)) {
-					match = true;
-				}
+			if (paramFrom.equals(start) && paramTo.equals(end)) {
+				match = true;
 			}
 		}
 		 
@@ -596,6 +626,7 @@ public class AtpcoRecordService {
 					
 					attributes.add(convertObjectToCategoryAttribute(AtpcoDataConverterUtil.convertCategoryTypeToName(type), AtpcoDataConverterUtil.convertRelationshipToName(relationship), category, cat));
 				} catch (Exception e) {
+					System.out.println(category);
 					e.printStackTrace();
 				}
 			}
