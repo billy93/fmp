@@ -67,7 +67,8 @@
         vm.passengers = passengers;
         vm.currencies = currencies;
         vm.indexSelectedTab = 0;
-        $scope.dateformat = "yyyy-MM-dd";
+//        $scope.dateformat = "yyyy-MM-dd";
+        $scope.dateformat = "dd-MM-yyyy";
         vm.optionFare = fareTypes;
         vm.atpcoFareTypes = atpcoFareTypes;
                            
@@ -1618,7 +1619,13 @@
 //	        			vm.workPackage.addonFareSheet.push(angular.copy(vm.workPackage.addonFareSheet[x]));
 	        			if(vm.workPackage.addonFareSheet[x].fares.length > 0){
 		        			clipboardSheet.sheet = angular.copy(vm.workPackage.addonFareSheet[x]);
-		        			clipboardSheet.type = "addon";
+		        			
+		        			if(vm.workPackage.type == 'REGULAR'){
+		        				clipboardSheet.type = "addon-fares";
+		        			}
+		        			else if(vm.workPackage.type == 'MARKET'){
+		        				clipboardSheet.type = "addon-market";
+		        			}
 	        			}
 	        			break;
 	        		}
@@ -1708,36 +1715,80 @@
         //END SHEET FUNCTION
         
         vm.pasteSheet = function(){
-//        	alert('Paste Sheet');
         	if(vm.workPackage.reviewLevel != 'DISTRIBUTION'){
-	        	$uibModal.open({
-	                templateUrl: 'app/pages/work-packages/work-package-add-sheet-dialog.html',
-	                controller: 'WorkPackageAddSheetDialogController',
-	                controllerAs: 'vm',
-	                backdrop: 'static',
-	                size: 'lg',
-	                windowClass: 'full-page-modal',
-	                resolve: {
-	                	workPackage: function(){
-	                		return vm.workPackage;
-	                	},
-	                    fareTypes: ['FareType', function(FareType) {
-	                        return FareType.getAll().$promise;
-	                    }],
-	                    sheet: function(){
-	                    	return ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
-	                    }
-	                }
-				}).result.then(function(option) {
-					var clipboardSheet = ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
-					clipboardSheet.then(function(result){
-						vm.addTab(option, result.sheet.fares);
-						alert('Paste Sheet Success');
-					});
-	            }, function() {
-	        			
-	            });
+        		ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise.then(function(sheet){
+        			if(sheet != null){
+        	        	if(vm.workPackage.type == 'REGULAR'){
+        		        	if(sheet.type == 'fares' || sheet.type == 'addon-fares'){
+        		        		vm.openAddSheetDialog();
+        		        	}
+        		        	else{
+        		        		alert('No sheet copied');   
+        		        	}
+        	        	}
+        	        	else if(vm.workPackage.type == 'MARKET'){
+        	        		if(sheet.type == 'market' || sheet.type == 'addon-market'){
+        		        		vm.openAddSheetDialog();        		        		
+        		        	}
+        	        		else{
+        		        		alert('No sheet copied');   
+        		        	}
+        	        	}
+        	        	else if(vm.workPackage.type == 'DISCOUNT'){
+        	        		if(sheet.type == 'discount'){
+        		        		vm.openAddSheetDialog();        		        		
+        		        	}
+        	        		else{
+        		        		alert('No sheet copied');   
+        		        	}
+        	        	}
+        	        	else if(vm.workPackage.type == 'WAIVER'){
+        	        		if(sheet.type == 'waiver'){
+        		        		vm.openAddSheetDialog();        		        		
+        		        	}
+        	        		else{
+        		        		alert('No sheet copied');   
+        		        	}
+        	        	}
+        	        	else{
+        	        		alert('No sheet copied');        	        		
+        	        	}
+        	        }
+        	        else{
+        	        	alert('No sheet copied');
+        	        }
+        		});	        	
         	}
+        };
+        
+        vm.openAddSheetDialog = function(){
+        	$uibModal.open({
+                templateUrl: 'app/pages/work-packages/work-package-add-sheet-dialog.html',
+                controller: 'WorkPackageAddSheetDialogController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full-page-modal',
+                resolve: {
+                	workPackage: function(){
+                		return vm.workPackage;
+                	},
+                    fareTypes: ['FareType', function(FareType) {
+                        return FareType.getAll().$promise;
+                    }],
+                    sheet: function(){
+                    	return ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
+                    }
+                }
+			}).result.then(function(option) {
+				var clipboardSheet = ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
+				clipboardSheet.then(function(result){
+					vm.addTab(option, result.sheet.fares);
+					alert('Paste Sheet Success');
+				});
+            }, function() {
+        			
+            });
         };
         
         vm.faresActionButton = [];
@@ -4853,7 +4904,7 @@
 	      });
 	  }
       
-      vm.agent = function(){
+      vm.agent = function(disabled){
 	    	  	var object = {
 	    			agents: vm.workPackage.agent
 	    	 	}
@@ -4865,7 +4916,8 @@
 	          backdrop: 'static',
 	          size: 'lg',
 	          resolve: {
-	              entity: object
+	              entity: object,
+		          isDisabled : disabled
 	          }
 	      }).result.then(function(agent) {
 	      	  vm.workPackage.agent = agent;
@@ -4969,7 +5021,7 @@
       
       //Waiver Function
       vm.calculateFareLost = function(fare){
-    	  if(fare.waiverApprovedFare != null && fare.waiverNewBasicFare != null){
+    	  if(fare.waiverApprovedFare != null || fare.waiverNewBasicFare != null){
     		  fare.waiverFareLost = parseInt(fare.waiverApprovedFare) - parseInt(fare.waiverNewBasicFare);
     		  if(fare.waiverTotalPax !=null && fare.waiverPenaltyLostAmount != null){
         		  fare.waiverTotalLost = (parseInt(fare.waiverFareLost)+parseInt(fare.waiverPenaltyLostAmount))*parseInt(fare.waiverTotalPax);
@@ -4977,7 +5029,7 @@
     	  }
       }
       vm.calculatePenaltyLost = function(fare){
-    	  if(fare.waiverApprovedPn != null && fare.waiverOriginalPn != null){
+    	  if(fare.waiverApprovedPn != null || fare.waiverApprovedPn != undefined || fare.waiverOriginalPn != null || fare.waiverOriginalPn != undefined){
     		  fare.waiverPenaltyLostPercent = (parseInt(fare.waiverApprovedPn) - parseInt(fare.waiverOriginalPn))/parseInt(fare.waiverApprovedPn)*100;
     		  fare.waiverPenaltyLostAmount = parseInt(fare.waiverApprovedPn) - parseInt(fare.waiverOriginalPn);
     		  if(fare.waiverTotalPax !=null && fare.waiverFareLost != null){
@@ -6178,6 +6230,28 @@
     		  }
     	  }
     	  return disabled;
+      }
+      
+      vm.lockedOnly = function(wp){
+    	  var disabled = false;
+    	  if(wp.locked == true && wp.locked !=null){
+    		  if( wp.lockedBy == vm.user.login){
+    			  disabled = false;
+    		  }else{
+    			  disabled = true;
+    		  }    		  
+    	  } 
+    	  return disabled;
+      }
+      
+      vm.reviewOnly = function(wp){
+    	  var disabled = false;
+    	  if(vm.user.reviewLevels.indexOf(wp.reviewLevel) > -1){
+			  disabled = false;
+		  }else{
+			  disabled = true;  
+		  }
+    	  return disabled;  
       }
       
       vm.getTooltip = function(value){

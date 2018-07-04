@@ -2014,6 +2014,11 @@ public class WorkPackageResource {
 		    		err1.setMessage("Name is required");
 		    		errorHeader.add(err1);
 				}
+				if(workPackage.getPriority() == null || workPackage.getPriority().contentEquals("")) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Priority is required");
+		    		errorHeader.add(err1);
+				}
 				if(workPackage.getDistributionDate() == null) {
 					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 		    		err1.setMessage("Distribution Date is required");
@@ -3669,7 +3674,15 @@ public class WorkPackageResource {
         	workPackage.setStatus(Status.REVIEWING);
         	workPackageService.save(workPackage);
         }
-        if(!workPackage.isLocked()) {
+
+        Boolean needLocked = false;
+        Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());  
+		if(user.get().getReviewLevels().indexOf(workPackage.getReviewLevel()) > -1){
+			needLocked = true;
+		}
+		
+        if(!workPackage.isLocked() && needLocked) {
+        	log.debug("HARUS di-locked ya ? : {}", id);
         	workPackage.setLocked(true);
             workPackage.setLockedBy(SecurityUtils.getCurrentUserLogin().get());
             workPackage.setLockedSince(ZonedDateTime.now());

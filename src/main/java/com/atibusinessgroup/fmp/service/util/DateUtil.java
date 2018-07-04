@@ -97,7 +97,7 @@ public class DateUtil {
 		
 		return result;
 	}
-
+	
 	public static Date getMinOrMaxDate(String type) {
 		if (type != null && type.contentEquals("Min")) {
 			return new Date(Long.MIN_VALUE);
@@ -106,5 +106,41 @@ public class DateUtil {
 		} else {
 			return null;
 		}
+	}
+		
+	public static Date convertObjectToDateWithParam(Object date, int day, int month, int year) {
+		Date result = null;
+		
+		try {
+			Date paramDate = (Date) date;
+			
+			Calendar calendar = Calendar.getInstance();
+			calendar.set(Calendar.HOUR_OF_DAY, 0);
+			calendar.set(Calendar.MINUTE, 0);
+			calendar.set(Calendar.SECOND, 0);
+			calendar.set(Calendar.MILLISECOND, 0);
+			calendar.setTime(paramDate);
+			
+			
+			calendar.add(Calendar.DATE, day);
+			calendar.add(Calendar.MONTH, day);
+			calendar.add(Calendar.YEAR, day);
+			
+			result = calendar.getTime();
+		} catch (Exception e) {
+		}
+		
+		if (result == null) {
+			try {
+				String dateString = date.toString();
+				if (dateString.contains("T") && dateString.contains("+")) {
+					String tempDate = dateString.substring(0, 10);
+					result = new SimpleDateFormat("yyyy-MM-dd").parse(tempDate);
+				}
+			} catch (Exception e) {
+			}
+		}
+		
+		return result;
 	}
 }

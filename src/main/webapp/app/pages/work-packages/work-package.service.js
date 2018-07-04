@@ -20,7 +20,7 @@
                 data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
                 data.lockedSince = DateUtils.convertDateTimeFromServer(data.lockedSince);
                 data.saleDate = DateUtils.convertDateTimeFromServer(data.saleDate);
-                
+
                 if(data.fareSheet.length > 0){
                 	for(var x=0;x<data.fareSheet.length;x++){
                 		var fares = data.fareSheet[x].fares;
@@ -35,7 +35,7 @@
                 		}
                 	}
                 }
-                
+
                 if(data.addonFareSheet.length > 0){
                 	for(var x=0;x<data.addonFareSheet.length;x++){
                 		var fares = data.addonFareSheet[x].fares;
@@ -50,7 +50,7 @@
                 		}
                 	}
                 }
-                
+
                 if(data.marketFareSheet.length > 0){
                 	for(var x=0;x<data.marketFareSheet.length;x++){
                 		var fares = data.marketFareSheet[x].fares;
@@ -65,8 +65,8 @@
                 		}
                 	}
                 }
-                
-                
+
+
                 if(data.discountFareSheet.length > 0){
                 	for(var x=0;x<data.discountFareSheet.length;x++){
                 		var fares = data.discountFareSheet[x].fares;
@@ -102,7 +102,7 @@
             }
         	return data;
         }
-        
+
         return $resource(resourceUrl, {}, {
             'query': { method: 'GET', isArray: true},
             'findDiscountDerivedFares': { method: 'POST', isArray: true, url:'api/work-packages/derived/findFares'},
@@ -158,14 +158,14 @@
 	        'unlock': {
 				method:'POST', url:'api/work-packages/unlock'
 	        },
-	        'history': { method: 'GET', isArray: true, url:'api/work-packages/history/:id'},	        
-	        'changeVersion': { method: 'POST', url:'api/work-packages/changeVersion'},	        
+	        'history': { method: 'GET', isArray: true, url:'api/work-packages/history/:id'},
+	        'changeVersion': { method: 'POST', url:'api/work-packages/changeVersion'},
 	        'exportQueue': {method:'POST', url:'api/work-packages/exportQueue'},
 	        'importFares': { method: 'POST',  url:'api/work-packages/import-fares'},
 	        'importFaresAddon': { method: 'POST',  url:'api/work-packages/import-fares-addon'},
 	        'importFaresMarket': { method: 'POST',  url:'api/work-packages/import-fares-market'},
 	        'importFaresDiscount': { method: 'POST',  url:'api/work-packages/import-fares-discount'},
-	        'importFaresWaiver': { method: 'POST',  url:'api/work-packages/import-fares-waiver'},	        
+	        'importFaresWaiver': { method: 'POST',  url:'api/work-packages/import-fares-waiver'},
 	        'exportFares': { method: 'POST',  url:'api/work-packages/export-fares'},
 	        'exportFaresAddon': { method: 'POST',  url:'api/work-packages/export-fares-addon'},
 	        'exportFaresMarket': { method: 'POST',  url:'api/work-packages/export-fares-market'},
@@ -174,6 +174,7 @@
 	        'exportDerivedFares': { method: 'POST',  url:'api/work-packages/derived/exportDerivedFares'},
 	        'publish' : { method: 'POST',  url:'api/work-packages/market/publish'},
 	        'exportRateSheet': { method: 'POST',  url:'api/work-packages/export-ratesheet'},
+	        'exportRateSheetCSV': { method: 'POST',  url:'api/work-packages/export-ratesheet-csv'},
 	        'exportRateSheetExcel': { method: 'POST',  url:'api/work-packages/export-ratesheet-excel'},
 	        'exportRateSheetWord': { method: 'POST',  url:'api/work-packages/export-ratesheet-word'},
 	        'exportRateSheetDiscount': { method: 'POST',  url:'api/work-packages/export-ratesheet-discount'},

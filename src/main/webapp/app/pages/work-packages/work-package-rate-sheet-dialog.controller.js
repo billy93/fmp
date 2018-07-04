@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('WorkPackageRateSheetDialogController', WorkPackageRateSheetDialogController);
 
-    WorkPackageRateSheetDialogController.$inject = ['$scope', 'FileSaver', 'DataUtils', '$uibModalInstance', 'WorkPackage', '$state', 'entity', 'index'];
+    WorkPackageRateSheetDialogController.$inject = ['$scope', 'FileSaver', 'DataUtils', '$uibModalInstance', 'WorkPackage', '$state', 'entity', 'index', '$stateParams', '$window'];
 
-    function WorkPackageRateSheetDialogController($scope, FileSaver, DataUtils, $uibModalInstance, WorkPackage, $state, entity, index) {
+    function WorkPackageRateSheetDialogController($scope, FileSaver, DataUtils, $uibModalInstance, WorkPackage, $state, entity, index, $stateParams, $window) {
 
         var vm = this;
         vm.workPackage = entity;
@@ -22,11 +22,45 @@
         vm.faresData = [];
         vm.fares = [];
         vm.index = index;
-        
+
         function clear () {
             $uibModalInstance.dismiss('cancel');
         }
-        
+
+        vm.exportRateSheetCSV = function(){
+      	  console.log(vm.title);
+      	  console.log(vm.workPackage)
+          var wprs = {
+        		  wp : vm.workPackage,
+        		  ruleText : vm.ruleText,
+        		  index : vm.index,
+                  header : vm.title
+          }
+  	  	  WorkPackage.exportRateSheetCSV(wprs, onExportSuccess, onExportFailure);
+    	  function onExportSuccess(result){
+    		var fileType = "data:text/csv;charset=utf-8,";
+  			var templateFilename = "RateSheet.csv";
+  			var blob = b64toBlob(result.file, fileType);
+  			FileSaver.saveAs(blob, templateFilename);
+    	  }
+
+    	  function onExportFailure(){
+    		  alert('Export to CSV failed');
+    	  }
+        }
+
+        vm.exportRateSheetScreen = function(data){
+            var wprs = {
+                wp : vm.workPackage,
+                sheetData: data,
+                ruleText: vm.ruleText,
+                index: vm.index,
+                header: vm.title
+            }
+            var window = $window.open("#/work-package-detail/screen", "_blank");
+            window.variable = wprs;
+        }
+
         vm.exportRateSheet  = function(){
       	  console.log(vm.title);
           var wprs = {
@@ -42,12 +76,12 @@
   			var blob = b64toBlob(result.file, fileType);
   			FileSaver.saveAs(blob, templateFilename);
     	  }
-    	  
+
     	  function onExportFailure(){
     		  alert('Export to PDF failed');
-    	  }    	  
+    	  }
         }
-        
+
         function clear () {
             $uibModalInstance.dismiss('cancel');
         }
@@ -67,12 +101,12 @@
   			var blob = b64toBlob(result.file, fileType);
   			FileSaver.saveAs(blob, templateFilename);
     	  }
-    	  
+
     	  function onExportFailure(){
     		  alert('Export to Excel failed');
-    	  }    	  
+    	  }
         }
-        
+
         vm.exportRateSheetExcels  = function(){
         	  console.log(vm.title);
             var wprs = {
@@ -88,12 +122,12 @@
     			var blob = b64toBlob(result.file, fileType);
     			FileSaver.saveAs(blob, templateFilename);
       	  }
-      	  
+
       	  function onExportFailure(){
       		  alert('Export to Excel failed');
-      	  }    	  
+      	  }
           }
-        
+
         vm.exportRateSheetWord  = function(){
         	  console.log(vm.title);
             var wprs = {
@@ -109,12 +143,12 @@
     			var blob = b64toBlob(result.file, fileType);
     			FileSaver.saveAs(blob, templateFilename);
       	  }
-      	  
+
       	  function onExportFailure(){
       		  alert('Export to word failed');
-      	  }    	  
+      	  }
           }
-        
+
         function b64toBlob(b64Data, contentType, sliceSize) {
         	contentType = contentType || '';
   		  	sliceSize = sliceSize || 512;
@@ -139,7 +173,7 @@
 
   		  return blob;
         }
-        
+
 //        vm.submit = function(){
 //        	vm.selectHeader = false;
 //
@@ -148,7 +182,7 @@
 //            }else{
 //            	vm.isNull = true;
 //            }
-//        	        	
+//
 //        	vm.allFares =[]
 //    		for(var x= 0; x<vm.workPackage.fareSheet[vm.index].fares.length; x++){
 //    			vm.allFares.push(vm.workPackage.fareSheet[vm.index].fares[x]);
@@ -161,9 +195,9 @@
 //    			}
 //    			vm.faresData.push(vm.fares);
 //    		}
-//        	
+//
 //        }
-        
+
         vm.submit = function(){
         	if(vm.workPackage.targetDistribution == "ATPCO"){
         		vm.selectHeader = false;
@@ -173,7 +207,7 @@
                 }else{
                 	vm.isNull = true;
                 }
-            	        	
+
             	vm.allFares =[]
         		for(var x= 0; x<vm.workPackage.fareSheet[vm.index].fares.length; x++){
         			vm.allFares.push(vm.workPackage.fareSheet[vm.index].fares[x]);
@@ -194,7 +228,7 @@
                 }else{
                 	vm.isNull = true;
                 }
-            	console.log(vm.title.length); 	
+            	console.log(vm.title.length);
             	vm.allFares =[]
         		for(var x= 0; x<vm.workPackage.marketFareSheet[vm.index].fares.length; x++){
         			vm.allFares.push(vm.workPackage.marketFareSheet[vm.index].fares[x]);
@@ -207,11 +241,11 @@
         			}
         			vm.faresData.push(vm.fares);
         		}
-        	}        	
-        	
+        	}
+
         }
-        
-        vm.addOriginalAuthorities = function () { 
+
+        vm.addOriginalAuthorities = function () {
         	if (vm.header[0] != undefined) {
         		if(vm.header.length>1){
         			for(var l=0; l<vm.header.length;l++){
@@ -267,30 +301,30 @@
             	setTitle(vm.selectedHeader[i]);
         	}
         }
-        
+
         vm.removeAllSelectedAuthorities = function(){
         	vm.selectedHeader = [];
         	vm.title = [];
         }
-        
-        vm.removeSelectedAuthorities = function () { 
+
+        vm.removeSelectedAuthorities = function () {
         	var index = vm.title.indexOf(vm.removedHeader[0])
         	console.log(vm.removedHeader[0], index);
-        	
+
         	if (index > -1) {
-        		vm.title.splice(index, 1);            
-        		vm.selectedHeader.splice(index, 1);   
+        		vm.title.splice(index, 1);
+        		vm.selectedHeader.splice(index, 1);
         		console.log(vm.title, vm.selectedHeader);
-        	}         	
+        	}
         }
-        
+
         function getFares(data,y){
         	switch (data) {
         	case "status" :
         		vm.fares.push(vm.allFares[y].status);
         	    break;
         	case "carrier":
-        		vm.fares.push(vm.allFares[y].carrier);            	
+        		vm.fares.push(vm.allFares[y].carrier);
         	    break;
         	case "action" :
         		vm.fares.push(vm.allFares[y].action);
@@ -298,7 +332,7 @@
         	case "tarno" :
         		if(vm.allFares[y].tariffNumber != null){
             		vm.fares.push(vm.allFares[y].tariffNumber.tarNo);
-            	    break;        			
+            	    break;
         		}else{
         			vm.fares.push(null);
         			break;
@@ -306,7 +340,7 @@
         	case "tarcd" :
         		if(vm.allFares[y].tariffNumber != null){
             		vm.fares.push(vm.allFares[y].tariffNumber.tarCd);
-            	    break;        			
+            	    break;
         		}else{
         			vm.fares.push(null);
         			break;
@@ -314,7 +348,7 @@
         	case "global" :
         		if(vm.allFares[y].tariffNumber != null){
             		vm.fares.push(vm.allFares[y].tariffNumber.global);
-            	    break;        			
+            	    break;
         		}else{
         			vm.fares.push(null);
         			break;
@@ -368,7 +402,7 @@
         		break;
         	case "cat12" :
         		vm.fares.push(vm.allFares[y].cat12);
-        	    
+
         		break;
         	case "totalTaxes" :
         		vm.fares.push(vm.allFares[y].totalTaxes);
@@ -395,7 +429,7 @@
 
         		break;
         	case "travelEnd" :
-        		vm.fares.push(vm.allFares[y].travelEnd);	               		
+        		vm.fares.push(vm.allFares[y].travelEnd);
 
         		break;
         	case "saleStart" :
@@ -407,24 +441,24 @@
 
         		break;
         	case "effDt" :
-        		vm.fares.push(vm.allFares[y].effDt);	 
+        		vm.fares.push(vm.allFares[y].effDt);
 
         		break;
         	case "comment" :
-        		vm.fares.push(vm.allFares[y].comment);               		
+        		vm.fares.push(vm.allFares[y].comment);
 
         		break;
         	case "travelComplete" :
-        		vm.fares.push(vm.allFares[y].travelComplete);               		
+        		vm.fares.push(vm.allFares[y].travelComplete);
 
         		break;
         	case "travelCompleteIndicator" :
-        		vm.fares.push(vm.allFares[y].travelCompleteIndicator);	               		
- 
+        		vm.fares.push(vm.allFares[y].travelCompleteIndicator);
+
         		break;
         	case "ratesheetComment" :
-        		vm.fares.push(vm.allFares[y].ratesheetComment);	               		
-  
+        		vm.fares.push(vm.allFares[y].ratesheetComment);
+
         		break;
         	case "dealCode" :
         		vm.fares.push(vm.allFares[y].dealCode);
@@ -434,7 +468,7 @@
         		break;
 			}
         }
-        
+
         function setTitle(data){
         	console.log(data);
         	switch (data) {
@@ -442,7 +476,7 @@
         		vm.title.push("Status");
         	    break;
         	case "carrier":
-        		vm.title.push("Carrier");            	
+        		vm.title.push("Carrier");
         	    break;
         	case "action" :
         		vm.title.push("Action");
@@ -502,7 +536,7 @@
         		break;
         	case "cat12" :
         		vm.title.push("Cat 12");
-        	    
+
         		break;
         	case "totalTaxes" :
         		vm.title.push("Taxes");
@@ -529,7 +563,7 @@
 
         		break;
         	case "travelEnd" :
-        		vm.title.push("Travel End");	               		
+        		vm.title.push("Travel End");
 
         		break;
         	case "saleStart" :
@@ -541,24 +575,24 @@
 
         		break;
         	case "effDt" :
-        		vm.title.push("EffDt");	 
+        		vm.title.push("EffDt");
 
         		break;
         	case "comment" :
-        		vm.title.push("Comment");               		
+        		vm.title.push("Comment");
 
         		break;
         	case "travelComplete" :
-        		vm.title.push("Travel Complete");               		
+        		vm.title.push("Travel Complete");
 
         		break;
         	case "travelCompleteIndicator" :
-        		vm.title.push("Travel Complete Indicator");	               		
- 
+        		vm.title.push("Travel Complete Indicator");
+
         		break;
         	case "ratesheetComment" :
-        		vm.title.push("RateSheet Comment");	               		
-  
+        		vm.title.push("RateSheet Comment");
+
         		break;
         	case "dealCode" :
         		vm.title.push("Deal Code");
