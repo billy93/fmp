@@ -60,8 +60,72 @@
 	         
         
         vm.save = function(){
-        	console.log(vm.option);
-        	$uibModalInstance.close(vm.option);
+        	var saveSuccess = true;
+        	if(sheet != null){
+            	if(sheet.type == 'fares'){
+            		if(vm.workPackage.fareSheet.length > 0){
+                      	for(var x=0;x<vm.workPackage.fareSheet.length;x++){
+                      		if(vm.workPackage.fareSheet[x].specifiedFaresName == vm.option.name){
+                      			alert('ERROR: Work sheet name is not unique. Please select another one');
+                      			saveSuccess = false;
+                      			break;
+                      		}
+                      	}
+                      }
+            	}
+            	else if(sheet.type == 'addon-fares'){
+            		if(vm.workPackage.addonFareSheet.length > 0){
+            			for(var x=0;x<vm.workPackage.addonFareSheet.length;x++){
+                      		if(vm.workPackage.addonFareSheet[x].addonFaresName == vm.option.name){
+                      			alert('ERROR: Work sheet name is not unique. Please select another one');
+                      			saveSuccess = false;
+                      			break;
+                      		}
+                      	}
+            		}
+            	}
+            	else if(sheet.type == 'discount'){
+            		if(vm.workPackage.discountFareSheet.length > 0){
+            			for(var x=0;x<vm.workPackage.discountFareSheet.length;x++){
+                      		if(vm.workPackage.discountFareSheet[x].discountFaresName == vm.option.name){
+                      			alert('ERROR: Work sheet name is not unique. Please select another one');
+                      			saveSuccess = false;
+                      			break;
+                      		}
+                      	}
+            		}
+            	}
+            	else if(sheet.type == 'market'){
+            		if(vm.workPackage.marketFareSheet.length > 0){
+            			for(var x=0;x<vm.workPackage.marketFareSheet.length;x++){
+                      		if(vm.workPackage.marketFareSheet[x].marketFaresName == vm.option.name){
+                      			alert('ERROR: Work sheet name is not unique. Please select another one');
+                      			saveSuccess = false;
+                      			break;
+                      		}
+                      	}
+            		}
+            	}
+            	else if(sheet.type == 'waiver'){
+            		if(vm.workPackage.waiverFareSheet.length > 0){
+            			for(var x=0;x<vm.workPackage.waiverFareSheet.length;x++){
+                      		if(vm.workPackage.waiverFareSheet[x].waiverFaresName == vm.option.name){
+                      			alert('ERROR: Work sheet name is not unique. Please select another one');
+                      			saveSuccess = false;
+                      			break;
+                      		}
+                      	}
+            		}
+            	}
+            }
+            else{
+            	//vm.sheet = null;
+            }
+        	
+//        	console.log(vm.option);
+        	if(saveSuccess){
+        		$uibModalInstance.close(vm.option);
+        	}
         }
         vm.loadAll = function(){
         		
@@ -75,6 +139,8 @@
         	if(sheet.type == 'fares'){
         		vm.option.type = "Fares";
         		vm.option.name = "Copy of "+sheet.sheet.specifiedFaresName;
+        		vm.option.fareType = sheet.sheet.fareType;
+
         		vm.sheet = sheet;
         	}
         	else if(sheet.type == 'addon-fares'){
