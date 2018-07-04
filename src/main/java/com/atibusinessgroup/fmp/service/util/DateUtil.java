@@ -32,7 +32,8 @@ public class DateUtil {
 
 		try {
 			if (year != null && !year.isEmpty()) {
-				int yearInt = Integer.parseInt(year);
+				String currentYear = (Calendar.getInstance().get(Calendar.YEAR) + "").substring(0, 2);
+				int yearInt = Integer.parseInt(currentYear + year);
 				calendar.set(Calendar.YEAR, yearInt);
 				result += new SimpleDateFormat("yyyy").format(calendar.getTime());
 			} else {
@@ -45,8 +46,6 @@ public class DateUtil {
 	}
 	
 	public static boolean firstDateIsLessThanEqualSecondDate(Date firstDate, Date secondDate) {
-		System.out.println(firstDate + " " + secondDate);
-		
 		if (firstDate == null || secondDate == null) {
 			return true;
 		}
@@ -88,6 +87,24 @@ public class DateUtil {
 			}
 		}
 		
+		if (result == null) {
+			try {
+				String dateString = date.toString();
+				result = new SimpleDateFormat("ddMMMyyyy").parse(dateString);
+			} catch (Exception e) {
+			}
+		}
+		
 		return result;
+	}
+
+	public static Date getMinOrMaxDate(String type) {
+		if (type != null && type.contentEquals("Min")) {
+			return new Date(Long.MIN_VALUE);
+		} else if (type != null && type.contentEquals("Max")) {
+			return new Date(Long.MAX_VALUE);
+		} else {
+			return null;
+		}
 	}
 }

@@ -257,7 +257,7 @@
 <!-- 							</div> -->
 							<div class="clearfix">
 								<div class="pull-right pv1">
-									<button type="button" class="btn btn-default small" ng-click="vm.query()">Query</button>
+									<button type="button" class="btn btn-default small" ng-click="vm.categoryRules = null; vm.query()">Query</button>
 									<button type="reset" ng-click="vm.reset()" class="btn btn-default small">Reset</button>
 								</div>
 							</div>
@@ -266,10 +266,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-md-12 text-center">
-			<label ng-if="vm.noDataAvailable">No Data Available</label>
-		</div>
-		<div class="table-wrapper mb2" ng-if="vm.afdQueries.length > 0">
+		<div class="table-wrapper mb2">
 			<div class="datatable-wrapper form-inline">
 				<div class="clearfix">
 					<div class="pull-right w50">
@@ -461,7 +458,16 @@
 			                </tr>
 			            </tbody>
 			        </table>
-			   		<label ng-if="vm.isLastPage" style="width: 100%; text-align: center;">You have reached the end of the page &nbsp;<i style="font-size: 10px !important;" class="glyphicon glyphicon-chevron-up"></i></label>
+			        <div class="col-md-12 text-center" ng-if="vm.isLoading">
+						<div class="spinner">
+						  <div class="double-bounce1"></div>
+						  <div class="double-bounce2"></div>
+						</div>
+					</div>
+					<div class="col-md-12 text-center">
+						<label ng-if="(vm.noDataAvailable || vm.afdQueries.length == 0) && !vm.isLoading" style="text-align: center; margin: 0">No Data Available</label>
+						<label ng-if="vm.isLastPage && !vm.noDataAvailable" style="text-align: center; margin: 0">You have reached the end of the page &nbsp;<i style="font-size: 10px !important;" class="glyphicon glyphicon-chevron-up"></i></label>
+					</div>
 			    </div>
 			</div>
 		</div>
