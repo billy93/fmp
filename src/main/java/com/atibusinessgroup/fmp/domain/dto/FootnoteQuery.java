@@ -8,6 +8,7 @@ public class FootnoteQuery {
 	private String tarCd;
 	private String ftnt;
 	private String fareAddonCount;
+	private String catNo;
 	
 	public String getCxr() {
 		return cxr;
@@ -44,6 +45,12 @@ public class FootnoteQuery {
 	}
 	public void setFareAddonCount(String fareAddonCount) {
 		this.fareAddonCount = fareAddonCount;
+	}
+	public String getCatNo() {
+		return catNo;
+	}
+	public void setCatNo(String catNo) {
+		this.catNo = catNo;
 	}
 	
 	

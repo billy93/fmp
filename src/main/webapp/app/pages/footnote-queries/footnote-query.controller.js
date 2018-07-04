@@ -32,16 +32,6 @@
         vm.loadExpired = loadExpired;
         
         
-        $("#catNo").change(function() {
-        	vm.queryParams.saleDateFrom = null;
-        	vm.queryParams.saleDateTo = null;
-        	vm.queryParams.travelDateFrom = null;
-        	vm.queryParams.travelDateTo = null;
-        	vm.queryParams.completedDateFrom = null;
-        	vm.queryParams.travelOpt[0];
-        	
-        });
-        
 		function loadAll() {
 			vm.footnoteQueryCategories = null;
 			vm.queryParams.page = vm.page - 1;
@@ -110,9 +100,10 @@
 			vm.page = page;
 		}
 
-		function getFtnt(footnoteQuery) {
+		function getFtnt(footnoteQuery, catNo) {
 			FootnoteQuery.getFtnt(footnoteQuery, function(data) {
 				vm.footnoteQueryCategories = data;
+				console.log(data);
 			}, function(error) {
 				console.log(error);
 			});
@@ -141,12 +132,12 @@
 				catNo : null,
 				saleDateFrom : null,
 				saleDateTo : null,
-				saleDateType : "1",
+				saleDateType : null,
 				travelDateFrom : null,
 				travelDateTo : null,
-				travelDateType : "1",
+				travelDateType : null,
 				completedDateFrom : null,
-				travelOpt : "2",
+				travelOpt : null,
 				includeDisc : null
 			}
 
