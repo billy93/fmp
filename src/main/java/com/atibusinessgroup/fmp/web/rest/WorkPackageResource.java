@@ -3948,17 +3948,29 @@ public class WorkPackageResource {
      * @param workPackage the workPackage to create
      * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
+     * @throws UnlockAlertException 
      */
     @PostMapping("/work-packages/unlock")
     @Timed
-    public ResponseEntity<WorkPackage> unlockWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
-        log.debug("REST request to withdraw WorkPackage : {}", workPackage);
+    public ResponseEntity<WorkPackage> unlockWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException, UnlockAlertException {
+        log.debug("REST request to unlock WorkPackage : {}", workPackage);
         if (workPackage.getId() == null) {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
-        }
-
+        }        
+        
         WorkPackage result = workPackageService.findOne(workPackage.getId());
-
+        
+        if(!result.getLockedBy().contentEquals(SecurityUtils.getCurrentUserLogin().get())) {
+        	if(result.isOpened()) {
+            	throw new UnlockAlertException("Can not unlock because workpackage in edit mode by "+result.getLockedBy());
+            }
+        }
+        
+        Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
+       	if(user.get().getReviewLevels().indexOf(result.getReviewLevel()) < 0){
+       		throw new UnlockAlertException("Your review level "+user.get().getReviewLevels()+" does not have access to unlock this workpackage");
+        }
+        
         result.setLocked(false);
         workPackageService.save(result);
 
