@@ -80,6 +80,7 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
 import com.atibusinessgroup.fmp.domain.WorkPackageHistory;
+import com.atibusinessgroup.fmp.domain.enumeration.PackageType;
 import com.atibusinessgroup.fmp.domain.enumeration.Status;
 import com.atibusinessgroup.fmp.repository.AtpcoFareRepository;
 import com.atibusinessgroup.fmp.repository.ContractFMPRepository;
@@ -304,13 +305,7 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<WorkPackage> reuseWorkPackage(@RequestBody WorkPackage wp) throws URISyntaxException {
         log.debug("REST request to save reuse WorkPackage : {}", wp);
-
-        WorkPackageHistory history = new WorkPackageHistory();
-        history.setWorkPackage(new ObjectId(wp.getId()));
-        history.setType("REUSE");
-        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
-        workPackageHistoryService.save(history);
-
+       
         wp.setReuseFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
@@ -323,8 +318,11 @@ public class WorkPackageResource {
         wp.setCreatedBy(null);
         wp.setCreatedDate(null);
         wp.setLocked(false);
+        wp.setOpened(false);
     	wp.setLockedBy(null);
+    	wp.setOpenedBy(null);
     	wp.setLockedSince(null);
+    	wp.setOpenedSince(null);
         wp.setLastModifiedBy(null);
         wp.setLastModifiedDate(null);
         wp.setFilingInstruction(false);
@@ -366,6 +364,12 @@ public class WorkPackageResource {
         wp.setQueuedDate(Instant.now());
 
         WorkPackage result = workPackageService.save(wp);
+        
+        WorkPackageHistory history = new WorkPackageHistory();
+        history.setWorkPackage(new ObjectId(result.getId()));
+        history.setType("REUSE");
+        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        workPackageHistoryService.save(history);
 
 
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
@@ -384,13 +388,7 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<WorkPackage> replaceWorkPackage(@RequestBody WorkPackage wp) throws URISyntaxException {
         log.debug("REST request to save reuse WorkPackage : {}", wp);
-
-        WorkPackageHistory history = new WorkPackageHistory();
-        history.setWorkPackage(new ObjectId(wp.getId()));
-        history.setType("REPLACE");
-        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
-        workPackageHistoryService.save(history);
-
+       
         wp.setReplaceFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
@@ -403,8 +401,11 @@ public class WorkPackageResource {
         wp.setLastModifiedDate(null);
         wp.setPriority(null);
     	wp.setLocked(false);
+    	wp.setOpened(false);
     	wp.setLockedBy(null);
+    	wp.setOpenedBy(null);
     	wp.setLockedSince(null);
+    	wp.setOpenedSince(null);
 
 
 //        if(!workPackage.getReuseReplaceConfig().isAttachment()) {
@@ -442,6 +443,11 @@ public class WorkPackageResource {
 
         WorkPackage result = workPackageService.save(wp);
 
+        WorkPackageHistory history = new WorkPackageHistory();
+        history.setWorkPackage(new ObjectId(result.getId()));
+        history.setType("REPLACE");
+        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        workPackageHistoryService.save(history);
 
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -1496,61 +1502,109 @@ public class WorkPackageResource {
 
     	LinkedHashMap<String, Object> data = new LinkedHashMap<>();
 
-    	data.put("Status", new ArrayList<>());
-    	data.put("Carrier", new ArrayList<>());
-    	data.put("Action", new ArrayList<>());
-    	data.put("Tar No", new ArrayList<>());
-    	data.put("Tar Cd", new ArrayList<>());
-    	data.put("Global", new ArrayList<>());
-    	data.put("Origin", new ArrayList<>());
-    	data.put("Dest", new ArrayList<>());
-    	data.put("Addon Bucket", new ArrayList<>());
-    	data.put("OW/RT", new ArrayList<>());
-    	data.put("Ftnt", new ArrayList<>());
-    	data.put("Zone", new ArrayList<>());
-    	data.put("Rtg No", new ArrayList<>());
-    	data.put("Filing Curr", new ArrayList<>());
-    	data.put("Base Amt", new ArrayList<>());
-    	data.put("Amt Diff", new ArrayList<>());
-    	data.put("% Amt Diff", new ArrayList<>());
-    	data.put("Travel Start", new ArrayList<>());
-    	data.put("Travel End", new ArrayList<>());
-    	data.put("Sales Start", new ArrayList<>());
-    	data.put("Sales End", new ArrayList<>());
-    	data.put("Comment", new ArrayList<>());
-    	data.put("Travel Complete", new ArrayList<>());
-    	data.put("Travel Complete Indicator", new ArrayList<>());
+    	if(workPackage.getTargetDistribution().contentEquals("MARKET")) {
+    		data.put("Status", new ArrayList<>());
+        	data.put("Carrier", new ArrayList<>());
+        	data.put("Action", new ArrayList<>());
+        	data.put("Origin", new ArrayList<>());
+        	data.put("Dest", new ArrayList<>());
+        	data.put("Addon Bucket", new ArrayList<>());
+        	data.put("OW/RT", new ArrayList<>());
+        	data.put("Filing Curr", new ArrayList<>());
+        	data.put("Base Amt", new ArrayList<>());
+        	data.put("Amt Diff", new ArrayList<>());
+        	data.put("% Amt Diff", new ArrayList<>());
+        	data.put("Travel Start", new ArrayList<>());
+        	data.put("Travel End", new ArrayList<>());
+        	data.put("Sales Start", new ArrayList<>());
+        	data.put("Sales End", new ArrayList<>());
+        	data.put("Comment", new ArrayList<>());
+        	data.put("Travel Complete", new ArrayList<>());
+        	data.put("Travel Complete Indicator", new ArrayList<>());
 
-    	WorkPackage wp = workPackageService.findOne(workPackage.getId());
-        List<WorkPackageFare> fares = wp.getAddonFareSheet().get(workPackage.getExportIndex()).getFares();
+        	WorkPackage wp = workPackageService.findOne(workPackage.getId());
+            List<WorkPackageFare> fares = wp.getAddonFareSheet().get(workPackage.getExportIndex()).getFares();
 
-        DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy");
-        for(int i=0; i<fares.size(); i++) {
-        	putValue(data.get("Status"), fares.get(i).getStatus());
-        	putValue(data.get("Carrier"), fares.get(i).getCarrier());
-        	putValue(data.get("Action"), fares.get(i).getAction());
-        	putValue(data.get("Tar No"), fares.get(i).getTariffNumber() != null ? fares.get(i).getTariffNumber().getTarNo() : null);
-        	putValue(data.get("Tar Cd"), fares.get(i).getTariffNumber() != null ?  fares.get(i).getTariffNumber().getTarCd() : null);
-        	putValue(data.get("Global"), fares.get(i).getTariffNumber() != null ? fares.get(i).getTariffNumber().getGlobal() : null);
-        	putValue(data.get("Origin"), fares.get(i).getOrigin());
-        	putValue(data.get("Dest"), fares.get(i).getDestination());
-        	putValue(data.get("Addon Bucket"), fares.get(i).getBucket());
-        	putValue(data.get("OW/RT"), fares.get(i).getTypeOfJourney());
-        	putValue(data.get("Ftnt"), fares.get(i).getFootnote1());
-        	putValue(data.get("Zone"), fares.get(i).getZone());
-        	putValue(data.get("Rtg No"), fares.get(i).getRtgno());
-        	putValue(data.get("Filing Curr"), fares.get(i).getCurrency());
-        	putValue(data.get("Base Amt"), fares.get(i).getAmount());
-        	putValue(data.get("Amt Diff"), fares.get(i).getAmount());
-        	putValue(data.get("% Amt Diff"), fares.get(i).getAmount());
-        	putValue(data.get("Travel Start"), fares.get(i).getTravelStart() != null ? dfFull.format(Date.from(fares.get(i).getTravelStart().toInstant())) : null);
-        	putValue(data.get("Travel End"), fares.get(i).getTravelEnd() != null ? dfFull.format(Date.from(fares.get(i).getTravelEnd().toInstant())) : null);
-        	putValue(data.get("Sales Start"), fares.get(i).getSaleStart() != null ? dfFull.format(Date.from(fares.get(i).getSaleStart().toInstant())) : null);
-        	putValue(data.get("Sales End"), fares.get(i).getSaleEnd() != null ? dfFull.format(Date.from(fares.get(i).getSaleEnd().toInstant())) : null);
-        	putValue(data.get("Comment"), fares.get(i).getComment());
-        	putValue(data.get("Travel Complete"), fares.get(i).getTravelComplete() != null ? dfFull.format(Date.from(fares.get(i).getTravelComplete().toInstant())): null);
-        	putValue(data.get("Travel Complete Indicator"), fares.get(i).getTravelCompleteIndicator());
-        }
+            DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy");
+            for(int i=0; i<fares.size(); i++) {
+            	putValue(data.get("Status"), fares.get(i).getStatus());
+            	putValue(data.get("Carrier"), fares.get(i).getCarrier());
+            	putValue(data.get("Action"), fares.get(i).getAction());
+            	putValue(data.get("Origin"), fares.get(i).getOrigin());
+            	putValue(data.get("Dest"), fares.get(i).getDestination());
+            	putValue(data.get("Addon Bucket"), fares.get(i).getBucket());
+            	putValue(data.get("OW/RT"), fares.get(i).getTypeOfJourney());
+            	putValue(data.get("Filing Curr"), fares.get(i).getCurrency());
+            	putValue(data.get("Base Amt"), fares.get(i).getAmount());
+            	putValue(data.get("Amt Diff"), fares.get(i).getAmtDiff());
+            	putValue(data.get("% Amt Diff"), fares.get(i).getAmtPercentDiff());
+            	putValue(data.get("Travel Start"), fares.get(i).getTravelStart() != null ? dfFull.format(Date.from(fares.get(i).getTravelStart().toInstant())) : null);
+            	putValue(data.get("Travel End"), fares.get(i).getTravelEnd() != null ? dfFull.format(Date.from(fares.get(i).getTravelEnd().toInstant())) : null);
+            	putValue(data.get("Sales Start"), fares.get(i).getSaleStart() != null ? dfFull.format(Date.from(fares.get(i).getSaleStart().toInstant())) : null);
+            	putValue(data.get("Sales End"), fares.get(i).getSaleEnd() != null ? dfFull.format(Date.from(fares.get(i).getSaleEnd().toInstant())) : null);
+            	putValue(data.get("Comment"), fares.get(i).getComment());
+            	putValue(data.get("Travel Complete"), fares.get(i).getTravelComplete() != null ? dfFull.format(Date.from(fares.get(i).getTravelComplete().toInstant())): null);
+            	putValue(data.get("Travel Complete Indicator"), fares.get(i).getTravelCompleteIndicator());
+            }
+    	}else {
+    		data.put("Status", new ArrayList<>());
+        	data.put("Carrier", new ArrayList<>());
+        	data.put("Action", new ArrayList<>());
+        	data.put("Tar No", new ArrayList<>());
+        	data.put("Tar Cd", new ArrayList<>());
+        	data.put("Global", new ArrayList<>());
+        	data.put("Origin", new ArrayList<>());
+        	data.put("Dest", new ArrayList<>());
+        	data.put("Addon Bucket", new ArrayList<>());
+        	data.put("OW/RT", new ArrayList<>());
+        	data.put("Ftnt", new ArrayList<>());
+        	data.put("Zone", new ArrayList<>());
+        	data.put("Rtg No", new ArrayList<>());
+        	data.put("Filing Curr", new ArrayList<>());
+        	data.put("Base Amt", new ArrayList<>());
+        	data.put("Amt Diff", new ArrayList<>());
+        	data.put("% Amt Diff", new ArrayList<>());
+        	data.put("Travel Start", new ArrayList<>());
+        	data.put("Travel End", new ArrayList<>());
+        	data.put("Sales Start", new ArrayList<>());
+        	data.put("Sales End", new ArrayList<>());
+        	data.put("Comment", new ArrayList<>());
+        	data.put("Travel Complete", new ArrayList<>());
+        	data.put("Travel Complete Indicator", new ArrayList<>());
+
+        	WorkPackage wp = workPackageService.findOne(workPackage.getId());
+            List<WorkPackageFare> fares = wp.getAddonFareSheet().get(workPackage.getExportIndex()).getFares();
+
+            DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy");
+            for(int i=0; i<fares.size(); i++) {
+            	putValue(data.get("Status"), fares.get(i).getStatus());
+            	putValue(data.get("Carrier"), fares.get(i).getCarrier());
+            	putValue(data.get("Action"), fares.get(i).getAction());
+            	putValue(data.get("Tar No"), fares.get(i).getTariffNumber() != null ? fares.get(i).getTariffNumber().getTarNo() : null);
+            	putValue(data.get("Tar Cd"), fares.get(i).getTariffNumber() != null ?  fares.get(i).getTariffNumber().getTarCd() : null);
+            	putValue(data.get("Global"), fares.get(i).getTariffNumber() != null ? fares.get(i).getTariffNumber().getGlobal() : null);
+            	putValue(data.get("Origin"), fares.get(i).getOrigin());
+            	putValue(data.get("Dest"), fares.get(i).getDestination());
+            	putValue(data.get("Addon Bucket"), fares.get(i).getBucket());
+            	putValue(data.get("OW/RT"), fares.get(i).getTypeOfJourney());
+            	putValue(data.get("Ftnt"), fares.get(i).getFootnote1());
+            	putValue(data.get("Zone"), fares.get(i).getZone());
+            	putValue(data.get("Rtg No"), fares.get(i).getRtgno());
+            	putValue(data.get("Filing Curr"), fares.get(i).getCurrency());
+            	putValue(data.get("Base Amt"), fares.get(i).getAmount());
+            	putValue(data.get("Amt Diff"), fares.get(i).getAmtDiff());
+            	putValue(data.get("% Amt Diff"), fares.get(i).getAmtPercentDiff());
+            	putValue(data.get("Travel Start"), fares.get(i).getTravelStart() != null ? dfFull.format(Date.from(fares.get(i).getTravelStart().toInstant())) : null);
+            	putValue(data.get("Travel End"), fares.get(i).getTravelEnd() != null ? dfFull.format(Date.from(fares.get(i).getTravelEnd().toInstant())) : null);
+            	putValue(data.get("Sales Start"), fares.get(i).getSaleStart() != null ? dfFull.format(Date.from(fares.get(i).getSaleStart().toInstant())) : null);
+            	putValue(data.get("Sales End"), fares.get(i).getSaleEnd() != null ? dfFull.format(Date.from(fares.get(i).getSaleEnd().toInstant())) : null);
+            	putValue(data.get("Comment"), fares.get(i).getComment());
+            	putValue(data.get("Travel Complete"), fares.get(i).getTravelComplete() != null ? dfFull.format(Date.from(fares.get(i).getTravelComplete().toInstant())): null);
+            	putValue(data.get("Travel Complete Indicator"), fares.get(i).getTravelCompleteIndicator());
+            }
+    	}
+    	
+    	
 
     	Attachment att = createWorkbook("Workorder Addon Fare", data);
         return ResponseEntity.ok()
@@ -2461,6 +2515,7 @@ public class WorkPackageResource {
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("OW/RT is required");
 					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareTypeOfJourney");
 					    		errors.add(err1);
 							}
 							if(fare.getCurrency() == null || fare.getCurrency().contentEquals("")) {
@@ -2468,6 +2523,7 @@ public class WorkPackageResource {
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Currency is required");
 					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareCurrency");
 					    		errors.add(err1);
 							}
 							if(fare.getAmount() == null || fare.getAmount().contentEquals("")) {
@@ -2475,6 +2531,7 @@ public class WorkPackageResource {
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Base Amt is required");
 					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareAmount");
 					    		errors.add(err1);			
 							}
 
@@ -2483,11 +2540,13 @@ public class WorkPackageResource {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Travel Start Date must be less than or equal to Travel End Date");
 						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareTravelStartDate");
 						    		errors.add(err1);
 								}else if(fare.getTravelEnd().isBefore(fare.getTravelStart())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Travel End Date cannot be earlier than Sales End Date");
 						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareTravelEndDate");
 						    		errors.add(err1);
 								}
 							}
@@ -2496,12 +2555,15 @@ public class WorkPackageResource {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Travel Start Date cannot be blank");
 						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareTravelStartDate");
 						    		errors.add(err1);
 								}
 								if(fare.getTravelEnd() == null) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Travel End Date cannot be blank");
 						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareTravelEndDate");
+
 						    		errors.add(err1);
 								}
 							}
@@ -2511,12 +2573,14 @@ public class WorkPackageResource {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Sale Start Date must be less than or equal to Sale End Date");
 						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareSaleStartDate");						    		
 						    		errors.add(err1);
 								}
 								if(fare.getSaleStart().isAfter(fare.getTravelStart())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
-						    		err1.setMessage("Sale Start Date must be before  or equal to Travel Starte Date");
+						    		err1.setMessage("Sale Start Date must be before or equal to Travel Start Date");
 						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareSaleStartDate");						    		
 						    		errors.add(err1);
 								}
 							}
@@ -2548,6 +2612,7 @@ public class WorkPackageResource {
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Origin is required");
 					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareOrigin");
 					    		errors.add(err1);
 							}
 							if(fare.getDestination() == null || fare.getDestination().contentEquals("")) {
@@ -2555,12 +2620,15 @@ public class WorkPackageResource {
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Destination is required");
 					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareDestination");
 					    		errors.add(err1);
 							}
 							if(fare.getTypeOfJourney() == null || fare.getTypeOfJourney().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("OW/RT is required");
+					    		err1.setField("addonFareTypeOfJourney");
+
 					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
@@ -2569,6 +2637,8 @@ public class WorkPackageResource {
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Currency is required");
 					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareCurrency");
+
 					    		errors.add(err1);
 							}
 							if(fare.getAmount() == null || fare.getAmount().contentEquals("")) {
@@ -2576,6 +2646,8 @@ public class WorkPackageResource {
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Base Amt is required");
 					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareAmount");
+
 					    		errors.add(err1);			
 							}
 							if(fare.getTravelStart() != null && fare.getTravelEnd() != null) {
@@ -2583,11 +2655,13 @@ public class WorkPackageResource {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Travel Start Date must be less than or equal to Travel End Date");
 						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareTravelStartDate");
 						    		errors.add(err1);
 								}else if(fare.getTravelEnd().isBefore(fare.getTravelStart())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Travel End Date cannot be earlier than Sales End Date");
 						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareTravelEndDate");
 						    		errors.add(err1);
 								}
 							}
@@ -2596,12 +2670,14 @@ public class WorkPackageResource {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Sale Start Date must be less than or equal to Sale End Date");
 						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareSaleStartDate");
 						    		errors.add(err1);
 								}
 								if(fare.getSaleStart().isAfter(fare.getTravelStart())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Sale Start Date must be before  or equal to Travel Starte Date");
 						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareSaleStartDate");
 						    		errors.add(err1);
 								}
 							}
@@ -2611,6 +2687,8 @@ public class WorkPackageResource {
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Tarno is required");
 					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareTarno");
+
 					    		errors.add(err1);
 							}
 							if(fare.getTariffNumber().getTarCd() == null || fare.getTariffNumber().getTarCd().contentEquals("")) {
@@ -2618,6 +2696,7 @@ public class WorkPackageResource {
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("TarCd is required");
 					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareTarcd");
 					    		errors.add(err1);
 							}
 							if(fare.getOrigin() == null || fare.getOrigin().contentEquals("")) {
@@ -2625,6 +2704,7 @@ public class WorkPackageResource {
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Origin is required");
 					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareOrigin");
 					    		errors.add(err1);
 							}
 							if(fare.getDestination() == null || fare.getDestination().contentEquals("")) {
@@ -2632,6 +2712,7 @@ public class WorkPackageResource {
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Destination is required");
 					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareDestination");
 					    		errors.add(err1);
 							}
 							if(fare.getBucket() == null || fare.getBucket().contentEquals("")) {
@@ -2639,6 +2720,7 @@ public class WorkPackageResource {
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Add On Bucket is required");
 					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareBucket");
 					    		errors.add(err1);
 							}
 							if(fare.getTypeOfJourney() == null || fare.getTypeOfJourney().contentEquals("")) {
@@ -2646,6 +2728,7 @@ public class WorkPackageResource {
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("OW/RT is required");
 					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareTypeOfJourney");
 					    		errors.add(err1);
 							}
 							if(fare.getZone() == null || fare.getZone().contentEquals("")) {
@@ -2653,6 +2736,7 @@ public class WorkPackageResource {
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Zone is required");
 					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareZone");
 					    		errors.add(err1);
 							}
 							if(fare.getRtgno() == null || fare.getRtgno().contentEquals("")) {
@@ -2660,6 +2744,7 @@ public class WorkPackageResource {
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("RtgNo is required");
 					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareRtgno");
 					    		errors.add(err1);
 							}
 							if(fare.getCurrency() == null || fare.getCurrency().contentEquals("")) {
@@ -2667,6 +2752,7 @@ public class WorkPackageResource {
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Currency is required");
 					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareCurrency");
 					    		errors.add(err1);
 							}
 							if(fare.getTravelStart() != null && fare.getTravelEnd() != null) {
@@ -2674,11 +2760,13 @@ public class WorkPackageResource {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Travel Start Date must be less than or equal to Travel End Date");
 						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareTravelStartDate");
 						    		errors.add(err1);
 								}else if(fare.getTravelEnd().isBefore(fare.getTravelStart())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Travel End Date cannot be earlier than Sales End Date");
 						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareTravelEndDate");
 						    		errors.add(err1);
 								}
 							}
@@ -2687,12 +2775,14 @@ public class WorkPackageResource {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Sale Start Date must be less than or equal to Sale End Date");
 						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareSaleStartDate");
 						    		errors.add(err1);
 								}
 								if(fare.getSaleStart().isAfter(fare.getTravelStart())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Sale Start Date must be before  or equal to Travel Starte Date");
 						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareSaleStartDate");
 						    		errors.add(err1);
 								}
 							}
@@ -2748,6 +2838,8 @@ public class WorkPackageResource {
 
 		    		List<String> rejectStatus = new ArrayList<>();
 		    		List<WorkPackageFare> fares = wpfs.getFares();
+		    		
+		    		int index = 0;
 					for(WorkPackageFare fare : fares) {
 						if(fare.getStatus() != null || !fare.getStatus().contentEquals("")) {
 							if(fare.getStatus().contentEquals("REJECTED")) {
@@ -2759,42 +2851,56 @@ public class WorkPackageResource {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Name is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("");
 					    		errors.add(err1);
 							}
 							if(wpfs.getFareType() == null || wpfs.getFareType().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Fare Type is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("discountFareFareType");
 					    		errors.add(err1);
 							}
 							if(fare.getLoc1Type() == null || fare.getLoc1Type().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Loc 1 Type is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("discountLoc1Type");
 					    		errors.add(err1);
 							}
 							if(fare.getLoc1() == null || fare.getLoc1().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Loc1 is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("discountLoc1");
 					    		errors.add(err1);
 							}
 							if(fare.getLoc2Type() == null || fare.getLoc2Type().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Loc 2 Type is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("discountLoc2Type");
 					    		errors.add(err1);
 							}
 							if(fare.getLoc2() == null || fare.getLoc2().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Loc2 is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("discountLoc2");
 					    		errors.add(err1);
 							}
 							if(fare.getCalcType() == null || fare.getCalcType().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Calc Type is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("discountCalcType");					    		
 					    		errors.add(err1);
 							}
 							if(fare.getCalcType() != null ) {
@@ -2802,20 +2908,20 @@ public class WorkPackageResource {
 									if(fare.getPercentBaseFare() == null || fare.getPercentBaseFare().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
-							    		err1.setMessage("% Base Fare is  required when 'Calculated'  Calc Type is used");
+							    		err1.setMessage("% Base Fare is required when 'Calculated'  Calc Type is used");
 							    		errors.add(err1);
 									}
 								}else if(fare.getCalcType().contentEquals("S")) {
 									if(fare.getCurrency() == null || fare.getCurrency().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
-							    		err1.setMessage("Currency is  required when 'Specified'  Calc Type is used");
+							    		err1.setMessage("Currency is required when 'Specified'  Calc Type is used");
 							    		errors.add(err1);
 									}
 									if(fare.getDiscountSpecifiedAmount() == null || fare.getDiscountSpecifiedAmount().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
-							    		err1.setMessage("Specified Amount is  required when 'Specified'  Calc Type is used");
+							    		err1.setMessage("Specified Amount is required when 'Specified'  Calc Type is used");
 							    		errors.add(err1);
 									}if(fare.getFareType() == null || fare.getFareType().contentEquals("")) {
 										//List Error
@@ -3761,12 +3867,19 @@ public class WorkPackageResource {
 		}
 
         if(!workPackage.isLocked() && needLocked) {
-        	log.debug("HARUS di-locked ya ? : {}", id);
         	workPackage.setLocked(true);
             workPackage.setLockedBy(SecurityUtils.getCurrentUserLogin().get());
             workPackage.setLockedSince(ZonedDateTime.now());
             workPackage = workPackageService.save(workPackage);
         }
+        
+        if(!workPackage.isOpened()) {
+        	workPackage.setOpened(true);
+        	workPackage.setOpenedBy(SecurityUtils.getCurrentUserLogin().get());
+        	workPackage.setOpenedSince(ZonedDateTime.now());
+        	workPackage = workPackageService.save(workPackage);
+        }
+        
 //        List<WorkPackageFare> fares = workPackageFareService.findAllByWorkPackageAndFareType(workPackage.getId(), null);
 //        log.debug("REST request to set WorkPackageFARES : {}", fares.size());
 //        workPackage.setFares(fares);
@@ -3860,6 +3973,7 @@ public class WorkPackageResource {
 	    		result.setReviewLevel("HO");
 	    		result.setStatus(Status.PENDING);
 	    		result.setLocked(false);
+	    		result.setOpened(false);
 	        }
 	        List<WorkPackageFareSheet> fareSheet = result.getFareSheet();
 	        for(WorkPackageFareSheet sheet : fareSheet) {
@@ -3934,18 +4048,57 @@ public class WorkPackageResource {
      * @param workPackage the workPackage to create
      * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
+     * @throws UnlockAlertException 
      */
     @PostMapping("/work-packages/unlock")
     @Timed
-    public ResponseEntity<WorkPackage> unlockWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
-        log.debug("REST request to withdraw WorkPackage : {}", workPackage);
+    public ResponseEntity<WorkPackage> unlockWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException, UnlockAlertException {
+        log.debug("REST request to unlock WorkPackage : {}", workPackage);
+        if (workPackage.getId() == null) {
+            throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
+        }        
+        
+        WorkPackage result = workPackageService.findOne(workPackage.getId());
+        
+        if(result.isLocked()) {
+        	if(!result.getLockedBy().contentEquals(SecurityUtils.getCurrentUserLogin().get())) {
+            	if(result.isOpened()) {
+                	throw new UnlockAlertException("Can not unlock because workpackage in edit mode by "+result.getLockedBy());
+                }
+            }
+            
+            Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
+           	if(user.get().getReviewLevels().indexOf(result.getReviewLevel()) < 0){
+           		throw new UnlockAlertException("Your review level "+user.get().getReviewLevels()+" does not have access to unlock this workpackage");
+            }
+        }        
+        
+        result.setLocked(false);
+        workPackageService.save(result);
+
+        return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                .body(result);
+    }
+    
+    /**
+     * POST  /work-packages/closed : closed
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/work-packages/closed")
+    @Timed
+    public ResponseEntity<WorkPackage> closedWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
+        log.debug("REST request to closed WorkPackage : {}", workPackage);
         if (workPackage.getId() == null) {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
 
         WorkPackage result = workPackageService.findOne(workPackage.getId());
 
-        result.setLocked(false);
+        result.setOpened(false);
         workPackageService.save(result);
 
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
@@ -4054,6 +4207,7 @@ public class WorkPackageResource {
     		result.setReviewLevel("LSO");
     		result.setStatus(Status.PENDING);
     		result.setLocked(false);
+    		result.setOpened(false);
         }
 
         List<WorkPackageFareSheet> fareSheet = result.getFareSheet();
@@ -4147,6 +4301,7 @@ public class WorkPackageResource {
     		result.setSidewayReviewLevel(null);
         }
 		result.setLocked(false);
+		result.setOpened(false);
         result.setStatus(Status.PENDING);
         result.setQueuedDate(Instant.now());
         workPackageService.save(result);
@@ -4190,11 +4345,13 @@ public class WorkPackageResource {
         	workPackage.setDistributionReviewLevel(reviewLevel);
         	workPackage.setReviewLevel("LSO");
         	workPackage.setLocked(false);
+        	workPackage.setOpened(false);
         	workPackage.setStatus(Status.DISTRIBUTED);
         }else if(reviewLevel.contentEquals("HO")) {
         	workPackage.setDistributionReviewLevel(reviewLevel);
         	workPackage.setReviewLevel("DISTRIBUTION");
     		workPackage.setLocked(false);
+    		workPackage.setOpened(false);
     		workPackage.setStatus(Status.PENDING);
 	    }
 //        if(reviewLevel.contentEquals("HO")) {
@@ -4317,6 +4474,7 @@ public class WorkPackageResource {
 
         WorkPackage result = workPackageService.findOne(workPackage.getId());
         result.setLocked(false);
+        result.setOpened(false);
         workPackageService.save(result);
 
         ApproveConfig x = new ApproveConfig();
@@ -4434,6 +4592,7 @@ public class WorkPackageResource {
         result.setDistributionReviewLevel(null);
         result.setStatus(Status.REFERRED);
 		result.setLocked(false);
+		result.setOpened(false);
 		result.setQueuedDate(Instant.now());
         workPackageService.save(result);
 
@@ -4473,6 +4632,7 @@ public class WorkPackageResource {
         result.setDistributionReviewLevel(result.getDistributionReviewLevel());
         result.setStatus(Status.DISTRIBUTED);
 		result.setLocked(false);
+		result.setOpened(false);
 		result.setQueuedDate(Instant.now());
         workPackageService.save(result);
 
@@ -4617,9 +4777,9 @@ public class WorkPackageResource {
                		 batchBuilder.append("N");
                		 batchBuilder.append(fare.getOrigin());
                		 batchBuilder.append(fare.getDestination());
-               		 batchBuilder.append(fare.getFareBasis());
-               		 if(8-fare.getFareBasis().length() > 0) {
-               			 for(int i=0;i<(8-fare.getFareBasis().length()); i++) {
+               		 batchBuilder.append(fare.getBucket());
+               		 if(8-fare.getBucket().length() > 0) {
+               			 for(int i=0;i<(8-fare.getBucket().length()); i++) {
                				 batchBuilder.append(" ");
                			 }
                		 }
@@ -4701,16 +4861,26 @@ public class WorkPackageResource {
 
 
 	        workPackage.setLocked(false);
+	        workPackage.setOpened(false);
 	        workPackage.setLockedBy(null);
 	    	workPackage.setLockedSince(null);
 	        workPackage.setStatus(Status.READY_TO_RELEASE); //BUSY
 
 	        List<WorkPackageFareSheet> fareSheet = workPackage.getFareSheet();
+	        List<WorkPackageFareSheet> addonFareSheet = workPackage.getAddonFareSheet();
 	        Set<TariffNumber> fareTariffNumber = new HashSet<TariffNumber>();
+	        Set<TariffNumber> addonFareTariffNumber = new HashSet<TariffNumber>();
 	        for(WorkPackageFareSheet sheet : fareSheet) {
 	        	List<WorkPackageFare> fares = sheet.getFares();
 	        	for(WorkPackageFare fare : fares) {
 	        		fareTariffNumber.add(fare.getTariffNumber());
+	        	}
+	        }
+	        
+	        for(WorkPackageFareSheet sheet : addonFareSheet) {
+	        	List<WorkPackageFare> fares = sheet.getFares();
+	        	for(WorkPackageFare fare : fares) {
+	        		addonFareTariffNumber.add(fare.getTariffNumber());
 	        	}
 	        }
 
@@ -4723,6 +4893,15 @@ public class WorkPackageResource {
 	        	fdt.tarCd = tariff.getTarCd();
 	        	fdt.tarNo = tariff.getTarNo();
 	        	fdt.tarType = "Fare";
+	        	workPackage.getFilingDetail().getFilingDetailTarif().add(fdt);
+	        }
+	        for(TariffNumber tariff : addonFareTariffNumber) {
+	        	FilingDetailTariff fdt = new FilingDetailTariff();
+	        	fdt.cxr = "GA";
+	        	fdt.gov = "XX";
+	        	fdt.tarCd = tariff.getTarCd();
+	        	fdt.tarNo = tariff.getTarNo();
+	        	fdt.tarType = "Addon";
 	        	workPackage.getFilingDetail().getFilingDetailTarif().add(fdt);
 	        }
 	        workPackage = workPackageService.save(workPackage);
@@ -4753,15 +4932,23 @@ public class WorkPackageResource {
         log.debug("REST request to refresh tariff WorkPackage : {}", workPackage);
 
         List<WorkPackageFareSheet> fareSheet = workPackage.getFareSheet();
+        List<WorkPackageFareSheet> addonFareSheet = workPackage.getAddonFareSheet();
         Set<TariffNumber> fareTariffNumber = new HashSet<TariffNumber>();
+        Set<TariffNumber> addonFareTariffNumber = new HashSet<TariffNumber>();
         for(WorkPackageFareSheet sheet : fareSheet) {
         	List<WorkPackageFare> fares = sheet.getFares();
         	for(WorkPackageFare fare : fares) {
         		fareTariffNumber.add(fare.getTariffNumber());
         	}
         }
-
+        for(WorkPackageFareSheet sheet : addonFareSheet) {
+        	List<WorkPackageFare> fares = sheet.getFares();
+        	for(WorkPackageFare fare : fares) {
+        		addonFareTariffNumber.add(fare.getTariffNumber());
+        	}
+        }
         workPackage.setFilingDetail(new FilingDetail());
+        
         for(TariffNumber tariff : fareTariffNumber) {
         	FilingDetailTariff fdt = new FilingDetailTariff();
         	fdt.cxr = "GA";
@@ -4769,6 +4956,15 @@ public class WorkPackageResource {
         	fdt.tarCd = tariff.getTarCd();
         	fdt.tarNo = tariff.getTarNo();
         	fdt.tarType = "Fare";
+        	workPackage.getFilingDetail().getFilingDetailTarif().add(fdt);
+        }
+        for(TariffNumber tariff : addonFareTariffNumber) {
+        	FilingDetailTariff fdt = new FilingDetailTariff();
+        	fdt.cxr = "GA";
+        	fdt.gov = "XX";
+        	fdt.tarCd = tariff.getTarCd();
+        	fdt.tarNo = tariff.getTarNo();
+        	fdt.tarType = "Addon";
         	workPackage.getFilingDetail().getFilingDetailTarif().add(fdt);
         }
         workPackage = workPackageService.save(workPackage);
@@ -4796,6 +4992,7 @@ public class WorkPackageResource {
 
 //        WorkPackage result = workPackageService.findOne(workPackage.getId());
         workPackage.setLocked(false);
+        workPackage.setOpened(false);
         workPackage.setLockedBy(null);
     	workPackage.setLockedSince(null);
         workPackage.setStatus(Status.READY_TO_RELEASE); //BUSY

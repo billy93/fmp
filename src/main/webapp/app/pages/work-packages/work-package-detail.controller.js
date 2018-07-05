@@ -39,6 +39,11 @@
 		    ]
 		};
     	
+    	$scope.$on("$destroy", function() {
+	    	WorkPackage.closeEditor(vm.workPackage, closedSuccess, closedFailure);
+	      	  function closedSuccess (result) {}
+	      	  function closedFailure (error) {} 
+    	   });
     	
         vm.currentTab = [];
         vm.currentAddonTab = [];
@@ -1220,17 +1225,18 @@
         	}
         	else if(option.type == 'Waiver Fares'){
         		vm.workPackage.waiverFares = true;
-        		vm.workPackage.waiverFareSheet.push({waiverFaresName:option.name, waiverFareType:option.fareType, fares:fares});
+        		vm.workPackage.waiverFareSheet.push({waiverFaresName:option.name, waiverFareType:option.fareType, fareType:option.fareType, fares:fares});
         		vm.selectWaiverTab(vm.workPackage.waiverFareSheet.length-1);
         	}
         	else if(option.type == 'Discount Fares'){
         		vm.workPackage.discount = true;
-        		vm.workPackage.discountFareSheet.push({discountFaresName:option.name, discountFareType:option.fareType, fares:fares});
+        		console.log(option);
+        		vm.workPackage.discountFareSheet.push({discountFaresName:option.name, discountFareType:option.fareType, fareType:option.fareType, fares:fares});
         		vm.selectDiscountTab(vm.workPackage.discountFareSheet.length-1);
         	}
         	else if(option.type == 'Add-Ons'){
         		vm.workPackage.addon = true;
-        		vm.workPackage.addonFareSheet.push({addonFaresName:option.name, fares:fares});
+        		vm.workPackage.addonFareSheet.push({addonFaresName:option.name, fareType:option.fareType, fares:fares});
         		vm.selectAddonTab(vm.workPackage.addonFareSheet.length-1);
         	}
         	else if(option.type == 'Attachment'){
@@ -6320,7 +6326,57 @@
     		  vm.workPackage.addonFareSheet[sheetIndex].fares[fareIndex].field[field] = !vm.workPackage.addonFareSheet[sheetIndex].fares[fareIndex].field[field]; 
     		  
     		  var fieldName = ""+field+sheetIndex+fareIndex;
-    		  alert(fieldName);
+    		  var elmnt = $window.document.getElementsByName(fieldName)[0];
+    		  var offset_top = elmnt.offsetTop;
+//    		  var offset_left = elmnt.offsetLeft;
+    		  var elmntPage = $window.document.querySelector(".table-wrapper");
+    		  elmntPage.scrollTop = offset_top;
+//    		  elmntPage.scrollLeft = offset_left;
+    		  elmnt.focus();
+    	  }
+    	  else if(sheetType == 'Market'){
+    		  vm.selectMarketTab(sheetIndex);
+    		  for(var x=0;x<vm.workPackage.marketFareSheet[sheetIndex].fares.length;x++){
+    			  vm.workPackage.marketFareSheet[sheetIndex].fares[x].field = {};
+        	  }
+    		  
+    		  vm.workPackage.marketFareSheet[sheetIndex].fares[fareIndex].field[field] = !vm.workPackage.marketFareSheet[sheetIndex].fares[fareIndex].field[field]; 
+    		  
+    		  var fieldName = ""+field+sheetIndex+fareIndex;
+    		  var elmnt = $window.document.getElementsByName(fieldName)[0];
+    		  var offset_top = elmnt.offsetTop;
+//    		  var offset_left = elmnt.offsetLeft;
+    		  var elmntPage = $window.document.querySelector(".table-wrapper");
+    		  elmntPage.scrollTop = offset_top;
+//    		  elmntPage.scrollLeft = offset_left;
+    		  elmnt.focus();
+    	  }
+    	  else if(sheetType == 'Discount'){
+    		  vm.selectDiscountTab(sheetIndex);
+    		  for(var x=0;x<vm.workPackage.discountFareSheet[sheetIndex].fares.length;x++){
+    			  vm.workPackage.discountFareSheet[sheetIndex].fares[x].field = {};
+        	  }
+    		  
+    		  vm.workPackage.discountFareSheet[sheetIndex].fares[fareIndex].field[field] = !vm.workPackage.discountFareSheet[sheetIndex].fares[fareIndex].field[field]; 
+    		  
+    		  var fieldName = ""+field+sheetIndex+fareIndex;
+    		  var elmnt = $window.document.getElementsByName(fieldName)[0];
+    		  var offset_top = elmnt.offsetTop;
+//    		  var offset_left = elmnt.offsetLeft;
+    		  var elmntPage = $window.document.querySelector(".table-wrapper");
+    		  elmntPage.scrollTop = offset_top;
+//    		  elmntPage.scrollLeft = offset_left;
+    		  elmnt.focus();
+    	  }
+    	  else if(sheetType == 'Waiver'){
+    		  vm.selectWaiverTab(sheetIndex);
+    		  for(var x=0;x<vm.workPackage.waiverFareSheet[sheetIndex].fares.length;x++){
+    			  vm.workPackage.waiverFareSheet[sheetIndex].fares[x].field = {};
+        	  }
+    		  
+    		  vm.workPackage.waiverFareSheet[sheetIndex].fares[fareIndex].field[field] = !vm.workPackage.waiverFareSheet[sheetIndex].fares[fareIndex].field[field]; 
+    		  
+    		  var fieldName = ""+field+sheetIndex+fareIndex;
     		  var elmnt = $window.document.getElementsByName(fieldName)[0];
     		  var offset_top = elmnt.offsetTop;
 //    		  var offset_left = elmnt.offsetLeft;

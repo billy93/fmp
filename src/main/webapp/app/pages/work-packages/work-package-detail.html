@@ -387,7 +387,7 @@
 													<div class="clearfix">
 														<div class="pull-right datatable-button">
 															<div class="button-group dropdown custom">
-																<button class="btn btn-default small btn-secondary" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)}"></i></button>
+																<button class="btn btn-default small btn-secondary" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></i></button>
 																<ul class="dropdown-menu custom" role="menu">
 																    <li>
 																    	<a ng-click="vm.clearSelection(workPackageSheet)" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)">Clear Selection</a>
@@ -868,7 +868,7 @@
 													<div class="clearfix">
 														<div class="pull-right datatable-button">
 															<div class="button-group dropdown custom">
-																<button class="btn btn-default small btn-secondary" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) ">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)}"></i></button>
+																<button class="btn btn-default small btn-secondary" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></i></button>
 																<ul class="dropdown-menu custom" role="menu">
 																	<li>
 																    	<a ng-click="vm.clearSelection(workPackageSheet)" ng-disabled="vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)" ng-class="{'poiv-none':vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}">Clear Selection</a>
@@ -922,55 +922,57 @@
 												</div>
 											</div>
 											<div class="table-responsive">
-												<table class="table table-stripped table-bordered datatable" jq-slider>
+												<table class="table table-stripped table-bordered datatable">
 													<thead>
 														<tr role="row">																	
 															<th>No</th>
+															<th># <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, '#')"></span><div class="resize-div"></div></th>
 									                		<th>Status</th>
-										                	<th>Carrier
-										                		<div class="resize-div"></div>
+										                	<th>Carrier <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'carrier')">
+										                		<div class="resize-div" style="min-width: 30px"></div>
 										                	</th>		                	
-									                		<th>Action
+									                		<th>Action <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'action')"></span>
 									                			<div class="resize-div"></div>
 									                		</th>
-										                	<th>Tar No</th>
-										                	<th>Tar Cd</th>
-										                	<th>Global</th>
-										                	<th>Origin</th>
-										                	<th>Dest</th>
-										                	<th>Addon Bucket/Fare Class
+										                	<th>Tar No <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'tariffNumber.tarNo')"></span><div class="resize-div"></div></th>
+										                	<th>Tar Cd <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'tariffNumber.tarCd')"></span><div class="resize-div"></div></th>
+										                	<th>Global <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'tariffNumber.global')"></span><div class="resize-div"></div></th>
+										                	<th>Origin <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'origin')"></span><div class="resize-div"></div></th>
+										                	<th>Dest <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'destination')"></span><div class="resize-div"></div></th>
+										                	<th>Addon Bucket/Fare Class <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'bucket')"></span>
 										                		<div class="resize-div" style="min-width: 165px"></div>
 										                	</th>
-										                	<th>OW/RT
-										                		<div class="resize-div" style="min-width: 120px"></div>
+										                	<th>OW/RT <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'typeOfJourney')"></span>
+										                		<div class="resize-div" style="min-width: 100px"></div>
 										                	</th>
-										                	<th>Ftnt
+										                	<th>Ftnt <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'footnote')"></span>
 										                		<div class="resize-div"></div>
 										                	</th>
-										                	<th>Zone
+										                	<th>Zone <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'zone')"></span>
 										                		<div class="resize-div"></div>
 										                	</th>
-										                	<th>Rtg No
+										                	<th>Rtg No <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'rtgno')"></span>
 										                		<div class="resize-div"></div>
 										                	</th>
-										                	<th>Filing Curr</th>
-										                	<th>Base Amt</th>
-										                	<th>Amt Diff</th>
-										                	<th>% Amt Diff</th>
-											                <th>Travel Start</th>
-										               		<th>Travel End</th>		               		
-										               		<th>Sale Start</th>
-										               		<th>Sale End</th>	
-										               		<th>Comment
+										                	<th>Filing Curr <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'currency')"></span></th>
+										                	<th>Base Amt <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'amount')"></span> <div class="resize-div" style="min-width: 100px"></div></th>
+										                	<th>Amt Diff <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'bucket')"></span> <div class="resize-div" style="min-width: 100px"></div></th>
+										                	<th>% Amt Diff <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'bucket')"></span> <div class="resize-div" style="min-width: 100px"></div></th>
+											                <th>Travel Start <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelStart')"></span><div class="resize-div"></div></th>
+										               		<th>Travel End <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelEnd')"></span><div class="resize-div"></div></th>		               		
+										               		<th>Sale Start <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'saleStart')"></span><div class="resize-div"></div></th>
+										               		<th>Sale End <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'saleEnd')"></span><div class="resize-div"></div></th>	
+										               		<th>Comment <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'comment')"></span><div class="resize-div"></div>
 										               			<div class="resize-div" style="min-width: 200px;"></div>
 										               		</th>	               		
-										               		<th>Travel Complete</th>	               		
-										               		<th>Travel Complete Indicator</th>		
+										               		<th>Travel Complete <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelComplete')"></span><div class="resize-div"></div></th>	               		
+										               		<th>Travel Complete Indicator <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelCompleteIndicator')"></span><div class="resize-div"></div></th>		
 														</tr>
 													</thead>
 													<tbody>
 														<tr role="row" class="datatable-row" ng-repeat="fare in workPackageSheet.currentFares track by $index" ng-class="{'poiv-none': workPackageSheet.version != 'current', 'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no'], changed : vm.diff[fare.id].indexOf('no') > -1}">{{$index+1}}</td>
+															<td>{{$index+1}}</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no'], changed : vm.diff[fare.id].indexOf('no') > -1}" name="no{{$parent.$index}}{{$index}}">{{fare.no}}</td>															
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'status', $event)" ng-class="{highlighted:fare.field['status'], changed : vm.diff[fare.id].indexOf('status') > -1}">
 																<select class="form-control inside-table" name="addonFareStatus{{$index}}" ng-model="fare.status" id="field_status" 
 																	ng-class="{'must-fill': !editForm.editFormATPCO.addonFareStatus{{$index}}.$valid && fare.action != 'Canceled'}"												         		
@@ -1038,7 +1040,7 @@
 																	<input type="text" class="form-control" name="addonFareDestination{{$parent.$index}}{{$index}}" id="field_carrier"
 											                    		ng-model="fare.destination"
 											                    		uppercase
-											                    		ng-disabled="!vm.isEditable('addonFareDestination') "
+											                    		ng-disabled="!vm.isEditable('addonFareDestination')"
 											                    		style="min-width:60px"
 											                    		ng-class="{'must-fill': editForm.editFormATPCO.addonFareDestination{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('addonFareDestination') && fare.action != 'Canceled'"
@@ -1054,7 +1056,7 @@
 											           				ng-maxlength="8"
 								                					maxlength="8"
 								                					uppercase
-								                					ng-pattern="/^[a-zA-Z0-9]{1,8}$/"
+								                					ng-pattern="/^[a-zA-Z0-9*]{1,8}$/"
 								                					ng-keypress="vm.keypress($event, '^[a-zA-Z0-9*]{1,8}$')"									                				
 														            ng-class="{'must-fill': editForm.editFormATPCO.addonFareBucket{{$parent.$index}}{{$index}}.$error.required 
 														            || editForm.editFormATPCO.addonFareBucket{{$parent.$index}}{{$index}}.$error.pattern 
@@ -1062,7 +1064,7 @@
 														            ng-required="vm.isRequired('addonFareBucket')" />
 															</td>
 										           			<td ng-click="vm.tdClick(workPackageSheet, fare, 'typeOfJourney', $event)" ng-class="{highlighted:fare.field['typeOfJourney'], changed : vm.diff[fare.id].indexOf('typeOfJourney') > -1}">
-										           				<select class="form-control" 
+										           				<select class="form-control" style="min-width:90px"
 														             name="addonFareTypeOfJourney{{$parent.$index}}{{$index}}"
 														             ng-required="vm.isRequired('addonFareTypeOfJourney')"
 														             ng-class="{'must-fill': !editForm.editFormATPCO.addonFareTypeOfJourney{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"																			            
@@ -1260,18 +1262,18 @@
 								
 								</div>
 								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+vm.workPackage.addonFareSheet.length}}" ng-class="{active:vm.currentTabFilingInstruction, 'poiv-none': vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}" ng-if="vm.workPackage.filingInstruction">									
-									<div class="box-header"></div>
+										<div class="box-header"></div>
 									<div class="box-body mb1">
-										<div class="form-group" ng-class="{'poiv-none': vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}">
+										<div class="form-group" ng-class="{'poiv-none': vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}">
 											<label>Comment</label>
 											<wysiwyg-edit content="vm.commentStringFillingInstruction" config="vm.editorConfig"></wysiwyg-edit>
 										</div>
 										<div class="clearfix">
 											<div class="pull-right">
-												<button class="btn btn-default small btn-secondary" ng-click="vm.deleteCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Delete Comment</button>
-												<button class="btn btn-default small btn-secondary" ng-click="vm.collapseCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Collapse Deleted Comment</button>
-												<button class="btn btn-default small btn-secondary" ng-click="vm.expandCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Expand Deleted Comment</button>
-												<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Add Comment</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.deleteCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Delete Comment</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.collapseCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Collapse Deleted Comment</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.expandCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Expand Deleted Comment</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Add Comment</button>
 											</div>
 										</div>		
 									</div>
@@ -1292,7 +1294,7 @@
 									    		</div>
 							        		</div>					        		
 								    	</div>
-									</div>							
+									</div>					
 							    </div>		
 								
 								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+vm.workPackage.addonFareSheet.length+1}}" ng-class="{active:vm.currentTabAttachment}" ng-if="vm.workPackage.attachment">
@@ -1360,7 +1362,7 @@
 								</div>
 							
 								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+vm.workPackage.addonFareSheet.length+2}}" ng-class="{active:vm.currentTabFilingDetail}" ng-if="vm.workPackage.fareSheet.length > 0 || vm.workPackage.addonFareSheet.length > 0">
-									<div class="tab-content wp">
+									<div class="tab-content wp" ng-class="{'poiv-none' : (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}">
 										<div class="clearfix">
 											<div class="pull-left w20 ph5px">
 												<div class="form-group">
@@ -1374,7 +1376,7 @@
 												<div class="form-group">
 													<div class="checkbox-wrapper">	
 														<label class="black">
-															<input type="radio" name="radio1" ng-model="vm.workPackage.filingDetail.workUnitType" value="new" ng-disabled="vm.checkFilingDetailDisabled()">
+															<input type="radio" name="radio1" ng-init="vm.workPackage.filingDetail.workUnitType == null || vm.workPackage.filingDetail.workUnitType == '' ? vm.workPackage.filingDetail.workUnitType = 'new' : vm.workPackage.filingDetail.workUnitType = vm.workPackage.filingDetail.workUnitType"  ng-model="vm.workPackage.filingDetail.workUnitType" value="new" ng-disabled="vm.checkFilingDetailDisabled()">
 															Use New Work Unit
 														</label>
 													</div>
@@ -1684,7 +1686,7 @@
 						                  <div class="clearfix">
 						                    <div class="pull-right datatable-button">
 						                      <div class="button-group dropdown custom">
-						                        <button class="btn btn-default small btn-secondary" ng-disabled="vm.workPackage.status=='WITHDRAWN' || vm.workPackage.status=='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none': (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || vm.workPackage.status == 'WITHDRAWN' || vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) }"></i></button>
+						                        <button class="btn btn-default small btn-secondary" ng-disabled="vm.workPackage.status=='WITHDRAWN' || vm.workPackage.status=='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none': (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || vm.workPackage.status == 'WITHDRAWN' || vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></i></button>
 						                        <ul class="dropdown-menu custom" role="menu">
 						                            <li>
 												   		<a ng-click="vm.clearSelection(workPackageSheet)" ng-disabled="vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)" ng-class="{'poiv-none':vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}">Clear Selection</a>
@@ -1727,78 +1729,130 @@
 						                  <thead>
 						                    <tr role="row">
 				                     		 <th>No</th>
+				                     		 <th class="sorting_asc" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" aria-sort="ascending"># <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, '#')"></span></th>
+				                     		 
 				                              <th>Status</th>
 				                              <th>
 				                              	FBR Tariff Code
+				                              	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'tarcd')"></span>
 				                              	<div class="resize-div" style="min-width: 130px"></div>
 				                              </th>
 				                              <th>
 				                              	Loc 1 Type
+				                              	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'loc1Type')"></span>
 				                              	<div class="resize-div" style="min-width: 120px"></div>
 				                              </th>		                	
-				                              <th>Loc 1</th>
+				                              <th>Loc 1 
+				                              <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'loc1')"></span>
+				                              <div class="resize-div"></div>
+				                              	</th>
 				                              <th>
 				                              	Loc 2 Type
+				                              	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'loc2Type')"></span>
 				                              	<div class="resize-div" style="min-width: 120px"></div>
 				                              </th>
-				                              <th>Loc 2</th>
-				                              <th>Base FareCls</th>
-				                              <th>Base Rule No</th>
-				                              <th>Base Tariff Code</th>
+				                              <th>Loc 2 
+				                              <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'loc2')">
+				                              <div class="resize-div"></div></th>
+				                              <th>Base FareCls
+				                              <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'baseFareBasis')">
+				                              <div class="resize-div"></div></th>
+				                              <th>Base Rule No
+				                              <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'baseRuleNo')">
+				                              <div class="resize-div"></div></th>
+				                              <th>Base Tariff Code
+				                              <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'baseTarcd')">
+				                              <div class="resize-div"></div></th>
 				                              <th>
 				                              	Calc Type
+				                              	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'calcType')">				                              
 				                              	<div class="resize-div" style="min-width: 120px"></div>
 				                              </th>
-				                              <th>% of Base Fare</th>
-				                              <th>Curr</th>
-				                              <th>Specified Amount</th>
-				                              <th>PAX Type</th>
+				                              <th>% of Base Fare
+				                              <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'percentBaseFare')">
+				                              <div class="resize-div"></div></th></th>
+				                              <th>Curr
+				                              <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'currency')">
+				                              <div class="resize-div"></div></th></th>
+				                              <th>Specified Amount
+				                              <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'discountSpecifiedAmount')">
+				                              <div class="resize-div"></div></th></th>
+				                              <th>PAX Type
+				                              <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'passengerType')">
+				                              <div class="resize-div"></div></th></th>
 				                              <th>
 				                              	Fare Type
+				                              	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'fareType')">
 				                              	<div class="resize-div" style="min-width: 120px"></div>
 				                              </th>
 				                              <th>
 				                              	Tkt Code
+				                              	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'ticketCode')">				                              
 				                              	<div class="resize-div"></div>
 				                              </th>
 				                              <th>
 				                              	Tkt Des
+				                              	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'ticketDesignator')">
 				                              	<div class="resize-div"></div>
 				                              </th>
 				                              <th>
 				                              	Base Fare OW/RT
+				                              	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'typeOfJourney')">				                              
 				                              	<div class="resize-div" style="min-width: 120px"></div>
 				                              </th>
 				                              <th>
 				                              	Global
+				                              	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'global')">				                              
 				                              	<div class="resize-div"></div>
 				                              </th>
 				                              <th>
 				                              	Rtg No
+				                              	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'rtgno')">				                              
 				                              	<div class="resize-div"></div>
 				                              </th>		               		
-				                              <th>Rtg No Tarno</th>
-				                              <th>New FareCls</th>	
+				                              <th>Rtg No Tarno
+				                              <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'rtgnoTarno')">				                              
+				                              	<div class="resize-div"></div></th>
+				                              <th>New FareCls
+				                              <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'newFareBasis')">				                              
+				                              	<div class="resize-div"></div></th>	
 				                              <th>
 				                              	New OW/RT
+				                              	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'newTypeOfJourney')">	
 				                              	<div class="resize-div" style="min-width: 120px"></div>
 				                              </th>	 
-				                              <th>New BkgCd</th>	 
-				                              <th>Travel Start</th>	   
-				                              <th>Travel End</th>	   
-				                              <th>Sale Start</th>	   
-				                              <th>Sale End</th>	   
+				                              <th>New BkgCd
+				                              <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'newBookingCode')">				                              
+				                              	<div class="resize-div"></div></th>	 
+				                              <th>Travel Start
+				                              <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelStart')">				                              
+				                              	<div class="resize-div"></div></th>	   
+				                              <th>Travel End
+				                              <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelEnd')">				                              
+				                              	<div class="resize-div"></div></th>	   
+				                              <th>Sale Start
+				                              <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'saleStart')">				                              
+				                              	<div class="resize-div"></div></th>	   
+				                              <th>Sale End
+				                              <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'saleEnd')">				                              
+				                              	<div class="resize-div"></div></th>	   
 				                              <th>
 				                              	Comment
-				                              	<div class="resize-div"></div>
+				                              	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'comment')">				                              
+				                              <div class="resize-div"></div>
 				                              </th>	  
-				                              <th>Travel Complete</th>	  
-				                              <th>Travel Complete Indicator</th>	
+				                              <th>Travel Complete
+				                              <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelComplete')">				                              
+				                              	<div class="resize-div"></div></th>	  
+				                              <th>Travel Complete Indicator
+				                              <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelCompleteIndicator')">				                              
+				                              	<div class="resize-div"></div></th>	
 						                    </tr>
 						                  </thead>
 						                  <tbody>
 						                    <tr ng-click="vm.tbodyClick(workPackageSheet)" ng-repeat="fare in workPackageSheet.currentFares track by $index" role="row" class="datatable-row" ng-class="{'poiv-none':workPackageSheet.version != 'current', 'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
-						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no']}">{{$index+1}}</td>
+						                      <td>{{$index+1}}</td>
+											  <td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no'], changed : vm.diff[fare.id].indexOf('no') > -1}" name="no{{$parent.$index}}{{$index}}">{{fare.no}}</td>
 						                      <td ng-click="vm.tdClick(workPackageSheet, fare, 'status', $event)" ng-class="{highlighted:fare.field['status']}">
 						                        <select class="form-control inside-table" name="status{{$parent.$index}}{{$index}}" ng-model="fare.status" id="field_status" 
 						                            ng-class="{'must-fill': !editForm.editFormDiscount.status{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"												         		
@@ -2186,39 +2240,39 @@
         					</div>
         					
         					<div class="tab-pane" ng-class="{active:vm.currentTabFilingInstruction, 'poiv-none' : vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}" ng-if="vm.workPackage.filingInstruction">
-					       		<div class="box-header"></div>
-								<div class="box-body mb1">
-									<div class="form-group">
-										<label>Comment</label>
-										<wysiwyg-edit content="vm.commentStringFillingInstruction" config="vm.editorConfig"></wysiwyg-edit>
-									</div>
-									<div class="clearfix">
-										<div class="pull-right">
-											<button class="btn btn-default small btn-secondary" ng-click="vm.deleteCommentFillingInstruction()">Delete Comment</button>
-												<button class="btn btn-default small btn-secondary" ng-click="vm.collapseCommentFillingInstruction()">Collapse Deleted Comment</button>
-												<button class="btn btn-default small btn-secondary" ng-click="vm.expandCommentFillingInstruction()">Expand Deleted Comment</button>
-												<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()">Add Comment</button>
+					       			<div class="box-header"></div>
+									<div class="box-body mb1">
+										<div class="form-group" ng-class="{'poiv-none': vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}">
+											<label>Comment</label>
+											<wysiwyg-edit content="vm.commentStringFillingInstruction" config="vm.editorConfig"></wysiwyg-edit>
 										</div>
-									</div>		
-								</div>
-								<div class="box-detail box-comment">
-									<div class="box-body">
-						        		<div class="comment-container">
-						        			<div class="comment-wrapper">
-								    			<div ng-click="vm.selectCommentFillingInstruction(filingInstructionData)" ng-class="{'FIclicked': vm.tempFIC.indexOf(filingInstructionData) > -1}" class="comment-list" ng-if="!filingInstructionData.isDeleted || !vm.isFilingInstructionCollapse" ng-repeat="filingInstructionData in  vm.workPackage.filingInstructionData.slice().reverse() track by $index">
-											    	<div class="clearfix">
-											    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
-											    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'short'}}</div>
-											    	</div>
-											    	<label> 
-											    		<input type="checkbox" id="comment-message" name="comment-message" ng-model="filingInstructionData.isDeleted" disabled />
-														<span data-ng-bind-html="trustAsHtml(filingInstructionData.comment)"></span>
-													</label>
-												</div>
-								    		</div>
-						        		</div>					        		
-							    	</div>
-								</div>	
+										<div class="clearfix">
+											<div class="pull-right">
+												<button class="btn btn-default small btn-secondary" ng-click="vm.deleteCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Delete Comment</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.collapseCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Collapse Deleted Comment</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.expandCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Expand Deleted Comment</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Add Comment</button>
+											</div>
+										</div>		
+									</div>
+									<div class="box-detail box-comment">
+										<div class="box-body">
+							        		<div class="comment-container">
+							        			<div class="comment-wrapper">
+									    			<div ng-click="vm.selectCommentFillingInstruction(filingInstructionData)" ng-class="{'FIclicked': vm.tempFIC.indexOf(filingInstructionData) > -1}" ng-if="!filingInstructionData.isDeleted || !vm.isFilingInstructionCollapse" class="comment-list" ng-repeat="filingInstructionData in  vm.workPackage.filingInstructionData.slice().reverse() track by $index">
+												    	<div class="clearfix">
+												    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
+												    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'short'}}</div>
+												    	</div>
+												    	<label> 
+												    		<input type="checkbox" id="comment-message" name="comment-message" ng-model="filingInstructionData.isDeleted" disabled>
+															<span data-ng-bind-html="trustAsHtml(filingInstructionData.comment)"></span>
+														</label>
+													</div>
+									    		</div>
+							        		</div>					        		
+								    	</div>
+									</div>
 					        </div>
 					        
 					        <div class="tab-pane" ng-class="{active:vm.currentTabAttachment}" ng-if="vm.workPackage.attachment">
@@ -2286,179 +2340,232 @@
 							</div>
 					        
 					        <div class="tab-pane" ng-class="{active:vm.currentTabFilingDetail}" ng-if="vm.workPackage.discountFareSheet.length > 0" >
-			          	
-								<div class="tab-content wp">
-								<div class="clearfix">
-									<div class="pull-left w20 ph5px">
-										<div class="form-group">
-											<div class="checkbox-wrapper">
-												<label class="black">
-													<input type="radio" name="radio1" ng-model="vm.workPackage.filingDetail.workUnitType" value="existing">
-													Use Existing Work Unit
-												</label>
+					        <div class="tab-content wp" ng-class="{'poiv-none' : (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}">
+										<div class="clearfix">
+											<div class="pull-left w20 ph5px">
+												<div class="form-group">
+													<div class="checkbox-wrapper">
+														<label class="black">
+															<input type="radio" name="radio1" ng-model="vm.workPackage.filingDetail.workUnitType" value="existing" ng-disabled="vm.checkFilingDetailDisabled()">
+															Use Existing Work Unit
+														</label>
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="checkbox-wrapper">	
+														<label class="black">
+															<input type="radio" name="radio1" ng-init="vm.workPackage.filingDetail.workUnitType == null || vm.workPackage.filingDetail.workUnitType == '' ? vm.workPackage.filingDetail.workUnitType = 'new' : vm.workPackage.filingDetail.workUnitType = vm.workPackage.filingDetail.workUnitType"  ng-model="vm.workPackage.filingDetail.workUnitType" value="new" ng-disabled="vm.checkFilingDetailDisabled()">
+															Use New Work Unit
+														</label>
+													</div>
+												</div>
+											</div>
+											<div class="pull-left w20 ph5px">
+												<div class="form-group">
+													<label>Work Unit ID</label>
+													<input type="text" name="Work Unit ID" class="form-control" ng-model="vm.workPackage.filingDetail.workUnitId" ng-disabled="vm.workPackage.filingDetail.workUnitType != 'existing' || vm.checkFilingDetailDisabled()">																
+												</div>
+												<div class="form-group">
+													<label>New Work Unit</label>
+													<input type="text" name="New Work Unit" class="form-control" ng-model="vm.workPackage.filingDetail.workUnit" ng-disabled="vm.workPackage.filingDetail.workUnitType != 'new' || vm.checkFilingDetailDisabled()">																
+												</div>
+											</div>
+											<div class="pull-left w20 ph5px">
+												<div class="form-group absolute-datepicker">
+													<label>Created Date</label>
+													<div class="input-group">
+														<input type="text" id="field_gfsDate" name="gfsDate{{$index}}" class="form-control"
+														ng-disabled="vm.workPackage.filingDetail.workUnitType != 'existing' || vm.checkFilingDetailDisabled()"
+														enable-time="false"
+														datetime-picker="{{dateformat}}" ng-model="vm.workPackage.filingDetail.createdDate" is-open="vm.datePickerOpenStatus['filingDetailCreatedDate']" />
+														<span ng-click="vm.openCalendar('filingDetailCreatedDate')" class="input-group-addon" ng-class="{'poiv-none':vm.workPackage.filingDetail.workUnitType != 'existing'}">
+															<i class="fa fa-calendar"></i>
+														</span>
+													</div>
+													<!-- <select class="form-control" ng-disabled="vm.workPackage.filingDetail.workUnitType != 'existing'" ng-model="vm.workPackage.filingDetail.workUnitId">
+														<option></option>
+														<option>Current</option>
+													</select> -->
+												</div>
+												<div class="form-group absolute-datepicker">
+													<label>Release Date (EST)</label>
+													<div class="input-group">
+														<input type="text" id="field_gfsDate" name="gfsDate{{$index}}" class="form-control"
+														ng-disabled="vm.workPackage.filingDetail.releaseInstruction != 'release' || vm.checkFilingDetailDisabled()"
+														enable-time="false"
+														datetime-picker="{{dateformat}}" ng-model="vm.workPackage.filingDetail.releaseDate" is-open="vm.datePickerOpenStatus['filingDetailReleaseDate']" />
+														<span ng-click="vm.openCalendar('filingDetailCreatedDate')" class="input-group-addon poiv-none">
+															<i class="fa fa-calendar"></i>
+														</span>
+													</div>
+													<!-- <input type="text" class="form-control" ng-model="vm.workPackage.filingDetail.releaseDate" disabled> -->		
+												</div>
+											</div>
+											<div class="pull-left w20 ph5px">
+												<div class="form-group">
+													<label>Organization</label>
+													<input type="text" name="Organization" class="form-control" ng-model="vm.workPackage.filingDetail.organization" ng-disabled="vm.workPackage.filingDetail.workUnitType != 'existing' || vm.checkFilingDetailDisabled()">		
+												</div>
+												<div class="form-group">
+													<div class="checkbox-wrapper">
+														<label class="black">
+															<input type="checkbox" ng-model="vm.workPackage.filingDetail.exclusiveAccess" ng-disabled="vm.workPackage.filingDetail.workUnitType != 'new' || vm.checkFilingDetailDisabled()">
+															Exclusive Access
+														</label>
+														<label class="black">
+															<input type="checkbox" disabled>
+															Ignore Errors
+														</label>
+													</div>
+												</div>
+											</div>
+											<div class="pull-left w20 ph5px">
+												<div class="button-group dropdown" style="margin-top: 23px;
+												margin-left: 10px;">
+													<div class="button-group dropdown custom">
+														<button class="btn btn-default small" ng-disabled="vm.workPackage.reviewLevel == 'LSO' || vm.workPackage.reviewLevel == 'HO'">Actions <i class="fa fa-caret-down"></i></button>
+														<ul class="dropdown-menu custom" role="menu">
+														    <li>
+														    	<a>Copy Justification Text</a>
+														    	<a ng-click="vm.refreshTariff()">Refresh Tariff List</a>
+														    	<a ng-click="vm.applyText()">ApplyText for All tariffs</a>
+														    	<a ng-click="vm.previewUploadFile()">Preview Upload File</a>
+														    </li>
+														</ul>
+													</div>	
+													<!-- <button class="btn btn-secondary small">Action <i class="fa fa-caret-down"></i></button>
+													<ul class="dropdown-menu" role="menu">
+													    <li>
+													    	<a href="#">A</a>
+													    </li>
+													    <li>
+													    	<a href="#">B</a>
+													    </li>
+													</ul> -->
+												</div>
 											</div>
 										</div>
-										<div class="form-group">
-											<div class="checkbox-wrapper">	
-												<label class="black">
-													<input type="radio" name="radio1" ng-model="vm.workPackage.filingDetail.workUnitType" value="new">
-													Use New Work Unit
-												</label>
-											</div>
-										</div>
-									</div>
-									<div class="pull-left w20 ph5px">
-										<div class="form-group">
-											<label>Work Unit ID</label>
-											<input type="text" name="Work Unit ID" class="form-control" ng-model="vm.workPackage.filingDetail.workUnitId">																
-										</div>
-										<div class="form-group">
-											<label>New Work Unit</label>
-											<input type="text" name="New Work Unit" class="form-control" ng-model="vm.workPackage.filingDetail.workUnitId">																
-										</div>
-									</div>
-									<div class="pull-left w20 ph5px">
-										<div class="form-group">
-											<label>Created Date</label>
-											<select class="form-control" disabled="disabled" ng-model="vm.workPackage.filingDetail.workUnitId">
-												<option></option>
-												<option>Current</option>
-											</select>
-										</div>
-										<div class="form-group">
-											<label>Releaser Date (EST)</label>
-											<input type="text" name="Releaser Date (EST)" class="form-control" ng-model="vm.workPackage.filingDetail.workUnitId">		
-										</div>
-									</div>
-									<div class="pull-left w20 ph5px">
-										<div class="form-group">
-											<label>Organization</label>
-											<input type="text" name="Organization" class="form-control" disabled="disabled">		
-										</div>
-										<div class="form-group">
-											<div class="checkbox-wrapper">
-												<label class="black">
-													<input type="checkbox" name="" checked="checked">
-													Exclusive Access
-												</label>
-												<label class="black">
-													<input type="checkbox" name="" checked="checked" disabled="disabled">
-													Ignore Errors
-												</label>
-											</div>
-										</div>
-									</div>
-									<div class="pull-left w20 ph5px">
-										<div class="button-group dropdown" style="margin-top: 28px; margin-left: 10px;">
-											<button class="btn btn-secondary small">Action <i class="fa fa-caret-down"></i></button>
-											<ul class="dropdown-menu" role="menu">
-											    <li>
-											    	<a href="#">A</a>
-											    </li>
-											    <li>
-											    	<a href="#">B</a>
-											    </li>
-											</ul>
-										</div>
-									</div>
-								</div>
-								<div class="w60 ph5px">
-									<div class="form-group">
-										<label>Description</label>
-										<input type="text" name="Description" class="form-control">	
-									</div>
-									<div class="form-group">
-										<label>Email Notification</label>
-										<input type="text" name="Email Notification" class="form-control" ng-model="vm.workPackage.filingDetail.email">	
-									</div>											
-								</div>
-								<div class="clearfix mb1">
-										<div class="pull-left w60 ph5px">
+										<div class="w60 ph5px">
 											<div class="form-group">
-												<label>Release Instruction</label>
-												<select class="form-control" ng-model="vm.workPackage.filingDetail.releaseInstruction" id="field_status">
-													<option value="">Select Release Instruction</option>
-									                <option value="Release Batches">Release Work Unit / Batch</option>
-									                <option value="Create Batches">Do not Release Work Unit / Batch</option>
-												</select>
+												<label>Description</label>
+												<input type="text" name="Description" class="form-control" ng-model="vm.workPackage.filingDetail.description" ng-disabled="vm.workPackage.filingDetail.workUnitType != 'new' || vm.checkFilingDetailDisabled()">	
 											</div>
+											<div class="form-group">
+												<label>Email Notification</label>
+												<input type="text" name="Email Notification" class="form-control" ng-model="vm.workPackage.filingDetail.email" ng-disabled="vm.checkFilingDetailDisabled()">	
+											</div>											
 										</div>
-										<div class="pull-left w40 ph5px">
-											<div class="btn-wrapper-action text-right">
-												<button class="btn btn-default small btn-secondary" ng-click="vm.addBatch()">Add Batch Number</button>
-												<button class="btn btn-default small btn-secondary">Remove Batch Number</button>
-											</div>												
-										</div>
-									</div>
-								<div class="clearfix">
-										<div class="pull-left w60 ph5px">
-											<div class="box-detail">
-							      				<div class="box-header">
-													Tariffs :
+										<div class="clearfix mb1">
+												<div class="pull-left w60 ph5px">
+													<div class="form-group">
+														<label>Release Instruction</label>
+														<select class="form-control" 
+														ng-disabled="vm.workPackage.filingDetail.workUnitType != 'new' || vm.checkFilingDetailDisabled()"
+														ng-model="vm.workPackage.filingDetail.releaseInstruction" id="field_status" ng-init="vm.workPackage.filingDetail.releaseInstruction == null ? vm.workPackage.filingDetail.releaseInstruction = 'notRelease' : vm.workPackage.filingDetail.releaseInstruction = vm.workPackage.filingDetail.releaseInstruction">
+															<option value="">Select Release Instruction</option>
+											                <option value="release">Release Work Unit / Batch</option>
+											                <option value="notRelease">Do not Release Work Unit / Batch</option>
+														</select>
+													</div>
 												</div>
-							      				<div class="box-body">
-							      					<div class="table-wrapper">
-														<div class="datatable-wrapper form-inline">
-															<div class="table-responsive">
-																<table class="table table-stripped table-bordered datatable" jq-slider>
-																	<thead>
-																		<tr role="row">
-																			<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tar Type</th>
-																			<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tar No</th>
-																			<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tar CD</th>
-																			<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">CXR</th>
-																		</tr>
-																	</thead>
-																	<tbody>
-																		<tr role="row" class="datatable-row">
-																			<td>A</td>
-																			<td>B</td>
-																			<td>C</td>
-																			<td>D</td>
-																		</tr>
-																	</tbody>
-																</table>
+												<div class="pull-left w40 ph5px">
+													<div class="btn-wrapper-action text-right">
+														<button class="btn btn-default small btn-secondary" ng-click="vm.addBatchNumber()" ng-disabled="vm.workPackage.reviewLevel == 'LSO' || vm.workPackage.reviewLevel == 'HO'">Add Batch Number</button>
+														<button class="btn btn-default small btn-secondary" ng-click="vm.removeBatchNumber()" ng-disabled="vm.workPackage.reviewLevel == 'LSO' || vm.workPackage.reviewLevel == 'HO'">Remove Batch Number</button>
+													</div>												
+												</div>
+											</div>
+										<div class="clearfix">
+												<div class="pull-left w60 ph5px">
+													<div class="box-detail">
+									      				<div class="box-header">
+															Tariffs :
+														</div>
+									      				<div class="box-body">
+									      					<div class="table-wrapper">
+																<div class="datatable-wrapper form-inline">
+																	<div class="table-responsive">
+																		<table class="table table-stripped table-bordered datatable" jq-slider>
+																			<thead>
+																				<tr role="row">
+																					<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tar Type</th>
+																					<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tar No</th>
+																					<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Tar CD</th>
+																					<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">CXR</th>
+																					<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Gov</th>
+																					<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Justification Text</th>
+																				</tr>
+																			</thead>
+																			<tbody>
+																				<tr ng-click="vm.selectedTariffRow = tariff" ng-class="{highlighted:vm.selectedTariffRow == tariff}" role="row" class="datatable-row" ng-repeat="tariff in vm.workPackage.filingDetail.filingDetailTarif track by $index ">
+																					<td>{{tariff.tarType}}</td>
+																					<td>{{tariff.tarNo}}</td>
+																					<td>{{tariff.tarCd}}</td>
+																					<td>{{tariff.cxr}}</td>
+																					<td>XX</td>
+																					<td>
+																						<input type="text" ng-model="tariff.justificationText" class="form-control" maxlength="65"/>
+																					</td>
+																				</tr>
+																			</tbody>
+																		</table>
+																	</div>
+																</div>
+															</div>
+															<!-- end of table wrapper -->
+									      				</div>
+									      			</div>
+												</div>
+												<div class="pull-left w40 ph5px">
+													<div class="box-detail">
+									      				<div class="box-header">
+															Batch &amp; GFs Numbers :
+														</div>
+									      				<div class="box-body">
+									      					<div class="table-wrapper">
+																<div class="datatable-wrapper form-inline">
+																	<div class="table-responsive">
+																		<table class="table table-stripped table-bordered datatable" jq-slider>
+																			<thead>
+																				<tr role="row">
+																					<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Batch No</th>
+																					<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">GFs Refs</th>
+																					<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">GFs Date</th>
+																				</tr>
+																			</thead>
+																			<tbody>
+																				<tr ng-click="vm.selectedBatchRow = batch" ng-class="{highlighted:vm.selectedBatchRow == batch}" role="row" class="datatable-row" ng-repeat="batch in vm.selectedTariffRow.batch track by $index">
+																					<td>
+																					<input type="text" ng-model="batch.batchNo" maxlength="5" class="form-control"/>
+																					</td>
+																					<td>
+																					<input type="text" ng-model="batch.gfsRef" maxlength="3" class="form-control"/>
+																					</td>
+																					<td>
+																						<div class="form-group pm0">
+																							<div class="input-group">
+																								<input type="text" id="field_gfsDate" name="gfsDate{{$index}}" class="form-control"
+																								enable-time="false"
+																								datetime-picker="{{dateformat}}" ng-model="batch.gfsDate" is-open="vm.datePickerOpenStatus['gfsDate'+$index]" />
+																								<span ng-click="vm.openCalendar('gfsDate'+$index)" class="input-group-addon">
+																									<i class="fa fa-calendar"></i>
+																								</span>
+																							</div>
+																						</div>
+																					<!-- <input type="text" ng-model="batch.gfsDate" class="form-control"/> -->
+																					</td>
+																				</tr>
+																			</tbody>
+																		</table>
+																	</div>
+																</div>
 															</div>
 														</div>
 													</div>
-													<!-- end of table wrapper -->
-							      				</div>
-							      			</div>
-										</div>
-										<div class="pull-left w40 ph5px">
-											<div class="box-detail">
-							      				<div class="box-header">
-													Batch &amp; GFs Numbers :
-												</div>
-							      				<div class="box-body">
-							      					<div class="table-wrapper">
-														<div class="datatable-wrapper form-inline">
-															<div class="table-responsive">
-																<table class="table table-stripped table-bordered datatable" jq-slider>
-																	<thead>
-																		<tr role="row">
-																			<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Batch No</th>
-																			<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">GFs Refs</th>
-																			<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">GFs Date</th>
-																		</tr>
-																	</thead>
-																	<tbody>
-																		<tr role="row" class="datatable-row">
-																			<td>A</td>
-																			<td>B</td>
-																			<td>C</td>
-																		</tr>
-																	</tbody>
-																</table>
-															</div>
-														</div>
-													</div>
 												</div>
 											</div>
-										</div>
-									</div>
-					      	</div>
-
+							      	</div>
+			          			
 
 					        </div>	
         					
@@ -2603,53 +2710,101 @@
 												<thead>
 													<tr>
 								                		<th>No</th>
-								                		<th>Status</th>
+														<th># <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, '#')"></span>
+														<div class="resize-div"></div>
+														</th>
+								                		<th>Status
+								                		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'status')"></span>
+								                		<div class="resize-div"></div>
+								                		</th>
 								                		<th>Action
+								                		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'action')"></span>
 								                			<div class="resize-div"></div>
 								                		</th>
 									                	<th>Carrier
+									                	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'carrier')"></span>
 									                		<div class="resize-div"></div>
 									                	</th>		                	
-									                	<th>Origin</th>
-									                	<th>Dest</th>
+									                	<th>Origin
+									                	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'origin')">
+				                              			<div class="resize-div"></div></th>
+									                	<th>Dest
+									                	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'destination')">
+				                              			<div class="resize-div"></div></th>
 									                	<th>Fare Cls
+									                	    <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'fareBasis')">
 									                		<div class="resize-div" style="min-width: 100px"></div>
 									                	</th>
-									                	<th>Bkg Cls</th>
-									                	<th>SSN</th>
+									                	<th>Bkg Cls
+									                	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'bookingClass')">
+				                              			<div class="resize-div"></div></th>
+									                	<th>SSN
+									                	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'ssn')">
+				                              			<div class="resize-div"></div></th>
 									                	<th>Cabin
+									                	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'cabin')">
+				                              			
 									                		<div class="resize-div" style="min-width: 120px"></div>
 									                	</th>
 									                	<th>OW/RT
+									                	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'typeOfJourney')">
+				                              			
 									                		<div class="resize-div" style="min-width: 120px"></div>
 									                	</th>
 									                	<th>Rule Id
+									                	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'ruleno')">
+				                              			
 									                		<div class="resize-div"></div>
 									                	</th>
-									                	<th>Curr</th>
+									                	<th>Curr<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'currency')">
+				                              			
+									                		<div class="resize-div"></th>
 									                	<th>Base Amt
+									                	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'amount')">
+				                              			
 									                		<div class="resize-div" style="min-width: 120px"></div>
 									                	</th>
-									                  	<th>Prev Base Amt</th>
-									                	<th>Prev Base Amt Diff</th>
-									                	<th>% Prev Base Amt Diff</th>
-										                <th>Travel Start</th>
-									               		<th>Travel End</th>		               		
-									               		<th>Sale Start</th>
-									               		<th>Sale End</th>	
+									                  	<th>Prev Base Amt
+									                  	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'prevAmount')">
+				                              			<div class="resize-div"></th>
+									                	<th>Prev Base Amt Diff
+									                	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'prevAmountDiff')">
+				                              			<div class="resize-div"></th>
+									                	<th>% Prev Base Amt Diff
+									                	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'prevPercentAmountDiff')">
+				                              			<div class="resize-div"></th>
+										                <th>Travel Start
+										                <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelStart')">
+				                              			<div class="resize-div"></th>
+									               		<th>Travel End
+									               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelEnd')">
+				                              			<div class="resize-div"></th>		               		
+									               		<th>Sale Start
+									               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'saleStart')">
+				                              			<div class="resize-div"></th>
+									               		<th>Sale End
+									               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'saleEnd')">
+				                              			<div class="resize-div"></th>	
 									               		<th>Comment
-									               			<div class="resize-div" style="min-width: 200px;"></div>
+									               			<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'comment')">
+				                              				<div class="resize-div" style="min-width: 200px;"></div>
 									               		</th>	               		
-									               		<th>Travel Complete</th>	               		
-									               		<th>Travel Complete Indicator</th>	               		
+									               		<th>Travel Complete
+									               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelComplete')">
+				                              			<div class="resize-div"></th>	               		
+									               		<th>Travel Complete Indicator
+									               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelCompleteIndicator')">
+				                              			<div class="resize-div"></th>	               		
 									               		<th>RateSheet Comment
-									               			<div class="resize-div" style="min-width: 200px;"></div>
+									               			<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'ratesheetComment')">
+				                              				<div class="resize-div" style="min-width: 200px;"></div>
 									               		</th>	        		
 									                </tr>
 												</thead>
 												<tbody ng-class="{'poiv-none' : vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO'&& vm.workPackage.status=='DISTRIBUTED' }">
 													<tr ng-click="vm.tbodyClick(workPackageSheet)" ng-repeat="fare in workPackageSheet.currentFares track by $index" role="row" class="datatable-row" ng-class="{'poiv-none': workPackageSheet.version != 'current', 'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
-														<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no']}">{{$index+1}}</td>
+														<td>{{$index+1}}</td>
+														<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no'], changed : vm.diff[fare.id].indexOf('no') > -1}" name="no{{$parent.$index}}{{$index}}">{{fare.no}}</td>															
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'status', $event)" ng-class="{highlighted:fare.field['status']}">
 															<select class="form-control inside-table" name="marketFareStatus{{$parent.$index}}{{$index}}" ng-model="fare.status" id="field_status" 
 																ng-class="{'must-fill': !editForm.editFormMarket.marketFareStatus{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"												         		
@@ -3075,40 +3230,77 @@
 													<thead>
 														<tr role="row">																	
 															<th>No</th>
-									                		<th>Status</th>
+															<th># <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, '#')"></span>
+									                		<th>Status
+									                		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'status')"></span>
+									                		<div class="resize-div"></div>
+									                		</th>
 										                	<th>Carrier
-										                		<div class="resize-div"></div>
+										                		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'carrier')"></span>
+									                		<div class="resize-div"></div>
 										                	</th>		                	
 									                		<th>Action
-									                			<div class="resize-div"></div>
+									                			<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'action')"></span>
+									                		<div class="resize-div"></div>
 									                		</th>
-										                	<th>Origin</th>
-										                	<th>Dest</th>
+										                	<th>Origin
+										                	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'origin')"></span>
+									                		<div class="resize-div"></div></th>
+										                	<th>Dest
+										                	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'destination')"></span>
+									                		<div class="resize-div"></div></th>
 										                	<th>Addon Bucket/Fare Class
+										                	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'bucket')"></span>
 										                		<div class="resize-div" style="min-width: 165px"></div>
 										                	</th>
 										                	<th>OW/RT
+										                	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'typeOfJourney')"></span>
 										                		<div class="resize-div" style="min-width: 120px"></div>
 										                	</th>
-										                	<th>Filing Curr</th>
-										                	<th>Base Amt</th>
-										                	<th>Prev Base Amt</th>
-									                		<th>Prev Base Amt Diff</th>
-									                		<th>% Prev Base Amt Diff</th>
-											                <th>Travel Start</th>
-										               		<th>Travel End</th>		               		
-										               		<th>Sale Start</th>
-										               		<th>Sale End</th>	
+										                	<th>Filing Curr
+										                	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'currency')"></span>
+									                		<div class="resize-div"></div></th>
+										                	<th>Base Amt
+										                	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'amount')"></span>
+									                		<div class="resize-div"></div></th>
+										                	<th>Prev Base Amt
+										                	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'prevAmount')"></span>
+									                		<div class="resize-div"></div></th>
+									                		<th>Prev Base Amt Diff
+									                		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'prevAmountDiff')"></span>
+									                		<div class="resize-div"></div></th>
+									                		<th>% Prev Base Amt Diff
+									                		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'prevPercentAmountDiff')"></span>
+									                		<div class="resize-div"></div></th>
+											                <th>Travel Start
+											                <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelStart')"></span>
+									                		<div class="resize-div"></div></th>
+										               		<th>Travel End
+										               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelEnd')"></span>
+									                		<div class="resize-div"></div></th>		               		
+										               		<th>Sale Start
+										               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'saleStart')"></span>
+									                		<div class="resize-div"></div></th>
+										               		<th>Sale End
+										               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'saleEnd')"></span>
+									                		<div class="resize-div"></div></th>	
 										               		<th>Comment
+										               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'comment')"></span>
 										               			<div class="resize-div" style="min-width: 200px;"></div>
 										               		</th>	               		
-										               		<th>Travel Complete</th>	               		
-										               		<th>Travel Complete Indicator</th>		
+										               		<th>Travel Complete
+										               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelComplete')"></span>
+									                		<div class="resize-div"></div></th>	               		
+										               		<th>Travel Complete Indicator
+										               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'travelCompleteIndicator')"></span>
+									                		<div class="resize-div"></div>
+									                		</th>		
 														</tr>
 													</thead>
 													<tbody>
 														<tr role="row" class="datatable-row" ng-repeat="fare in workPackageSheet.currentFares track by $index" ng-class="{'poiv-none': workPackageSheet.version != 'current', 'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
-															<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no']}">{{$index+1}}</td>
+															<td>{{$index+1}}</td>
+															<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no'], changed : vm.diff[fare.id].indexOf('no') > -1}" name="no{{$parent.$index}}{{$index}}">{{fare.no}}</td>															
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'status', $event)" ng-class="{highlighted:fare.field['status']}">
 																<select class="form-control inside-table" name="addonFareStatus{{$index}}" ng-model="fare.status" id="field_status" 
 																	ng-class="{'must-fill': !editForm.editFormMarket.addonFareStatus{{$index}}.$valid && fare.action != 'Canceled'}"												         		
@@ -3161,7 +3353,7 @@
 											           				ng-maxlength="8"
 								                					maxlength="8"
 								                					uppercase
-								                					ng-pattern="/^[a-zA-Z0-9]{1,8}$/"
+								                					ng-pattern="/^[a-zA-Z0-9*]{1,8}$/"
 								                					ng-keypress="vm.keypress($event, '^[a-zA-Z0-9*]{1,8}$')"									                				
 														            ng-class="{'must-fill': editForm.editFormMarket.addonFareBucket{{$parent.$index}}{{$index}}.$error.required 
 														            || editForm.editFormMarket.addonFareBucket{{$parent.$index}}{{$index}}.$error.pattern 
@@ -3409,41 +3601,39 @@
 							</div>
 													
 							<div class="tab-pane" ng-class="{active:vm.currentTabFilingInstruction, 'poiv-none' : vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}" ng-if="vm.workPackage.filingInstruction">									
-								<div class="box-header"></div>
-								<div class="box-body mb1">
-									<div class="form-group">
-										<label>Comment</label>
-									`	<wysiwyg-edit content="vm.commentStringFillingInstruction" config="vm.editorConfig"></wysiwyg-edit>
-									</div>
-									<div class="clearfix">
-										<div class="pull-right">
-											<button class="btn btn-default small btn-secondary" ng-click="vm.deleteCommentFillingInstruction()">Delete Comment</button>
-											<button class="btn btn-default small btn-secondary" ng-click="vm.collapseCommentFillingInstruction()">Collapse Deleted Comment</button>
-											<button class="btn btn-default small btn-secondary" ng-click="vm.expandCommentFillingInstruction()">Expand Deleted Comment</button>
-											<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()">Add Comment</button>
+									<div class="box-header"></div>
+									<div class="box-body mb1">
+										<div class="form-group" ng-class="{'poiv-none': vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}">
+											<label>Comment</label>
+											<wysiwyg-edit content="vm.commentStringFillingInstruction" config="vm.editorConfig"></wysiwyg-edit>
 										</div>
-									</div>		
-								</div>
-								<div class="box-detail box-comment">
-									<div class="box-body">
-						        		<div class="comment-container">
-						        			<div class="comment-wrapper">
-								    			<div ng-click="vm.selectCommentFillingInstruction(filingInstructionData)" ng-class="{'FIclicked': vm.tempFIC.indexOf(filingInstructionData) > -1}" ng-if="!filingInstructionData.isDeleted || !vm.isFilingInstructionCollapse" class="comment-list" ng-repeat="filingInstructionData in  vm.workPackage.filingInstructionData.slice().reverse() track by $index">
-											    	<div class="clearfix">
-											    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
-											    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'short'}}</div>
-											    	</div>
-											    	<label> 
-											    		<input type="checkbox" id="comment-message" name="comment-message" ng-model="filingInstructionData.isDeleted" disabled>
-														<span data-ng-bind-html="trustAsHtml(filingInstructionData.comment)"></span>
-													</label>
-												</div>
-								    		</div>
-						        		</div>					        		
-							    	</div>
-								</div>	
-							</div>
-							
+										<div class="clearfix">
+											<div class="pull-right">
+												<button class="btn btn-default small btn-secondary" ng-click="vm.deleteCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Delete Comment</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.collapseCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Collapse Deleted Comment</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.expandCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Expand Deleted Comment</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Add Comment</button>
+											</div>
+										</div>		
+									</div>
+									<div class="box-detail box-comment">
+										<div class="box-body">
+							        		<div class="comment-container">
+							        			<div class="comment-wrapper">
+									    			<div ng-click="vm.selectCommentFillingInstruction(filingInstructionData)" ng-class="{'FIclicked': vm.tempFIC.indexOf(filingInstructionData) > -1}" ng-if="!filingInstructionData.isDeleted || !vm.isFilingInstructionCollapse" class="comment-list" ng-repeat="filingInstructionData in  vm.workPackage.filingInstructionData.slice().reverse() track by $index">
+												    	<div class="clearfix">
+												    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
+												    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'short'}}</div>
+												    	</div>
+												    	<label> 
+												    		<input type="checkbox" id="comment-message" name="comment-message" ng-model="filingInstructionData.isDeleted" disabled>
+															<span data-ng-bind-html="trustAsHtml(filingInstructionData.comment)"></span>
+														</label>
+													</div>
+									    		</div>
+							        		</div>					        		
+								    	</div>
+									</div>	
 						</div>
 						
 					</div>
@@ -3455,8 +3645,8 @@
 					<div class="clearfix tab-body">
 						<ul class="clearfix nav-responsive nav nav-tabs">
 						    <li ng-if="vm.workPackage.waiverFares" ng-class="{active:vm.currentWaiverTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.waiverFareSheet track by $index"><a ng-click="vm.selectWaiverTab($index);">Waiver Fares : {{vm.workPackage.waiverFareSheet[$index].waiverFaresName}}</a></li>
-						    <li ng-if="vm.workPackage.waiverRules" ng-class="{active:vm.currentTabWaiverRules}"><a ng-click="vm.selectOtherTab('waiverRules')">Waiver Rules</a></li>
-						    <li ng-if="vm.workPackage.attachment" ng-class="{active:vm.currentTabAttachment}"><a ng-click="vm.selectOtherTab('attachment')">Attachment</a></li>
+						    <!-- <li ng-if="vm.workPackage.waiverRules" ng-class="{active:vm.currentTabWaiverRules}"><a ng-click="vm.selectOtherTab('waiverRules')">Waiver Rules</a></li>
+						    <li ng-if="vm.workPackage.attachment" ng-class="{active:vm.currentTabAttachment}"><a ng-click="vm.selectOtherTab('attachment')">Attachment</a></li> -->
 						</ul>
 						<div class="tab-content">
 							<div class="tab-pane" ng-class="{active:vm.currentWaiverTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.waiverFareSheet track by $index">
@@ -3605,70 +3795,107 @@
 												<thead>
 													<tr>
 								                		<th>No</th>
+														<th># <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, '#')"></span><div class="resize-div"></div></th>
+									                	
 								                		<th>Type
+								                		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverType')"></span>
 								                			<div class="resize-div"></div>
 								                		</th>
 									                	<th>Full/Partial
+								                		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverFullPartial')"></span>
 									                		<div class="resize-div"></div>
 									                	</th>		                	
 									                	<th>PNR
+								                		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverPnr')"></span>
 									                		<div class="resize-div"></div>
 									                	</th>
 									                	<th>Tkt From
+								                		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverTktFrom')"></span>
 									                		<div class="resize-div"></div>
 									                	</th>
 									                	<th>Tkt To
+								                		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverTktTo')"></span>
 									                		<div class="resize-div"></div>
 									                	</th>
-									                	<th>Ori</th>
-									                	<th>Dest</th>
+									                	<th>Ori
+									                	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverOri')"></span>
+									                		<div class="resize-div"></div>
+									                	</th>
+									                	<th>Dest
+									                	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverDest')"></span>
+									                		<div class="resize-div"></div>
+									                	</th>
 									                	<th>Original Itinerary
+									                	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverOriginalItinerary')"></span>
 									                		<div class="resize-div"></div>
 									                	</th>
 									                	<th>New Itinerary
+									                	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverNewItinerary')"></span>
 									                		<div class="resize-div"></div>
 									                	</th>
 									                	<th>Original Basic Fare
+									                	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverOriginalBasicFare')"></span>
 									                		<div class="resize-div"></div>
 									                	</th>
 									                	<th>New Basic Fare
+									                	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverNewBasicFare')"></span>
 									                		<div class="resize-div"></div>
 									                	</th>
 									                	<th>Approved Fares
+									                	<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverApprovedFare')"></span>
 									                		<div class="resize-div"></div>
 									                	</th>
 										                <th>Fare Lost
-										                	<div class="resize-div"></div>
+										                <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverFareLost')"></span>
+									                		<div class="resize-div"></div>
 										                </th>
 									               		<th>Calculated PN
-									               			<div class="resize-div"></div>
+									               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverCalculatedPn')"></span>
+									                		<div class="resize-div"></div>
 									               		</th>		               		
 									               		<th>Original PN
-									               			<div class="resize-div"></div>
+									               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverOriginalPn')"></span>
+									                		<div class="resize-div"></div>
 									               		</th>
 									               		<th>Approved PN
-									               			<div class="resize-div"></div>
+									               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverApprovedPn')"></span>
+									                		<div class="resize-div"></div>
 									               		</th>	
-									               		<th>Penalty Lost %</th>	               		
-									               		<th>Penalty Lost Amount</th>	               		
-									               		<th>Currency</th>	               		
+									               		<th>Penalty Lost %
+									               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverPenaltyLostPercent')"></span>
+									                		<div class="resize-div"></div>
+									               		
+									               		</th>	               		
+									               		<th>Penalty Lost Amount
+									               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverPenaltyLostAmount')"></span>
+									                		<div class="resize-div"></div>
+									               		</th>	               		
+									               		<th>Currency
+									               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverCurrency')"></span>
+									                		<div class="resize-div"></div>
+									               		</th>	               		
 									               		<th>Total Pax
-									               			<div class="resize-div"></div>
+									               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverTotalPax')"></span>
+									                		<div class="resize-div"></div>
 									               		</th>	        	
 									               		<th>Total Lost
-									               			<div class="resize-div"></div>
+									               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverTotalLost')"></span>
+									                		<div class="resize-div"></div>
 									               		</th>	 
 									               		<th>Approver
-									               			<div class="resize-div"></div>
+									               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverApprover')"></span>
+									                		<div class="resize-div"></div>
 									               		</th>
 									               		<th>Remark
-									               			<div class="resize-div"></div>
+									               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverRemark')"></span>
+									                		<div class="resize-div"></div>
 									               		</th>	        		        	       		
 									                </tr>
 												</thead>
 												<tbody>
 													<tr ng-click="vm.tbodyClick(workPackageSheet)" ng-repeat="fare in workPackageSheet.currentFares track by $index" role="row" class="datatable-row" ng-class="{'poiv-none':workPackageSheet.version != 'current', 'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
-														<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no']}">{{$index+1}}</td>
+														<td>{{$index+1}}</td>
+														<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no'], changed : vm.diff[fare.id].indexOf('no') > -1}" name="no{{$parent.$index}}{{$index}}">{{fare.no}}</td>															
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverType', $event)" ng-class="{highlighted:fare.field['waiverType']}">
 															<select class="form-control" ng-model="fare.waiverType" name="waiverType{{$parent.$index}}{{$index}}"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverType{{$parent.$index}}{{$index}}.$valid}"												         		
@@ -4009,6 +4236,7 @@
 								     </div>
 								
 							</div>
+						
 						</div>
 					</div>
 				</div>

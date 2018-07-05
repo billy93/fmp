@@ -157,7 +157,7 @@ public class FootnoteQueryResource {
 
 		String recordId = footnoteQuery.getTarNo() + footnoteQuery.getCxr() + footnoteQuery.getFtnt() + "";
 
-		List<AtpcoFootnoteQueryDetails> arecords2 = atpcoFootnoteQueryCustomRepository.getListFtntRecord2(recordId, footnoteQuery.getCatNo());
+		List<AtpcoFootnoteQueryDetails> arecords2 = atpcoFootnoteQueryCustomRepository.getListFtntRecord2(recordId);
 
 		return new ResponseEntity<>(arecords2, HttpStatus.OK);
 	}
