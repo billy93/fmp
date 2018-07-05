@@ -51,8 +51,6 @@ public class AtpcoFootnoteQueryCustomRepository {
 		
 		ftntParam = param;
 		
-		System.out.println(param.getCatNo());
-
 		List<AggregationOperation> aggregationOperations = new ArrayList<>();
 
 		aggregationOperations.add(new AggregationOperation() {
@@ -707,8 +705,6 @@ public class AtpcoFootnoteQueryCustomRepository {
 		});
 		
 		Aggregation aggregation = newAggregation(aggregationOperations);
-		
-		System.out.println(aggregation.toString());
 
 		List<AtpcoFootnoteQueryGroup> data = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_FOOTNOTE_RECORD_2, AtpcoFootnoteQueryGroup.class).getMappedResults();
 		
@@ -950,8 +946,6 @@ public class AtpcoFootnoteQueryCustomRepository {
 	
 
 		Aggregation aggregation = newAggregation(aggregationOperations);
-		
-		System.out.println(aggregation.toString());
 
 		List<AtpcoFootnoteQueryGroup> data = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_FOOTNOTE_RECORD_2, AtpcoFootnoteQueryGroup.class).getMappedResults();
 		
@@ -1192,8 +1186,6 @@ public class AtpcoFootnoteQueryCustomRepository {
 
 		Aggregation aggregation = newAggregation(aggregationOperations);
 		
-		System.out.println(aggregation.toString());
-
 		List<AtpcoFootnoteQueryGroup> data = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_FOOTNOTE_RECORD_2, AtpcoFootnoteQueryGroup.class).getMappedResults();
 		
 		int total = 0;
@@ -1488,9 +1480,6 @@ public class AtpcoFootnoteQueryCustomRepository {
 							
 							
 							Aggregation aggregation = newAggregation(aggregationOperations);
-							
-
-							System.out.println(aggregation);
 							
 							AtpcoFootnoteQueryDetails af = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_FOOTNOTE_RECORD_2, AtpcoFootnoteQueryDetails.class).getUniqueMappedResult();
 							
