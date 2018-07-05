@@ -2915,6 +2915,8 @@ public class WorkPackageResource {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("% Base Fare is required when 'Calculated'  Calc Type is used");
+							    		err1.setIndex(index+"");
+							    		err1.setField("discountPercentageOfBaseFare");			
 							    		errors.add(err1);
 									}
 								}else if(fare.getCalcType().contentEquals("S")) {
@@ -2922,27 +2924,40 @@ public class WorkPackageResource {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Currency is required when 'Specified'  Calc Type is used");
+							    		err1.setIndex(index+"");
+							    		err1.setField("discountFareCurrency");			
 							    		errors.add(err1);
 									}
 									if(fare.getDiscountSpecifiedAmount() == null || fare.getDiscountSpecifiedAmount().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Specified Amount is required when 'Specified'  Calc Type is used");
+							    		err1.setIndex(index+"");
+							    		err1.setField("discountSpecifiedAmount");		
 							    		errors.add(err1);
-									}if(fare.getFareType() == null || fare.getFareType().contentEquals("")) {
+									}
+									if(fare.getFareType() == null || fare.getFareType().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Fare Type Code is required when 'Specified'  Calc Type is used");
+							    		err1.setIndex(index+"");
+							    		err1.setField("discountFareFareType");		
 							    		errors.add(err1);
-									}if(fare.getTypeOfJourney() == null || fare.getTypeOfJourney().contentEquals("")) {
+									}
+									if(fare.getTypeOfJourney() == null || fare.getTypeOfJourney().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Base Fare OW/RT is required when 'Specified'  Calc Type is used");
+							    		err1.setIndex(index+"");
+							    		err1.setField("discountBaseFareOwRt");		
 							    		errors.add(err1);
-									}if(fare.getGlobal() == null || fare.getGlobal().contentEquals("")) {
+									}
+									if(fare.getGlobal() == null || fare.getGlobal().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Global is required when 'Specified'  Calc Type is used");
+							    		err1.setIndex(index+"");
+							    		err1.setField("discountGlobal");		
 							    		errors.add(err1);
 									}
 								}else if(fare.getCalcType().contentEquals("M")) {
@@ -2950,18 +2965,24 @@ public class WorkPackageResource {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("% Base Fare is  required when 'Subtract Specified'  Calc Type is used");
+							    		err1.setIndex(index+"");
+							    		err1.setField("discountPercentageOfBaseFare");		
 							    		errors.add(err1);
 									}
 									if(fare.getCurrency() == null || fare.getCurrency().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Currency is  required when 'Subtract Specified'  Calc Type is used");
+							    		err1.setIndex(index+"");
+							    		err1.setField("discountFareCurrency");		
 							    		errors.add(err1);
 									}
 									if(fare.getDiscountSpecifiedAmount() == null || fare.getDiscountSpecifiedAmount().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Specified Amount is  required when 'Subtract Specified'  Calc Type is used");
+							    		err1.setIndex(index+"");
+							    		err1.setField("discountSpecifiedAmount");		
 							    		errors.add(err1);
 									}
 								}
@@ -2969,16 +2990,22 @@ public class WorkPackageResource {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("PAX Type is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("discountPaxType");		
 					    		errors.add(err1);
 							}
 							if(fare.getTravelStart() != null && fare.getTravelEnd() != null) {
 								if(fare.getTravelStart().isAfter(fare.getTravelEnd())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Travel Start Date must be less than or equal to Travel End Date");
+						    		err1.setIndex(index+"");
+						    		err1.setField("discountTravelStartDate");	
 						    		errors.add(err1);
 								}else if(fare.getTravelEnd().isBefore(fare.getTravelStart())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Travel End Date cannot be earlier than Sales End Date");
+						    		err1.setIndex(index+"");
+						    		err1.setField("discountTravelEndDate");	
 						    		errors.add(err1);
 								}
 							}
@@ -2986,11 +3013,15 @@ public class WorkPackageResource {
 								if(fare.getSaleStart().isAfter(fare.getSaleEnd())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Sale Start Date must be less than or equal to Sale End Date");
+						    		err1.setIndex(index+"");
+						    		err1.setField("discountSaleStartDate");	
 						    		errors.add(err1);
 								}
 								if(fare.getSaleStart().isAfter(fare.getTravelStart())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Sale Start Date must be before  or equal to Travel Starte Date");
+						    		err1.setIndex(index+"");
+						    		err1.setField("discountSaleStartDate");	
 						    		errors.add(err1);
 								}
 							}
@@ -3005,48 +3036,64 @@ public class WorkPackageResource {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Fare Type is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("discountFareFareType");
 					    		errors.add(err1);
 							}
 							if(fare.getTarcd()== null || fare.getTarcd().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("FBR Tariff Code is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("discountTariffCode");					    		
 					    		errors.add(err1);
 							}
 							if(fare.getLoc1Type() == null || fare.getLoc1Type().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Loc 1 Type is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("discountLoc1Type");	
 					    		errors.add(err1);
 							}
 							if(fare.getLoc1() == null || fare.getLoc1().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Loc1 is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("discountLoc1");	
 					    		errors.add(err1);
 							}
 							if(fare.getLoc2Type() == null || fare.getLoc2Type().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Loc 2 Type is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("discountLoc2Type");	
 					    		errors.add(err1);
 							}
 							if(fare.getLoc2() == null || fare.getLoc2().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Loc2 is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("discountLoc2");	
 					    		errors.add(err1);
 							}
 							if(fare.getBaseFareBasis() == null || fare.getBaseFareBasis().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Base Fare Cls is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("discountBaseFareBasis");	
 					    		errors.add(err1);
 							}
 							if(fare.getCalcType() == null || fare.getCalcType().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Calc Type is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("discountCalcType");	
 					    		errors.add(err1);
 							}
 							if(fare.getCalcType() != null ) {
@@ -3055,6 +3102,8 @@ public class WorkPackageResource {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("% Base Fare is  required when 'Calculated'  Calc Type is used");
+							    		err1.setIndex(index+"");
+							    		err1.setField("discountPercentageOfBaseFare");	
 							    		errors.add(err1);
 									}
 								}else if(fare.getCalcType().contentEquals("S")) {
@@ -3062,27 +3111,37 @@ public class WorkPackageResource {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Currency is  required when 'Specified'  Calc Type is used");
+							    		err1.setIndex(index+"");
+							    		err1.setField("discountFareCurrency");	
 							    		errors.add(err1);
 									}
 									if(fare.getDiscountSpecifiedAmount() == null || fare.getDiscountSpecifiedAmount().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Specified Amount is  required when 'Specified'  Calc Type is used");
+							    		err1.setIndex(index+"");
+							    		err1.setField("discountSpecifiedAmount");	
 							    		errors.add(err1);
 									}if(fare.getFareType() == null || fare.getFareType().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Fare Type Code is required when 'Specified'  Calc Type is used");
+							    		err1.setIndex(index+"");
+							    		err1.setField("discountFareFareType");	
 							    		errors.add(err1);
 									}if(fare.getTypeOfJourney() == null || fare.getTypeOfJourney().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Base Fare OW/RT is required when 'Specified'  Calc Type is used");
+							    		err1.setIndex(index+"");
+							    		err1.setField("discountBaseFareOwRt");	
 							    		errors.add(err1);
 									}if(fare.getGlobal() == null || fare.getGlobal().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Global is required when 'Specified'  Calc Type is used");
+							    		err1.setIndex(index+"");
+							    		err1.setField("discountGlobal");	
 							    		errors.add(err1);
 									}
 								}else if(fare.getCalcType().contentEquals("M")) {
@@ -3090,18 +3149,24 @@ public class WorkPackageResource {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("% Base Fare is  required when 'Subtract Specified'  Calc Type is used");
+							    		err1.setIndex(index+"");
+							    		err1.setField("discountPercentageOfBaseFare");	
 							    		errors.add(err1);
 									}
 									if(fare.getCurrency() == null || fare.getCurrency().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Currency is  required when 'Subtract Specified'  Calc Type is used");
+							    		err1.setIndex(index+"");
+							    		err1.setField("discountFareCurrency");	
 							    		errors.add(err1);
 									}
 									if(fare.getDiscountSpecifiedAmount() == null || fare.getDiscountSpecifiedAmount().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Specified Amount is  required when 'Subtract Specified'  Calc Type is used");
+							    		err1.setIndex(index+"");
+							    		err1.setField("discountSpecifiedAmount");	
 							    		errors.add(err1);
 									}
 								}
@@ -3109,16 +3174,22 @@ public class WorkPackageResource {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("PAX Type is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("discountPaxType");	
 					    		errors.add(err1);
 							}
 							if(fare.getTravelStart() != null && fare.getTravelEnd() != null) {
 								if(fare.getTravelStart().isAfter(fare.getTravelEnd())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Travel Start Date must be less than or equal to Travel End Date");
+						    		err1.setIndex(index+"");
+						    		err1.setField("discountTravelStartDate");	
 						    		errors.add(err1);
 								}else if(fare.getTravelEnd().isBefore(fare.getTravelStart())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Travel End Date cannot be earlier than Sales End Date");
+						    		err1.setIndex(index+"");
+						    		err1.setField("discountTravelEndDate");	
 						    		errors.add(err1);
 								}
 							}
@@ -3126,11 +3197,15 @@ public class WorkPackageResource {
 								if(fare.getSaleStart().isAfter(fare.getSaleEnd())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Sale Start Date must be less than or equal to Sale End Date");
+						    		err1.setIndex(index+"");
+						    		err1.setField("discountSaleStartDate");	
 						    		errors.add(err1);
 								}
 								if(fare.getSaleStart().isAfter(fare.getTravelStart())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Sale Start Date must be before  or equal to Travel Starte Date");
+						    		err1.setIndex(index+"");
+						    		err1.setField("discountSaleStartDate");	
 						    		errors.add(err1);
 								}
 							}
@@ -3139,36 +3214,48 @@ public class WorkPackageResource {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("FBR Tariff Code is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("discountTariffCode");	
 					    		errors.add(err1);
 							}
 							if(fare.getLoc1Type() == null || fare.getLoc1Type().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Loc 1 Type is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("discountLoc1Type");	
 					    		errors.add(err1);
 							}
 							if(fare.getLoc1() == null || fare.getLoc1().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Loc1 is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("discountLoc1");	
 					    		errors.add(err1);
 							}
 							if(fare.getLoc2Type() == null || fare.getLoc2Type().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Loc 2 Type is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("discountLoc2Type");	
 					    		errors.add(err1);
 							}
 							if(fare.getLoc2() == null || fare.getLoc2().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Loc2 is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("discountLoc2");	
 					    		errors.add(err1);
 							}
 							if(fare.getBaseFareBasis() == null || fare.getBaseFareBasis().contentEquals("")) {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Base Fare Cls is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("discountBaseFareBasis");	
 					    		errors.add(err1);
 							}
 
@@ -3177,25 +3264,33 @@ public class WorkPackageResource {
 									if(fare.getCurrency() == null || fare.getCurrency().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
-							    		err1.setMessage("Currency is  required when 'Specified'  Calc Type is used");
+							    		err1.setMessage("Currency is required when 'Specified'  Calc Type is used");
+							    		err1.setIndex(index+"");
+							    		err1.setField("discountFareCurrency");	
 							    		errors.add(err1);
 									}
 									if(fare.getFareType() == null || fare.getFareType().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Fare Type Code is required when 'Specified'  Calc Type is used");
+							    		err1.setIndex(index+"");
+							    		err1.setField("discountFareFareType");	
 							    		errors.add(err1);
 									}
 									if(fare.getTypeOfJourney() == null || fare.getTypeOfJourney().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Base Fare OW/RT is required when 'Specified'  Calc Type is used");
+							    		err1.setIndex(index+"");
+							    		err1.setField("discountBaseFareOwRt");	
 							    		errors.add(err1);
 									}
 									if(fare.getGlobal() == null || fare.getGlobal().contentEquals("")) {
 										//List Error
 										WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 							    		err1.setMessage("Global is required when 'Specified'  Calc Type is used");
+							    		err1.setIndex(index+"");
+							    		err1.setField("discountGlobal");	
 							    		errors.add(err1);
 									}
 								}
@@ -3203,16 +3298,22 @@ public class WorkPackageResource {
 								//List Error
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("PAX Type is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("discountPaxType");	
 					    		errors.add(err1);
 							}
 							if(fare.getTravelStart() != null && fare.getTravelEnd() != null) {
 								if(fare.getTravelStart().isAfter(fare.getTravelEnd())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Travel Start Date must be less than or equal to Travel End Date");
+						    		err1.setIndex(index+"");
+						    		err1.setField("discountTravelStartDate");	
 						    		errors.add(err1);
 								}else if(fare.getTravelEnd().isBefore(fare.getTravelStart())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Travel End Date cannot be earlier than Sales End Date");
+						    		err1.setIndex(index+"");
+						    		err1.setField("discountTravelEndDate");	
 						    		errors.add(err1);
 								}
 							}
@@ -3220,15 +3321,20 @@ public class WorkPackageResource {
 								if(fare.getSaleStart().isAfter(fare.getSaleEnd())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Sale Start Date must be less than or equal to Sale End Date");
+						    		err1.setIndex(index+"");
+						    		err1.setField("discountSaleStartDate");	
 						    		errors.add(err1);
 								}
 								if(fare.getSaleStart().isAfter(fare.getTravelStart())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Sale Start Date must be before  or equal to Travel Starte Date");
+						    		err1.setIndex(index+"");
+						    		err1.setField("discountSaleStartDate");	
 						    		errors.add(err1);
 								}
 							}
 						}
+		    			index += 1;
 					}
 					if(rejectStatus.size() == fares.size()) {
 						WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
