@@ -3076,7 +3076,7 @@
 								<div class="action-btn-wrapper">
 				       				<div class="col-md-12 text-right no-pad">
 				       					<button ng-click="vm.downloadTemplate()" class="btn btn-primary" >Download Market Rules Template</button>
-				     					<button ng-click="vm.addMarketRules()" class="btn btn-primary" ng-disabled="vm.workPackage.status =='DISCONTINUED'">Add</button>
+				     					<button ng-click="vm.addMarketRules()" class="btn btn-primary" ng-disabled="vm.workPackage.status =='DISCONTINUED' || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED') ">Add</button>
 				       				</div>
 				       				
 				       			</div>
@@ -3091,11 +3091,11 @@
 						        		<div class="col-md-6">
 						        			<div class="form-group">
 												<label>Market Rule Id</label>
-												<input uppercase type="text" class="form-control" ng-model="marketRules.ruleid" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"/>
+												<input uppercase type="text" class="form-control" ng-model="marketRules.ruleid" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"/>
 											</div>	
 							      			<div class="form-group">
 							      				<label>Comment</label>
-							      				<textarea class="form-control" ng-model="marketRules.comment" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"></textarea>
+							      				<textarea class="form-control" ng-model="marketRules.comment" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"></textarea>
 							      			</div>
 						        		</div>
 						        		<div class="col-md-6">
@@ -3108,17 +3108,17 @@
 									                </div>
 									                <div class="action-btn-wrapper no-pad">
 									                	<button type="button" ngf-select class="btn btn-secondary"
-										                        ngf-change="vm.setFile($file, marketRules)" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
+										                        ngf-change="vm.setFile($file, marketRules)" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">
 										                    Add file
 										                </button>
 										                <button type="button" ng-click="marketRules.file=null;marketRules.fileContentType=null;"
-									                            class="btn btn-back delete grey" ng-disabled="vm.workPackage.status !='NEW' && vm.workPackage.reuseFrom != null" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
+									                            class="btn btn-back delete grey" ng-disabled="vm.workPackage.status !='NEW' && vm.workPackage.reuseFrom != null" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">
 									                        Remove file
 									                    </button>
 									                    <div class="form-group mt1">
 															<div class="checkbox-wrapper">
 																<label class="black" for="inOnly">
-																	<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly" ng-disabled="attachment.isDeleted || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
+																	<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly" ng-disabled="attachment.isDeleted || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">
 																	Inter Office Notification
 																</label>
 															</div>
@@ -3146,7 +3146,7 @@
 									         		style="min-width: 100%; min-height:100%"
 									         		ng-class="{'must-fill': editForm.editFormMarket.addonFaresName{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 									         		ng-required="vm.isRequired('addonFaresName')"  
-									         		ng-disabled="!vm.isEditable('addonFaresName')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">
+									         		ng-disabled="!vm.isEditable('addonFaresName')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">
 							          				</textarea>
 												</div>
 											</div>
@@ -3304,7 +3304,7 @@
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'status', $event)" ng-class="{highlighted:fare.field['status']}">
 																<select class="form-control inside-table" name="addonFareStatus{{$index}}" ng-model="fare.status" id="field_status" 
 																	ng-class="{'must-fill': !editForm.editFormMarket.addonFareStatus{{$index}}.$valid && fare.action != 'Canceled'}"												         		
-								           							ng-disabled="!vm.isEditable('addonFareStatus')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)"
+								           							ng-disabled="!vm.isEditable('addonFareStatus')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 													             	ng-required="vm.isRequired('addonFareStatus')"
 													             	ng-options="key as value for (key , value) in vm.status">
 																</select>
@@ -3312,7 +3312,7 @@
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'carrier', $event)" ng-class="{highlighted:fare.field['carrier']}">
 																<input type="text" class="form-control" name="addonFareCarrier{{$index}}" id="field_carrier"
 											                    		ng-model="fare.carrier"
-											                    		ng-disabled="!vm.isEditable('addonFareCarrier')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+											                    		ng-disabled="!vm.isEditable('addonFareCarrier')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											                    		ng-class="{'must-fill': ditForm.editFormATPCO.addonFareCarrier{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('addonFareCarrier')"/>
 															</td>																
@@ -3321,13 +3321,13 @@
 																<span class="input-group">
 																		<input type="text" class="form-control" name="addonFareOrigin{{$parent.$index}}{{$index}}" id="field_carrier"
 												                    		ng-model="fare.origin"
-												                    		ng-disabled="!vm.isEditable('addonFareOrigin')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+												                    		ng-disabled="!vm.isEditable('addonFareOrigin')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 												                    		style="min-width:60px"
 												                    		ng-class="{'must-fill': editForm.editFormMarket.addonFareOrigin{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 												                    		uppercase
 																            ng-required="vm.isRequired('addonFareOrigin')"
 																            ng-focus="origin[$parent.$index][$index]=true" ng-blur="origin[$parent.$index][$index]=false; vm.checkCity(fare, 'origin');"/>
-																		<span class="input-group-addon disabled" ng-click="$event.stopPropagation(); vm.selectCity(fare, 'origin')" ng-class="{'poiv-none': !vm.isEditable('addonFareOrigin') || fare.status == 'APPROVED' || fare.status == 'REJECTED'}">
+																		<span class="input-group-addon disabled" ng-click="$event.stopPropagation(); vm.selectCity(fare, 'origin')" ng-class="{'poiv-none': !vm.isEditable('addonFareOrigin') || fare.status == 'APPROVED' || fare.status == 'REJECTED' || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')}">
 																			<i class="fa fa-folder"></i>
 																		</span>
 																	</span>
@@ -3336,20 +3336,20 @@
 																<span class="input-group">
 																	<input type="text" class="form-control" name="addonFareDestination{{$parent.$index}}{{$index}}" id="field_carrier"
 											                    		ng-model="fare.destination"
-											                    		ng-disabled="!vm.isEditable('addonFareDestination')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+											                    		ng-disabled="!vm.isEditable('addonFareDestination')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											                    		style="min-width:60px"
 											                    		uppercase
 											                    		ng-class="{'must-fill': editForm.editFormMarket.addonFareDestination{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 															            ng-required="vm.isRequired('addonFareDestination') && fare.action != 'Canceled'"
 															            ng-focus="destination[$parent.$index][$index]=true" ng-blur="destination[$parent.$index][$index]=false; vm.checkCity(fare, 'destination');"/>
-																	<span class="input-group-addon disabled" ng-click="$event.stopPropagation(); vm.selectCity(fare, 'destination')" ng-class="{'poiv-none': !vm.isEditable('addonFareDestination') || fare.status == 'APPROVED' || fare.status == 'REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) }">
+																	<span class="input-group-addon disabled" ng-click="$event.stopPropagation(); vm.selectCity(fare, 'destination')" ng-class="{'poiv-none': !vm.isEditable('addonFareDestination') || fare.status == 'APPROVED' || fare.status == 'REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED') }">
 																		<i class="fa fa-folder"></i>
 																	</span>
 																</span>
 															</td>
 															<td ng-click="vm.tdClick(workPackageSheet, fare, 'bucket', $event)" ng-class="{highlighted:fare.field['bucket']}">
 																<input type="text" class="form-control" ng-model="fare.bucket" name="addonFareBucket{$parent.$index}}{{$index}}"
-											           				ng-disabled="!vm.isEditable('addonFareBucket') || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+											           				ng-disabled="!vm.isEditable('addonFareBucket') || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											           				ng-maxlength="8"
 								                					maxlength="8"
 								                					uppercase
@@ -3366,27 +3366,27 @@
 														             ng-required="vm.isRequired('addonFareTypeOfJourney')"
 														             ng-class="{'must-fill': !editForm.editFormMarket.addonFareTypeOfJourney{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"																			            
 														             ng-model="fare.typeOfJourney" id="field_typeOfJourney"
-														             ng-disabled="!vm.isEditable('addonFareTypeOfJourney') || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)"
+														             ng-disabled="!vm.isEditable('addonFareTypeOfJourney') || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 														             ng-options="key as value for (key , value) in vm.typeOfJourney"></select>
 										           			</td>									               			
 									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'currency', $event)" ng-class="{highlighted:fare.field['currency']}">
 										               			<span class="input-group">
 																		<input type="text" class="form-control" name="addonFareCurrency{{$parent.$index}}{{$index}}" id="field_carrier"
 												                    		ng-model="fare.currency"
-												                    		ng-disabled="!vm.isEditable('addonFareCurrency')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+												                    		ng-disabled="!vm.isEditable('addonFareCurrency')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 												                    		style="min-width:60px"
 												                    		uppercase
 												                    		ng-class="{'must-fill': editForm.editFormMarket.addonFareCurrency{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"												         		
 																            ng-required="vm.isRequired('addonFareCurrency') && fare.action != 'Canceled'"
 																            ng-focus="currency[$parent.$index][$index]=true" ng-blur="currency[$parent.$index][$index]=false; vm.checkCurrency(fare, 'currency');"/>
-																		<span class="input-group-addon disabled" ng-click="$event.stopPropagation(); vm.selectCurrency(fare, 'currency')" ng-class="{'poiv-none': !vm.isEditable('addonFareCurrency') || fare.status == 'APPROVED' || fare.status == 'REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}">
+																		<span class="input-group-addon disabled" ng-click="$event.stopPropagation(); vm.selectCurrency(fare, 'currency')" ng-class="{'poiv-none': !vm.isEditable('addonFareCurrency') || fare.status == 'APPROVED' || fare.status == 'REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')}">
 																			<i class="fa fa-folder"></i>
 																		</span>
 																	</span>
 									               			</td>
 									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'amount', $event)" ng-class="{highlighted:fare.field['amount']}">
 									               				<input type="text" class="form-control" name="addonFareAmount{{$parent.$index}}{{$index}}" id="field_amount"
-										                				ng-disabled="!vm.isEditable('addonFareAmount') || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) "
+										                				ng-disabled="!vm.isEditable('addonFareAmount') || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 										                				ng-required="vm.isRequired('addonFareAmount')" 
 										                				ng-maxlength="9"
 									                					maxlength="9"
@@ -3420,7 +3420,7 @@
 																	<input id="field_addonFareTravelStartDate" 
 																		type="text"
 																		name="addonFareTravelStartDate{{$parent.$index}}{{$index}}" id="field_travelEndDate"
-										                				ng-disabled="!vm.isEditable('addonFareTravelStartDate') || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) "	
+										                				ng-disabled="!vm.isEditable('addonFareTravelStartDate') || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"	
 										                				class="form-control input-date"					                				
 										                				ng-required="vm.isRequired('addonFareTravelStartDate') && vm.workPackage.targetDistribution != 'MARKET'"
 											                    		ng-class="{'must-fill': editForm.editFormMarket.addonFareTravelStartDate{{$parent.$index}}{{$index}}.$error.required}"																			            
@@ -3428,7 +3428,7 @@
 															            datetime-picker="{{dateformat}}" 
 															            enable-time="false"
 															            is-open="vm.datePickerOpenStatus['addonFareTravelStartDate'+$parent.$index+''+$index]">
-																	<span ng-click="vm.openCalendar('addonFareTravelStartDate'+$parent.$index+''+$index)" class="input-group-addon disabled" ng-class="{'poiv-none': !vm.isEditable('addonFareTravelStartDate') || fare.status == 'APPROVED' || fare.status == 'REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)}">
+																	<span ng-click="vm.openCalendar('addonFareTravelStartDate'+$parent.$index+''+$index)" class="input-group-addon disabled" ng-class="{'poiv-none': !vm.isEditable('addonFareTravelStartDate') || fare.status == 'APPROVED' || fare.status == 'REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')}">
 																		<i class="fa fa-calendar"></i>
 																	</span>
 																</span>
@@ -3439,7 +3439,7 @@
 																	<input id="field_addonFareTravelEndDate" 
 																		type="text"
 																		name="addonFareTravelEndDate{{$parent.$index}}{{$index}}" id="field_travelEndDate"
-										                				ng-disabled="!vm.isEditable('addonFareTravelEndDate') || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)"	
+										                				ng-disabled="!vm.isEditable('addonFareTravelEndDate') || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"	
 										                				class="form-control input-date"					                				
 										                				ng-required="vm.isRequired('addonFareTravelEndDate')"
 											                    		ng-class="{'must-fill': editForm.editFormMarket.addonFareTravelEndDate{{$parent.$index}}{{$index}}.$error.required}"																			            
@@ -3447,7 +3447,7 @@
 															            datetime-picker="{{dateformat}}" 
 															            enable-time="false"
 															            is-open="vm.datePickerOpenStatus['addonFareTravelEndDate'+$parent.$index+''+$index]">
-																	<span ng-click="vm.openCalendar('addonFareTravelEndDate'+$parent.$index+''+$index)" class="input-group-addon disabled" ng-class="{'poiv-none': !vm.isEditable('addonFareTravelEndDate') || fare.status == 'APPROVED' || fare.status == 'REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) }">
+																	<span ng-click="vm.openCalendar('addonFareTravelEndDate'+$parent.$index+''+$index)" class="input-group-addon disabled" ng-class="{'poiv-none': !vm.isEditable('addonFareTravelEndDate') || fare.status == 'APPROVED' || fare.status == 'REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED') }">
 																		<i class="fa fa-calendar"></i>
 																	</span>
 																</span>
@@ -3458,7 +3458,7 @@
 																	<input id="field_addonFareSaleStartDate" 
 																		type="text"
 																		name="addonFareSaleStartDate{{$parent.$index}}{{$index}}" id="field_travelEndDate"
-										                				ng-disabled="!vm.isEditable('addonFareSaleStartDate') || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)"	
+										                				ng-disabled="!vm.isEditable('addonFareSaleStartDate') || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"	
 										                				class="form-control input-date"					                				
 										                				ng-required="vm.isRequired('addonFareSaleStartDate')"
 											                    		ng-class="{'must-fill': editForm.editFormMarket.addonFareSaleStartDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
@@ -3466,7 +3466,7 @@
 															            datetime-picker="{{dateformat}}" 
 															            enable-time="false"
 															            is-open="vm.datePickerOpenStatus['addonFareSaleStartDate'+$parent.$index+''+$index]">
-																	<span ng-click="vm.openCalendar('addonFareSaleStartDate'+$parent.$index+''+$index)" class="input-group-addon disabled" ng-class="{'poiv-none': !vm.isEditable('addonFareSaleStartDate') || fare.status == 'APPROVED' || fare.status == 'REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)}">
+																	<span ng-click="vm.openCalendar('addonFareSaleStartDate'+$parent.$index+''+$index)" class="input-group-addon disabled" ng-class="{'poiv-none': !vm.isEditable('addonFareSaleStartDate') || fare.status == 'APPROVED' || fare.status == 'REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')}">
 																		<i class="fa fa-calendar"></i>
 																	</span>
 																</span>
@@ -3477,7 +3477,7 @@
 																	<input id="field_addonFareSaleEndDate" 
 																		type="text"
 																		name="addonFareSaleEndDate{{$parent.$index}}{{$index}}" id="field_travelEndDate"
-										                				ng-disabled="!vm.isEditable('addonFareSaleEndDate') || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"	
+										                				ng-disabled="!vm.isEditable('addonFareSaleEndDate') || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"	
 										                				class="form-control input-date"					                				
 										                				ng-required="vm.isRequired('addonFareSaleEndDate')"
 											                    		ng-class="{'must-fill': editForm.editFormMarket.addonFareSaleEndDate{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
@@ -3485,14 +3485,14 @@
 															            datetime-picker="{{dateformat}}" 
 															            enable-time="false"
 															            is-open="vm.datePickerOpenStatus['addonFareSaleEndDate'+$parent.$index+''+$index]">
-																	<span ng-click="vm.openCalendar('addonFareSaleEndDate'+$parent.$index+''+$index)" class="input-group-addon disabled" ng-class="{'poiv-none': !vm.isEditable('addonFareSaleEndDate') || fare.status == 'APPROVED' || fare.status == 'REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)}">
+																	<span ng-click="vm.openCalendar('addonFareSaleEndDate'+$parent.$index+''+$index)" class="input-group-addon disabled" ng-class="{'poiv-none': !vm.isEditable('addonFareSaleEndDate') || fare.status == 'APPROVED' || fare.status == 'REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')}">
 																		<i class="fa fa-calendar"></i>
 																	</span>
 																</span>
 									               			</td>
 									               			<td ng-click="vm.tdClick(workPackageSheet, fare, 'comment', $event)" ng-class="{highlighted:fare.field['comment']}">
 									               				<input type="text" class="form-control" name="addonFareComment{{$parent.$index}}{{$index}}" id="field_comment"
-									               					ng-disabled="fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)"
+									               					ng-disabled="fare.status =='APPROVED' || fare.status =='REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											                    		ng-model="fare.comment"/>
 									               			</td>
 									               			
@@ -3501,7 +3501,7 @@
 																	<input id="field_addonFareTravelComplete" 
 																		type="text"
 																		name="addonFareTravelComplete{{$parent.$index}}{{$index}}" id="field_travelEndDate"
-										                				ng-disabled="!vm.isEditable('addonFareTravelComplete') || vm.workPackage.status=='WITHDRAWN'  ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"	
+										                				ng-disabled="!vm.isEditable('addonFareTravelComplete') || vm.workPackage.status=='WITHDRAWN'  ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"	
 										                				class="form-control input-date"					                				
 										                				ng-required="vm.isRequired('addonFareTravelComplete')"
 											                    		ng-class="{'must-fill': editForm.editFormMarket.addonFareTravelComplete{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
@@ -3509,14 +3509,14 @@
 															            datetime-picker="{{dateformat}}" 
 															            enable-time="false"
 															            is-open="vm.datePickerOpenStatus['addonFareTravelComplete'+$parent.$index+''+$index]">
-																	<span ng-click="vm.openCalendar('addonFareTravelComplete'+$parent.$index+''+$index)" class="input-group-addon disabled" ng-class="{'poiv-none': !vm.isEditable('addonFareTravelComplete') || fare.status == 'APPROVED' || fare.status == 'REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)}">
+																	<span ng-click="vm.openCalendar('addonFareTravelComplete'+$parent.$index+''+$index)" class="input-group-addon disabled" ng-class="{'poiv-none': !vm.isEditable('addonFareTravelComplete') || fare.status == 'APPROVED' || fare.status == 'REJECTED'|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')}">
 																		<i class="fa fa-calendar"></i>
 																	</span>
 																</span>
 									               			</td>
 									               			<td>
 									               				<select class="form-control" name="addonFareTravelIndicator{{$index}}" id="field_travelIndicator"
-										                				ng-disabled="!vm.isEditable('addonFareTravelIndicator') || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)"
+										                				ng-disabled="!vm.isEditable('addonFareTravelIndicator') || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 										                				ng-required="vm.isRequired('addonFareTravelIndicator')"
 											                    		ng-class="{'must-fill': !editForm.editFormMarket.addonFareTravelIndicator{{$index}}.$valid && fare.action != 'Canceled'}"												                    		
 											                    		ng-options="key as value for (key , value) in vm.travelCompleteIndicator"														             																		            														                    		
@@ -3539,22 +3539,22 @@
 							<div class="tab-pane" ng-class="{active:vm.currentTabAttachment}" ng-if="vm.workPackage.attachment">
 									<div class="action-btn-wrapper">
 					     				<div class="col-md-12 text-right no-pad">
-					     					<button ng-click="vm.addAttachment()" class="btn btn-primary" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Add</button>
+					     					<button ng-click="vm.addAttachment()" class="btn btn-primary" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Add</button>
 					     				</div>
 					     			</div>
 									<div class="pull-left w50 two-column">
 						                <div class="form-group">
 						                  <label>Approval Reference</label>
 						                  <input type="text" name="attachmentApprovalReference{{$index}}" class="form-control" 
-						                  ng-model="vm.workPackage.attachmentApprovalReference" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
-						                  <button ng-click="vm.generateTourCodeAttachment()" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Generate Tour Code</button>
+						                  ng-model="vm.workPackage.attachmentApprovalReference" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">
+						                  <button ng-click="vm.generateTourCodeAttachment()" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Generate Tour Code</button>
 						                </div>
 						              </div>
 						              
 					     			<div class="col-md-12">
 					     				<div class="text-center no-data" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">No Attachment Available</div>							
 						     			<div ng-repeat="attachment in vm.workPackage.attachmentData.slice().reverse() track by $index" class="form-repeat">
-					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION'"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION'}"></span></button>
+					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION'"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')}"></span></button>
 							       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'short'}}</label>
 							       			<div class="row mt1">
 								        		<div class="col-md-6">
@@ -3572,13 +3572,13 @@
 											                    Open
 											                </button>
 											                <button type="button" ngf-select class="btn btn-secondary"
-											                        ngf-change="vm.setFile($file, attachment)" ng-disabled="attachment.isDeleted||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
+											                        ngf-change="vm.setFile($file, attachment)" ng-disabled="attachment.isDeleted||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">
 											                    Add file
 											                </button>
 										                    <div class="form-group mt1">
 																<div class="checkbox-wrapper">
 																	<label class="black" for="inOnly">
-																		<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly" ng-disabled="attachment.isDeleted || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
+																		<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly" ng-disabled="attachment.isDeleted || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">
 																		Inter Office Notification
 																	</label>
 																	<label class="black" for="isDeleted">
@@ -3600,19 +3600,19 @@
 								     </div>
 							</div>
 													
-							<div class="tab-pane" ng-class="{active:vm.currentTabFilingInstruction, 'poiv-none' : vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}" ng-if="vm.workPackage.filingInstruction">									
+							<div class="tab-pane" ng-class="{active:vm.currentTabFilingInstruction, 'poiv-none' : vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')}" ng-if="vm.workPackage.filingInstruction">									
 									<div class="box-header"></div>
 									<div class="box-body mb1">
-										<div class="form-group" ng-class="{'poiv-none': vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}">
+										<div class="form-group" ng-class="{'poiv-none': vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')}">
 											<label>Comment</label>
 											<wysiwyg-edit content="vm.commentStringFillingInstruction" config="vm.editorConfig"></wysiwyg-edit>
 										</div>
 										<div class="clearfix">
 											<div class="pull-right">
-												<button class="btn btn-default small btn-secondary" ng-click="vm.deleteCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Delete Comment</button>
-												<button class="btn btn-default small btn-secondary" ng-click="vm.collapseCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Collapse Deleted Comment</button>
-												<button class="btn btn-default small btn-secondary" ng-click="vm.expandCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Expand Deleted Comment</button>
-												<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Add Comment</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.deleteCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Delete Comment</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.collapseCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Collapse Deleted Comment</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.expandCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Expand Deleted Comment</button>
+												<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Add Comment</button>
 											</div>
 										</div>		
 									</div>
@@ -3658,7 +3658,7 @@
 												<input type="text" name="waiverFareDescription{{$parent.$index}}{{$index}}" class="form-control"
 												ng-model="workPackageSheet.waiverFaresName" 
 												ng-class="{'must-fill': !editForm.editFormWaiver.waiverFareDescription{{$parent.$index}}{{$index}}.$valid}"												         		
-			           							ng-disabled="!vm.isEditable('waiverFareDescription')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+			           							ng-disabled="!vm.isEditable('waiverFareDescription')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 								             	ng-required="vm.isRequired('waiverFareDescription')">
 											</div>
 										</div>
@@ -3668,9 +3668,9 @@
 												<input type="text" name="waiverApprovalReference{{$parent.$index}}{{$index}}" class="form-control" 
 												 ng-model="workPackageSheet.approvalReference"
 												 ng-class="{'must-fill': !editForm.editFormWaiver.waiverApprovalReference{{$parent.$index}}{{$index}}.$valid}"												         		
-			           							ng-disabled="!vm.isEditable('waiverApprovalReference')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+			           							ng-disabled="!vm.isEditable('waiverApprovalReference')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 								             	ng-required="vm.isRequired('waiverApprovalReference')">
-												 <button ng-click="vm.generateTourCode(workPackageSheet)" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Generate Tour Code</button>
+												 <button ng-click="vm.generateTourCode(workPackageSheet)" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Generate Tour Code</button>
 											</div>
 										</div>
 									</div>											
@@ -3679,7 +3679,7 @@
 											<div class="form-group">
 												<label>Fare Type</label>												
 							      				<select class="form-control" name="waiverFareType{{$parent.$index}}{{$index}}" ng-model="workPackageSheet.waiverFareType" ng-class="{'must-fill': !editForm.editFormWaiver.waiverFareType{{$parent.$index}}{{$index}}.$valid}"
-												ng-required="vm.isRequired('waiverFareType')" ng-disabled="!vm.isEditable('waiverFareType')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
+												ng-required="vm.isRequired('waiverFareType')" ng-disabled="!vm.isEditable('waiverFareType')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">
 												<option ng-repeat="fare in vm.optionFare track by $index" value="{{fare.name}}">
 													{{fare.code}} | {{fare.name}}
 												</option>
@@ -3704,7 +3704,7 @@
 												<label>Agent Name</label>
 												<input name="waiverAgentName{{$parent.$index}}{{$index}}" type="text" class="form-control" ng-model="workPackageSheet.waiverAgentName"
 												ng-class="{'must-fill': !editForm.editFormWaiver.waiverAgentName{{$parent.$index}}{{$index}}.$valid}"												         		
-			           							ng-disabled="!vm.isEditable('waiverAgentName')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+			           							ng-disabled="!vm.isEditable('waiverAgentName')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 								             	ng-required="vm.isRequired('waiverAgentName')"/>
 											</div>
 										</div>
@@ -3713,7 +3713,7 @@
 												<label>IATA No</label>
 												<input name="waiverIataNo{{$parent.$index}}{{$index}}" type="text" class="form-control"  ng-model="workPackageSheet.waiverIataNo"
 												ng-class="{'must-fill': !editForm.editFormWaiver.waiverIataNo{{$parent.$index}}{{$index}}.$valid}"												         		
-			           							ng-disabled="!vm.isEditable('waiverIataNo')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+			           							ng-disabled="!vm.isEditable('waiverIataNo')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 								             	ng-required="vm.isRequired('waiverIataNo')"/>
 											</div>
 										</div>
@@ -3724,7 +3724,7 @@
 												<label>Approval Date</label>
 												<input name="waiverApprovalDate{{$parent.$index}}{{$index}}" type="text" class="form-control" ng-model="workPackageSheet.waiverApprovalDate"
 												ng-class="{'must-fill': !editForm.editFormWaiver.waiverApprovalDate{{$parent.$index}}{{$index}}.$valid}"												         		
-			           							ng-disabled="!vm.isEditable('waiverApprovalDate')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+			           							ng-disabled="!vm.isEditable('waiverApprovalDate')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 								             	ng-required="vm.isRequired('waiverApprovalDate')"/>
 											</div>
 										</div>
@@ -3733,7 +3733,7 @@
 												<label>IOC Number</label>
 												<input name="waiverIocNumber{{$parent.$index}}{{$index}}" type="text" class="form-control" ng-model="workPackageSheet.waiverIocNumber"
 												ng-class="{'must-fill': !editForm.editFormWaiver.waiverIocNumber{{$parent.$index}}{{$index}}.$valid}"												         		
-			           							ng-disabled="!vm.isEditable('waiverIocNumber')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+			           							ng-disabled="!vm.isEditable('waiverIocNumber')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 								             	ng-required="vm.isRequired('waiverIocNumber')"/>
 											</div>
 										</div>
@@ -3747,7 +3747,7 @@
 												<div class="clearfix">
 													<div class="pull-right datatable-button">
 														<div class="button-group dropdown custom">
-															<button class="btn btn-default small btn-secondary" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)}"></i></button>
+															<button class="btn btn-default small btn-secondary" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')}"></i></button>
 															<ul class="dropdown-menu custom" role="menu">
 															    <li>
 															    	<a ng-click="vm.clearSelection(workPackageSheet)" ng-disabled="vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)" ng-class="{'poiv-none':vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}">Clear Selection</a>
@@ -3782,10 +3782,10 @@
 															</ul>
 														</div>		
 														
-														<button class="btn btn-default small btn-secondary" ngf-select  ngf-change="vm.importFareWaiver($file, $index)" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Import</button>
-														<button class="btn btn-default small btn-secondary" ng-click="vm.exportFaresWaiver($index)" ng-disabled="vm.workPackage.status=='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Export</button>	
-														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.agent(vm.reviewOnly(vm.workPackage))" ng-disabled="vm.workPackage.status=='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Agents</button>
-														<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalRatesheet" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Rate Sheet</button>
+														<button class="btn btn-default small btn-secondary" ngf-select  ngf-change="vm.importFareWaiver($file, $index)" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Import</button>
+														<button class="btn btn-default small btn-secondary" ng-click="vm.exportFaresWaiver($index)" ng-disabled="vm.workPackage.status=='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Export</button>	
+														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.agent(vm.reviewOnly(vm.workPackage))" ng-disabled="vm.workPackage.status=='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Agents</button>
+														<button class="btn btn-default small btn-secondary" data-toggle="modal" data-target="#modalRatesheet" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Rate Sheet</button>
 													</div>
 												</div>	
 											</div>
@@ -3899,7 +3899,7 @@
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverType', $event)" ng-class="{highlighted:fare.field['waiverType']}">
 															<select class="form-control" ng-model="fare.waiverType" name="waiverType{{$parent.$index}}{{$index}}"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverType{{$parent.$index}}{{$index}}.$valid}"												         		
-						           							ng-disabled="!vm.isEditable('waiverType')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+						           							ng-disabled="!vm.isEditable('waiverType')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											             	ng-required="vm.isRequired('waiverType')">
 																<option>SALES</option>
 																<option>FUND</option>
@@ -3908,7 +3908,7 @@
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverFullPartial', $event)" ng-class="{highlighted:fare.field['waiverFullPartial']}">
 															<select class="form-control" ng-model="fare.waiverFullPartial"  name="waiverFullPartial{{$parent.$index}}{{$index}}"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverFullPartial{{$parent.$index}}{{$index}}.$valid}"												         		
-						           							ng-disabled="!vm.isEditable('waiverFullPartial')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+						           							ng-disabled="!vm.isEditable('waiverFullPartial')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											             	ng-required="vm.isRequired('waiverFullPartial')">
 																<option>FULL</option>
 																<option>PARTIAL</option>
@@ -3917,19 +3917,19 @@
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverPnr', $event)" ng-class="{highlighted:fare.field['waiverPnr']}">
 															<input type="text" class="form-control" ng-model="fare.waiverPnr" name="waiverPnr{{$parent.$index}}{{$index}}"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverPnr{{$parent.$index}}{{$index}}.$valid}"												         		
-						           							ng-disabled="!vm.isEditable('waiverPnr')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+						           							ng-disabled="!vm.isEditable('waiverPnr')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											             	ng-required="vm.isRequired('waiverPnr')"/>
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverTktFrom', $event)" ng-class="{highlighted:fare.field['waiverTktFrom']}">
 															<input type="text" class="form-control"  ng-model="fare.waiverTktFrom" name="waiverTktFrom{{$parent.$index}}{{$index}}"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverTktFrom{{$parent.$index}}{{$index}}.$valid}"												         		
-						           							ng-disabled="!vm.isEditable('waiverTktFrom')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+						           							ng-disabled="!vm.isEditable('waiverTktFrom')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											             	ng-required="vm.isRequired('waiverTktFrom')"/>
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverTktTo', $event)" ng-class="{highlighted:fare.field['waiverTktTo']}">
 															<input type="text" class="form-control" ng-model="fare.waiverTktTo" name="waiverTktTo{{$parent.$index}}{{$index}}"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverTktTo{{$parent.$index}}{{$index}}.$valid}"												         		
-						           							ng-disabled="!vm.isEditable('waiverTktTo')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+						           							ng-disabled="!vm.isEditable('waiverTktTo')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											             	ng-required="vm.isRequired('waiverTktTo')"/>
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverOri', $event)" ng-class="{highlighted:fare.field['waiverOri']}">										             	
@@ -3937,13 +3937,13 @@
 																	<input type="text" class="form-control" name="waiverOri{{$parent.$index}}{{$index}}" id="field_carrier"
 											                    		ng-model="fare.waiverOri"
 											                    		uppercase
-											                    		ng-disabled="!vm.isEditable('waiverOri')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+											                    		ng-disabled="!vm.isEditable('waiverOri')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											                    		name="waiverOri{{$parent.$index}}{{$index}}"
 											                    		style="min-width:60px"
 											                    		ng-class="{'must-fill': !editForm.editFormWaiver.waiverOri{{$parent.$index}}{{$index}}.$valid}"												         		
 															            ng-required="vm.isRequired('waiverOri')"
 															            ng-focus="origin[$parent.$index][$index]=true" ng-blur="origin[$parent.$index][$index]=false; vm.checkCity(fare, 'waiverOri');"/>
-																	<span class="input-group-addon disabled" ng-click="$event.stopPropagation(); vm.selectCity(fare, 'waiverOri')" ng-class="{'poiv-none': !vm.isEditable('waiverOri')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}">
+																	<span class="input-group-addon disabled" ng-click="$event.stopPropagation(); vm.selectCity(fare, 'waiverOri')" ng-class="{'poiv-none': !vm.isEditable('waiverOri')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')}">
 																		<i class="fa fa-folder"></i>
 																	</span>
 																</span>
@@ -3954,12 +3954,12 @@
 											                    		ng-model="fare.waiverDest"
 											                    		uppercase
 											                    		name="waiverDest{{$parent.$index}}{{$index}}"
-											                    		ng-disabled="!vm.isEditable('waiverDest')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+											                    		ng-disabled="!vm.isEditable('waiverDest')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											                    		style="min-width:60px"
 											                    		ng-class="{'must-fill': !editForm.editFormWaiver.waiverDest{{$parent.$index}}{{$index}}.$valid}"												         		
 															            ng-required="vm.isRequired('waiverDest')"
 															            ng-focus="destination[$parent.$index][$index]=true" ng-blur="destination[$parent.$index][$index]=false; vm.checkCity(fare, 'waiverDest');"/>
-																	<span class="input-group-addon disabled" ng-click="$event.stopPropagation(); vm.selectCity(fare, 'waiverDest')" ng-class="{'poiv-none': !vm.isEditable('waiverDest')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}">
+																	<span class="input-group-addon disabled" ng-click="$event.stopPropagation(); vm.selectCity(fare, 'waiverDest')" ng-class="{'poiv-none': !vm.isEditable('waiverDest')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')}">
 																		<i class="fa fa-folder"></i>
 																	</span>
 																</span>
@@ -3967,33 +3967,33 @@
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverOriginalItinerary', $event)" ng-class="{highlighted:fare.field['waiverOriginalItinerary']}">
 															<input type="text" class="form-control" ng-model="fare.waiverOriginalItinerary" name="waiverOriginalItinerary{{$parent.$index}}{{$index}}"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverOriginalItinerary{{$parent.$index}}{{$index}}.$valid}"												         		
-						           							ng-disabled="!vm.isEditable('waiverOriginalItinerary')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+						           							ng-disabled="!vm.isEditable('waiverOriginalItinerary')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											             	ng-required="vm.isRequired('waiverOriginalItinerary')"/>
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverNewItinerary', $event)" ng-class="{highlighted:fare.field['waiverNewItinerary']}">
 															<input type="text" class="form-control" ng-model="fare.waiverNewItinerary" name="waiverNewItinerary{{$parent.$index}}{{$index}}"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverNewItinerary{{$parent.$index}}{{$index}}.$valid}"												         		
-						           							ng-disabled="!vm.isEditable('waiverNewItinerary')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+						           							ng-disabled="!vm.isEditable('waiverNewItinerary')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											             	ng-required="vm.isRequired('waiverNewItinerary')"/>
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverOriginalBasicFare', $event)" ng-class="{highlighted:fare.field['waiverOriginalBasicFare']}">
 															<input type="text" class="form-control" ng-model="fare.waiverOriginalBasicFare" name="waiverOriginalBasicFare{{$parent.$index}}{{$index}}"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverOriginalBasicFare{{$parent.$index}}{{$index}}.$valid}"												         		
-						           							ng-disabled="!vm.isEditable('waiverOriginalBasicFare')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+						           							ng-disabled="!vm.isEditable('waiverOriginalBasicFare')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											             	ng-required="vm.isRequired('waiverOriginalBasicFare')"/>
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverNewBasicFare', $event)" ng-class="{highlighted:fare.field['waiverNewBasicFare']}">
 															<input type="text" class="form-control" ng-model="fare.waiverNewBasicFare" name="waiverNewBasicFare{{$parent.$index}}{{$index}}"
 															ng-change="vm.calculateFareLost(fare)"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverNewBasicFare{{$parent.$index}}{{$index}}.$valid}"												         		
-						           							ng-disabled="!vm.isEditable('waiverNewBasicFare')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+						           							ng-disabled="!vm.isEditable('waiverNewBasicFare')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											             	ng-required="vm.isRequired('waiverNewBasicFare')"/>
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverApprovedFare', $event)" ng-class="{highlighted:fare.field['waiverApprovedFare']}">
 															<input type="text" class="form-control" ng-model="fare.waiverApprovedFare" name="waiverApprovedFare{{$parent.$index}}{{$index}}"
 															ng-change="vm.calculateFareLost(fare)"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverApprovedFare{{$parent.$index}}{{$index}}.$valid}"												         		
-						           							ng-disabled="!vm.isEditable('waiverApprovedFare')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+						           							ng-disabled="!vm.isEditable('waiverApprovedFare')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											             	ng-required="vm.isRequired('waiverApprovedFare')"/>
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverFareLost', $event)" ng-class="{highlighted:fare.field['waiverFareLost']}">
@@ -4008,7 +4008,7 @@
 						           							ng-disabled="!vm.isEditable('waiverCalculatedPn')||vm.workPackage.status=='WITHDRAWN'"
 											             	ng-required="vm.isRequired('waiverCalculatedPn')" /> -->
 											             	<select class="form-control" name="waiverCalculatedPn{{$parent.$index}}{{$index}}" ng-model="fare.waiverCalculatedPn" ng-class="{'must-fill': !editForm.editFormWaiver.waiverCalculatedPn{{$parent.$index}}{{$index}}.$valid}"
-															ng-disabled="!vm.isEditable('waiverCalculatedPn')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+															ng-disabled="!vm.isEditable('waiverCalculatedPn')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											             	ng-required="vm.isRequired('waiverCalculatedPn')" >
 																<option value="amount">Amount</option>
 																<option value="percent">Percent</option>
@@ -4018,40 +4018,40 @@
 															<input type="text" class="form-control" ng-model="fare.waiverOriginalPn" name="waiverOriginalPn{{$parent.$index}}{{$index}}"
 															ng-change="vm.calculatePenaltyLost(fare)"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverOriginalPn{{$parent.$index}}{{$index}}.$valid}"												         		
-						           							ng-disabled="!vm.isEditable('waiverOriginalPn')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+						           							ng-disabled="!vm.isEditable('waiverOriginalPn')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											             	ng-required="vm.isRequired('waiverOriginalPn')"/>
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverApprovedPn', $event)" ng-class="{highlighted:fare.field['waiverApprovedPn']}">
 															<input type="text" class="form-control" ng-model="fare.waiverApprovedPn" name="waiverApprovedPn{{$parent.$index}}{{$index}}"
 															ng-change="vm.calculatePenaltyLost(fare)"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverApprovedPn{{$parent.$index}}{{$index}}.$valid}"												         		
-						           							ng-disabled="!vm.isEditable('waiverApprovedPn')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+						           							ng-disabled="!vm.isEditable('waiverApprovedPn')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											             	ng-required="vm.isRequired('waiverApprovedPn')"/>
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverPenaltyLostPercent', $event)" ng-class="{highlighted:fare.field['waiverPenaltyLostPercent']}">
 															<input type="text" class="form-control" ng-model="fare.waiverPenaltyLostPercent" name="waiverPenaltyLostPercent{{$parent.$index}}{{$index}}"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverPenaltyLostPercent{{$parent.$index}}{{$index}}.$valid}"												         		
-						           							ng-disabled="!vm.isEditable('waiverPenaltyLostPercent')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+						           							ng-disabled="!vm.isEditable('waiverPenaltyLostPercent')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											             	ng-required="vm.isRequired('waiverPenaltyLostPercent')" disabled/>
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverPenaltyLostAmount', $event)" ng-class="{highlighted:fare.field['waiverPenaltyLostAmount']}">
 															<input type="text" class="form-control" ng-model="fare.waiverPenaltyLostAmount" name="waiverPenaltyLostAmount{{$parent.$index}}{{$index}}"
 															ng-change="vm.calculateTotalLost(fare)"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverPenaltyLostAmount{{$parent.$index}}{{$index}}.$valid}"												         		
-						           							ng-disabled="!vm.isEditable('waiverPenaltyLostAmount')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+						           							ng-disabled="!vm.isEditable('waiverPenaltyLostAmount')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											             	ng-required="vm.isRequired('waiverPenaltyLostAmount')" disabled/>
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverCurrency', $event)" ng-class="{highlighted:fare.field['waiverCurrency']}">
 															<span class="input-group">
 																	<input type="text" class="form-control" name="waiverCurrency{{$parent.$index}}{{$index}}" id="field_carrier"
 											                    		ng-model="fare.waiverCurrency"
-											                    		ng-disabled="!vm.isEditable('waiverCurrency')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+											                    		ng-disabled="!vm.isEditable('waiverCurrency')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											                    		style="min-width:60px"
 											                    		uppercase
 											                    		ng-class="{'must-fill': !editForm.editFormWaiver.waiverCurrency{{$parent.$index}}{{$index}}.$valid}"												         		
 															            ng-required="vm.isRequired('waiverCurrency')"
 															            ng-focus="currency[$parent.$index][$index]=true" ng-blur="currency[$parent.$index][$index]=false; vm.checkCurrency(fare, 'currency');"/>
-																	<span class="input-group-addon disabled" ng-click="$event.stopPropagation(); vm.selectCurrency(fare, 'waiverCurrency')" ng-class="{'poiv-none': !vm.isEditable('waiverCurrency')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}">
+																	<span class="input-group-addon disabled" ng-click="$event.stopPropagation(); vm.selectCurrency(fare, 'waiverCurrency')" ng-class="{'poiv-none': !vm.isEditable('waiverCurrency')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')}">
 																		<i class="fa fa-folder"></i>
 																	</span>
 																</span>
@@ -4060,29 +4060,28 @@
 															<input type="text" class="form-control" ng-model="fare.waiverTotalPax" name="waiverTotalPax{{$parent.$index}}{{$index}}"
 															ng-change="vm.calculateTotalLost(fare)"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverTotalPax{{$parent.$index}}{{$index}}.$valid}"												         		
-						           							ng-disabled="!vm.isEditable('waiverTotalPax')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+						           							ng-disabled="!vm.isEditable('waiverTotalPax')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											             	ng-required="vm.isRequired('waiverTotalPax')"/>
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverTotalLost', $event)" ng-class="{highlighted:fare.field['waiverTotalLost']}">
 															<input type="text" class="form-control" ng-model="fare.waiverTotalLost" name="waiverTotalLost{{$parent.$index}}{{$index}}"
-															ng-class="{'must-fill': !editForm.editFormWaiver.waiverTotalLost{{$parent.$index}}{{$index}}.$valid}"											         		
-						           							
+															ng-class="{'must-fill': !editForm.editFormWaiver.waiverTotalLost{{$parent.$index}}{{$index}}.$valid}"
 											             	ng-required="vm.isRequired('waiverTotalLost')" disabled/>
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverApprover', $event)" ng-class="{highlighted:fare.field['waiverApprover']}">
 															<input type="text" class="form-control" ng-model="fare.waiverApprover" name="waiverApprover{{$parent.$index}}{{$index}}"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverApprover{{$parent.$index}}{{$index}}.$valid}"												         		
-						           							ng-disabled="!vm.isEditable('waiverApprover')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+						           							ng-disabled="!vm.isEditable('waiverApprover')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											             	ng-required="vm.isRequired('waiverApprover')"/>
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverRemark', $event)" ng-class="{highlighted:fare.field['waiverRemark']}">
 															<input type="text" class="form-control" ng-model="fare.waiverRemark" name="waiverRemark{{$parent.$index}}{{$index}}"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverRemark{{$parent.$index}}{{$index}}.$valid}"												         		
-						           							ng-disabled="!vm.isEditable('waiverRemark')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
+						           							ng-disabled="!vm.isEditable('waiverRemark')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											             	ng-required="vm.isRequired('waiverRemark')"/>
 														</td>
 													</tr>
-													<tr class="datatable-action{{$index}}" ng-show="vm.waiverFaresActionButton[$index]" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
+													<tr class="datatable-action{{$index}}" ng-show="vm.waiverFaresActionButton[$index]" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">
 														<td colspan="18" class="">
 															<div class="btn btn-app">
 																<i class="fa fa-level-up"></i>Move Up
@@ -4175,28 +4174,28 @@
 							<div class="tab-pane" ng-class="{active:vm.currentTabAttachment}">
 									<div class="action-btn-wrapper">
 					     				<div class="col-md-12 text-right no-pad">
-					     					<button ng-click="vm.addAttachment()" class="btn btn-primary" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Add</button>
+					     					<button ng-click="vm.addAttachment()" class="btn btn-primary" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Add</button>
 					     				</div>
 					     			</div>
 									<div class="pull-left w50 two-column">
 						                <div class="form-group">
 						                  <label>Approval Reference</label>
 						                  <input type="text" name="attachmentApprovalReference{{$index}}" class="form-control" 
-						                  ng-model="vm.workPackage.attachmentApprovalReference" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
-						                  <button ng-click="vm.generateTourCodeAttachment()" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Generate Tour Code</button>
+						                  ng-model="vm.workPackage.attachmentApprovalReference" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">
+						                  <button ng-click="vm.generateTourCodeAttachment()" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Generate Tour Code</button>
 						                </div>
 						              </div>
 						              
 					     			<div class="col-md-12">
 					     				<div class="text-center no-data" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">No Attachment Available</div>							
 						     			<div ng-repeat="attachment in vm.workPackage.attachmentData.slice().reverse() track by $index" class="form-repeat">
-					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION'"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION'}"></span></button>
+					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION'"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')}"></span></button>
 							       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'short'}}</label>
 							       			<div class="row mt1">
 								        		<div class="col-md-6">
 									      			<div class="form-group">
 									      				<label>Comment</label>
-									      				<textarea class="form-control" ng-model="attachment.comment" ng-disabled="attachment.isDeleted ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"></textarea>
+									      				<textarea class="form-control" ng-model="attachment.comment" ng-disabled="attachment.isDeleted ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"></textarea>
 									      			</div>
 								        		</div>
 								        		<div class="col-md-6">
@@ -4208,13 +4207,13 @@
 											                    Open
 											                </button>
 											                <button type="button" ngf-select class="btn btn-secondary"
-											                        ngf-change="vm.setFile($file, attachment)" ng-disabled="attachment.isDeleted||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
+											                        ngf-change="vm.setFile($file, attachment)" ng-disabled="attachment.isDeleted||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">
 											                    Add file
 											                </button>
 										                    <div class="form-group mt1">
 																<div class="checkbox-wrapper">
 																	<label class="black" for="inOnly">
-																		<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly" ng-disabled="attachment.isDeleted || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
+																		<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly" ng-disabled="attachment.isDeleted || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">
 																		Inter Office Notification
 																	</label>
 																	<label class="black" for="isDeleted">
