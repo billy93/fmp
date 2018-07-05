@@ -4341,7 +4341,7 @@ public class WorkPackageResource {
         String distribution = workPackage.getTargetDistribution();
         String type = workPackage.getType().name();
 
-        if(reviewLevel.contentEquals("HO") && distribution.contentEquals("MARKET") && type.contentEquals("REGULAR")) {
+       /* if(reviewLevel.contentEquals("HO") && distribution.contentEquals("MARKET") && type.contentEquals("REGULAR")) {
         	workPackage.setDistributionReviewLevel(reviewLevel);
         	workPackage.setReviewLevel("LSO");
         	workPackage.setLocked(false);
@@ -4353,13 +4353,31 @@ public class WorkPackageResource {
     		workPackage.setLocked(false);
     		workPackage.setOpened(false);
     		workPackage.setStatus(Status.PENDING);
-	    }
-//        if(reviewLevel.contentEquals("HO")) {
-//    		result.setDistributionReviewLevel(reviewLevel);
-//    		result.setReviewLevel("DISTRIBUTION");
-//    		result.setLocked(false);
-//    		result.setStatus(Status.PENDING);
-//	    }
+	    }*/
+        
+        if(reviewLevel.contentEquals("HO")) {
+        	if(distribution.contentEquals("MARKET") && type.contentEquals("REGULAR")) {
+        		workPackage.setDistributionReviewLevel(reviewLevel);
+            	workPackage.setReviewLevel("LSO");
+            	workPackage.setLocked(false);
+            	workPackage.setOpened(false);
+            	workPackage.setStatus(Status.DISTRIBUTED);
+        	}else if(distribution.contentEquals("MARKET") && type.contentEquals("WAIVER")) {
+        		workPackage.setDistributionReviewLevel(reviewLevel);
+            	workPackage.setReviewLevel("LSO");
+            	workPackage.setLocked(false);
+            	workPackage.setOpened(false);
+            	workPackage.setStatus(Status.DISTRIBUTED);
+        	}else {
+        		workPackage.setDistributionReviewLevel(reviewLevel);
+            	workPackage.setReviewLevel("DISTRIBUTION");
+        		workPackage.setLocked(false);
+        		workPackage.setOpened(false);
+        		workPackage.setStatus(Status.PENDING);
+        	}
+        }
+        
+        
         workPackage.setQueuedDate(Instant.now());
         workPackageService.save(workPackage);
 
