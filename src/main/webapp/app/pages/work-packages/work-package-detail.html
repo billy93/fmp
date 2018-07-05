@@ -297,8 +297,7 @@
 						    <li>
 						    	<a ng-click="vm.removeSheet()" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
 								&& vm.workPackage.status=='DISTRIBUTED')" 
-								ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage) ||  (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
-								&& vm.workPackage.status=='DISTRIBUTED')}">Remove</a>
+								ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage) ||  (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')}">Remove</a>
 						    </li>
 						    <!-- <li>
 						    	<a href="#">Rename</a>
@@ -307,7 +306,7 @@
 						    	<a ng-click="vm.copySheet()" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage)" >Copy</a>
 						    </li>
 						    <li>
-						    	<a ng-click="vm.pasteSheet()" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}">Paste</a>
+						    	<a ng-click="vm.pasteSheet()" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)||  (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)||  (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')}">Paste</a>
 						    </li>
 						</ul>
 					</div>												
