@@ -242,8 +242,7 @@
 	<div class="panel panel-tabs">
 		<div class="panel-body">
 			<div class="clearfix mb1">
-				<div class="pull-right" ng-class="{'poiv-none' : (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
-						&& vm.workPackage.status=='DISTRIBUTED')}">
+				<div class="pull-right">
 					<button class="btn btn-default small" ng-click="vm.resendApprove()" ng-if="vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.user.reviewLevels.indexOf('HO') > -1">Generate IN</button>
 					<button class="btn btn-default small" ng-click="vm.viewRecipients()" ng-if="vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.user.reviewLevels.indexOf('HO') > -1">View IN Recipients</button>
 					<div class="button-group dropdown custom">
@@ -274,8 +273,10 @@
 					        ng-class="{'poiv-none' :(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}">Complete</a></li>
 						</ul>
 					</div>
-					<div class="button-group dropdown custom" ng-class="{'poiv-none' :(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}">
-						<button class="btn btn-default small" ng-disabled="vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)">Action <i class="fa fa-caret-down" ng-class="{'poiv-none' :vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}"></i></button>
+					<div class="button-group dropdown custom" ng-class="{'poiv-none' :(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') ||  (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
+						&& vm.workPackage.status=='DISTRIBUTED')}">
+						<button class="btn btn-default small" ng-disabled="vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)  || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
+						&& vm.workPackage.status=='DISTRIBUTED')">Action <i class="fa fa-caret-down" ng-class="{'poiv-none' :vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}"></i></button>
 						<ul class="dropdown-menu custom" role="menu">
 						    <li>
 						    	<a ng-click="vm.save(true)">Save and Validate</a>
@@ -288,10 +289,16 @@
 						<button class="btn btn-default small" ng-disabled="vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) ">Sheet <i class="fa fa-caret-down" ng-class="{'poiv-none' :vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage)}"></i></button>
 						<ul class="dropdown-menu custom" role="menu">
 						    <li>
-						    	<a ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)" ng-click="vm.addSheet()" data-toggle="modal" data-target="#addNewsheet" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}">Add</a>
+						    	<a ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
+								&& vm.workPackage.status=='DISTRIBUTED')" 
+								ng-click="vm.addSheet()" data-toggle="modal" data-target="#addNewsheet" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage) ||  (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
+								&& vm.workPackage.status=='DISTRIBUTED')}">Add</a>
 						    </li>
 						    <li>
-						    	<a ng-click="vm.removeSheet()" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}">Remove</a>
+						    	<a ng-click="vm.removeSheet()" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
+								&& vm.workPackage.status=='DISTRIBUTED')" 
+								ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage) ||  (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
+								&& vm.workPackage.status=='DISTRIBUTED')}">Remove</a>
 						    </li>
 						    <!-- <li>
 						    	<a href="#">Rename</a>
