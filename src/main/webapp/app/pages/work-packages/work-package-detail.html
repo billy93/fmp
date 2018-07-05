@@ -222,7 +222,7 @@
 											<div class="form-group">
 												<label>Rate Sheet Comment</label>
 												<textarea class="form-control" rows="3" id="ratesheetComment" ng-model="vm.workPackage.ratesheetComment" name="ratesheetComment"
-							                    ng-disabled="!vm.isEditable('ratesheetComment') || vm.workPackage.status=='WITHDRAWN' || vm.disabledField(vm.workPackage)" 
+							                    ng-disabled="!vm.isEditable('ratesheetComment') || vm.workPackage.status=='WITHDRAWN' || vm.disabledField(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')" 
 							                    ng-class="{'must-fill': editForm.ratesheetComment.$error.required}"
 							                    ng-required="vm.isRequired('ratesheetComment')"></textarea>
 											</div>								
