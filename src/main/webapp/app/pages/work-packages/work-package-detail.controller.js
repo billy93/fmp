@@ -1788,6 +1788,15 @@
 			}).result.then(function(option) {
 				var clipboardSheet = ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
 				clipboardSheet.then(function(result){
+					
+					for(var l=0; l<result.sheet.fares.length; l++){
+						try {
+							result.sheet.fares[l].status="PENDING";
+						} catch (e) {
+						}
+						
+					}
+					
 					vm.addTab(option, result.sheet.fares);
 					alert('Paste Sheet Success');
 				});
