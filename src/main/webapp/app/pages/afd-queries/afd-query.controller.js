@@ -187,13 +187,16 @@
 
         function getRules(afdQuery) {
         	if (vm.currentAfdQuery == undefined || vm.currentAfdQuery == null || vm.currentAfdQuery != afdQuery) {
-        		console.log(afdQuery);
+        		vm.isLoadingRule = true;
+        		vm.categoryRules = null;
         		AfdQuery.getRules(afdQuery, function(data) {
             		vm.categoryRules = data;
             		vm.currentAfdQuery = afdQuery;
             		console.log(vm.categoryRules);
+            		vm.isLoadingRule = false;
             	}, function(error) {
             		console.log(error);
+            		vm.isLoadingRule = false;
             	});
         	} 
         }

@@ -94,10 +94,4 @@ public class CategoryAttribute {
 		}
 		return true;
 	}
-
-	@Override
-	public String toString() {
-		return "CategoryAttribute [relationship=" + relationship + ", type=" + type + ", subcat=" + subcat
-				+ ", attributes=" + attributes + "]";
-	}
 }

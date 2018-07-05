@@ -107,10 +107,4 @@ public class Category {
 		}
 		return true;
 	}
-
-	@Override
-	public String toString() {
-		return "Category [catNo=" + catNo + ", catName=" + catName + ", type=" + type + ", textFormat=" + textFormat
-				+ ", catAttributes=" + catAttributes + "]";
-	}
 }

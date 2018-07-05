@@ -1,16 +1,15 @@
 package com.atibusinessgroup.fmp.domain;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.io.Serializable;
-import java.util.Objects;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 /**
  * A TariffNumber.
  */
-@Document(collection = "tariff_number")
+@Document(collection = "master_tariff")
 public class TariffNumber implements Serializable {
 
     private static final long serialVersionUID = 1L;

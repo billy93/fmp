@@ -20,6 +20,10 @@
   animation: sk-bounce 2.0s infinite ease-in-out;
 }
 
+.spinner.yellow .double-bounce1, .spinner.yellow .double-bounce2 {
+	background-color: #ffc113;
+}
+
 .double-bounce2 {
   -webkit-animation-delay: -1.0s;
   animation-delay: -1.0s;

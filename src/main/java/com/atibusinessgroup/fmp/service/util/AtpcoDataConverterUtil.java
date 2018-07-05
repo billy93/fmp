@@ -16,11 +16,11 @@ public class AtpcoDataConverterUtil {
 
 		if (type != null) {
 			if (type.contentEquals(CategoryType.RULE)) {
-				result = "FARE";
+				result = "FARE RULE";
 			} else if (type.contentEquals(CategoryType.FOOTNOTE)) {
 				result = "FOOTNOTE";
 			} else if (type.contentEquals(CategoryType.GENERAL_RULE)) {
-				result = "GENERAL";
+				result = "GENERAL RULE";
 			} else if (type.contentEquals(CategoryType.ALTERNATE_GENERAL_RULE)) {
 				result = "ALTERNATE GENERAL";
 			}

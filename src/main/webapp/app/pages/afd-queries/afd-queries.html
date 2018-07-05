@@ -486,7 +486,12 @@
 			    </div>
 			</div>
 		</div>
-		
+		<div class="col-md-12 text-center" ng-if="vm.isLoadingRule">
+			<div class="spinner yellow">
+			  <div class="double-bounce1"></div>
+			  <div class="double-bounce2"></div>
+			</div>
+		</div>
 		<div class="additional-info-wrapper" ng-if="vm.categoryRules">
 			<div class="clearfix">
 				<div class="pull-left ph5px additional-container" ng-repeat="cat in vm.categoryRules track by cat.catNo">

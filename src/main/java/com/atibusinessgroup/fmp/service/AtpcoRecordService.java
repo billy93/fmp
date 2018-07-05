@@ -57,6 +57,7 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat23;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat25;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat26;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat27;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat35;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat50;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoDateWrapper;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord3CategoryWithDataTable;
@@ -763,7 +764,6 @@ public class AtpcoRecordService {
 				catAttrObjs.add(attObj);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 
 		result.setAttributes(catAttrObjs);
@@ -777,18 +777,36 @@ public class AtpcoRecordService {
 		try {
 			result = mongoTemplate.getConverter().read(c, category);
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 
 		return result;
 	}
 	
-	public String generateCategoryTextHeader(String type, String tariffNo, String tariffCode, String ruleNo, String sequence, Object date) {
+	public String generateCategoryTextHeader(String type, String tariffNo, String tariffCode, String value, String sequence, Object date) {
 		String result = "";
 		
 		String catType = AtpcoDataConverterUtil.convertCategoryTypeToName(type);
 		
-		result += (catType != null ? catType : "") + " RULE " + (ruleNo != null ? ruleNo : "") + " IN TARIFF " + (tariffCode != null ? tariffCode : "") + " (" + (tariffNo != null ? tariffNo : "") + ")\n";
+		if (!catType.isEmpty()) {
+			result += catType + " ";
+		}
+		
+		if (value != null && !value.isEmpty()) {
+			result += value + " ";
+		}
+		
+		if (tariffCode != null && !tariffCode.isEmpty()) {
+			result += "IN TARIFF " + tariffCode + " ";
+		}
+		
+		if (tariffNo != null && !tariffNo.isEmpty()) {
+			result += "(" + tariffNo + ") ";
+		}
+		
+		if (!result.isEmpty()) {
+			result += "\n";
+		}
+		
 		result += "SEQUENCE: " + (sequence != null ? sequence : "") + "\n";
 		
 		String effStr = null;
@@ -1197,7 +1215,7 @@ public class AtpcoRecordService {
 				if (cat05.getAdvancedReservationFirstTimeOfDay() != null && !cat05.getAdvancedReservationFirstTimeOfDay().isEmpty()) {
 					firstAdv += cat05.getAdvancedReservationFirstTimeOfDay() + " ";
 				}
-				if (cat05.getAdvancedReservationFirstPeriod() != null && !cat05.getAdvancedReservationFirstPeriod().isEmpty()) {
+				if (cat05.getAdvancedReservationFirstPeriod() != null && !cat05.getAdvancedReservationFirstPeriod().isEmpty() && !cat05.getAdvancedReservationFirstPeriod().contentEquals("000")) {
 					firstAdv += cat05.getAdvancedReservationFirstPeriod() + " ";			
 				}
 				if (cat05.getAdvancedReservationFirstUnit() != null && !cat05.getAdvancedReservationFirstUnit().isEmpty()) {
@@ -1210,7 +1228,7 @@ public class AtpcoRecordService {
 				if (cat05.getAdvancedReservationLastTimeOfDay() != null && !cat05.getAdvancedReservationLastTimeOfDay().isEmpty()) {
 					lastAdv += cat05.getAdvancedReservationLastTimeOfDay() + " ";
 				}
-				if (cat05.getAdvancedReservationLastPeriod() != null && !cat05.getAdvancedReservationLastPeriod().isEmpty()) {
+				if (cat05.getAdvancedReservationLastPeriod() != null && !cat05.getAdvancedReservationLastPeriod().isEmpty() && !cat05.getAdvancedReservationLastPeriod().contentEquals("000")) {
 					lastAdv += cat05.getAdvancedReservationLastPeriod() + " ";			
 				}
 				if (cat05.getAdvancedReservationLastUnit() != null && !cat05.getAdvancedReservationLastUnit().isEmpty()) {
@@ -1223,7 +1241,7 @@ public class AtpcoRecordService {
 				if (cat05.getAdvancedTicketingTimeOfDay() != null && !cat05.getAdvancedTicketingTimeOfDay().isEmpty()) {
 					tkt += cat05.getAdvancedTicketingTimeOfDay() + " ";
 				}
-				if (cat05.getAdvancedTicketingPeriod() != null && !cat05.getAdvancedTicketingPeriod().isEmpty()) {
+				if (cat05.getAdvancedTicketingPeriod() != null && !cat05.getAdvancedTicketingPeriod().isEmpty() && !cat05.getAdvancedTicketingPeriod().contentEquals("000")) {
 					tkt += cat05.getAdvancedTicketingPeriod() + " ";			
 				}
 				if (cat05.getAdvancedTicketingUnit1() != null && !cat05.getAdvancedTicketingUnit1().isEmpty()) {
@@ -1231,6 +1249,24 @@ public class AtpcoRecordService {
 				}
 				if (!tkt.isEmpty()) {
 					result += "\tTICKETING MUST BE WITHIN " + tkt + "OF MAKING RESERVATION\n";
+				}
+				String tktDep = "";
+				if (cat05.getAdvancedTicketingBeforeDeparture() != null && !cat05.getAdvancedTicketingBeforeDeparture().isEmpty() && !cat05.getAdvancedTicketingBeforeDeparture().contentEquals("000")) {
+					tktDep += cat05.getAdvancedTicketingBeforeDeparture() + " ";
+				}
+				if (cat05.getAdvancedTicketingUnit2() != null && !cat05.getAdvancedTicketingUnit2().isEmpty()) {
+					tktDep += AtpcoDataConverterUtil.convertUnitToName(cat05.getAdvancedTicketingUnit2()) + " ";	
+				}
+				if (!tktDep.isEmpty()) {
+					result += "\tTICKETING MUST BE AT LEAST " + tktDep + "BEFORE DEPARTURE\n";
+					
+					if (cat05.getAdvancedTicketingBoth() != null && !cat05.getAdvancedTicketingBoth().isEmpty()) {
+						if (cat05.getAdvancedTicketingBoth().trim().contentEquals("E")) {
+							result += "\tWHICHEVER IS EARLIER\n";
+						} else if (cat05.getAdvancedTicketingBoth().trim().contentEquals("L")) {
+							result += "\tWHICHEVER IS LATER\n";
+						}
+					}
 				}
 				if (!result.isEmpty()) {
 					result += "\n";
@@ -2101,6 +2137,7 @@ public class AtpcoRecordService {
 			case "033":
 				break;
 			case "035":
+				AtpcoRecord3Cat35 cat35 = (AtpcoRecord3Cat35) catObj;
 				break;
 			case "050":
 				AtpcoRecord3Cat50 cat50 = (AtpcoRecord3Cat50) catObj;
