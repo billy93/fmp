@@ -125,7 +125,7 @@
         }
         
         function changeItemsPerPage() {
-        	vm.loadAll();
+        	vm.loadAll(false);
         }
     }
 })();

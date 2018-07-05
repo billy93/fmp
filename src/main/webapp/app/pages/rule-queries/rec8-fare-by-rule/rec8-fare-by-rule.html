@@ -1,0 +1,142 @@
+<div class="panel">
+	<div class="panel" id="rec8TabContent">
+		<div class="panel-body">
+			<div class="filter-hero">
+				<div class="filter-label semibold show">Hide Filter</div>
+				<div class="filter-area">
+					<div class="clearfix">
+						<form id="rec8Form" name="rec8Form" role="form" novalidate>
+							<div class="pull-left col-md-4 no-lpad">
+								<div class="form-group">
+									<div class="custom-label semibold">Carrier</div>
+									<div class="input-group">
+									<input type="text" class="form-control" name="carrier"
+										id="carrier" ng-minlength="2"
+										ng-model="vm.paramCarrier" uppercase 
+										required/>
+										<span ng-click="vm.showCarrierModal()" class="input-group-addon"><i class="fa fa-folder"></i>
+										</span>
+									</div>
+									<div ng-show="rec8Form.carrier.$invalid">
+										<p class="help-block" ng-show="rec8Form.carrier.$error.required">
+											This field is required.</p>
+										<p class="help-block" ng-show="rec8Form.carrier.$error.minlength">
+											Minimum 2 letters</p>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Rule Number</div>
+									<input type="text" class="form-control" name="ruleNo"
+										id="ruleNo" ng-model="vm.queryParams.ruleNo" uppercase />
+								</div>
+							</div>
+
+							<div class="pull-left col-md-4 no-lpad">
+								<div class="form-group">
+									<div class="custom-label semibold">Tariff Number</div>
+									<div class="input-group">
+										<input id="ruleTarNumber" type="text" 
+                  								name="ruleTarNumber"  
+                  								class="form-control"
+                  								ng-model="vm.paramTarNo" uppercase>
+										<span ng-click="vm.showTariffModal()" class="input-group-addon"><i class="fa fa-folder"></i>
+										</span>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<div class="custom-label semibold">Account Code</div>
+									<input type="text" class="form-control" name="accountCode"
+										id="accountCode" ng-model="vm.queryParams.accountCode" uppercase />
+								</div>
+							</div>
+
+							<div class="pull-right col-md-4 no-rpad">
+								<div class="form-group">
+									<div class="custom-label semibold">Additional Options</div>
+									<div class="checkbox-wrapper">
+										<label> <input type="checkbox"
+											name="includeDisc"
+											id="includeDisc"
+											ng-model="vm.queryParams.includeDisc"> Include Discontinued Sequences
+										</label>
+									</div>
+									<br/>
+									<div class="form-group mt1">
+										<button type="button" id="btnLoadRec8"
+											ng-disabled="rec8Form.$invalid"
+											class="btn btn-default small pull-left"
+											ng-click="vm.loadAll(true);">Query</button>
+										<button type="button" id="btnClearRec8"
+											class="btn btn-default small pull-left"
+											ng-click="vm.clearFilter();">Clear</button>
+										<button type="reset" id="btnResetRec8" 
+											ng-click="vm.resetFilter();"
+											class="btn btn-default small pull-left">Reset</button>
+									</div>
+									
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<div class="table-wrapper">
+				<div class="datatable-wrapper form-inline">
+					<div class="table-responsive">
+						<table class="table table-striped table-bordered datatable">
+							<thead>
+								<tr>
+									<th>No</th>
+									<th>CXR</th>
+									<th>TAR NO</th>
+									<th>TAR CD</th>
+									<th>DESCRIPTION</th>
+									<th>RULE NO</th>
+									<th>CAT 35</th>
+									<th>PAX TYPE</th>
+									<th>ACCOUNT CODE</th>
+									<th>GLOBAL</th>
+									<th>LOC 1</th>
+									<th>LOC 2</th>
+									<th>EFFECTIVE DATE</th>
+									<th>DISCONTINUE DATE</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="rec8 in vm.record8">
+									<td>{{$index + 1}}</td>
+									<td>{{rec8.cxr_code}}</td>
+									<td>{{rec8.tariff}}</td>
+									<td>{{rec8.tar_cd}}</td>
+									<td>{{rec8.description}}</td>
+									<td>{{rec8.rule_no}}</td>
+									<td>{{rec8.cat35}}</td>
+									<td>{{rec8.prim_pass_type}}</td>
+									<td>{{rec8.account_code}}</td>
+									<td>{{rec8.fare_geo_scope_global}}</td>
+									<td>{{rec8.fare_geo_scope_loc_1}}</td>
+									<td>{{rec8.fare_geo_scope_loc_2}}</td>
+									<td><span ng-if="rec8.dates_eff=='indef'"></span><span
+										ng-if="rec8.dates_eff != 'indef'">{{rec8.dates_eff
+											| date:'medium'}}</span></td>
+									<td><span ng-if="rec8.dates_disc=='indef'"></span><span
+										ng-if="rec8.dates_disc != 'indef'">{{rec8.dates_disc
+											| date:'medium'}}</span></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="text-center">
+						<jhi-item-count page="vm.page" total="vm.queryCount"
+							items-per-page="vm.itemsPerPage"></jhi-item-count>
+						<uib-pagination class="pagination-sm"
+							total-items="vm.totalItems" items-per-page="vm.itemsPerPage"
+							ng-model="vm.page" ng-change="vm.loadAll()"></uib-pagination>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

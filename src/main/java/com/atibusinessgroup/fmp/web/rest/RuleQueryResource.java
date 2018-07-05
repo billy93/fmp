@@ -103,10 +103,10 @@ public class RuleQueryResource {
 	 * @return the ResponseEntity with status 200 (OK) and the list of ruleQueries
 	 *         in body
 	 */
-	@PostMapping("/rule-queries")
+	@PostMapping("/rule-query")
 	@Timed
 	public ResponseEntity<List<RuleQuery>> getAllRuleQueries(@RequestBody RuleQueryParam param) {
-//		log.debug("REST request to get a page of RuleQueries: {}", param);
+		log.debug("REST request to get a page of RuleQueries: {}", param);
 		
 		Pageable pageable = new PageRequest(param.getPage(), param.getSize());
 		
@@ -121,7 +121,7 @@ public class RuleQueryResource {
 			}
 		}
 
-		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/rule-queries");
+		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/rule-query");
 		
 		return new ResponseEntity<>(result, headers, HttpStatus.OK);
 	}
@@ -131,7 +131,7 @@ public class RuleQueryResource {
 	 *
 	 * @return the ResponseEntity with status 200 (OK) and the list of rules in body
 	 */
-	@GetMapping("/rule-queries/rules")
+	@GetMapping("/rule-query/rules")
 	@Timed
 	public ResponseEntity<List<AtpcoRecord2>> getRuleQueryRules(RuleQueryParam ruleQuery) {
 		log.debug("REST request to get ruleQueries rules: {}", ruleQuery);
@@ -149,7 +149,7 @@ public class RuleQueryResource {
 	 *
 	 * @return the ResponseEntity with status 200 (OK) and the list of rules in body
 	 */
-	@GetMapping("/rule-queries/rules2")
+	@GetMapping("/rule-query/rules2")
 	@Timed
 	public ResponseEntity<List<Category>> getRuleQueryRules2(RuleQuery ruleQuery) {
 		log.debug("REST request to get ruleQueries rules: {}", ruleQuery);
@@ -196,24 +196,29 @@ public class RuleQueryResource {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 	
-	/**
-	 * GET /rule-queries/rules : get rule query rules.
-	 *
-	 * @return the ResponseEntity with status 200 (OK) and the list of rules in body
-	 */
-	@PostMapping("/rule-queries/rec8")
+	@PostMapping("/fare-class-query")
 	@Timed
-	public ResponseEntity<List<AtpcoRecord8>> getRec8(@RequestBody Rec8Param param) {
+	public ResponseEntity<List<AtpcoRecord8>> getAllFareClassQueries(@RequestBody Rec8Param param) {
+		Pageable pageable = new PageRequest(param.getPage(), param.getSize());
 		
-		System.out.println("param : "+param.getCxr());
+		Page<AtpcoRecord8> result = atpcoRuleQueryCustomRepository.getListRec8(param, pageable);
+		
+		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(result, "/api/fare-class-query");
+		
+		return new ResponseEntity<>(result.getContent(), headers, HttpStatus.OK);
+	}
+
+	@PostMapping("/rec8-fare-by-rule")
+	@Timed
+	public ResponseEntity<List<AtpcoRecord8>> getAllRec8FareByRules(@RequestBody Rec8Param param) {
+		System.out.println("param : "+param);
 
 		Pageable pageable = new PageRequest(param.getPage(), param.getSize());
 		
 		Page<AtpcoRecord8> result = atpcoRuleQueryCustomRepository.getListRec8(param, pageable);
 		
-		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(result, "/api/rule-queries/rec8");
+		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(result, "/api/rec8-fare-by-rule");
 		
 		return new ResponseEntity<>(result.getContent(), headers, HttpStatus.OK);
 	}
-
 }
