@@ -412,6 +412,12 @@ public class WorkPackageResource {
 //        	wp.setAttachment(false);
 //        	wp.getAttachmentData().clear();
 //        }
+    	 
+        for(Attachment attachment : wp.getAttachmentData()) {
+        	attachment.setUsername(user.getLogin());
+        	attachment.setCreatedTime(ZonedDateTime.now());
+        }
+        
         for(WorkPackageFareSheet wps : wp.getFareSheet()) {
         	for(WorkPackageFare fare : wps.getFares()) {
         		fare.setStatus("PENDING");
