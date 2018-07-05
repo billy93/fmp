@@ -153,7 +153,7 @@ public class FootnoteQueryResource {
 	@GetMapping("/footnote-queries/rules")
 	@Timed
 	public ResponseEntity<List<AtpcoFootnoteQueryDetails>> getFootnoteQueryRules(FootnoteQuery footnoteQuery) {
-		log.debug("REST request to get footnoteQueries rules: {}", footnoteQuery);
+//		log.debug("REST request to get footnoteQueries rules: {}", footnoteQuery);
 
 		String recordId = footnoteQuery.getTarNo() + footnoteQuery.getCxr() + footnoteQuery.getFtnt() + "";
 
