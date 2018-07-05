@@ -12,7 +12,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.atibusinessgroup.fmp.constant.CategoryName;
 import com.atibusinessgroup.fmp.constant.CategoryType;
+import com.atibusinessgroup.fmp.domain.VoltrasFare;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFootnoteRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord0;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
@@ -35,6 +35,7 @@ import com.atibusinessgroup.fmp.domain.dto.DataTable;
 import com.atibusinessgroup.fmp.domain.dto.GeneralRuleApplication;
 import com.atibusinessgroup.fmp.domain.dto.WorkPackageMarketFare;
 import com.atibusinessgroup.fmp.repository.AtpcoRecord0Repository;
+import com.atibusinessgroup.fmp.repository.VoltrasFareRepository;
 import com.atibusinessgroup.fmp.repository.WorkPackageRepositoryImpl;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoFareCustomRepository;
 import com.atibusinessgroup.fmp.service.AtpcoRecordService;
@@ -51,16 +52,19 @@ public class AfdQueryResource {
 	private final AtpcoRecord0Repository atpcoRecord0Repository;
 	private final AtpcoFareCustomRepository atpcoFareCustomRepository;
 	private final AtpcoRecordService atpcoRecordService;
+	private final VoltrasFareRepository voltrasFareRepository;
 	private final WorkPackageRepositoryImpl workPackageRepositoryImpl;
 	private final AfdQueryMapper afdQueryMapper;
 	
     public AfdQueryResource(AtpcoRecord0Repository atpcoRecord0Repository, AtpcoFareCustomRepository atpcoFareCustomRepository, 
-    		AtpcoRecordService atpcoRecordService, WorkPackageRepositoryImpl workPackageRepositoryImpl, AfdQueryMapper afdQueryMapper) {
+    		AtpcoRecordService atpcoRecordService, WorkPackageRepositoryImpl workPackageRepositoryImpl, AfdQueryMapper afdQueryMapper,
+    		VoltrasFareRepository voltrasFareRepository) {
     	this.atpcoRecord0Repository = atpcoRecord0Repository;
     	this.atpcoFareCustomRepository = atpcoFareCustomRepository;
     	this.atpcoRecordService = atpcoRecordService;
     	this.workPackageRepositoryImpl = workPackageRepositoryImpl;
     	this.afdQueryMapper = afdQueryMapper;
+    	this.voltrasFareRepository = voltrasFareRepository;
     	
     	categories.put("001", CategoryName.CAT_001);
     	categories.put("002", CategoryName.CAT_002);
@@ -139,7 +143,16 @@ public class AfdQueryResource {
             
             //Web
             if (param.getSource().contentEquals("W")) {
+            	Page<VoltrasFare> rawWebs = voltrasFareRepository.findAll(pageable);
             	
+            	for (int i = 0; i < rawWebs.getContent().size(); i++) {
+            		VoltrasFare web = rawWebs.getContent().get(i);
+            		afdQueries.add(afdQueryMapper.convertVoltrasFare(web));
+            	}
+            	
+            	if (rawWebs.getTotalPages() == pageable.getPageNumber()) {
+            		isLastPage = true;
+            	}
             }
             
             //Competitor
@@ -156,13 +169,13 @@ public class AfdQueryResource {
     }
     
     /**
-     * GET  /afd-queries/rules : get afd query rules.
+     * POST  /afd-queries/rules : s afd query rules.
      *
      * @return the ResponseEntity with status 200 (OK) and the list of rules in body
      */
-    @GetMapping("/afd-queries/rules")
+    @PostMapping("/afd-queries/rules")
     @Timed
-    public ResponseEntity<List<Category>> getAfdQueryRules(AfdQuery afdQuery) {
+    public ResponseEntity<List<Category>> getAfdQueryRules(@RequestBody AfdQuery afdQuery) {
         log.debug("REST request to get AfdQueries rules: {}", afdQuery);
         
         List<Category> result = new ArrayList<>();

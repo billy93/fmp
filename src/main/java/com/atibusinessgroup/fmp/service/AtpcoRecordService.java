@@ -58,6 +58,7 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat25;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat26;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat27;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat50;
+import com.atibusinessgroup.fmp.domain.dto.AtpcoDateWrapper;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord3CategoryWithDataTable;
 import com.atibusinessgroup.fmp.domain.dto.BaseFareTable;
 import com.atibusinessgroup.fmp.domain.dto.CategoryAttribute;
@@ -170,6 +171,25 @@ public class AtpcoRecordService {
 		return match;
 	}
 	
+	public boolean compareValueWithParamListString(List<String> values, String param) {
+		boolean match = false;
+		
+		if (param != null && !param.trim().isEmpty()) {
+			if (values != null && values.size() > 0) {
+				for (String value:values) {
+					if (compareValueWithParamString(value, param)) {
+						match = true;
+						break;
+					}
+				}
+			}
+		} else {
+			match = true;
+		}
+		
+		return match;
+	}
+	
 	public boolean compareValueWithParamTourCode(String value, String param) {
 		boolean match = false;
 		
@@ -194,39 +214,49 @@ public class AtpcoRecordService {
 		return match;
 	}
 	
-	public boolean compareValueWithParamDate(Object startDate, Object endDate, Date paramFrom,
+	public boolean compareValueWithParamDate(List<AtpcoDateWrapper> dates, Date paramFrom,
 			Date paramTo, String option) {
 		boolean match = false;
 		
-		Date start = DateUtil.convertObjectToDate(startDate);
-		Date end = DateUtil.convertObjectToDate(endDate);
-		
-		if (start == null) {
-			start = minimumDate;
-		}
-		
-		if (end == null) {
-			end = maximumDate;
-		}
-		
-		if (paramFrom == null) {
-			paramFrom = minimumDate;
-		}
-		
-		if (paramTo == null) {
-			paramTo = maximumDate;
-		}
-		
-		if (option != null && option.contentEquals("A")) {
-			if (!start.after(paramTo) && !end.before(paramFrom)) {
-				match = true;
+		if (dates != null && dates.size() > 0) {
+			if (paramFrom == null) {
+				paramFrom = minimumDate;
 			}
-		} else if (option != null && option.contentEquals("E")) {
-			if (paramFrom.equals(start) && paramTo.equals(end)) {
-				match = true;
+			
+			if (paramTo == null) {
+				paramTo = maximumDate;
 			}
+			
+			for (AtpcoDateWrapper date:dates) {
+				Date start = DateUtil.convertObjectToDate(date.getStartDate());
+				Date end = DateUtil.convertObjectToDate(date.getEndDate());
+				
+				if (start == null) {
+					start = minimumDate;
+				}
+				
+				if (end == null) {
+					end = maximumDate;
+				}
+				
+				if (option != null && option.contentEquals("A")) {
+					if (!start.after(paramTo) && !end.before(paramFrom)) {
+						match = true;
+					}
+				} else if (option != null && option.contentEquals("E")) {
+					if (paramFrom.equals(start) && paramTo.equals(end)) {
+						match = true;
+					}
+				}
+				
+				if (match) {
+					break;
+				}
+			}
+		} else {
+			match = true;
 		}
-		 
+		
 		return match;
 	}
 	

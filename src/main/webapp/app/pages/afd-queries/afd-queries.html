@@ -400,7 +400,7 @@
 			                    <td>{{afdQuery.destinationCity}}</td>
 			                    <td>{{afdQuery.destinationCountry}}</td>
 			                    <td>{{afdQuery.fareClassCode}}</td>
-			                    <td>{{afdQuery.bookingClass}}</td>
+			                    <td><span ng-repeat="value in afdQuery.bookingClass track by $index">{{value}}<span ng-if="$index < afdQuery.bookingClass.length - 1">, </span></span></td>
 			                    <td>{{afdQuery.cabin}}</td>
 			                    <td><span ng-if="afdQuery.owrt == '1'">OW</span><span ng-if="afdQuery.owrt == '2'">RT</span><span ng-if="afdQuery.owrt == '3'">OO</span></td>
 			                    <td>{{afdQuery.footnote}}</td>
@@ -424,31 +424,45 @@
 			                	<td>{{afdQuery.globalIndicator}}</td>
 			                	<td><span ng-if="afdQuery.ruleFocusDate != 'indef'">{{afdQuery.focusDate | date:'dd/MM/yyyy':vm.timezone}}</span></td>
 			                	<td></td>
-			                	<td><span ng-if="afdQuery.travelStartDate != 'indef'">{{afdQuery.travelStartDate | date:'dd/MM/yyyy':vm.timezone}}</span></td>
-			                	<td><span ng-if="afdQuery.travelEndDate != 'indef'">{{afdQuery.travelEndDate | date:'dd/MM/yyyy':vm.timezone}}</span></td>
-			                	<td><span ng-if="afdQuery.travelComplete != 'indef'">{{afdQuery.travelComplete | date:'dd/MM/yyyy':vm.timezone}}</span></td>
-			                	<td><span ng-if="afdQuery.saleStartDate != 'indef'">{{afdQuery.saleStartDate | date:'dd/MM/yyyy':vm.timezone}}</span></td>
-			                	<td><span ng-if="afdQuery.saleEndDate != 'indef'">{{afdQuery.saleEndDate | date:'dd/MM/yyyy':vm.timezone}}</span></td>
-			                	<td><span ng-if="afdQuery.resStartDate != 'indef'">{{afdQuery.resStartDate | date:'dd/MM/yyyy':vm.timezone}}</span></td>
-			                	<td><span ng-if="afdQuery.resEndDate != 'indef'">{{afdQuery.resEndDate | date:'dd/MM/yyyy':vm.timezone}}</span></td>
-			                	<td>{{afdQuery.minStay}}</td>
-			                	<td>{{afdQuery.maxStay}}</td>
-			                	<td>{{afdQuery.advancePurchase}}</td>
+			                	<td>
+			                		<span ng-if="afdQuery.firstTravelDate != null && afdQuery.firstTravelDate != ''">{{afdQuery.firstTravelDate | date:'dd/MM/yyyy':vm.timezone}}</span>
+			                	</td>
+			                	<td>
+			                		<span ng-if="afdQuery.lastTravelDate != null && afdQuery.lastTravelDate != ''">{{afdQuery.lastTravelDate | date:'dd/MM/yyyy':vm.timezone}}</span>
+			                	</td>
+			                	<td>
+			                		<span ng-repeat="value in afdQuery.travelDates track by $index">{{value.completeDate | date:'dd/MM/yyyy':vm.timezone}}<span ng-if="$index < afdQuery.travelDates.length - 1">, </span></span>
+			                	</td>
+			                	<td>
+			                		<span ng-if="afdQuery.firstSaleDate != null && afdQuery.firstSaleDate != ''">{{afdQuery.firstSaleDate | date:'dd/MM/yyyy':vm.timezone}}</span>
+			                	</td>
+			                	<td>
+			                		<span ng-if="afdQuery.lastSaleDate != null && afdQuery.lastSaleDate != ''">{{afdQuery.lastSaleDate | date:'dd/MM/yyyy':vm.timezone}}</span>
+			                	</td>
+			                	<td>
+			                		<span ng-if="afdQuery.firstResDate != null && afdQuery.firstResDate != ''">{{afdQuery.firstResDate | date:'dd/MM/yyyy':vm.timezone}}</span>
+			                	</td>
+			                	<td>
+			                		<span ng-if="afdQuery.lastResDate != null && afdQuery.lastResDate != ''">{{afdQuery.lastResDate | date:'dd/MM/yyyy':vm.timezone}}</span>
+			                	</td>
+			                	<td><span ng-repeat="value in afdQuery.minStay track by $index">{{value}}<span ng-if="$index < afdQuery.minStay.length - 1">, </span></span></td>
+			                	<td><span ng-repeat="value in afdQuery.maxStay track by $index">{{value}}<span ng-if="$index < afdQuery.maxStay.length - 1">, </span></span></td>
+			                	<td><span ng-repeat="value in afdQuery.advancePurchase track by $index">{{value}}<span ng-if="$index < afdQuery.advancePurchase.length - 1">, </span></span></td>
 			                	<td></td>
 			                	<td></td>
 			                	<td>{{afdQuery.season}}</td>
 			                	<td><span ng-if="afdQuery.firstSeasonDate != 'indef'">{{afdQuery.firstSeasonDate | date:'dd/MM/yyyy':vm.timezone}}</span></td>
 			                	<td><span ng-if="afdQuery.lastSeasonDate != 'indef'">{{afdQuery.lastSeasonDate | date:'dd/MM/yyyy':vm.timezone}}</span></td>
 			                	<td>
-			                		<span ng-if="afdQuery.travelStartDate == 'indef'">XXXXXXXX</span><span ng-if="afdQuery.travelStartDate != 'indef'">{{afdQuery.travelStartDate | date:'dd/MM/yyyy':vm.timezone}}</span>
-			                		<span ng-if="afdQuery.travelEndDate == 'indef'"> - XXXXXXXX</span><span ng-if="afdQuery.travelEndDate != undefined && afdQuery.travelEndDate != null && afdQuery.travelEndDate != 'indef'"> - {{afdQuery.travelEndDate | date:'dd/MM/yyyy':vm.timezone}}</span>
+			                		<span ng-if="afdQuery.firstTravelDate == null || afdQuery.firstTravelDate == ''">XXXXXXXX</span><span ng-if="afdQuery.firstTravelDate != null && afdQuery.firstTravelDate != ''">{{afdQuery.firstTravelDate | date:'dd/MM/yyyy':vm.timezone}}</span>
+			                		<span ng-if="afdQuery.lastTravelDate == null || afdQuery.lastTravelDate == ''"> - XXXXXXXX</span><span ng-if="afdQuery.lastTravelDate != null && afdQuery.lastTravelDate != ''"> - {{afdQuery.lastTravelDate | date:'dd/MM/yyyy':vm.timezone}}</span>
 			                	</td>
 			               		<td>{{afdQuery.fareType}}</td>
-			                	<td>{{afdQuery.paxType}}</td>
+			                	<td><span ng-repeat="value in afdQuery.paxType track by $index">{{value}}<span ng-if="$index < afdQuery.paxType.length - 1">, </span></span></td>
 			                	<td><a ui-sref="work-package-detail({id:afdQuery.wpObjectId})">{{afdQuery.wpId}}</a></td>
 			                	<td>{{afdQuery.wpName}}</td>
-			                	<td>{{afdQuery.tourCode}}</td>
-			                	<td>{{afdQuery.cat50Title}}</td>
+			                	<td><span ng-repeat="value in afdQuery.tourCode track by $index">{{value}}<span ng-if="$index < afdQuery.tourCode.length - 1">, </span></span></td>
+			                	<td><span ng-repeat="value in afdQuery.cat50Title track by $index">{{value}}<span ng-if="$index < afdQuery.cat50Title.length - 1">, </span></span></td>
 			                	<td></td>
 <!-- 			                	<td></td> -->
 <!-- 			                	<td></td> -->
