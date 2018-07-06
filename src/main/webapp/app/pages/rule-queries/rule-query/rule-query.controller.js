@@ -5,33 +5,21 @@
         .module('fmpApp')
         .controller('RuleQueryController', RuleQueryController);
 
-    RuleQueryController.$inject = ['$state', 'RuleQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', 'params', 'rec8params', '$uibModal'];
+    RuleQueryController.$inject = ['$state', '$stateParams', 'RuleQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', '$uibModal'];
 
-    function RuleQueryController($state, RuleQuery, ParseLinks, AlertService, paginationConstants, queryParams, params, rec8params, $uibModal) {
+    function RuleQueryController($state, $stateParams, RuleQuery, ParseLinks, AlertService, paginationConstants, pagingParams, $uibModal) {
     	
-
         var vm = this;
-        vm.loadPage = loadPage;
-        vm.loadPageRec8 = loadPageRec8;
         vm.itemsPerPage = paginationConstants.itemsPerPage;
-        vm.itemsPerPageRec8 = paginationConstants.itemsPerPage;
-        vm.queryParams = queryParams;
-        vm.params = params;
         vm.loadAll = loadAll;
-        vm.loadRec8 = loadRec8;
         vm.getRules = getRules;
         vm.getRules2 = getRules2;
-        vm.reset = reset;
+        vm.resetFilter = resetFilter;
         vm.page = 1;
-        vm.pageRec8 = 1;
         vm.hideDetail = hideDetail;
         vm.showCategoryDetail = showCategoryDetail;
         vm.clearFilter = clearFilter;
         vm.showDetail = showDetail;
-        vm.getTab = getTab;
-        vm.rec8params = rec8params;
-        vm.paramCarrier = null;
-        vm.paramTarNo = null;
         vm.showTariffModal = showTariffModal;
         vm.showCarrierModal = showCarrierModal;
         
@@ -41,13 +29,22 @@
         
         vm.openTooltip = true;
         
-        function loadAll (queryForm) {
+        if($stateParams.ruleQueryFilter != null){
+        	vm.queryParams = $stateParams.ruleQueryFilter;
+        	vm.params = $stateParams.ruleQueryDetailFilter;
+        	vm.itemsPerPage = vm.queryParams.size;
+        } else {
+        	vm.clearFilter();
+        	vm.itemsPerPage = "10";
+        }
+        
+        function loadAll() {
 
         	vm.queryParams.page = vm.page - 1;
         	vm.queryParams.size = vm.itemsPerPage;
         	
-        	vm.queryParams.ruleTarNo = vm.paramTarNo;
         	vm.queryParams.cxr = vm.paramCarrier;
+        	vm.queryParams.ruleTarNo = vm.paramTarNo;
         	
         	RuleQuery.query(vm.queryParams, onSuccess, onError);
         	
@@ -64,40 +61,7 @@
     	
         }
 
-        function loadRec8 (rec8Form) {
-        	
-        	vm.rec8params.page = vm.pageRec8 - 1;
-        	vm.rec8params.size = vm.itemsPerPageRec8;
-        	
-        	vm.rec8params.ruleTarNo = vm.paramTarNo;
-        	vm.rec8params.cxr = vm.paramCarrier;
-        	
-        	RuleQuery.queryRec8(vm.rec8params, onSuccess, onError);
-        	
-            function onSuccess(data, headers) {
-                vm.links = ParseLinks.parse(headers('link'));
-                vm.totalItemsRec8 = headers('X-Total-Count');
-                vm.queryCountRec8 = vm.totalItemsRec8;
-                vm.record8 = data;
-                
-            }
-            
-            function onError(error) {
-                AlertService.error(error.data.message);
-            }
-    	
-        } 
-
-        function loadPage(page) {
-            vm.page = page;
-        }
-        
-        function loadPageRec8(page) {
-            vm.pageRec8 = page;
-        }
-
         function getRules(ruleQuery) {
-        	
         	vm.params.cxr= ruleQuery.cxr;
         	vm.params.ruleTarNo= ruleQuery.tarNo;
         	vm.params.ruleNo= ruleQuery.ruleNo;
@@ -142,98 +106,36 @@
             vm.datePickerOpenStatus[date] = true;
         }
         
-        vm.tab1 = true;
-        function getTab(tab) {
-        	if(tab=='1') {
-        		vm.tab1 = true;
-        		vm.tab2 = false;
-        		vm.tab3 = false;
-        	} else if(tab=='2') {
-        		vm.tab1 = false;
-        		vm.tab2 = true;
-        		vm.tab3 = false;
-        	}  else if(tab=='3') {
-        		vm.tab1 = false;
-        		vm.tab2 = false;
-        		vm.tab3 = true;
-        	}
-        }
-        
-        function reset() {
-        	
-        	vm.queryParams = {
-    			cxr: null,
-        		ruleTarNo: null,
-        		ruleNo: null,
-        		type: null,
-        		catNo: null,
-        		includeDisc : null,
-        	};
-        	
-        	vm.rec8params = {
-        			cxr: null,
-            		ruleTarNo: null,
-            		ruleNo: null,
-            		accountCode: null,
-            		includeDisc : null,
-            };
-
-            vm.links.first = 0;
-            vm.links.last = 1;
-            vm.links.next = 1;
+        function resetFilter() {
+        	vm.clearFilter();
             
         	vm.ruleQueries = null;
         	vm.ruleQueryCategories = null;
         	vm.ruleQueryCategories2 = null;
-        	vm.record8 = null;
-        	
-        	vm.clearFilter();
         }
-        
         
         function clearFilter() {
-        	$("#cxr").val("");
-        	$("#ruleNo").val("");
-        	$("#type").val("");
-        	$("#src").val("");
-        	$("#ruleTarNo").val("");
-        	$("#catNo").val("");
-        	$("#cxrRec8").val("");
-        	$("#ruleNoRec8").val("");
-        	$("#accCodeRec8").val("");
-        	$("#ruleTarNoRec8").val("");
-        }
-        
-        function checkFormValidation(form) {
-        	
-        	if(vm.tab1 == true) {
-        		var cxr = $("#cxr").val();
-            	if(cxr.length < 2) {
-            		form.$dirty = false;
-                	form.$pristine = true;
-                	form.$valid = false;
-            	}
+        	vm.queryParams = {
+        			cxr: null,
+        			ruleNo: null,
+        			type: null,
+        			ruleTarNo: null,
+        			catNo: null,
+        			includeDisc: null
         	}
+        	vm.paramCarrier = null;
+        	vm.paramTarNo = null;
         	
-        	
-        	if(vm.tab3 == true) {
-        		var cxrRec8 = $("#cxrRec8").val();
-            	if(cxrRec8.length < 2) {
-            		form.$dirty = false;
-                	form.$pristine = true;
-                	form.$valid = false;
-            	}
+        	vm.params = {
+        			cxr: null,
+            		ruleTarNo: null,
+            		ruleNo: null,
+            		type: null,
+            		src: null,
+            		cat: null,
+            		catNo: null
         	}
-        	
-        	
-        	return form;
-        	
         }
-        
-        function tooltipOpen(form) {
-        	
-        }
-        
         
         function showCategoryDetail(category) {
         	$uibModal.open({
@@ -247,13 +149,11 @@
                     entity: category
                 }
             }).result.then(function() {
-                $state.go('rule-query', {}, { reload: false });
+                $state.go('rule-queries', {}, { reload: false });
             }, function() {
-                $state.go('rule-query');
+                $state.go('rule-queries');
             });
         }
-        
-        
         
         function showTariffModal() {
         	$uibModal.open({
@@ -267,9 +167,9 @@
                 	entity: vm
                 }
             }).result.then(function() {
-                $state.go('rule-query', {}, { reload: false });
+                $state.go('rule-queries', {}, { reload: false });
             }, function() {
-                $state.go('rule-query');
+                $state.go('rule-queries');
             });
         }
         
@@ -285,11 +185,10 @@
                 	entity: vm
                 }
             }).result.then(function() {
-                $state.go('rule-query', {}, { reload: false });
+                $state.go('rule-queries', {}, { reload: false });
             }, function() {
-                $state.go('rule-query');
+                $state.go('rule-queries');
             });
         }
-        
     }
 })();
