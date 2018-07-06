@@ -4026,21 +4026,21 @@
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverNewBasicFare', $event)" ng-class="{highlighted:fare.field['waiverNewBasicFare']}">
 															<input type="text" class="form-control" ng-model="fare.waiverNewBasicFare" name="waiverNewBasicFare{{$parent.$index}}{{$index}}"
-															ng-change="vm.calculateFareLost(fare)"
+															ng-change="vm.calculateFareLost(fare)" ng-init="vm.calculatePenaltyLost(fare)"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverNewBasicFare{{$parent.$index}}{{$index}}.$valid}"												         		
 						           							ng-disabled="!vm.isEditable('waiverNewBasicFare')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											             	ng-required="vm.isRequired('waiverNewBasicFare')"/>
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverApprovedFare', $event)" ng-class="{highlighted:fare.field['waiverApprovedFare']}">
 															<input type="text" class="form-control" ng-model="fare.waiverApprovedFare" name="waiverApprovedFare{{$parent.$index}}{{$index}}"
-															ng-change="vm.calculateFareLost(fare)"
+															ng-change="vm.calculateFareLost(fare)" ng-init="vm.calculatePenaltyLost(fare)"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverApprovedFare{{$parent.$index}}{{$index}}.$valid}"												         		
 						           							ng-disabled="!vm.isEditable('waiverApprovedFare')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											             	ng-required="vm.isRequired('waiverApprovedFare')"/>
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverFareLost', $event)" ng-class="{highlighted:fare.field['waiverFareLost']}">
 															<input type="text" class="form-control" ng-model="fare.waiverFareLost" name="waiverFareLost{{$parent.$index}}{{$index}}"
-															ng-change="vm.calculateTotalLost(fare)"
+															ng-change="vm.calculateFareLost(fare)" ng-init="vm.calculatePenaltyLost(fare)"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverFareLost{{$parent.$index}}{{$index}}.$valid}"
 											             	ng-required="vm.isRequired('waiverFareLost')" disabled/>
 														</td>
@@ -4051,7 +4051,7 @@
 											             	ng-required="vm.isRequired('waiverCalculatedPn')" /> -->
 											             	<select class="form-control" name="waiverCalculatedPn{{$parent.$index}}{{$index}}" ng-model="fare.waiverCalculatedPn" ng-class="{'must-fill': !editForm.editFormWaiver.waiverCalculatedPn{{$parent.$index}}{{$index}}.$valid}"
 															ng-disabled="!vm.isEditable('waiverCalculatedPn')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
-											             	ng-required="vm.isRequired('waiverCalculatedPn')" >
+											             	ng-required="vm.isRequired('waiverCalculatedPn')" ng-change="vm.calculatePenaltyLost(fare)" ng-init="vm.calculatePenaltyLost(fare)">
 																<option value="amount">Amount</option>
 																<option value="percent">Percent</option>
 												</select>
@@ -4100,7 +4100,7 @@
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverTotalPax', $event)" ng-class="{highlighted:fare.field['waiverTotalPax']}">
 															<input type="text" class="form-control" ng-model="fare.waiverTotalPax" name="waiverTotalPax{{$parent.$index}}{{$index}}"
-															ng-change="vm.calculateTotalLost(fare)"
+															ng-change="vm.calculatePenaltyLost(fare)"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverTotalPax{{$parent.$index}}{{$index}}.$valid}"												         		
 						           							ng-disabled="!vm.isEditable('waiverTotalPax')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 											             	ng-required="vm.isRequired('waiverTotalPax')"/>
