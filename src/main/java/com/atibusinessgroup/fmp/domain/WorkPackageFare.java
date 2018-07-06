@@ -289,6 +289,18 @@ public class WorkPackageFare implements Serializable {
 	  
 	
 	//WAIVER
+	@Field("waiver_agent_name")
+    private String waiverAgentName;
+	
+	@Field("waiver_iata_no")
+    private String waiverIataNo;
+	
+	@Field("waiver_ioc_no")
+    private String waiverIocNo;
+	
+	@Field("waiver_approval_date")
+    private String waiverApprovalDate;
+	
 	@Field("waiver_type")
     private String waiverType;
 	
@@ -387,6 +399,37 @@ public class WorkPackageFare implements Serializable {
 
 	public void setPrevPercentAmountDiff(String prevPercentAmountDiff) {
 		this.prevPercentAmountDiff = prevPercentAmountDiff;
+	}	
+	public String getWaiverAgentName() {
+		return waiverAgentName;
+	}
+
+	public void setWaiverAgentName(String waiverAgentName) {
+		this.waiverAgentName = waiverAgentName;
+	}
+
+	public String getWaiverIataNo() {
+		return waiverIataNo;
+	}
+
+	public void setWaiverIataNo(String waiverIataNo) {
+		this.waiverIataNo = waiverIataNo;
+	}
+
+	public String getWaiverIocNo() {
+		return waiverIocNo;
+	}
+
+	public void setWaiverIocNo(String waiverIocNo) {
+		this.waiverIocNo = waiverIocNo;
+	}
+
+	public String getWaiverApprovalDate() {
+		return waiverApprovalDate;
+	}
+
+	public void setWaiverApprovalDate(String waiverApprovalDate) {
+		this.waiverApprovalDate = waiverApprovalDate;
 	}
 
 	public int getNo() {

@@ -3704,7 +3704,7 @@
 											</div>
 										 </div>	
 									</div>
-									<div class="clearfix">
+									<!-- <div class="clearfix">
 										<div class="pull-left w50 two-column">
 											<div class="form-group">
 												<label>Agent Name</label>
@@ -3723,8 +3723,8 @@
 								             	ng-required="vm.isRequired('waiverIataNo')"/>
 											</div>
 										</div>
-									</div>
-									<div class="clearfix">
+									</div> -->
+									<!-- <div class="clearfix">
 										<div class="pull-left w50 two-column">
 											<div class="form-group">
 												<label>Approval Date</label>
@@ -3743,7 +3743,7 @@
 								             	ng-required="vm.isRequired('waiverIocNumber')"/>
 											</div>
 										</div>
-									</div>
+									</div> -->
 								</div>																						
 							
 								<div class="table-wrapper">
@@ -3802,7 +3802,22 @@
 													<tr>
 								                		<th>No</th>
 														<th># <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, '#')"></span><div class="resize-div"></div></th>
-									                	
+									                	<th>Agent Name
+								                		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverAgentName')"></span>
+								                			<div class="resize-div"></div>
+								                		</th>
+								                		<th>IATA No
+								                		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverIataNo')"></span>
+								                			<div class="resize-div"></div>
+								                		</th>
+								                		<th>IOC Number
+								                		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverIocNo')"></span>
+								                			<div class="resize-div"></div>
+								                		</th>
+								                		<th>Approval Date
+								                		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverApprovalDate')"></span>
+								                			<div class="resize-div"></div>
+								                		</th>
 								                		<th>Type
 								                		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverType')"></span>
 								                			<div class="resize-div"></div>
@@ -3887,10 +3902,6 @@
 									               		<th>Total Lost
 									               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverTotalLost')"></span>
 									                		<div class="resize-div"></div>
-									               		</th>	 
-									               		<th>Approver
-									               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverApprover')"></span>
-									                		<div class="resize-div"></div>
 									               		</th>
 									               		<th>Remark
 									               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverRemark')"></span>
@@ -3902,6 +3913,30 @@
 													<tr ng-click="vm.tbodyClick(workPackageSheet)" ng-repeat="fare in workPackageSheet.currentFares track by $index" role="row" class="datatable-row" ng-class="{'poiv-none':workPackageSheet.version != 'current', 'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
 														<td>{{$index+1}}</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no'], changed : vm.diff[fare.id].indexOf('no') > -1}" name="no{{$parent.$index}}{{$index}}">{{fare.no}}</td>															
+														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverAgentName', $event)" ng-class="{highlighted:fare.field['waiverAgentName']}">
+															<input type="text" class="form-control" ng-model="fare.waiverAgentName" name="waiverAgentName{{$parent.$index}}{{$index}}"
+															ng-class="{'must-fill': !editForm.editFormWaiver.waiverAgentName{{$parent.$index}}{{$index}}.$valid}"												         		
+						           							ng-disabled="!vm.isEditable('waiverAgentName')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
+											             	ng-required="vm.isRequired('waiverAgentName')"/>
+														</td>
+														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverIataNo', $event)" ng-class="{highlighted:fare.field['waiverIataNo']}">
+															<input type="text" class="form-control" ng-model="fare.waiverIataNo" name="waiverIataNo{{$parent.$index}}{{$index}}"
+															ng-class="{'must-fill': !editForm.editFormWaiver.waiverIataNo{{$parent.$index}}{{$index}}.$valid}"												         		
+						           							ng-disabled="!vm.isEditable('waiverIataNo')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
+											             	ng-required="vm.isRequired('waiverIataNo')"/>
+														</td>
+														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverIocNo', $event)" ng-class="{highlighted:fare.field['waiverIocNo']}">
+															<input type="text" class="form-control" ng-model="fare.waiverIocNo" name="waiverIocNo{{$parent.$index}}{{$index}}"
+															ng-class="{'must-fill': !editForm.editFormWaiver.waiverIocNo{{$parent.$index}}{{$index}}.$valid}"												         		
+						           							ng-disabled="!vm.isEditable('waiverIocNo')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
+											             	ng-required="vm.isRequired('waiverIocNo')"/>
+														</td>
+														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverApprovalDate', $event)" ng-class="{highlighted:fare.field['waiverApprovalDate']}">
+															<input type="text" class="form-control" ng-model="fare.waiverApprovalDate" name="waiverApprovalDate{{$parent.$index}}{{$index}}"
+															ng-class="{'must-fill': !editForm.editFormWaiver.waiverApprovalDate{{$parent.$index}}{{$index}}.$valid}"												         		
+						           							ng-disabled="!vm.isEditable('waiverApprovalDate')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
+											             	ng-required="vm.isRequired('waiverApprovalDate')"/>
+														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverType', $event)" ng-class="{highlighted:fare.field['waiverType']}">
 															<select class="form-control" ng-model="fare.waiverType" name="waiverType{{$parent.$index}}{{$index}}"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverType{{$parent.$index}}{{$index}}.$valid}"												         		
@@ -4073,12 +4108,6 @@
 															<input type="text" class="form-control" ng-model="fare.waiverTotalLost" name="waiverTotalLost{{$parent.$index}}{{$index}}"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverTotalLost{{$parent.$index}}{{$index}}.$valid}"
 											             	ng-required="vm.isRequired('waiverTotalLost')" disabled/>
-														</td>
-														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverApprover', $event)" ng-class="{highlighted:fare.field['waiverApprover']}">
-															<input type="text" class="form-control" ng-model="fare.waiverApprover" name="waiverApprover{{$parent.$index}}{{$index}}"
-															ng-class="{'must-fill': !editForm.editFormWaiver.waiverApprover{{$parent.$index}}{{$index}}.$valid}"												         		
-						           							ng-disabled="!vm.isEditable('waiverApprover')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
-											             	ng-required="vm.isRequired('waiverApprover')"/>
 														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverRemark', $event)" ng-class="{highlighted:fare.field['waiverRemark']}">
 															<input type="text" class="form-control" ng-model="fare.waiverRemark" name="waiverRemark{{$parent.$index}}{{$index}}"
