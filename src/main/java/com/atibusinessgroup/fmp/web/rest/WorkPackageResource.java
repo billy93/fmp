@@ -4489,6 +4489,11 @@ public class WorkPackageResource {
         	}
         }
         
+        for(WorkPackageFareSheet wps : workPackage.getWaiverFareSheet()) {
+        	for(WorkPackageFare fare : wps.getFares()) {
+        		fare.setWaiverApprovalDate(ZonedDateTime.now()); 
+        	}
+        }
         
         workPackage.setQueuedDate(Instant.now());
         workPackageService.save(workPackage);
