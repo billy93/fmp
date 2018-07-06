@@ -3643,6 +3643,7 @@
 						</div>
 						
 					</div>
+					</div>
 				</div>
 			</ng-form>
 
@@ -3650,7 +3651,7 @@
 				<div class="tab-wrapper">
 					<div class="clearfix tab-body">
 						<ul class="clearfix nav-responsive nav nav-tabs">
-						    <li ng-if="vm.workPackage.waiverFares" ng-class="{active:vm.currentWaiverTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.waiverFareSheet track by $index"><a ng-click="vm.selectWaiverTab($index);">Waiver Fares : {{vm.workPackage.waiverFareSheet[$index].waiverFaresName}}</a></li>
+						    <li ng-if="vm.workPackage.waiverFares" ng-class="{active:vm.currentWaiverTab[$index]}" ng-repeat="workPackageSheet in vm.workPackage.waiverFareSheet track by $index"><a ng-click="vm.selectWaiverTab($index);">Waiver Fares : {{workPackageSheet.waiverFaresName}}</a></li>
 						    <!-- <li ng-if="vm.workPackage.waiverRules" ng-class="{active:vm.currentTabWaiverRules}"><a ng-click="vm.selectOtherTab('waiverRules')">Waiver Rules</a></li>
 						    <li ng-if="vm.workPackage.attachment" ng-class="{active:vm.currentTabAttachment}"><a ng-click="vm.selectOtherTab('attachment')">Attachment</a></li> -->
 						</ul>
