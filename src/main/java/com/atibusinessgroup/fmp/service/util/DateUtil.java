@@ -102,17 +102,6 @@ public class DateUtil {
 		return result;
 	}
 	
-	public static Date convertZonedDateTimeToDate(ZonedDateTime dt) {
-		Date result = null;
-		
-		try {
-			result = Date.from(dt.toInstant());
-		} catch (Exception e) {
-		}
-		
-		return result;
-	}
-	
 	public static Date getMinOrMaxDate(String type) {
 		if (type != null && type.contentEquals("Min")) {
 			return new Date(Long.MIN_VALUE);
