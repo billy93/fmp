@@ -1,6 +1,7 @@
 package com.atibusinessgroup.fmp.service.util;
 
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -62,37 +63,50 @@ public class DateUtil {
 	public static Date convertObjectToDate(Object date) {
 		Date result = null;
 		
-		try {
-			Date paramDate = (Date) date;
-			
-			Calendar calendar = Calendar.getInstance();
-			calendar.set(Calendar.HOUR_OF_DAY, 0);
-			calendar.set(Calendar.MINUTE, 0);
-			calendar.set(Calendar.SECOND, 0);
-			calendar.set(Calendar.MILLISECOND, 0);
-			calendar.setTime(paramDate);
-			
-			result = calendar.getTime();
-		} catch (Exception e) {
-		}
-		
-		if (result == null) {
+		if (date != null && !date.toString().contentEquals("indef")) {
 			try {
-				String dateString = date.toString();
-				if (dateString.contains("T") && dateString.contains("+")) {
-					String tempDate = dateString.substring(0, 10);
-					result = new SimpleDateFormat("yyyy-MM-dd").parse(tempDate);
+				Date paramDate = (Date) date;
+				
+				Calendar calendar = Calendar.getInstance();
+				calendar.set(Calendar.HOUR_OF_DAY, 0);
+				calendar.set(Calendar.MINUTE, 0);
+				calendar.set(Calendar.SECOND, 0);
+				calendar.set(Calendar.MILLISECOND, 0);
+				calendar.setTime(paramDate);
+				
+				result = calendar.getTime();
+			} catch (Exception e) {
+			}
+			
+			if (result == null) {
+				try {
+					String dateString = date.toString();
+					if (dateString.contains("T") && dateString.contains("+")) {
+						String tempDate = dateString.substring(0, 10);
+						result = new SimpleDateFormat("yyyy-MM-dd").parse(tempDate);
+					}
+				} catch (Exception e) {
 				}
-			} catch (Exception e) {
+			}
+			
+			if (result == null) {
+				try {
+					String dateString = date.toString();
+					result = new SimpleDateFormat("ddMMMyyyy").parse(dateString);
+				} catch (Exception e) {
+				}
 			}
 		}
 		
-		if (result == null) {
-			try {
-				String dateString = date.toString();
-				result = new SimpleDateFormat("ddMMMyyyy").parse(dateString);
-			} catch (Exception e) {
-			}
+		return result;
+	}
+	
+	public static Date convertZonedDateTimeToDate(ZonedDateTime dt) {
+		Date result = null;
+		
+		try {
+			result = Date.from(dt.toInstant());
+		} catch (Exception e) {
 		}
 		
 		return result;

@@ -1,5 +1,8 @@
 package com.atibusinessgroup.fmp.domain.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AfdQuery {
 	private String fareId;
 	private String source;
@@ -12,7 +15,7 @@ public class AfdQuery {
 	private String destinationCity;
 	private String destinationCountry;
 	private String fareClassCode;
-	private String bookingClass;
+	private List<String> bookingClass = new ArrayList<>();
 	private String cabin;
 	private String owrt;
 	private String footnote;
@@ -37,39 +40,39 @@ public class AfdQuery {
 	private String globalIndicator;
 	private Object focusDate;
 	private boolean sellable;
-	private Object travelStartDate;
-	private Object travelEndDate;
-	private Object travelComplete;
-	private Object saleStartDate;
-	private Object saleEndDate;
-	private Object resStartDate;
-	private Object resEndDate;
-	private String minStay;
-	private String maxStay;
-	private String advancePurchase;
+	private List<String> minStay = new ArrayList<>();
+	private List<String> maxStay = new ArrayList<>();
+	private List<String> advancePurchase = new ArrayList<>();
 	private String dowIn;
 	private String dowOut;
 	private String season;
 	private String dayOfWeekType;
-	private Object firstSeasonDate;
-	private Object lastSeasonDate;
 	private String travelDateRanges;
 	private String fareType;
-	private String paxType;
+	private List<String> paxType = new ArrayList<>();
 	private String wpObjectId;
 	private String wpId;
 	private String wpName;
-	private String tourCode;
-	private String cat50Title;
+	private List<String> tourCode = new ArrayList<>();
+	private List<String> cat50Title = new ArrayList<>();
 	private String groupFare;
 	private double refAmount;
 	private double refYqyr;
 	private double refTaxes;
 	private double refTfc;
 	private double refAif;
+	private Object firstSeasonDate;
+	private Object lastSeasonDate;
+	private List<AtpcoDateWrapper> seasonDates = new ArrayList<>();
+	private Object firstTravelDate;
+	private Object lastTravelDate;
+	private List<AtpcoDateWrapper> travelDates = new ArrayList<>();
+	private Object firstSaleDate;
+	private Object lastSaleDate;
+	private Object firstResDate;
+	private Object lastResDate;
+	private List<AtpcoDateWrapper> saleDates = new ArrayList<>();
 	
-	public AfdQuery() {}
-
 	public String getFareId() {
 		return fareId;
 	}
@@ -158,11 +161,11 @@ public class AfdQuery {
 		this.fareClassCode = fareClassCode;
 	}
 
-	public String getBookingClass() {
+	public List<String> getBookingClass() {
 		return bookingClass;
 	}
 
-	public void setBookingClass(String bookingClass) {
+	public void setBookingClass(List<String> bookingClass) {
 		this.bookingClass = bookingClass;
 	}
 
@@ -358,83 +361,27 @@ public class AfdQuery {
 		this.sellable = sellable;
 	}
 
-	public Object getTravelStartDate() {
-		return travelStartDate;
-	}
-
-	public void setTravelStartDate(Object travelStartDate) {
-		this.travelStartDate = travelStartDate;
-	}
-
-	public Object getTravelEndDate() {
-		return travelEndDate;
-	}
-
-	public void setTravelEndDate(Object travelEndDate) {
-		this.travelEndDate = travelEndDate;
-	}
-
-	public Object getTravelComplete() {
-		return travelComplete;
-	}
-
-	public void setTravelComplete(Object travelComplete) {
-		this.travelComplete = travelComplete;
-	}
-
-	public Object getSaleStartDate() {
-		return saleStartDate;
-	}
-
-	public void setSaleStartDate(Object saleStartDate) {
-		this.saleStartDate = saleStartDate;
-	}
-
-	public Object getSaleEndDate() {
-		return saleEndDate;
-	}
-
-	public void setSaleEndDate(Object saleEndDate) {
-		this.saleEndDate = saleEndDate;
-	}
-
-	public Object getResStartDate() {
-		return resStartDate;
-	}
-
-	public void setResStartDate(Object resStartDate) {
-		this.resStartDate = resStartDate;
-	}
-
-	public Object getResEndDate() {
-		return resEndDate;
-	}
-
-	public void setResEndDate(Object resEndDate) {
-		this.resEndDate = resEndDate;
-	}
-
-	public String getMinStay() {
+	public List<String> getMinStay() {
 		return minStay;
 	}
 
-	public void setMinStay(String minStay) {
+	public void setMinStay(List<String> minStay) {
 		this.minStay = minStay;
 	}
 
-	public String getMaxStay() {
+	public List<String> getMaxStay() {
 		return maxStay;
 	}
 
-	public void setMaxStay(String maxStay) {
+	public void setMaxStay(List<String> maxStay) {
 		this.maxStay = maxStay;
 	}
 
-	public String getAdvancePurchase() {
+	public List<String> getAdvancePurchase() {
 		return advancePurchase;
 	}
 
-	public void setAdvancePurchase(String advancePurchase) {
+	public void setAdvancePurchase(List<String> advancePurchase) {
 		this.advancePurchase = advancePurchase;
 	}
 
@@ -470,22 +417,6 @@ public class AfdQuery {
 		this.dayOfWeekType = dayOfWeekType;
 	}
 
-	public Object getFirstSeasonDate() {
-		return firstSeasonDate;
-	}
-
-	public void setFirstSeasonDate(Object firstSeasonDate) {
-		this.firstSeasonDate = firstSeasonDate;
-	}
-
-	public Object getLastSeasonDate() {
-		return lastSeasonDate;
-	}
-
-	public void setLastSeasonDate(Object lastSeasonDate) {
-		this.lastSeasonDate = lastSeasonDate;
-	}
-
 	public String getTravelDateRanges() {
 		return travelDateRanges;
 	}
@@ -502,11 +433,11 @@ public class AfdQuery {
 		this.fareType = fareType;
 	}
 
-	public String getPaxType() {
+	public List<String> getPaxType() {
 		return paxType;
 	}
 
-	public void setPaxType(String paxType) {
+	public void setPaxType(List<String> paxType) {
 		this.paxType = paxType;
 	}
 
@@ -534,19 +465,19 @@ public class AfdQuery {
 		this.wpName = wpName;
 	}
 
-	public String getTourCode() {
+	public List<String> getTourCode() {
 		return tourCode;
 	}
 
-	public void setTourCode(String tourCode) {
+	public void setTourCode(List<String> tourCode) {
 		this.tourCode = tourCode;
 	}
 
-	public String getCat50Title() {
+	public List<String> getCat50Title() {
 		return cat50Title;
 	}
 
-	public void setCat50Title(String cat50Title) {
+	public void setCat50Title(List<String> cat50Title) {
 		this.cat50Title = cat50Title;
 	}
 
@@ -598,6 +529,94 @@ public class AfdQuery {
 		this.refAif = refAif;
 	}
 
+	public Object getFirstSeasonDate() {
+		return firstSeasonDate;
+	}
+
+	public void setFirstSeasonDate(Object firstSeasonDate) {
+		this.firstSeasonDate = firstSeasonDate;
+	}
+
+	public Object getLastSeasonDate() {
+		return lastSeasonDate;
+	}
+
+	public void setLastSeasonDate(Object lastSeasonDate) {
+		this.lastSeasonDate = lastSeasonDate;
+	}
+
+	public List<AtpcoDateWrapper> getSeasonDates() {
+		return seasonDates;
+	}
+
+	public void setSeasonDates(List<AtpcoDateWrapper> seasonDates) {
+		this.seasonDates = seasonDates;
+	}
+
+	public Object getFirstTravelDate() {
+		return firstTravelDate;
+	}
+
+	public void setFirstTravelDate(Object firstTravelDate) {
+		this.firstTravelDate = firstTravelDate;
+	}
+
+	public Object getLastTravelDate() {
+		return lastTravelDate;
+	}
+
+	public void setLastTravelDate(Object lastTravelDate) {
+		this.lastTravelDate = lastTravelDate;
+	}
+
+	public List<AtpcoDateWrapper> getTravelDates() {
+		return travelDates;
+	}
+
+	public void setTravelDates(List<AtpcoDateWrapper> travelDates) {
+		this.travelDates = travelDates;
+	}
+
+	public Object getFirstSaleDate() {
+		return firstSaleDate;
+	}
+
+	public void setFirstSaleDate(Object firstSaleDate) {
+		this.firstSaleDate = firstSaleDate;
+	}
+
+	public Object getLastSaleDate() {
+		return lastSaleDate;
+	}
+
+	public void setLastSaleDate(Object lastSaleDate) {
+		this.lastSaleDate = lastSaleDate;
+	}
+
+	public Object getFirstResDate() {
+		return firstResDate;
+	}
+
+	public void setFirstResDate(Object firstResDate) {
+		this.firstResDate = firstResDate;
+	}
+
+	public Object getLastResDate() {
+		return lastResDate;
+	}
+
+	public void setLastResDate(Object lastResDate) {
+		this.lastResDate = lastResDate;
+	}
+
+	public List<AtpcoDateWrapper> getSaleDates() {
+		return saleDates;
+	}
+
+	public void setSaleDates(List<AtpcoDateWrapper> saleDates) {
+		this.saleDates = saleDates;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -624,7 +643,10 @@ public class AfdQuery {
 		result = prime * result + ((fareClassCode == null) ? 0 : fareClassCode.hashCode());
 		result = prime * result + ((fareId == null) ? 0 : fareId.hashCode());
 		result = prime * result + ((fareType == null) ? 0 : fareType.hashCode());
+		result = prime * result + ((firstResDate == null) ? 0 : firstResDate.hashCode());
+		result = prime * result + ((firstSaleDate == null) ? 0 : firstSaleDate.hashCode());
 		result = prime * result + ((firstSeasonDate == null) ? 0 : firstSeasonDate.hashCode());
+		result = prime * result + ((firstTravelDate == null) ? 0 : firstTravelDate.hashCode());
 		result = prime * result + ((focusDate == null) ? 0 : focusDate.hashCode());
 		result = prime * result + ((footnote == null) ? 0 : footnote.hashCode());
 		result = prime * result + ((gfsDate == null) ? 0 : gfsDate.hashCode());
@@ -632,7 +654,10 @@ public class AfdQuery {
 		result = prime * result + ((globalIndicator == null) ? 0 : globalIndicator.hashCode());
 		result = prime * result + ((groupFare == null) ? 0 : groupFare.hashCode());
 		result = prime * result + ((itinerary == null) ? 0 : itinerary.hashCode());
+		result = prime * result + ((lastResDate == null) ? 0 : lastResDate.hashCode());
+		result = prime * result + ((lastSaleDate == null) ? 0 : lastSaleDate.hashCode());
 		result = prime * result + ((lastSeasonDate == null) ? 0 : lastSeasonDate.hashCode());
+		result = prime * result + ((lastTravelDate == null) ? 0 : lastTravelDate.hashCode());
 		result = prime * result + ((maxStay == null) ? 0 : maxStay.hashCode());
 		result = prime * result + ((maximumPermittedMileage == null) ? 0 : maximumPermittedMileage.hashCode());
 		result = prime * result + ((minStay == null) ? 0 : minStay.hashCode());
@@ -651,14 +676,12 @@ public class AfdQuery {
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		temp = Double.doubleToLongBits(refYqyr);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + ((resEndDate == null) ? 0 : resEndDate.hashCode());
-		result = prime * result + ((resStartDate == null) ? 0 : resStartDate.hashCode());
 		result = prime * result + ((routingNo == null) ? 0 : routingNo.hashCode());
 		result = prime * result + ((ruleNo == null) ? 0 : ruleNo.hashCode());
-		result = prime * result + ((saleEndDate == null) ? 0 : saleEndDate.hashCode());
-		result = prime * result + ((saleStartDate == null) ? 0 : saleStartDate.hashCode());
+		result = prime * result + ((saleDates == null) ? 0 : saleDates.hashCode());
 		result = prime * result + ((sc == null) ? 0 : sc.hashCode());
 		result = prime * result + ((season == null) ? 0 : season.hashCode());
+		result = prime * result + ((seasonDates == null) ? 0 : seasonDates.hashCode());
 		result = prime * result + (sellable ? 1231 : 1237);
 		result = prime * result + ((source == null) ? 0 : source.hashCode());
 		result = prime * result + ((tariffCode == null) ? 0 : tariffCode.hashCode());
@@ -670,10 +693,8 @@ public class AfdQuery {
 		result = prime * result + ((tfcCalculationDate == null) ? 0 : tfcCalculationDate.hashCode());
 		result = prime * result + ((tfcFocusDate == null) ? 0 : tfcFocusDate.hashCode());
 		result = prime * result + ((tourCode == null) ? 0 : tourCode.hashCode());
-		result = prime * result + ((travelComplete == null) ? 0 : travelComplete.hashCode());
 		result = prime * result + ((travelDateRanges == null) ? 0 : travelDateRanges.hashCode());
-		result = prime * result + ((travelEndDate == null) ? 0 : travelEndDate.hashCode());
-		result = prime * result + ((travelStartDate == null) ? 0 : travelStartDate.hashCode());
+		result = prime * result + ((travelDates == null) ? 0 : travelDates.hashCode());
 		result = prime * result + ((wpId == null) ? 0 : wpId.hashCode());
 		result = prime * result + ((wpName == null) ? 0 : wpName.hashCode());
 		result = prime * result + ((wpObjectId == null) ? 0 : wpObjectId.hashCode());
@@ -819,11 +840,32 @@ public class AfdQuery {
 		} else if (!fareType.equals(other.fareType)) {
 			return false;
 		}
+		if (firstResDate == null) {
+			if (other.firstResDate != null) {
+				return false;
+			}
+		} else if (!firstResDate.equals(other.firstResDate)) {
+			return false;
+		}
+		if (firstSaleDate == null) {
+			if (other.firstSaleDate != null) {
+				return false;
+			}
+		} else if (!firstSaleDate.equals(other.firstSaleDate)) {
+			return false;
+		}
 		if (firstSeasonDate == null) {
 			if (other.firstSeasonDate != null) {
 				return false;
 			}
 		} else if (!firstSeasonDate.equals(other.firstSeasonDate)) {
+			return false;
+		}
+		if (firstTravelDate == null) {
+			if (other.firstTravelDate != null) {
+				return false;
+			}
+		} else if (!firstTravelDate.equals(other.firstTravelDate)) {
 			return false;
 		}
 		if (focusDate == null) {
@@ -875,11 +917,32 @@ public class AfdQuery {
 		} else if (!itinerary.equals(other.itinerary)) {
 			return false;
 		}
+		if (lastResDate == null) {
+			if (other.lastResDate != null) {
+				return false;
+			}
+		} else if (!lastResDate.equals(other.lastResDate)) {
+			return false;
+		}
+		if (lastSaleDate == null) {
+			if (other.lastSaleDate != null) {
+				return false;
+			}
+		} else if (!lastSaleDate.equals(other.lastSaleDate)) {
+			return false;
+		}
 		if (lastSeasonDate == null) {
 			if (other.lastSeasonDate != null) {
 				return false;
 			}
 		} else if (!lastSeasonDate.equals(other.lastSeasonDate)) {
+			return false;
+		}
+		if (lastTravelDate == null) {
+			if (other.lastTravelDate != null) {
+				return false;
+			}
+		} else if (!lastTravelDate.equals(other.lastTravelDate)) {
 			return false;
 		}
 		if (maxStay == null) {
@@ -949,20 +1012,6 @@ public class AfdQuery {
 		if (Double.doubleToLongBits(refYqyr) != Double.doubleToLongBits(other.refYqyr)) {
 			return false;
 		}
-		if (resEndDate == null) {
-			if (other.resEndDate != null) {
-				return false;
-			}
-		} else if (!resEndDate.equals(other.resEndDate)) {
-			return false;
-		}
-		if (resStartDate == null) {
-			if (other.resStartDate != null) {
-				return false;
-			}
-		} else if (!resStartDate.equals(other.resStartDate)) {
-			return false;
-		}
 		if (routingNo == null) {
 			if (other.routingNo != null) {
 				return false;
@@ -977,18 +1026,11 @@ public class AfdQuery {
 		} else if (!ruleNo.equals(other.ruleNo)) {
 			return false;
 		}
-		if (saleEndDate == null) {
-			if (other.saleEndDate != null) {
+		if (saleDates == null) {
+			if (other.saleDates != null) {
 				return false;
 			}
-		} else if (!saleEndDate.equals(other.saleEndDate)) {
-			return false;
-		}
-		if (saleStartDate == null) {
-			if (other.saleStartDate != null) {
-				return false;
-			}
-		} else if (!saleStartDate.equals(other.saleStartDate)) {
+		} else if (!saleDates.equals(other.saleDates)) {
 			return false;
 		}
 		if (sc == null) {
@@ -1003,6 +1045,13 @@ public class AfdQuery {
 				return false;
 			}
 		} else if (!season.equals(other.season)) {
+			return false;
+		}
+		if (seasonDates == null) {
+			if (other.seasonDates != null) {
+				return false;
+			}
+		} else if (!seasonDates.equals(other.seasonDates)) {
 			return false;
 		}
 		if (sellable != other.sellable) {
@@ -1056,13 +1105,6 @@ public class AfdQuery {
 		} else if (!tourCode.equals(other.tourCode)) {
 			return false;
 		}
-		if (travelComplete == null) {
-			if (other.travelComplete != null) {
-				return false;
-			}
-		} else if (!travelComplete.equals(other.travelComplete)) {
-			return false;
-		}
 		if (travelDateRanges == null) {
 			if (other.travelDateRanges != null) {
 				return false;
@@ -1070,18 +1112,11 @@ public class AfdQuery {
 		} else if (!travelDateRanges.equals(other.travelDateRanges)) {
 			return false;
 		}
-		if (travelEndDate == null) {
-			if (other.travelEndDate != null) {
+		if (travelDates == null) {
+			if (other.travelDates != null) {
 				return false;
 			}
-		} else if (!travelEndDate.equals(other.travelEndDate)) {
-			return false;
-		}
-		if (travelStartDate == null) {
-			if (other.travelStartDate != null) {
-				return false;
-			}
-		} else if (!travelStartDate.equals(other.travelStartDate)) {
+		} else if (!travelDates.equals(other.travelDates)) {
 			return false;
 		}
 		if (wpId == null) {
@@ -1124,15 +1159,16 @@ public class AfdQuery {
 				+ ", tfc=" + tfc + ", aif=" + aif + ", itinerary=" + itinerary + ", overrideIndicator="
 				+ overrideIndicator + ", effectiveDate=" + effectiveDate + ", discontinueDate=" + discontinueDate
 				+ ", gfsReference=" + gfsReference + ", gfsDate=" + gfsDate + ", globalIndicator=" + globalIndicator
-				+ ", focusDate=" + focusDate + ", sellable=" + sellable + ", travelStartDate=" + travelStartDate
-				+ ", travelEndDate=" + travelEndDate + ", travelComplete=" + travelComplete + ", saleStartDate="
-				+ saleStartDate + ", saleEndDate=" + saleEndDate + ", resStartDate=" + resStartDate + ", resEndDate="
-				+ resEndDate + ", minStay=" + minStay + ", maxStay=" + maxStay + ", advancePurchase=" + advancePurchase
-				+ ", dowIn=" + dowIn + ", dowOut=" + dowOut + ", season=" + season + ", dayOfWeekType=" + dayOfWeekType
-				+ ", firstSeasonDate=" + firstSeasonDate + ", lastSeasonDate=" + lastSeasonDate + ", travelDateRanges="
-				+ travelDateRanges + ", fareType=" + fareType + ", paxType=" + paxType + ", wpObjectId=" + wpObjectId
-				+ ", wpId=" + wpId + ", wpName=" + wpName + ", tourCode=" + tourCode + ", cat50Title=" + cat50Title
-				+ ", groupFare=" + groupFare + ", refAmount=" + refAmount + ", refYqyr=" + refYqyr + ", refTaxes="
-				+ refTaxes + ", refTfc=" + refTfc + ", refAif=" + refAif + "]";
+				+ ", focusDate=" + focusDate + ", sellable=" + sellable + ", minStay=" + minStay + ", maxStay="
+				+ maxStay + ", advancePurchase=" + advancePurchase + ", dowIn=" + dowIn + ", dowOut=" + dowOut
+				+ ", season=" + season + ", dayOfWeekType=" + dayOfWeekType + ", travelDateRanges=" + travelDateRanges
+				+ ", fareType=" + fareType + ", paxType=" + paxType + ", wpObjectId=" + wpObjectId + ", wpId=" + wpId
+				+ ", wpName=" + wpName + ", tourCode=" + tourCode + ", cat50Title=" + cat50Title + ", groupFare="
+				+ groupFare + ", refAmount=" + refAmount + ", refYqyr=" + refYqyr + ", refTaxes=" + refTaxes
+				+ ", refTfc=" + refTfc + ", refAif=" + refAif + ", firstSeasonDate=" + firstSeasonDate
+				+ ", lastSeasonDate=" + lastSeasonDate + ", seasonDates=" + seasonDates + ", firstTravelDate="
+				+ firstTravelDate + ", lastTravelDate=" + lastTravelDate + ", travelDates=" + travelDates
+				+ ", firstSaleDate=" + firstSaleDate + ", lastSaleDate=" + lastSaleDate + ", firstResDate="
+				+ firstResDate + ", lastResDate=" + lastResDate + ", saleDates=" + saleDates + "]";
 	}
 }

@@ -81,6 +81,7 @@ import com.atibusinessgroup.fmp.domain.WorkPackageFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
 import com.atibusinessgroup.fmp.domain.WorkPackageHistory;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
+import com.atibusinessgroup.fmp.domain.enumeration.PackageType;
 import com.atibusinessgroup.fmp.domain.enumeration.Status;
 import com.atibusinessgroup.fmp.repository.AtpcoFareRepository;
 import com.atibusinessgroup.fmp.repository.ContractFMPRepository;
@@ -325,13 +326,7 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<WorkPackage> reuseWorkPackage(@RequestBody WorkPackage wp) throws URISyntaxException {
         log.debug("REST request to save reuse WorkPackage : {}", wp);
-
-        WorkPackageHistory history = new WorkPackageHistory();
-        history.setWorkPackage(new ObjectId(wp.getId()));
-        history.setType("REUSE");
-        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
-        workPackageHistoryService.save(history);
-
+       
         wp.setReuseFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
@@ -390,6 +385,12 @@ public class WorkPackageResource {
         wp.setQueuedDate(Instant.now());
 
         WorkPackage result = workPackageService.save(wp);
+        
+        WorkPackageHistory history = new WorkPackageHistory();
+        history.setWorkPackage(new ObjectId(result.getId()));
+        history.setType("REUSE");
+        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        workPackageHistoryService.save(history);
 
 
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
@@ -408,13 +409,7 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<WorkPackage> replaceWorkPackage(@RequestBody WorkPackage wp) throws URISyntaxException {
         log.debug("REST request to save reuse WorkPackage : {}", wp);
-
-        WorkPackageHistory history = new WorkPackageHistory();
-        history.setWorkPackage(new ObjectId(wp.getId()));
-        history.setType("REPLACE");
-        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
-        workPackageHistoryService.save(history);
-
+       
         wp.setReplaceFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
@@ -438,6 +433,12 @@ public class WorkPackageResource {
 //        	wp.setAttachment(false);
 //        	wp.getAttachmentData().clear();
 //        }
+    	 
+        for(Attachment attachment : wp.getAttachmentData()) {
+        	attachment.setUsername(user.getLogin());
+        	attachment.setCreatedTime(ZonedDateTime.now());
+        }
+        
         for(WorkPackageFareSheet wps : wp.getFareSheet()) {
         	for(WorkPackageFare fare : wps.getFares()) {
         		fare.setStatus("PENDING");
@@ -469,6 +470,11 @@ public class WorkPackageResource {
 
         WorkPackage result = workPackageService.save(wp);
 
+        WorkPackageHistory history = new WorkPackageHistory();
+        history.setWorkPackage(new ObjectId(result.getId()));
+        history.setType("REPLACE");
+        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        workPackageHistoryService.save(history);
 
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -1523,61 +1529,109 @@ public class WorkPackageResource {
 
     	LinkedHashMap<String, Object> data = new LinkedHashMap<>();
 
-    	data.put("Status", new ArrayList<>());
-    	data.put("Carrier", new ArrayList<>());
-    	data.put("Action", new ArrayList<>());
-    	data.put("Tar No", new ArrayList<>());
-    	data.put("Tar Cd", new ArrayList<>());
-    	data.put("Global", new ArrayList<>());
-    	data.put("Origin", new ArrayList<>());
-    	data.put("Dest", new ArrayList<>());
-    	data.put("Addon Bucket", new ArrayList<>());
-    	data.put("OW/RT", new ArrayList<>());
-    	data.put("Ftnt", new ArrayList<>());
-    	data.put("Zone", new ArrayList<>());
-    	data.put("Rtg No", new ArrayList<>());
-    	data.put("Filing Curr", new ArrayList<>());
-    	data.put("Base Amt", new ArrayList<>());
-    	data.put("Amt Diff", new ArrayList<>());
-    	data.put("% Amt Diff", new ArrayList<>());
-    	data.put("Travel Start", new ArrayList<>());
-    	data.put("Travel End", new ArrayList<>());
-    	data.put("Sales Start", new ArrayList<>());
-    	data.put("Sales End", new ArrayList<>());
-    	data.put("Comment", new ArrayList<>());
-    	data.put("Travel Complete", new ArrayList<>());
-    	data.put("Travel Complete Indicator", new ArrayList<>());
+    	if(workPackage.getTargetDistribution().contentEquals("MARKET")) {
+    		data.put("Status", new ArrayList<>());
+        	data.put("Carrier", new ArrayList<>());
+        	data.put("Action", new ArrayList<>());
+        	data.put("Origin", new ArrayList<>());
+        	data.put("Dest", new ArrayList<>());
+        	data.put("Addon Bucket", new ArrayList<>());
+        	data.put("OW/RT", new ArrayList<>());
+        	data.put("Filing Curr", new ArrayList<>());
+        	data.put("Base Amt", new ArrayList<>());
+        	data.put("Amt Diff", new ArrayList<>());
+        	data.put("% Amt Diff", new ArrayList<>());
+        	data.put("Travel Start", new ArrayList<>());
+        	data.put("Travel End", new ArrayList<>());
+        	data.put("Sales Start", new ArrayList<>());
+        	data.put("Sales End", new ArrayList<>());
+        	data.put("Comment", new ArrayList<>());
+        	data.put("Travel Complete", new ArrayList<>());
+        	data.put("Travel Complete Indicator", new ArrayList<>());
 
-    	WorkPackage wp = workPackageService.findOne(workPackage.getId());
-        List<WorkPackageFare> fares = wp.getAddonFareSheet().get(workPackage.getExportIndex()).getFares();
+        	WorkPackage wp = workPackageService.findOne(workPackage.getId());
+            List<WorkPackageFare> fares = wp.getAddonFareSheet().get(workPackage.getExportIndex()).getFares();
 
-        DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy");
-        for(int i=0; i<fares.size(); i++) {
-        	putValue(data.get("Status"), fares.get(i).getStatus());
-        	putValue(data.get("Carrier"), fares.get(i).getCarrier());
-        	putValue(data.get("Action"), fares.get(i).getAction());
-        	putValue(data.get("Tar No"), fares.get(i).getTariffNumber() != null ? fares.get(i).getTariffNumber().getTarNo() : null);
-        	putValue(data.get("Tar Cd"), fares.get(i).getTariffNumber() != null ?  fares.get(i).getTariffNumber().getTarCd() : null);
-        	putValue(data.get("Global"), fares.get(i).getTariffNumber() != null ? fares.get(i).getTariffNumber().getGlobal() : null);
-        	putValue(data.get("Origin"), fares.get(i).getOrigin());
-        	putValue(data.get("Dest"), fares.get(i).getDestination());
-        	putValue(data.get("Addon Bucket"), fares.get(i).getBucket());
-        	putValue(data.get("OW/RT"), fares.get(i).getTypeOfJourney());
-        	putValue(data.get("Ftnt"), fares.get(i).getFootnote1());
-        	putValue(data.get("Zone"), fares.get(i).getZone());
-        	putValue(data.get("Rtg No"), fares.get(i).getRtgno());
-        	putValue(data.get("Filing Curr"), fares.get(i).getCurrency());
-        	putValue(data.get("Base Amt"), fares.get(i).getAmount());
-        	putValue(data.get("Amt Diff"), fares.get(i).getAmount());
-        	putValue(data.get("% Amt Diff"), fares.get(i).getAmount());
-        	putValue(data.get("Travel Start"), fares.get(i).getTravelStart() != null ? dfFull.format(Date.from(fares.get(i).getTravelStart().toInstant())) : null);
-        	putValue(data.get("Travel End"), fares.get(i).getTravelEnd() != null ? dfFull.format(Date.from(fares.get(i).getTravelEnd().toInstant())) : null);
-        	putValue(data.get("Sales Start"), fares.get(i).getSaleStart() != null ? dfFull.format(Date.from(fares.get(i).getSaleStart().toInstant())) : null);
-        	putValue(data.get("Sales End"), fares.get(i).getSaleEnd() != null ? dfFull.format(Date.from(fares.get(i).getSaleEnd().toInstant())) : null);
-        	putValue(data.get("Comment"), fares.get(i).getComment());
-        	putValue(data.get("Travel Complete"), fares.get(i).getTravelComplete() != null ? dfFull.format(Date.from(fares.get(i).getTravelComplete().toInstant())): null);
-        	putValue(data.get("Travel Complete Indicator"), fares.get(i).getTravelCompleteIndicator());
-        }
+            DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy");
+            for(int i=0; i<fares.size(); i++) {
+            	putValue(data.get("Status"), fares.get(i).getStatus());
+            	putValue(data.get("Carrier"), fares.get(i).getCarrier());
+            	putValue(data.get("Action"), fares.get(i).getAction());
+            	putValue(data.get("Origin"), fares.get(i).getOrigin());
+            	putValue(data.get("Dest"), fares.get(i).getDestination());
+            	putValue(data.get("Addon Bucket"), fares.get(i).getBucket());
+            	putValue(data.get("OW/RT"), fares.get(i).getTypeOfJourney());
+            	putValue(data.get("Filing Curr"), fares.get(i).getCurrency());
+            	putValue(data.get("Base Amt"), fares.get(i).getAmount());
+            	putValue(data.get("Amt Diff"), fares.get(i).getAmtDiff());
+            	putValue(data.get("% Amt Diff"), fares.get(i).getAmtPercentDiff());
+            	putValue(data.get("Travel Start"), fares.get(i).getTravelStart() != null ? dfFull.format(Date.from(fares.get(i).getTravelStart().toInstant())) : null);
+            	putValue(data.get("Travel End"), fares.get(i).getTravelEnd() != null ? dfFull.format(Date.from(fares.get(i).getTravelEnd().toInstant())) : null);
+            	putValue(data.get("Sales Start"), fares.get(i).getSaleStart() != null ? dfFull.format(Date.from(fares.get(i).getSaleStart().toInstant())) : null);
+            	putValue(data.get("Sales End"), fares.get(i).getSaleEnd() != null ? dfFull.format(Date.from(fares.get(i).getSaleEnd().toInstant())) : null);
+            	putValue(data.get("Comment"), fares.get(i).getComment());
+            	putValue(data.get("Travel Complete"), fares.get(i).getTravelComplete() != null ? dfFull.format(Date.from(fares.get(i).getTravelComplete().toInstant())): null);
+            	putValue(data.get("Travel Complete Indicator"), fares.get(i).getTravelCompleteIndicator());
+            }
+    	}else {
+    		data.put("Status", new ArrayList<>());
+        	data.put("Carrier", new ArrayList<>());
+        	data.put("Action", new ArrayList<>());
+        	data.put("Tar No", new ArrayList<>());
+        	data.put("Tar Cd", new ArrayList<>());
+        	data.put("Global", new ArrayList<>());
+        	data.put("Origin", new ArrayList<>());
+        	data.put("Dest", new ArrayList<>());
+        	data.put("Addon Bucket", new ArrayList<>());
+        	data.put("OW/RT", new ArrayList<>());
+        	data.put("Ftnt", new ArrayList<>());
+        	data.put("Zone", new ArrayList<>());
+        	data.put("Rtg No", new ArrayList<>());
+        	data.put("Filing Curr", new ArrayList<>());
+        	data.put("Base Amt", new ArrayList<>());
+        	data.put("Amt Diff", new ArrayList<>());
+        	data.put("% Amt Diff", new ArrayList<>());
+        	data.put("Travel Start", new ArrayList<>());
+        	data.put("Travel End", new ArrayList<>());
+        	data.put("Sales Start", new ArrayList<>());
+        	data.put("Sales End", new ArrayList<>());
+        	data.put("Comment", new ArrayList<>());
+        	data.put("Travel Complete", new ArrayList<>());
+        	data.put("Travel Complete Indicator", new ArrayList<>());
+
+        	WorkPackage wp = workPackageService.findOne(workPackage.getId());
+            List<WorkPackageFare> fares = wp.getAddonFareSheet().get(workPackage.getExportIndex()).getFares();
+
+            DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy");
+            for(int i=0; i<fares.size(); i++) {
+            	putValue(data.get("Status"), fares.get(i).getStatus());
+            	putValue(data.get("Carrier"), fares.get(i).getCarrier());
+            	putValue(data.get("Action"), fares.get(i).getAction());
+            	putValue(data.get("Tar No"), fares.get(i).getTariffNumber() != null ? fares.get(i).getTariffNumber().getTarNo() : null);
+            	putValue(data.get("Tar Cd"), fares.get(i).getTariffNumber() != null ?  fares.get(i).getTariffNumber().getTarCd() : null);
+            	putValue(data.get("Global"), fares.get(i).getTariffNumber() != null ? fares.get(i).getTariffNumber().getGlobal() : null);
+            	putValue(data.get("Origin"), fares.get(i).getOrigin());
+            	putValue(data.get("Dest"), fares.get(i).getDestination());
+            	putValue(data.get("Addon Bucket"), fares.get(i).getBucket());
+            	putValue(data.get("OW/RT"), fares.get(i).getTypeOfJourney());
+            	putValue(data.get("Ftnt"), fares.get(i).getFootnote1());
+            	putValue(data.get("Zone"), fares.get(i).getZone());
+            	putValue(data.get("Rtg No"), fares.get(i).getRtgno());
+            	putValue(data.get("Filing Curr"), fares.get(i).getCurrency());
+            	putValue(data.get("Base Amt"), fares.get(i).getAmount());
+            	putValue(data.get("Amt Diff"), fares.get(i).getAmtDiff());
+            	putValue(data.get("% Amt Diff"), fares.get(i).getAmtPercentDiff());
+            	putValue(data.get("Travel Start"), fares.get(i).getTravelStart() != null ? dfFull.format(Date.from(fares.get(i).getTravelStart().toInstant())) : null);
+            	putValue(data.get("Travel End"), fares.get(i).getTravelEnd() != null ? dfFull.format(Date.from(fares.get(i).getTravelEnd().toInstant())) : null);
+            	putValue(data.get("Sales Start"), fares.get(i).getSaleStart() != null ? dfFull.format(Date.from(fares.get(i).getSaleStart().toInstant())) : null);
+            	putValue(data.get("Sales End"), fares.get(i).getSaleEnd() != null ? dfFull.format(Date.from(fares.get(i).getSaleEnd().toInstant())) : null);
+            	putValue(data.get("Comment"), fares.get(i).getComment());
+            	putValue(data.get("Travel Complete"), fares.get(i).getTravelComplete() != null ? dfFull.format(Date.from(fares.get(i).getTravelComplete().toInstant())): null);
+            	putValue(data.get("Travel Complete Indicator"), fares.get(i).getTravelCompleteIndicator());
+            }
+    	}
+    	
+    	
 
     	Attachment att = createWorkbook("Workorder Addon Fare", data);
         return ResponseEntity.ok()
@@ -4209,16 +4263,18 @@ public class WorkPackageResource {
         
         WorkPackage result = workPackageService.findOne(workPackage.getId());
         
-        if(!result.getLockedBy().contentEquals(SecurityUtils.getCurrentUserLogin().get())) {
-        	if(result.isOpened()) {
-            	throw new UnlockAlertException("Can not unlock because workpackage in edit mode by "+result.getLockedBy());
+        if(result.isLocked()) {
+        	if(!result.getLockedBy().contentEquals(SecurityUtils.getCurrentUserLogin().get())) {
+            	if(result.isOpened()) {
+                	throw new UnlockAlertException("Can not unlock because workpackage in edit mode by "+result.getLockedBy());
+                }
             }
-        }
-        
-        Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
-       	if(user.get().getReviewLevels().indexOf(result.getReviewLevel()) < 0){
-       		throw new UnlockAlertException("Your review level "+user.get().getReviewLevels()+" does not have access to unlock this workpackage");
-        }
+            
+            Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
+           	if(user.get().getReviewLevels().indexOf(result.getReviewLevel()) < 0){
+           		throw new UnlockAlertException("Your review level "+user.get().getReviewLevels()+" does not have access to unlock this workpackage");
+            }
+        }        
         
         result.setLocked(false);
         workPackageService.save(result);
@@ -4488,7 +4544,7 @@ public class WorkPackageResource {
         String distribution = workPackage.getTargetDistribution();
         String type = workPackage.getType().name();
 
-        if(reviewLevel.contentEquals("HO") && distribution.contentEquals("MARKET") && type.contentEquals("REGULAR")) {
+       /* if(reviewLevel.contentEquals("HO") && distribution.contentEquals("MARKET") && type.contentEquals("REGULAR")) {
         	workPackage.setDistributionReviewLevel(reviewLevel);
         	workPackage.setReviewLevel("LSO");
         	workPackage.setLocked(false);
@@ -4500,13 +4556,36 @@ public class WorkPackageResource {
     		workPackage.setLocked(false);
     		workPackage.setOpened(false);
     		workPackage.setStatus(Status.PENDING);
-	    }
-//        if(reviewLevel.contentEquals("HO")) {
-//    		result.setDistributionReviewLevel(reviewLevel);
-//    		result.setReviewLevel("DISTRIBUTION");
-//    		result.setLocked(false);
-//    		result.setStatus(Status.PENDING);
-//	    }
+	    }*/
+        
+        if(reviewLevel.contentEquals("HO")) {
+        	if(distribution.contentEquals("MARKET") && type.contentEquals("REGULAR")) {
+        		workPackage.setDistributionReviewLevel(reviewLevel);
+            	workPackage.setReviewLevel("LSO");
+            	workPackage.setLocked(false);
+            	workPackage.setOpened(false);
+            	workPackage.setStatus(Status.DISTRIBUTED);
+        	}else if(distribution.contentEquals("MARKET") && type.contentEquals("WAIVER")) {
+        		workPackage.setDistributionReviewLevel(reviewLevel);
+            	workPackage.setReviewLevel("LSO");
+            	workPackage.setLocked(false);
+            	workPackage.setOpened(false);
+            	workPackage.setStatus(Status.DISTRIBUTED);
+        	}else {
+        		workPackage.setDistributionReviewLevel(reviewLevel);
+            	workPackage.setReviewLevel("DISTRIBUTION");
+        		workPackage.setLocked(false);
+        		workPackage.setOpened(false);
+        		workPackage.setStatus(Status.PENDING);
+        	}
+        }
+        
+        for(WorkPackageFareSheet wps : workPackage.getWaiverFareSheet()) {
+        	for(WorkPackageFare fare : wps.getFares()) {
+        		fare.setWaiverApprovalDate(ZonedDateTime.now()); 
+        	}
+        }
+        
         workPackage.setQueuedDate(Instant.now());
         workPackageService.save(workPackage);
 

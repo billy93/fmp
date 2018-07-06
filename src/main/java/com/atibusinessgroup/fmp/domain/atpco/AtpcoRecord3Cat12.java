@@ -64,7 +64,7 @@ public class AtpcoRecord3Cat12 {
     private String rbd;
 
 	@Field("charges_percent")
-    private String charges_percent;
+    private Decimal128 charges_percent;
 
 	@Field("charges_appl")
     private String charges_appl;
@@ -270,11 +270,11 @@ public class AtpcoRecord3Cat12 {
 		this.rbd = rbd;
 	}
 
-	public String getCharges_percent() {
+	public Decimal128 getCharges_percent() {
 		return charges_percent;
 	}
 
-	public void setCharges_percent(String charges_percent) {
+	public void setCharges_percent(Decimal128 charges_percent) {
 		this.charges_percent = charges_percent;
 	}
 

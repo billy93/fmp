@@ -121,6 +121,14 @@ public class AtpcoFootnoteQueryDetails {
 	}
 	public void setDiscDate(Object discDate) {
 		this.discDate = discDate;
+	}
+	@Override
+	public String toString() {
+		return "AtpcoFootnoteQueryDetails [catNo=" + catNo + ", seqNo=" + seqNo + ", locType1=" + locType1 + ", loc1="
+				+ loc1 + ", locType2=" + locType2 + ", loc2=" + loc2 + ", owrt=" + owrt + ", routingNo=" + routingNo
+				+ ", ftnt=" + ftnt + ", effDate=" + effDate + ", discDate=" + discDate + ", travelStart=" + travelStart
+				+ ", travelEnd=" + travelEnd + ", saleStart=" + saleStart + ", saleEnd=" + saleEnd + ", travelComplete="
+				+ travelComplete + ", travelCompInd=" + travelCompInd + "]";
 	} 
 	
 	

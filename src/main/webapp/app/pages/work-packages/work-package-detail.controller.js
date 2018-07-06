@@ -1230,7 +1230,6 @@
         	}
         	else if(option.type == 'Discount Fares'){
         		vm.workPackage.discount = true;
-        		console.log(option);
         		vm.workPackage.discountFareSheet.push({discountFaresName:option.name, discountFareType:option.fareType, fareType:option.fareType, fares:fares});
         		vm.selectDiscountTab(vm.workPackage.discountFareSheet.length-1);
         	}
@@ -1288,7 +1287,7 @@
         	if(!findTab){
 	        	for(var x=0;x<vm.currentTab.length;x++){
 	        		if(vm.currentTab[x]){
-	        			console.log('Active Fare Tab '+x);
+//	        			console.log('Active Fare Tab '+x);
 	        			findTab = true;
 	        			
 	        			var index = vm.workPackage.fareSheet.indexOf(vm.workPackage.fareSheet[x]);
@@ -1303,7 +1302,7 @@
         	if(!findTab){
 	        	for(var x=0;x<vm.currentAddonTab.length;x++){
 	        		if(vm.currentAddonTab[x]){
-	        			console.log('Active Addon Tab '+x);
+//	        			console.log('Active Addon Tab '+x);
 	        			findTab = true;
 	        			
 	        			var index = vm.workPackage.addonFareSheet.indexOf(vm.workPackage.addonFareSheet[x]);
@@ -1318,7 +1317,7 @@
         	if(!findTab){
 	        	for(var x=0;x<vm.currentDiscountTab.length;x++){
 	        		if(vm.currentDiscountTab[x]){
-	        			console.log('Active Discount Tab '+x);
+//	        			console.log('Active Discount Tab '+x);
 	        			findTab = true;
 	        			
 	        			var index = vm.workPackage.discountFareSheet.indexOf(vm.workPackage.discountFareSheet[x]);
@@ -1333,7 +1332,7 @@
         	if(!findTab){
 	        	for(var x=0;x<vm.currentMarketTab.length;x++){
 	        		if(vm.currentMarketTab[x]){
-	        			console.log('Active Market Tab '+x);
+//	        			console.log('Active Market Tab '+x);
 	        			findTab = true;
 	        			
 	        			var index = vm.workPackage.marketFareSheet.indexOf(vm.workPackage.marketFareSheet[x]);
@@ -1348,7 +1347,7 @@
         	if(!findTab){
 	        	for(var x=0;x<vm.currentWaiverTab.length;x++){
 	        		if(vm.currentWaiverTab[x]){
-	        			console.log('Active Waiver Tab '+x);
+//	        			console.log('Active Waiver Tab '+x);
 	        			findTab = true;
 	        			
 	        			var index = vm.workPackage.waiverFareSheet.indexOf(vm.workPackage.waiverFareSheet[x]);
@@ -1600,12 +1599,12 @@
         	if(!findTab){
 	        	for(var x=0;x<vm.currentTab.length;x++){
 	        		if(vm.currentTab[x]){
-	        			console.log('Active Fare Tab '+x);
+//	        			console.log('Active Fare Tab '+x);
 	        			findTab = true;
 	        			
 	        			var index = vm.workPackage.fareSheet.indexOf(x);
 //	        			vm.workPackage.fareSheet.push(angular.copy(vm.workPackage.fareSheet[x]));
-	        			console.log(vm.workPackage.fareSheet[x]);
+//	        			console.log(vm.workPackage.fareSheet[x]);
 	        			if(vm.workPackage.fareSheet[x].fares != undefined && vm.workPackage.fareSheet[x].fares.length > 0){
 		        			clipboardSheet.sheet = angular.copy(vm.workPackage.fareSheet[x]);
 		        			clipboardSheet.type = "fares";
@@ -1618,7 +1617,7 @@
         	if(!findTab){
 	        	for(var x=0;x<vm.currentAddonTab.length;x++){
 	        		if(vm.currentAddonTab[x]){
-	        			console.log('Active Addon Tab '+x);
+//	        			console.log('Active Addon Tab '+x);
 	        			findTab = true;
 	        			
 	        			var index = vm.workPackage.addonFareSheet.indexOf(x);
@@ -1641,7 +1640,7 @@
         	if(!findTab){
 	        	for(var x=0;x<vm.currentMarketTab.length;x++){
 	        		if(vm.currentMarketTab[x]){
-	        			console.log('Active Market Tab '+x);
+//	        			console.log('Active Market Tab '+x);
 	        			findTab = true;
 	        			
 	        			var index = vm.workPackage.marketFareSheet.indexOf(x);
@@ -1658,7 +1657,7 @@
         	if(!findTab){
 	        	for(var x=0;x<vm.currentDiscountTab.length;x++){
 	        		if(vm.currentDiscountTab[x]){
-	        			console.log('Active Discount Tab '+x);
+//	        			console.log('Active Discount Tab '+x);
 	        			findTab = true;
 	        			
 	        			var index = vm.workPackage.discountFareSheet.indexOf(x);
@@ -1675,7 +1674,7 @@
         	if(!findTab){
 	        	for(var x=0;x<vm.currentWaiverTab.length;x++){
 	        		if(vm.currentWaiverTab[x]){
-	        			console.log('Active Waiver Tab '+x);
+//	        			console.log('Active Waiver Tab '+x);
 	        			findTab = true;
 	        			
 	        			var index = vm.workPackage.waiverFareSheet.indexOf(x);
@@ -1789,6 +1788,15 @@
 			}).result.then(function(option) {
 				var clipboardSheet = ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
 				clipboardSheet.then(function(result){
+					
+					for(var l=0; l<result.sheet.fares.length; l++){
+						try {
+							result.sheet.fares[l].status="PENDING";
+						} catch (e) {
+						}
+						
+					}
+					
 					vm.addTab(option, result.sheet.fares);
 					alert('Paste Sheet Success');
 				});
@@ -1826,7 +1834,7 @@
         vm.derivedFares  = function() {
         	if (vm.selectedFare) {
         		DerivedFares.get(vm.selectedFare, onSuccess, function(error) {
-        			console.log(error);
+//        			console.log(error);
         		});
         		
         		function onSuccess(result) {
@@ -1850,7 +1858,7 @@
         		Clipboard.findCurrent({}, onFindSuccess, onFindError);
         		
         		function onFindSuccess(result){
-        			console.log(result);
+//        			console.log(result);
         			
         			for(var i=0;i<result.fares.length;i++){
             			if(vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'REGULAR'){
@@ -1891,7 +1899,7 @@
 	        	Clipboard.findCurrent({}, onFindSuccess, onFindError);
 	    		
 	    		function onFindSuccess(result){
-	    			console.log(result);
+//	    			console.log(result);
 	    			
 	    			for(var i=0;i<result.fares.length;i++){
 	        			if(vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'REGULAR'){
@@ -1930,7 +1938,7 @@
         
  	    //Specific Fares Function
  	    vm.addFares = function(fareSheet){ 	 
- 	    	console.log("ADD FARES");
+// 	    	console.log("ADD FARES");
  	    	if(fareSheet.fares == null){
  	    		fareSheet.fares = [];
        	  	}
@@ -2306,7 +2314,7 @@
         vm.clearSelection = function(workPackageSheet){
         	
         	for(var x=0;x<workPackageSheet.fares.length;x++){
-        		console.log(workPackageSheet.fares[x].field);
+//        		console.log(workPackageSheet.fares[x].field);
         		if(workPackageSheet.fares[x].field != undefined){
        			  Object.keys(workPackageSheet.fares[x].field).forEach(function(key,index) {
        				  
@@ -2439,7 +2447,7 @@
 	    //Discount Fares
 	    vm.addDiscountFares = function(){
 	    	if(vm.workPackage.discountFareSheet[vm.selectedDiscountTab].fares == null){
- 	    		console.log("WORKPACKAGE DISCOUNT FARES NULL");
+// 	    		console.log("WORKPACKAGE DISCOUNT FARES NULL");
  	    		vm.workPackage.discountFareSheet[vm.selectedDiscountTab].fares = [];
 	       	  }
  	    	
@@ -2550,7 +2558,7 @@
         	vm.account = account;
         })
         .catch(function(err){
-        	console.log(err);
+//        	console.log(err);
         });
        
         vm.datePickerOpenStatus.createdDate = false;
@@ -2559,7 +2567,7 @@
         vm.datePickerOpenStatus.discExpiryDate = false;
 
         function openCalendar (date) {
-        	console.log(date);
+//        	console.log(date);
             vm.datePickerOpenStatus[date] = true;
         }
         function openCalendarRow(variable, sheet, row) {
@@ -2617,7 +2625,7 @@
 		    if (confirm("Are you sure to Pass up this workorder?")) {
 		    	WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
 		    		WorkPackage.passup(result, function(wp){
-		    			console.log(wp);
+//		    			console.log(wp);
 		    			if(wp.validation != null && ((wp.validation.errorsCount > 0) || (wp.validation.warningsCount > 0))){
 		    				vm.workPackage.validation = wp.validation;
 		    				alert('There is '+wp.validation.errorsCount+' error(s) and '+wp.validation.warningsCount+' warning(s)');		    				
@@ -2721,7 +2729,7 @@
         	  	WorkPackage.resendApprove(vm.workPackage, function(){
 	    			$state.go('work-package');
     		}, function(){
-    			console.log("fail");
+//    			console.log("fail");
     		});
           }, function() {
       			
@@ -4681,7 +4689,7 @@
       			FileSaver.saveAs(blob, templateFilename);
 	    	  }
 	    	  function onExportFailure(error){
-	    		  console.log(error);
+//	    		  console.log(error);
 	    	  }    	 
 	    	}, function onSaveError(){
 	    		alert('An error occured, please try again');
@@ -4889,7 +4897,7 @@
       
       vm.removeFiling = function(filing){
 	   		var index = vm.workPackage.filingInstructionData.indexOf(filing); 
-	   		console.log(filing.isDeleted);
+//	   		console.log(filing.isDeleted);
 	   };
 	         
       vm.addInterOffice = function(){
@@ -4996,7 +5004,7 @@
     	      
     	      function onPublishSuccess(result){
     	    	  	alert("PUBLISH SUCCESS");
-    	    	  	console.log(result);
+//    	    	  	console.log(result);
     	      }
     	      
     	      function onPublishError(error){
@@ -5138,7 +5146,7 @@
   			FileSaver.saveAs(blob, templateFilename);
     	  }
     	  function onDownloadFailure(err){
-    		  console.log(err);
+//    		  console.log(err);
     	  }    	  
       };
       vm.close = function(){
@@ -5283,7 +5291,7 @@
 			  }
 			  else if(result.page == 'AFD_QUERY'){
 				  for(var x=0;x<result.content.length;x++){
-					  console.log(result.content[x]);
+//					  console.log(result.content[x]);
 					  var tariffNumber = null;
 					  for(var y=0;y<vm.tariffNumber.length;y++){	
 			    		  if(vm.tariffNumber[y].tarNo == result.content[x].tariffNo){

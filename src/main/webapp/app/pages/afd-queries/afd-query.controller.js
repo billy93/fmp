@@ -12,6 +12,7 @@
         var vm = this;
         vm.loadPage = loadPage;
         vm.itemsPerPage = paginationConstants.itemsPerPage;
+//        vm.itemsPerPage = 100;
         vm.queryParams = queryParams;
         vm.loadAll = loadAll;
         vm.query = query;
@@ -124,7 +125,7 @@
                     
                     if (vm.afdQueries.length == 0) {
                     	vm.noDataAvailable = true;
-                    } else{
+                    } else {
                     	$(document).ready(function(){
                     		var _parents = $('.table-afd').find('thead');
                     		var _th = _parents.find('.th-fixed');
@@ -186,12 +187,16 @@
 
         function getRules(afdQuery) {
         	if (vm.currentAfdQuery == undefined || vm.currentAfdQuery == null || vm.currentAfdQuery != afdQuery) {
+        		vm.isLoadingRule = true;
+        		vm.categoryRules = null;
         		AfdQuery.getRules(afdQuery, function(data) {
             		vm.categoryRules = data;
             		vm.currentAfdQuery = afdQuery;
             		console.log(vm.categoryRules);
+            		vm.isLoadingRule = false;
             	}, function(error) {
             		console.log(error);
+            		vm.isLoadingRule = false;
             	});
         	} 
         }
@@ -383,8 +388,6 @@
         }
         
         function showErrorModal(message) {
-        	console.log(message);
-        	
         	$uibModal.open({
                 templateUrl: 'app/pages/modals/info-modal.html',
                 controller: 'InfoModalController',

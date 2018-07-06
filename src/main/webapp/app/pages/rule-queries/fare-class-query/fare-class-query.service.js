@@ -2,15 +2,15 @@
     'use strict';
     angular
         .module('fmpApp')
-        .factory('AfdQuery', AfdQuery);
+        .factory('FareClassQuery', FareClassQuery);
 
-    AfdQuery.$inject = ['$resource'];
+    FareClassQuery.$inject = ['$resource'];
 
-    function AfdQuery ($resource) {
-        var resourceUrl =  'api/afd-queries/:id';
+    function FareClassQuery ($resource) {
+        var resourceUrl =  'api/fare-class-query/:id';
 
         return $resource(resourceUrl, {}, {
-            'query': { method: 'POST'},
+            'query': { method: 'POST', isArray: true},
             'get': {
                 method: 'GET',
                 transformResponse: function (data) {
@@ -19,9 +19,7 @@
                     }
                     return data;
                 }
-            },
-            'update': { method:'PUT' },
-            'getRules': { method: 'POST', url:'api/afd-queries/rules', isArray: true }
+            },        
         });
     }
 })();

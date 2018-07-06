@@ -110,6 +110,16 @@ public class FootnoteQueryParam {
 	public void setSize(int size) {
 		this.size = size;
 	}
+	@Override
+	public String toString() {
+		return "FootnoteQueryParam [cxr=" + cxr + ", tarNo=" + tarNo + ", ftnt=" + ftnt + ", catNo=" + catNo
+				+ ", saleDateFrom=" + saleDateFrom + ", saleDateTo=" + saleDateTo + ", saleDateType=" + saleDateType
+				+ ", travelDateFrom=" + travelDateFrom + ", travelDateTo=" + travelDateTo + ", travelDateType="
+				+ travelDateType + ", completedDateFrom=" + completedDateFrom + ", travelOpt=" + travelOpt
+				+ ", includeDiscDate=" + includeDiscDate + ", page=" + page + ", size=" + size + "]";
+	}
+	
+	
 	
 	
 }

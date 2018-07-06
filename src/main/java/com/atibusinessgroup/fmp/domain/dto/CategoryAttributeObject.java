@@ -57,9 +57,4 @@ public class CategoryAttributeObject {
 		}
 		return true;
 	}
-
-	@Override
-	public String toString() {
-		return "CategoryAttributeObject [key=" + key + ", value=" + value + "]";
-	}
 }

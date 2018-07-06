@@ -51,17 +51,6 @@ public class ExchangeRatesQueryResource {
     }
 	
 	private ExchangeRatesQuery setDataView(ExchangeRatesQuery exchangeRatesQuery) {
-		String alphaCode = exchangeRatesQuery.getAlphaCode();
-		String[] alphaCodeArr = alphaCode.split("/"); 
-		String currencyCodeFrom = alphaCodeArr[1];
-		String currencyCodeTo = exchangeRatesQuery.getNote().equals("D") ? "USD" : "EUR";
-		Currency currencyFrom = exchangeRatesQueryService.getCurrencyByCode(currencyCodeFrom);
-		Currency currencyTo = exchangeRatesQueryService.getCurrencyByCode(currencyCodeTo);
-		exchangeRatesQuery.setCurrencyCodeFrom(currencyCodeFrom);
-		if(currencyFrom != null) exchangeRatesQuery.setCurrencyNameFrom(currencyFrom.getCurrencyName());
-		exchangeRatesQuery.setCurrencyCodeTo(currencyCodeTo);
-		if(currencyTo != null) exchangeRatesQuery.setCurrencyNameTo(currencyTo.getCurrencyName());
-		
 		Date dateFrom = new Date(exchangeRatesQuery.getBatchDate().getTime());
 		dateFrom.setDate(1);
 		exchangeRatesQuery.setDateFrom(dateFrom);
@@ -72,7 +61,7 @@ public class ExchangeRatesQueryResource {
 		dateTo.setDate(cal.getActualMaximum(Calendar.DAY_OF_MONTH));
 		exchangeRatesQuery.setDateTo(dateTo);
 		
-		String exchangeRateValue = "1 "+currencyCodeFrom+" = "+exchangeRatesQuery.getRateExchange()+" "+currencyCodeTo;
+		String exchangeRateValue = "1 "+exchangeRatesQuery.getCurrencyCodeFrom()+" = "+exchangeRatesQuery.getRateExchange()+" "+exchangeRatesQuery.getCurrencyCodeTo();
 		exchangeRatesQuery.setRateExchangeValue(exchangeRateValue);
 		
 		return exchangeRatesQuery;
