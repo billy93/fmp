@@ -10,13 +10,11 @@
     function Rec8FareByRuleController($state, $stateParams, Rec8FareByRule, ParseLinks, AlertService, paginationConstants, pagingParams, $uibModal) {
 
         var vm = this;
-        
+        vm.itemsPerPage = paginationConstants.itemsPerPage;
         vm.loadAll = loadAll;
         vm.clearFilter = clearFilter;
         vm.resetFilter = resetFilter;
-        vm.predicate = pagingParams.predicate;
-        vm.reverse = pagingParams.ascending;
-        vm.itemsPerPage = paginationConstants.itemsPerPage;
+        vm.page = 1;
         vm.showCarrierModal = showCarrierModal;
         vm.showTariffModal = showTariffModal;
         
