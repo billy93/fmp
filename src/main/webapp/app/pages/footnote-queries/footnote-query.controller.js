@@ -140,10 +140,14 @@
 		}
 
 		function getFtnt2(footnoteQuery) {
+			vm.isLoadingRule = true;
 			FootnoteQuery.getFtnt2(footnoteQuery, function(data) {
 				vm.footnoteQueryCategories2 = data;
+				console.log(vm.footnoteQueryCategories2);
+				vm.isLoadingRule = false;
 			}, function(error) {
 				console.log(error);
+				vm.isLoadingRule = false;
 			});
 		}
 
@@ -181,7 +185,7 @@
 
 		function showCategoryDetail(category) {
 			$uibModal.open({
-				templateUrl : 'app/pages/category-modals/category-modal.html',
+				templateUrl : 'app/pages/modals/category-modal.html',
 				controller : 'CategoryModalController',
 				controllerAs : 'vm',
 				backdrop : 'static',

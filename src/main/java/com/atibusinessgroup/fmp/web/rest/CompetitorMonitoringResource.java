@@ -7,6 +7,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,14 +19,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
 import com.atibusinessgroup.fmp.domain.dto.AfdQuery;
 import com.atibusinessgroup.fmp.domain.dto.AfdQueryParam;
+import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteQueryGroup;
 import com.atibusinessgroup.fmp.domain.dto.Category;
 import com.atibusinessgroup.fmp.repository.AtpcoRecord0Repository;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoFareCustomRepository;
 import com.atibusinessgroup.fmp.repository.custom.CompetitorMonitoringCustomRepository;
 import com.atibusinessgroup.fmp.service.AtpcoRecordService;
 import com.atibusinessgroup.fmp.service.mapper.AfdQueryMapper;
+import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
 import com.codahale.metrics.annotation.Timed;
 
 @RestController
@@ -35,7 +42,7 @@ public class CompetitorMonitoringResource {
 	private final LinkedHashMap<String, String> footnotes = new LinkedHashMap<>();
 	private final String[] ruleCategories = new String[] {"003", "005", "006", "007", "014", "015"};
 	
-	private final Logger log = LoggerFactory.getLogger(CompetitorMonitoringResource.class);
+//	private final Logger log = LoggerFactory.getLogger(CompetitorMonitoringResource.class);
 
 	private final AtpcoRecord0Repository atpcoRecord0Repository;
 	
@@ -67,9 +74,13 @@ public class CompetitorMonitoringResource {
      */
     @PostMapping("/competitor-monitoring")
     @Timed
-    public ResponseEntity<List<AfdQuery>> getAllAfdQueries(@RequestBody AfdQueryParam param) {
-//        return afdQueryResource.getAllAfdQueries(param);
-    	return null;
+    public ResponseEntity<List<AtpcoFare>> getAllQueries(@RequestBody AfdQueryParam param) {
+    	
+    	Pageable pageable = new PageRequest(param.getPage(), param.getSize());
+    	Page<AtpcoFare> page = competitorMonitoringCustomRepository.getCompetitorQueries(param, pageable);
+    	HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/footnote-queries");
+    	
+		return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
     
 //    /**

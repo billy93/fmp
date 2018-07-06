@@ -21,14 +21,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.atibusinessgroup.fmp.constant.CategoryName;
 import com.atibusinessgroup.fmp.constant.CategoryType;
+import com.atibusinessgroup.fmp.domain.TariffNumber;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFootnoteRecord2;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteQueryDetails;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteQueryGroup;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.Category;
+import com.atibusinessgroup.fmp.domain.dto.CategoryTextFormatAndAttribute;
 import com.atibusinessgroup.fmp.domain.dto.DataTable;
 import com.atibusinessgroup.fmp.domain.dto.FootnoteQuery;
 import com.atibusinessgroup.fmp.domain.dto.FootnoteQueryParam;
+import com.atibusinessgroup.fmp.repository.TariffNumberRepository;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoFareCustomRepository;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoFootnoteQueryCustomRepository;
 import com.atibusinessgroup.fmp.service.AtpcoRecordService;
@@ -52,14 +55,19 @@ public class FootnoteQueryResource {
 
 	private final AtpcoRecordService atpcoRecordService;
 
+	private final TariffNumberRepository tariffNumberRepository;
+	
 	public FootnoteQueryResource(AtpcoFootnoteQueryCustomRepository atpcoFootnoteQueryCustomRepository,
-			FootnoteQueryMapper footnoteQueryMapper, AtpcoFareCustomRepository atpcoFareCustomRepository, AtpcoRecordService atpcoRecordService) {
+			FootnoteQueryMapper footnoteQueryMapper, AtpcoFareCustomRepository atpcoFareCustomRepository, AtpcoRecordService atpcoRecordService,
+			TariffNumberRepository tariffNumberRepository) {
 		this.atpcoFootnoteQueryCustomRepository = atpcoFootnoteQueryCustomRepository;
 		this.footnoteQueryMapper = footnoteQueryMapper;
 
 		this.atpcoFareCustomRepository = atpcoFareCustomRepository;
 		this.atpcoRecordService = atpcoRecordService;
 
+		this.tariffNumberRepository = tariffNumberRepository;
+		
 		categories.put("003", CategoryName.CAT_003);
 		categories.put("011", CategoryName.CAT_011);
 		categories.put("014", CategoryName.CAT_014);
@@ -181,17 +189,21 @@ public class FootnoteQueryResource {
 
 		List<AtpcoFootnoteRecord2GroupByCatNo> arecords2 = atpcoFootnoteQueryCustomRepository.groupFootnoteByRecordId(recordId);
 
+		TariffNumber ftntTn = tariffNumberRepository.findOneByTarNoAndType(footnoteQuery.getTarNo(), "FARE RULE");
+		String ftntTcd = null;
+		
+		if (ftntTn != null) {
+			ftntTcd = ftntTn.getTarCd();
+		}
+		
 		for (Map.Entry<String, String> entry : categories.entrySet()) {
-			List<DataTable> dataTables = new ArrayList<>();
+			AtpcoFootnoteRecord2 matchedFRecord2 = null;
 			
 			for (AtpcoFootnoteRecord2GroupByCatNo arecord2 : arecords2) {
+				
 				if (arecord2.getCatNo().contentEquals(entry.getKey())) {
 					for (AtpcoFootnoteRecord2 record2 : arecord2.getRecords2()) {
-						for (DataTable dt:record2.getDataTables()) {
-							if (!dataTables.contains(dt)) {
-								dataTables.add(dt);
-							}
-						}
+						matchedFRecord2 = record2;
 					}
 					break;
 				}
@@ -199,18 +211,34 @@ public class FootnoteQueryResource {
 			
 			Category cat = new Category();
 			cat.setCatName(entry.getValue());
-			cat.setType(CategoryType.FOOTNOTE);
 
 			try {
 				cat.setCatNo(Integer.parseInt(entry.getKey()));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
-			if (dataTables.size() > 0) {
-				cat.setCatAttributes(atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), dataTables, CategoryType.FOOTNOTE).getAttributes()	);
+			
+			String type = "";
+			
+			if (matchedFRecord2 != null) {
+				List<DataTable> dataTables = new ArrayList<>();
+				
+				for (DataTable dt:matchedFRecord2.getDataTables()) {
+					if (!dataTables.contains(dt)) {
+						dataTables.add(dt);
+					}
+				}
+				
+				type = CategoryType.FOOTNOTE;
+	        	String textFormat = atpcoRecordService.generateCategoryTextHeader(CategoryType.FOOTNOTE, footnoteQuery.getTarNo(), ftntTcd, footnoteQuery.getFtnt(), matchedFRecord2.getSequenceNo(), matchedFRecord2.getEffectiveDateObject());
+        		CategoryTextFormatAndAttribute ctfa = atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), dataTables, CategoryType.FOOTNOTE);
+        		textFormat += ctfa.getTextFormat();
+        		cat.getCatAttributes().addAll(ctfa.getAttributes());
+        		
+        		cat.setType(type);
+            	cat.setTextFormat(textFormat);
 			}
-
+			
 			result.add(cat);
 		}
 
