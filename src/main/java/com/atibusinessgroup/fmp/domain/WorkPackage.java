@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -115,7 +116,7 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     private ZonedDateTime filingDate;
 
     @Field("sale_date")
-    private ZonedDateTime saleDate;
+    private Date saleDate;
 
     @Field("target_distribution")
     private String targetDistribution;
@@ -339,7 +340,15 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     }
     
     
-    public Validation getValidation() {
+    public Date getSaleDate() {
+		return saleDate;
+	}
+
+	public void setSaleDate(Date saleDate) {
+		this.saleDate = saleDate;
+	}
+
+	public Validation getValidation() {
 		return validation;
 	}
 
@@ -888,14 +897,6 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 
 	public void setExpRev(String expRev) {
 		this.expRev = expRev;
-	}
-
-	public ZonedDateTime getSaleDate() {
-		return saleDate;
-	}
-
-	public void setSaleDate(ZonedDateTime saleDate) {
-		this.saleDate = saleDate;
 	}
 
 	public List<WorkPackageFareSheet> getDiscountFareSheet() {

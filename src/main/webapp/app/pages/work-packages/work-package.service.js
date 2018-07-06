@@ -19,18 +19,19 @@
                 data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
                 data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
                 data.lockedSince = DateUtils.convertDateTimeFromServer(data.lockedSince);
-                data.saleDate = DateUtils.convertDateTimeFromServer(data.saleDate);
+                
+                data.saleDate = DateUtils.convertDateFromServer(data.saleDate);
 
                 if(data.fareSheet.length > 0){
                 	for(var x=0;x<data.fareSheet.length;x++){
                 		var fares = data.fareSheet[x].fares;
                 		for(var y=0;y<fares.length;y++){
                     		if(fares[y] != null){
-                    			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
-                    			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
-                    			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
-                    			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
-                    			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+                    			fares[y].travelStart = DateUtils.convertDateFromServer(fares[y].travelStart);
+                    			fares[y].travelEnd = DateUtils.convertDateFromServer(fares[y].travelEnd);
+                    			fares[y].saleStart = DateUtils.convertDateFromServer(fares[y].saleStart);
+                    			fares[y].saleEnd = DateUtils.convertDateFromServer(fares[y].saleEnd);
+                    			fares[y].travelComplete = DateUtils.convertDateFromServer(fares[y].travelComplete);                    			
                     		}
                 		}
                 	}
@@ -41,11 +42,11 @@
                 		var fares = data.addonFareSheet[x].fares;
                 		for(var y=0;y<fares.length;y++){
                     		if(fares[y] != null){
-                    			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
-                    			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
-                    			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
-                    			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
-                    			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+                    			fares[y].travelStart = DateUtils.convertDateFromServer(fares[y].travelStart);
+                    			fares[y].travelEnd = DateUtils.convertDateFromServer(fares[y].travelEnd);
+                    			fares[y].saleStart = DateUtils.convertDateFromServer(fares[y].saleStart);
+                    			fares[y].saleEnd = DateUtils.convertDateFromServer(fares[y].saleEnd);
+                    			fares[y].travelComplete = DateUtils.convertDateFromServer(fares[y].travelComplete);
                     		}
                 		}
                 	}
@@ -56,11 +57,11 @@
                 		var fares = data.marketFareSheet[x].fares;
                 		for(var y=0;y<fares.length;y++){
                     		if(fares[y] != null){
-                    			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
-                    			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
-                    			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
-                    			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
-                    			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+                    			fares[y].travelStart = DateUtils.convertDateFromServer(fares[y].travelStart);
+                    			fares[y].travelEnd = DateUtils.convertDateFromServer(fares[y].travelEnd);
+                    			fares[y].saleStart = DateUtils.convertDateFromServer(fares[y].saleStart);
+                    			fares[y].saleEnd = DateUtils.convertDateFromServer(fares[y].saleEnd);
+                    			fares[y].travelComplete = DateUtils.convertDateFromServer(fares[y].travelComplete);
                     		}
                 		}
                 	}
@@ -72,11 +73,11 @@
                 		var fares = data.discountFareSheet[x].fares;
                 		for(var y=0;y<fares.length;y++){
                     		if(fares[y] != null){
-                    			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
-                    			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
-                    			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
-                    			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
-                    			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+                    			fares[y].travelStart = DateUtils.convertDateFromServer(fares[y].travelStart);
+                    			fares[y].travelEnd = DateUtils.convertDateFromServer(fares[y].travelEnd);
+                    			fares[y].saleStart = DateUtils.convertDateFromServer(fares[y].saleStart);
+                    			fares[y].saleEnd = DateUtils.convertDateFromServer(fares[y].saleEnd);
+                    			fares[y].travelComplete = DateUtils.convertDateFromServer(fares[y].travelComplete);
                     		}
                 		}
                 	}

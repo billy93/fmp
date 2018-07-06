@@ -237,6 +237,8 @@ public class AtpcoRuleQueryCustomRepository {
 		
 		
 		Aggregation aggregation = newAggregation(aggregationOperations);
+		
+		System.out.println(aggregation);
 
 		aggregationOperations.add(skip);
 

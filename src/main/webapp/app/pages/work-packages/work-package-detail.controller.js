@@ -1788,6 +1788,15 @@
 			}).result.then(function(option) {
 				var clipboardSheet = ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
 				clipboardSheet.then(function(result){
+					
+					for(var l=0; l<result.sheet.fares.length; l++){
+						try {
+							result.sheet.fares[l].status="PENDING";
+						} catch (e) {
+						}
+						
+					}
+					
 					vm.addTab(option, result.sheet.fares);
 					alert('Paste Sheet Success');
 				});
@@ -3012,12 +3021,77 @@
         		  vm.workPackage.validate = false;
         	  }
         	  
+        	  removeTime(vm.workPackage);
               WorkPackage.update(vm.workPackage, onSaveSuccess, onSaveError);
           } else {
               WorkPackage.save(vm.workPackage, onSaveSuccess, onSaveError);
           }
       }
 
+	  function removeTime(workPackage){
+		  data = workPackage;
+		  if(data.fareSheet.length > 0){
+          	for(var x=0;x<data.fareSheet.length;x++){
+          		var fares = data.fareSheet[x].fares;
+          		for(var y=0;y<fares.length;y++){
+              		if(fares[y] != null){
+              			fares[y].travelStart = DateUtils.convertLocalDateToServer(fares[y].travelStart);
+              			fares[y].travelEnd = DateUtils.convertLocalDateToServer(fares[y].travelEnd);
+              			fares[y].saleStart = DateUtils.convertLocalDateToServer(fares[y].saleStart);
+              			fares[y].saleEnd = DateUtils.convertLocalDateToServer(fares[y].saleEnd);
+              			fares[y].travelComplete = DateUtils.convertLocalDateToServer(fares[y].travelComplete);
+              		}
+          		}
+          	}
+          }
+
+          if(data.addonFareSheet.length > 0){
+          	for(var x=0;x<data.addonFareSheet.length;x++){
+          		var fares = data.addonFareSheet[x].fares;
+          		for(var y=0;y<fares.length;y++){
+              		if(fares[y] != null){
+              			fares[y].travelStart = DateUtils.convertLocalDateToServer(fares[y].travelStart);
+              			fares[y].travelEnd = DateUtils.convertLocalDateToServer(fares[y].travelEnd);
+              			fares[y].saleStart = DateUtils.convertLocalDateToServer(fares[y].saleStart);
+              			fares[y].saleEnd = DateUtils.convertLocalDateToServer(fares[y].saleEnd);
+              			fares[y].travelComplete = DateUtils.convertLocalDateToServer(fares[y].travelComplete);
+              		}
+          		}
+          	}
+          }
+
+          if(data.marketFareSheet.length > 0){
+          	for(var x=0;x<data.marketFareSheet.length;x++){
+          		var fares = data.marketFareSheet[x].fares;
+          		for(var y=0;y<fares.length;y++){
+              		if(fares[y] != null){
+              			fares[y].travelStart = DateUtils.convertLocalDateToServer(fares[y].travelStart);
+              			fares[y].travelEnd = DateUtils.convertLocalDateToServer(fares[y].travelEnd);
+              			fares[y].saleStart = DateUtils.convertLocalDateToServer(fares[y].saleStart);
+              			fares[y].saleEnd = DateUtils.convertLocalDateToServer(fares[y].saleEnd);
+              			fares[y].travelComplete = DateUtils.convertLocalDateToServer(fares[y].travelComplete);
+              		}
+          		}
+          	}
+          }
+
+
+          if(data.discountFareSheet.length > 0){
+          	for(var x=0;x<data.discountFareSheet.length;x++){
+          		var fares = data.discountFareSheet[x].fares;
+          		for(var y=0;y<fares.length;y++){
+              		if(fares[y] != null){
+              			fares[y].travelStart = DateUtils.convertLocalDateToServer(fares[y].travelStart);
+              			fares[y].travelEnd = DateUtils.convertLocalDateToServer(fares[y].travelEnd);
+              			fares[y].saleStart = DateUtils.convertLocalDateToServer(fares[y].saleStart);
+              			fares[y].saleEnd = DateUtils.convertLocalDateToServer(fares[y].saleEnd);
+              			fares[y].travelComplete = DateUtils.convertLocalDateToServer(fares[y].travelComplete);
+              		}
+          		}
+          	}
+          }
+	  }
+	  
       function onSaveSuccess (result) {
     	  alert("Save Success");
 	      $scope.$emit('fmpApp:workPackageUpdate', result);
@@ -4393,9 +4467,6 @@
       };
       
       vm.mapWorkpackage = function(result){
-    	  
-    	  
-    	  
     	  data = result;
   	  	  data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
           data.newCreatedDate = DateUtils.convertDateTimeFromServer(data.createdDate);
@@ -4403,18 +4474,18 @@
           data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
           data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
           data.lockedSince = DateUtils.convertDateTimeFromServer(data.lockedSince);
-          data.saleDate = DateUtils.convertDateTimeFromServer(data.saleDate);
+          data.saleDate = DateUtils.convertDateFromServer(data.saleDate);
           
           if(data.fareSheet.length > 0){
           	for(var x=0;x<data.fareSheet.length;x++){
           		var fares = data.fareSheet[x].fares;
           		for(var y=0;y<fares.length;y++){
               		if(fares[y] != null){
-              			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
-              			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
-              			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
-              			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
-              			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+              			fares[y].travelStart = DateUtils.convertDateFromServer(fares[y].travelStart);
+              			fares[y].travelEnd = DateUtils.convertDateFromServer(fares[y].travelEnd);
+              			fares[y].saleStart = DateUtils.convertDateFromServer(fares[y].saleStart);
+              			fares[y].saleEnd = DateUtils.convertDateFromServer(fares[y].saleEnd);
+              			fares[y].travelComplete = DateUtils.convertDateFromServer(fares[y].travelComplete);
               		}
           		}
           	}
@@ -4425,11 +4496,11 @@
           		var fares = data.addonFareSheet[x].fares;
           		for(var y=0;y<fares.length;y++){
               		if(fares[y] != null){
-              			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
-              			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
-              			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
-              			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
-              			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+              			fares[y].travelStart = DateUtils.convertDateFromServer(fares[y].travelStart);
+              			fares[y].travelEnd = DateUtils.convertDateFromServer(fares[y].travelEnd);
+              			fares[y].saleStart = DateUtils.convertDateFromServer(fares[y].saleStart);
+              			fares[y].saleEnd = DateUtils.convertDateFromServer(fares[y].saleEnd);
+              			fares[y].travelComplete = DateUtils.convertDateFromServer(fares[y].travelComplete);
               		}
           		}
           	}
@@ -4440,11 +4511,11 @@
           		var fares = data.marketFareSheet[x].fares;
           		for(var y=0;y<fares.length;y++){
               		if(fares[y] != null){
-              			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
-              			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
-              			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
-              			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
-              			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+              			fares[y].travelStart = DateUtils.convertDateFromServer(fares[y].travelStart);
+              			fares[y].travelEnd = DateUtils.convertDateFromServer(fares[y].travelEnd);
+              			fares[y].saleStart = DateUtils.convertDateFromServer(fares[y].saleStart);
+              			fares[y].saleEnd = DateUtils.convertDateFromServer(fares[y].saleEnd);
+              			fares[y].travelComplete = DateUtils.convertDateFromServer(fares[y].travelComplete);
               		}
           		}
           	}
@@ -4456,11 +4527,11 @@
           		var fares = data.discountFareSheet[x].fares;
           		for(var y=0;y<fares.length;y++){
               		if(fares[y] != null){
-              			fares[y].travelStart = DateUtils.convertDateTimeFromServer(fares[y].travelStart);
-              			fares[y].travelEnd = DateUtils.convertDateTimeFromServer(fares[y].travelEnd);
-              			fares[y].saleStart = DateUtils.convertDateTimeFromServer(fares[y].saleStart);
-              			fares[y].saleEnd = DateUtils.convertDateTimeFromServer(fares[y].saleEnd);
-              			fares[y].travelComplete = DateUtils.convertDateTimeFromServer(fares[y].travelComplete);
+              			fares[y].travelStart = DateUtils.convertDateFromServer(fares[y].travelStart);
+              			fares[y].travelEnd = DateUtils.convertDateFromServer(fares[y].travelEnd);
+              			fares[y].saleStart = DateUtils.convertDateFromServer(fares[y].saleStart);
+              			fares[y].saleEnd = DateUtils.convertDateFromServer(fares[y].saleEnd);
+              			fares[y].travelComplete = DateUtils.convertDateFromServer(fares[y].travelComplete);
               		}
           		}
           	}
@@ -4474,11 +4545,7 @@
 	     		data.filingDetail.releaseDate = DateUtils.convertDateTimeFromServer(data.filingDetail.releaseDate);
 	      }
           
-
-          
-          
-          vm.workPackage = data;
-          
+          vm.workPackage = data;          
 
           if(vm.workPackage.fareSheet.length > 0){
             	for(var x=0;x<vm.workPackage.fareSheet.length;x++){
@@ -6334,6 +6401,7 @@
     		  elmnt.focus();
     	  }
     	  else if(sheetType == 'Market'){
+    		  console.log("FIELD NAME : "+field+sheetIndex+fareIndex);
     		  vm.selectMarketTab(sheetIndex);
     		  for(var x=0;x<vm.workPackage.marketFareSheet[sheetIndex].fares.length;x++){
     			  vm.workPackage.marketFareSheet[sheetIndex].fares[x].field = {};

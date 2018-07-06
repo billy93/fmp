@@ -4,14 +4,15 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
@@ -73,16 +74,16 @@ public class WorkPackageService {
         for(WorkPackageFareSheet sheet : workPackage.getFareSheet()) {
         	List<WorkPackageFare> fares = sheet.getFares();
         	for(WorkPackageFare fare : fares) {
-        		if(fare.getTravelStart() != null)
-        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant(), ZoneId.systemDefault()));
-        		if(fare.getTravelEnd() != null)
-        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant(), ZoneId.systemDefault()));
-        		if(fare.getSaleStart() != null)	            		
-        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant(), ZoneId.systemDefault()));
-        		if(fare.getSaleEnd() != null)
-            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
-        		if(fare.getTravelComplete() != null)
-	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
+//        		if(fare.getTravelStart() != null)
+//        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+//        		if(fare.getTravelEnd() != null)
+//        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+//        		if(fare.getSaleStart() != null)	            		
+//        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+//        		if(fare.getSaleEnd() != null)
+//            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+//        		if(fare.getTravelComplete() != null)
+//	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
         		
         		Optional<AtpcoFare> checkAtpcoFare = atpcoFareRepository.findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCityAndFareOriginCurrencyCodeAndFareClassCodeAndOwrtAndFootnoteAndRoutingNoAndRuleNo(
         				fare.getCarrier(), 
@@ -129,16 +130,16 @@ public class WorkPackageService {
         for(WorkPackageFareSheet sheet : workPackage.getAddonFareSheet()) {
         	List<WorkPackageFare> fares = sheet.getFares();
         	for(WorkPackageFare fare : fares) {
-        		if(fare.getTravelStart() != null)
-        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant(), ZoneId.systemDefault()));
-        		if(fare.getTravelEnd() != null)
-        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant(), ZoneId.systemDefault()));
-        		if(fare.getSaleStart() != null)	            		
-        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant(), ZoneId.systemDefault()));
-        		if(fare.getSaleEnd() != null)
-            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
-        		if(fare.getTravelComplete() != null)
-	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));        		
+//        		if(fare.getTravelStart() != null)
+//        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+//        		if(fare.getTravelEnd() != null)
+//        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+//        		if(fare.getSaleStart() != null)	            		
+//        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+//        		if(fare.getSaleEnd() != null)
+//            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+//        		if(fare.getTravelComplete() != null)
+//	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));        		
         		
         		fare.setAction("N");
         		if(fare.getId() == null) {
@@ -149,16 +150,16 @@ public class WorkPackageService {
         for(WorkPackageFareSheet sheet : workPackage.getMarketFareSheet()) {
         	List<WorkPackageFare> fares = sheet.getFares();
         	for(WorkPackageFare fare : fares) {
-        		if(fare.getTravelStart() != null)
-        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant(), ZoneId.systemDefault()));
-        		if(fare.getTravelEnd() != null)
-        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant(), ZoneId.systemDefault()));
-        		if(fare.getSaleStart() != null)	            		
-        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant(), ZoneId.systemDefault()));
-        		if(fare.getSaleEnd() != null)
-            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
-        		if(fare.getTravelComplete() != null)
-	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
+//        		if(fare.getTravelStart() != null)
+//        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+//        		if(fare.getTravelEnd() != null)
+//        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+//        		if(fare.getSaleStart() != null)	            		
+//        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+//        		if(fare.getSaleEnd() != null)
+//            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+//        		if(fare.getTravelComplete() != null)
+//	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
         		
         		fare.setAction("N");   
         		if(fare.getId() == null) {
@@ -169,16 +170,16 @@ public class WorkPackageService {
         for(WorkPackageFareSheet sheet : workPackage.getDiscountFareSheet()) {
         	List<WorkPackageFare> fares = sheet.getFares();
         	for(WorkPackageFare fare : fares) {
-        		if(fare.getTravelStart() != null)
-        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant(), ZoneId.systemDefault()));
-        		if(fare.getTravelEnd() != null)
-        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant(), ZoneId.systemDefault()));
-        		if(fare.getSaleStart() != null)	            		
-        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant(), ZoneId.systemDefault()));
-        		if(fare.getSaleEnd() != null)
-            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
-        		if(fare.getTravelComplete() != null)
-	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
+//        		if(fare.getTravelStart() != null)
+//        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+//        		if(fare.getTravelEnd() != null)
+//        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+//        		if(fare.getSaleStart() != null)	            		
+//        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+//        		if(fare.getSaleEnd() != null)
+//            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+//        		if(fare.getTravelComplete() != null)
+//	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
         		
         		if(fare.getId() == null) {
         			fare.setId(new ObjectId().toString());
@@ -188,16 +189,16 @@ public class WorkPackageService {
         for(WorkPackageFareSheet sheet : workPackage.getWaiverFareSheet()) {
         	List<WorkPackageFare> fares = sheet.getFares();
         	for(WorkPackageFare fare : fares) {
-        		if(fare.getTravelStart() != null)
-        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant(), ZoneId.systemDefault()));
-        		if(fare.getTravelEnd() != null)
-        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant(), ZoneId.systemDefault()));
-        		if(fare.getSaleStart() != null)	            		
-        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant(), ZoneId.systemDefault()));
-        		if(fare.getSaleEnd() != null)
-            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant(), ZoneId.systemDefault()));
-        		if(fare.getTravelComplete() != null)
-	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant(), ZoneId.systemDefault()));
+//        		if(fare.getTravelStart() != null)
+//        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+//        		if(fare.getTravelEnd() != null)
+//        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+//        		if(fare.getSaleStart() != null)	            		
+//        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+//        		if(fare.getSaleEnd() != null)
+//            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+//        		if(fare.getTravelComplete() != null)
+//	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
         		if(fare.getId() == null) {
         			fare.setId(new ObjectId().toString());
         		}
@@ -359,7 +360,7 @@ public class WorkPackageService {
 	    	
 	    	for(Priority p : priorities) {
 	    		if(p.getType().contentEquals("DAYS")) {
-	    			long val = zonedDateTimeDifference(ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS), workPackage.getSaleDate().truncatedTo(ChronoUnit.DAYS), ChronoUnit.DAYS);
+	    			long val = getDateDiff(new Date(), workPackage.getSaleDate(), TimeUnit.DAYS);
 	    			long value = p.getValue();
 
 	    			if(val <= value) {    				
@@ -381,6 +382,24 @@ public class WorkPackageService {
         return workPackageRepository.save(workPackage);
     }
     
+    public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
+        long diffInMillies = removeTimeFromDate(date2).getTime() - removeTimeFromDate(date1).getTime();
+        return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
+    }
+    
+    public static Date removeTimeFromDate(Date date) {
+    	 
+        if (date == null) {
+            return null;
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
+    }
 
 	static long zonedDateTimeDifference(ZonedDateTime d1, ZonedDateTime d2, ChronoUnit unit){
         return unit.between(d1, d2);

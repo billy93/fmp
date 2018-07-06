@@ -295,19 +295,30 @@
 			</div>
 		</div>
 
-		<div class="additional-info-wrapper" id="vm.footnoteQueryCategories2"
-			ng-if="vm.footnoteQueryCategories != null">
-			<div class="clearfix">
-				<div class="pull-left ph5px additional-container"
-					ng-repeat="cat in vm.footnoteQueryCategories2 track by cat.catNo">
-					<div class="additional-info" ng-click="vm.showCategoryDetail(cat)"
-						ng-class="{'yellow': cat.catAttributes.length > 0 && cat.type != 'G', 'blue': cat.catAttributes.length > 0 && cat.type == 'G'}">
-						{{cat.catNo}} {{cat.catName}} <span
-							ng-if="cat.catAttributes.length > 0">({{cat.type}})</span>
-					</div>
-				</div>
+		<div class="col-md-12 text-center" ng-if="vm.isLoadingRule">
+			<div class="spinner yellow">
+			  <div class="double-bounce1"></div>
+			  <div class="double-bounce2"></div>
 			</div>
 		</div>
+		<div class="additional-info-wrapper" ng-if="vm.footnoteQueryCategories2">
+			<div class="clearfix">
+				<div class="pull-left ph5px additional-container" ng-repeat="cat in vm.footnoteQueryCategories2 track by cat.catNo">
+					<div class="additional-info" ng-click="vm.showCategoryDetail(cat)" ng-class="{'lightyellow': cat.type.includes('F'), 'yellow': cat.type.includes('R'), 'blue': cat.type == 'G'}">
+	        			{{cat.catNo}} {{cat.catName}} <span ng-if="cat.type != undefined && cat.type != ''">({{cat.type}})</span>
+		      		</div>
+				</div>
+				<div class="pull-left ph5px additional-container">
+					<div class="additional-info action dropdown custom" ng-click="vm.actionClicked = !vm.actionClicked">
+		      			Action <i class="fa fa-caret-down pull-right"></i>
+		      			<div class="action-wrapper" ng-if="vm.actionClicked">
+		      				<a ng-click="vm.showLegend()">Show Legend</a>
+		      				<a ng-click="vm.viewFullText()">View Full Text</a>
+		      			</div>
+		      		</div>
+	      		</div>
+			</div>
+   		</div>
 
 		
 	</div>

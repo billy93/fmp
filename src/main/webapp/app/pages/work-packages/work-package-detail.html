@@ -242,8 +242,7 @@
 	<div class="panel panel-tabs">
 		<div class="panel-body">
 			<div class="clearfix mb1">
-				<div class="pull-right" ng-class="{'poiv-none' : (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
-						&& vm.workPackage.status=='DISTRIBUTED')}">
+				<div class="pull-right">
 					<button class="btn btn-default small" ng-click="vm.resendApprove()" ng-if="vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.user.reviewLevels.indexOf('HO') > -1">Generate IN</button>
 					<button class="btn btn-default small" ng-click="vm.viewRecipients()" ng-if="vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.user.reviewLevels.indexOf('HO') > -1">View IN Recipients</button>
 					<div class="button-group dropdown custom">
@@ -274,8 +273,10 @@
 					        ng-class="{'poiv-none' :(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}">Complete</a></li>
 						</ul>
 					</div>
-					<div class="button-group dropdown custom" ng-class="{'poiv-none' :(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}">
-						<button class="btn btn-default small" ng-disabled="vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)">Action <i class="fa fa-caret-down" ng-class="{'poiv-none' :vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}"></i></button>
+					<div class="button-group dropdown custom" ng-class="{'poiv-none' :(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') ||  (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
+						&& vm.workPackage.status=='DISTRIBUTED')}">
+						<button class="btn btn-default small" ng-disabled="vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)  || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
+						&& vm.workPackage.status=='DISTRIBUTED')">Action <i class="fa fa-caret-down" ng-class="{'poiv-none' :vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}"></i></button>
 						<ul class="dropdown-menu custom" role="menu">
 						    <li>
 						    	<a ng-click="vm.save(true)">Save and Validate</a>
@@ -288,10 +289,15 @@
 						<button class="btn btn-default small" ng-disabled="vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) ">Sheet <i class="fa fa-caret-down" ng-class="{'poiv-none' :vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage)}"></i></button>
 						<ul class="dropdown-menu custom" role="menu">
 						    <li>
-						    	<a ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)" ng-click="vm.addSheet()" data-toggle="modal" data-target="#addNewsheet" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}">Add</a>
+						    	<a ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
+								&& vm.workPackage.status=='DISTRIBUTED')" 
+								ng-click="vm.addSheet()" data-toggle="modal" data-target="#addNewsheet" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage) ||  (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
+								&& vm.workPackage.status=='DISTRIBUTED')}">Add</a>
 						    </li>
 						    <li>
-						    	<a ng-click="vm.removeSheet()" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}">Remove</a>
+						    	<a ng-click="vm.removeSheet()" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' 
+								&& vm.workPackage.status=='DISTRIBUTED')" 
+								ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage) ||  (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')}">Remove</a>
 						    </li>
 						    <!-- <li>
 						    	<a href="#">Rename</a>
@@ -300,7 +306,7 @@
 						    	<a ng-click="vm.copySheet()" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage)" >Copy</a>
 						    </li>
 						    <li>
-						    	<a ng-click="vm.pasteSheet()" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}">Paste</a>
+						    	<a ng-click="vm.pasteSheet()" ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)||  (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')" ng-class="{'poiv-none':vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)||  (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')}">Paste</a>
 						    </li>
 						</ul>
 					</div>												
@@ -1300,28 +1306,28 @@
 								<div class="tab-pane" id="tabAtpco{{vm.workPackage.fareSheet.length+vm.workPackage.addonFareSheet.length+1}}" ng-class="{active:vm.currentTabAttachment}" ng-if="vm.workPackage.attachment">
 									<div class="action-btn-wrapper">
 					     				<div class="col-md-12 text-right no-pad">
-					     					<button ng-click="vm.addAttachment()" class="btn btn-primary" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN' ">Add</button>
+					     					<button ng-click="vm.addAttachment()" class="btn btn-primary" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN'|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') ">Add</button>
 					     				</div>
 					     			</div>
 									<div class="pull-left w50 two-column">
 						                <div class="form-group">
 						                  <label>Approval Reference</label>
 						                  <input type="text" name="attachmentApprovalReference{{$index}}" class="form-control" 
-						                  ng-model="vm.workPackage.attachmentApprovalReference" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN'">
-						                  <button ng-click="vm.generateTourCodeAttachment()" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN'">Generate Tour Code</button>
+						                  ng-model="vm.workPackage.attachmentApprovalReference" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN'|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
+						                  <button ng-click="vm.generateTourCodeAttachment()" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN'|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Generate Tour Code</button>
 						                </div>
 						              </div>
 						              
 					     			<div class="col-md-12">
 					     				<div class="text-center no-data" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">No Attachment Available</div>							
 						     			<div ng-repeat="attachment in vm.workPackage.attachmentData.slice().reverse() track by $index" class="form-repeat">
-					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION' || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION' || vm.workPackage.status=='WITHDRAWN' || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)}"></span></button>
+					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION' || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION' || vm.workPackage.status=='WITHDRAWN' || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></span></button>
 							       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'short'}}</label>
 							       			<div class="row mt1">
 								        		<div class="col-md-6">
 									      			<div class="form-group">
 									      				<label>Comment</label>
-									      				<textarea class="form-control" ng-model="attachment.comment" ng-disabled="attachment.isDeleted || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN'"></textarea>
+									      				<textarea class="form-control" ng-model="attachment.comment" ng-disabled="attachment.isDeleted || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN'|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')"></textarea>
 									      			</div>
 								        		</div>
 								        		<div class="col-md-6">
@@ -1333,13 +1339,13 @@
 											                    Open
 											                </button>
 											                <button type="button" ngf-select class="btn btn-secondary"
-											                        ngf-change="vm.setFile($file, attachment)" ng-disabled="attachment.isDeleted||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN'">
+											                        ngf-change="vm.setFile($file, attachment)" ng-disabled="attachment.isDeleted||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN'|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
 											                    Add file
 											                </button>
 										                    <div class="form-group mt1">
 																<div class="checkbox-wrapper">
 																	<label class="black" for="inOnly">
-																		<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly" ng-disabled="attachment.isDeleted || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN'">
+																		<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly" ng-disabled="attachment.isDeleted || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN'|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
 																		Inter Office Notification
 																	</label>
 																	<label class="black" for="isDeleted">
@@ -2278,28 +2284,28 @@
 					        <div class="tab-pane" ng-class="{active:vm.currentTabAttachment}" ng-if="vm.workPackage.attachment">
 				            	<div class="action-btn-wrapper">
 					     				<div class="col-md-12 text-right no-pad">
-					     					<button ng-click="vm.addAttachment()" class="btn btn-primary" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Add</button>
+					     					<button ng-click="vm.addAttachment()" class="btn btn-primary" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Add</button>
 					     				</div>
 					     			</div>
 									<div class="pull-left w50 two-column">
 						                <div class="form-group">
 						                  <label>Approval Reference</label>
 						                  <input type="text" name="attachmentApprovalReference{{$index}}" class="form-control" 
-						                  ng-model="vm.workPackage.attachmentApprovalReference" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
-						                  <button ng-click="vm.generateTourCodeAttachment()" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Generate Tour Code</button>
+						                  ng-model="vm.workPackage.attachmentApprovalReference" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
+						                  <button ng-click="vm.generateTourCodeAttachment()" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Generate Tour Code</button>
 						                </div>
 						              </div>
 						              
 					     			<div class="col-md-12">
 					     				<div class="text-center no-data" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">No Attachment Available</div>							
 						     			<div ng-repeat="attachment in vm.workPackage.attachmentData.slice().reverse() track by $index" class="form-repeat">
-					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION'"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION'}"></span></button>
+					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></span></button>
 							       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'short'}}</label>
 							       			<div class="row mt1">
 								        		<div class="col-md-6">
 									      			<div class="form-group">
 									      				<label>Comment</label>
-									      				<textarea class="form-control" ng-model="attachment.comment" ng-disabled="attachment.isDeleted ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"></textarea>
+									      				<textarea class="form-control" ng-model="attachment.comment" ng-disabled="attachment.isDeleted ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')"></textarea>
 									      			</div>
 								        		</div>
 								        		<div class="col-md-6">
@@ -2311,13 +2317,13 @@
 											                    Open
 											                </button>
 											                <button type="button" ngf-select class="btn btn-secondary"
-											                        ngf-change="vm.setFile($file, attachment)" ng-disabled="attachment.isDeleted||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
+											                        ngf-change="vm.setFile($file, attachment)" ng-disabled="attachment.isDeleted||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
 											                    Add file
 											                </button>
 										                    <div class="form-group mt1">
 																<div class="checkbox-wrapper">
 																	<label class="black" for="inOnly">
-																		<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly" ng-disabled="attachment.isDeleted || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">
+																		<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly" ng-disabled="attachment.isDeleted || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
 																		Inter Office Notification
 																	</label>
 																	<label class="black" for="isDeleted">
@@ -3539,28 +3545,28 @@
 							<div class="tab-pane" ng-class="{active:vm.currentTabAttachment}" ng-if="vm.workPackage.attachment">
 									<div class="action-btn-wrapper">
 					     				<div class="col-md-12 text-right no-pad">
-					     					<button ng-click="vm.addAttachment()" class="btn btn-primary" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Add</button>
+					     					<button ng-click="vm.addAttachment()" class="btn btn-primary" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Add</button>
 					     				</div>
 					     			</div>
 									<div class="pull-left w50 two-column">
 						                <div class="form-group">
 						                  <label>Approval Reference</label>
 						                  <input type="text" name="attachmentApprovalReference{{$index}}" class="form-control" 
-						                  ng-model="vm.workPackage.attachmentApprovalReference" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">
-						                  <button ng-click="vm.generateTourCodeAttachment()" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Generate Tour Code</button>
+						                  ng-model="vm.workPackage.attachmentApprovalReference" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
+						                  <button ng-click="vm.generateTourCodeAttachment()" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Generate Tour Code</button>
 						                </div>
 						              </div>
 						              
 					     			<div class="col-md-12">
 					     				<div class="text-center no-data" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">No Attachment Available</div>							
 						     			<div ng-repeat="attachment in vm.workPackage.attachmentData.slice().reverse() track by $index" class="form-repeat">
-					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION'"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')}"></span></button>
+					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION'"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></span></button>
 							       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'short'}}</label>
 							       			<div class="row mt1">
 								        		<div class="col-md-6">
 									      			<div class="form-group">
 									      				<label>Comment</label>
-									      				<textarea class="form-control" ng-model="attachment.comment" ng-disabled="attachment.isDeleted ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"></textarea>
+									      				<textarea class="form-control" ng-model="attachment.comment" ng-disabled="attachment.isDeleted ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')"></textarea>
 									      			</div>
 								        		</div>
 								        		<div class="col-md-6">
@@ -3572,13 +3578,13 @@
 											                    Open
 											                </button>
 											                <button type="button" ngf-select class="btn btn-secondary"
-											                        ngf-change="vm.setFile($file, attachment)" ng-disabled="attachment.isDeleted||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">
+											                        ngf-change="vm.setFile($file, attachment)" ng-disabled="attachment.isDeleted||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
 											                    Add file
 											                </button>
 										                    <div class="form-group mt1">
 																<div class="checkbox-wrapper">
 																	<label class="black" for="inOnly">
-																		<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly" ng-disabled="attachment.isDeleted || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">
+																		<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly" ng-disabled="attachment.isDeleted || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
 																		Inter Office Notification
 																	</label>
 																	<label class="black" for="isDeleted">
@@ -3698,7 +3704,7 @@
 											</div>
 										 </div>	
 									</div>
-									<div class="clearfix">
+									<!-- <div class="clearfix">
 										<div class="pull-left w50 two-column">
 											<div class="form-group">
 												<label>Agent Name</label>
@@ -3717,8 +3723,8 @@
 								             	ng-required="vm.isRequired('waiverIataNo')"/>
 											</div>
 										</div>
-									</div>
-									<div class="clearfix">
+									</div> -->
+									<!-- <div class="clearfix">
 										<div class="pull-left w50 two-column">
 											<div class="form-group">
 												<label>Approval Date</label>
@@ -3737,7 +3743,7 @@
 								             	ng-required="vm.isRequired('waiverIocNumber')"/>
 											</div>
 										</div>
-									</div>
+									</div> -->
 								</div>																						
 							
 								<div class="table-wrapper">
@@ -3796,7 +3802,22 @@
 													<tr>
 								                		<th>No</th>
 														<th># <span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, '#')"></span><div class="resize-div"></div></th>
-									                	
+									                	<th>Agent Name
+								                		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverAgentName')"></span>
+								                			<div class="resize-div"></div>
+								                		</th>
+								                		<th>IATA No
+								                		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverIataNo')"></span>
+								                			<div class="resize-div"></div>
+								                		</th>
+								                		<th>IOC Number
+								                		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverIocNo')"></span>
+								                			<div class="resize-div"></div>
+								                		</th>
+								                		<th>Approval Date
+								                		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverApprovalDate')"></span>
+								                			<div class="resize-div"></div>
+								                		</th>
 								                		<th>Type
 								                		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverType')"></span>
 								                			<div class="resize-div"></div>
@@ -3881,10 +3902,6 @@
 									               		<th>Total Lost
 									               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverTotalLost')"></span>
 									                		<div class="resize-div"></div>
-									               		</th>	 
-									               		<th>Approver
-									               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverApprover')"></span>
-									                		<div class="resize-div"></div>
 									               		</th>
 									               		<th>Remark
 									               		<span class="glyphicon glyphicon-sort" ng-click="vm.sort(workPackageSheet, 'waiverRemark')"></span>
@@ -3896,6 +3913,30 @@
 													<tr ng-click="vm.tbodyClick(workPackageSheet)" ng-repeat="fare in workPackageSheet.currentFares track by $index" role="row" class="datatable-row" ng-class="{'poiv-none':workPackageSheet.version != 'current', 'approved': fare.status == 'APPROVED', 'rejected': fare.status == 'REJECTED'}">
 														<td>{{$index+1}}</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'no', $event)" ng-class="{highlighted:fare.field['no'], changed : vm.diff[fare.id].indexOf('no') > -1}" name="no{{$parent.$index}}{{$index}}">{{fare.no}}</td>															
+														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverAgentName', $event)" ng-class="{highlighted:fare.field['waiverAgentName']}">
+															<input type="text" class="form-control" ng-model="fare.waiverAgentName" name="waiverAgentName{{$parent.$index}}{{$index}}"
+															ng-class="{'must-fill': !editForm.editFormWaiver.waiverAgentName{{$parent.$index}}{{$index}}.$valid}"												         		
+						           							ng-disabled="!vm.isEditable('waiverAgentName')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
+											             	ng-required="vm.isRequired('waiverAgentName')"/>
+														</td>
+														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverIataNo', $event)" ng-class="{highlighted:fare.field['waiverIataNo']}">
+															<input type="text" class="form-control" ng-model="fare.waiverIataNo" name="waiverIataNo{{$parent.$index}}{{$index}}"
+															ng-class="{'must-fill': !editForm.editFormWaiver.waiverIataNo{{$parent.$index}}{{$index}}.$valid}"												         		
+						           							ng-disabled="!vm.isEditable('waiverIataNo')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
+											             	ng-required="vm.isRequired('waiverIataNo')"/>
+														</td>
+														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverIocNo', $event)" ng-class="{highlighted:fare.field['waiverIocNo']}">
+															<input type="text" class="form-control" ng-model="fare.waiverIocNo" name="waiverIocNo{{$parent.$index}}{{$index}}"
+															ng-class="{'must-fill': !editForm.editFormWaiver.waiverIocNo{{$parent.$index}}{{$index}}.$valid}"												         		
+						           							ng-disabled="!vm.isEditable('waiverIocNo')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
+											             	ng-required="vm.isRequired('waiverIocNo')"/>
+														</td>
+														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverApprovalDate', $event)" ng-class="{highlighted:fare.field['waiverApprovalDate']}">
+															<input type="text" class="form-control" ng-model="fare.waiverApprovalDate" name="waiverApprovalDate{{$parent.$index}}{{$index}}"
+															ng-class="{'must-fill': !editForm.editFormWaiver.waiverApprovalDate{{$parent.$index}}{{$index}}.$valid}"												         		
+						           							ng-disabled="!vm.isEditable('waiverApprovalDate')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
+											             	ng-required="vm.isRequired('waiverApprovalDate')"/>
+														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverType', $event)" ng-class="{highlighted:fare.field['waiverType']}">
 															<select class="form-control" ng-model="fare.waiverType" name="waiverType{{$parent.$index}}{{$index}}"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverType{{$parent.$index}}{{$index}}.$valid}"												         		
@@ -4068,12 +4109,6 @@
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverTotalLost{{$parent.$index}}{{$index}}.$valid}"
 											             	ng-required="vm.isRequired('waiverTotalLost')" disabled/>
 														</td>
-														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverApprover', $event)" ng-class="{highlighted:fare.field['waiverApprover']}">
-															<input type="text" class="form-control" ng-model="fare.waiverApprover" name="waiverApprover{{$parent.$index}}{{$index}}"
-															ng-class="{'must-fill': !editForm.editFormWaiver.waiverApprover{{$parent.$index}}{{$index}}.$valid}"												         		
-						           							ng-disabled="!vm.isEditable('waiverApprover')||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
-											             	ng-required="vm.isRequired('waiverApprover')"/>
-														</td>
 														<td ng-click="vm.tdClick(workPackageSheet, fare, 'waiverRemark', $event)" ng-class="{highlighted:fare.field['waiverRemark']}">
 															<input type="text" class="form-control" ng-model="fare.waiverRemark" name="waiverRemark{{$parent.$index}}{{$index}}"
 															ng-class="{'must-fill': !editForm.editFormWaiver.waiverRemark{{$parent.$index}}{{$index}}.$valid}"												         		
@@ -4174,28 +4209,28 @@
 							<div class="tab-pane" ng-class="{active:vm.currentTabAttachment}">
 									<div class="action-btn-wrapper">
 					     				<div class="col-md-12 text-right no-pad">
-					     					<button ng-click="vm.addAttachment()" class="btn btn-primary" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Add</button>
+					     					<button ng-click="vm.addAttachment()" class="btn btn-primary" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Add</button>
 					     				</div>
 					     			</div>
 									<div class="pull-left w50 two-column">
 						                <div class="form-group">
 						                  <label>Approval Reference</label>
 						                  <input type="text" name="attachmentApprovalReference{{$index}}" class="form-control" 
-						                  ng-model="vm.workPackage.attachmentApprovalReference" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">
-						                  <button ng-click="vm.generateTourCodeAttachment()" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Generate Tour Code</button>
+						                  ng-model="vm.workPackage.attachmentApprovalReference" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
+						                  <button ng-click="vm.generateTourCodeAttachment()" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Generate Tour Code</button>
 						                </div>
 						              </div>
 						              
 					     			<div class="col-md-12">
 					     				<div class="text-center no-data" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">No Attachment Available</div>							
 						     			<div ng-repeat="attachment in vm.workPackage.attachmentData.slice().reverse() track by $index" class="form-repeat">
-					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION'"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')}"></span></button>
+					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></span></button>
 							       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'short'}}</label>
 							       			<div class="row mt1">
 								        		<div class="col-md-6">
 									      			<div class="form-group">
 									      				<label>Comment</label>
-									      				<textarea class="form-control" ng-model="attachment.comment" ng-disabled="attachment.isDeleted ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"></textarea>
+									      				<textarea class="form-control" ng-model="attachment.comment" ng-disabled="attachment.isDeleted ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')"></textarea>
 									      			</div>
 								        		</div>
 								        		<div class="col-md-6">
@@ -4207,13 +4242,13 @@
 											                    Open
 											                </button>
 											                <button type="button" ngf-select class="btn btn-secondary"
-											                        ngf-change="vm.setFile($file, attachment)" ng-disabled="attachment.isDeleted||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">
+											                        ngf-change="vm.setFile($file, attachment)" ng-disabled="attachment.isDeleted||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
 											                    Add file
 											                </button>
 										                    <div class="form-group mt1">
 																<div class="checkbox-wrapper">
 																	<label class="black" for="inOnly">
-																		<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly" ng-disabled="attachment.isDeleted || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">
+																		<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly" ng-disabled="attachment.isDeleted || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
 																		Inter Office Notification
 																	</label>
 																	<label class="black" for="isDeleted">

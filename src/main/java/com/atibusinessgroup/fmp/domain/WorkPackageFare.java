@@ -3,15 +3,17 @@ package com.atibusinessgroup.fmp.domain;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * A Fare.
@@ -19,15 +21,42 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Document(collection = "work_package_fare")
 public class WorkPackageFare implements Serializable {
 
+	/**
+	 * Get a diff between two dates
+	 * @param date1 the oldest date
+	 * @param date2 the newest date
+	 * @param timeUnit the unit in which you want the diff
+	 * @return the diff value, in the provided unit
+	 */
+	public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
+	    long diffInMillies = removeTimeFromDate(date2).getTime() - removeTimeFromDate(date1).getTime();
+	    return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
+	}
+	
+	public static Date removeTimeFromDate(Date date) {
+		 
+        if (date == null) {
+            return null;
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
+    }
+
+	
 	public static class WorkPackageFareComparator implements Comparator{  
 		public int compare(Object o1,Object o2){  
-			ZonedDateTime today = ZonedDateTime.now().truncatedTo(ChronoUnit.DAYS);
+			Date today = new Date();
 	    	
 			WorkPackageFare s1=(WorkPackageFare)o1;  
 			WorkPackageFare s2=(WorkPackageFare)o2;  
 		  
-			long val = zonedDateTimeDifference(today, s1.getSaleStart().truncatedTo(ChronoUnit.DAYS), ChronoUnit.DAYS);
-			long val2 = zonedDateTimeDifference(today, s2.getSaleStart().truncatedTo(ChronoUnit.DAYS), ChronoUnit.DAYS);
+			long val = getDateDiff(today, s1.getSaleStart(), TimeUnit.DAYS);
+			long val2 = getDateDiff(today, s2.getSaleStart(), TimeUnit.DAYS);
     		
 			if(val==val2)  
 				return 0;  
@@ -185,20 +214,19 @@ public class WorkPackageFare implements Serializable {
     private String cabinClass;
     
     @Field("travel_start")
-    @DateTimeFormat(iso= DateTimeFormat.ISO.DATE)
-    private ZonedDateTime travelStart;
+    private Date travelStart;
     
     @Field("travel_end")
-    private ZonedDateTime travelEnd;
+    private Date travelEnd;
     
     @Field("sale_start")
-    private ZonedDateTime saleStart;
+    private Date saleStart;
     
     @Field("sale_end")
-    private ZonedDateTime saleEnd;
+    private Date saleEnd;
     
     @Field("travel_complete")
-    private ZonedDateTime travelComplete;
+    private Date travelComplete;
     
     @Field("travel_complete_indicator")
     private String travelCompleteIndicator;
@@ -289,6 +317,18 @@ public class WorkPackageFare implements Serializable {
 	  
 	
 	//WAIVER
+	@Field("waiver_agent_name")
+    private String waiverAgentName;
+	
+	@Field("waiver_iata_no")
+    private String waiverIataNo;
+	
+	@Field("waiver_ioc_no")
+    private String waiverIocNo;
+	
+	@Field("waiver_approval_date")
+    private ZonedDateTime waiverApprovalDate;
+	
 	@Field("waiver_type")
     private String waiverType;
 	
@@ -387,6 +427,37 @@ public class WorkPackageFare implements Serializable {
 
 	public void setPrevPercentAmountDiff(String prevPercentAmountDiff) {
 		this.prevPercentAmountDiff = prevPercentAmountDiff;
+	}	
+	public String getWaiverAgentName() {
+		return waiverAgentName;
+	}
+
+	public void setWaiverAgentName(String waiverAgentName) {
+		this.waiverAgentName = waiverAgentName;
+	}
+
+	public String getWaiverIataNo() {
+		return waiverIataNo;
+	}
+
+	public void setWaiverIataNo(String waiverIataNo) {
+		this.waiverIataNo = waiverIataNo;
+	}
+
+	public String getWaiverIocNo() {
+		return waiverIocNo;
+	}
+
+	public void setWaiverIocNo(String waiverIocNo) {
+		this.waiverIocNo = waiverIocNo;
+	}
+
+	public ZonedDateTime getWaiverApprovalDate() {
+		return waiverApprovalDate;
+	}
+
+	public void setWaiverApprovalDate(ZonedDateTime waiverApprovalDate) {
+		this.waiverApprovalDate = waiverApprovalDate;
 	}
 
 	public int getNo() {
@@ -839,14 +910,6 @@ public class WorkPackageFare implements Serializable {
 		this.ruleno = ruleno;
 	}
 
-	public ZonedDateTime getTravelComplete() {
-		return travelComplete;
-	}
-
-	public void setTravelComplete(ZonedDateTime travelComplete) {
-		this.travelComplete = travelComplete;
-	}
-
 	public String getTravelCompleteIndicator() {
 		return travelCompleteIndicator;
 	}
@@ -984,37 +1047,44 @@ public class WorkPackageFare implements Serializable {
 	}
 
 	
-
-	public ZonedDateTime getSaleStart() {
-		return saleStart;
-	}
-
-	public void setSaleStart(ZonedDateTime saleStart) {
-		this.saleStart = saleStart;
-	}
-
-	public ZonedDateTime getSaleEnd() {
-		return saleEnd;
-	}
-
-	public void setSaleEnd(ZonedDateTime saleEnd) {
-		this.saleEnd = saleEnd;
-	}
-
-	public ZonedDateTime getTravelStart() {
+	public Date getTravelStart() {
 		return travelStart;
 	}
 
-	public void setTravelStart(ZonedDateTime travelStart) {
+	public void setTravelStart(Date travelStart) {
 		this.travelStart = travelStart;
 	}
 
-	public ZonedDateTime getTravelEnd() {
+	public Date getTravelEnd() {
 		return travelEnd;
 	}
 
-	public void setTravelEnd(ZonedDateTime travelEnd) {
+	public void setTravelEnd(Date travelEnd) {
 		this.travelEnd = travelEnd;
+	}
+
+	public Date getSaleStart() {
+		return saleStart;
+	}
+
+	public void setSaleStart(Date saleStart) {
+		this.saleStart = saleStart;
+	}
+
+	public Date getSaleEnd() {
+		return saleEnd;
+	}
+
+	public void setSaleEnd(Date saleEnd) {
+		this.saleEnd = saleEnd;
+	}
+
+	public Date getTravelComplete() {
+		return travelComplete;
+	}
+
+	public void setTravelComplete(Date travelComplete) {
+		this.travelComplete = travelComplete;
 	}
 
 	public boolean isAdded() {
