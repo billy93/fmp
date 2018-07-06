@@ -113,10 +113,6 @@ public class AfdQueryResource {
     @Timed
     public ResponseEntity<AfdQueryWrapper> getAllAfdQueries(@RequestBody AfdQueryParam param) {
         log.debug("REST request to get a page of AfdQueries: {}", param);
-        System.out.println("FROM");
-        System.out.println(param.getTravelDateFrom());
-        System.out.println("TO");
-        System.out.println(param.getTravelDateTo());
         
         AfdQueryWrapper result = new AfdQueryWrapper();
         

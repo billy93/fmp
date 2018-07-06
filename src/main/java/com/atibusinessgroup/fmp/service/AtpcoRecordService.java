@@ -221,6 +221,9 @@ public class AtpcoRecordService {
 		boolean match = false;
 		
 		if (dates != null && !(paramFrom == null && paramTo == null)) {
+			Date originalParamFrom = paramFrom;
+			Date originalParamTo = paramTo;
+			
 			paramFrom = DateUtil.convertObjectToDate(paramFrom);
 			paramTo = DateUtil.convertObjectToDate(paramTo);
 			
@@ -234,6 +237,8 @@ public class AtpcoRecordService {
 			
 			for (AtpcoDateWrapper date:dates) {
 				Date start = date.getStartDate(), end = date.getEndDate();
+				Date originalStart = date.getStartDate();
+				Date originalEnd = date.getEndDate();
 				
 				start = DateUtil.convertObjectToDate(start);
 				end = DateUtil.convertObjectToDate(end);
@@ -251,7 +256,7 @@ public class AtpcoRecordService {
 						match = true;
 					}
 				} else if (option != null && option.contentEquals("E")) {
-					if (paramFrom.equals(start) && paramTo.equals(end)) {
+					if (((originalParamFrom == null && originalStart == null) || paramFrom.equals(start)) && ((originalParamTo == null && originalEnd == null) || paramTo.equals(end))) {
 						match = true;
 					}
 				}
