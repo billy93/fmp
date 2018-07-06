@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('AfdQueryController', AfdQueryController);
 
-    AfdQueryController.$inject = ['$state', 'AfdQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', 'tariffNumbers', 'cities', '$uibModal', 'Clipboard', 'Timezone', 'atpcoMasterFareType', 'globals', 'passengers', 'fareTypes'];
+    AfdQueryController.$inject = ['$state', 'AfdQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', 'tariffNumbers', 'cities', '$uibModal', 'Clipboard', 'Timezone', 'atpcoMasterFareType', 'globals', 'passengers', 'fareTypes', 'DateUtils'];
 
-    function AfdQueryController($state, AfdQuery, ParseLinks, AlertService, paginationConstants, queryParams, tariffNumbers, cities, $uibModal, Clipboard, Timezone, atpcoMasterFareType, globals, passengers, fareTypes) {
+    function AfdQueryController($state, AfdQuery, ParseLinks, AlertService, paginationConstants, queryParams, tariffNumbers, cities, $uibModal, Clipboard, Timezone, atpcoMasterFareType, globals, passengers, fareTypes, DateUtils) {
 
         var vm = this;
         vm.loadPage = loadPage;
@@ -38,7 +38,7 @@
         vm.disableInfiniteScroll = true;
         
         vm.datePickerOpenStatus = {};
-        vm.dateFormat = "dd/MM/yyyy";
+        vm.dateFormat = "dd-MM-yyyy";
         vm.openCalendar = openCalendar;
         
         vm.tariffs = tariffNumbers;
@@ -107,6 +107,15 @@
             	vm.queryParams.page = vm.page;
             	vm.queryParams.size = vm.itemsPerPage;
             	vm.queryParams.lastIndex = vm.lastIndex;
+            	
+            	vm.queryParams.effectiveDateFrom = DateUtils.convertLocalDateToServer(vm.queryParams.effectiveDateFrom);
+            	vm.queryParams.effectiveDateTo = DateUtils.convertLocalDateToServer(vm.queryParams.effectiveDateTo);
+            	vm.queryParams.travelDateFrom = DateUtils.convertLocalDateToServer(vm.queryParams.travelDateFrom);
+            	vm.queryParams.travelDateTo = DateUtils.convertLocalDateToServer(vm.queryParams.travelDateTo);
+            	vm.queryParams.saleDateFrom = DateUtils.convertLocalDateToServer(vm.queryParams.saleDateFrom);
+            	vm.queryParams.saleDateTo = DateUtils.convertLocalDateToServer(vm.queryParams.saleDateTo);
+            	vm.queryParams.seasonDateFrom = DateUtils.convertLocalDateToServer(vm.queryParams.seasonDateFrom);
+            	vm.queryParams.seasonDateTo = DateUtils.convertLocalDateToServer(vm.queryParams.seasonDateTo);
             	
             	AfdQuery.query(vm.queryParams, onSuccess, onError);
             	

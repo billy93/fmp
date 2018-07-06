@@ -58,6 +58,7 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat25;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat26;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat27;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat35;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat35Ticketing;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat50;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoDateWrapper;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord3CategoryWithDataTable;
@@ -219,7 +220,10 @@ public class AtpcoRecordService {
 			Date paramTo, String option) {
 		boolean match = false;
 		
-		if (dates != null && dates.size() > 0) {
+		if (dates != null && !(paramFrom == null && paramTo == null)) {
+			paramFrom = DateUtil.convertObjectToDate(paramFrom);
+			paramTo = DateUtil.convertObjectToDate(paramTo);
+			
 			if (paramFrom == null) {
 				paramFrom = minimumDate;
 			}
@@ -229,8 +233,10 @@ public class AtpcoRecordService {
 			}
 			
 			for (AtpcoDateWrapper date:dates) {
-				Date start = DateUtil.convertObjectToDate(date.getStartDate());
-				Date end = DateUtil.convertObjectToDate(date.getEndDate());
+				Date start = date.getStartDate(), end = date.getEndDate();
+				
+				start = DateUtil.convertObjectToDate(start);
+				end = DateUtil.convertObjectToDate(end);
 				
 				if (start == null) {
 					start = minimumDate;
@@ -2138,6 +2144,63 @@ public class AtpcoRecordService {
 				break;
 			case "035":
 				AtpcoRecord3Cat35 cat35 = (AtpcoRecord3Cat35) catObj;
+				String detail35 = "";
+				if (cat35.getPtc() != null && !cat35.getPtc().isEmpty()) {
+					detail35 += "\tPAX TYPE: " + cat35.getPtc() + "\n";
+				}
+				if (cat35.getMethod_type() != null && !cat35.getMethod_type().isEmpty()) {
+					detail35 += "\tMETHOD TYPE: " + (cat35.getMethod_type().trim().isEmpty() ? "STANDARD" : cat35.getMethod_type()) + "\n";
+				}
+				if (cat35.getCommission_net_gross() != null && !cat35.getCommission_net_gross().isEmpty()) {
+					String netgross = AtpcoDataConverterUtil.convertCategory35NetGrossToName(cat35.getCommission_net_gross());
+					if (!netgross.isEmpty()) {
+						detail35 += "\tCOMMISSION NET/GROSS: " + netgross + "\n";
+					}
+				}
+				if (cat35.getCommission_percent() != null && cat35.getCommission_percent().bigDecimalValue().doubleValue() != 0.0) {
+					 detail35 += "\tCOMMISSION PERCENT: " + cat35.getCommission_percent().bigDecimalValue().doubleValue() + "%\n";
+				}
+				if (cat35.getCommission_amt_1() != null && cat35.getCommission_amt_1().bigDecimalValue().doubleValue() != 0.0) {
+					if (cat35.getCommission_cur_1() != null && !cat35.getCommission_cur_1().isEmpty()) {
+						detail35 += "\tCOMMISSION AMOUNT 1: " + cat35.getCommission_cur_1() + cat35.getCommission_amt_1().bigDecimalValue().doubleValue() + "\n";
+					}
+				}
+				if (cat35.getCommission_amt_2() != null && cat35.getCommission_amt_2().bigDecimalValue().doubleValue() != 0.0) {
+					if (cat35.getCommission_cur_2() != null && !cat35.getCommission_cur_2().isEmpty()) {
+						detail35 += "\tCOMMISSION AMOUNT 2: " + cat35.getCommission_cur_2() + cat35.getCommission_amt_2().bigDecimalValue().doubleValue() + "\n";
+					}
+				}
+				if (!detail35.isEmpty()) {
+					result += detail35 + "\n";
+				}
+				String ticketing = "";
+				for (AtpcoRecord3Cat35Ticketing tkt35:cat35.getTicketing()) {
+					if (tkt35.getAuditor_passenger_coupon() != null && !tkt35.getAuditor_passenger_coupon().isEmpty()) {
+						if (tkt35.getAuditor_passenger_coupon().contentEquals("A")) {
+							ticketing += "\tTICKETING COUPON: AUDITOR COUPON\n";
+						} else if (tkt35.getAuditor_passenger_coupon().contentEquals("P")) {
+							ticketing += "\tTICKETING COUPON: PASSENGER COUPON\n";
+						}
+					}
+					if (tkt35.getType() != null && !tkt35.getType().isEmpty()) {
+						String type = AtpcoDataConverterUtil.convertCategory35TicketingTypeToName(tkt35.getType());
+						if (!type.isEmpty()) {
+							ticketing += "\tTICKETING TYPE: " + type + "\n";
+						}
+					}
+					if (tkt35.getTour_car_value_code() != null && !tkt35.getTour_car_value_code().isEmpty()) {
+						ticketing += "\tTICKETING TOUR/CAR VALUE CODE: " + tkt35.getTour_car_value_code() + "\n";
+					}
+					if (tkt35.getTicket_designator() != null && !tkt35.getTicket_designator().isEmpty()) {
+						ticketing += "\tTICKETING TICKET DESIGNATOR: " + tkt35.getTicket_designator() + "\n";
+					}
+				}
+				if (!ticketing.isEmpty()) {
+					result += ticketing + "\n";
+				}
+				if (!result.isEmpty()) {
+					result += "\n";
+				}
 				break;
 			case "050":
 				AtpcoRecord3Cat50 cat50 = (AtpcoRecord3Cat50) catObj;
