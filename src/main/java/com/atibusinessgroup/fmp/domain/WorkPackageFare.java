@@ -299,7 +299,7 @@ public class WorkPackageFare implements Serializable {
     private String waiverIocNo;
 	
 	@Field("waiver_approval_date")
-    private String waiverApprovalDate;
+    private ZonedDateTime waiverApprovalDate;
 	
 	@Field("waiver_type")
     private String waiverType;
@@ -424,11 +424,11 @@ public class WorkPackageFare implements Serializable {
 		this.waiverIocNo = waiverIocNo;
 	}
 
-	public String getWaiverApprovalDate() {
+	public ZonedDateTime getWaiverApprovalDate() {
 		return waiverApprovalDate;
 	}
 
-	public void setWaiverApprovalDate(String waiverApprovalDate) {
+	public void setWaiverApprovalDate(ZonedDateTime waiverApprovalDate) {
 		this.waiverApprovalDate = waiverApprovalDate;
 	}
 
