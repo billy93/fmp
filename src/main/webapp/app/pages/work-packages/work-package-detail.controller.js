@@ -20,8 +20,8 @@
      * @param Clipboard
      * @returns
      */
-    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber','tariffNumberAddOn', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities', 'states', 'cityGroups', 'Currency', 'atpcoFareTypes', 'ClipboardSheet', 'Clipboard'];
-    function WorkPackageDetailController($window, $sce, currencies,tariffNumber,tariffNumberAddOn, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups, Currency, atpcoFareTypes, ClipboardSheet, Clipboard) {
+    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber','tariffNumberAddOn', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities', 'states', 'cityGroups', 'Currency', 'atpcoFareTypes', 'ClipboardSheet', 'Clipboard', '$timeout'];
+    function WorkPackageDetailController($window, $sce, currencies,tariffNumber,tariffNumberAddOn, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups, Currency, atpcoFareTypes, ClipboardSheet, Clipboard, $timeout) {
     	var vm = this;
 
     	window.onbeforeunload = function () {
@@ -5480,20 +5480,163 @@
 //    	  }
       }
       
+      function getNearestTableAncestor(htmlElementNode) {
+    	    while (htmlElementNode) {
+    	        htmlElementNode = htmlElementNode.parentNode;
+    	        if (htmlElementNode.tagName.toLowerCase() === 'table') {
+    	            return htmlElementNode;
+    	        }
+    	    }
+    	    return undefined;
+      }
       
       vm.tdClick = function(workPackageSheet, fare, f, event){
-    	  if (event.ctrlKey){
-
-    	  }else{
+    	  var elmtCell = event.target;
+    	  while(elmtCell.cellIndex == undefined){
+    		  elmtCell = elmtCell.parentNode;
+    	  }
+    	  var cellIndex = elmtCell.cellIndex;
+    	  
+    	  var elmtRow = event.target;
+    	  while(elmtRow.rowIndex == undefined){
+    		  elmtRow = elmtRow.parentNode;
+    	  }
+    	  var rowIndex = elmtRow.rowIndex;
+    	  var table = getNearestTableAncestor(event.target);
+//    	  $timeout(function() {
+//    		    angular.element(table.rows[1].cells[1]).triggerHandler('click');
+//    	  }, 0);
+//    	  angular.element(table.rows[1].cells[1]).triggerHandler('click');
+//    	  console.log(table.rows[1].cells[1].getAttributeNode("ng-click").value);
+    	  //console.log(table.rows[rowIndex].cells[cellIndex].getAttributeNode("ng-click").value);
+    	  
+    	  if (event.ctrlKey || event.metaKey){
+    		  if(fare.field == null || fare.field == undefined){
+        		  fare.field = {};
+        	  }
+    		  if(workPackageSheet.column == null || workPackageSheet.column == undefined){
+        		  workPackageSheet.column = [];
+        	  }
+    		  
+        	  fare.field[f] = !fare.field[f];   
+        	  workPackageSheet.column.push({row:rowIndex,column:cellIndex});
+    	  }
+    	  else if(event.shiftKey){
+    		  if(workPackageSheet.column == null || workPackageSheet.column == undefined){
+    			  if(fare.field == null || fare.field == undefined){
+            		  fare.field = {};
+            	  }
+            	  fare.field[f] = !fare.field[f];  
+        		  workPackageSheet.column = [];
+        		  workPackageSheet.column.push({row:rowIndex,column:cellIndex});
+        	  }
+    		  else{
+	    		  workPackageSheet.column.push({row:rowIndex,column:cellIndex});
+	    		  //row index
+	    		  var firstIndex = -1;
+	    		  var lastIndex = -1;
+	    		  
+	    		  //column index
+	    		  var firstColumnIndex = -1;
+	    		  var lastColumnIndex = -1;
+	    		  
+	    		  for(var x=0;x<workPackageSheet.fares.length;x++){
+	    			  //console.log(workPackageSheet.fares[x].field);
+	    			  if(workPackageSheet.fares[x].field == undefined || Object.keys(workPackageSheet.fares[x].field).length === 0){
+	    				  
+	    			  }
+	    			  else{
+	    				  firstIndex = x;
+	    				  break;
+	    			  }
+	        	  }
+	    		  
+	    		  for(var x=0;x<workPackageSheet.fares.length;x++){
+	    			  if(fare == workPackageSheet.fares[x]){
+	    				  lastIndex = x;
+	    				  break;
+	    			  }
+	        	  }
+	    		  
+	    		  if(firstIndex == lastIndex){
+	    			  
+	    		  }
+	    		  else if(firstIndex > lastIndex){
+	    			  var temp = firstIndex;
+	    			  firstIndex = lastIndex;
+	    			  lastIndex = temp;
+	    		  }
+	    		  
+	    		  
+	    		  if(firstIndex < lastIndex){
+	    			 //highlight multiple row column
+	    			  var row = workPackageSheet.column[workPackageSheet.column.length-1].row;
+	    			  var lastSelected = workPackageSheet.column[workPackageSheet.column.length-1];
+	    			  var lastBeforeSelected = workPackageSheet.column[workPackageSheet.column.length-2];
+	    			  var fromColumn = lastBeforeSelected.column;
+	    			  var toColumn = lastSelected.column;
+	    			  if(fromColumn > toColumn){
+	    				  var temp = fromColumn;
+	    				  fromColumn = toColumn;
+	    				  toColumn = temp;
+	    			  }
+	    			  
+	    			  for(var z=firstIndex;z<=lastIndex;z++){
+	    				  for(var x=0;x<workPackageSheet.fares.length;x++){
+		        			  if(workPackageSheet.fares[x] == workPackageSheet.fares[z]){        				  
+		        				  for(var f=fromColumn; f<=toColumn;f++){
+		        					  var column = angular.element(table.rows[row].cells[f]).attr('id');
+		        					  workPackageSheet.fares[x].field[column] = true;
+		        				  }
+		        				  break;
+		        			  }
+		            	  } 
+	    			  }
+	    			 
+	    		  }
+	    		  else if(firstIndex == lastIndex){
+	    			  //highlight 1 row column
+	    			  var row = workPackageSheet.column[workPackageSheet.column.length-1].row;
+	    			  var lastSelected = workPackageSheet.column[workPackageSheet.column.length-1];
+	    			  var lastBeforeSelected = workPackageSheet.column[workPackageSheet.column.length-2];
+	    			  var fromColumn = lastBeforeSelected.column;
+	    			  var toColumn = lastSelected.column;
+	    			  if(fromColumn > toColumn){
+	    				  var temp = fromColumn;
+	    				  fromColumn = toColumn;
+	    				  toColumn = temp;
+	    			  }
+	    			  
+	    			  for(var x=0;x<workPackageSheet.fares.length;x++){
+	        			  if(fare == workPackageSheet.fares[x]){        				  
+	        				  for(var f=fromColumn; f<=toColumn;f++){
+	        					  var column = angular.element(table.rows[row].cells[f]).attr('id');
+	        					  fare.field[column] = true;
+	        				  }
+	        				  break;
+	        			  }
+	            	  }    			  
+	    		  }
+    		  }
+    	  }
+    	  else{
     		  for(var x=0;x<workPackageSheet.fares.length;x++){
 				  workPackageSheet.fares[x].field = {};
         	  }
+    		  
+    		  if(fare.field == null || fare.field == undefined){
+        		  fare.field = {};
+        	  }
+    		  if(workPackageSheet.column == null || workPackageSheet.column == undefined){
+    			  workPackageSheet.column = [];
+        	  }
+        	  fare.field[f] = !fare.field[f];  
+        	  
+        	  workPackageSheet.column = [];
+        	  workPackageSheet.column.push({row:rowIndex,column:cellIndex});        	  
     	  }
     	  
-    	  if(fare.field == null || fare.field == undefined){
-    		  fare.field = {};
-    	  }
-    	  fare.field[f] = !fare.field[f];    	  
+    	  console.log(workPackageSheet.column);    	  
       }
       
       $scope.optionToggled = function(fares){
