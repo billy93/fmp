@@ -2213,24 +2213,6 @@ public class AtpcoRecordService {
 					if (!result.isEmpty()) {
 						result += "\n";
 					}
-//					DISPLAY ALL THE CODED ATTRIBUTES AS IS: Examples below...
-//					  TVL CXR DU   --LOCALES---                U  R  S  T  C  
-//					AP AGY CRS FN  T LOC1  T LOC2  @T  CODE/NO. P  D  L  K  H  
-//					== === === === = ===== = ===== === ======== == == == == == 
-//					       1A      C DAC            T  3VS763   N  N  Y  Y     
-//					       1A      C DLA            T  228106   N  N  Y  Y     
-//					       1A      C DLA            T  228101   N  N  Y  Y     
-//					       1A      C BOG            T  2VU155   N  N  Y  Y     
-//					       1A      C BOG            T  2VU337   N  N  Y  Y     
-//					       1A      C ABJ            T  226845   N  N  Y  Y     
-//					       1A      C ABJ            T  226102   N  N  Y  Y     
-//					       1A      C PAR            T  2HV721   N  N  Y  Y     
-//					       1A      C PAR            T  2WL10G   N  N  Y  Y     
-//					       1A      C PAR            T  2WL13P   N  N  Y  Y     
-//					       1A      C PAR            T  2WL10P   N  N  Y  Y     
-//					       1A      C PAR            T  2WLAPI   N  N  Y  Y     
-
-					       
 				}
 				if (!result.isEmpty()) {
 					result += "\n";
