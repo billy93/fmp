@@ -1,7 +1,6 @@
 package com.atibusinessgroup.fmp.domain;
 
 import java.io.Serializable;
-import java.time.ZonedDateTime;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
@@ -37,10 +36,18 @@ public class ExchangeRatesQuery implements Serializable  {
     @Field("note")
     private String note;
     
+    @Field("currency_code_from")
     private String currencyCodeFrom;
+    
+    @Field("currency_code_to")
 	private String currencyCodeTo;
+    
+    @Field("currency_name_from")
 	private String currencyNameFrom;
+    
+    @Field("currency_name_to")
 	private String currencyNameTo;
+    
 	private Date dateFrom;
 	private Date dateTo;
 	private String rateExchangeValue;

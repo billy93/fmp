@@ -180,6 +180,16 @@ public class AtpcoFareCustomRepository {
 					queries.add(destination);
 				}
 				
+				if (param.getGlobalIndicator() != null && !param.getGlobalIndicator().isEmpty()) {
+					BasicDBObject global = new BasicDBObject();
+					global.append("global_indicator", param.getGlobalIndicator());
+					queries.add(global);
+				} else {
+					BasicDBObject global = new BasicDBObject();
+					global.append("global_indicator", new BasicDBObject("$exists", "true"));
+					queries.add(global);
+				}
+				
 				if (param.getOwrt() != null && !param.getOwrt().isEmpty()) {
 					BasicDBObject owrt = new BasicDBObject();
 					owrt.append("ow_rt", param.getOwrt());
@@ -239,11 +249,18 @@ public class AtpcoFareCustomRepository {
 					queries.add(effective);
 				} else if (param.getEffectiveDateOption() != null && param.getEffectiveDateOption().contentEquals("E")) {
 					BasicDBObject effective = new BasicDBObject();
-					effective.append("$and", Arrays.asList(new BasicDBObject("tar_eff_date", new BasicDBObject("$eq", paramFrom)), 
-							new BasicDBObject("dates_discontinue", new BasicDBObject("$eq", paramTo))));
+					if (param.getEffectiveDateFrom() != null && param.getEffectiveDateTo() != null) {
+						effective.append("$and", Arrays.asList(new BasicDBObject("tar_eff_date", new BasicDBObject("$eq", paramFrom)), 
+								new BasicDBObject("dates_discontinue", new BasicDBObject("$eq", paramTo))));
+					} else if (param.getEffectiveDateFrom() == null && param.getEffectiveDateTo() != null) {
+						effective.append("dates_discontinue", new BasicDBObject("$eq", paramTo));
+					} else if (param.getEffectiveDateTo() == null && param.getEffectiveDateFrom() != null) {
+						effective.append("tar_eff_date", new BasicDBObject("$eq", paramFrom));
+					}
+					
 					queries.add(effective);
 				}
-				
+					
 				if (queries.size() > 0) {
 					and.append("$and", queries);
 				}
@@ -361,8 +378,6 @@ public class AtpcoFareCustomRepository {
     		
         	for (AtpcoFareAfdQueryWithRecords a1fare:a1fares) {
         		Date focusDate = null;
-    	        
-    	        atpcoRecordService.compareFareClass(null, null);
     	        
             	AtpcoFare afare = a1fare.getAtpcoFare();
             	AtpcoRecord1 matchedRecord1 = null;
@@ -482,22 +497,30 @@ public class AtpcoFareCustomRepository {
             	AfdQuery afdQuery = afdQueryMapper.convertAtpcoFare(afare, matchedRecord1, cat03s, cat05s, cat06s, cat07s, cat14s, cat15s, cat27s, cat35s, cat50s,
             			footnote14s, footnote15s, focusDate);
             	
-            	if (atpcoRecordService.compareValueWithParamString(afdQuery.getFareType(), param.getFareType()) &&
-            			atpcoRecordService.compareValueWithParamString(afdQuery.getGlobalIndicator(), param.getGlobalIndicator()) &&
-            			atpcoRecordService.compareValueWithParamString(afdQuery.getPaxType(), param.getPaxType()) && 
-            			atpcoRecordService.compareValueWithParamString(afdQuery.getCabin(), param.getCabin()) && 
-            			atpcoRecordService.compareValueWithParamString(afdQuery.getBookingClass(), param.getBookingClass()) &&
-            			atpcoRecordService.compareValueWithParamString(afdQuery.getAdvancePurchase(), param.getAdvancePurchase()) &&
-            			atpcoRecordService.compareValueWithParamString(afdQuery.getMinStay(), param.getMinStay()) &&
-            			atpcoRecordService.compareValueWithParamString(afdQuery.getMaxStay(), param.getMaxStay()) &&
-            			atpcoRecordService.compareValueWithParamString(afdQuery.getWpId(), param.getWoId()) &&
-            			atpcoRecordService.compareValueWithParamTourCode(afdQuery.getTourCode(), param.getTourCode()) &&
-            			atpcoRecordService.compareValueWithParamDate(afdQuery.getSaleStartDate(), afdQuery.getSaleEndDate(), param.getSaleDateFrom(), 
-            					param.getSaleDateTo(), param.getSaleDateOption()) &&
-            			atpcoRecordService.compareValueWithParamDate(afdQuery.getTravelStartDate(), afdQuery.getTravelEndDate(), param.getTravelDateFrom(), 
-            					param.getTravelDateTo(), param.getTravelDateOption()) &&
-            			atpcoRecordService.compareValueWithParamDate(afdQuery.getFirstSeasonDate(), afdQuery.getLastSeasonDate(), param.getSeasonDateFrom(), 
-            					param.getSeasonDateTo(), param.getSeasonDateOption())) {
+            	if ((param.getFareType() != null && !param.getFareType().isEmpty()) || (param.getPaxType() != null && !param.getPaxType().isEmpty()) ||
+            			(param.getCabin() != null && !param.getCabin().isEmpty()) || (param.getBookingClass() != null && !param.getBookingClass().isEmpty()) ||
+            			(param.getAdvancePurchase() != null && !param.getAdvancePurchase().isEmpty()) || (param.getMinStay() != null && !param.getMinStay().isEmpty()) ||
+            			(param.getMaxStay() != null && !param.getMaxStay().isEmpty()) || (param.getWoId() != null && !param.getWoId().isEmpty()) || 
+            			(param.getTourCode() != null && !param.getTourCode().isEmpty()) || param.getSaleDateFrom() != null || param.getSaleDateTo() != null ||
+            			param.getTravelDateFrom() != null || param.getTravelDateTo() != null || param.getSeasonDateFrom() != null || param.getSeasonDateTo() != null) {
+            		if (atpcoRecordService.compareValueWithParamString(afdQuery.getFareType(), param.getFareType()) &&
+                			atpcoRecordService.compareValueWithParamListString(afdQuery.getPaxType(), param.getPaxType()) && 
+                			atpcoRecordService.compareValueWithParamString(afdQuery.getCabin(), param.getCabin()) && 
+                			atpcoRecordService.compareValueWithParamListString(afdQuery.getBookingClass(), param.getBookingClass()) &&
+                			atpcoRecordService.compareValueWithParamListString(afdQuery.getAdvancePurchase(), param.getAdvancePurchase()) &&
+                			atpcoRecordService.compareValueWithParamListString(afdQuery.getMinStay(), param.getMinStay()) &&
+                			atpcoRecordService.compareValueWithParamListString(afdQuery.getMaxStay(), param.getMaxStay()) &&
+                			atpcoRecordService.compareValueWithParamString(afdQuery.getWpId(), param.getWoId()) &&
+                			atpcoRecordService.compareValueWithParamListString(afdQuery.getTourCode(), param.getTourCode()) &&
+                			atpcoRecordService.compareValueWithParamDate(afdQuery.getSaleDates(), param.getSaleDateFrom(), 
+                					param.getSaleDateTo(), param.getSaleDateOption()) &&
+                			atpcoRecordService.compareValueWithParamDate(afdQuery.getTravelDates(), param.getTravelDateFrom(), 
+                					param.getTravelDateTo(), param.getTravelDateOption()) &&
+                			atpcoRecordService.compareValueWithParamDate(afdQuery.getSeasonDates(), param.getSeasonDateFrom(), 
+                					param.getSeasonDateTo(), param.getSeasonDateOption())) {
+                		afdQueries.add(afdQuery);
+                	}
+            	} else {
             		afdQueries.add(afdQuery);
             	}
             	

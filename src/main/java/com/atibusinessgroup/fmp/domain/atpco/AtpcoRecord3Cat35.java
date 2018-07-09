@@ -12,100 +12,100 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class AtpcoRecord3Cat35 {
 
 	@Id
-    private String id;
-	
+	private String id;
+
 	@Field("ticketing_application")
 	private String ticketing_application;
 
 	@Field("record_sequence")
-    private String record_sequence;
+	private String record_sequence;
 
 	@Field("commission_cur_2")
-    private String commission_cur_2;
+	private String commission_cur_2;
 
 	@Field("commission_cur_1")
-    private String commission_cur_1;
+	private String commission_cur_1;
 
 	@Field("sec_tbl_no_983")
-    private String sec_tbl_no_983;
+	private String sec_tbl_no_983;
 
 	@Field("ptc")
-    private String ptc;
+	private String ptc;
 
 	@Field("ticketing")
-    private List<AtpcoRecord3Cat35Ticketing> ticketing = new ArrayList<>();
+	private List<AtpcoRecord3Cat35Ticketing> ticketing = new ArrayList<>();
 
 	@Field("commission_amt_1")
-    private Decimal128 commission_amt_1;
+	private Decimal128 commission_amt_1;
 
 	@Field("commission_amt_2")
-    private Decimal128 commission_amt_2;
+	private Decimal128 commission_amt_2;
 
 	@Field("tbl_no")
-    private String tbl_no;
+	private String tbl_no;
 
 	@Field("unavail")
-    private String unavail;
+	private String unavail;
 
 	@Field("commission_net_gross")
-    private String commission_net_gross;
+	private String commission_net_gross;
 
 	@Field("action")
-    private String action;
+	private String action;
 
 	@Field("rules_type")
-    private String rules_type;
+	private String rules_type;
 
 	@Field("commission_dec_1")
-    private String commission_dec_1;
+	private String commission_dec_1;
 
 	@Field("commission_dec_2")
-    private String commission_dec_2;
+	private String commission_dec_2;
 
 	@Field("method_type")
-    private String method_type;
+	private String method_type;
 
 	@Field("ticketing_ind")
-    private String ticketing_ind;
+	private String ticketing_ind;
 
 	@Field("ticketing_cxr")
-    private String ticketing_cxr;
+	private String ticketing_cxr;
 
 	@Field("date_tbl_no_994")
-    private String date_tbl_no_994;
+	private String date_tbl_no_994;
 
 	@Field("text_tbl_no_996")
-    private String text_tbl_no_996;
+	private String text_tbl_no_996;
 
 	@Field("record_batch")
-    private String record_batch;
+	private String record_batch;
 
 	@Field("upgrade")
-    private String upgrade;
+	private String upgrade;
 
 	@Field("reserved_3")
-    private String reserved_3;
+	private String reserved_3;
 
 	@Field("cat_no")
-    private String cat_no;
+	private String cat_no;
 
 	@Field("commission_percent")
-    private String commission_percent;
-	
+	private Decimal128 commission_percent;
+
 	@Field("reserved_2")
-    private String reserved_2;
+	private String reserved_2;
 
 	@Field("rec_type")
-    private String rec_type;
+	private String rec_type;
 
 	@Field("reserved_1")
-    private String reserved_1;
+	private String reserved_1;
 
 	@Field("fare_crtr_tbl_no_979")
-    private String fare_crtr_tbl_no_979;
+	private String fare_crtr_tbl_no_979;
 
 	@Field("filler_1")
-    private String filler_1;
+	private String filler_1;
 
 	public String getId() {
 		return id;
@@ -315,11 +315,11 @@ public class AtpcoRecord3Cat35 {
 		this.cat_no = cat_no;
 	}
 
-	public String getCommission_percent() {
+	public Decimal128 getCommission_percent() {
 		return commission_percent;
 	}
 
-	public void setCommission_percent(String commission_percent) {
+	public void setCommission_percent(Decimal128 commission_percent) {
 		this.commission_percent = commission_percent;
 	}
 
@@ -589,7 +589,5 @@ public class AtpcoRecord3Cat35 {
 				+ ", reserved_2=" + reserved_2 + ", rec_type=" + rec_type + ", reserved_1=" + reserved_1
 				+ ", fare_crtr_tbl_no_979=" + fare_crtr_tbl_no_979 + ", filler_1=" + filler_1 + "]";
 	}
-	
-	
 
 }

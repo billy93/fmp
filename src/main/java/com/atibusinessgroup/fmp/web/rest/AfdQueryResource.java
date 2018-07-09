@@ -1,7 +1,6 @@
 package com.atibusinessgroup.fmp.web.rest;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +12,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.atibusinessgroup.fmp.constant.CategoryName;
 import com.atibusinessgroup.fmp.constant.CategoryType;
+import com.atibusinessgroup.fmp.domain.TariffNumber;
+import com.atibusinessgroup.fmp.domain.VoltrasFare;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFootnoteRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord0;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
@@ -36,6 +36,8 @@ import com.atibusinessgroup.fmp.domain.dto.DataTable;
 import com.atibusinessgroup.fmp.domain.dto.GeneralRuleApplication;
 import com.atibusinessgroup.fmp.domain.dto.WorkPackageMarketFare;
 import com.atibusinessgroup.fmp.repository.AtpcoRecord0Repository;
+import com.atibusinessgroup.fmp.repository.TariffNumberRepository;
+import com.atibusinessgroup.fmp.repository.VoltrasFareRepository;
 import com.atibusinessgroup.fmp.repository.WorkPackageRepositoryImpl;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoFareCustomRepository;
 import com.atibusinessgroup.fmp.service.AtpcoRecordService;
@@ -47,22 +49,26 @@ import com.codahale.metrics.annotation.Timed;
 public class AfdQueryResource {
 
 	private final LinkedHashMap<String, String> categories = new LinkedHashMap<>();
-	private final LinkedHashMap<String, String> footnotes = new LinkedHashMap<>();
 	private final Logger log = LoggerFactory.getLogger(AfdQueryResource.class);
 
 	private final AtpcoRecord0Repository atpcoRecord0Repository;
 	private final AtpcoFareCustomRepository atpcoFareCustomRepository;
 	private final AtpcoRecordService atpcoRecordService;
+	private final VoltrasFareRepository voltrasFareRepository;
 	private final WorkPackageRepositoryImpl workPackageRepositoryImpl;
 	private final AfdQueryMapper afdQueryMapper;
+	private final TariffNumberRepository tariffNumberRepository;
 	
     public AfdQueryResource(AtpcoRecord0Repository atpcoRecord0Repository, AtpcoFareCustomRepository atpcoFareCustomRepository, 
-    		AtpcoRecordService atpcoRecordService, WorkPackageRepositoryImpl workPackageRepositoryImpl, AfdQueryMapper afdQueryMapper) {
+    		AtpcoRecordService atpcoRecordService, WorkPackageRepositoryImpl workPackageRepositoryImpl, AfdQueryMapper afdQueryMapper,
+    		VoltrasFareRepository voltrasFareRepository, TariffNumberRepository tariffNumberRepository) {
     	this.atpcoRecord0Repository = atpcoRecord0Repository;
     	this.atpcoFareCustomRepository = atpcoFareCustomRepository;
     	this.atpcoRecordService = atpcoRecordService;
     	this.workPackageRepositoryImpl = workPackageRepositoryImpl;
     	this.afdQueryMapper = afdQueryMapper;
+    	this.voltrasFareRepository = voltrasFareRepository;
+    	this.tariffNumberRepository = tariffNumberRepository;
     	
     	categories.put("001", CategoryName.CAT_001);
     	categories.put("002", CategoryName.CAT_002);
@@ -95,8 +101,6 @@ public class AfdQueryResource {
     	categories.put("033", CategoryName.CAT_033);
     	categories.put("035", CategoryName.CAT_035);
     	categories.put("050", CategoryName.CAT_050);
-    	footnotes.put("014", CategoryName.CAT_014);
-    	footnotes.put("015", CategoryName.CAT_015);
     }
     
     /**
@@ -109,9 +113,10 @@ public class AfdQueryResource {
     @Timed
     public ResponseEntity<AfdQueryWrapper> getAllAfdQueries(@RequestBody AfdQueryParam param) {
         log.debug("REST request to get a page of AfdQueries: {}", param);
+        
         AfdQueryWrapper result = new AfdQueryWrapper();
         
-        if (param != null) {
+        if (param != null && param.getSource() != null) {
         	Pageable pageable = new PageRequest(param.getPage(), param.getSize());
             
             List<AfdQuery> afdQueries = new ArrayList<>();
@@ -143,7 +148,16 @@ public class AfdQueryResource {
             
             //Web
             if (param.getSource().contentEquals("W")) {
+            	Page<VoltrasFare> rawWebs = voltrasFareRepository.findAll(pageable);
             	
+            	for (int i = 0; i < rawWebs.getContent().size(); i++) {
+            		VoltrasFare web = rawWebs.getContent().get(i);
+            		afdQueries.add(afdQueryMapper.convertVoltrasFare(web));
+            	}
+            	
+            	if (rawWebs.getTotalPages() == pageable.getPageNumber()) {
+            		isLastPage = true;
+            	}
             }
             
             //Competitor
@@ -160,13 +174,13 @@ public class AfdQueryResource {
     }
     
     /**
-     * GET  /afd-queries/rules : get afd query rules.
+     * POST  /afd-queries/rules : s afd query rules.
      *
      * @return the ResponseEntity with status 200 (OK) and the list of rules in body
      */
-    @GetMapping("/afd-queries/rules")
+    @PostMapping("/afd-queries/rules")
     @Timed
-    public ResponseEntity<List<Category>> getAfdQueryRules(AfdQuery afdQuery) {
+    public ResponseEntity<List<Category>> getAfdQueryRules(@RequestBody AfdQuery afdQuery) {
         log.debug("REST request to get AfdQueries rules: {}", afdQuery);
         
         List<Category> result = new ArrayList<>();
@@ -175,6 +189,16 @@ public class AfdQueryResource {
         List<AtpcoRecord2GroupByCatNo> arecords2 = atpcoFareCustomRepository.findAtpcoRecord2ByRecordId(afdQuery.getTariffNo() + afdQuery.getCarrierCode() + afdQuery.getRuleNo() + "");
         List<AtpcoRecord2Cat10> arecords210 = atpcoFareCustomRepository.findAtpcoRecord2Cat10ByRecordId(afdQuery.getTariffNo() + afdQuery.getCarrierCode() + afdQuery.getRuleNo() + "");
         List<AtpcoFootnoteRecord2GroupByCatNo> frecords2 = atpcoFareCustomRepository.findAtpcoFootnoteRecord2ByRecordId(afdQuery.getTariffNo() + afdQuery.getCarrierCode() + afdQuery.getFootnote() + "");
+        
+        String ruleTcd = null;
+        TariffNumber generalTn = null;
+        TariffNumber ruleTn = tariffNumberRepository.findOneByTarNoAndType(afdQuery.getTariffNo(), "FARE RULE");
+        
+        if (ruleTn != null) {
+        	ruleTcd = ruleTn.getTarCd();
+        }
+        
+//        LinkedHashMap<String, List<DataTable>> unmatchedRec2CatDataTables = new LinkedHashMap<>();
         
         for (Map.Entry<String, String> entry : categories.entrySet()) {
         	AtpcoRecord2 matchedGeneralRecord2 = null;
@@ -246,49 +270,36 @@ public class AfdQueryResource {
         	
         	if (matchedFRecord2 != null && matchedFRecord2.getDataTables() != null && matchedFRecord2.getDataTables().size() > 0) {
         		type += CategoryType.FOOTNOTE;
-        		textFormat += atpcoRecordService.generateCategoryTextHeader(CategoryType.FOOTNOTE, afdQuery.getTariffNo(), afdQuery.getTariffCode(), afdQuery.getRuleNo(), matchedFRecord2.getSequenceNo(), matchedFRecord2.getEffectiveDateObject());
+        		textFormat += atpcoRecordService.generateCategoryTextHeader(CategoryType.FOOTNOTE, afdQuery.getTariffNo(), ruleTcd, afdQuery.getFootnote(), matchedFRecord2.getSequenceNo(), matchedFRecord2.getEffectiveDateObject());
         		CategoryTextFormatAndAttribute ctfa = atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), matchedFRecord2.getDataTables(), CategoryType.FOOTNOTE);
         		textFormat += ctfa.getTextFormat();
         		cat.getCatAttributes().addAll(ctfa.getAttributes());
         	}
         	
-        	LinkedHashMap<String, List<DataTable>> unmatchedCatDataTables = new LinkedHashMap<>();
-        	
         	if (matchedRecord2 != null && matchedRecord2.getDataTables() != null && matchedRecord2.getDataTables().size() > 0) {
-        		List<DataTable> rec2DataTables = matchedRecord2.getDataTables();
+//        		List<DataTable> rec2DataTables = matchedRecord2.getDataTables();
     			
-        		System.out.println();
-    			for (Iterator<DataTable> iterator = rec2DataTables.iterator(); iterator.hasNext();) {
-    				DataTable dt = iterator.next();
-    				System.out.println(dt.toString());
-    				if (!dt.getCatNo().contentEquals(entry.getKey())) {
-    					for (Map.Entry<String, List<DataTable>> ucdt:unmatchedCatDataTables.entrySet()) {
-    						if (ucdt.getKey().contentEquals(entry.getKey())) {
-    							if (ucdt.getValue() == null) {
-    								ucdt.setValue(new ArrayList<DataTable>());
-    							}
-    							
-    							ucdt.getValue().add(dt);
-    							break;
-    						}
-    					}
-    					iterator.remove();
-    				}
-    			}
-    			
-            	for (Map.Entry<String, List<DataTable>> ucdt:unmatchedCatDataTables.entrySet()) {
-            		System.out.println();
-            		System.out.println("unmatched");
-            		System.out.println(ucdt.getKey());
-            		for (DataTable dt:ucdt.getValue()) {
-            			System.out.println(dt.toString());
-            		}
-            		System.out.println();
-            		System.out.println();
-            	}
+//        		System.out.println();
+//    			for (Iterator<DataTable> iterator = rec2DataTables.iterator(); iterator.hasNext();) {
+//    				DataTable dt = iterator.next();
+//    				System.out.println(dt.toString());
+//    				if (!dt.getCatNo().contentEquals(entry.getKey())) {
+//    					for (Map.Entry<String, List<DataTable>> ucdt:unmatchedRec2CatDataTables.entrySet()) {
+//    						if (ucdt.getKey().contentEquals(entry.getKey())) {
+//    							if (ucdt.getValue() == null) {
+//    								ucdt.setValue(new ArrayList<DataTable>());
+//    							}
+//    							
+//    							ucdt.getValue().add(dt);
+//    							break;
+//    						}
+//    					}
+//    					iterator.remove();
+//    				}
+//    			}
     			
         		type += CategoryType.RULE;
-        		textFormat += atpcoRecordService.generateCategoryTextHeader(CategoryType.RULE, afdQuery.getTariffNo(), afdQuery.getTariffCode(), afdQuery.getRuleNo(), matchedRecord2.getSequenceNo(), matchedRecord2.getEffectiveDateObject());
+        		textFormat += atpcoRecordService.generateCategoryTextHeader(CategoryType.RULE, afdQuery.getTariffNo(), ruleTcd, afdQuery.getRuleNo(), matchedRecord2.getSequenceNo(), matchedRecord2.getEffectiveDateObject());
         		CategoryTextFormatAndAttribute ctfa = atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), matchedRecord2.getDataTables(), CategoryType.RULE);
         		textFormat += ctfa.getTextFormat();
         		cat.getCatAttributes().addAll(ctfa.getAttributes());
@@ -296,17 +307,19 @@ public class AfdQueryResource {
         	
         	if (matchedRecord2Cat10 != null && matchedRecord2Cat10.getData_segs() != null && matchedRecord2Cat10.getData_segs().size() > 0) {
         		type += CategoryType.RULE;
-        		textFormat += atpcoRecordService.generateCategoryTextHeader(CategoryType.RULE, afdQuery.getTariffNo(), afdQuery.getTariffCode(), afdQuery.getRuleNo(), matchedRecord2Cat10.getSeq_no(), matchedRecord2Cat10.getDates_eff());
+        		textFormat += atpcoRecordService.generateCategoryTextHeader(CategoryType.RULE, afdQuery.getTariffNo(), ruleTcd, afdQuery.getRuleNo(), matchedRecord2Cat10.getSeq_no(), matchedRecord2Cat10.getDates_eff());
         		
         		LinkedHashMap<String, List<DataTable>> groupedCat10DataTables = new LinkedHashMap<>();
         		
         		for (DataTable dt:matchedRecord2Cat10.getData_segs()) {
-        			if (!groupedCat10DataTables.containsKey(dt.getCatNo())) {
-        				List<DataTable> dts = new ArrayList<>();
-        				dts.add(dt);
-        				groupedCat10DataTables.put(dt.getCatNo(), dts);
-        			} else {
-        				groupedCat10DataTables.get(dt.getCatNo()).add(dt);
+        			if (!dt.getCatNo().contentEquals(entry.getKey())) {
+        				if (!groupedCat10DataTables.containsKey(dt.getCatNo())) {
+            				List<DataTable> dts = new ArrayList<>();
+            				dts.add(dt);
+            				groupedCat10DataTables.put(dt.getCatNo(), dts);
+            			} else {
+            				groupedCat10DataTables.get(dt.getCatNo()).add(dt);
+            			}
         			}
         		}
         		
@@ -318,28 +331,44 @@ public class AfdQueryResource {
         	}
         	
         	if (matchedGeneral != null) {
-    			List<AtpcoRecord2GroupByCatNo> generalRecords2 = atpcoFareCustomRepository.findAtpcoRecord2ByRecordId(matchedGeneral.getSourceTariff() + afdQuery.getCarrierCode() + matchedGeneral.getRuleNo() + "");
+        		boolean resolveGeneralRule = true;
         		
-        		all : for (AtpcoRecord2GroupByCatNo grecord2:generalRecords2) {
-                	if (grecord2.getCatNo().contentEquals(entry.getKey())) {
-                		for (AtpcoRecord2 record2:grecord2.getRecords2()) {
-                			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afdQuery.getOriginCity(), "C", afdQuery.getDestinationCity(), afdQuery.getFareClassCode(), afdQuery.getFareType(), afdQuery.getSeason(), afdQuery.getDayOfWeekType(), afdQuery.getOwrt(), afdQuery.getRoutingNo(), afdQuery.getFootnote(), afdQuery.getFocusDate(),
-                					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getFareClass(), record2.getFareType(), record2.getSeasonType(), record2.getDayOfWeekType(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
-                        	
-                    		if (matched) {
-                    			matchedGeneralRecord2 = record2;
-                    			break all;
-                    		} 
-                		}
-                	}
-                }	
+        		if (matchedRecord2 != null && matchedRecord2.getGeneralRuleApplication() != null && 
+        				matchedRecord2.getGeneralRuleApplication().trim().contentEquals("N")) {
+        			resolveGeneralRule = false;
+        		}
         		
-        		if (matchedGeneralRecord2 != null && matchedGeneralRecord2.getDataTables() != null && matchedGeneralRecord2.getDataTables().size() > 0) {
-        			type += CategoryType.GENERAL_RULE;
-        			textFormat += atpcoRecordService.generateCategoryTextHeader(CategoryType.GENERAL_RULE, afdQuery.getTariffNo(), afdQuery.getTariffCode(), afdQuery.getRuleNo(), matchedGeneralRecord2.getSequenceNo(), matchedGeneralRecord2.getEffectiveDateObject());
-        			CategoryTextFormatAndAttribute ctfa = atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), matchedGeneralRecord2.getDataTables(), CategoryType.GENERAL_RULE);
-            		textFormat += ctfa.getTextFormat();
-            		cat.getCatAttributes().addAll(ctfa.getAttributes());
+        		if (resolveGeneralRule) {
+        			List<AtpcoRecord2GroupByCatNo> generalRecords2 = atpcoFareCustomRepository.findAtpcoRecord2ByRecordId(matchedGeneral.getSourceTariff() + afdQuery.getCarrierCode() + matchedGeneral.getRuleNo() + "");
+            		
+            		all : for (AtpcoRecord2GroupByCatNo grecord2:generalRecords2) {
+                    	if (grecord2.getCatNo().contentEquals(entry.getKey())) {
+                    		for (AtpcoRecord2 record2:grecord2.getRecords2()) {
+                    			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afdQuery.getOriginCity(), "C", afdQuery.getDestinationCity(), afdQuery.getFareClassCode(), afdQuery.getFareType(), afdQuery.getSeason(), afdQuery.getDayOfWeekType(), afdQuery.getOwrt(), afdQuery.getRoutingNo(), afdQuery.getFootnote(), afdQuery.getFocusDate(),
+                    					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getFareClass(), record2.getFareType(), record2.getSeasonType(), record2.getDayOfWeekType(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
+                            	
+                        		if (matched) {
+                        			matchedGeneralRecord2 = record2;
+                        			break all;
+                        		} 
+                    		}
+                    	}
+                    }	
+            		
+            		if (matchedGeneralRecord2 != null && matchedGeneralRecord2.getDataTables() != null && matchedGeneralRecord2.getDataTables().size() > 0) {
+            			type += CategoryType.GENERAL_RULE;
+            			String generalTCd = null;
+            			if (generalTn != null) {
+            				if (!generalTn.getTarNo().contentEquals(matchedGeneral.getSourceTariff())) {
+            					generalTn = tariffNumberRepository.findOneByTarNoAndType(matchedGeneral.getSourceTariff(), "GENERAL RULE");
+            				}
+            				generalTCd = generalTn.getTarCd();
+            			}
+            			textFormat += atpcoRecordService.generateCategoryTextHeader(CategoryType.GENERAL_RULE, matchedGeneral.getSourceTariff(), generalTCd, matchedGeneral.getRuleNo(), matchedGeneralRecord2.getSequenceNo(), matchedGeneralRecord2.getEffectiveDateObject());
+            			CategoryTextFormatAndAttribute ctfa = atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), matchedGeneralRecord2.getDataTables(), CategoryType.GENERAL_RULE);
+                		textFormat += ctfa.getTextFormat();
+                		cat.getCatAttributes().addAll(ctfa.getAttributes());
+            		}
         		}
     		}
         	
@@ -348,6 +377,15 @@ public class AfdQueryResource {
         	
         	result.add(cat);
         }
+        
+//        for (Map.Entry<String, List<DataTable>> ucdt:unmatchedRec2CatDataTables.entrySet()) {
+//    		System.out.println(ucdt.getKey());
+//    		for (DataTable dt:ucdt.getValue()) {
+//    			System.out.println(dt.toString());
+//    		}
+//    		System.out.println();
+//    		System.out.println();
+//    	}
         
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

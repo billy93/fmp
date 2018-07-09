@@ -18,4 +18,6 @@ public interface TariffNumberRepository extends MongoRepository<TariffNumber, St
 
 	TariffNumber findOneByGlobal(String valueOf);
 
+	TariffNumber findOneByTarNoAndType(String tariffNo, String type);
+
 }

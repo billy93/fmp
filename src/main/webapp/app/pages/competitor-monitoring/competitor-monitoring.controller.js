@@ -107,7 +107,7 @@
         	vm.queryParams.size = vm.itemsPerPage;
 
 //			vm.checkRuleNoGA();
-			vm.splitOrigDest(vm.queryParams.origDest);
+//			vm.splitOrigDest(vm.queryParams.origDest);
 			
 			CompetitorMonitoring.query(vm.queryParams, onSuccess, onError);
 			
@@ -118,6 +118,8 @@
 				vm.queryCount = vm.totalItems;
 				vm.compMonitoring = data;
 				vm.graphEnabled = isDisabled();
+				
+				console.log(data);
 			}
 
 			function onError(error) {

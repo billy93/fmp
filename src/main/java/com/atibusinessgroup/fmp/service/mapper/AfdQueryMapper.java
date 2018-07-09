@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.atibusinessgroup.fmp.domain.TariffNumber;
+import com.atibusinessgroup.fmp.domain.VoltrasFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageFare;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterFareMatrix;
@@ -24,6 +25,7 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat35;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat35Ticketing;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat50;
 import com.atibusinessgroup.fmp.domain.dto.AfdQuery;
+import com.atibusinessgroup.fmp.domain.dto.AtpcoDateWrapper;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord1FareClassInformation;
 import com.atibusinessgroup.fmp.domain.dto.CategoryObject;
 import com.atibusinessgroup.fmp.domain.dto.TextTable;
@@ -80,22 +82,21 @@ public class AfdQueryMapper {
 		result.setEffectiveDate(afare.getTariffEffectiveDateObject());
 		result.setDiscontinueDate(afare.getDiscontinueDateObject());
 		result.setGlobalIndicator(afare.getGlobalIndicator());
-		result.setSaleStartDate(afare.getFirstSaleDateObject());
-		result.setSaleEndDate(afare.getLastSaleDateObject());
 		result.setGfsReference(afare.getGfsNumber());
 		result.setGfsDate(afare.getGfsDateObject());
 		
 		//AtpcoRecord1 attributes
 		if (record1 != null) {
+			
 			for (AtpcoRecord1FareClassInformation fci:record1.getFareClassInformation()) {
-				String rbds = "";
 				for (String rbd:fci.getRbd()) {
-					if (rbd != null && !rbd.trim().isEmpty()) {
-						rbds += rbd + ", ";
+					if (rbd != null && !rbd.trim().isEmpty() && !result.getBookingClass().contains(rbd.trim())) {
+						result.getBookingClass().add(rbd.trim());
 					}
 				}
-				result.setBookingClass(!rbds.isEmpty() ? rbds.substring(0, rbds.length() - 2) : "");
-				result.setPaxType(fci.getPassengerType());
+				if (fci.getPassengerType() != null && !fci.getPassengerType().trim().isEmpty() && !result.getPaxType().contains(fci.getPassengerType().trim())) {
+					result.getPaxType().add(fci.getPassengerType().trim());
+				}
 			}
 			
 			result.setSeason(record1.getSeasonType());
@@ -111,23 +112,31 @@ public class AfdQueryMapper {
 		
 		//Rule attributes
 		if (cat03s != null) {
+			List<AtpcoDateWrapper> seasonDates = new ArrayList<>();
 			List<Date> firsts = new ArrayList<>();
 			List<Date> lasts = new ArrayList<>();
 			for (CategoryObject cat03o:cat03s) {
+				AtpcoDateWrapper range = new AtpcoDateWrapper();
+				
 				AtpcoRecord3Cat03 cat03 = (AtpcoRecord3Cat03) cat03o.getCategory();
 				String first = DateUtil.convertSeasonDayMonthYearFormat(cat03.getDate_start_dd(), cat03.getDate_start_mm(), cat03.getDate_start_yy());
 				try {
 					Date dfirst = new SimpleDateFormat("ddMMMyyyy").parse(first);
 					firsts.add(dfirst);
+					range.setStartDate(dfirst);
 				} catch (Exception e) {
 				}
+				
 				String last = DateUtil.convertSeasonDayMonthYearFormat(cat03.getDate_stop_dd(), cat03.getDate_stop_mm(), cat03.getDate_stop_yy());
 				try {
 					Date dlast = new SimpleDateFormat("ddMMMyyyy").parse(last);
 					lasts.add(dlast);
+					range.setEndDate(dlast);
 				} catch (Exception e) {
 				}
+				seasonDates.add(range);
 			}
+			result.setSeasonDates(seasonDates);
 			if (firsts.size() > 0) {
 				result.setFirstSeasonDate(Collections.min(firsts));
 			}
@@ -140,8 +149,10 @@ public class AfdQueryMapper {
 			for (CategoryObject cat05o:cat05s) {
 				AtpcoRecord3Cat05 cat05 = (AtpcoRecord3Cat05) cat05o.getCategory();
 				Integer lp = TypeConverterUtil.convertStringToInt(cat05.getAdvancedReservationLastPeriod());
-				String advPur = lp != null ? lp.toString().concat(cat05.getAdvancedReservationLastUnit() != null ? cat05.getAdvancedReservationLastUnit() : "") : "";
-				result.setAdvancePurchase(advPur);
+				if (lp != 0 && cat05.getAdvancedReservationLastUnit() != null && !cat05.getAdvancedReservationLastUnit().isEmpty() &&
+						!result.getAdvancePurchase().contains(lp.toString().concat(cat05.getAdvancedReservationLastUnit()))) {
+					result.getAdvancePurchase().add(lp.toString().concat(cat05.getAdvancedReservationLastUnit()));
+				}
 			}
 		}
 		
@@ -149,8 +160,9 @@ public class AfdQueryMapper {
 			for (CategoryObject cat06o:cat06s) {
 				AtpcoRecord3Cat06 cat06 = (AtpcoRecord3Cat06) cat06o.getCategory();
 				Integer ms = TypeConverterUtil.convertStringToInt(cat06.getMinStay());
-				String minStay = ms != null ? ms.toString().concat(cat06.getUnit() != null ? cat06.getUnit() : "") : "";
-				result.setMinStay(minStay);
+				if (ms != 0 && cat06.getUnit() != null && !cat06.getUnit().isEmpty() && !result.getMinStay().contains(ms.toString().concat(cat06.getUnit()))) {
+					result.getMinStay().add(ms.toString().concat(cat06.getUnit()));
+				}
 			}
 		}
 		
@@ -158,27 +170,88 @@ public class AfdQueryMapper {
 			for (CategoryObject cat07o:cat07s) {
 				AtpcoRecord3Cat07 cat07 = (AtpcoRecord3Cat07) cat07o.getCategory();
 				Integer ms = TypeConverterUtil.convertStringToInt(cat07.getMaxStay());
-				String maxStay = ms != null ? ms.toString().concat(cat07.getUnit() != null ? cat07.getUnit() : "") : "";
-				result.setMaxStay(maxStay);
+				if (ms != 0 && cat07.getUnit() != null && !cat07.getUnit().isEmpty() && !result.getMaxStay().contains(ms.toString().concat(cat07.getUnit()))) {
+					result.getMaxStay().add(ms.toString().concat(cat07.getUnit()));
+				}
 			}
 		}
 		
 		if (cat14s != null) {
+			List<AtpcoDateWrapper> travelDates = new ArrayList<>();
+			List<Date> firsts = new ArrayList<>();
+			List<Date> lasts = new ArrayList<>();
 			for (CategoryObject cat14o:cat14s) {
+				AtpcoDateWrapper range = new AtpcoDateWrapper();
 				AtpcoRecord3Cat14 cat14 = (AtpcoRecord3Cat14) cat14o.getCategory();
-				result.setTravelStartDate(cat14.getTravel_dates_comm());
-				result.setTravelEndDate(cat14.getTravel_dates_exp());
-				result.setTravelComplete(cat14.getTravel_dates_commence_complete());
+				Date s = DateUtil.convertObjectToDate(cat14.getTravel_dates_comm());
+				if (s != null) {
+					firsts.add(s);
+					range.setStartDate(s);
+				}
+				Date e = DateUtil.convertObjectToDate(cat14.getTravel_dates_exp());
+				if (e != null) {
+					lasts.add(e);
+					range.setEndDate(e);
+				}
+				Date c = DateUtil.convertObjectToDate(cat14.getTravel_dates_commence_complete());
+				if (c != null) {
+					range.setCompleteDate(c);
+				}
+				travelDates.add(range);
+			}
+			result.setTravelDates(travelDates);
+			if (firsts.size() > 0) {
+				result.setFirstTravelDate(Collections.min(firsts));
+			}
+			if (lasts.size() > 0) {
+				result.setLastTravelDate(Collections.max(lasts));
 			}
 		}
 		
 		if (cat15s != null) {
+			List<AtpcoDateWrapper> saleDates = new ArrayList<>();
+			List<Date> firsts = new ArrayList<>();
+			List<Date> lasts = new ArrayList<>();
+			List<Date> resfirsts = new ArrayList<>();
+			List<Date> reslasts = new ArrayList<>();
 			for (CategoryObject cat15o:cat15s) {
+				AtpcoDateWrapper range = new AtpcoDateWrapper();
+				
 				AtpcoRecord3Cat15 cat15 = (AtpcoRecord3Cat15) cat15o.getCategory();
-				result.setSaleStartDate(cat15.getSales_dates_earliest_tktg());
-				result.setSaleEndDate(cat15.getSales_dates_latest_tktg());
-				result.setResStartDate(cat15.getSales_dates_earliest_res());
-				result.setResEndDate(cat15.getSales_dates_latest_res());
+				Date s = DateUtil.convertObjectToDate(cat15.getSales_dates_earliest_tktg());
+				if (s != null) {
+					firsts.add(s);
+					range.setStartDate(s);
+				}
+				Date e = DateUtil.convertObjectToDate(cat15.getSales_dates_latest_tktg());
+				if (e != null) {
+					lasts.add(e);
+					range.setEndDate(e);
+				}
+				Date rs = DateUtil.convertObjectToDate(cat15.getSales_dates_earliest_res());
+				if (rs != null) {
+					resfirsts.add(rs);
+					range.setResStartDate(rs);
+				}
+				Date re = DateUtil.convertObjectToDate(cat15.getSales_dates_latest_res());
+				if (re != null) {
+					reslasts.add(re);
+					range.setResEndDate(re);
+				}
+				saleDates.add(range);
+			}
+			result.setSaleDates(saleDates);
+			if (firsts.size() > 0) {
+				result.setFirstSaleDate(Collections.min(firsts));
+			}
+			if (lasts.size() > 0) {
+				result.setLastSaleDate(Collections.max(lasts));
+			}
+			if (resfirsts.size() > 0) {
+				result.setFirstResDate(Collections.min(resfirsts));
+			}
+			if (reslasts.size() > 0) {
+				result.setLastResDate(Collections.max(reslasts));
 			}
 		}
 		
@@ -186,14 +259,14 @@ public class AfdQueryMapper {
 			for (CategoryObject cat35o:cat35s) {
 				AtpcoRecord3Cat35 cat35 = (AtpcoRecord3Cat35) cat35o.getCategory();
 				for (AtpcoRecord3Cat35Ticketing ticketing:cat35.getTicketing()) {
-					if (ticketing.getTour_car_value_code() != null && !ticketing.getTour_car_value_code().trim().isEmpty()) {
-						result.setTourCode(ticketing.getTour_car_value_code());
+					if (ticketing.getTour_car_value_code() != null && !ticketing.getTour_car_value_code().trim().isEmpty() && !result.getTourCode().contains(ticketing.getTour_car_value_code().trim())) {
+						result.getTourCode().add(ticketing.getTour_car_value_code().trim());
 					}
 				}
 			}
 		}
 		
-		if (result.getTourCode() == null && cat27s != null) {
+		if (cat27s != null) {
 			for (CategoryObject cat27o:cat27s) {
 				AtpcoRecord3Cat27 cat27 = (AtpcoRecord3Cat27) cat27o.getCategory();
 				if (cat27.getText_table_no_996() != null && !cat27.getText_table_no_996().trim().isEmpty()) {
@@ -201,8 +274,8 @@ public class AfdQueryMapper {
 					String textTable = AtpcoDataConverterUtil.convertTextTableToText(textTable996);
 					for (String word:textTable.split("\\W")) {
 						word = word.replaceAll("[\n\r\t]", "").trim();
-						if (word.startsWith("RZ")) {
-							result.setTourCode(word);
+						if (word.startsWith("RZ") && !result.getTourCode().contains(word)) {
+							result.getTourCode().add(word);
 							break;
 						}
 					}
@@ -213,29 +286,89 @@ public class AfdQueryMapper {
 		if (cat50s != null) {
 			for (CategoryObject cat50o:cat50s) {
 				AtpcoRecord3Cat50 cat50 = (AtpcoRecord3Cat50) cat50o.getCategory();
-				if (cat50.getApplication_title() != null && !cat50.getApplication_title().trim().isEmpty()) {
-					result.setCat50Title(cat50.getApplication_title());
+				if (cat50.getApplication_title() != null && !cat50.getApplication_title().trim().isEmpty() && !result.getCat50Title().contains(cat50.getApplication_title().trim())) {
+					result.getCat50Title().add(cat50.getApplication_title().trim());
 				}
 			}
 		}
 		
 		//Footnote attributes
 		if (footnote14s != null) {
+			List<AtpcoDateWrapper> travelDates = new ArrayList<>();
+			List<Date> firsts = new ArrayList<>();
+			List<Date> lasts = new ArrayList<>();
 			for (CategoryObject footnote14:footnote14s) {
+				AtpcoDateWrapper range = new AtpcoDateWrapper();
 				AtpcoRecord3Cat14 cat14 = (AtpcoRecord3Cat14) footnote14.getCategory();
-				result.setTravelStartDate(cat14.getTravel_dates_comm());
-				result.setTravelEndDate(cat14.getTravel_dates_exp());
-				result.setTravelComplete(cat14.getTravel_dates_commence_complete());
+				Date s = DateUtil.convertObjectToDate(cat14.getTravel_dates_comm());
+				if (s != null) {
+					firsts.add(s);
+					range.setStartDate(s);
+				}
+				Date e = DateUtil.convertObjectToDate(cat14.getTravel_dates_exp());
+				if (e != null) {
+					lasts.add(e);
+					range.setEndDate(e);
+				}
+				Date c = DateUtil.convertObjectToDate(cat14.getTravel_dates_commence_complete());
+				if (c != null) {
+					range.setCompleteDate(c);
+				}
+				travelDates.add(range);
+			}
+			result.setTravelDates(travelDates);
+			if (firsts.size() > 0) {
+				result.setFirstTravelDate(Collections.min(firsts));
+			}
+			if (lasts.size() > 0) {
+				result.setLastTravelDate(Collections.max(lasts));
 			}
 		}
 		
 		if (footnote15s != null) {
+			List<AtpcoDateWrapper> saleDates = new ArrayList<>();
+			List<Date> firsts = new ArrayList<>();
+			List<Date> lasts = new ArrayList<>();
+			List<Date> resfirsts = new ArrayList<>();
+			List<Date> reslasts = new ArrayList<>();
 			for (CategoryObject footnote15:footnote15s) {
+				AtpcoDateWrapper range = new AtpcoDateWrapper();
+				
 				AtpcoRecord3Cat15 cat15 = (AtpcoRecord3Cat15) footnote15.getCategory();
-				result.setSaleStartDate(cat15.getSales_dates_earliest_tktg());
-				result.setSaleEndDate(cat15.getSales_dates_latest_tktg());
-				result.setResStartDate(cat15.getSales_dates_earliest_res());
-				result.setResEndDate(cat15.getSales_dates_latest_res());
+				Date s = DateUtil.convertObjectToDate(cat15.getSales_dates_earliest_tktg());
+				if (s != null) {
+					firsts.add(s);
+					range.setStartDate(s);
+				}
+				Date e = DateUtil.convertObjectToDate(cat15.getSales_dates_latest_tktg());
+				if (e != null) {
+					lasts.add(e);
+					range.setEndDate(e);
+				}
+				Date rs = DateUtil.convertObjectToDate(cat15.getSales_dates_earliest_res());
+				if (rs != null) {
+					resfirsts.add(rs);
+					range.setResStartDate(rs);
+				}
+				Date re = DateUtil.convertObjectToDate(cat15.getSales_dates_latest_res());
+				if (re != null) {
+					reslasts.add(re);
+					range.setResEndDate(re);
+				}
+				saleDates.add(range);
+			}
+			result.setSaleDates(saleDates);
+			if (firsts.size() > 0) {
+				result.setFirstSaleDate(Collections.min(firsts));
+			}
+			if (lasts.size() > 0) {
+				result.setLastSaleDate(Collections.max(lasts));
+			}
+			if (resfirsts.size() > 0) {
+				result.setFirstResDate(Collections.min(resfirsts));
+			}
+			if (reslasts.size() > 0) {
+				result.setLastResDate(Collections.max(reslasts));
 			}
 		}
 		
@@ -247,44 +380,62 @@ public class AfdQueryMapper {
 	public AfdQuery convertMarketFare(WorkPackageFare fare, String wpObjectId, String fareId, String woId, String woName) {
 		AfdQuery result = new AfdQuery();
 		
-		//AtpcoFare attributes
 		result.setFareId(fareId);
 		result.setSource("M");
 		result.setSc("S");
 		result.setTariffNo("MKT");
 		result.setTariffCode("MARKET");
-		
 		result.setCarrierCode(fare.getCarrier());
 		result.setOriginCity(fare.getOrigin());
-		result.setOriginCountry(null);
 		result.setDestinationCity(fare.getDestination());
-		result.setDestinationCountry(null);
 		result.setFareClassCode(fare.getFareBasis());
 		result.setOwrt(fare.getTypeOfJourney());
 		result.setFootnote(fare.getFootnote1());
 		result.setRoutingNo(fare.getRtgno());
 		result.setRuleNo(fare.getRuleno());
-		result.setMaximumPermittedMileage(null);
 		result.setCurrencyCode(fare.getCurrency());
 		result.setBaseAmount(TypeConverterUtil.convertStringToDouble(fare.getAmount()));
-		result.setEffectiveDate(null);
-		result.setDiscontinueDate(null);
 		result.setGlobalIndicator(fare.getGlobal());
-		result.setSaleStartDate(fare.getSaleStart());
-		result.setSaleEndDate(fare.getSaleEnd());
-		result.setGfsReference(null);
-		result.setGfsDate(null);
-		result.setBookingClass(fare.getBookingClass());
-		result.setPaxType(fare.getPassengerType());
+		
+		AtpcoDateWrapper saleDate = new AtpcoDateWrapper();
+		saleDate.setStartDate(fare.getSaleStart());
+		saleDate.setEndDate(fare.getSaleEnd());
+		result.getSaleDates().add(saleDate);
+		
+		result.getBookingClass().add(fare.getBookingClass());
+		result.getPaxType().add(fare.getPassengerType());
 		result.setSeason(fare.getSeasonType());
 		result.setFareType(fare.getFareType());
 		result.setCabin(fare.getCabin());
-		result.setTravelStartDate(fare.getTravelStart());
-		result.setTravelEndDate(fare.getTravelEnd());
-		result.setTravelComplete(fare.getTravelComplete());
+		
+		AtpcoDateWrapper travelDate = new AtpcoDateWrapper();
+		travelDate.setStartDate(fare.getTravelStart());
+		travelDate.setEndDate(fare.getTravelEnd());
+		travelDate.setCompleteDate(fare.getTravelComplete());
+		result.getTravelDates().add(travelDate);
+		
 		result.setWpId(woId);
 		result.setWpObjectId(wpObjectId);
 		result.setWpName(woName);
+		
+		return result;
+	}
+
+	public AfdQuery convertVoltrasFare(VoltrasFare vf) {
+		AfdQuery result = new AfdQuery();
+		
+		result.setFareId(vf.getId());
+		result.setSource("W");
+		result.setSc("S");
+		result.setTariffNo("WEB");
+		result.setTariffCode("WEB FARE");
+		
+		result.setCarrierCode(vf.getCarrierCode());
+		result.setOriginCity(vf.getOrigin());
+		result.setDestinationCity(vf.getDestination());
+		result.setOwrt(vf.getOwrt());
+		result.setCurrencyCode(vf.getCurrency());
+		result.setBaseAmount(TypeConverterUtil.convertStringToDouble(vf.getPrice().getLow() + ""));
 		
 		return result;
 	}

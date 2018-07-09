@@ -50,7 +50,7 @@ public class AtpcoCcfParcityCustomRepository {
 				}
 				
 				match.append("$match", and);
-				
+
 				return match;
 			}
 		});

@@ -16,11 +16,11 @@ public class AtpcoDataConverterUtil {
 
 		if (type != null) {
 			if (type.contentEquals(CategoryType.RULE)) {
-				result = "FARE";
+				result = "FARE RULE";
 			} else if (type.contentEquals(CategoryType.FOOTNOTE)) {
 				result = "FOOTNOTE";
 			} else if (type.contentEquals(CategoryType.GENERAL_RULE)) {
-				result = "GENERAL";
+				result = "GENERAL RULE";
 			} else if (type.contentEquals(CategoryType.ALTERNATE_GENERAL_RULE)) {
 				result = "ALTERNATE GENERAL";
 			}
@@ -391,7 +391,7 @@ public class AtpcoDataConverterUtil {
 			result = "COUNTRY";
 			break;
 		case "S": 
-			result = "STATE/COUNTRY";
+			result = "COUNTRY/STATE";
 			break;
 		case "C": 
 			result = "CITY";
@@ -409,13 +409,34 @@ public class AtpcoDataConverterUtil {
 		
 		switch (owrt) {
 		case "1":
-			result = "One Way";
+			result = "ONE WAY";
 			break;
 		case "2":
-			result = "Round Trip";
+			result = "ROUND TRIP";
 			break;
 		case "3":
-			result = "One Way Fare That May Not Be Doubled";
+			result = "ONE WAY FARE THAT MAY NOT BE DOUBLED";
+			break;
+		}
+		
+		return result;
+	}
+	
+	public static String convertCategory35TicketingTypeToName(String type) {
+		String result = "";
+		
+		switch (type) {
+		case "B":
+			result = "CAR CODE/VALUE CODE";
+			break;
+		case "C":
+			result = "CAR CODE ONLY";
+			break;
+		case "V":
+			result = "VALUE CODE ONLY";
+			break;
+		case "T":
+			result = "TOUR CODE OR ANY OTHER TYPE (E.G CONTRACT CODE)";
 			break;
 		}
 		
@@ -488,6 +509,69 @@ public class AtpcoDataConverterUtil {
 		}
 		
 		return result.toUpperCase();
+	}
+	
+	public static String convertSalesGeoTypeToName(String type) {
+		String result = "";
+		
+		switch (type) {
+		case "A": 
+			result = "AREA";
+			break;
+		case "C": 
+			result = "CITY";
+			break;
+		case "H": 
+			result = "HOME IATA AGENCY NO";
+			break;
+		case "I": 
+			result = "IATA TRAVEL AGENT NO";
+			break;	
+		case "N": 
+			result = "COUNTRY";
+			break;
+		case "P": 
+			result = "AIRPORT";
+			break;
+		case "S": 
+			result = "COUNTRY/STATE";
+			break;
+		case "T": 
+			result = "TRAVEL AGENCY";
+			break;
+		case "U": 
+			result = "HOME TRAVEL AGENCY CODE";
+			break;
+		case "V": 
+			result = "CRS/CXR DEPARTMENT CODE";
+			break;
+		case "X": 
+			result = "DEPARTMENT/IDENTIFIER";
+			break;
+		case "Z": 
+			result = "ZONE";
+			break;
+		}
+		
+		return result;
+	}
+	
+	public static String convertCategory35NetGrossToName(String value) {
+		String result = "";
+		
+		switch (value) {
+		case "N":
+			result = "(N) NET SUBMIT AMOUNT";
+			break;
+		case "G":
+			result = "(G) GROSS TICKETED AMOUNT";
+			break;
+		case "B":
+			result = "(B) CALCULATE THE PERCENTAGE DIFFERENCE BETWEEN THE NET SUBMIT FARE AMOUNT AND THE TICKETED GROSS FARE AMOUNT";
+			break;
+		}
+		
+		return result;
 	}
 	
 	public static String convertDateObjectToText(Object dateObj) {

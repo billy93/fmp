@@ -256,18 +256,14 @@
         }
 
         vm.unlock = function(){
-        	if(vm.login.reviewLevels.indexOf(vm.selectedRow.reviewLevel) > -1){
-        	  vm.selectedRow.locked = false;
-   	      	  WorkPackage.unlock(vm.selectedRow, onUnlockedSuccess, onUnlockedFailure);
-   	      	  function onUnlockedSuccess (result) {
-   	      		  alert('Work Package Successful Unlocked');
-   	      	  }
-   	      	  function onUnlockedFailure (error) {
-
-   	      	  }
-	  		}else{
-	  			alert('Your review level does not have access to unlock this workpackage');
-	  		}
+        	WorkPackage.unlock(vm.selectedRow, onUnlockedSuccess, onUnlockedFailure);
+	      	  function onUnlockedSuccess (result) {
+	      		vm.selectedRow.locked = false;
+	      		alert('Work Package Successful Unlocked');
+	      	  }
+	      	  function onUnlockedFailure (error) {
+	      		  alert(error.data.detail);
+	      	  }
         };
 
         vm.changeItemsPerPage = function(){

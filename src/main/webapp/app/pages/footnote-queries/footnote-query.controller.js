@@ -18,6 +18,7 @@
 		vm.reset = reset;
 		vm.page = 1;
 		vm.showCategoryDetail = showCategoryDetail;
+		vm.paramDetails = null;
 
 		vm.datePickerOpenStatus = {};
 		vm.dateFormat = "yyyy-MM-dd";
@@ -38,29 +39,50 @@
         vm.loadExpired = loadExpired;
         vm.loadAll();
         
+        $("#catNo").change(function() {
+        	vm.queryParams.saleDateFrom = null;
+        	vm.queryParams.saleDateTo = null;
+        	vm.queryParams.saleDateType = null;
+        	vm.queryParams.travelDateFrom = null;
+        	vm.queryParams.travelDateTo = null;
+        	vm.queryParams.travelDateType = null;
+        	vm.queryParams.completedDateFrom = null;
+        	vm.queryParams.travelOpt = null;
+        	
+        });
+        
 		function loadAll() {
-			vm.footnoteQueryCategories = null;
-			vm.queryParams.page = vm.page - 1;
-			vm.queryParams.size = vm.itemsPerPage;
-			
-			vm.queryParams.cxr = vm.paramCarrier;
-			vm.queryParams.tarNo = vm.paramTarNo;
+			if(vm.paramCarrier != null) {
+				vm.footnoteQueries = null;
+				vm.footnoteQueryCategories = null;
+				
+				vm.queryParams.page = vm.page - 1;
+				vm.queryParams.size = vm.itemsPerPage;
+				
+				vm.queryParams.cxr = vm.paramCarrier;
+				vm.queryParams.tarNo = vm.paramTarNo;
 
-			FootnoteQuery.query(vm.queryParams, onSuccess, onError);
+				vm.paramDetails = vm.queryParams;
 
-			function onSuccess(data, headers) {
-				vm.links = ParseLinks.parse(headers('link'));
-				vm.totalItems = headers('X-Total-Count');
-				vm.queryCount = vm.totalItems;
-				vm.footnoteQueries = data;
-			}
+				FootnoteQuery.query(vm.queryParams, onSuccess, onError);
+				
 
-			function onError(error) {
-				AlertService.error(error.data.message);
+				function onSuccess(data, headers) {
+					vm.links = ParseLinks.parse(headers('link'));
+					vm.totalItems = headers('X-Total-Count');
+					vm.queryCount = vm.totalItems;
+					vm.footnoteQueries = data;
+				}
+
+				function onError(error) {
+					AlertService.error(error.data.message);
+				}
 			}
 		}
 		
 		function loadAvailable() {
+			vm.footnoteQueries = null;
+			vm.footnoteQueryCategories = null;
 			vm.queryParams.page = vm.page - 1;
 			vm.queryParams.size = vm.itemsPerPage;
 			
@@ -74,6 +96,7 @@
 				vm.totalItems = headers('X-Total-Count');
 				vm.queryCount = vm.totalItems;
 				vm.footnoteQueries = data;
+				
 			}
 
 			function onError(error) {
@@ -82,6 +105,8 @@
 		}
 		
 		function loadExpired() {
+			vm.footnoteQueries = null;
+			vm.footnoteQueryCategories = null;
 			vm.queryParams.page = vm.page - 1;
 			vm.queryParams.size = vm.itemsPerPage;
 			
@@ -106,20 +131,23 @@
 			vm.page = page;
 		}
 
-		function getFtnt(footnoteQuery, catNo) {
+		function getFtnt(footnoteQuery) {
 			FootnoteQuery.getFtnt(footnoteQuery, function(data) {
 				vm.footnoteQueryCategories = data;
-				console.log(data);
 			}, function(error) {
 				console.log(error);
 			});
 		}
 
 		function getFtnt2(footnoteQuery) {
+			vm.isLoadingRule = true;
 			FootnoteQuery.getFtnt2(footnoteQuery, function(data) {
 				vm.footnoteQueryCategories2 = data;
+				console.log(vm.footnoteQueryCategories2);
+				vm.isLoadingRule = false;
 			}, function(error) {
 				console.log(error);
+				vm.isLoadingRule = false;
 			});
 		}
 
@@ -157,7 +185,7 @@
 
 		function showCategoryDetail(category) {
 			$uibModal.open({
-				templateUrl : 'app/pages/category-modals/category-modal.html',
+				templateUrl : 'app/pages/modals/category-modal.html',
 				controller : 'CategoryModalController',
 				controllerAs : 'vm',
 				backdrop : 'static',

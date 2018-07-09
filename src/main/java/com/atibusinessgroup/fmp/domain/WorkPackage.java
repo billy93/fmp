@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -65,6 +66,9 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     @Field("locked")
     private boolean locked;
     
+    @Field("opened")
+    private boolean opened;
+    
     //HEADER
     @Field("exp_pax")
     private String expPax;
@@ -112,7 +116,7 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     private ZonedDateTime filingDate;
 
     @Field("sale_date")
-    private ZonedDateTime saleDate;
+    private Date saleDate;
 
     @Field("target_distribution")
     private String targetDistribution;
@@ -131,9 +135,15 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 
     @Field("locked_by")
     private String lockedBy;
+    
+    @Field("opened_by")
+    private String openedBy;
 
     @Field("locked_since")
     private ZonedDateTime lockedSince;
+    
+    @Field("opened_since")
+    private ZonedDateTime openedSince;
 
     @Field("type")
     private PackageType type;
@@ -330,7 +340,15 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     }
     
     
-    public Validation getValidation() {
+    public Date getSaleDate() {
+		return saleDate;
+	}
+
+	public void setSaleDate(Date saleDate) {
+		this.saleDate = saleDate;
+	}
+
+	public Validation getValidation() {
 		return validation;
 	}
 
@@ -341,12 +359,24 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 	public boolean isLocked() {
 		return locked;
 	}
+	
+	public boolean isOpened() {
+		return opened;
+	}
 
 	public void setLocked(boolean locked) {
 		this.locked = locked;
 		if(!this.locked) {
 			this.lockedBy = null;
 			this.lockedSince = null;
+		}
+	}
+	
+	public void setOpened(boolean opened) {
+		this.opened = opened;
+		if(!this.opened) {
+			this.openedBy = null;
+			this.openedSince = null;
 		}
 	}
 
@@ -867,14 +897,6 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 
 	public void setExpRev(String expRev) {
 		this.expRev = expRev;
-	}
-
-	public ZonedDateTime getSaleDate() {
-		return saleDate;
-	}
-
-	public void setSaleDate(ZonedDateTime saleDate) {
-		this.saleDate = saleDate;
 	}
 
 	public List<WorkPackageFareSheet> getDiscountFareSheet() {
@@ -1626,14 +1648,27 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 	public String getLockedBy() {
         return lockedBy;
     }
+	
+	public String getOpenedBy() {
+        return openedBy;
+    }
 
     public WorkPackage lockedBy(String lockedBy) {
         this.lockedBy = lockedBy;
         return this;
     }
+    
+    public WorkPackage openedBy(String openedBy) {
+        this.openedBy = openedBy;
+        return this;
+    }
 
     public void setLockedBy(String lockedBy) {
         this.lockedBy = lockedBy;
+    }
+    
+    public void setOpenedBy(String openedBy) {
+        this.openedBy = openedBy;
     }
 
     public ZonedDateTime getLockedSince() {
@@ -1649,7 +1684,20 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
         this.lockedSince = lockedSince;
     }
 
-    public PackageType getType() {
+    public ZonedDateTime getOpenedSince() {
+		return openedSince;
+	}
+	
+	public WorkPackage openedSince(ZonedDateTime openedSince) {
+        this.openedSince = openedSince;
+        return this;
+    }
+
+    public void setOpenedSince(ZonedDateTime openedSince) {
+        this.openedSince = openedSince;
+    }
+    
+	public PackageType getType() {
         return type;
     }
 
