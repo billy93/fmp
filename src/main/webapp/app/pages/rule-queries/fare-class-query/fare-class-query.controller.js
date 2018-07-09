@@ -38,9 +38,16 @@
                 vm.links = ParseLinks.parse(headers('link'));
                 vm.totalItems = headers('X-Total-Count');
                 vm.queryCount = vm.totalItems;
+                
                 vm.fareClassGroups = data;
-                vm.fareClassQueries = null;
-            	vm.fareClassDetails = null;
+                if(vm.fareClassGroups.length > 0) {
+                	vm.selectedRow = vm.fareClassGroups[0];
+                    getFareClassQueries(vm.selectedRow);
+                } else {
+                	vm.fareClassQueries = null;
+                	vm.fareClassSelectedRow = null;
+                	vm.fareClassDetails = null;
+                }
             }
             function onError(error) {
                 AlertService.error(error.data.message);
@@ -63,6 +70,7 @@
         	vm.clearFilter();
         	vm.fareClassGroups = null;
         	vm.fareClassQueries = null;
+        	vm.fareClassSelectedRow = null;
         	vm.fareClassDetails = null;
         }
         
@@ -76,6 +84,8 @@
             
             function onSuccess(data, headers) {
                 vm.fareClassQueries = data;
+                vm.fareClassSelectedRow = vm.fareClassQueries[0];
+            	vm.fareClassDetails = [vm.fareClassSelectedRow];
             }
             function onError(error) {
                 AlertService.error(error.data.message);
