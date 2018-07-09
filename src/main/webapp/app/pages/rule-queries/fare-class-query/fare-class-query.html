@@ -116,7 +116,7 @@
 											<tbody>
 												<tr ng-repeat="fareClassGroup in vm.fareClassGroups" 
 													ng-click="vm.selectedRow = fareClassGroup; vm.getFareClassQueries(fareClassGroup);"
-													ng-class="{'selected': vm.selectedRow == fareClass}">
+													ng-class="{'selected': vm.selectedRow == fareClassGroup}">
 													<td>{{(vm.queryParams.page * vm.queryParams.size) + $index + 1}}</td>
 													<td>{{fareClassGroup.cxr}}</td>
 													<td>{{fareClassGroup.tarNo}}</td>
@@ -147,9 +147,9 @@
 							<div class="clearfix">
 								<div class="pull-right text-right">
 									<button type="button" class="btn btn-default small"
-										ng-click="vm.fareClassGroupText()">Text</button>
+										ng-click="vm.fareClassGroupText()" ng-disabled="vm.fareClassSelectedRow == null">Text</button>
 									<button type="button" ng-click="vm.constructDetails()"
-										class="btn btn-default small">Construction Details</button>
+										class="btn btn-default small" ng-disabled="vm.fareClassSelectedRow == null">Construction Details</button>
 								</div>
 							</div>
 							<div class="table-wrapper">
