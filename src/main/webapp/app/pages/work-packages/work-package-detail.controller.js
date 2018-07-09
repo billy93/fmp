@@ -5119,7 +5119,7 @@
             		  fare.waiverTotalLost = (parseInt(fare.waiverFareLost)+parseInt(fare.waiverPenaltyLostAmount))*parseInt(fare.waiverTotalPax);
             	  }
     		  }else if(fare.waiverCalculatedPn=="percent"){
-    			  fare.waiverPenaltyLostPercent = (parseInt(fare.waiverApprovedPn) - parseInt(fare.waiverOriginalPn))/parseInt(fare.waiverApprovedPn)*100;
+    			  fare.waiverPenaltyLostPercent = parseInt(fare.waiverApprovedPn) - parseInt(fare.waiverOriginalPn);
         		  fare.waiverPenaltyLostAmount = null;
         		  if(fare.waiverTotalPax !=null){
             		  fare.waiverTotalLost = (parseInt(fare.waiverFareLost))*parseInt(fare.waiverTotalPax);
@@ -5212,6 +5212,12 @@
 	    				  if(fares[0].fare.field[key]){
 	    					  if(key == 'tarno' || key == 'tarcd' || key == 'global'){
 	    						  workPackageSheet.fares[x].tariffNumber = fares[0].fare.tariffNumber;
+	    						  if(fares[0].fare.tariffNumber == null){
+	    							  try {
+	    								  workPackageSheet.fares[x].tarcd = fares[0].fare.tarcd;
+									} catch (e) {
+									}
+	    						  }
 	    					  }
 	    					  else{
 	    						  workPackageSheet.fares[x][key] = fares[0].fare[key];
