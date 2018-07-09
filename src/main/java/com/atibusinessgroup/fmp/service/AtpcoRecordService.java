@@ -70,6 +70,7 @@ import com.atibusinessgroup.fmp.domain.dto.CategoryTextFormatAndAttribute;
 import com.atibusinessgroup.fmp.domain.dto.DataTable;
 import com.atibusinessgroup.fmp.domain.dto.FlightTable;
 import com.atibusinessgroup.fmp.domain.dto.Record3ReflectionObject;
+import com.atibusinessgroup.fmp.domain.dto.SecurityDataTable;
 import com.atibusinessgroup.fmp.repository.PassengerRepository;
 import com.atibusinessgroup.fmp.repository.SurchargeCodeRepository;
 import com.atibusinessgroup.fmp.repository.TourTypeCodeRepository;
@@ -2203,6 +2204,34 @@ public class AtpcoRecordService {
 				if (!ticketing.isEmpty()) {
 					result += ticketing + "\n";
 				}
+				if (cat35.getSec_tbl_no_983() != null && !cat35.getSec_tbl_no_983().isEmpty()) {
+					List<SecurityDataTable> secds = atpcoRecord3CategoryCustomRepository.findRecord3SecurityTable(cat35.getSec_tbl_no_983());
+					String secText = convertCodedSecurityTableValueToText(secds);
+					if (!secText.isEmpty()) {
+						result += secText;
+					}
+					if (!result.isEmpty()) {
+						result += "\n";
+					}
+//					DISPLAY ALL THE CODED ATTRIBUTES AS IS: Examples below...
+//					  TVL CXR DU   --LOCALES---                U  R  S  T  C  
+//					AP AGY CRS FN  T LOC1  T LOC2  @T  CODE/NO. P  D  L  K  H  
+//					== === === === = ===== = ===== === ======== == == == == == 
+//					       1A      C DAC            T  3VS763   N  N  Y  Y     
+//					       1A      C DLA            T  228106   N  N  Y  Y     
+//					       1A      C DLA            T  228101   N  N  Y  Y     
+//					       1A      C BOG            T  2VU155   N  N  Y  Y     
+//					       1A      C BOG            T  2VU337   N  N  Y  Y     
+//					       1A      C ABJ            T  226845   N  N  Y  Y     
+//					       1A      C ABJ            T  226102   N  N  Y  Y     
+//					       1A      C PAR            T  2HV721   N  N  Y  Y     
+//					       1A      C PAR            T  2WL10G   N  N  Y  Y     
+//					       1A      C PAR            T  2WL13P   N  N  Y  Y     
+//					       1A      C PAR            T  2WL10P   N  N  Y  Y     
+//					       1A      C PAR            T  2WLAPI   N  N  Y  Y     
+
+					       
+				}
 				if (!result.isEmpty()) {
 					result += "\n";
 				}
@@ -2219,5 +2248,81 @@ public class AtpcoRecordService {
 		}
 		
 		return result;
+	}
+	
+	private String convertCodedSecurityTableValueToText(List<SecurityDataTable> secds) {
+		String result = "";
+		
+		for (SecurityDataTable secd:secds) {
+			String line = "";
+			if (secd != null) {
+				if (secd.getAppl() != null) {
+					line += "\t" + appendSpace(secd.getAppl().trim(), 3 - secd.getAppl().trim().length());
+				}
+				if (secd.getTvl_agency() != null) {
+					line += appendSpace(secd.getTvl_agency().trim(), 4 - secd.getTvl_agency().trim().length());
+				}
+				if (secd.getCxr_crs() != null) {
+					line += appendSpace(secd.getCxr_crs().trim(), 4 - secd.getCxr_crs().trim().length());
+				}
+				if (secd.getDuty_func() != null) {
+					line += appendSpace(secd.getDuty_func().trim(), 4 - secd.getDuty_func().trim().length());
+				}
+				if (secd.getLocales_geo_type_1() != null) {
+					line += appendSpace(secd.getLocales_geo_type_1().trim(), 2 - secd.getLocales_geo_type_1().trim().length());
+				}
+				if (secd.getLocales_geo_loc_1() != null) {
+					line += appendSpace(secd.getLocales_geo_loc_1().trim(), 6 - secd.getLocales_geo_loc_1().trim().length());
+				}
+				if (secd.getLocales_geo_type_2() != null) {
+					line += appendSpace(secd.getLocales_geo_type_2().trim(), 2 - secd.getLocales_geo_type_2().trim().length());
+				}
+				if (secd.getLocales_geo_loc_2() != null) {
+					line += appendSpace(secd.getLocales_geo_loc_2().trim(), 6 - secd.getLocales_geo_loc_2().trim().length());
+				}
+				if (secd.getLocales_type() != null) {
+					line += appendSpace(secd.getLocales_type().trim(), 4 - secd.getLocales_type().trim().length());
+				}
+				if (secd.getLocales_code() != null) {
+					line += appendSpace(secd.getLocales_code().trim(), 9 - secd.getLocales_code().trim().length());
+				}
+				if (secd.getUpdate() != null) {
+					line += appendSpace(secd.getUpdate().trim(), 3 - secd.getUpdate().trim().length());
+				}
+				if (secd.getRedistribute() != null) {
+					line += appendSpace(secd.getRedistribute().trim(), 3 - secd.getRedistribute().trim().length());
+				}
+				if (secd.getSell() != null) {
+					line += appendSpace(secd.getSell().trim(), 3 - secd.getSell().trim().length());
+				}
+				if (secd.getTicketing() != null) {
+					line += appendSpace(secd.getTicketing().trim(), 3 - secd.getTicketing().trim().length());
+				}
+				if (secd.getChanges_only() != null) {
+					line += appendSpace(secd.getChanges_only().trim(), 3 - secd.getChanges_only().trim().length());
+				}
+				if (!line.isEmpty()) {
+					if (result.isEmpty()) {
+						result += "\tSECURITY TABLE\n";
+						result += "\t   TVL CXR DU  --LOCALES--                  U  R  S  T  C \n";
+						result += "\tAP AGY CRS FN  T LOC1  T LOC2  @T  CODE/NO. P  D  L  K  H \n";
+						result += "\t== === === === = ===== = ===== === ======== == == == == ==\n";
+					}
+					result += line + "\n";
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	private String appendSpace(String text, int num) {
+		if (text != null) {
+			for (int i = 0; i < num; i++) {
+				text += " ";
+			}
+		}
+		
+		return text;
 	}
 }

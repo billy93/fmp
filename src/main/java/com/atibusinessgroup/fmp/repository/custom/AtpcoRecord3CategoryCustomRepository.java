@@ -17,6 +17,7 @@ import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord3CategoryWithDataTable;
 import com.atibusinessgroup.fmp.domain.dto.BaseFareTable;
 import com.atibusinessgroup.fmp.domain.dto.DateTable;
 import com.atibusinessgroup.fmp.domain.dto.FlightTable;
+import com.atibusinessgroup.fmp.domain.dto.SecurityDataTable;
 import com.atibusinessgroup.fmp.domain.dto.TextTable;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -185,6 +186,27 @@ public class AtpcoRecord3CategoryCustomRepository {
 		Aggregation aggregation = newAggregation(aggregationOperations);
 		
 		BaseFareTable result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_RECORD_BASE_FARE_TABLE_989, BaseFareTable.class).getUniqueMappedResult();
+		
+		return result;
+	}
+	
+	public List<SecurityDataTable> findRecord3SecurityTable(String tableNo) {
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject match = new BasicDBObject();
+				BasicDBObject no = new BasicDBObject();
+				no.append("tbl_no", tableNo);
+				match.append("$match", no);
+				return match;
+			}
+		});
+		
+		Aggregation aggregation = newAggregation(aggregationOperations);
+		
+		List<SecurityDataTable> result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_RECORD_SECURITY_TABLE_983, SecurityDataTable.class).getMappedResults();
 		
 		return result;
 	}
