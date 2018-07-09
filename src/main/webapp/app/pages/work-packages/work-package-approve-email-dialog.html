@@ -21,10 +21,10 @@
 						</div> -->
       					<div class="form-group">
 							<label class="control-label" for="field_email">Email</label>
-				            <div class="input-group">
+				            <div class="input-group mb1">
 				            	<input autocomplete="off" type="email" name="email" ng-model="vm.email" class="form-control" />
-				            	<span class="input-group-btn">
-				                    <button type="button" class="btn btn-default" ng-click="vm.addEmail()" ng-disabled="vm.email == null || editForm.email.$error.email"><i class="glyphicon glyphicon-plus"></i></button>
+				            	<span class="input-group-addon" ng-click="vm.addEmail()" ng-disabled="vm.email == null || editForm.email.$error.email">
+				                    <i class="fa fa-plus"></i>
 				                </span>
 				            </div>
 				            <div ng-show="editForm.email.$invalid">
@@ -41,16 +41,16 @@
 				           		<label name="remove_email" >
 				           			{{email}}<span class="delete"  ng-click="vm.removeEmail($index)"><i class="glyphicon glyphicon-remove-sign"></i></span>
 				           		</label>
-				           		<br/><br/>
+				           		<br/>
 				           		</span>
 				           	</div>
 						</div>
 						<div class="form-group">
 							<label class="control-label" for="field_email">Cc Email</label>
-				            <div class="input-group">
+				            <div class="input-group mb1">
 				            	<input type="email" name="ccEmail" ng-model="vm.ccEmail" class="form-control" />
-				            	<span class="input-group-btn">
-				                    <button type="button" class="btn btn-default" ng-click="vm.addCcEmail()" ng-disabled="vm.ccEmail == null || editForm.ccEmail.$error.email"><i class="glyphicon glyphicon-plus"></i></button>
+				            	<span class="input-group-addon" ng-click="vm.addCcEmail()" ng-disabled="vm.ccEmail == null || editForm.ccEmail.$error.email">
+				                    <i class="fa fa-plus"></i>
 				                </span>
 				            </div>
 				            <div ng-show="editForm.ccEmail.$invalid">
