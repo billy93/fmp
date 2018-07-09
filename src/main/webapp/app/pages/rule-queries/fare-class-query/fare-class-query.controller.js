@@ -10,14 +10,12 @@
     function FareClassQueryController($state, $stateParams, FareClassQuery, ParseLinks, AlertService, paginationConstants, pagingParams) {
 
         var vm = this;
-        
+        vm.itemsPerPage = paginationConstants.itemsPerPage;
         vm.loadAll = loadAll;
         vm.clearFilter = clearFilter;
         vm.resetFilter = resetFilter;
-        vm.predicate = pagingParams.predicate;
-        vm.reverse = pagingParams.ascending;
-        vm.itemsPerPage = paginationConstants.itemsPerPage;
-        vm.getFareClassGroups = getFareClassGroups;
+        vm.page = 1;
+        vm.getFareClassQueries = getFareClassQueries;
         vm.fareClassGroupText = fareClassGroupText;
         vm.constructDetails = constructDetails;
         vm.getFareClassDetails = getFareClassDetails;
@@ -31,7 +29,7 @@
         }
         
         function loadAll() {
-        	vm.queryParams.page = pagingParams.page - 1;
+        	vm.queryParams.page = vm.page - 1;
 			vm.queryParams.size = vm.itemsPerPage;
 			
 			FareClassQuery.query(vm.queryParams, onSuccess, onError);
@@ -40,7 +38,16 @@
                 vm.links = ParseLinks.parse(headers('link'));
                 vm.totalItems = headers('X-Total-Count');
                 vm.queryCount = vm.totalItems;
-                //vm.fareClassQueries = data;
+                
+                vm.fareClassGroups = data;
+                if(vm.fareClassGroups.length > 0) {
+                	vm.selectedRow = vm.fareClassGroups[0];
+                    getFareClassQueries(vm.selectedRow);
+                } else {
+                	vm.fareClassQueries = null;
+                	vm.fareClassSelectedRow = null;
+                	vm.fareClassDetails = null;
+                }
             }
             function onError(error) {
                 AlertService.error(error.data.message);
@@ -49,23 +56,42 @@
         
         function clearFilter() {
         	vm.queryParams = {
-        			carrier: null,
-        			ruleNumber: null,
+        			cxr: null,
+        			ruleNo: null,
         			fareClass: null,
-        			tariffNumber: null,
-        			passengerType: null,
+        			tarNo: null,
+        			psgrType: null,
         			fareType: null,
         			bookingClass: null
-        	}
+        	};
         }
         
         function resetFilter() {
         	vm.clearFilter();
+        	vm.fareClassGroups = null;
         	vm.fareClassQueries = null;
+        	vm.fareClassSelectedRow = null;
+        	vm.fareClassDetails = null;
         }
         
-        function getFareClassGroups() {
-        	console.log("getFareClassGroups");
+        function getFareClassQueries(fareClassGroup) {
+        	fareClassGroup.fareClass = vm.queryParams.fareClass;
+        	fareClassGroup.psgrType = vm.queryParams.psgrType;
+        	fareClassGroup.fareType = vm.queryParams.fareType;
+        	fareClassGroup.bookingClass = vm.queryParams.bookingClass;
+        	
+        	FareClassQuery.getFareClassGroups(fareClassGroup, onSuccess, onError);
+            
+            function onSuccess(data, headers) {
+                vm.fareClassQueries = data;
+                vm.fareClassSelectedRow = vm.fareClassQueries[0];
+            	vm.fareClassDetails = [vm.fareClassSelectedRow];
+            }
+            function onError(error) {
+                AlertService.error(error.data.message);
+            }
+            
+            vm.fareClassDetails = null;
         }
         
         function fareClassGroupText() {
@@ -76,8 +102,9 @@
         	console.log("constructDetails");
         }
         
-        function getFareClassDetails() {
-        	console.log("getFareClassDetails");
+        function getFareClassDetails(fareClassQuery) {
+        	console.log(fareClassQuery);
+        	vm.fareClassDetails = [fareClassQuery];
         }
     }
 })();

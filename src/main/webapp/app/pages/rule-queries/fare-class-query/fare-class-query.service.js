@@ -19,7 +19,8 @@
                     }
                     return data;
                 }
-            },        
+            }, 
+            'getFareClassGroups': { method: 'GET', url:'api/fare-class-query/groups', isArray: true },
         });
     }
 })();

@@ -26,12 +26,13 @@ import com.atibusinessgroup.fmp.constant.CollectionName;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord8;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByRuleNoCxrTarNo;
+import com.atibusinessgroup.fmp.domain.dto.FareClassGroup;
+import com.atibusinessgroup.fmp.domain.dto.FareClassQuery;
+import com.atibusinessgroup.fmp.domain.dto.FareClassQueryParam;
 import com.atibusinessgroup.fmp.domain.dto.Rec8Param;
 import com.atibusinessgroup.fmp.domain.dto.RuleQueryParam;
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
-import com.mongodb.client.AggregateIterable;
 
 @Service
 public class AtpcoRuleQueryCustomRepository {
@@ -451,6 +452,277 @@ public class AtpcoRuleQueryCustomRepository {
 		}
 		
 		return dt;
+	}
+	
+	public Page<FareClassGroup> getListFareClasses(FareClassQueryParam param, Pageable pageable) {
+		List<AggregationOperation> aggregationOperations = getFareClassAggregation(param);
+		Aggregation aggregation = newAggregation(aggregationOperations);
+		System.out.println("aggregation "+aggregation);
+		SkipOperation skip = new SkipOperation(pageable.getPageNumber() * pageable.getPageSize());
+		aggregationOperations.add(skip);
+		LimitOperation limit = new LimitOperation(pageable.getPageSize());
+		aggregationOperations.add(limit);
+		Aggregation aggregationPagination = newAggregation(aggregationOperations);
+		
+		List<FareClassGroup> result = mongoTemplate.aggregate(aggregationPagination, FareClassGroup.class, FareClassGroup.class).getMappedResults();
+		long allResultCount = mongoTemplate.aggregate(aggregation, FareClassGroup.class, FareClassGroup.class).getMappedResults().size();
+		
+		return new PageImpl<>(result, pageable, allResultCount);
+	}
+	
+	public List<FareClassQuery> getFareClassGroups(FareClassGroup param) {
+		List<AggregationOperation> aggregationOperations = getFareClassGroupAggregation(param);
+		Aggregation aggregation = newAggregation(aggregationOperations);
+		List<FareClassQuery> result = mongoTemplate.aggregate(aggregation, FareClassQuery.class, FareClassQuery.class).getMappedResults();
+		return result;
+	}
+	
+	private List<AggregationOperation> getFareClassAggregation(FareClassQueryParam param) {
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject match = new BasicDBObject();
+				
+				if (param.getCxr() != null && !param.getCxr().isEmpty()) {
+					match.append("cxr_code", param.getCxr());
+				}
+				if (param.getRuleNo() != null && !param.getRuleNo().isEmpty()) {
+					match.append("rule_no", param.getRuleNo());
+				}
+				if (param.getTarNo() != null && !param.getTarNo().isEmpty()) {
+					match.append("rule_tar_no", param.getTarNo());
+				}
+				if (param.getFareClass() != null && !param.getFareClass().isEmpty()) {
+					match.append("fare_class", param.getFareClass());
+				}
+				if (param.getFareType() != null && !param.getFareType().isEmpty()) {
+					match.append("fare_type", param.getFareType());
+				}
+				
+				return new BasicDBObject("$match", match);
+			}
+		});
+		
+		if (param.getPsgrType() != null && !param.getPsgrType().isEmpty()) {
+			aggregationOperations.add(new AggregationOperation() {
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					return new BasicDBObject("$unwind", "$fare_class_information");
+				}
+			});
+		}
+		
+		if (param.getBookingClass() != null && !param.getBookingClass().isEmpty()) {
+			aggregationOperations.add(new AggregationOperation() {
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					return new BasicDBObject("$unwind", "$fare_class_information.rbd");
+				}
+			});
+		}
+		
+		if ((param.getPsgrType() != null && !param.getPsgrType().isEmpty()) || (param.getBookingClass() != null && !param.getBookingClass().isEmpty())) {
+			aggregationOperations.add(new AggregationOperation() {
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					BasicDBObject match = new BasicDBObject();
+					if (param.getPsgrType() != null && !param.getPsgrType().isEmpty()) {
+						match.append("fare_class_information.psgr_type", param.getPsgrType());
+					}
+					if (param.getBookingClass() != null && !param.getBookingClass().isEmpty()) {
+						match.append("fare_class_information.rbd", new BasicDBObject("$regex", param.getBookingClass()).append("$options", "i"));
+					}
+					
+					return new BasicDBObject("$match", match);
+				}
+			});
+		}
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject group = new BasicDBObject();
+				BasicDBObject idGroup = new BasicDBObject();
+				idGroup.append("cxr_code", "$cxr_code");
+				idGroup.append("tar_no", "$rule_tar_no");
+				idGroup.append("rule_no", "$rule_no");
+				
+				if (param.getFareClass() != null && !param.getFareClass().isEmpty()) {
+					idGroup.append("fare_class", "$fare_class");
+				}
+				if (param.getFareType() != null && !param.getFareType().isEmpty()) {
+					idGroup.append("fare_type", "$fare_type");
+				}
+				
+				group.append("_id", idGroup);
+				
+				return new BasicDBObject("$group", group);
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject project = new BasicDBObject();
+				project.append("_id", 0);
+				project.append("cxr_code", "$_id.cxr_code");
+				project.append("tarNo", "$_id.tar_no");
+				project.append("rule_no", "$_id.rule_no");
+				
+				return new BasicDBObject("$project", project);
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject lookup = new BasicDBObject();
+				lookup.append("from", "master_tariff");
+				lookup.append("let", new BasicDBObject("tar_no", "$tarNo"));
+				lookup.append("pipeline", Arrays.asList(
+						new BasicDBObject("$match", 
+								new BasicDBObject("$expr", 
+										new BasicDBObject("$and", 
+												Arrays.asList(
+														new BasicDBObject("$eq", Arrays.asList("$tar_no", "$$tar_no")), 
+														new BasicDBObject("$eq", Arrays.asList("$type", "FARE"))
+												)
+										)
+								)
+						)
+				));
+				lookup.append("as", "master_tariff");
+				
+				return new BasicDBObject("$lookup", lookup);
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject project = new BasicDBObject();
+				project.append("_id", 0);
+				project.append("cxr_code", "$cxr_code");
+				project.append("tar_no", "$tarNo");
+				project.append("tar_cd", 
+						new BasicDBObject("$cond", 
+								new BasicDBObject("if", new BasicDBObject("$eq", Arrays.asList(new BasicDBObject("$size", "$master_tariff.tar_cd"), 1)))
+								.append("then", new BasicDBObject("$arrayElemAt", Arrays.asList("$master_tariff.tar_cd", 0)))
+								.append("else", "")
+						)
+				);
+				project.append("description", 
+						new BasicDBObject("$cond", 
+								new BasicDBObject("if", new BasicDBObject("$eq", Arrays.asList(new BasicDBObject("$size", "$master_tariff.description"), 1)))
+								.append("then", new BasicDBObject("$arrayElemAt", Arrays.asList("$master_tariff.description", 0)))
+								.append("else", "")
+						)
+				);
+				project.append("rule_no", "$rule_no");
+				
+				return new BasicDBObject("$project", project);
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject sort = new BasicDBObject();
+				sort.append("tar_no", 1);
+				
+				return new BasicDBObject("$sort", sort);
+			}
+		});
+		
+		return aggregationOperations;
+	}
+	
+	private List<AggregationOperation> getFareClassGroupAggregation(FareClassGroup param) {
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject match = new BasicDBObject();
+				match.append("cxr_code", param.getCxr());
+				match.append("rule_no", param.getRuleNo());
+				match.append("rule_tar_no", param.getTarNo());
+				if (param.getFareClass() != null && !param.getFareClass().isEmpty()) {
+					match.append("fare_class", param.getFareClass());
+				}
+				if (param.getFareType() != null && !param.getFareType().isEmpty()) {
+					match.append("fare_type", param.getFareType());
+				}
+				
+				return new BasicDBObject("$match", match);
+			}
+		});
+		
+		if (param.getPsgrType() != null && !param.getPsgrType().isEmpty()) {
+			aggregationOperations.add(new AggregationOperation() {
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					return new BasicDBObject("$unwind", "$fare_class_information");
+				}
+			});
+		}
+		
+		if (param.getBookingClass() != null && !param.getBookingClass().isEmpty()) {
+			aggregationOperations.add(new AggregationOperation() {
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					return new BasicDBObject("$unwind", "$fare_class_information.rbd");
+				}
+			});
+		}
+		
+		if ((param.getPsgrType() != null && !param.getPsgrType().isEmpty()) || (param.getBookingClass() != null && !param.getBookingClass().isEmpty())) {
+			aggregationOperations.add(new AggregationOperation() {
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					BasicDBObject match = new BasicDBObject();
+					if (param.getPsgrType() != null && !param.getPsgrType().isEmpty()) {
+						match.append("fare_class_information.psgr_type", param.getPsgrType());
+					}
+					if (param.getBookingClass() != null && !param.getBookingClass().isEmpty()) {
+						match.append("fare_class_information.rbd", new BasicDBObject("$regex", param.getBookingClass()).append("$options", "i"));
+					}
+					
+					return new BasicDBObject("$match", match);
+				}
+			});
+		}
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject project = new BasicDBObject();
+				project.append("fare_class", "$fare_class");
+				project.append("seq_no", "$seq_no");
+				project.append("geo_type_1", "$geo_type_1");
+				project.append("geo_loc_1", "$geo_loc_1");
+				project.append("geo_type_2", "$geo_type_2");
+				project.append("geo_loc_2", "$geo_loc_2");
+				project.append("ft_nt", "$ft_nt");
+				project.append("rtg_no", "$rtg_no");
+				project.append("season_type", "$season_type");
+				project.append("day_of_week_type", "$day_of_week_type");
+				project.append("fare_type", "$fare_type");
+				project.append("owrt", "$owrt");
+				project.append("bkcd", "");
+				project.append("normal_special", "");
+				project.append("display_type", "");
+				project.append("pax_type", "");
+				project.append("dates_eff", "$dates_eff");
+				project.append("dates_disc", "$dates_disc");
+				
+				return new BasicDBObject("$project", project);
+			}
+		});
+		
+		return aggregationOperations;
 	}
 
 }

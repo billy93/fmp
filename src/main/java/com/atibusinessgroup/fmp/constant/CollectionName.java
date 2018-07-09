@@ -59,6 +59,7 @@ public class CollectionName {
 	public final static String ATPCO_FOOTNOTE_RECORD_3_CAT_015 = "atpco_footnote_record_3_cat_015";
 	public final static String ATPCO_FOOTNOTE_RECORD_3_CAT_023 = "atpco_footnote_record_3_cat_023";
 	
+	public final static String ATPCO_RECORD_SECURITY_TABLE_983 = "atpco_record_security_table_983";
 	public final static String ATPCO_RECORD_FLIGHT_TABLE_986 = "atpco_record_flight_table_986";
 	public final static String ATPCO_RECORD_BASE_FARE_TABLE_989 = "atpco_record_base_fare_table_989";
 	public final static String ATPCO_RECORD_DATE_TABLE_994 = "atpco_record_date_table_994";
