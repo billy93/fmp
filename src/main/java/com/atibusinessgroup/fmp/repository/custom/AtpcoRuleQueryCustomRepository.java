@@ -46,24 +46,27 @@ public class AtpcoRuleQueryCustomRepository {
 	
 	public Page<AtpcoRecord2GroupByRuleNoCxrTarNo> getQueryByType(RuleQueryParam param, Pageable pageable) {
 		
-		List<AggregationOperation> aggregationOperations = getAggregationGroupingByType(param);
+		List<AggregationOperation> aggregationOperations = getAggregationGroupingByType(param, pageable);
 		
 		Aggregation aggregation = newAggregation(aggregationOperations);
 		
-		System.out.println(aggregation.toString());
+//		SkipOperation skip = new SkipOperation(pageable.getPageNumber() * pageable.getPageSize());
+//		aggregationOperations.add(skip);
+//
+//		LimitOperation limit = new LimitOperation(pageable.getPageSize());
+//		aggregationOperations.add(limit);
+
+//		Aggregation aggregationPagination = newAggregation(aggregationOperations);
+
+		List<AtpcoRecord2GroupByRuleNoCxrTarNo> result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_RECORD_2, AtpcoRecord2GroupByRuleNoCxrTarNo.class).getMappedResults();
 		
-
-		SkipOperation skip = new SkipOperation(pageable.getPageNumber() * pageable.getPageSize());
-		aggregationOperations.add(skip);
-
-		LimitOperation limit = new LimitOperation(pageable.getPageSize());
-		aggregationOperations.add(limit);
-
-		Aggregation aggregationPagination = newAggregation(aggregationOperations);
-
-		List<AtpcoRecord2GroupByRuleNoCxrTarNo> result = mongoTemplate.aggregate(aggregationPagination, CollectionName.ATPCO_RECORD_2, AtpcoRecord2GroupByRuleNoCxrTarNo.class).getMappedResults();
+		int total = 0;
 		
-		return new PageImpl<>(result, pageable, mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_RECORD_2, AtpcoRecord2GroupByRuleNoCxrTarNo.class).getMappedResults().size());
+		if(result.size() > 0) {
+			total = Integer.parseInt(result.get(0).getTotal());
+		}
+		
+		return new PageImpl<>(result, pageable, total);
 	}
 	
 	public List<AtpcoRecord2> getRuleDetails(RuleQueryParam param) {
@@ -103,7 +106,7 @@ public class AtpcoRuleQueryCustomRepository {
 	}
 
 	
-	public List<AtpcoRecord2> getListRecord2ById(String recordId, String catNo) {
+	public List<AtpcoRecord2> getListRecord2ById(String recordId) {
 		List<AtpcoRecord2> result = new ArrayList<>();
 		Query query = new Query();
 		query.addCriteria(Criteria.where("record_id").is(recordId));
@@ -258,7 +261,10 @@ public class AtpcoRuleQueryCustomRepository {
 	
 	}
 	
-	public List<AggregationOperation> getAggregationGroupingByType(RuleQueryParam param) {
+	public List<AggregationOperation> getAggregationGroupingByType(RuleQueryParam param, Pageable pageable) {
+		
+		Date today = getCalendarDate(0);
+		Date twoYearsBefore = getCalendarDate(1);
 		
 		List<String> type = new ArrayList<>();
 		if(param.getType() != null) {
@@ -279,34 +285,7 @@ public class AtpcoRuleQueryCustomRepository {
 		final List<String> typeFinal = type;
 
 		List<AggregationOperation> aggregationOperations = new ArrayList<>();
-		
-		aggregationOperations.add(new AggregationOperation() {
-			@Override
-			public DBObject toDBObject(AggregationOperationContext context) {
-				BasicDBObject match = new BasicDBObject();
-				BasicDBObject or = new BasicDBObject();
-				
-				Date today = getCalendarDate(0);
-				Date twoYearsBefore = getCalendarDate(1);
-				
-				if(param.isIncludeDisc()) {
-					or.append("$or", Arrays.asList(
-							new BasicDBObject("dates_disc", new BasicDBObject("$lte", today).append("$gte", twoYearsBefore)), 
-							new BasicDBObject("dates_disc", "indef")));
-					
-				} else {
-					or.append("$or", Arrays.asList(
-							new BasicDBObject("dates_disc", new BasicDBObject("$gte", today)), 
-							new BasicDBObject("dates_disc", "indef")));
-				}
 
-				match.append("$match", or);
-
-				return match;
-			}
-		});
-		
-		
 		aggregationOperations.add(new AggregationOperation() {
 			@Override
 			public DBObject toDBObject(AggregationOperationContext context) {
@@ -318,26 +297,39 @@ public class AtpcoRuleQueryCustomRepository {
 				if (param.getCxr() != null && !param.getCxr().isEmpty()) {
 					and.add(new BasicDBObject("cxr_code", param.getCxr()));
 				} else {
-					and.add(new BasicDBObject("cxr_code", new BasicDBObject("$ne", "")));
+					and.add(new BasicDBObject("cxr_code", new BasicDBObject("$exists", true)));
 				}
 				
 				if (param.getRuleNo() != null && !param.getRuleNo().isEmpty()) {
 					and.add(new BasicDBObject("rule_no", param.getRuleNo()));
 				} else {
-					and.add(new BasicDBObject("rule_no", new BasicDBObject("$ne", "")));
+					and.add(new BasicDBObject("rule_no", new BasicDBObject("$exists", true)));
 				}
 
 				if (param.getRuleTarNo() != null && !param.getRuleTarNo().isEmpty()) {
 					and.add(new BasicDBObject("rule_tar_no", param.getRuleTarNo()));
 				} else {
-					and.add(new BasicDBObject("rule_tar_no", new BasicDBObject("$ne", "")));
+					and.add(new BasicDBObject("rule_tar_no", new BasicDBObject("$exists", true)));
 				}
 				
 				if (param.getCatNo() != null && !param.getCatNo().isEmpty()) {
 					and.add(new BasicDBObject("cat_no", param.getCatNo()));
 				} else {
-					and.add(new BasicDBObject("cat_no", new BasicDBObject("$ne", "")));
+					and.add(new BasicDBObject("cat_no", new BasicDBObject("$exists", true)));
 				}
+				
+				
+				if(param.isIncludeDisc()) {
+					and.add(new BasicDBObject("$or", Arrays.asList(
+							new BasicDBObject("dates_disc", new BasicDBObject("$lte", today).append("$gte", twoYearsBefore)), 
+							new BasicDBObject("dates_disc", "indef"))));
+					
+				} else {
+					and.add(new BasicDBObject("$or", Arrays.asList(
+							new BasicDBObject("dates_disc", new BasicDBObject("$gte", today)), 
+							new BasicDBObject("dates_disc", "indef"))));
+				}
+
 				
 				if (and.size() > 0) {
 					andQuery.append("$and", and);
@@ -353,14 +345,64 @@ public class AtpcoRuleQueryCustomRepository {
 			@Override
 			public DBObject toDBObject(AggregationOperationContext context) {
 				BasicDBObject group = new BasicDBObject();
-				BasicDBObject groupId = new BasicDBObject();
-				BasicDBObject groupList = new BasicDBObject();
-				groupList.put("cxr_code", "$cxr_code");
-				groupList.put("rule_no", "$rule_no");
-				groupList.put("rule_tar_no", "$rule_tar_no");
-				groupId.append("_id", groupList);
-				group.append("$group", groupId);
+				BasicDBObject query = new BasicDBObject();
+				query.append("_id", 
+						new BasicDBObject("cxr", "$cxr_code")
+						.append("ruleNo", "$rule_no")
+						.append("tarNo", "$rule_tar_no"));
+				group.append("$group", query);
 				return group;
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject project = new BasicDBObject();
+				BasicDBObject query = new BasicDBObject();
+				
+				query.append("tmp", new BasicDBObject("result", "$_id"));
+				project.append("$project", query);
+				return project;
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject group = new BasicDBObject();
+				BasicDBObject query = new BasicDBObject();
+				query.append("_id", null);
+				query.append("total", new BasicDBObject("$sum", 1));
+				query.append("data", new BasicDBObject("$addToSet", "$tmp.result"));
+				group.append("$group", query);
+				return group;
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject project = new BasicDBObject();
+				BasicDBObject query = new BasicDBObject();
+				
+				query.append("_id", null);
+				query.append("total", "$total");
+				query.append("data", new BasicDBObject("$slice", Arrays.asList("$data", pageable.getPageNumber() * pageable.getPageSize(), pageable.getPageSize())));
+				project.append("$project", query);
+				return project;
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject unwind = new BasicDBObject();
+				unwind.append("$unwind", "$data"); 	
+				return unwind;
 			}
 		});
 		
@@ -370,12 +412,12 @@ public class AtpcoRuleQueryCustomRepository {
 				BasicDBObject lookup = new BasicDBObject();
 				BasicDBObject query = new BasicDBObject();
 				query.append("from", CollectionName.ATPCO_MASTER_TARIFF);
-				query.append("let", new BasicDBObject("tariff", "$_id.rule_tar_no"));
+				query.append("let", new BasicDBObject("tarNo", "$data.tarNo"));
 				query.append("pipeline", Arrays.asList(
 						new BasicDBObject("$match", 
 								new BasicDBObject("$expr", 
 										new BasicDBObject("$and", Arrays.asList(
-												new BasicDBObject("$eq", Arrays.asList("$tar_no", "$$tariff")), 
+												new BasicDBObject("$eq", Arrays.asList("$tar_no", "$$tarNo")), 
 												new BasicDBObject("$in", Arrays.asList("$type", typeFinal)),
 												new BasicDBObject("$eq", Arrays.asList("$pp", "public"))
 												)
@@ -392,43 +434,27 @@ public class AtpcoRuleQueryCustomRepository {
 		aggregationOperations.add(new AggregationOperation() {
 			@Override
 			public DBObject toDBObject(AggregationOperationContext context) {
-				BasicDBObject unwind = new BasicDBObject("$unwind", "$m_tariff");
+				BasicDBObject unwind = new BasicDBObject("$unwind", new BasicDBObject("path", "$m_tariff").append("preserveNullAndEmptyArrays", true));
 				return unwind;
 			}
 		});
 		
 		aggregationOperations.add(new AggregationOperation() {
-			@Override
-			public DBObject toDBObject(AggregationOperationContext context) {
-				BasicDBObject group = new BasicDBObject();
-				BasicDBObject groupId = new BasicDBObject();
-				BasicDBObject groupList = new BasicDBObject();
-				groupList.put("cxr_code", "$_id.cxr_code");
-				groupList.put("rule_no", "$_id.rule_no");
-				groupList.put("rule_tar_no", "$_id.rule_tar_no");
-				groupList.put("type", "$m_tariff.type");
-				groupId.append("_id", groupList);
-				group.append("$group", groupId);
-				return group;
-			}
-		});
-
-		aggregationOperations.add(new AggregationOperation() {
-			@Override
-			public DBObject toDBObject(AggregationOperationContext context) {
-				
-				BasicDBObject projection = new BasicDBObject();
-				
-				//PROJECT
-				projection.append("$project", new BasicDBObject("_id", 0)
-						.append("cxr_code","$_id.cxr_code")
-						.append("rule_no","$_id.rule_no")
-						.append("rule_tar_no","$_id.rule_tar_no")
-						.append("type", "$_id.type")
-				);
-				return projection;
-			}
 			
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject project = new BasicDBObject();
+				BasicDBObject query = new BasicDBObject();
+				
+				query.append("_id", 0);
+				query.append("total", "$total");
+				query.append("cxr", "$data.cxr");
+				query.append("tarNo", "$data.tarNo");
+				query.append("ruleNo", "$data.ruleNo");
+				query.append("tarCd", "$m_tariff.tar_cd");
+				project.append("$project", query);
+				return project;
+			}
 		});
 
 

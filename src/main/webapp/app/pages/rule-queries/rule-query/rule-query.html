@@ -5,23 +5,23 @@
 			<div class="filter-area">
 				<div class="clearfix">
 					<form name="queryForm" role="form" novalidate>
-						<div class="pull-left col-md-4 no-lpad" >
+						<div class="pull-left col-md-4 no-lpad">
 							<div class="form-group">
 								<div class="custom-label semibold">Carrier</div>
 								<div class="input-group">
-								<input type="text" class="form-control" name="carrier"
-									id="carrier" 
-									ng-minlength="2"
-									ng-model="vm.paramCarrier" uppercase 
-									required/>
-									<span ng-click="vm.showCarrierModal()" class="input-group-addon"><i class="fa fa-folder"></i>
+									<input type="text" class="form-control" name="carrier"
+										id="carrier" ng-minlength="2" ng-model="vm.paramCarrier"
+										uppercase required /> <span ng-click="vm.showCarrierModal()"
+										class="input-group-addon"><i class="fa fa-folder"></i>
 									</span>
 								</div>
 								<div ng-show="queryForm.carrier.$invalid">
-									<p class="help-block" ng-show="queryForm.carrier.$error.required">
-										This field is required.</p>
-									<p class="help-block" ng-show="queryForm.carrier.$error.minlength">
-										Minimum 2 letters</p>
+									<p class="help-block"
+										ng-show="queryForm.carrier.$error.required">This field is
+										required.</p>
+									<p class="help-block"
+										ng-show="queryForm.carrier.$error.minlength">Minimum 2
+										letters</p>
 								</div>
 							</div>
 							<div class="form-group">
@@ -45,12 +45,10 @@
 							<div class="form-group">
 								<div class="custom-label semibold">Tariff Number</div>
 								<div class="input-group">
-									<input id="ruleTarNo" type="text" 
-                 								name="ruleTarNo"  
-                 								class="form-control"
-                 								ng-model="vm.paramTarNo" uppercase>
-									<span ng-click="vm.showTariffModal()" class="input-group-addon"><i class="fa fa-folder"></i>
-									</span>
+									<input id="ruleTarNo" type="text" name="ruleTarNo"
+										class="form-control" ng-model="vm.paramTarNo" uppercase>
+									<span ng-click="vm.showTariffModal()" class="input-group-addon"><i
+										class="fa fa-folder"></i> </span>
 								</div>
 							</div>
 							<div class="form-group">
@@ -91,36 +89,33 @@
 									<option value="050">50 - Rule App</option>
 								</select>
 							</div>
-							
+
 						</div>
 
 						<div class="pull-right col-md-4 no-rpad">
 							<div class="form-group">
 								<div class="custom-label semibold">Additional Options</div>
 								<div class="checkbox-wrapper">
-									<label> <input type="checkbox"
-										name="includeDisc"
-										ng-model="vm.queryParams.includeDisc"> Include Discontinued Sequences
+									<label> <input type="checkbox" name="includeDisc"
+										ng-model="vm.queryParams.includeDisc"> Include
+										Discontinued Sequences
 									</label>
 								</div>
-								<br/>
-								<button type="button"
-										class="btn btn-default small pull-left"
-										ng-click="" disabled="disabled">Generate Derived Fares</button>
-								<br/>
-								<br/>
+								<br />
+								<button type="button" class="btn btn-default small pull-left"
+									ng-click="" disabled="disabled">Generate Derived Fares</button>
+								<br /> <br />
 								<div class="form-group mt1">
-									<button type="button"
-										class="btn btn-default small pull-left"
+									<button type="button" class="btn btn-default small pull-left"
 										ng-disabled="queryForm.$invalid"
 										ng-click="vm.loadAll(); vm.hideDetail()">Query</button>
-									<button type="button"
-										class="btn btn-default small pull-left"
+									<button type="button" class="btn btn-default small pull-left"
 										ng-click="vm.hideDetail(); vm.clearFilter();">Clear</button>
-									<button type="reset" ng-click="vm.resetFilter(); vm.hideDetail()"
+									<button type="reset"
+										ng-click="vm.resetFilter(); vm.hideDetail()"
 										class="btn btn-default small pull-left">Reset</button>
 								</div>
-								
+
 							</div>
 						</div>
 					</form>
@@ -146,11 +141,12 @@
 							<tr ng-repeat="ruleQuery in vm.ruleQueries"
 								ng-click="vm.selectedRow = ruleQuery; vm.showDetail(); vm.getRules(ruleQuery); vm.getRules2(ruleQuery);"
 								ng-class="{'selected': vm.selectedRow == ruleQuery}">
-								<td>{{(vm.queryParams.page * vm.queryParams.size) + $index + 1}}</td>
+								<td>{{(vm.queryParams.page * vm.queryParams.size) + $index
+									+ 1}}</td>
 								<td>{{ruleQuery.cxr}}</td>
 								<td>{{ruleQuery.tarNo}}</td>
 								<td>{{ruleQuery.ruleNo}}</td>
-								<td>{{ruleQuery.type}}</td>
+								<td>{{ruleQuery.tarCd}}</td>
 								<td>{{ruleQuery.src}}</td>
 							</tr>
 						</tbody>
@@ -159,9 +155,9 @@
 				<div class="text-center">
 					<jhi-item-count page="vm.page" total="vm.queryCount"
 						items-per-page="vm.itemsPerPage"></jhi-item-count>
-					<uib-pagination class="pagination-sm"
-						total-items="vm.totalItems" items-per-page="vm.itemsPerPage"
-						ng-model="vm.page" ng-change="vm.loadAll()"></uib-pagination>
+					<uib-pagination class="pagination-sm" total-items="vm.totalItems"
+						items-per-page="vm.itemsPerPage" ng-model="vm.page"
+						ng-change="vm.loadAll()"></uib-pagination>
 				</div>
 			</div>
 		</div>
@@ -207,7 +203,9 @@
 								<td>{{rq.owrt}}</td>
 								<td>{{rq.routingNo}}</td>
 								<td>{{rq.footnote}}</td>
-								<td>{{rq.effectiveDateObject | date:'medium'}}</td>
+								<td><span ng-if="rq.effectiveDateObject=='indef'"></span><span
+									ng-if="rq.effectiveDateObject!='indef'">{{rq.effectiveDateObject
+										| date:'medium'}}</span></td>
 								<td><span ng-if="rq.discontinueDateObject=='indef'"></span><span
 									ng-if="rq.discontinueDateObject!='indef'">{{rq.discontinueDateObject
 										| date:'medium'}}</span></td>
@@ -215,21 +213,36 @@
 						</tbody>
 					</table>
 				</div>
-
-				<div class="additional-info-wrapper" id="ruleCategories"
-					hidden="hidden">
+			</div>
+		</div>
+				<div class="col-md-12 text-center" ng-if="vm.isLoadingRule">
+					<div class="spinner yellow">
+						<div class="double-bounce1"></div>
+						<div class="double-bounce2"></div>
+					</div>
+				</div>
+				<div class="additional-info-wrapper" ng-if="vm.ruleQueryCategories2">
 					<div class="clearfix">
-						<div class="pull-left ph5px additional-container" ng-repeat="cat in vm.ruleQueryCategories2 track by cat.catNo">
+						<div class="pull-left ph5px additional-container"
+							ng-repeat="cat in vm.ruleQueryCategories2 track by cat.catNo">
 							<div class="additional-info"
 								ng-click="vm.showCategoryDetail(cat)"
-								ng-class="{'yellow': cat.catAttributes.length > 0 && cat.type != 'G', 'blue': cat.catAttributes.length > 0 && cat.type == 'G'}">
+								ng-class="{'lightyellow': cat.type.includes('F'), 'yellow': cat.type.includes('R'), 'blue': cat.type == 'G'}">
 								{{cat.catNo}} {{cat.catName}} <span
-									ng-if="cat.catAttributes.length > 0">({{cat.type}})</span>
+									ng-if="cat.type != undefined && cat.type != ''">({{cat.type}})</span>
+							</div>
+						</div>
+						<div class="pull-left ph5px additional-container">
+							<div class="additional-info action dropdown custom"
+								ng-click="vm.actionClicked = !vm.actionClicked">
+								Action <i class="fa fa-caret-down pull-right"></i>
+								<div class="action-wrapper" ng-if="vm.actionClicked">
+									<a ng-click="vm.showLegend()">Show Legend</a> <a
+										ng-click="vm.viewFullText()">View Full Text</a>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
 	</div>
 </div>
