@@ -2298,42 +2298,43 @@
 					                  ng-model="vm.workPackage.attachmentApprovalReference" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
 					                  <button ng-click="vm.generateTourCodeAttachment()" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Generate Tour Code</button>
 					                </div>
-					          	</div>						              
-									<div class="col-md-12">
-					     				<div class="text-center no-data" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">No Attachment Available</div>							
-						     			<div ng-repeat="attachment in vm.workPackage.attachmentData.slice().reverse() track by $index" class="form-repeat">
-					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></span></button>
-							       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'dd/MM/yyyy HH:mm'}}</label>
-							       			<div class="row mt1">
-								        		<div class="col-md-6">
-									      			<div class="form-group">
-									      				<label>Comment</label>
-									      				<textarea class="form-control" ng-model="attachment.comment" ng-disabled="attachment.isDeleted ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')"></textarea>
-									      			</div>
-								        		</div>
-								        		<div class="col-md-6">
-								        			<div class="form-group file" ngf-drop ngf-change="vm.setFileAttachment($file, attachment)">
-											            <label class="control-label" ng-if="attachment.fileName!=null">{{attachment.fileName}}</label>
-											            <label class="control-label" ng-if="attachment.fileName==null">File Attachment</label>
-											            <div>
-											                <button type="button" class="btn btn-secondary" ng-click="vm.openFile(attachment.fileContentType, attachment.file)" ng-disabled="attachment.fileName==null">
-											                    Open
-											                </button>
-											                <button type="button" ngf-select class="btn btn-secondary"
-											                        ngf-change="vm.setFile($file, attachment)" ng-disabled="attachment.isDeleted||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
-											                    Add file
-											                </button>
-										                    <div class="form-group mt1">
-																<div class="checkbox-wrapper">
-																	<label class="black" for="inOnly">
-																		<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly" ng-disabled="attachment.isDeleted || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
-																		Inter Office Notification
-																	</label>
-																	<label class="black" for="isDeleted">
-																		<input type="checkbox" id="isDeleted" name="isDeleted" ng-model="attachment.isDeleted" disabled>
-																		Is Deleted
-																	</label>
-																</div>
+					          	</div>
+						              
+				     			<div class="col-md-12">
+				     				<div class="text-center no-data" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">No Attachment Available</div>							
+					     			<div ng-repeat="attachment in vm.workPackage.attachmentData.slice().reverse() track by $index" class="form-repeat">
+				       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></span></button>
+						       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'short'}}</label>
+						       			<div class="row mt1">
+							        		<div class="col-md-6">
+								      			<div class="form-group">
+								      				<label>Comment</label>
+								      				<textarea class="form-control" ng-model="attachment.comment" ng-disabled="attachment.isDeleted ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')"></textarea>
+								      			</div>
+							        		</div>
+							        		<div class="col-md-6">
+							        			<div class="form-group file" ngf-drop ngf-change="vm.setFileAttachment($file, attachment)">
+										            <label class="control-label" ng-if="attachment.fileName!=null">{{attachment.fileName}}</label>
+										            <label class="control-label" ng-if="attachment.fileName==null">File Attachment</label>
+										            <div>
+										                <button type="button" class="btn btn-secondary" ng-click="vm.openFile(attachment.fileContentType, attachment.file)" ng-disabled="attachment.fileName==null">
+										                    Open
+										                </button>
+										                <button type="button" ngf-select class="btn btn-secondary"
+										                        ngf-change="vm.setFile($file, attachment)" ng-disabled="attachment.isDeleted||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
+										                    Add file
+										                </button>
+									                    <div class="form-group mt1">
+															<div class="checkbox-wrapper">
+																<label class="black" for="inOnly">
+																	<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly" ng-disabled="attachment.isDeleted || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
+																	Inter Office Notification
+																</label>
+																<label class="black" for="isDeleted">
+																	<input type="checkbox" id="isDeleted" name="isDeleted" ng-model="attachment.isDeleted" disabled>
+																	Is Deleted
+																</label>
+															</div>
 														</div>
 										            </div>
 										            <input type="hidden" class="form-control" name="file" id="field_file"
@@ -4202,52 +4203,52 @@
 							<div class="tab-pane" ng-class="{active:vm.currentTabAttachment}">
 								<div class="action-btn-wrapper">
 					     				<div class="col-md-12 text-right no-pad">
-					     					<button ng-click="vm.addAttachment()" class="btn btn-primary" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Add</button>
-					     				</div>
-					     			</div>
-									<div class="pull-left w50 two-column">
-						                <div class="form-group">
-						                  <label>Approval Reference</label>
-						                  <input type="text" name="attachmentApprovalReference{{$index}}" class="form-control" 
-						                  ng-model="vm.workPackage.attachmentApprovalReference" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
-						                  <button ng-click="vm.generateTourCodeAttachment()" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Generate Tour Code</button>
-						                </div>
-						              </div>
-						              
-					     			<div class="col-md-12">
-					     				<div class="text-center no-data" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">No Attachment Available</div>							
-						     			<div ng-repeat="attachment in vm.workPackage.attachmentData.slice().reverse() track by $index" class="form-repeat">
-					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></span></button>
-							       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'dd/MM/yyyy HH:mm'}}</label>
-							       			<div class="row mt1">
-								        		<div class="col-md-6">
-									      			<div class="form-group">
-									      				<label>Comment</label>
-									      				<textarea class="form-control" ng-model="attachment.comment" ng-disabled="attachment.isDeleted ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')"></textarea>
-									      			</div>
-								        		</div>
-								        		<div class="col-md-6">
-								        			<div class="form-group file" ngf-drop ngf-change="vm.setFileAttachment($file, attachment)">
-											            <label class="control-label" ng-if="attachment.fileName!=null">{{attachment.fileName}}</label>
-											            <label class="control-label" ng-if="attachment.fileName==null">File Attachment</label>
-											            <div>
-											                <button type="button" class="btn btn-secondary" ng-click="vm.openFile(attachment.fileContentType, attachment.file)" ng-disabled="attachment.fileName==null">
-											                    Open
-											                </button>
-											                <button type="button" ngf-select class="btn btn-secondary"
-											                        ngf-change="vm.setFile($file, attachment)" ng-disabled="attachment.isDeleted||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
-											                    Add file
-											                </button>
-										                    <div class="form-group mt1">
-																<div class="checkbox-wrapper">
-																	<label class="black" for="inOnly">
-																		<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly" ng-disabled="attachment.isDeleted || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
-																		Inter Office Notification
-																	</label>
-																	<label class="black" for="isDeleted">
-																		<input type="checkbox" id="isDeleted" name="isDeleted" ng-model="attachment.isDeleted" disabled>
-																		Is Deleted
-																	</label>
+				     					<button ng-click="vm.addAttachment()" class="btn btn-primary" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Add</button>
+				     				</div>
+				     			</div>
+								<div class="pull-left w50 two-column">
+					                <div class="form-group">
+					                  <label>Approval Reference</label>
+					                  <input type="text" name="attachmentApprovalReference{{$index}}" class="form-control" 
+					                  ng-model="vm.workPackage.attachmentApprovalReference" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
+					                  <button ng-click="vm.generateTourCodeAttachment()" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Generate Tour Code</button>
+					                </div>
+					              </div>
+					              
+				     			<div class="col-md-12">
+				     				<div class="text-center no-data" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">No Attachment Available</div>							
+					     			<div ng-repeat="attachment in vm.workPackage.attachmentData.slice().reverse() track by $index" class="form-repeat">
+				       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></span></button>
+						       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'short'}}</label>
+						       			<div class="row mt1">
+							        		<div class="col-md-6">
+								      			<div class="form-group">
+								      				<label>Comment</label>
+								      				<textarea class="form-control" ng-model="attachment.comment" ng-disabled="attachment.isDeleted ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')"></textarea>
+								      			</div>
+							        		</div>
+							        		<div class="col-md-6">
+							        			<div class="form-group file" ngf-drop ngf-change="vm.setFileAttachment($file, attachment)">
+										            <label class="control-label" ng-if="attachment.fileName!=null">{{attachment.fileName}}</label>
+										            <label class="control-label" ng-if="attachment.fileName==null">File Attachment</label>
+										            <div>
+										                <button type="button" class="btn btn-secondary" ng-click="vm.openFile(attachment.fileContentType, attachment.file)" ng-disabled="attachment.fileName==null">
+										                    Open
+										                </button>
+										                <button type="button" ngf-select class="btn btn-secondary"
+										                        ngf-change="vm.setFile($file, attachment)" ng-disabled="attachment.isDeleted||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
+										                    Add file
+										                </button>
+									                    <div class="form-group mt1">
+															<div class="checkbox-wrapper">
+																<label class="black" for="inOnly">
+																	<input type="checkbox" id="inOnly" name="inOnly" ng-model="attachment.inOnly" ng-disabled="attachment.isDeleted || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
+																	Inter Office Notification
+																</label>
+																<label class="black" for="isDeleted">
+																	<input type="checkbox" id="isDeleted" name="isDeleted" ng-model="attachment.isDeleted" disabled>
+																	Is Deleted
+																</label>
 																</div>
 															</div>
 														</div>
