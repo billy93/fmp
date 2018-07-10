@@ -2304,7 +2304,7 @@
 				     				<div class="text-center no-data" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">No Attachment Available</div>							
 					     			<div ng-repeat="attachment in vm.workPackage.attachmentData.slice().reverse() track by $index" class="form-repeat">
 				       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></span></button>
-						       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'short'}}</label>
+						       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'dd/MM/yyyy HH:mm'}}</label>
 						       			<div class="row mt1">
 							        		<div class="col-md-6">
 								      			<div class="form-group">
@@ -4219,7 +4219,7 @@
 				     				<div class="text-center no-data" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">No Attachment Available</div>							
 					     			<div ng-repeat="attachment in vm.workPackage.attachmentData.slice().reverse() track by $index" class="form-repeat">
 				       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></span></button>
-						       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'short'}}</label>
+						       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'dd/MM/yyyy HH:mm'}}</label>
 						       			<div class="row mt1">
 							        		<div class="col-md-6">
 								      			<div class="form-group">
