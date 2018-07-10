@@ -1,5 +1,8 @@
 package com.atibusinessgroup.fmp.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -14,6 +17,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +39,8 @@ import com.atibusinessgroup.fmp.domain.WorkPackage.Attachment;
 import com.atibusinessgroup.fmp.domain.WorkPackage.Comment;
 import com.atibusinessgroup.fmp.domain.WorkPackage.FilingInstruction;
 import com.atibusinessgroup.fmp.domain.WorkPackage.MarketRules;
+import com.atibusinessgroup.fmp.domain.WorkPackage.MarketRules.RulesData;
+import com.atibusinessgroup.fmp.domain.WorkPackage.MarketRules.RulesData.Field;
 import com.atibusinessgroup.fmp.domain.WorkPackage.WorkPackageFareSheet;
 import com.atibusinessgroup.fmp.domain.WorkPackageFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
@@ -282,6 +293,12 @@ public class WorkPackageService {
     				marketRules.setUsername(SecurityUtils.getCurrentUserLogin().get());
     				marketRules.setCreatedTime(ZonedDateTime.now());
     			}
+    			try {
+					extractRules(marketRules);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
     		}
     	}
     	
@@ -382,7 +399,105 @@ public class WorkPackageService {
         return workPackageRepository.save(workPackage);
     }
     
-    public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
+    /**
+     * This method for the type of data in the cell, extracts the data and
+     * returns it as a string.
+     */
+    public static String getCellValueAsString(Cell cell) {
+        String strCellValue = null;
+        if (cell != null) {
+            switch (cell.getCellType()) {
+            case Cell.CELL_TYPE_STRING:
+                strCellValue = cell.toString();
+                break;
+            case Cell.CELL_TYPE_NUMERIC:
+                if (DateUtil.isCellDateFormatted(cell)) {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat(
+                            "dd/MM/yyyy");
+                    strCellValue = dateFormat.format(cell.getDateCellValue());
+                } else {
+                    Double value = cell.getNumericCellValue();
+                    Long longValue = value.longValue();
+                    strCellValue = new String(longValue.toString());
+                }
+                break;
+            case Cell.CELL_TYPE_BOOLEAN:
+                strCellValue = new String(new Boolean(
+                        cell.getBooleanCellValue()).toString());
+                break;
+            case Cell.CELL_TYPE_BLANK:
+                strCellValue = "";
+                break;
+            }
+        }
+        return strCellValue;
+    }
+    
+    private void extractRules(MarketRules marketRules) throws IOException {
+		// TODO Auto-generated method stub
+		byte[] attachment = marketRules.getFile();		
+		if(attachment != null) {
+			if(marketRules.getRulesData() != null) {
+				marketRules.getRulesData().clear();
+			}
+			else {
+				marketRules.setRulesData(new ArrayList<>());
+			}
+			
+			List<RulesData> rulesData = marketRules.getRulesData();
+			
+			//
+			InputStream input = new ByteArrayInputStream(attachment);
+
+			Workbook workbook = new XSSFWorkbook(input);
+			Sheet datatypeSheet = workbook.getSheetAt(0);
+			
+//			RulesData rd = new RulesData();
+//			rd.setCategory("1");			
+//				List<Field> fields = new ArrayList<>();
+//				
+//				Field f = new Field();
+//				f.setKey("psg_type");
+//				f.setValue("ADT");
+//				fields.add(f);
+//				rd.setFields(fields);
+//			rulesData.add(rd);
+			
+			RulesData rd = null;
+			for (Row myrow : datatypeSheet) {		
+				boolean checkHeader = false;
+				boolean checkValue = false;
+				
+			    for (Cell mycell : myrow) {
+			    	if(mycell.getColumnIndex() == 0 && mycell.getStringCellValue().contentEquals("Category")) {
+			    		checkHeader = true;
+			    		if(rd != null) {
+			    			rulesData.add(rd);
+			    		}
+			    		rd = new RulesData();
+			    		rd.setFields(new ArrayList<>());
+			    		rd.setCategory(datatypeSheet.getRow(myrow.getRowNum()+1).getCell(0).getStringCellValue());
+			    	}
+	
+			    	if(checkHeader) {
+			    		if(mycell.getColumnIndex() != 0) {
+				    		if(getCellValueAsString(mycell) != null && !getCellValueAsString(mycell).contentEquals("")) {
+				    			Field f = new Field();
+				    			f.setKey(mycell.getStringCellValue());
+				    			
+				    			String value = getCellValueAsString(datatypeSheet.getRow(myrow.getRowNum()+1).getCell(mycell.getColumnIndex()));				    			
+				    			f.setValue(value);
+				    			rd.getFields().add(f);
+				    		}
+			    		}
+			    	}
+			    }
+			}
+			rulesData.add(rd);
+		}
+	}
+
+	public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
         long diffInMillies = removeTimeFromDate(date2).getTime() - removeTimeFromDate(date1).getTime();
         return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
     }
