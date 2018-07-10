@@ -71,7 +71,7 @@ public class RbdqueryResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final RbdQueryResource rbdqueryResource = new RbdQueryResource(rbdqueryService);
+        final RbdQueryResource rbdqueryResource = new RbdQueryResource(rbdqueryService, null);
         this.restRbdqueryMockMvc = MockMvcBuilders.standaloneSetup(rbdqueryResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
