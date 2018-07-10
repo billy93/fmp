@@ -2266,6 +2266,14 @@ public class WorkPackageResource {
 								}
 							}
 						}else if(workPackage.getReviewLevel().contentEquals("HO")) {
+							if(wpfs.getApprovalReference() == null || wpfs.getApprovalReference().contentEquals("")) {
+								//List Error
+					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setIndex(index+"");
+					    		err1.setField("approvalReference");
+					    		err1.setMessage("Approval reference is required");
+					    		errors.add(err1);
+							}
 							if(fare.getStatus() == null || fare.getStatus().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
