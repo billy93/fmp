@@ -426,7 +426,7 @@
         	},
         	{
         		name:"addonFareAmount",
-        		editable:["LSO", "HO", "DISTRIBUTION"],
+        		editable:["LSO", "HO"],
         		mandatory:["LSO", "HO"]
         	},
         	{
@@ -543,7 +543,7 @@
         	},
         	{
         		name:"discountPercentageOfBaseFare",
-        		editable:["LSO", "HO",  "DISTRIBUTION"],
+        		editable:["LSO", "HO"],
         		mandatory:[],
         		mandatoryExtraCondition:[
         			{
@@ -646,12 +646,52 @@
         	{
         		name:"discountBaseFareOwRt",
         		editable:["LSO", "HO",  "DISTRIBUTION"],
-        		mandatory:[]
+        		mandatory:[],
+        		mandatoryExtraCondition:[
+        			{
+        				field:"calcType",
+        				isEqual:"M"
+        			},
+        			{
+        				field:"calcType",
+        				isEqual:"S"
+        			}
+        		],
+        		editableExtraCondition:[
+	    			{
+	    				field:"calcType",
+	    				isEqual:"M"
+	    			},
+	    			{
+	    				field:"calcType",
+	    				isEqual:"S"
+	    			}
+	    		]
         	},
         	{
         		name:"discountGlobal",
         		editable:["LSO", "HO",  "DISTRIBUTION"],
-        		mandatory:[]
+        		mandatory:[],
+        		mandatoryExtraCondition:[
+        			{
+        				field:"calcType",
+        				isEqual:"M"
+        			},
+        			{
+        				field:"calcType",
+        				isEqual:"S"
+        			}
+        		],
+        		editableExtraCondition:[
+	    			{
+	    				field:"calcType",
+	    				isEqual:"M"
+	    			},
+	    			{
+	    				field:"calcType",
+	    				isEqual:"S"
+	    			}
+	    		]
         	},
         	{
         		name:"discountRtgno",
@@ -2623,20 +2663,16 @@
 	  
 	  vm.passUp = function(){
 		    if (confirm("Are you sure to Pass up this workorder?")) {
+		    	vm.workPackage.validate = true;
 		    	WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
-		    		WorkPackage.passup(result, function(wp){
-//		    			console.log(wp);
-		    			if(wp.validation != null && ((wp.validation.errorsCount > 0) || (wp.validation.warningsCount > 0))){
-		    				vm.workPackage.validation = wp.validation;
-		    				alert('There is '+wp.validation.errorsCount+' error(s) and '+wp.validation.warningsCount+' warning(s)');		    				
-		    			}
-		    			else{
+		    		if(vm.mapWorkpackage(result)){
+			    		WorkPackage.passup(result, function(wp){
 			    			alert('Pass Up Success');
 			    			$state.go('work-package');
-		    			}
-		    		}, function(){
-		    			alert('Pass Up Failed');
-		    		});
+			    		}, function(){
+			    			alert('Pass Up Failed');
+			    		});
+		    		}
 		    	}, function onSaveError(){
 		    		alert('An error occured, please try again');
 		    	});
@@ -2662,13 +2698,19 @@
 	  
 	  vm.passSideway = function(){
 		    if (confirm("Are you sure to Pass sideway this workorder?")) {
+		    		vm.workPackage.validate = true;
 			    	WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
-			    		WorkPackage.passsideway(vm.workPackage, function(){
-			    			alert('Pass Sideway Success');
-			    			$state.go('work-package');
-			    		}, function(){
-			    			alert('Pass Sideway Failed');
-			    		});
+			    		if(vm.mapWorkpackage(result)){
+				    		WorkPackage.passsideway(vm.workPackage, function(){
+				    			alert('Pass Sideway Success');
+				    			$state.go('work-package');
+				    		}, function(){
+				    			alert('Pass Sideway Failed');
+				    		});
+			    		}
+			    		else{
+			    			
+			    		}
 			    	}, function onSaveError(){
 			    		alert('An error occured, please try again');
 			    	});
@@ -2737,218 +2779,205 @@
 	  };
 	  
 	  vm.approve = function(){
-		  var validated = true;
-		  var cekStatus = "";
-		  var counterApprove = false;
-		  var approveRuleNo = [];
-		  var marketRulesNo = [];
+		  vm.workPackage.validate = true;
+		  WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
+			  if(vm.mapWorkpackage(result)){
+				  var validated = true;
+				  var cekStatus = "";
+				  var counterApprove = false;
+				  var approveRuleNo = [];
+				  var marketRulesNo = [];
 
-		  if(vm.workPackage.interofficeComment == null || vm.workPackage.interofficeComment.length == 0){
-			  cekStatus = "Interoffice comment could not be blank";
-			  validated = false;
-		  }
-		  
-		  if(vm.workPackage.fareSheet != null && vm.workPackage.fareSheet.length > 0){
-			  for(var x=0;x<vm.workPackage.fareSheet.length;x++){
-				  if(vm.workPackage.fareSheet[x].fares != null && vm.workPackage.fareSheet[x].fares.length > 0){
-					  //vm.expandCityGroup(vm.workPackage.fareSheet[x]);
-					  for(var y=0;y<vm.workPackage.fareSheet[x].fares.length;y++){
-						  if(vm.workPackage.fareSheet[x].fares[y].status == "APPROVED"){
-							  counterApprove = true;
-							  break;
-						  }
-					  }
-					  for(var y=0;y<vm.workPackage.fareSheet[x].fares.length;y++){
-						  if(vm.workPackage.fareSheet[x].fares[y].status == "" || vm.workPackage.fareSheet[x].fares[y].status == "PENDING" || !counterApprove){
-							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.fareSheet[x].fares[y].status;
-							  validated = false;
-							  break;
-						  }
-					  }
-				  }
-			  }
-		  }
-		  
-		  if(vm.workPackage.discountFareSheet != null && vm.workPackage.discountFareSheet.length > 0){
-			  for(var x=0;x<vm.workPackage.discountFareSheet.length;x++){
-				  if(vm.workPackage.discountFareSheet[x].fares != null && vm.workPackage.discountFareSheet[x].fares.length > 0){
-					  for(var y=0;y<vm.workPackage.discountFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.discountFareSheet[x].fares[y].status == "APPROVED"){
-							  counterApprove =true;
-							  break;
-						  }
-					  }
-					  for(var y=0;y<vm.workPackage.discountFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.discountFareSheet[x].fares[y].status == "" || vm.workPackage.discountFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
-							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.discountFareSheet[x].fares[y].status;
-							  validated = false;
-							  break;
-						  }
-					  }
-				  }
-			  }
-		  }	
-		  
-		  if(vm.workPackage.addonFareSheet != null && vm.workPackage.addonFareSheet.length > 0){
-			  for(var x=0;x<vm.workPackage.addonFareSheet.length;x++){
-				  if(vm.workPackage.addonFareSheet[x].fares != null && vm.workPackage.addonFareSheet[x].fares.length > 0){
-					  //vm.expandCityGroup(vm.workPackage.addonFareSheet[x]);
-					  for(var y=0;y<vm.workPackage.addonFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.addonFareSheet[x].fares[y].status == "APPROVED"){
-							  counterApprove =true;
-							  break;
-						  }
-					  }
-					  for(var y=0;y<vm.workPackage.addonFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.addonFareSheet[x].fares[y].status == "" || vm.workPackage.addonFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
-							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.addonFareSheet[x].fares[y].status;
-							  validated = false;
-							  break;
-						  }
-					  }
-				  }
-			  } 
-		  }	
-		  
-		  if(vm.workPackage.marketFareSheet != null && vm.workPackage.marketFareSheet.length > 0){
-			  for(var x=0;x<vm.workPackage.marketFareSheet.length;x++){
-				  if(vm.workPackage.marketFareSheet[x].fares != null && vm.workPackage.marketFareSheet[x].fares.length > 0){
-					  //vm.expandCityGroup(vm.workPackage.marketFareSheet[x]);
-					  for(var y=0;y<vm.workPackage.marketFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.marketFareSheet[x].fares[y].status == "APPROVED"){
-							  approveRuleNo.push(vm.workPackage.marketFareSheet[x].fares[y].ruleno);
-							  counterApprove =true;
-						  }
-					  }					  
-					  for(var y=0;y<vm.workPackage.marketFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.marketFareSheet[x].fares[y].status == "" || vm.workPackage.marketFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
-							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.marketFareSheet[x].fares[y].status;
-							  validated = false;
-							  break;
-						  }
-					  }
-				  }
-			  }
-			  if(counterApprove){
-				  if(vm.workPackage.marketRulesData != null && vm.workPackage.marketRulesData.length > 0 ){
-					  for(var h=0; h<vm.workPackage.marketRulesData.length; h++){
-						  marketRulesNo.push(vm.workPackage.marketRulesData[h].ruleid);
-					  }
-					  for(var l=0;l<approveRuleNo.length;l++){
-						  if(marketRulesNo.indexOf(approveRuleNo[l]) < 0){
-							  cekStatus = "Rule ID "+approveRuleNo[l]+ " does not exist in market rule";
-							  validated = false;
-						  }
-					  }
-				  }else{
-					  cekStatus = "Market rules data could not be blank";
+				  if(vm.workPackage.interofficeComment == null || vm.workPackage.interofficeComment.length == 0){
+					  cekStatus = "Interoffice comment could not be blank";
 					  validated = false;
-				  }				  
-			  }
-		  }	
-		  
-		  /*if(vm.workPackage.waiverFareSheet != null && vm.workPackage.waiverFareSheet.length > 0){
-			  for(var x=0;x<vm.workPackage.waiverFareSheet.length;x++){
-				  if(vm.workPackage.waiverFareSheet[x].fares != null && vm.workPackage.waiverFareSheet[x].fares.length > 0){
-					  //vm.expandCityGroup(vm.workPackage.waiverFareSheet[x]);
-					  for(var y=0;y<vm.workPackage.waiverFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.waiverFareSheet[x].fares[y].status == "APPROVED"){
-							  counterApprove =true;
-							  break;
+				  }
+				  
+				  if(vm.workPackage.fareSheet != null && vm.workPackage.fareSheet.length > 0){
+					  for(var x=0;x<vm.workPackage.fareSheet.length;x++){
+						  if(vm.workPackage.fareSheet[x].fares != null && vm.workPackage.fareSheet[x].fares.length > 0){
+							  //vm.expandCityGroup(vm.workPackage.fareSheet[x]);
+							  for(var y=0;y<vm.workPackage.fareSheet[x].fares.length;y++){
+								  if(vm.workPackage.fareSheet[x].fares[y].status == "APPROVED"){
+									  counterApprove = true;
+									  break;
+								  }
+							  }
+							  for(var y=0;y<vm.workPackage.fareSheet[x].fares.length;y++){
+								  if(vm.workPackage.fareSheet[x].fares[y].status == "" || vm.workPackage.fareSheet[x].fares[y].status == "PENDING" || !counterApprove){
+									  cekStatus = "Can not approve because status fare is : "+vm.workPackage.fareSheet[x].fares[y].status;
+									  validated = false;
+									  break;
+								  }
+							  }
 						  }
 					  }
-					  for(var y=0;y<vm.workPackage.waiverFareSheet[x].fares.length;y++){
-						  if(vm.workPackage.waiverFareSheet[x].fares[y].status == "" || vm.workPackage.waiverFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
-							  cekStatus = "Can not approve because status fare is : "+vm.workPackage.waiverFareSheet[x].fares[y].status;
+				  }
+				  
+				  if(vm.workPackage.discountFareSheet != null && vm.workPackage.discountFareSheet.length > 0){
+					  for(var x=0;x<vm.workPackage.discountFareSheet.length;x++){
+						  if(vm.workPackage.discountFareSheet[x].fares != null && vm.workPackage.discountFareSheet[x].fares.length > 0){
+							  for(var y=0;y<vm.workPackage.discountFareSheet[x].fares.length;y++){
+								  if(vm.workPackage.discountFareSheet[x].fares[y].status == "APPROVED"){
+									  counterApprove =true;
+									  break;
+								  }
+							  }
+							  for(var y=0;y<vm.workPackage.discountFareSheet[x].fares.length;y++){
+								  if(vm.workPackage.discountFareSheet[x].fares[y].status == "" || vm.workPackage.discountFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
+									  cekStatus = "Can not approve because status fare is : "+vm.workPackage.discountFareSheet[x].fares[y].status;
+									  validated = false;
+									  break;
+								  }
+							  }
+						  }
+					  }
+				  }	
+				  
+				  if(vm.workPackage.addonFareSheet != null && vm.workPackage.addonFareSheet.length > 0){
+					  for(var x=0;x<vm.workPackage.addonFareSheet.length;x++){
+						  if(vm.workPackage.addonFareSheet[x].fares != null && vm.workPackage.addonFareSheet[x].fares.length > 0){
+							  //vm.expandCityGroup(vm.workPackage.addonFareSheet[x]);
+							  for(var y=0;y<vm.workPackage.addonFareSheet[x].fares.length;y++){
+								  if(vm.workPackage.addonFareSheet[x].fares[y].status == "APPROVED"){
+									  counterApprove =true;
+									  break;
+								  }
+							  }
+							  for(var y=0;y<vm.workPackage.addonFareSheet[x].fares.length;y++){
+								  if(vm.workPackage.addonFareSheet[x].fares[y].status == "" || vm.workPackage.addonFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
+									  cekStatus = "Can not approve because status fare is : "+vm.workPackage.addonFareSheet[x].fares[y].status;
+									  validated = false;
+									  break;
+								  }
+							  }
+						  }
+					  } 
+				  }	
+				  
+				  if(vm.workPackage.marketFareSheet != null && vm.workPackage.marketFareSheet.length > 0){
+					  for(var x=0;x<vm.workPackage.marketFareSheet.length;x++){
+						  if(vm.workPackage.marketFareSheet[x].fares != null && vm.workPackage.marketFareSheet[x].fares.length > 0){
+							  //vm.expandCityGroup(vm.workPackage.marketFareSheet[x]);
+							  for(var y=0;y<vm.workPackage.marketFareSheet[x].fares.length;y++){
+								  if(vm.workPackage.marketFareSheet[x].fares[y].status == "APPROVED"){
+									  approveRuleNo.push(vm.workPackage.marketFareSheet[x].fares[y].ruleno);
+									  counterApprove =true;
+								  }
+							  }					  
+							  for(var y=0;y<vm.workPackage.marketFareSheet[x].fares.length;y++){
+								  if(vm.workPackage.marketFareSheet[x].fares[y].status == "" || vm.workPackage.marketFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
+									  cekStatus = "Can not approve because status fare is : "+vm.workPackage.marketFareSheet[x].fares[y].status;
+									  validated = false;
+									  break;
+								  }
+							  }
+						  }
+					  }
+					  if(counterApprove){
+						  if(vm.workPackage.marketRulesData != null && vm.workPackage.marketRulesData.length > 0 ){
+							  for(var h=0; h<vm.workPackage.marketRulesData.length; h++){
+								  marketRulesNo.push(vm.workPackage.marketRulesData[h].ruleid);
+							  }
+							  for(var l=0;l<approveRuleNo.length;l++){
+								  if(marketRulesNo.indexOf(approveRuleNo[l]) < 0){
+									  cekStatus = "Rule ID "+approveRuleNo[l]+ " does not exist in market rule";
+									  validated = false;
+								  }
+							  }
+						  }else{
+							  cekStatus = "Market rules data could not be blank";
 							  validated = false;
-							  break;
+						  }				  
+					  }
+				  }	
+				  				 
+				  if(validated){
+					  
+					  if(vm.workPackage.fareSheet != null && vm.workPackage.fareSheet.length > 0){
+						  for(var x=0;x<vm.workPackage.fareSheet.length;x++){
+							  if(vm.workPackage.fareSheet[x].fares != null && vm.workPackage.fareSheet[x].fares.length > 0){
+								  vm.expandCityGroup(vm.workPackage.fareSheet[x]);
+							  }
 						  }
 					  }
-				  }
-			  }
-		  }	*/
-		 
-		  if(validated){
-			  
-			  if(vm.workPackage.fareSheet != null && vm.workPackage.fareSheet.length > 0){
-				  for(var x=0;x<vm.workPackage.fareSheet.length;x++){
-					  if(vm.workPackage.fareSheet[x].fares != null && vm.workPackage.fareSheet[x].fares.length > 0){
-						  vm.expandCityGroup(vm.workPackage.fareSheet[x]);
-					  }
-				  }
-			  }
-			  
-			  if(vm.workPackage.discountFareSheet != null && vm.workPackage.discountFareSheet.length > 0){
-				  for(var x=0;x<vm.workPackage.discountFareSheet.length;x++){
-					  if(vm.workPackage.discountFareSheet[x].fares != null && vm.workPackage.discountFareSheet[x].fares.length > 0){
-						 
-					  }
-				  }
-			  }	
-			  
-			  if(vm.workPackage.addonFareSheet != null && vm.workPackage.addonFareSheet.length > 0){
-				  for(var x=0;x<vm.workPackage.addonFareSheet.length;x++){
-					  if(vm.workPackage.addonFareSheet[x].fares != null && vm.workPackage.addonFareSheet[x].fares.length > 0){
-						  vm.expandCityGroup(vm.workPackage.addonFareSheet[x]);
-					  }
+					  
+					  if(vm.workPackage.discountFareSheet != null && vm.workPackage.discountFareSheet.length > 0){
+						  for(var x=0;x<vm.workPackage.discountFareSheet.length;x++){
+							  if(vm.workPackage.discountFareSheet[x].fares != null && vm.workPackage.discountFareSheet[x].fares.length > 0){
+								 
+							  }
+						  }
+					  }	
+					  
+					  if(vm.workPackage.addonFareSheet != null && vm.workPackage.addonFareSheet.length > 0){
+						  for(var x=0;x<vm.workPackage.addonFareSheet.length;x++){
+							  if(vm.workPackage.addonFareSheet[x].fares != null && vm.workPackage.addonFareSheet[x].fares.length > 0){
+								  vm.expandCityGroup(vm.workPackage.addonFareSheet[x]);
+							  }
+						  } 
+					  }	
+					  
+					  if(vm.workPackage.marketFareSheet != null && vm.workPackage.marketFareSheet.length > 0){
+						  for(var x=0;x<vm.workPackage.marketFareSheet.length;x++){
+							  if(vm.workPackage.marketFareSheet[x].fares != null && vm.workPackage.marketFareSheet[x].fares.length > 0){
+								  vm.expandCityGroup(vm.workPackage.marketFareSheet[x]);
+							  }
+						  }
+					  }	
+					  
+					  if(vm.workPackage.waiverFareSheet != null && vm.workPackage.waiverFareSheet.length > 0){
+						  for(var x=0;x<vm.workPackage.waiverFareSheet.length;x++){
+							  if(vm.workPackage.waiverFareSheet[x].fares != null && vm.workPackage.waiverFareSheet[x].fares.length > 0){
+								  vm.expandCityGroup(vm.workPackage.waiverFareSheet[x]);
+							  }
+						  }
+					  }	
+					  
+					  $uibModal.open({
+			              templateUrl: 'app/pages/work-packages/work-package-approve-email-dialog.html',
+			              controller: 'WorkPackageApproveEmailDialogController',
+			              controllerAs: 'vm',
+			              backdrop: 'static',
+			              size: 'lg',
+			              resolve: {
+			                  workPackage: vm.workPackage,              	  
+				              email: ['SystemParameter', function(SystemParameter) {
+				                   return SystemParameter.getSystemParameterByName({name : 'APPROVE_EMAIL'}).$promise;
+				              }],
+				              ccEmail: ['SystemParameter', function(SystemParameter) {
+				                   return SystemParameter.getSystemParameterByName({name : 'APPROVE_CC_EMAIL'}).$promise;
+				              }],
+				              statusResend : false
+			              }
+			          }).result.then(function(config) {
+			        	  vm.workPackage.approveConfig = config;
+			        	  
+			        	  WorkPackage.update(vm.workPackage, function onSaveSuccess(result){		        	  
+				        	  WorkPackage.approve(vm.workPackage, function(){
+				        		  alert('Approve Success');
+				        		  $state.go('work-package');
+				    		  }, function(){
+				    			  alert('Approve Failed');
+				    		  });
+			        	  }, function onSaveError(){
+			        		  alert('An error occured, please try again');
+					      });
+			          }, function() {
+			      			
+			          });
+				  } else{
+					  if(cekStatus.length != 0){
+						  alert(cekStatus);
+					  }else{
+						 alert('Work Package cannot be approved, please check the workorder');  
+					  }			  
 				  } 
 			  }	
-			  
-			  if(vm.workPackage.marketFareSheet != null && vm.workPackage.marketFareSheet.length > 0){
-				  for(var x=0;x<vm.workPackage.marketFareSheet.length;x++){
-					  if(vm.workPackage.marketFareSheet[x].fares != null && vm.workPackage.marketFareSheet[x].fares.length > 0){
-						  vm.expandCityGroup(vm.workPackage.marketFareSheet[x]);
-					  }
-				  }
-			  }	
-			  
-			  if(vm.workPackage.waiverFareSheet != null && vm.workPackage.waiverFareSheet.length > 0){
-				  for(var x=0;x<vm.workPackage.waiverFareSheet.length;x++){
-					  if(vm.workPackage.waiverFareSheet[x].fares != null && vm.workPackage.waiverFareSheet[x].fares.length > 0){
-						  vm.expandCityGroup(vm.workPackage.waiverFareSheet[x]);
-					  }
-				  }
-			  }	
-			  
-			  $uibModal.open({
-	              templateUrl: 'app/pages/work-packages/work-package-approve-email-dialog.html',
-	              controller: 'WorkPackageApproveEmailDialogController',
-	              controllerAs: 'vm',
-	              backdrop: 'static',
-	              size: 'lg',
-	              resolve: {
-	                  workPackage: vm.workPackage,              	  
-		              email: ['SystemParameter', function(SystemParameter) {
-		                   return SystemParameter.getSystemParameterByName({name : 'APPROVE_EMAIL'}).$promise;
-		              }],
-		              ccEmail: ['SystemParameter', function(SystemParameter) {
-		                   return SystemParameter.getSystemParameterByName({name : 'APPROVE_CC_EMAIL'}).$promise;
-		              }],
-		              statusResend : false
-	              }
-	          }).result.then(function(config) {
-	        	  vm.workPackage.approveConfig = config;
-	        	  
-	        	  WorkPackage.update(vm.workPackage, function onSaveSuccess(result){		        	  
-		        	  WorkPackage.approve(vm.workPackage, function(){
-		        		  alert('Approve Success');
-		        		  $state.go('work-package');
-		    		  }, function(){
-		    			  alert('Approve Failed');
-		    		  });
-	        	  }, function onSaveError(){
-	        		  alert('An error occured, please try again');
-			      });
-	          }, function() {
-	      			
-	          });
-		  } else{
-			  if(cekStatus.length != 0){
-				  alert(cekStatus);
-			  }else{
-				 alert('Work Package cannot be approved, please check the workorder');  
-			  }			  
-		  }
+	    	}, function onSaveError(){
+	    		alert('An error occured, please try again');
+	    	});
+		 
 	  };
 	  
 	  vm.referback = function(){
@@ -6720,6 +6749,8 @@
     	  fare.percentBaseFare = null;
     	  fare.currency = null;
     	  fare.discountSpecifiedAmount = null;
+    	  fare.typeOfJourney = null;
+    	  fare.global=null;
       }
       
       vm.footnote = function(workPackageSheet){
