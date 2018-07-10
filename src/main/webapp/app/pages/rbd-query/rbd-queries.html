@@ -7,59 +7,73 @@
 					<form name="queryForm" role="form" novalidate>
 						<div class="col-md-12 no-pad">
 							<div class="pull-left col-md-4 no-lpad">
-								<div class="form-group">	
+								<div class="form-group">
 									<div class="custom-label semibold">Carrier</div>
-									<input type="text" class="form-control" name="carrier" id="carrier" ng-model="vm.queryParams.cxrCode" value="GA" uppercase/>
+									<div class="input-group">
+										<input id="cxr" type="text" class="form-control" name="cxr" 
+											ng-model="vm.paramCarrier" uppercase ng-disabled="true"> 
+										<span ng-click="vm.showCarrierModal()"
+											class="input-group-addon"><i class="fa fa-folder"></i>
+										</span>
+									</div>									
 								</div>
-								<div class="form-group">	
-									<div class="custom-label semibold">Tariff</div>
-									<input type="text" class="form-control" name="tarno" id="tarno" ng-model="vm.queryParams.tarNo" uppercase />
-								</div>								
+								<div class="form-group">
+									<div class="custom-label semibold">Rule</div>
+									<input type="text" class="form-control" name="ruleno"
+										id="routingno" ng-model="vm.params.ruleNo" uppercase />
+								</div>
 							</div>
 							<div class="pull-left col-md-4 no-lpad">
 								<div class="form-group">
-									<div class="custom-label semibold">Rule</div>
-									<input type="text" class="form-control" name="ruleno" id="routingno" ng-model="vm.queryParams.ruleNo" uppercase />
+									<div class="custom-label semibold">Tariff Number</div>
+									<div class="input-group">
+										<input id="ruleTarNo" type="text" name="ruleTarNo"
+											class="form-control" ng-model="vm.paramTarNo" uppercase ng-disabled="true">
+										<span ng-click="vm.showTariffModal()"
+											class="input-group-addon"><i class="fa fa-folder"></i>
+										</span>
+									</div>
 								</div>
 								<div class="form-group">
 									<div class="custom-label semibold">Effective Date</div>
 									<div class="row no-mar">
 										<div class="col-md-6 no-lpad">
-											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'focusDate')" 
-												is-open="vm.datePickerOpenStatus['focusDate']" datetime-picker="{{vm.dateFormat}}" 
-												enable-time="false" name="focusDate" id="datepicker" 
-												ng-model="vm.queryParams.focusDate" placeholder="From"/>
+											<input type="text" class="form-control"
+												ng-click="vm.openCalendar($event, 'effectiveDateFrom')"
+												is-open="vm.datePickerOpenStatus['effectiveDateFrom']"
+												datetime-picker="{{vm.dateFormat}}" enable-time="false"
+												name="effectiveDateFrom" id="dtpEffectiveDate"
+												ng-model="vm.params.effectiveDateFrom" placeholder="Date" />												
 										</div>
 									</div>
-								</div>								
+								</div>
 							</div>
 							<div class="col-md-12 no-lpad">
 								<div class="form-group">
 									<div class="custom-label semibold">Chart</div>
 									<div class="checkbox-wrapper">
-										<label>
-											<input type="checkbox" name="chart1" ng-model="vm.queryParams.chart1" ng-disabled="false"> 
-											Chart 1
-										</label>
-										<label>
-											<input type="checkbox" name="chart2" ng-model="vm.queryParams.chart2" ng-disabled="false"> 
-											Chart 2
-										</label>
+										<div class="checkbox-wrapper">
+											<label> 
+												<input type="checkbox" name="chart1_chkbox" ng-model="vm.params.chart1"> Chart 1
+											</label>
+										</div>
+										<div class="checkbox-wrapper">
+											<label> 
+												<input type="checkbox" name="chart2_chkbox" ng-model="vm.params.chart2"> Chart 2
+											</label>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="clearfix">
 							<div class="pull-right pv1">
-								<button type="button"
-										class="btn btn-default small"
-										ng-click="vm.loadAll();">Query</button>
-								<button type="button"
-										class="btn btn-default small"
-										ng-click="vm.clearFilter();">Clear</button>
-								<button type="reset"
-										ng-click="vm.resetFilter();"
-										class="btn btn-default small">Reset</button>
+								<button type="button" class="btn btn-default small"
+									ng-click="vm.loadAll();">Query</button>
+								<button type="button" class="btn btn-default small"
+									ng-click="vm.clearFilter();">Clear</button>
+								<button type="reset" class="btn btn-default small"
+									ng-click="vm.resetFilter();">Reset</button>
 							</div>
 						</div>
 					</form>
@@ -71,32 +85,34 @@
 				<div class="table-responsive">
 					<table class="table table-striped table-bordered datatable">
 						<thead>
-							<tr role="row" jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-									<th>No.</th>
-<!-- 									<th jh-sort-by="id"><span>ID</span> <span class="glyphicon glyphicon-sort"></span></th> -->
-				                    <th jh-sort-by="cxrCode"><span>Cxr</span> <span class="glyphicon glyphicon-sort"></span></th>
-				                    <th jh-sort-by="rulesTar"><span>Rules Tar No</span> <span class="glyphicon glyphicon-sort"></span></th>
-				                    <th jh-sort-by="ruleNo"><span>Rule No</span> <span class="glyphicon glyphicon-sort"></span></th>
-				                    <th jh-sort-by="conv"><span>Chart</span> <span class="glyphicon glyphicon-sort"></span></th>
-				                    <th jh-sort-by="bookingCodeTblNo999}"><span>Table No</span> <span class="glyphicon glyphicon-sort"></span></th>
-				                    <th jh-sort-by="sequenceNo"><span>Sequence No</span> <span class="glyphicon glyphicon-sort"></span></th>
-				                    <th jh-sort-by="effectiveDate"><span>Effective Date</span> <span class="glyphicon glyphicon-sort"></span></th>
-				                    <th jh-sort-by="discontinueDate"><span>Discontinue Date</span> <span class="glyphicon glyphicon-sort"></span></th>
+							<tr role="row" jh-sort="vm.predicate" ascending="vm.reverse"
+								callback="vm.transition()">
+								<th>No.</th>
+								<th><span>Cxr</span></th>
+								<th><span>Rules Tar No</span></th>
+								<th><span>Rule No</span></th>
+								<th><span>Chart</span></th>
+								<th><span>Table No</span></th>
+								<th><span>Sequence No</span></th>
+								<th><span>Effective Date</span></th>
+								<th><span>Discontinue Date</span> </th>
 								<th></th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="rbdquery in vm.rbdqueries" ng-class="{'selected': vm.selectedRow == rbdquery}" ng-click="vm.selectedRow = rbdquery; vm.getDetails(rbdquery);">
+							<tr ng-repeat="rbdquery in vm.rbdqueries"
+								ng-class="{'selected': vm.selectedRow == rbdquery}"
+								ng-click="vm.selectedRow = rbdquery; vm.getDetails(rbdquery);">
 								<td>{{$index + 1}}</td>
 								<td>{{rbdquery.cxrCode}}</td>
-			                    <td>{{rbdquery.rulesTar}}</td>
-			                    <td>{{rbdquery.ruleNo}}</td>
-			                    <td>{{rbdquery.conv}}</td>
-			                    <td>{{rbdquery.bookingCodeTblNo999}}</td>
-			                    <td>{{rbdquery.sequenceNo}}</td>
-			                    <td>{{rbdquery.effectiveDate | date:'medium'}}</td>
-			                    <td>{{rbdquery.discontinueDate | date:'medium'}}</td>
-			                    <!-- <td class="text-right">
+								<td>{{rbdquery.rulesTar}}</td>
+								<td>{{rbdquery.ruleNo}}</td>
+								<td>{{rbdquery.conv}}</td>
+								<td>{{rbdquery.bookingCodeTblNo999}}</td>
+								<td>{{rbdquery.sequenceNo}}</td>
+								<td>{{rbdquery.effectiveDate | date:'medium'}}</td>
+								<td>{{rbdquery.discontinueDate | date:'medium'}}</td>
+								<td class="text-right">
 			                        <div class="btn-group flex-btn-group-container">
 			                            <button type="submit"
 			                                    ui-sref="rbdquery-detail({id:rbdquery.id})"
@@ -105,39 +121,17 @@
 			                                <span class="hidden-sm-down"></span>
 			                            </button>
 			                        </div>
-			                    </td> -->
+			                    </td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
-			    <div class="text-center">
-			        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
-			        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
-			    </div>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="panel">
-	<div class="panel-body">
-		<div>
-			<h5>Maps</h5>
-			<div class="table-wrapper">
-				<div class="datatable-wrapper form-inline">
-					<div class="table-responsive">
-						<table class="table table-striped table-bordered datatable">
-							<thead>
-					  		</thead>
-					  		<tbody>
-					  			<tr ng-repeat="details in vm.routingDetails">
-					  				<td>{{$index + 1}}</td>
-					  				<td ng-repeat="detail in details" style="white-space:normal">
-					  					<div style="word-break:break-all; width: 10vw">{{detail}}</div>
-					  				</td>
-					  			</tr>
-					  		</tbody>
-						</table>
-					</div>
+				<div class="text-center">
+					<jhi-item-count page="vm.page" total="vm.queryCount"
+						items-per-page="vm.itemsPerPage"></jhi-item-count>
+					<uib-pagination class="pagination-sm" total-items="vm.totalItems"
+						items-per-page="vm.itemsPerPage" ng-model="vm.page"
+						ng-change="vm.loadAll()"></uib-pagination>
 				</div>
 			</div>
 		</div>

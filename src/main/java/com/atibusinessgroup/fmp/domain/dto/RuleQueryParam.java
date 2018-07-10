@@ -1,5 +1,7 @@
 package com.atibusinessgroup.fmp.domain.dto;
 
+import java.util.Date;
+
 public class RuleQueryParam {
 	
 	private String cxr;
@@ -9,11 +11,40 @@ public class RuleQueryParam {
 	private String src;
 	private String category;
 	private String catNo;
+	private boolean chart1;
+	private boolean chart2;
+	
 	private boolean includeDisc;
 	
 	private int page;
 	private int size;
 	
+	private Date effectiveDateFrom;	
+
+	public boolean isChart1() {
+		return chart1;
+	}
+
+	public void setChart1(boolean chart1) {
+		this.chart1 = chart1;
+	}
+
+	public boolean isChart2() {
+		return chart2;
+	}
+
+	public void setChart2(boolean chart2) {
+		this.chart2 = chart2;
+	}
+
+	public Date getEffectiveDateFrom() {
+		return effectiveDateFrom;
+	}
+
+	public void setEffectiveDateFrom(Date effectiveDateFrom) {
+		this.effectiveDateFrom = effectiveDateFrom;
+	}
+
 	public RuleQueryParam() {
 		
 	}
