@@ -11,15 +11,28 @@
         var vm = this;
 
         vm.fareClassQuery = entity;
-        console.log(vm.fareClassQuery);
+        vm.getText = getText;
         vm.clear = clear;
+        
+        vm.getText();
 
         $timeout(function (){
             angular.element('.form-group:eq(1)>input').focus();
         });
 
-        function clear () {
+        function clear() {
             $uibModalInstance.dismiss('cancel');
+        }
+        
+        function getText() {
+        	FareClassQuery.getFareClassConstructionDetails(vm.fareClassQuery, onSuccess, onError);
+            
+            function onSuccess(data, headers) {
+                vm.text = data;
+            }
+            function onError(error) {
+                AlertService.error(error.data.message);
+            }
         }
 
     }

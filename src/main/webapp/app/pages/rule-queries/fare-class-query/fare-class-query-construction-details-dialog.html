@@ -7,8 +7,14 @@
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
-
+		<span ng-repeat="text in vm.text track by $index">
+			{{text}}
+			</br>
+		</span>
     </div>
     <div class="modal-footer">
+    	<button type="button" class="btn btn-back" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Close</span>
+        </button>
     </div>
 </form>

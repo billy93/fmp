@@ -11,8 +11,9 @@
         var vm = this;
 
         vm.fareClassQuery = entity;
-        vm.clear = clear;
         vm.getText = getText;
+        vm.print = print;
+        vm.clear = clear;
         
         vm.getText();
 
@@ -20,7 +21,7 @@
             angular.element('.form-group:eq(1)>input').focus();
         });
 
-        function clear () {
+        function clear() {
             $uibModalInstance.dismiss('cancel');
         }
         
@@ -29,11 +30,14 @@
             
             function onSuccess(data, headers) {
                 vm.text = data;
-                console.log(vm.text);
             }
             function onError(error) {
                 AlertService.error(error.data.message);
             }
+        }
+        
+        function print() {
+            console.log("print text");
         }
 
     }
