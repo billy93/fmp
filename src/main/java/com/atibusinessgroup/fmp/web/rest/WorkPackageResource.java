@@ -327,6 +327,8 @@ public class WorkPackageResource {
     public ResponseEntity<WorkPackage> reuseWorkPackage(@RequestBody WorkPackage wp) throws URISyntaxException {
         log.debug("REST request to save reuse WorkPackage : {}", wp);
        
+        String tempId = wp.getWpid();
+        
         wp.setReuseFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
@@ -381,6 +383,16 @@ public class WorkPackageResource {
         	}
         }
 
+        Comment flagComment = new Comment();
+        flagComment.setComment("This workpackage was reused from Workpackage "+tempId); 
+        flagComment.setCreatedTime(ZonedDateTime.now());
+        flagComment.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        
+        List<Comment> comment = new ArrayList<>();
+        comment.add(flagComment);
+        
+        
+        wp.setComment(comment);
         wp.setStatus(Status.NEW);
         wp.setQueuedDate(Instant.now());
 
@@ -410,6 +422,8 @@ public class WorkPackageResource {
     public ResponseEntity<WorkPackage> replaceWorkPackage(@RequestBody WorkPackage wp) throws URISyntaxException {
         log.debug("REST request to save reuse WorkPackage : {}", wp);
        
+        String tempId = wp.getWpid();
+        
         wp.setReplaceFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
@@ -465,6 +479,16 @@ public class WorkPackageResource {
         	}
         }
 
+        Comment flagComment = new Comment();
+        flagComment.setComment("This workpackage was reused from Workpackage "+tempId); 
+        flagComment.setCreatedTime(ZonedDateTime.now());
+        flagComment.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        
+        List<Comment> comment = new ArrayList<>();
+        comment.add(flagComment);
+        
+        
+        wp.setComment(comment);
         wp.setStatus(Status.NEW);
         wp.setQueuedDate(Instant.now());
 

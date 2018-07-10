@@ -183,7 +183,7 @@
 									    			<div class="comment-list" ng-repeat="comment in vm.workPackage.comment.slice().reverse() track by $index">
 												    	<div class="clearfix">
 												    		<div class="pull-left comment-detail">{{comment.username}}</div>
-												    		<div class="pull-right comment-detail">{{comment.createdTime | date: 'short'}}</div>
+												    		<div class="pull-right comment-detail">{{comment.createdTime | date: 'dd/MM/yyyy HH:mm'}}</div>
 												    	</div>
 												    	<div class="comment-message" data-ng-bind-html="trustAsHtml(comment.comment)"></div>
 												    </div>
@@ -208,7 +208,7 @@
 									    			<div class="comment-list" ng-repeat="comment in vm.workPackage.interofficeComment.slice().reverse() track by $index">
 												    	<div class="clearfix">
 												    		<div class="pull-left comment-detail">{{comment.username}}</div>
-												    		<div class="pull-right comment-detail">{{comment.createdTime | date: 'short'}}</div>
+												    		<div class="pull-right comment-detail">{{comment.createdTime | date: 'dd/MM/yyyy HH:mm'}}</div>
 												    	</div>
 												    	<div class="comment-message" data-ng-bind-html="trustAsHtml(comment.comment)"></div>
 												    </div>
@@ -1292,7 +1292,7 @@
 									    			<div ng-click="vm.selectCommentFillingInstruction(filingInstructionData)" ng-class="{'FIclicked': vm.tempFIC.indexOf(filingInstructionData) > -1}" ng-if="!filingInstructionData.isDeleted || !vm.isFilingInstructionCollapse" class="comment-list" ng-repeat="filingInstructionData in  vm.workPackage.filingInstructionData.slice().reverse() track by $index">
 												    	<div class="clearfix">
 												    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
-												    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'short'}}</div>
+												    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'dd/MM/yyyy HH:mm'}}</div>
 												    	</div>
 												    	<label> 
 												    		<input type="checkbox" id="comment-message" name="comment-message" ng-model="filingInstructionData.isDeleted" disabled>
@@ -1326,7 +1326,7 @@
 					     				<div class="text-center no-data" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">No Attachment Available</div>							
 						     			<div ng-repeat="attachment in vm.workPackage.attachmentData.slice().reverse() track by $index" class="form-repeat">
 					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION' || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION' || vm.workPackage.status=='WITHDRAWN' || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></span></button>
-							       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'short'}}</label>
+							       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'dd/MM/yyyy HH:mm'}}</label>
 							       			<div class="row mt1">
 								        		<div class="col-md-6">
 									      			<div class="form-group">
@@ -2271,7 +2271,7 @@
 									    			<div ng-click="vm.selectCommentFillingInstruction(filingInstructionData)" ng-class="{'FIclicked': vm.tempFIC.indexOf(filingInstructionData) > -1}" ng-if="!filingInstructionData.isDeleted || !vm.isFilingInstructionCollapse" class="comment-list" ng-repeat="filingInstructionData in  vm.workPackage.filingInstructionData.slice().reverse() track by $index">
 												    	<div class="clearfix">
 												    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
-												    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'short'}}</div>
+												    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'dd/MM/yyyy HH:mm'}}</div>
 												    	</div>
 												    	<label> 
 												    		<input type="checkbox" id="comment-message" name="comment-message" ng-model="filingInstructionData.isDeleted" disabled>
@@ -2303,7 +2303,7 @@
 					     				<div class="text-center no-data" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">No Attachment Available</div>							
 						     			<div ng-repeat="attachment in vm.workPackage.attachmentData.slice().reverse() track by $index" class="form-repeat">
 					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></span></button>
-							       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'short'}}</label>
+							       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'dd/MM/yyyy HH:mm'}}</label>
 							       			<div class="row mt1">
 								        		<div class="col-md-6">
 									      			<div class="form-group">
@@ -3083,7 +3083,7 @@
 			       				</label>
 								<div ng-repeat="marketRules in vm.workPackage.marketRulesData track by $index" class="form-repeat">
 			       					<button ng-click="vm.removeMarketRules(marketRules)" class="bordered delete" ng-disabled="vm.workPackage.status !='NEW' && vm.workPackage.reuseFrom != null ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')"><span class="glyphicon glyphicon-remove"></span></button>
-				       				<label class="user">{{marketRules.username}} <span class="vseparator no-mar"></span> {{marketRules.createdTime | date:'short'}}</label>
+				       				<label class="user">{{marketRules.username}} <span class="vseparator no-mar"></span> {{marketRules.createdTime | date:'dd/MM/yyyy HH:mm'}}</label>
 						        	<div class="row mt1">
 						        		<div class="col-md-6">
 						        			<div class="form-group">
@@ -3552,7 +3552,7 @@
 					     				<div class="text-center no-data" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">No Attachment Available</div>							
 						     			<div ng-repeat="attachment in vm.workPackage.attachmentData.slice().reverse() track by $index" class="form-repeat">
 					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION'"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></span></button>
-							       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'short'}}</label>
+							       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'dd/MM/yyyy HH:mm'}}</label>
 							       			<div class="row mt1">
 								        		<div class="col-md-6">
 									      			<div class="form-group">
@@ -3620,7 +3620,7 @@
 									    			<div ng-click="vm.selectCommentFillingInstruction(filingInstructionData)" ng-class="{'FIclicked': vm.tempFIC.indexOf(filingInstructionData) > -1}" ng-if="!filingInstructionData.isDeleted || !vm.isFilingInstructionCollapse" class="comment-list" ng-repeat="filingInstructionData in  vm.workPackage.filingInstructionData.slice().reverse() track by $index">
 												    	<div class="clearfix">
 												    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
-												    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'short'}}</div>
+												    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'dd/MM/yyyy HH:mm'}}</div>
 												    	</div>
 												    	<label> 
 												    		<input type="checkbox" id="comment-message" name="comment-message" ng-model="filingInstructionData.isDeleted" disabled>
@@ -4217,7 +4217,7 @@
 					     				<div class="text-center no-data" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">No Attachment Available</div>							
 						     			<div ng-repeat="attachment in vm.workPackage.attachmentData.slice().reverse() track by $index" class="form-repeat">
 					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></span></button>
-							       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'short'}}</label>
+							       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'dd/MM/yyyy HH:mm'}}</label>
 							       			<div class="row mt1">
 								        		<div class="col-md-6">
 									      			<div class="form-group">
