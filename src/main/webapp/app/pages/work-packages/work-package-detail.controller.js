@@ -2663,20 +2663,16 @@
 	  
 	  vm.passUp = function(){
 		    if (confirm("Are you sure to Pass up this workorder?")) {
+		    	vm.workPackage.validate = true;
 		    	WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
-		    		WorkPackage.passup(result, function(wp){
-//		    			console.log(wp);
-		    			if(wp.validation != null && ((wp.validation.errorsCount > 0) || (wp.validation.warningsCount > 0))){
-		    				vm.workPackage.validation = wp.validation;
-		    				alert('There is '+wp.validation.errorsCount+' error(s) and '+wp.validation.warningsCount+' warning(s)');		    				
-		    			}
-		    			else{
+		    		if(vm.mapWorkpackage(result)){
+			    		WorkPackage.passup(result, function(wp){
 			    			alert('Pass Up Success');
 			    			$state.go('work-package');
-		    			}
-		    		}, function(){
-		    			alert('Pass Up Failed');
-		    		});
+			    		}, function(){
+			    			alert('Pass Up Failed');
+			    		});
+		    		}
 		    	}, function onSaveError(){
 		    		alert('An error occured, please try again');
 		    	});
@@ -2702,13 +2698,19 @@
 	  
 	  vm.passSideway = function(){
 		    if (confirm("Are you sure to Pass sideway this workorder?")) {
+		    		vm.workPackage.validate = true;
 			    	WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
-			    		WorkPackage.passsideway(vm.workPackage, function(){
-			    			alert('Pass Sideway Success');
-			    			$state.go('work-package');
-			    		}, function(){
-			    			alert('Pass Sideway Failed');
-			    		});
+			    		if(vm.mapWorkpackage(result)){
+				    		WorkPackage.passsideway(vm.workPackage, function(){
+				    			alert('Pass Sideway Success');
+				    			$state.go('work-package');
+				    		}, function(){
+				    			alert('Pass Sideway Failed');
+				    		});
+			    		}
+			    		else{
+			    			
+			    		}
 			    	}, function onSaveError(){
 			    		alert('An error occured, please try again');
 			    	});
@@ -2777,6 +2779,7 @@
 	  };
 	  
 	  vm.approve = function(){
+		  vm.workPackage.validate = true;
 		  WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
 			  if(vm.mapWorkpackage(result)){
 				  var validated = true;
@@ -2888,28 +2891,7 @@
 						  }				  
 					  }
 				  }	
-				  
-				  /*if(vm.workPackage.waiverFareSheet != null && vm.workPackage.waiverFareSheet.length > 0){
-					  for(var x=0;x<vm.workPackage.waiverFareSheet.length;x++){
-						  if(vm.workPackage.waiverFareSheet[x].fares != null && vm.workPackage.waiverFareSheet[x].fares.length > 0){
-							  //vm.expandCityGroup(vm.workPackage.waiverFareSheet[x]);
-							  for(var y=0;y<vm.workPackage.waiverFareSheet[x].fares.length;y++){
-								  if(vm.workPackage.waiverFareSheet[x].fares[y].status == "APPROVED"){
-									  counterApprove =true;
-									  break;
-								  }
-							  }
-							  for(var y=0;y<vm.workPackage.waiverFareSheet[x].fares.length;y++){
-								  if(vm.workPackage.waiverFareSheet[x].fares[y].status == "" || vm.workPackage.waiverFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
-									  cekStatus = "Can not approve because status fare is : "+vm.workPackage.waiverFareSheet[x].fares[y].status;
-									  validated = false;
-									  break;
-								  }
-							  }
-						  }
-					  }
-				  }	*/
-				 
+				  				 
 				  if(validated){
 					  
 					  if(vm.workPackage.fareSheet != null && vm.workPackage.fareSheet.length > 0){
@@ -2991,7 +2973,7 @@
 						 alert('Work Package cannot be approved, please check the workorder');  
 					  }			  
 				  } 
-			  }			  
+			  }	
 	    	}, function onSaveError(){
 	    		alert('An error occured, please try again');
 	    	});

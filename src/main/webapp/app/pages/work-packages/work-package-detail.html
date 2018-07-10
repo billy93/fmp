@@ -791,7 +791,7 @@
 																</span>							                			
 									               			</td>
 									               			<td id="comment" ng-click="vm.tdClick(workPackageSheet, fare, 'comment', $event);" 
-									               				ng-class="{'poiv-none': highlighted:fare.field['comment'], changed : vm.diff[fare.id].indexOf('comment') > -1}">
+									               				ng-class="{highlighted:fare.field['comment'], changed : vm.diff[fare.id].indexOf('comment') > -1}">
 									               				<input type="text" class="form-control" name="comment{{$parent.$index}}{{$index}}" id="field_comment"
 									               						ng-disabled=" vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X'"
 											                    		ng-model="fare.comment"/>
