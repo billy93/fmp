@@ -4105,7 +4105,7 @@ public class WorkPackageResource {
 					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
-							if(wpfs.getWaiverAgentName() == null || wpfs.getWaiverAgentName().contentEquals("")) {
+							if(fare.getWaiverAgentName() == null || fare.getWaiverAgentName().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Agent Name is required");
@@ -4113,7 +4113,7 @@ public class WorkPackageResource {
 					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
-							if(wpfs.getWaiverIataNo() == null || wpfs.getWaiverIataNo().contentEquals("")) {
+							if(fare.getWaiverIataNo() == null || fare.getWaiverIataNo().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("IATA No is required");
@@ -4234,7 +4234,7 @@ public class WorkPackageResource {
 					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
-							if(wpfs.getWaiverAgentName() == null || wpfs.getWaiverAgentName().contentEquals("")) {
+							if(fare.getWaiverAgentName() == null || fare.getWaiverAgentName().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Agent Name is required");
@@ -4242,7 +4242,7 @@ public class WorkPackageResource {
 					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
-							if(wpfs.getWaiverIataNo() == null || wpfs.getWaiverIataNo().contentEquals("")) {
+							if(fare.getWaiverIataNo() == null || fare.getWaiverIataNo().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("IATA No is required");
