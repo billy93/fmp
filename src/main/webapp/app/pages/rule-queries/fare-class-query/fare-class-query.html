@@ -1,249 +1,239 @@
-<div class="panel">
-	<div class="panel" id="fareTabContent">
-		<div class="panel-body">
-			<div class="filter-hero">
-				<div class="filter-label semibold show">Hide Filter</div>
-				<div class="filter-area">
-					<div class="clearfix">
-						<form name="fareClassForm" role="form" novalidate>
-							<div class="clearfix form-group">
-								<div class="pull-left ph5px w70">
-									<div class="panel panel-default mb0"
-										style="background-color: transparent !important; border-color: #f5f5f5">
-										<div class="panel-heading" style="background-color: #f5f5f5">
-											<h3 class="panel-title">Generic Filters</h3>
-										</div>
-										<div class="panel-body">
-											<div class="pull-left col-md-6 no-lpad">
-												<div class="form-group">
-													<div class="custom-label semibold">Carrier</div>
-													<input type="text" class="form-control" name="cxr"
-														id="cxr" ng-model="vm.queryParams.cxr" uppercase />
-												</div>
-												<div class="form-group">
-													<div class="custom-label semibold">Rule Number</div>
-													<input type="text" class="form-control" name="ruleNo"
-														id="ruleNo" ng-model="vm.queryParams.ruleNo" uppercase />
-												</div>
-											</div>
-											<div class="pull-left col-md-6 no-lpad">
-												<div class="form-group">
-													<div class="custom-label semibold">Fare Class</div>
-													<input type="text" class="form-control" name="fareClass"
-														id="fareClass" ng-model="vm.queryParams.fareClass" uppercase />
-												</div>
-												<div class="form-group">
-													<div class="custom-label semibold">Tariff Number</div>
-													<input type="text" class="form-control" name="tarNo"
-														id="tarNo" ng-model="vm.queryParams.tarNo"
-														uppercase />
-												</div>
-											</div>
-										</div>
+<div class="panel" id="fareTabContent">
+	<div class="panel-body">
+		<div class="filter-hero">
+			<div class="filter-label semibold show">Hide Filter</div>
+			<div class="filter-area">
+				<div class="clearfix">
+					<form name="fareClassForm" role="form" novalidate>
+						<div class="clearfix form-group">
+							<div class="pull-left ph5px w70">
+								<div class="panel panel-default mb0"
+									style="background-color: transparent !important; border-color: #f5f5f5">
+									<div class="panel-heading" style="background-color: #f5f5f5">
+										<h3 class="panel-title">Generic Filters</h3>
 									</div>
-								</div>
-								<div class="pull-left ph5px w30">
-									<div class="panel panel-default mb0"
-										style="background-color: transparent !important; border-color: #f5f5f5;">
-										<div class="panel-heading" style="background-color: #f5f5f5">
-											<h3 class="panel-title">Advanced Filters</h3>
+									<div class="panel-body">
+										<div class="pull-left col-md-6 no-lpad">
+											<div class="form-group">
+												<div class="custom-label semibold">Carrier</div>
+												<input type="text" class="form-control" name="cxr"
+													id="cxr" ng-model="vm.queryParams.cxr" uppercase />
+											</div>
+											<div class="form-group">
+												<div class="custom-label semibold">Rule Number</div>
+												<input type="text" class="form-control" name="ruleNo"
+													id="ruleNo" ng-model="vm.queryParams.ruleNo" uppercase />
+											</div>
 										</div>
-										<div class="panel-body"
-											style="background-color: transparent !important;">
-											<div>
-												<div class="form-group">
-													<div class="custom-label semibold">Passenger Type</div>
-													<input type="text" class="form-control" name="psgrType"
-														id="psgrType" ng-model="vm.queryParams.psgrType"
-														uppercase />
-												</div>
-												<div class="form-group">
-													<div class="custom-label semibold">Fare Type</div>
-													<input type="text" class="form-control" name="fareType"
-														id="fareType" ng-model="vm.queryParams.fareType"
-														uppercase />
-												</div>
-												<div class="form-group">
-													<div class="custom-label semibold">Booking Class</div>
-													<input type="text" class="form-control" name="bookingClass"
-														id="bookingClass" ng-model="vm.queryParams.bookingClass"
-														uppercase />
-												</div>
+										<div class="pull-left col-md-6 no-lpad">
+											<div class="form-group">
+												<div class="custom-label semibold">Fare Class</div>
+												<input type="text" class="form-control" name="fareClass"
+													id="fareClass" ng-model="vm.queryParams.fareClass" uppercase />
+											</div>
+											<div class="form-group">
+												<div class="custom-label semibold">Tariff Number</div>
+												<input type="text" class="form-control" name="tarNo"
+													id="tarNo" ng-model="vm.queryParams.tarNo"
+													uppercase />
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-
-							<div class="clearfix mb1">
-								<div class="pull-right text-right">
-									<button type="button" id="btnLoadFare"
-										class="btn btn-default small"
-										ng-click="vm.loadAll();">Query</button>
-									<button type="button" id="btnClearFare"
-										class="btn btn-default small"
-										ng-click="vm.clearFilter();">Clear</button>
-									<button type="reset" id="btnResetFare"
-										ng-click="vm.resetFilter();"
-										class="btn btn-default small">Reset</button>
+							<div class="pull-left ph5px w30">
+								<div class="panel panel-default mb0"
+									style="background-color: transparent !important; border-color: #f5f5f5;">
+									<div class="panel-heading" style="background-color: #f5f5f5">
+										<h3 class="panel-title">Advanced Filters</h3>
+									</div>
+									<div class="panel-body"
+										style="background-color: transparent !important;">
+										<div>
+											<div class="form-group">
+												<div class="custom-label semibold">Passenger Type</div>
+												<input type="text" class="form-control" name="psgrType"
+													id="psgrType" ng-model="vm.queryParams.psgrType"
+													uppercase />
+											</div>
+											<div class="form-group">
+												<div class="custom-label semibold">Fare Type</div>
+												<input type="text" class="form-control" name="fareType"
+													id="fareType" ng-model="vm.queryParams.fareType"
+													uppercase />
+											</div>
+											<div class="form-group">
+												<div class="custom-label semibold">Booking Class</div>
+												<input type="text" class="form-control" name="bookingClass"
+													id="bookingClass" ng-model="vm.queryParams.bookingClass"
+													uppercase />
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
+						</div>
 
-						</form>
+						<div class="clearfix mb1">
+							<div class="pull-right text-right">
+								<button type="button" id="btnLoadFare"
+									class="btn btn-default small"
+									ng-click="vm.loadAll();">Query</button>
+								<button type="button" id="btnClearFare"
+									class="btn btn-default small"
+									ng-click="vm.clearFilter();">Clear</button>
+								<button type="reset" id="btnResetFare"
+									ng-click="vm.resetFilter();"
+									class="btn btn-default small">Reset</button>
+							</div>
+						</div>
+
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div class="clearfix mb1">
+			<div class="pull-left ph5px w60">
+				<div class="box-detail">
+					<div class="box-header">Group Of Fare Classes</div>
+					<div class="box-body">
+						<div class="table-wrapper">
+							<div class="datatable-wrapper form-inline">
+								<div class="table-responsive">
+									<table class="table table-striped table-bordered datatable">
+										<thead>
+											<tr>
+												<th>No</th>
+												<th>CXR</th>
+												<th>TAR NO</th>
+												<th>TAR CD</th>
+												<th>DESCRIPTION</th>
+												<th>RULE NO</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="fareClassGroup in vm.fareClassGroups" 
+												ng-click="vm.selectedRow = fareClassGroup; vm.getFareClassQueries(fareClassGroup);"
+												ng-class="{'selected': vm.selectedRow == fareClassGroup}">
+												<td>{{(vm.queryParams.page * vm.queryParams.size) + $index + 1}}</td>
+												<td>{{fareClassGroup.cxr}}</td>
+												<td>{{fareClassGroup.tarNo}}</td>
+												<td>{{fareClassGroup.tarCd}}</td>
+												<td>{{fareClassGroup.description}}</td>
+												<td>{{fareClassGroup.ruleNo}}</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="text-center">
+								<jhi-item-count page="vm.page" total="vm.queryCount"
+									items-per-page="vm.itemsPerPage"></jhi-item-count>
+								<uib-pagination class="pagination-sm"
+									total-items="vm.totalItems" items-per-page="vm.itemsPerPage"
+									ng-model="vm.page" ng-change="vm.loadAll()"></uib-pagination>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 
-			<div class="clearfix mb1">
-				<div class="pull-left ph5px w60">
-					<div class="box-detail">
-						<div class="box-header">Group Of Fare Classes</div>
-						<div class="box-body">
-							<div class="table-wrapper">
-								<div class="datatable-wrapper form-inline">
-									<div class="table-responsive">
-										<table class="table table-striped table-bordered datatable">
-											<thead>
-												<tr>
-													<th>No</th>
-													<th>CXR</th>
-													<th>TAR NO</th>
-													<th>TAR CD</th>
-													<th>DESCRIPTION</th>
-													<th>RULE NO</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr ng-repeat="fareClassGroup in vm.fareClassGroups" 
-													ng-click="vm.selectedRow = fareClassGroup; vm.getFareClassQueries(fareClassGroup);"
-													ng-class="{'selected': vm.selectedRow == fareClassGroup}">
-													<td>{{(vm.queryParams.page * vm.queryParams.size) + $index + 1}}</td>
-													<td>{{fareClassGroup.cxr}}</td>
-													<td>{{fareClassGroup.tarNo}}</td>
-													<td>{{fareClassGroup.tarCd}}</td>
-													<td>{{fareClassGroup.description}}</td>
-													<td>{{fareClassGroup.ruleNo}}</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-								</div>
-								<div class="text-center">
-									<jhi-item-count page="vm.page" total="vm.queryCount"
-										items-per-page="vm.itemsPerPage"></jhi-item-count>
-									<uib-pagination class="pagination-sm"
-										total-items="vm.totalItems" items-per-page="vm.itemsPerPage"
-										ng-model="vm.page" ng-change="vm.loadAll()"></uib-pagination>
+			<div class="pull-left ph5px w40">
+				<div class="box-detail">
+					<div class="box-header">Fare Classes Of Selected Group</div>
+					<div class="box-body">
+						<div class="table-wrapper table-afd">
+							<div class="datatable-wrapper form-inline mb0">
+								<div class="table-responsive pb0">
+									<table class="table table-striped table-bordered datatable table-header-fixed">
+										<thead>
+											<tr>
+												<th class="th-fixed">No</th>
+												<th class="th-fixed">FARE CLASS</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr ng-repeat="fareClassQuery in vm.fareClassQueries"
+												ng-click="vm.fareClassSelectedRow = fareClassQuery; vm.getFareClassDetails(fareClassQuery);"
+												ng-class="{'selected': vm.fareClassSelectedRow == fareClassQuery}">
+												<td>{{$index + 1}}</td>
+												<td>{{fareClassQuery.fareClass}}</td>
+											</tr>
+										</tbody>
+									</table>
 								</div>
 							</div>
 						</div>
-					</div>
-				</div>
-
-				<div class="pull-left ph5px w40">
-					<div class="box-detail">
-						<div class="box-header">Fare Classes Of Selected Group</div>
-						<div class="box-body">
-							<div class="clearfix">
-								<div class="pull-right text-right">
-									<button type="button" class="btn btn-default small"
-										ng-click="vm.fareClassGroupText()" ng-disabled="vm.fareClassSelectedRow == null">Text</button>
-									<button type="button" ng-click="vm.constructDetails()"
-										class="btn btn-default small" ng-disabled="vm.fareClassSelectedRow == null">Construction Details</button>
-								</div>
-							</div>
-							<div class="table-wrapper">
-								<div class="datatable-wrapper form-inline">
-									<div class="table-responsive">
-										<table class="table table-striped table-bordered datatable">
-											<thead>
-												<tr>
-													<th>No</th>
-													<th>FARE CLASS</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr ng-repeat="fareClassQuery in vm.fareClassQueries"
-													ng-click="vm.fareClassSelectedRow = fareClassQuery; vm.getFareClassDetails(fareClassQuery);"
-													ng-class="{'selected': vm.fareClassSelectedRow == fareClassQuery}">
-													<td>{{$index + 1}}</td>
-													<td>{{fareClassQuery.fareClass}}</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
-								</div>
-<!-- 								<div class="text-center"> -->
-<!-- 									<jhi-item-count page="vm.page" total="vm.queryCount" -->
-<!-- 										items-per-page="vm.itemsPerPage"></jhi-item-count> -->
-<!-- 									<uib-pagination class="pagination-sm" -->
-<!-- 										total-items="vm.totalItems" items-per-page="vm.itemsPerPage" -->
-<!-- 										ng-model="vm.page" ng-change="vm.loadFareClass()"></uib-pagination> -->
-<!-- 								</div> -->
+						<div class="clearfix">
+							<div class="pull-right text-right">
+								<button type="button" class="btn btn-default small"
+									ng-click="vm.fareClassGroupText()" ng-disabled="vm.fareClassSelectedRow == null">Text</button>
+								<button type="button" ng-click="vm.constructDetails()"
+									class="btn btn-default small" ng-disabled="vm.fareClassSelectedRow == null">Construction Details</button>
 							</div>
 						</div>
 					</div>
-
 				</div>
 			</div>
-
-			<div class="box-detail box-comment">
-				<div class="box-header">Details Of Selected Fare Classes</div>
-				<div class="box-body">
-
-					<div class="table-wrapper">
-						<div class="datatable-wrapper form-inline">
-							<div class="table-responsive">
-								<table class="table table-striped table-bordered datatable">
-									<thead>
-										<tr>
-											<th>No</th>
-											<th>SEQ NO</th>
-											<th>LOC 1 TYPE</th>
-											<th>LOC 1</th>
-											<th>LOC 2 TYPE</th>
-											<th>LOC 2</th>
-											<th>FTNT</th>
-											<th>RTG NO</th>
-											<th>SEASON</th>
-											<th>DAY OF WEEK</th>
-											<th>FARE TYPE</th>
-											<th>OW/RT</th>
-											<th>BKCD</th>
-											<th>NORMAL/SPECIAL</th>
-											<th>DISPLAY TYPE</th>
-											<th>PAX TYPE</th>
-											<th>EFFECTIVE DATE</th>
-											<th>DISCONTINUE DATE</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr ng-repeat="fareClassDetail in vm.fareClassDetails"
-											ng-click="vm.fareClassDetailSelectedRow = fareClassDetail;"
-											ng-class="{'selected': vm.fareClassDetailSelectedRow == fareClassDetail}">
-											<td>{{$index + 1}}</td>
-											<td>{{fareClassDetail.seqNo}}</td>
-											<td>{{fareClassDetail.geoType1}}</td>
-											<td>{{fareClassDetail.geoLoc1}}</td>
-											<td>{{fareClassDetail.geoType2}}</td>
-											<td>{{fareClassDetail.geoLoc2}}</td>
-											<td>{{fareClassDetail.ftnt}}</td>
-											<td>{{fareClassDetail.rtgNo}}</td>
-											<td>{{fareClassDetail.seasonType}}</td>
-											<td>{{fareClassDetail.dowType}}</td>
-											<td>{{fareClassDetail.fareType}}</td>
-											<td>{{fareClassDetail.owrt}}</td>
-											<td>{{fareClassDetail.bkcd}}</td>
-											<td>{{fareClassDetail.normalSpecial}}</td>
-											<td>{{fareClassDetail.displayType}}</td>
-											<td>{{fareClassDetail.paxType}}</td>
-											<td>{{fareClassDetail.datesEff | date:'medium'}}</td>
-											<td>{{fareClassDetail.datesDisc}}</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
+		</div>
+		
+		<div class="box-detail box-comment">
+			<div class="box-header">Details Of Selected Fare Classes</div>
+			<div class="box-body">
+				<div class="table-wrapper">
+					<div class="datatable-wrapper form-inline">
+						<div class="table-responsive">
+							<table class="table table-striped table-bordered datatable">
+								<thead>
+									<tr>
+										<th>No</th>
+										<th>SEQ NO</th>
+										<th>LOC 1 TYPE</th>
+										<th>LOC 1</th>
+										<th>LOC 2 TYPE</th>
+										<th>LOC 2</th>
+										<th>FTNT</th>
+										<th>RTG NO</th>
+										<th>SEASON</th>
+										<th>DAY OF WEEK</th>
+										<th>FARE TYPE</th>
+										<th>OW/RT</th>
+										<th>BKCD</th>
+										<th>NORMAL/SPECIAL</th>
+										<th>DISPLAY TYPE</th>
+										<th>PAX TYPE</th>
+										<th>EFFECTIVE DATE</th>
+										<th>DISCONTINUE DATE</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="fareClassDetail in vm.fareClassDetails"
+										ng-click="vm.fareClassDetailSelectedRow = fareClassDetail;"
+										ng-class="{'selected': vm.fareClassDetailSelectedRow == fareClassDetail}">
+										<td>{{$index + 1}}</td>
+										<td>{{fareClassDetail.seqNo}}</td>
+										<td>{{fareClassDetail.geoType1}}</td>
+										<td>{{fareClassDetail.geoLoc1}}</td>
+										<td>{{fareClassDetail.geoType2}}</td>
+										<td>{{fareClassDetail.geoLoc2}}</td>
+										<td>{{fareClassDetail.ftnt}}</td>
+										<td>{{fareClassDetail.rtgNo}}</td>
+										<td>{{fareClassDetail.seasonType}}</td>
+										<td>{{fareClassDetail.dowType}}</td>
+										<td>{{fareClassDetail.fareType}}</td>
+										<td>{{fareClassDetail.owrt}}</td>
+										<td>{{fareClassDetail.bkcd}}</td>
+										<td>{{fareClassDetail.normalSpecial}}</td>
+										<td>{{fareClassDetail.displayType}}</td>
+										<td>{{fareClassDetail.paxType}}</td>
+										<td>{{fareClassDetail.datesEff | date:'medium'}}</td>
+										<td>{{fareClassDetail.datesDisc}}</td>
+									</tr>
+								</tbody>
+							</table>
 						</div>
+					</div>
 <!-- 						<div class="text-center"> -->
 <!-- 							<jhi-item-count page="vm.page" total="vm.queryCount" -->
 <!-- 								items-per-page="vm.itemsPerPage"></jhi-item-count> -->
@@ -251,11 +241,10 @@
 <!-- 								total-items="vm.totalItems" items-per-page="vm.itemsPerPage" -->
 <!-- 								ng-model="vm.page" ng-change="vm.loadFareClassDetail()"></uib-pagination> -->
 <!-- 						</div> -->
-					</div>
 				</div>
 			</div>
-
 		</div>
 
 	</div>
 </div>
+

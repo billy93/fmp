@@ -671,7 +671,8 @@ public class AtpcoFootnoteQueryCustomRepository {
 								new BasicDBObject("$expr", 
 										new BasicDBObject("$and", Arrays.asList(
 												new BasicDBObject("$eq", Arrays.asList("$tar_no","$$tar_no")),
-												new BasicDBObject("$eq", Arrays.asList("$type","FARE"))
+												new BasicDBObject("$eq", Arrays.asList("$type","FARE")),
+												new BasicDBObject("$eq", Arrays.asList("$pp","public"))
 												))
 										)
 								)
@@ -1150,7 +1151,8 @@ public class AtpcoFootnoteQueryCustomRepository {
 								new BasicDBObject("$expr", 
 										new BasicDBObject("$and", Arrays.asList(
 												new BasicDBObject("$eq", Arrays.asList("$tar_no","$$tar_no")),
-												new BasicDBObject("$eq", Arrays.asList("$type","FARE"))
+												new BasicDBObject("$eq", Arrays.asList("$type","FARE")),
+												new BasicDBObject("$eq", Arrays.asList("$pp","public"))
 												))
 										)
 								)

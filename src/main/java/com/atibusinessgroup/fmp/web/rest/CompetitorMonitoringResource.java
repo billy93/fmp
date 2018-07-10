@@ -1,5 +1,6 @@
 package com.atibusinessgroup.fmp.web.rest;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
 import com.atibusinessgroup.fmp.domain.dto.AfdQuery;
 import com.atibusinessgroup.fmp.domain.dto.AfdQueryParam;
+import com.atibusinessgroup.fmp.domain.dto.AfdQueryWrapper;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteQueryGroup;
 import com.atibusinessgroup.fmp.domain.dto.Category;
 import com.atibusinessgroup.fmp.repository.AtpcoRecord0Repository;
@@ -74,10 +76,10 @@ public class CompetitorMonitoringResource {
      */
     @PostMapping("/competitor-monitoring")
     @Timed
-    public ResponseEntity<List<AtpcoFare>> getAllQueries(@RequestBody AfdQueryParam param) {
+    public ResponseEntity<List<AfdQuery>> getAllQueries(@RequestBody AfdQueryParam param) {
     	
     	Pageable pageable = new PageRequest(param.getPage(), param.getSize());
-    	Page<AtpcoFare> page = competitorMonitoringCustomRepository.getCompetitorQueries(param, pageable);
+    	Page<AfdQuery> page = competitorMonitoringCustomRepository.getCompetitorQueries(param, pageable);
     	HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/footnote-queries");
     	
 		return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);

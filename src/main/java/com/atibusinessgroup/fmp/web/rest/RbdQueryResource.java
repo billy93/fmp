@@ -4,6 +4,9 @@ import com.codahale.metrics.annotation.Timed;
 import com.atibusinessgroup.fmp.domain.RbdQuery;
 import com.atibusinessgroup.fmp.domain.dto.AfdQuery;
 import com.atibusinessgroup.fmp.domain.dto.Category;
+import com.atibusinessgroup.fmp.domain.dto.RuleQueryParam;
+import com.atibusinessgroup.fmp.repository.RbdqueryRepository;
+import com.atibusinessgroup.fmp.repository.custom.AtpcoRbdQueryCustomRepository;
 import com.atibusinessgroup.fmp.service.RbdqueryService;
 import com.atibusinessgroup.fmp.web.rest.errors.BadRequestAlertException;
 import com.atibusinessgroup.fmp.web.rest.util.HeaderUtil;
@@ -12,6 +15,7 @@ import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -36,9 +40,12 @@ public class RbdQueryResource {
     private static final String ENTITY_NAME = "rbdquery";
 
     private final RbdqueryService rbdqueryService;
+    
+    private final AtpcoRbdQueryCustomRepository rbdQueryCustomRepository;
 
-    public RbdQueryResource(RbdqueryService rbdqueryService) {
+    public RbdQueryResource(RbdqueryService rbdqueryService, AtpcoRbdQueryCustomRepository rbdQueryCustomRepository) {
         this.rbdqueryService = rbdqueryService;
+        this.rbdQueryCustomRepository = rbdQueryCustomRepository;
     }
 
     /**
@@ -89,11 +96,19 @@ public class RbdQueryResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of rbdqueries in body
      */
-    @GetMapping("/rbdqueries")
+    @PostMapping("/rbdqueries/all")
     @Timed
-    public ResponseEntity<List<RbdQuery>> getAllRbdqueries(Pageable pageable) {
-        log.debug("REST request to get a page of Rbdqueries");
-        Page<RbdQuery> page = rbdqueryService.findAll(pageable);
+    public ResponseEntity<List<RbdQuery>> getAllRbdqueries(@RequestBody RuleQueryParam params) {
+        log.debug("REST request to get a page of Rbdqueries: {}, {}", params.toString());
+        
+        Pageable pageable = new PageRequest(params.getPage(), params.getSize());
+        
+//        Page<RbdQuery> page = rbdqueryService.findAll(pageable);
+        
+        //Custom
+        Page<RbdQuery> page = rbdQueryCustomRepository.getRbdByParams(params, pageable);
+        
+        
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/rbdqueries");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -126,12 +141,12 @@ public class RbdQueryResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
     }
     
-    @GetMapping("/rbdqueries/rbd")
-    @Timed
-    public ResponseEntity<List<Category>> getAfdQueryRules(AfdQuery afdQuery) {
-        log.debug("REST request to get AfdQueries rules: {}", afdQuery);
-        String a = "aaaa";
-        System.out.println(a);
-        return null;
-    }
+//    @GetMapping("/rbdqueries/rbd")
+//    @Timed
+//    public ResponseEntity<List<Category>> getAfdQueryRules(AfdQuery afdQuery) {
+//        log.debug("REST request to get AfdQueries rules: {}", afdQuery);
+//        String a = "aaaa";
+//        System.out.println(a);
+//        return null;
+//    }
 }
