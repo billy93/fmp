@@ -73,7 +73,7 @@
         vm.currencies = currencies;
         vm.indexSelectedTab = 0;
 //        $scope.dateformat = "yyyy-MM-dd";
-        $scope.dateformat = "dd-MM-yyyy";
+        $scope.dateformat = "dd/MM/yyyy";
         vm.optionFare = fareTypes;
         vm.atpcoFareTypes = atpcoFareTypes;
                            
