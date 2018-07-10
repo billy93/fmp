@@ -2,6 +2,7 @@ package com.atibusinessgroup.fmp.service.impl;
 
 import com.atibusinessgroup.fmp.service.RbdqueryService;
 import com.atibusinessgroup.fmp.domain.RbdQuery;
+import com.atibusinessgroup.fmp.domain.dto.RuleQueryParam;
 import com.atibusinessgroup.fmp.repository.RbdqueryRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

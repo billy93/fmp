@@ -35,6 +35,16 @@
                 search: null
             },
             resolve: {
+            	params: [function() {
+            		return {
+            			cxr: null,
+                		ruleTarNo: null,
+                		ruleNo: null,
+                		effectiveDateFrom: null,
+                		chart1: null,
+                		chart2: null
+                	}
+            	}],
                 pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
                     return {
                         page: PaginationUtil.parsePage($stateParams.page),
