@@ -2300,7 +2300,7 @@
 					                </div>
 					          	</div>
 						              
-								<div class="col-md-12">
+									<div class="col-md-12">
 					     				<div class="text-center no-data" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">No Attachment Available</div>							
 						     			<div ng-repeat="attachment in vm.workPackage.attachmentData.slice().reverse() track by $index" class="form-repeat">
 					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></span></button>
@@ -3608,26 +3608,34 @@
 										<label>Comment</label>
 										<wysiwyg-edit content="vm.commentStringFillingInstruction" config="vm.editorConfig"></wysiwyg-edit>
 									</div>
-
-									<div class="box-detail box-comment">
-										<div class="box-body">
-							        		<div class="comment-container">
-							        			<div class="comment-wrapper">
-									    			<div ng-click="vm.selectCommentFillingInstruction(filingInstructionData)" ng-class="{'FIclicked': vm.tempFIC.indexOf(filingInstructionData) > -1}" ng-if="!filingInstructionData.isDeleted || !vm.isFilingInstructionCollapse" class="comment-list" ng-repeat="filingInstructionData in  vm.workPackage.filingInstructionData.slice().reverse() track by $index">
-												    	<div class="clearfix">
-												    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
-												    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'dd/MM/yyyy HH:mm'}}</div>
-												    	</div>
-												    	<label> 
-												    		<input type="checkbox" id="comment-message" name="comment-message" ng-model="filingInstructionData.isDeleted" disabled>
-															<span data-ng-bind-html="trustAsHtml(filingInstructionData.comment)"></span>
-														</label>
-													</div>
-									    		</div>
-							        		</div>					        		
-								    	</div>
-									</div>	
-						</div>						
+									<div class="clearfix">
+										<div class="pull-right">
+											<button class="btn btn-default small btn-secondary" ng-click="vm.deleteCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Delete Comment</button>
+											<button class="btn btn-default small btn-secondary" ng-click="vm.collapseCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Collapse Deleted Comment</button>
+											<button class="btn btn-default small btn-secondary" ng-click="vm.expandCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Expand Deleted Comment</button>
+											<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Add Comment</button>
+										</div>
+									</div>		
+								</div>
+								<div class="box-detail box-comment">
+									<div class="box-body">
+						        		<div class="comment-container">
+						        			<div class="comment-wrapper">
+								    			<div ng-click="vm.selectCommentFillingInstruction(filingInstructionData)" ng-class="{'FIclicked': vm.tempFIC.indexOf(filingInstructionData) > -1}" ng-if="!filingInstructionData.isDeleted || !vm.isFilingInstructionCollapse" class="comment-list" ng-repeat="filingInstructionData in  vm.workPackage.filingInstructionData.slice().reverse() track by $index">
+											    	<div class="clearfix">
+											    		<div class="pull-left comment-detail">{{filingInstructionData.username}}</div>
+											    		<div class="pull-right comment-detail">{{filingInstructionData.createdTime | date: 'dd/MM/yyyy HH:mm'}}</div>
+											    	</div>
+											    	<label> 
+											    		<input type="checkbox" id="comment-message" name="comment-message" ng-model="filingInstructionData.isDeleted" disabled>
+														<span data-ng-bind-html="trustAsHtml(filingInstructionData.comment)"></span>
+													</label>
+												</div>
+								    		</div>
+						        		</div>					        		
+							    	</div>
+								</div>	
+							</div>						
 						</div>
 					</div>
 				</div>
@@ -4194,7 +4202,7 @@
 							</div>																						
 						
 							<div class="tab-pane" ng-class="{active:vm.currentTabAttachment}">
-									<div class="action-btn-wrapper">
+								<div class="action-btn-wrapper">
 					     				<div class="col-md-12 text-right no-pad">
 					     					<button ng-click="vm.addAttachment()" class="btn btn-primary" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Add</button>
 					     				</div>
