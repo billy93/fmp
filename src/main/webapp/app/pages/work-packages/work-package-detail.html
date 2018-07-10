@@ -2298,8 +2298,7 @@
 					                  ng-model="vm.workPackage.attachmentApprovalReference" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
 					                  <button ng-click="vm.generateTourCodeAttachment()" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Generate Tour Code</button>
 					                </div>
-					          	</div>
-						              
+					          	</div>						              
 									<div class="col-md-12">
 					     				<div class="text-center no-data" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">No Attachment Available</div>							
 						     			<div ng-repeat="attachment in vm.workPackage.attachmentData.slice().reverse() track by $index" class="form-repeat">
@@ -2335,7 +2334,6 @@
 																		Is Deleted
 																	</label>
 																</div>
-															</div>
 														</div>
 										            </div>
 										            <input type="hidden" class="form-control" name="file" id="field_file"
