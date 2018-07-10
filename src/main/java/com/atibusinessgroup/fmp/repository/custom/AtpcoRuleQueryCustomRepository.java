@@ -187,7 +187,9 @@ public class AtpcoRuleQueryCustomRepository {
 				query.append("pipeline",  Arrays.asList(
 						new BasicDBObject("$match", new BasicDBObject("$expr", new BasicDBObject("$and", Arrays.asList(
 								new BasicDBObject("$eq", Arrays.asList("$tar_no", "$$tariff")), 
-								new BasicDBObject("$eq", Arrays.asList("$type", "FARE BY RULE")))
+								new BasicDBObject("$eq", Arrays.asList("$type", "FARE BY RULE")),
+								new BasicDBObject("$eq", Arrays.asList("$pp", "public"))
+								)
 						)))
 				));
 				
@@ -370,7 +372,8 @@ public class AtpcoRuleQueryCustomRepository {
 								new BasicDBObject("$expr", 
 										new BasicDBObject("$and", Arrays.asList(
 												new BasicDBObject("$eq", Arrays.asList("$tar_no", "$$tariff")), 
-												new BasicDBObject("$in", Arrays.asList("$type", typeFinal))
+												new BasicDBObject("$in", Arrays.asList("$type", typeFinal)),
+												new BasicDBObject("$eq", Arrays.asList("$pp", "public"))
 												)
 											)
 										)
