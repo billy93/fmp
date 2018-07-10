@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('FareClassQueryController', FareClassQueryController);
 
-    FareClassQueryController.$inject = ['$state', '$stateParams', 'FareClassQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams'];
+    FareClassQueryController.$inject = ['$state', '$stateParams', 'FareClassQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', '$uibModal'];
 
-    function FareClassQueryController($state, $stateParams, FareClassQuery, ParseLinks, AlertService, paginationConstants, pagingParams) {
+    function FareClassQueryController($state, $stateParams, FareClassQuery, ParseLinks, AlertService, paginationConstants, pagingParams, $uibModal) {
 
         var vm = this;
         vm.itemsPerPage = paginationConstants.itemsPerPage;
@@ -86,6 +86,27 @@
                 vm.fareClassQueries = data;
                 vm.fareClassSelectedRow = vm.fareClassQueries[0];
             	vm.fareClassDetails = [vm.fareClassSelectedRow];
+            	
+            	$(document).ready(function(){
+            		var _parents = $('.table-afd').find('thead');
+            		var _th = _parents.find('.th-fixed');
+            		var _tr = _parents.siblings('tbody').find('tr:first-child');
+            		var _td = _tr.find('td');
+            		var _length = _th.length;
+            		_th.last().css('border-right','none');
+            		for(var i=0;i<_length;i++){
+            			var _width = _th.eq(i).outerWidth();
+            			var _width2 = _td.eq(i).outerWidth();
+            			if(_width > _width2){
+            				_td.eq(i).css('min-width', _width);
+            				_td.eq(i).css('width', _width);
+            			}
+            			else{
+            				_th.eq(i).css('min-width', _width2);
+            				_th.eq(i).css('width', _width2);
+            			}
+            		}
+            	});
             }
             function onError(error) {
                 AlertService.error(error.data.message);
@@ -95,15 +116,42 @@
         }
         
         function fareClassGroupText() {
-        	console.log("fareClassGroupText");
+        	$uibModal.open({
+                templateUrl: 'app/pages/rule-queries/fare-class-query/fare-class-query-text-dialog.html',
+                controller: 'FareClassTextController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full',
+                resolve: {
+                	entity: vm.fareClassSelectedRow
+                }
+            }).result.then(function() {
+                $state.go('rule-queries', {}, { reload: false });
+            }, function() {
+                $state.go('rule-queries');
+            });
         }
         
         function constructDetails() {
-        	console.log("constructDetails");
+        	$uibModal.open({
+                templateUrl: 'app/pages/rule-queries/fare-class-query/fare-class-query-construction-details-dialog.html',
+                controller: 'FareClassConstructionDetailsController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full',
+                resolve: {
+                	entity: vm.fareClassSelectedRow
+                }
+            }).result.then(function() {
+                $state.go('rule-queries', {}, { reload: false });
+            }, function() {
+                $state.go('rule-queries');
+            });
         }
         
         function getFareClassDetails(fareClassQuery) {
-        	console.log(fareClassQuery);
         	vm.fareClassDetails = [fareClassQuery];
         }
     }

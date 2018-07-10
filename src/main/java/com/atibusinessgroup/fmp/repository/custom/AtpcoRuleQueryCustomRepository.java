@@ -696,7 +696,43 @@ public class AtpcoRuleQueryCustomRepository {
 		aggregationOperations.add(new AggregationOperation() {
 			@Override
 			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject lookup = new BasicDBObject();
+				lookup.append("from", "master_tariff");
+				lookup.append("let", new BasicDBObject("tar_no", "$rule_tar_no"));
+				lookup.append("pipeline", Arrays.asList(
+						new BasicDBObject("$match", 
+								new BasicDBObject("$expr", 
+										new BasicDBObject("$and", 
+												Arrays.asList(
+														new BasicDBObject("$eq", Arrays.asList("$tar_no", "$$tar_no")), 
+														new BasicDBObject("$eq", Arrays.asList("$type", "FARE"))
+												)
+										)
+								)
+						)
+				));
+				lookup.append("as", "master_tariff");
+				
+				return new BasicDBObject("$lookup", lookup);
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				return new BasicDBObject("$unwind", "$master_tariff");
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
 				BasicDBObject project = new BasicDBObject();
+				project.append("cxr_code", "$cxr_code");
+				project.append("tar_no", "$rule_tar_no");
+				project.append("tar_cd", "$master_tariff.tar_cd");
+				project.append("description", "$master_tariff.description");
+				project.append("rule_no", "$rule_no");
 				project.append("fare_class", "$fare_class");
 				project.append("seq_no", "$seq_no");
 				project.append("geo_type_1", "$geo_type_1");
@@ -721,6 +757,42 @@ public class AtpcoRuleQueryCustomRepository {
 		});
 		
 		return aggregationOperations;
+	}
+	
+	public List<String> getFareClassText(FareClassQuery param) {
+		List<String> fareClassTextList = new ArrayList<>();
+		
+		StringBuilder row1 = new StringBuilder();
+		row1.append("CXR: "+param.getCxr()+"  ");
+		row1.append("RULE: "+param.getRuleNo()+"  ");
+		row1.append("TARIFF: "+param.getTarCd()+" - "+param.getDescription()+"  ");
+		fareClassTextList.add(row1.toString().toUpperCase());
+		
+		StringBuilder row2 = new StringBuilder();
+		row2.append("EXPLANATION 										RBDS");
+		fareClassTextList.add(row2.toString().toUpperCase());
+		
+		StringBuilder row3 = new StringBuilder();
+		row3.append("------------------------------------------------------");
+		fareClassTextList.add(row3.toString().toUpperCase());
+		
+		StringBuilder row4 = new StringBuilder();
+		fareClassTextList.add(row4.toString().toUpperCase());
+		
+		StringBuilder row6 = new StringBuilder();
+		fareClassTextList.add(row6.toString().toUpperCase());
+		
+		StringBuilder row7 = new StringBuilder();
+		row7.append("SEQUENCE: "+param.getSeqNo()+"  ");
+		row7.append("EFF: "+param.getDatesEff()+"  ");
+		row7.append("DISC: "+param.getDatesDisc()+"  ");
+		fareClassTextList.add(row7.toString().toUpperCase());
+		
+		StringBuilder row8 = new StringBuilder();
+		row8.append(param.getFareClass());
+		fareClassTextList.add(row8.toString().toUpperCase());
+		
+		return fareClassTextList;
 	}
 
 }
