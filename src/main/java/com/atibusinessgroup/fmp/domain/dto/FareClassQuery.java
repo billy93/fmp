@@ -14,6 +14,21 @@ public class FareClassQuery implements Serializable {
 	@Id
     private String id;
 	
+	@Field("cxr_code")
+	private String cxr;
+	
+	@Field("tar_no")
+	private String tarNo;
+	
+	@Field("tar_cd")
+	private String tarCd;
+	
+	@Field("description")
+	private String description;
+	
+	@Field("rule_no")
+	private String ruleNo;
+	
 	@Field("fare_class")
 	private String fareClass;
 	
@@ -74,6 +89,46 @@ public class FareClassQuery implements Serializable {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getCxr() {
+		return cxr;
+	}
+
+	public void setCxr(String cxr) {
+		this.cxr = cxr;
+	}
+
+	public String getTarNo() {
+		return tarNo;
+	}
+
+	public void setTarNo(String tarNo) {
+		this.tarNo = tarNo;
+	}
+
+	public String getTarCd() {
+		return tarCd;
+	}
+
+	public void setTarCd(String tarCd) {
+		this.tarCd = tarCd;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getRuleNo() {
+		return ruleNo;
+	}
+
+	public void setRuleNo(String ruleNo) {
+		this.ruleNo = ruleNo;
 	}
 
 	public String getFareClass() {
@@ -222,10 +277,11 @@ public class FareClassQuery implements Serializable {
 
 	@Override
 	public String toString() {
-		return "FareClassQuery [id=" + id + ", fareClass=" + fareClass + ", seqNo=" + seqNo + ", geoType1=" + geoType1
-				+ ", geoLoc1=" + geoLoc1 + ", geoType2=" + geoType2 + ", geoLoc2=" + geoLoc2 + ", ftnt=" + ftnt
-				+ ", rtgNo=" + rtgNo + ", seasonType=" + seasonType + ", dowType=" + dowType + ", fareType=" + fareType
-				+ ", owrt=" + owrt + ", bkcd=" + bkcd + ", normalSpecial=" + normalSpecial + ", displayType="
+		return "FareClassQuery [id=" + id + ", cxr=" + cxr + ", tarNo=" + tarNo + ", tarCd=" + tarCd + ", description="
+				+ description + ", ruleNo=" + ruleNo + ", fareClass=" + fareClass + ", seqNo=" + seqNo + ", geoType1="
+				+ geoType1 + ", geoLoc1=" + geoLoc1 + ", geoType2=" + geoType2 + ", geoLoc2=" + geoLoc2 + ", ftnt="
+				+ ftnt + ", rtgNo=" + rtgNo + ", seasonType=" + seasonType + ", dowType=" + dowType + ", fareType="
+				+ fareType + ", owrt=" + owrt + ", bkcd=" + bkcd + ", normalSpecial=" + normalSpecial + ", displayType="
 				+ displayType + ", paxType=" + paxType + ", datesEff=" + datesEff + ", datesDisc=" + datesDisc + "]";
 	}
 

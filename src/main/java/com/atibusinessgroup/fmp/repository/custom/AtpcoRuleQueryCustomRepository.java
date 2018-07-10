@@ -2,11 +2,14 @@ package com.atibusinessgroup.fmp.repository.custom;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -587,7 +590,8 @@ public class AtpcoRuleQueryCustomRepository {
 										new BasicDBObject("$and", 
 												Arrays.asList(
 														new BasicDBObject("$eq", Arrays.asList("$tar_no", "$$tar_no")), 
-														new BasicDBObject("$eq", Arrays.asList("$type", "FARE"))
+														new BasicDBObject("$eq", Arrays.asList("$type", "FARE")),
+														new BasicDBObject("$eq", Arrays.asList("$pp", "public"))
 												)
 										)
 								)
@@ -602,24 +606,19 @@ public class AtpcoRuleQueryCustomRepository {
 		aggregationOperations.add(new AggregationOperation() {
 			@Override
 			public DBObject toDBObject(AggregationOperationContext context) {
+				return new BasicDBObject("$unwind", "$master_tariff");
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
 				BasicDBObject project = new BasicDBObject();
 				project.append("_id", 0);
 				project.append("cxr_code", "$cxr_code");
 				project.append("tar_no", "$tarNo");
-				project.append("tar_cd", 
-						new BasicDBObject("$cond", 
-								new BasicDBObject("if", new BasicDBObject("$eq", Arrays.asList(new BasicDBObject("$size", "$master_tariff.tar_cd"), 1)))
-								.append("then", new BasicDBObject("$arrayElemAt", Arrays.asList("$master_tariff.tar_cd", 0)))
-								.append("else", "")
-						)
-				);
-				project.append("description", 
-						new BasicDBObject("$cond", 
-								new BasicDBObject("if", new BasicDBObject("$eq", Arrays.asList(new BasicDBObject("$size", "$master_tariff.description"), 1)))
-								.append("then", new BasicDBObject("$arrayElemAt", Arrays.asList("$master_tariff.description", 0)))
-								.append("else", "")
-						)
-				);
+				project.append("tar_cd", "$master_tariff.tar_cd");
+				project.append("description", "$master_tariff.description");
 				project.append("rule_no", "$rule_no");
 				
 				return new BasicDBObject("$project", project);
@@ -629,10 +628,7 @@ public class AtpcoRuleQueryCustomRepository {
 		aggregationOperations.add(new AggregationOperation() {
 			@Override
 			public DBObject toDBObject(AggregationOperationContext context) {
-				BasicDBObject sort = new BasicDBObject();
-				sort.append("tar_no", 1);
-				
-				return new BasicDBObject("$sort", sort);
+				return new BasicDBObject("$sort", new BasicDBObject("tar_no", 1));
 			}
 		});
 		
@@ -698,7 +694,44 @@ public class AtpcoRuleQueryCustomRepository {
 		aggregationOperations.add(new AggregationOperation() {
 			@Override
 			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject lookup = new BasicDBObject();
+				lookup.append("from", "master_tariff");
+				lookup.append("let", new BasicDBObject("tar_no", "$rule_tar_no"));
+				lookup.append("pipeline", Arrays.asList(
+						new BasicDBObject("$match", 
+								new BasicDBObject("$expr", 
+										new BasicDBObject("$and", 
+												Arrays.asList(
+														new BasicDBObject("$eq", Arrays.asList("$tar_no", "$$tar_no")), 
+														new BasicDBObject("$eq", Arrays.asList("$type", "FARE")),
+														new BasicDBObject("$eq", Arrays.asList("$pp", "public"))
+												)
+										)
+								)
+						)
+				));
+				lookup.append("as", "master_tariff");
+				
+				return new BasicDBObject("$lookup", lookup);
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				return new BasicDBObject("$unwind", "$master_tariff");
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
 				BasicDBObject project = new BasicDBObject();
+				project.append("cxr_code", "$cxr_code");
+				project.append("tar_no", "$rule_tar_no");
+				project.append("tar_cd", "$master_tariff.tar_cd");
+				project.append("description", "$master_tariff.description");
+				project.append("rule_no", "$rule_no");
 				project.append("fare_class", "$fare_class");
 				project.append("seq_no", "$seq_no");
 				project.append("geo_type_1", "$geo_type_1");
@@ -724,5 +757,58 @@ public class AtpcoRuleQueryCustomRepository {
 		
 		return aggregationOperations;
 	}
+	
+	public List<String> getFareClassText(FareClassQuery param) {
+		List<String> fareClassTextList = new ArrayList<>();
+		SimpleDateFormat sdf = new SimpleDateFormat("ddMMMyyyy");
+		SimpleDateFormat sdf2 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
+		
+		String datesEffFormat = "";
+		if(param.getDatesEff() != null && !param.getDatesEff().equals("indef")) {
+			try {
+				Date dt = sdf2.parse(param.getDatesEff());
+				datesEffFormat = sdf.format(dt);
+			} catch (Exception e) {
+				datesEffFormat = param.getDatesEff();
+				e.printStackTrace();
+			}
+		} else {
+			datesEffFormat = param.getDatesEff();
+		}
+		
+		String datesDiscFormat = "";
+		if(param.getDatesDisc() != null && !param.getDatesDisc().equals("indef")) {
+			try {
+				Date dt = sdf2.parse(param.getDatesDisc());
+				datesDiscFormat = sdf.format(dt);
+			} catch (Exception e) {
+				datesDiscFormat = param.getDatesDisc();
+				e.printStackTrace();
+			}
+		} else {
+			datesDiscFormat = param.getDatesDisc();
+		}
+		
+		fareClassTextList.add("CXR: "+param.getCxr().toUpperCase()+" "+"RULE: "+param.getRuleNo().toUpperCase()+" "+"TARIFF: "+param.getTarCd().toUpperCase()+" - "+param.getDescription().toUpperCase());
+		fareClassTextList.add("EXPLANATION");
+		fareClassTextList.add("------------------------------------------------------");
+		fareClassTextList.add("");
+		fareClassTextList.add("SEQUENCE: "+param.getSeqNo().toUpperCase()+" "+"EFF: "+datesEffFormat+" "+"DISC: "+datesDiscFormat);
+		fareClassTextList.add(param.getFareClass().toUpperCase());
+		fareClassTextList.add("");
+		fareClassTextList.add("");
+		fareClassTextList.add("CONSTRUCTION DATA");
+		fareClassTextList.add("");
+		fareClassTextList.add("");
+		fareClassTextList.add("END OF TEXT");
+		
+		return fareClassTextList;
+	}
 
+	public List<String> getFareClassConstructionDetails(FareClassQuery param) {
+		List<String> fareClassContructionDetailsList = new ArrayList<>();
+		fareClassContructionDetailsList.add("Carrier: "+param.getCxr().toUpperCase()+" "+"Tariff No: "+param.getTarNo().toUpperCase()+" "+"Tariff Code: "+param.getTarCd().toUpperCase()+" "+"Rule No: "+param.getRuleNo().toUpperCase());
+		
+		return fareClassContructionDetailsList;
+	}
 }

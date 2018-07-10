@@ -217,6 +217,22 @@ public class RuleQueryResource {
 		
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+	
+	@GetMapping("/fare-class-query/text")
+	@Timed
+	public ResponseEntity<List<String>> getFareClassText(FareClassQuery param) {
+		List<String> resultList = atpcoRuleQueryCustomRepository.getFareClassText(param);
+		
+		return new ResponseEntity<>(resultList, HttpStatus.OK);
+	}
+	
+	@GetMapping("/fare-class-query/construction-details")
+	@Timed
+	public ResponseEntity<List<String>> getFareClassConstructionDetails(FareClassQuery param) {
+		List<String> resultList = atpcoRuleQueryCustomRepository.getFareClassConstructionDetails(param);
+		
+		return new ResponseEntity<>(resultList, HttpStatus.OK);
+	}
 
 	@PostMapping("/rec8-fare-by-rule")
 	@Timed
