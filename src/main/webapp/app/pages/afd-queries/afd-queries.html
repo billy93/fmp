@@ -101,13 +101,13 @@
 											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'effectiveDateFrom')" 
 												is-open="vm.datePickerOpenStatus['effectiveDateFrom']" datetime-picker="{{vm.dateFormat}}" 
 												enable-time="false" name="effectiveDateFrom" id="datepicker" 
-												ng-model="vm.queryParams.effectiveDateFrom" placeholder="From"/>
+												ng-model="vm.effectiveDateFrom" placeholder="From"/>
 										</div>
 										<div class="col-md-4 no-pad absolute-datepicker">
 											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'effectiveDateTo')"
 												is-open="vm.datePickerOpenStatus['effectiveDateTo']" datetime-picker="{{vm.dateFormat}}" 
 												enable-time="false" name="effectiveDateTo" id="datepicker" 
-												ng-model="vm.queryParams.effectiveDateTo" placeholder="To"/>
+												ng-model="vm.effectiveDateTo" placeholder="To"/>
 										</div>
 										<div class="col-md-4 no-rpad">
 											<select class="form-control" name="effectiveDateOption" id="effectiveDateOption" ng-init="vm.queryParams.effectiveDateOption = vm.dateOptions[0].key" ng-model="vm.queryParams.effectiveDateOption">
@@ -124,13 +124,13 @@
 											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'saleDateFrom')"
 												is-open="vm.datePickerOpenStatus['saleDateFrom']" datetime-picker="{{vm.dateFormat}}" 
 												enable-time="false" name="saleDateFrom" id="datepicker" 
-												ng-model="vm.queryParams.saleDateFrom" placeholder="From"/>
+												ng-model="vm.saleDateFrom" placeholder="From"/>
 										</div>
 										<div class="col-md-4 no-pad absolute-datepicker">
 											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'saleDateTo')"
 												is-open="vm.datePickerOpenStatus['saleDateTo']" datetime-picker="{{vm.dateFormat}}" 
 												enable-time="false" name="saleDateTo" id="datepicker" 
-												ng-model="vm.queryParams.saleDateTo" placeholder="To"/>
+												ng-model="vm.saleDateTo" placeholder="To"/>
 										</div>
 										<div class="col-md-4 no-rpad">
 											<select class="form-control" name="saleDateOption" id="saleDateOption" ng-init="vm.queryParams.saleDateOption = vm.dateOptions[0].key" ng-model="vm.queryParams.saleDateOption">
@@ -146,13 +146,13 @@
 											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'travelDateFrom')"
 												is-open="vm.datePickerOpenStatus['travelDateFrom']" datetime-picker="{{vm.dateFormat}}" 
 												enable-time="false" name="travelDateFrom" id="datepicker" 
-												ng-model="vm.queryParams.travelDateFrom" placeholder="From"/>
+												ng-model="vm.travelDateFrom" placeholder="From"/>
 										</div>
 										<div class="col-md-4 no-pad absolute-datepicker">
 											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'travelDateTo')"
 												is-open="vm.datePickerOpenStatus['travelDateTo']" datetime-picker="{{vm.dateFormat}}" 
 												enable-time="false" name="travelDateTo" id="datepicker" 
-												ng-model="vm.queryParams.travelDateTo" placeholder="To"/>
+												ng-model="vm.travelDateTo" placeholder="To"/>
 										</div>
 										<div class="col-md-4 no-rpad">
 											<select class="form-control" name="travelDateOption" id="travelDateOption" ng-init="vm.queryParams.travelDateOption = vm.dateOptions[0].key" ng-model="vm.queryParams.travelDateOption">
@@ -168,13 +168,13 @@
 											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'seasonDateFrom')"
 												is-open="vm.datePickerOpenStatus['seasonDateFrom']" datetime-picker="{{vm.dateFormat}}" 
 												enable-time="false" name="seasonDateFrom" id="datepicker" 
-												ng-model="vm.queryParams.seasonDateFrom" placeholder="From"/>
+												ng-model="vm.seasonDateFrom" placeholder="From"/>
 										</div>
 										<div class="col-md-4 no-pad absolute-datepicker">
 											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'seasonDateTo')"
 												is-open="vm.datePickerOpenStatus['seasonDateTo']" datetime-picker="{{vm.dateFormat}}" 
 												enable-time="false" name="seasonDateTo" id="datepicker" 
-												ng-model="vm.queryParams.seasonDateTo" placeholder="To"/>
+												ng-model="vm.seasonDateTo" placeholder="To"/>
 										</div>
 										<div class="col-md-4 no-rpad">
 											<select class="form-control" name="seasonDateOption" id="seasonDateOption" ng-init="vm.queryParams.seasonDateOption = vm.dateOptions[0].key" ng-model="vm.queryParams.seasonDateOption">
@@ -418,32 +418,32 @@
 <!-- 			                    <td></td> -->
 <!-- 			                    <td></td> -->
 			                    <td></td>
-			                    <td><span ng-if="afdQuery.effectiveDate != 'indef'">{{afdQuery.effectiveDate | date:'dd/MM/yyyy':vm.timezone}}</span></td>
-			                	<td><span ng-if="afdQuery.discontinueDate != 'indef'">{{afdQuery.discontinueDate | date:'dd/MM/yyyy':vm.timezone}}</span></td>
-			                	<td><span ng-if="afdQuery.gfsDate != undefined && afdQuery.gfsDate != null">{{afdQuery.gfsDate | date:'dd/MM/yyyy':vm.timezone}} - {{afdQuery.gfsReference}}</span></td>
+			                    <td><span ng-if="afdQuery.effectiveDate != 'indef'">{{afdQuery.effectiveDate | date:vm.dateFormat:vm.timezone}}</span></td>
+			                	<td><span ng-if="afdQuery.discontinueDate != 'indef'">{{afdQuery.discontinueDate | date:vm.dateFormat:vm.timezone}}</span></td>
+			                	<td><span ng-if="afdQuery.gfsDate != undefined && afdQuery.gfsDate != null">{{afdQuery.gfsDate | date:vm.dateFormat:vm.timezone}} | {{afdQuery.gfsReference}}</span></td>
 			                	<td>{{afdQuery.globalIndicator}}</td>
-			                	<td><span ng-if="afdQuery.ruleFocusDate != 'indef'">{{afdQuery.focusDate | date:'dd/MM/yyyy':vm.timezone}}</span></td>
+			                	<td><span ng-if="afdQuery.ruleFocusDate != 'indef'">{{afdQuery.focusDate | date:vm.dateFormat:vm.timezone}}</span></td>
 			                	<td></td>
 			                	<td>
-			                		<span ng-if="afdQuery.firstTravelDate != null && afdQuery.firstTravelDate != ''">{{afdQuery.firstTravelDate | date:'dd/MM/yyyy':vm.timezone}}</span>
+			                		<span ng-if="afdQuery.firstTravelDate != null && afdQuery.firstTravelDate != ''">{{afdQuery.firstTravelDate | date:vm.dateFormat:vm.timezone}}</span>
 			                	</td>
 			                	<td>
-			                		<span ng-if="afdQuery.lastTravelDate != null && afdQuery.lastTravelDate != ''">{{afdQuery.lastTravelDate | date:'dd/MM/yyyy':vm.timezone}}</span>
+			                		<span ng-if="afdQuery.lastTravelDate != null && afdQuery.lastTravelDate != ''">{{afdQuery.lastTravelDate | date:vm.dateFormat:vm.timezone}}</span>
 			                	</td>
 			                	<td>
-			                		<span ng-repeat="value in afdQuery.travelDates track by $index">{{value.completeDate | date:'dd/MM/yyyy':vm.timezone}}<span ng-if="$index < afdQuery.travelDates.length - 1">, </span></span>
+			                		<span ng-repeat="value in afdQuery.travelDates track by $index">{{value.completeDate | date:vm.dateFormat:vm.timezone}}<span ng-if="$index < afdQuery.travelDates.length - 1">, </span></span>
 			                	</td>
 			                	<td>
-			                		<span ng-if="afdQuery.firstSaleDate != null && afdQuery.firstSaleDate != ''">{{afdQuery.firstSaleDate | date:'dd/MM/yyyy':vm.timezone}}</span>
+			                		<span ng-if="afdQuery.firstSaleDate != null && afdQuery.firstSaleDate != ''">{{afdQuery.firstSaleDate | date:vm.dateFormat:vm.timezone}}</span>
 			                	</td>
 			                	<td>
-			                		<span ng-if="afdQuery.lastSaleDate != null && afdQuery.lastSaleDate != ''">{{afdQuery.lastSaleDate | date:'dd/MM/yyyy':vm.timezone}}</span>
+			                		<span ng-if="afdQuery.lastSaleDate != null && afdQuery.lastSaleDate != ''">{{afdQuery.lastSaleDate | date:vm.dateFormat:vm.timezone}}</span>
 			                	</td>
 			                	<td>
-			                		<span ng-if="afdQuery.firstResDate != null && afdQuery.firstResDate != ''">{{afdQuery.firstResDate | date:'dd/MM/yyyy':vm.timezone}}</span>
+			                		<span ng-if="afdQuery.firstResDate != null && afdQuery.firstResDate != ''">{{afdQuery.firstResDate | date:vm.dateFormat:vm.timezone}}</span>
 			                	</td>
 			                	<td>
-			                		<span ng-if="afdQuery.lastResDate != null && afdQuery.lastResDate != ''">{{afdQuery.lastResDate | date:'dd/MM/yyyy':vm.timezone}}</span>
+			                		<span ng-if="afdQuery.lastResDate != null && afdQuery.lastResDate != ''">{{afdQuery.lastResDate | date:vm.dateFormat:vm.timezone}}</span>
 			                	</td>
 			                	<td><span ng-repeat="value in afdQuery.minStay track by $index">{{value}}<span ng-if="$index < afdQuery.minStay.length - 1">, </span></span></td>
 			                	<td><span ng-repeat="value in afdQuery.maxStay track by $index">{{value}}<span ng-if="$index < afdQuery.maxStay.length - 1">, </span></span></td>
@@ -451,11 +451,11 @@
 			                	<td></td>
 			                	<td></td>
 			                	<td>{{afdQuery.season}}</td>
-			                	<td><span ng-if="afdQuery.firstSeasonDate != 'indef'">{{afdQuery.firstSeasonDate | date:'dd/MM/yyyy':vm.timezone}}</span></td>
-			                	<td><span ng-if="afdQuery.lastSeasonDate != 'indef'">{{afdQuery.lastSeasonDate | date:'dd/MM/yyyy':vm.timezone}}</span></td>
+			                	<td><span ng-if="afdQuery.firstSeasonDate != 'indef'">{{afdQuery.firstSeasonDate | date:vm.dateFormat:vm.timezone}}</span></td>
+			                	<td><span ng-if="afdQuery.lastSeasonDate != 'indef'">{{afdQuery.lastSeasonDate | date:vm.dateFormat:vm.timezone}}</span></td>
 			                	<td>
-			                		<span ng-if="afdQuery.firstTravelDate == null || afdQuery.firstTravelDate == ''">XXXXXXXX</span><span ng-if="afdQuery.firstTravelDate != null && afdQuery.firstTravelDate != ''">{{afdQuery.firstTravelDate | date:'dd/MM/yyyy':vm.timezone}}</span>
-			                		<span ng-if="afdQuery.lastTravelDate == null || afdQuery.lastTravelDate == ''"> - XXXXXXXX</span><span ng-if="afdQuery.lastTravelDate != null && afdQuery.lastTravelDate != ''"> - {{afdQuery.lastTravelDate | date:'dd/MM/yyyy':vm.timezone}}</span>
+			                		<span ng-if="afdQuery.firstTravelDate == null || afdQuery.firstTravelDate == ''">XXXXXXXX</span><span ng-if="afdQuery.firstTravelDate != null && afdQuery.firstTravelDate != ''">{{afdQuery.firstTravelDate | date:vm.dateFormat:vm.timezone}}</span>
+			                		<span ng-if="afdQuery.lastTravelDate == null || afdQuery.lastTravelDate == ''"> | XXXXXXXX</span><span ng-if="afdQuery.lastTravelDate != null && afdQuery.lastTravelDate != ''"> | {{afdQuery.lastTravelDate | date:vm.dateFormat:vm.timezone}}</span>
 			                	</td>
 			               		<td>{{afdQuery.fareType}}</td>
 			                	<td><span ng-repeat="value in afdQuery.paxType track by $index">{{value}}<span ng-if="$index < afdQuery.paxType.length - 1">, </span></span></td>
@@ -473,7 +473,7 @@
 			                <tr infinite-scroll="vm.loadPage(vm.page + 1)" infinite-scroll-disabled="vm.disableInfiniteScroll || vm.isLastPage || vm.isLoading" infinite-scroll-container="'#tbody-afd'"></tr>
 			            </tbody>
 			        </table>
-			        <div class="col-md-12 text-center" ng-if="vm.isLoading">
+			        <div class="col-md-12 text-center" ng-if="vm.isLoading" style="min-height: 70px">
 						<div class="spinner">
 						  <div class="double-bounce1"></div>
 						  <div class="double-bounce2"></div>

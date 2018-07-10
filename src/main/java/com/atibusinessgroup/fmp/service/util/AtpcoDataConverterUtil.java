@@ -409,13 +409,34 @@ public class AtpcoDataConverterUtil {
 		
 		switch (owrt) {
 		case "1":
-			result = "One Way";
+			result = "ONE WAY";
 			break;
 		case "2":
-			result = "Round Trip";
+			result = "ROUND TRIP";
 			break;
 		case "3":
-			result = "One Way Fare That May Not Be Doubled";
+			result = "ONE WAY FARE THAT MAY NOT BE DOUBLED";
+			break;
+		}
+		
+		return result;
+	}
+	
+	public static String convertCategory35TicketingTypeToName(String type) {
+		String result = "";
+		
+		switch (type) {
+		case "B":
+			result = "CAR CODE/VALUE CODE";
+			break;
+		case "C":
+			result = "CAR CODE ONLY";
+			break;
+		case "V":
+			result = "VALUE CODE ONLY";
+			break;
+		case "T":
+			result = "TOUR CODE OR ANY OTHER TYPE (E.G CONTRACT CODE)";
 			break;
 		}
 		
@@ -529,6 +550,24 @@ public class AtpcoDataConverterUtil {
 			break;
 		case "Z": 
 			result = "ZONE";
+			break;
+		}
+		
+		return result;
+	}
+	
+	public static String convertCategory35NetGrossToName(String value) {
+		String result = "";
+		
+		switch (value) {
+		case "N":
+			result = "(N) NET SUBMIT AMOUNT";
+			break;
+		case "G":
+			result = "(G) GROSS TICKETED AMOUNT";
+			break;
+		case "B":
+			result = "(B) CALCULATE THE PERCENTAGE DIFFERENCE BETWEEN THE NET SUBMIT FARE AMOUNT AND THE TICKETED GROSS FARE AMOUNT";
 			break;
 		}
 		

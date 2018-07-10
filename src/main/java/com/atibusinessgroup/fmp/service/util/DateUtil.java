@@ -65,16 +65,7 @@ public class DateUtil {
 		
 		if (date != null && !date.toString().contentEquals("indef")) {
 			try {
-				Date paramDate = (Date) date;
-				
-				Calendar calendar = Calendar.getInstance();
-				calendar.set(Calendar.HOUR_OF_DAY, 0);
-				calendar.set(Calendar.MINUTE, 0);
-				calendar.set(Calendar.SECOND, 0);
-				calendar.set(Calendar.MILLISECOND, 0);
-				calendar.setTime(paramDate);
-				
-				result = calendar.getTime();
+				result = (Date) date;
 			} catch (Exception e) {
 			}
 			
@@ -98,15 +89,14 @@ public class DateUtil {
 			}
 		}
 		
-		return result;
-	}
-	
-	public static Date convertZonedDateTimeToDate(ZonedDateTime dt) {
-		Date result = null;
-		
-		try {
-			result = Date.from(dt.toInstant());
-		} catch (Exception e) {
+		if (result != null) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(result);
+			calendar.set(Calendar.HOUR_OF_DAY, 0);
+			calendar.set(Calendar.MINUTE, 0);
+			calendar.set(Calendar.SECOND, 0);
+			calendar.set(Calendar.MILLISECOND, 0);
+			result = calendar.getTime();
 		}
 		
 		return result;

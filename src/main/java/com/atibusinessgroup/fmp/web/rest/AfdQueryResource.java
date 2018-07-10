@@ -113,6 +113,7 @@ public class AfdQueryResource {
     @Timed
     public ResponseEntity<AfdQueryWrapper> getAllAfdQueries(@RequestBody AfdQueryParam param) {
         log.debug("REST request to get a page of AfdQueries: {}", param);
+        
         AfdQueryWrapper result = new AfdQueryWrapper();
         
         if (param != null && param.getSource() != null) {
@@ -330,35 +331,44 @@ public class AfdQueryResource {
         	}
         	
         	if (matchedGeneral != null) {
-    			List<AtpcoRecord2GroupByCatNo> generalRecords2 = atpcoFareCustomRepository.findAtpcoRecord2ByRecordId(matchedGeneral.getSourceTariff() + afdQuery.getCarrierCode() + matchedGeneral.getRuleNo() + "");
+        		boolean resolveGeneralRule = true;
         		
-        		all : for (AtpcoRecord2GroupByCatNo grecord2:generalRecords2) {
-                	if (grecord2.getCatNo().contentEquals(entry.getKey())) {
-                		for (AtpcoRecord2 record2:grecord2.getRecords2()) {
-                			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afdQuery.getOriginCity(), "C", afdQuery.getDestinationCity(), afdQuery.getFareClassCode(), afdQuery.getFareType(), afdQuery.getSeason(), afdQuery.getDayOfWeekType(), afdQuery.getOwrt(), afdQuery.getRoutingNo(), afdQuery.getFootnote(), afdQuery.getFocusDate(),
-                					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getFareClass(), record2.getFareType(), record2.getSeasonType(), record2.getDayOfWeekType(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
-                        	
-                    		if (matched) {
-                    			matchedGeneralRecord2 = record2;
-                    			break all;
-                    		} 
-                		}
-                	}
-                }	
+        		if (matchedRecord2 != null && matchedRecord2.getGeneralRuleApplication() != null && 
+        				matchedRecord2.getGeneralRuleApplication().trim().contentEquals("N")) {
+        			resolveGeneralRule = false;
+        		}
         		
-        		if (matchedGeneralRecord2 != null && matchedGeneralRecord2.getDataTables() != null && matchedGeneralRecord2.getDataTables().size() > 0) {
-        			type += CategoryType.GENERAL_RULE;
-        			String generalTCd = null;
-        			if (generalTn != null) {
-        				if (!generalTn.getTarNo().contentEquals(matchedGeneral.getSourceTariff())) {
-        					generalTn = tariffNumberRepository.findOneByTarNoAndType(matchedGeneral.getSourceTariff(), "GENERAL RULE");
-        				}
-        				generalTCd = generalTn.getTarCd();
-        			}
-        			textFormat += atpcoRecordService.generateCategoryTextHeader(CategoryType.GENERAL_RULE, matchedGeneral.getSourceTariff(), generalTCd, matchedGeneral.getRuleNo(), matchedGeneralRecord2.getSequenceNo(), matchedGeneralRecord2.getEffectiveDateObject());
-        			CategoryTextFormatAndAttribute ctfa = atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), matchedGeneralRecord2.getDataTables(), CategoryType.GENERAL_RULE);
-            		textFormat += ctfa.getTextFormat();
-            		cat.getCatAttributes().addAll(ctfa.getAttributes());
+        		if (resolveGeneralRule) {
+        			List<AtpcoRecord2GroupByCatNo> generalRecords2 = atpcoFareCustomRepository.findAtpcoRecord2ByRecordId(matchedGeneral.getSourceTariff() + afdQuery.getCarrierCode() + matchedGeneral.getRuleNo() + "");
+            		
+            		all : for (AtpcoRecord2GroupByCatNo grecord2:generalRecords2) {
+                    	if (grecord2.getCatNo().contentEquals(entry.getKey())) {
+                    		for (AtpcoRecord2 record2:grecord2.getRecords2()) {
+                    			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afdQuery.getOriginCity(), "C", afdQuery.getDestinationCity(), afdQuery.getFareClassCode(), afdQuery.getFareType(), afdQuery.getSeason(), afdQuery.getDayOfWeekType(), afdQuery.getOwrt(), afdQuery.getRoutingNo(), afdQuery.getFootnote(), afdQuery.getFocusDate(),
+                    					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getFareClass(), record2.getFareType(), record2.getSeasonType(), record2.getDayOfWeekType(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
+                            	
+                        		if (matched) {
+                        			matchedGeneralRecord2 = record2;
+                        			break all;
+                        		} 
+                    		}
+                    	}
+                    }	
+            		
+            		if (matchedGeneralRecord2 != null && matchedGeneralRecord2.getDataTables() != null && matchedGeneralRecord2.getDataTables().size() > 0) {
+            			type += CategoryType.GENERAL_RULE;
+            			String generalTCd = null;
+            			if (generalTn != null) {
+            				if (!generalTn.getTarNo().contentEquals(matchedGeneral.getSourceTariff())) {
+            					generalTn = tariffNumberRepository.findOneByTarNoAndType(matchedGeneral.getSourceTariff(), "GENERAL RULE");
+            				}
+            				generalTCd = generalTn.getTarCd();
+            			}
+            			textFormat += atpcoRecordService.generateCategoryTextHeader(CategoryType.GENERAL_RULE, matchedGeneral.getSourceTariff(), generalTCd, matchedGeneral.getRuleNo(), matchedGeneralRecord2.getSequenceNo(), matchedGeneralRecord2.getEffectiveDateObject());
+            			CategoryTextFormatAndAttribute ctfa = atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), matchedGeneralRecord2.getDataTables(), CategoryType.GENERAL_RULE);
+                		textFormat += ctfa.getTextFormat();
+                		cat.getCatAttributes().addAll(ctfa.getAttributes());
+            		}
         		}
     		}
         	
@@ -368,9 +378,6 @@ public class AfdQueryResource {
         	result.add(cat);
         }
         
-//        System.out.println();
-//		System.out.println("unmatched");
-//		
 //        for (Map.Entry<String, List<DataTable>> ucdt:unmatchedRec2CatDataTables.entrySet()) {
 //    		System.out.println(ucdt.getKey());
 //    		for (DataTable dt:ucdt.getValue()) {

@@ -28,6 +28,9 @@ import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByRuleNoCxrTarNo;
 import com.atibusinessgroup.fmp.domain.dto.Category;
 import com.atibusinessgroup.fmp.domain.dto.DataTable;
+import com.atibusinessgroup.fmp.domain.dto.FareClassGroup;
+import com.atibusinessgroup.fmp.domain.dto.FareClassQuery;
+import com.atibusinessgroup.fmp.domain.dto.FareClassQueryParam;
 import com.atibusinessgroup.fmp.domain.dto.Rec8Param;
 import com.atibusinessgroup.fmp.domain.dto.RuleQuery;
 import com.atibusinessgroup.fmp.domain.dto.RuleQueryParam;
@@ -198,14 +201,37 @@ public class RuleQueryResource {
 	
 	@PostMapping("/fare-class-query")
 	@Timed
-	public ResponseEntity<List<AtpcoRecord8>> getAllFareClassQueries(@RequestBody Rec8Param param) {
+	public ResponseEntity<List<FareClassGroup>> getAllFareClassQueries(@RequestBody FareClassQueryParam param) {
+		System.out.println("param : "+param);
 		Pageable pageable = new PageRequest(param.getPage(), param.getSize());
-		
-		Page<AtpcoRecord8> result = atpcoRuleQueryCustomRepository.getListRec8(param, pageable);
-		
+		Page<FareClassGroup> result = atpcoRuleQueryCustomRepository.getListFareClasses(param, pageable);
 		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(result, "/api/fare-class-query");
 		
 		return new ResponseEntity<>(result.getContent(), headers, HttpStatus.OK);
+	}
+	
+	@GetMapping("/fare-class-query/groups")
+	@Timed
+	public ResponseEntity<List<FareClassQuery>> getFareClassGroups(FareClassGroup param) {
+		List<FareClassQuery> result = atpcoRuleQueryCustomRepository.getFareClassGroups(param);
+		
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/fare-class-query/text")
+	@Timed
+	public ResponseEntity<List<String>> getFareClassText(FareClassQuery param) {
+		List<String> resultList = atpcoRuleQueryCustomRepository.getFareClassText(param);
+		
+		return new ResponseEntity<>(resultList, HttpStatus.OK);
+	}
+	
+	@GetMapping("/fare-class-query/construction-details")
+	@Timed
+	public ResponseEntity<List<String>> getFareClassConstructionDetails(FareClassQuery param) {
+		List<String> resultList = atpcoRuleQueryCustomRepository.getFareClassConstructionDetails(param);
+		
+		return new ResponseEntity<>(resultList, HttpStatus.OK);
 	}
 
 	@PostMapping("/rec8-fare-by-rule")

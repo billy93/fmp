@@ -182,8 +182,8 @@ public class WorkPackageFilterResource {
         Optional<WorkPackageFilter> workPackagefilter = workPackagefilterRepository.findOneByLoginName(loginName);
         if(workPackagefilter.isPresent()) {
         	 result = workPackagefilter.get();
+             workPackagefilterRepository.delete(result.getId());
         }
-        workPackagefilterRepository.delete(result.getId());
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, result.getId())).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, null)).build();
     }
 }

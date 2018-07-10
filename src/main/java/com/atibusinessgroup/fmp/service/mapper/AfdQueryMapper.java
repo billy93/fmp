@@ -398,8 +398,8 @@ public class AfdQueryMapper {
 		result.setGlobalIndicator(fare.getGlobal());
 		
 		AtpcoDateWrapper saleDate = new AtpcoDateWrapper();
-		saleDate.setStartDate(DateUtil.convertZonedDateTimeToDate(fare.getSaleStart()));
-		saleDate.setEndDate(DateUtil.convertZonedDateTimeToDate(fare.getSaleEnd()));
+		saleDate.setStartDate(fare.getSaleStart());
+		saleDate.setEndDate(fare.getSaleEnd());
 		result.getSaleDates().add(saleDate);
 		
 		result.getBookingClass().add(fare.getBookingClass());
@@ -409,9 +409,9 @@ public class AfdQueryMapper {
 		result.setCabin(fare.getCabin());
 		
 		AtpcoDateWrapper travelDate = new AtpcoDateWrapper();
-		travelDate.setStartDate(DateUtil.convertZonedDateTimeToDate(fare.getTravelStart()));
-		travelDate.setEndDate(DateUtil.convertZonedDateTimeToDate(fare.getTravelEnd()));
-		travelDate.setCompleteDate(DateUtil.convertZonedDateTimeToDate(fare.getTravelComplete()));
+		travelDate.setStartDate(fare.getTravelStart());
+		travelDate.setEndDate(fare.getTravelEnd());
+		travelDate.setCompleteDate(fare.getTravelComplete());
 		result.getTravelDates().add(travelDate);
 		
 		result.setWpId(woId);

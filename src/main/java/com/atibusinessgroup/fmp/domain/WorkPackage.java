@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -115,7 +116,7 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     private ZonedDateTime filingDate;
 
     @Field("sale_date")
-    private ZonedDateTime saleDate;
+    private Date saleDate;
 
     @Field("target_distribution")
     private String targetDistribution;
@@ -339,7 +340,15 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     }
     
     
-    public Validation getValidation() {
+    public Date getSaleDate() {
+		return saleDate;
+	}
+
+	public void setSaleDate(Date saleDate) {
+		this.saleDate = saleDate;
+	}
+
+	public Validation getValidation() {
 		return validation;
 	}
 
@@ -890,14 +899,6 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 		this.expRev = expRev;
 	}
 
-	public ZonedDateTime getSaleDate() {
-		return saleDate;
-	}
-
-	public void setSaleDate(ZonedDateTime saleDate) {
-		this.saleDate = saleDate;
-	}
-
 	public List<WorkPackageFareSheet> getDiscountFareSheet() {
 		return discountFareSheet;
 	}
@@ -1169,27 +1170,74 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     }
 	
 	public static class MarketRules{
-    		private String status;
-    		private String username;
-    		private String ruleid;
-    		private String cxr;
-    		private String comment;
-    		
-    	    @Field("file")
-    	    private byte[] file;
+		private String status;
+		private String username;
+		private String ruleid;
+		private String cxr;
+		private String comment;
+		private List<RulesData> rulesData;
+		
+	    @Field("file")
+	    private byte[] file;
 
-    	    @Field("file_content_type")
-    	    private String fileContentType;
+	    @Field("file_content_type")
+	    private String fileContentType;
 
-    	    @Field("createdTime")	    
-    		private ZonedDateTime createdTime;
-    	    
-    	   
+	    @Field("createdTime")	    
+		private ZonedDateTime createdTime;
+	    
+	    public static class RulesData{
+	    	private String category;
+	    	private List<Field> fields;
+	    	
+	    	public static class Field{
+	    		private String key;
+	    		private String value;
+				public String getKey() {
+					return key;
+				}
+				public void setKey(String key) {
+					this.key = key;
+				}
+				public String getValue() {
+					return value;
+				}
+				public void setValue(String value) {
+					this.value = value;
+				}
+	    	}
+
+			public String getCategory() {
+				return category;
+			}
+
+			public void setCategory(String category) {
+				this.category = category;
+			}
+
+			public List<Field> getFields() {
+				return fields;
+			}
+
+			public void setFields(List<Field> fields) {
+				this.fields = fields;
+			}
+	    	
+	    }
+
+		public List<RulesData> getRulesData() {
+			return rulesData;
+		}
+
+		public void setRulesData(List<RulesData> rulesData) {
+			this.rulesData = rulesData;
+		}
+
 		public String getUsername() {
 				return username;
 			}
 
-			public void setUsername(String username) {
+		public void setUsername(String username) {
 				this.username = username;
 			}
 

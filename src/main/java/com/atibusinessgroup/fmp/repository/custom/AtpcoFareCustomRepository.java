@@ -249,11 +249,18 @@ public class AtpcoFareCustomRepository {
 					queries.add(effective);
 				} else if (param.getEffectiveDateOption() != null && param.getEffectiveDateOption().contentEquals("E")) {
 					BasicDBObject effective = new BasicDBObject();
-					effective.append("$and", Arrays.asList(new BasicDBObject("tar_eff_date", new BasicDBObject("$eq", paramFrom)), 
-							new BasicDBObject("dates_discontinue", new BasicDBObject("$eq", paramTo))));
+					if (param.getEffectiveDateFrom() != null && param.getEffectiveDateTo() != null) {
+						effective.append("$and", Arrays.asList(new BasicDBObject("tar_eff_date", new BasicDBObject("$eq", paramFrom)), 
+								new BasicDBObject("dates_discontinue", new BasicDBObject("$eq", paramTo))));
+					} else if (param.getEffectiveDateFrom() == null && param.getEffectiveDateTo() != null) {
+						effective.append("dates_discontinue", new BasicDBObject("$eq", paramTo));
+					} else if (param.getEffectiveDateTo() == null && param.getEffectiveDateFrom() != null) {
+						effective.append("tar_eff_date", new BasicDBObject("$eq", paramFrom));
+					}
+					
 					queries.add(effective);
 				}
-				
+					
 				if (queries.size() > 0) {
 					and.append("$and", queries);
 				}

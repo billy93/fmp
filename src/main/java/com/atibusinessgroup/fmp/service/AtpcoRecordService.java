@@ -58,6 +58,7 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat25;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat26;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat27;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat35;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat35Ticketing;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat50;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoDateWrapper;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord3CategoryWithDataTable;
@@ -69,6 +70,7 @@ import com.atibusinessgroup.fmp.domain.dto.CategoryTextFormatAndAttribute;
 import com.atibusinessgroup.fmp.domain.dto.DataTable;
 import com.atibusinessgroup.fmp.domain.dto.FlightTable;
 import com.atibusinessgroup.fmp.domain.dto.Record3ReflectionObject;
+import com.atibusinessgroup.fmp.domain.dto.SecurityDataTable;
 import com.atibusinessgroup.fmp.repository.PassengerRepository;
 import com.atibusinessgroup.fmp.repository.SurchargeCodeRepository;
 import com.atibusinessgroup.fmp.repository.TourTypeCodeRepository;
@@ -219,7 +221,13 @@ public class AtpcoRecordService {
 			Date paramTo, String option) {
 		boolean match = false;
 		
-		if (dates != null && dates.size() > 0) {
+		if (dates != null && !(paramFrom == null && paramTo == null)) {
+			Date originalParamFrom = paramFrom;
+			Date originalParamTo = paramTo;
+			
+			paramFrom = DateUtil.convertObjectToDate(paramFrom);
+			paramTo = DateUtil.convertObjectToDate(paramTo);
+			
 			if (paramFrom == null) {
 				paramFrom = minimumDate;
 			}
@@ -229,8 +237,12 @@ public class AtpcoRecordService {
 			}
 			
 			for (AtpcoDateWrapper date:dates) {
-				Date start = DateUtil.convertObjectToDate(date.getStartDate());
-				Date end = DateUtil.convertObjectToDate(date.getEndDate());
+				Date start = date.getStartDate(), end = date.getEndDate();
+				Date originalStart = date.getStartDate();
+				Date originalEnd = date.getEndDate();
+				
+				start = DateUtil.convertObjectToDate(start);
+				end = DateUtil.convertObjectToDate(end);
 				
 				if (start == null) {
 					start = minimumDate;
@@ -245,7 +257,7 @@ public class AtpcoRecordService {
 						match = true;
 					}
 				} else if (option != null && option.contentEquals("E")) {
-					if (paramFrom.equals(start) && paramTo.equals(end)) {
+					if (((originalParamFrom == null && originalStart == null) || paramFrom.equals(start)) && ((originalParamTo == null && originalEnd == null) || paramTo.equals(end))) {
 						match = true;
 					}
 				}
@@ -2138,6 +2150,73 @@ public class AtpcoRecordService {
 				break;
 			case "035":
 				AtpcoRecord3Cat35 cat35 = (AtpcoRecord3Cat35) catObj;
+				String detail35 = "";
+				if (cat35.getPtc() != null && !cat35.getPtc().isEmpty()) {
+					detail35 += "\tPAX TYPE: " + cat35.getPtc() + "\n";
+				}
+				if (cat35.getMethod_type() != null && !cat35.getMethod_type().isEmpty()) {
+					detail35 += "\tMETHOD TYPE: " + (cat35.getMethod_type().trim().isEmpty() ? "STANDARD" : cat35.getMethod_type()) + "\n";
+				}
+				if (cat35.getCommission_net_gross() != null && !cat35.getCommission_net_gross().isEmpty()) {
+					String netgross = AtpcoDataConverterUtil.convertCategory35NetGrossToName(cat35.getCommission_net_gross());
+					if (!netgross.isEmpty()) {
+						detail35 += "\tCOMMISSION NET/GROSS: " + netgross + "\n";
+					}
+				}
+				if (cat35.getCommission_percent() != null && cat35.getCommission_percent().bigDecimalValue().doubleValue() != 0.0) {
+					 detail35 += "\tCOMMISSION PERCENT: " + cat35.getCommission_percent().bigDecimalValue().doubleValue() + "%\n";
+				}
+				if (cat35.getCommission_amt_1() != null && cat35.getCommission_amt_1().bigDecimalValue().doubleValue() != 0.0) {
+					if (cat35.getCommission_cur_1() != null && !cat35.getCommission_cur_1().isEmpty()) {
+						detail35 += "\tCOMMISSION AMOUNT 1: " + cat35.getCommission_cur_1() + cat35.getCommission_amt_1().bigDecimalValue().doubleValue() + "\n";
+					}
+				}
+				if (cat35.getCommission_amt_2() != null && cat35.getCommission_amt_2().bigDecimalValue().doubleValue() != 0.0) {
+					if (cat35.getCommission_cur_2() != null && !cat35.getCommission_cur_2().isEmpty()) {
+						detail35 += "\tCOMMISSION AMOUNT 2: " + cat35.getCommission_cur_2() + cat35.getCommission_amt_2().bigDecimalValue().doubleValue() + "\n";
+					}
+				}
+				if (!detail35.isEmpty()) {
+					result += detail35 + "\n";
+				}
+				String ticketing = "";
+				for (AtpcoRecord3Cat35Ticketing tkt35:cat35.getTicketing()) {
+					if (tkt35.getAuditor_passenger_coupon() != null && !tkt35.getAuditor_passenger_coupon().isEmpty()) {
+						if (tkt35.getAuditor_passenger_coupon().contentEquals("A")) {
+							ticketing += "\tTICKETING COUPON: AUDITOR COUPON\n";
+						} else if (tkt35.getAuditor_passenger_coupon().contentEquals("P")) {
+							ticketing += "\tTICKETING COUPON: PASSENGER COUPON\n";
+						}
+					}
+					if (tkt35.getType() != null && !tkt35.getType().isEmpty()) {
+						String type = AtpcoDataConverterUtil.convertCategory35TicketingTypeToName(tkt35.getType());
+						if (!type.isEmpty()) {
+							ticketing += "\tTICKETING TYPE: " + type + "\n";
+						}
+					}
+					if (tkt35.getTour_car_value_code() != null && !tkt35.getTour_car_value_code().isEmpty()) {
+						ticketing += "\tTICKETING TOUR/CAR VALUE CODE: " + tkt35.getTour_car_value_code() + "\n";
+					}
+					if (tkt35.getTicket_designator() != null && !tkt35.getTicket_designator().isEmpty()) {
+						ticketing += "\tTICKETING TICKET DESIGNATOR: " + tkt35.getTicket_designator() + "\n";
+					}
+				}
+				if (!ticketing.isEmpty()) {
+					result += ticketing + "\n";
+				}
+				if (cat35.getSec_tbl_no_983() != null && !cat35.getSec_tbl_no_983().isEmpty()) {
+					List<SecurityDataTable> secds = atpcoRecord3CategoryCustomRepository.findRecord3SecurityTable(cat35.getSec_tbl_no_983());
+					String secText = convertCodedSecurityTableValueToText(secds);
+					if (!secText.isEmpty()) {
+						result += secText;
+					}
+					if (!result.isEmpty()) {
+						result += "\n";
+					}
+				}
+				if (!result.isEmpty()) {
+					result += "\n";
+				}
 				break;
 			case "050":
 				AtpcoRecord3Cat50 cat50 = (AtpcoRecord3Cat50) catObj;
@@ -2151,5 +2230,81 @@ public class AtpcoRecordService {
 		}
 		
 		return result;
+	}
+	
+	private String convertCodedSecurityTableValueToText(List<SecurityDataTable> secds) {
+		String result = "";
+		
+		for (SecurityDataTable secd:secds) {
+			String line = "";
+			if (secd != null) {
+				if (secd.getAppl() != null) {
+					line += "\t" + appendSpace(secd.getAppl().trim(), 3 - secd.getAppl().trim().length());
+				}
+				if (secd.getTvl_agency() != null) {
+					line += appendSpace(secd.getTvl_agency().trim(), 4 - secd.getTvl_agency().trim().length());
+				}
+				if (secd.getCxr_crs() != null) {
+					line += appendSpace(secd.getCxr_crs().trim(), 4 - secd.getCxr_crs().trim().length());
+				}
+				if (secd.getDuty_func() != null) {
+					line += appendSpace(secd.getDuty_func().trim(), 4 - secd.getDuty_func().trim().length());
+				}
+				if (secd.getLocales_geo_type_1() != null) {
+					line += appendSpace(secd.getLocales_geo_type_1().trim(), 2 - secd.getLocales_geo_type_1().trim().length());
+				}
+				if (secd.getLocales_geo_loc_1() != null) {
+					line += appendSpace(secd.getLocales_geo_loc_1().trim(), 6 - secd.getLocales_geo_loc_1().trim().length());
+				}
+				if (secd.getLocales_geo_type_2() != null) {
+					line += appendSpace(secd.getLocales_geo_type_2().trim(), 2 - secd.getLocales_geo_type_2().trim().length());
+				}
+				if (secd.getLocales_geo_loc_2() != null) {
+					line += appendSpace(secd.getLocales_geo_loc_2().trim(), 6 - secd.getLocales_geo_loc_2().trim().length());
+				}
+				if (secd.getLocales_type() != null) {
+					line += appendSpace(secd.getLocales_type().trim(), 4 - secd.getLocales_type().trim().length());
+				}
+				if (secd.getLocales_code() != null) {
+					line += appendSpace(secd.getLocales_code().trim(), 9 - secd.getLocales_code().trim().length());
+				}
+				if (secd.getUpdate() != null) {
+					line += appendSpace(secd.getUpdate().trim(), 3 - secd.getUpdate().trim().length());
+				}
+				if (secd.getRedistribute() != null) {
+					line += appendSpace(secd.getRedistribute().trim(), 3 - secd.getRedistribute().trim().length());
+				}
+				if (secd.getSell() != null) {
+					line += appendSpace(secd.getSell().trim(), 3 - secd.getSell().trim().length());
+				}
+				if (secd.getTicketing() != null) {
+					line += appendSpace(secd.getTicketing().trim(), 3 - secd.getTicketing().trim().length());
+				}
+				if (secd.getChanges_only() != null) {
+					line += appendSpace(secd.getChanges_only().trim(), 3 - secd.getChanges_only().trim().length());
+				}
+				if (!line.isEmpty()) {
+					if (result.isEmpty()) {
+						result += "\tSECURITY TABLE\n";
+						result += "\t   TVL CXR DU  --LOCALES--                  U  R  S  T  C \n";
+						result += "\tAP AGY CRS FN  T LOC1  T LOC2  @T  CODE/NO. P  D  L  K  H \n";
+						result += "\t== === === === = ===== = ===== === ======== == == == == ==\n";
+					}
+					result += line + "\n";
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	private String appendSpace(String text, int num) {
+		if (text != null) {
+			for (int i = 0; i < num; i++) {
+				text += " ";
+			}
+		}
+		
+		return text;
 	}
 }
