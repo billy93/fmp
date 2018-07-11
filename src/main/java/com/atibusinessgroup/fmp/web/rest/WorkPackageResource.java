@@ -67,6 +67,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.atibusinessgroup.fmp.domain.AtpcoMasterTariff;
+import com.atibusinessgroup.fmp.domain.TariffNumber;
 import com.atibusinessgroup.fmp.domain.User;
 import com.atibusinessgroup.fmp.domain.WorkPackage;
 import com.atibusinessgroup.fmp.domain.WorkPackage.ApproveConfig;
@@ -81,15 +82,15 @@ import com.atibusinessgroup.fmp.domain.WorkPackageFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
 import com.atibusinessgroup.fmp.domain.WorkPackageHistory;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
-import com.atibusinessgroup.fmp.domain.enumeration.PackageType;
 import com.atibusinessgroup.fmp.domain.enumeration.Status;
 import com.atibusinessgroup.fmp.repository.AtpcoFareRepository;
+import com.atibusinessgroup.fmp.repository.AtpcoMasterTariffRepository;
 import com.atibusinessgroup.fmp.repository.ContractFMPRepository;
 import com.atibusinessgroup.fmp.repository.ContractFareFMPRepository;
 import com.atibusinessgroup.fmp.repository.CounterRepository;
 import com.atibusinessgroup.fmp.repository.FormRepository;
 import com.atibusinessgroup.fmp.repository.PriorityRepository;
-import com.atibusinessgroup.fmp.repository.AtpcoMasterTariffRepository;
+import com.atibusinessgroup.fmp.repository.TariffNumberRepository;
 import com.atibusinessgroup.fmp.repository.UserRepository;
 import com.atibusinessgroup.fmp.repository.WorkPackageFareHistoryDataRepository;
 import com.atibusinessgroup.fmp.repository.WorkPackageFilterRepository;
@@ -151,7 +152,7 @@ public class WorkPackageResource {
     private final CounterRepository counterRepository;
     private final PriorityRepository priorityRepository;
     private final MailService mailService;
-    private final AtpcoMasterTariffRepository tariffNumberRepository;
+    private final TariffNumberRepository tariffNumberRepository;
     private final WorkPackageFilterRepository packagefilterRepository;
     private final AtpcoFareRepository atpcoFareRepository;
 
@@ -5165,8 +5166,8 @@ public class WorkPackageResource {
 
 	        List<WorkPackageFareSheet> fareSheet = workPackage.getFareSheet();
 	        List<WorkPackageFareSheet> addonFareSheet = workPackage.getAddonFareSheet();
-	        Set<AtpcoMasterTariff> fareTariffNumber = new HashSet<AtpcoMasterTariff>();
-	        Set<AtpcoMasterTariff> addonFareTariffNumber = new HashSet<AtpcoMasterTariff>();
+	        Set<TariffNumber> fareTariffNumber = new HashSet<TariffNumber>();
+	        Set<TariffNumber> addonFareTariffNumber = new HashSet<TariffNumber>();
 	        for(WorkPackageFareSheet sheet : fareSheet) {
 	        	List<WorkPackageFare> fares = sheet.getFares();
 	        	for(WorkPackageFare fare : fares) {
@@ -5183,7 +5184,7 @@ public class WorkPackageResource {
 
 	        workPackage.setFilingDetail(new FilingDetail());
 	        workPackage.getFilingDetail().setAtpcoFile(batchBuilder.toString());
-	        for(AtpcoMasterTariff tariff : fareTariffNumber) {
+	        for(TariffNumber tariff : fareTariffNumber) {
 	        	FilingDetailTariff fdt = new FilingDetailTariff();
 	        	fdt.cxr = "GA";
 	        	fdt.gov = "XX";
@@ -5192,7 +5193,7 @@ public class WorkPackageResource {
 	        	fdt.tarType = "Fare";
 	        	workPackage.getFilingDetail().getFilingDetailTarif().add(fdt);
 	        }
-	        for(AtpcoMasterTariff tariff : addonFareTariffNumber) {
+	        for(TariffNumber tariff : addonFareTariffNumber) {
 	        	FilingDetailTariff fdt = new FilingDetailTariff();
 	        	fdt.cxr = "GA";
 	        	fdt.gov = "XX";
@@ -5230,8 +5231,8 @@ public class WorkPackageResource {
 
         List<WorkPackageFareSheet> fareSheet = workPackage.getFareSheet();
         List<WorkPackageFareSheet> addonFareSheet = workPackage.getAddonFareSheet();
-        Set<AtpcoMasterTariff> fareTariffNumber = new HashSet<AtpcoMasterTariff>();
-        Set<AtpcoMasterTariff> addonFareTariffNumber = new HashSet<AtpcoMasterTariff>();
+        Set<TariffNumber> fareTariffNumber = new HashSet<TariffNumber>();
+        Set<TariffNumber> addonFareTariffNumber = new HashSet<TariffNumber>();
         for(WorkPackageFareSheet sheet : fareSheet) {
         	List<WorkPackageFare> fares = sheet.getFares();
         	for(WorkPackageFare fare : fares) {
@@ -5246,7 +5247,7 @@ public class WorkPackageResource {
         }
         workPackage.setFilingDetail(new FilingDetail());
         
-        for(AtpcoMasterTariff tariff : fareTariffNumber) {
+        for(TariffNumber tariff : fareTariffNumber) {
         	FilingDetailTariff fdt = new FilingDetailTariff();
         	fdt.cxr = "GA";
         	fdt.gov = "XX";
@@ -5255,7 +5256,7 @@ public class WorkPackageResource {
         	fdt.tarType = "Fare";
         	workPackage.getFilingDetail().getFilingDetailTarif().add(fdt);
         }
-        for(AtpcoMasterTariff tariff : addonFareTariffNumber) {
+        for(TariffNumber tariff : addonFareTariffNumber) {
         	FilingDetailTariff fdt = new FilingDetailTariff();
         	fdt.cxr = "GA";
         	fdt.gov = "XX";
