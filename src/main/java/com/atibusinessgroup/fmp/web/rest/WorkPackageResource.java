@@ -66,6 +66,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.atibusinessgroup.fmp.domain.AtpcoMasterTariff;
 import com.atibusinessgroup.fmp.domain.TariffNumber;
 import com.atibusinessgroup.fmp.domain.User;
 import com.atibusinessgroup.fmp.domain.WorkPackage;
@@ -81,9 +82,9 @@ import com.atibusinessgroup.fmp.domain.WorkPackageFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
 import com.atibusinessgroup.fmp.domain.WorkPackageHistory;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
-import com.atibusinessgroup.fmp.domain.enumeration.PackageType;
 import com.atibusinessgroup.fmp.domain.enumeration.Status;
 import com.atibusinessgroup.fmp.repository.AtpcoFareRepository;
+import com.atibusinessgroup.fmp.repository.AtpcoMasterTariffRepository;
 import com.atibusinessgroup.fmp.repository.ContractFMPRepository;
 import com.atibusinessgroup.fmp.repository.ContractFareFMPRepository;
 import com.atibusinessgroup.fmp.repository.CounterRepository;
@@ -636,7 +637,7 @@ public class WorkPackageResource {
                 List<Object> value = entry.getValue();
 
                 int i=0;
-                TariffNumber tfNumber = new TariffNumber();
+                AtpcoMasterTariff tfNumber = new AtpcoMasterTariff();
                 for(Object o : value) {
                 	if(header.contentEquals("Status")) {
                 		fares.get(i).setStatus("PENDING");
@@ -806,7 +807,7 @@ public class WorkPackageResource {
                 List<Object> value = entry.getValue();
 
                 int i=0;
-                TariffNumber tfNumber = new TariffNumber();
+                AtpcoMasterTariff tfNumber = new AtpcoMasterTariff();
                 for(Object o : value) {
                 	if(header.contentEquals("Status")) {
                 		fares.get(i).setStatus("PENDING");
@@ -968,7 +969,7 @@ public class WorkPackageResource {
                    List<Object> value = entry.getValue();
 
                    int i=0;
-                   TariffNumber tfNumber = new TariffNumber();
+                   AtpcoMasterTariff tfNumber = new AtpcoMasterTariff();
                    for(Object o : value) {
                    	if(header.contentEquals("Status")) {
                    		fares.get(i).setStatus("PENDING");
@@ -1091,7 +1092,7 @@ public class WorkPackageResource {
                 List<Object> value = entry.getValue();
 
                 int i=0;
-                TariffNumber tfNumber = new TariffNumber();
+                AtpcoMasterTariff tfNumber = new AtpcoMasterTariff();
                 for(Object o : value) {
                 	if(header.contentEquals("Status")) {
                 		fares.get(i).setStatus("PENDING");
@@ -1246,7 +1247,7 @@ public class WorkPackageResource {
                 List<Object> value = entry.getValue();
 
                 int i=0;
-                TariffNumber tfNumber = new TariffNumber();
+                AtpcoMasterTariff tfNumber = new AtpcoMasterTariff();
                 for(Object o : value) {
                 	if(header.contentEquals("Type")) {
                 		fares.get(i).setWaiverType(String.valueOf(o));

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.atibusinessgroup.fmp.constant.CategoryName;
 import com.atibusinessgroup.fmp.constant.CategoryType;
-import com.atibusinessgroup.fmp.domain.TariffNumber;
+import com.atibusinessgroup.fmp.domain.AtpcoMasterTariff;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFootnoteRecord2;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteQueryDetails;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteQueryGroup;
@@ -31,7 +31,7 @@ import com.atibusinessgroup.fmp.domain.dto.CategoryTextFormatAndAttribute;
 import com.atibusinessgroup.fmp.domain.dto.DataTable;
 import com.atibusinessgroup.fmp.domain.dto.FootnoteQuery;
 import com.atibusinessgroup.fmp.domain.dto.FootnoteQueryParam;
-import com.atibusinessgroup.fmp.repository.TariffNumberRepository;
+import com.atibusinessgroup.fmp.repository.AtpcoMasterTariffRepository;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoFareCustomRepository;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoFootnoteQueryCustomRepository;
 import com.atibusinessgroup.fmp.service.AtpcoRecordService;
@@ -55,11 +55,11 @@ public class FootnoteQueryResource {
 
 	private final AtpcoRecordService atpcoRecordService;
 
-	private final TariffNumberRepository tariffNumberRepository;
+	private final AtpcoMasterTariffRepository tariffNumberRepository;
 	
 	public FootnoteQueryResource(AtpcoFootnoteQueryCustomRepository atpcoFootnoteQueryCustomRepository,
 			FootnoteQueryMapper footnoteQueryMapper, AtpcoFareCustomRepository atpcoFareCustomRepository, AtpcoRecordService atpcoRecordService,
-			TariffNumberRepository tariffNumberRepository) {
+			AtpcoMasterTariffRepository tariffNumberRepository) {
 		this.atpcoFootnoteQueryCustomRepository = atpcoFootnoteQueryCustomRepository;
 		this.footnoteQueryMapper = footnoteQueryMapper;
 
@@ -189,7 +189,7 @@ public class FootnoteQueryResource {
 
 		List<AtpcoFootnoteRecord2GroupByCatNo> arecords2 = atpcoFootnoteQueryCustomRepository.groupFootnoteByRecordId(recordId);
 
-		TariffNumber ftntTn = tariffNumberRepository.findOneByTarNoAndType(footnoteQuery.getTarNo(), "FARE RULE");
+		AtpcoMasterTariff ftntTn = tariffNumberRepository.findOneByTarNoAndType(footnoteQuery.getTarNo(), "FARE RULE");
 		String ftntTcd = null;
 		
 		if (ftntTn != null) {

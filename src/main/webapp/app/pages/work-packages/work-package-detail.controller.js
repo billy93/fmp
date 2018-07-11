@@ -1898,10 +1898,11 @@
         		Clipboard.findCurrent({}, onFindSuccess, onFindError);
         		
         		function onFindSuccess(result){
-//        			console.log(result);
+        			console.log(result);
         			
         			for(var i=0;i<result.fares.length;i++){
             			if(vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'REGULAR'){
+//            				console.log("BOOKING CLASS : "+result.fares[i].bookingClass);
             				vm.workPackage.fares.push({
             					status:"PENDING",
             					carrier:"GA",
@@ -5344,7 +5345,6 @@
 			  }
 			  else if(result.page == 'AFD_QUERY'){
 				  for(var x=0;x<result.content.length;x++){
-//					  console.log(result.content[x]);
 					  var tariffNumber = null;
 					  for(var y=0;y<vm.tariffNumber.length;y++){	
 			    		  if(vm.tariffNumber[y].tarNo == result.content[x].tariffNo){
