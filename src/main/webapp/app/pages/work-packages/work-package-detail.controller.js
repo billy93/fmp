@@ -5371,7 +5371,7 @@
 							  origin:result.content[x].originCity,
 							  destination:result.content[x].destinationCity,
 							  fareBasis:result.content[x].fareClassCode,
-							  bookingClass:result.content[x].bookingClass,
+							  bookingClass:result.content[x].bookingClass.length > 0 ? result.content[x].bookingClass[0] : null,
 							  cabin:result.content[x].cabin,
 							  typeOfJourney:result.content[x].owrt,
 							  footnote1:result.content[x].footnote,
@@ -5380,11 +5380,11 @@
 							  currency:result.content[x].currencyCode,
 							  amount:result.content[x].baseAmount,
 							  aif:result.content[x].aif,
-							  travelStart:DateUtils.convertDateTimeFromServer(result.content[x].travelStartDate),
-							  travelEnd:DateUtils.convertDateTimeFromServer(result.content[x].travelEndDate),
-							  saleStart:DateUtils.convertDateTimeFromServer(result.content[x].saleStartDate),
-							  saleEnd:DateUtils.convertDateTimeFromServer(result.content[x].saleEndDate),
-							  travelComplete:DateUtils.convertDateTimeFromServer(result.content[x].travelComplete)
+							  travelStart:DateUtils.convertDateFromServer(result.content[x].travelStartDate),
+							  travelEnd:DateUtils.convertDateFromServer(result.content[x].travelEndDate),
+							  saleStart:DateUtils.convertDateFromServer(result.content[x].saleStartDate),
+							  saleEnd:DateUtils.convertDateFromServer(result.content[x].saleEndDate),
+							  travelComplete:DateUtils.convertDateFromServer(result.content[x].travelComplete)
 						  };
 					  } else if(vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.type == 'REGULAR'){
 						  var fare = {
@@ -5404,11 +5404,11 @@
 								  currency:result.content[x].currencyCode,
 								  amount:result.content[x].baseAmount,
 								  aif:result.content[x].aif,
-								  travelStart:DateUtils.convertDateTimeFromServer(result.content[x].travelStartDate),
-								  travelEnd:DateUtils.convertDateTimeFromServer(result.content[x].travelEndDate),
-								  saleStart:DateUtils.convertDateTimeFromServer(result.content[x].saleStartDate),
-								  saleEnd:DateUtils.convertDateTimeFromServer(result.content[x].saleEndDate),
-								  travelComplete:DateUtils.convertDateTimeFromServer(result.content[x].travelComplete),
+								  travelStart:DateUtils.convertDateFromServer(result.content[x].travelStartDate),
+								  travelEnd:DateUtils.convertDateFromServer(result.content[x].travelEndDate),
+								  saleStart:DateUtils.convertDateFromServer(result.content[x].saleStartDate),
+								  saleEnd:DateUtils.convertDateFromServer(result.content[x].saleEndDate),
+								  travelComplete:DateUtils.convertDateFromServer(result.content[x].travelComplete),
 								  prevAmount:result.content[x].baseAmount,
 								  prevAmountDiff:0,
 								  prevPercentAmountDiff:0
@@ -5435,12 +5435,12 @@
 								  currency:result.content[x].currencyCode,
 								  amount:result.content[x].baseAmount,
 								  aif:result.content[x].aif,
-								  passengerType:result.content[x].paxType,
-								  travelStart:DateUtils.convertDateTimeFromServer(result.content[x].travelStartDate),
-								  travelEnd:DateUtils.convertDateTimeFromServer(result.content[x].travelEndDate),
-								  saleStart:DateUtils.convertDateTimeFromServer(result.content[x].saleStartDate),
-								  saleEnd:DateUtils.convertDateTimeFromServer(result.content[x].saleEndDate),
-								  travelComplete:DateUtils.convertDateTimeFromServer(result.content[x].travelComplete)
+								  passengerType:result.content[x].paxType.length > 0 ? result.content[x].paxType[0] : null,
+								  travelStart:DateUtils.convertDateFromServer(result.content[x].travelStartDate),
+								  travelEnd:DateUtils.convertDateFromServer(result.content[x].travelEndDate),
+								  saleStart:DateUtils.convertDateFromServer(result.content[x].saleStartDate),
+								  saleEnd:DateUtils.convertDateFromServer(result.content[x].saleEndDate),
+								  travelComplete:DateUtils.convertDateFromServer(result.content[x].travelComplete)
 							  };
 					  }
 					  workPackageSheet.fares.push(fare);    	
