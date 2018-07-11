@@ -2617,6 +2617,7 @@
 
         function openCalendar (date) {
 //        	console.log(date);
+        	vm.datePickerOpenStatus = {};
             vm.datePickerOpenStatus[date] = true;
         }
         function openCalendarRow(variable, sheet, row) {

@@ -13,8 +13,8 @@ public class AtpcoRecord2GroupByRuleNoCxrTarNo {
 	@Field("ruleNo")
     private String ruleNo;
 	
-	@Field("tarCd")
-    private String tarCd;
+	@Field("type")
+    private String type;
 	
 	@Field("total")
     private String total;
@@ -43,12 +43,12 @@ public class AtpcoRecord2GroupByRuleNoCxrTarNo {
 		this.ruleNo = ruleNo;
 	}
 
-	public String getTarCd() {
-		return tarCd;
+	public String getType() {
+		return type;
 	}
 
-	public void setTarCd(String tarCd) {
-		this.tarCd = tarCd;
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public String getTotal() {
@@ -61,10 +61,10 @@ public class AtpcoRecord2GroupByRuleNoCxrTarNo {
 
 	@Override
 	public String toString() {
-		return "AtpcoRecord2GroupByRuleNoCxrTarNo [tarNo=" + tarNo + ", cxr=" + cxr + ", ruleNo=" + ruleNo + ", tarCd="
-				+ tarCd + ", total=" + total + "]";
+		return "AtpcoRecord2GroupByRuleNoCxrTarNo [tarNo=" + tarNo + ", cxr=" + cxr + ", ruleNo=" + ruleNo + ", type="
+				+ type + ", total=" + total + "]";
 	}
-	
+
 	
 	
 	

@@ -56,6 +56,7 @@
         vm.datePickerOpenStatus.ticketingDate = false;
         
         function openCalendar (date) {
+        	vm.datePickerOpenStatus = {};
             vm.datePickerOpenStatus[date] = true;
         }
 
