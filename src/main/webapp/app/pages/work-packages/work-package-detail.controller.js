@@ -6681,7 +6681,6 @@
     	  WorkPackage.createbatch(vm.workPackage, function(result){
     		  if(vm.mapWorkpackage(result)){
 	    		  alert('Create batch Success');
-	    		  vm.mapWorkpackage(result);
 	  			  $state.go('work-package');
     		  }
     	  }, function(){
