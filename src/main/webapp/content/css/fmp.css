@@ -4027,13 +4027,32 @@ tr td.highlighted {
   width: 100%; }
   .table.table-header-fixed tbody {
     display: block;
-    height: 300px;
+    max-height: 300px;
     overflow-y: auto;
     width: 100%; }
   .table.table-header-fixed thead {
     display: table;
     width: 100%;
     overflow: auto; }
+
+.absolute-table {
+  display: inline-block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: auto;
+  padding-bottom: 50px; }
+  .absolute-table .table-header-fixed thead {
+    padding-right: 17px;
+    background-color: #64768a; }
+
+.fixed-wrapper-inside {
+  display: inline-block;
+  position: absolute;
+  width: 100%;
+  bottom: 40px;
+  left: 0;
+  font-size: 15px;
+  color: #ff2500d1; }
 
 .tab-wrapper {
   position: relative;
@@ -4328,10 +4347,8 @@ table.uib-daypicker tbody td {
   position: relative !important; }
 
 .absolute-datepicker .dropdown-menu.datetime-picker-dropdown {
-  position: absolute !important; }
-  @media screen and (max-width: 1200px) {
-    .absolute-datepicker .dropdown-menu.datetime-picker-dropdown {
-      padding: 8px 5px 1px; } }
+  position: absolute !important;
+  padding: 8px 5px 1px; }
   .absolute-datepicker .dropdown-menu.datetime-picker-dropdown .btn-default {
     border: 1px solid #f4f4f4;
     background: #fff;
@@ -4346,6 +4363,9 @@ table.uib-daypicker tbody td {
     .absolute-datepicker .dropdown-menu.datetime-picker-dropdown .btn-default:hover {
       background: #5697ce;
       color: #fff; }
+      .absolute-datepicker .dropdown-menu.datetime-picker-dropdown .btn-default:hover .text-muted {
+        color: #fff;
+        opacity: 1; }
     .absolute-datepicker .dropdown-menu.datetime-picker-dropdown .btn-default.active {
       background: #ffc700; }
       .absolute-datepicker .dropdown-menu.datetime-picker-dropdown .btn-default.active:hover {
@@ -4356,6 +4376,8 @@ table.uib-daypicker tbody td {
   .absolute-datepicker .dropdown-menu.datetime-picker-dropdown th .btn-default {
     background: #5697ce;
     color: #fff; }
+  .absolute-datepicker .dropdown-menu.datetime-picker-dropdown th .glyphicon {
+    margin: 0; }
   .absolute-datepicker .dropdown-menu.datetime-picker-dropdown .text-muted {
     color: #999;
     opacity: .7; }
@@ -4624,6 +4646,26 @@ label.tree_label:after {
 .a--open {
   color: #337ab7;
   margin-left: 10px; }
+
+.svg-loader {
+  position: absolute;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  margin-top: -35px; }
+  .svg-loader svg path,
+  .svg-loader svg rect {
+    fill: #FF6700; }
+
+.center-div {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  margin-top: -11px; }
 
 /* General Demo Style */
 body, html {

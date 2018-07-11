@@ -113,8 +113,7 @@
         	e.preventDefault();
             e.stopPropagation();
             
-            cosole.log("date :: "+date);
-            
+            vm.datePickerOpenStatus = {};
             vm.datePickerOpenStatus[date] = true;
         }
         

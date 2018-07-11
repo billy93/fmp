@@ -24,11 +24,17 @@
     function WorkPackageDetailController($window, $sce, currencies,tariffNumber,tariffNumberAddOn, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups, Currency, atpcoFareTypes, ClipboardSheet, Clipboard, $timeout) {
     	var vm = this;
 
-    	window.onbeforeunload = function () {
+    	window.onbeforeunload = function (e) {
     		   // handle the exit event
-    		return false;
+    		return "Please click 'Stay on this Page' if you did this unintentionally";
     	};
-
+    	
+    	window.addEventListener("beforeunload", function() {
+    		console.log(event);
+    		console.log(event.srcElement.URL);
+    		console.log(event.target.URL);
+    	});
+    	
     	vm.editorConfig = {
 		    sanitize: false,
 		    toolbar: [
@@ -41,8 +47,10 @@
     	
     	$scope.$on("$destroy", function() {
 	    	WorkPackage.closeEditor(vm.workPackage, closedSuccess, closedFailure);
-	      	  function closedSuccess (result) {}
-	      	  function closedFailure (error) {} 
+	      	  function closedSuccess (result) {
+	      	  }
+	      	  function closedFailure (error) {
+	      	  } 
     	   });
     	
         vm.currentTab = [];
@@ -2609,6 +2617,7 @@
 
         function openCalendar (date) {
 //        	console.log(date);
+        	vm.datePickerOpenStatus = {};
             vm.datePickerOpenStatus[date] = true;
         }
         function openCalendarRow(variable, sheet, row) {
