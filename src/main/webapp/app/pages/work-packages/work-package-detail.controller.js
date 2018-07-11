@@ -1858,10 +1858,11 @@
         		Clipboard.findCurrent({}, onFindSuccess, onFindError);
         		
         		function onFindSuccess(result){
-//        			console.log(result);
+        			console.log(result);
         			
         			for(var i=0;i<result.fares.length;i++){
             			if(vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'REGULAR'){
+//            				console.log("BOOKING CLASS : "+result.fares[i].bookingClass);
             				vm.workPackage.fares.push({
             					status:"PENDING",
             					carrier:"GA",
@@ -5319,6 +5320,8 @@
 			    	  }
 					  
 					  if(vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'REGULAR'){
+						  console.log("BOOKING CLASS");
+						  console.log(result.content[x].bookingClass);
 						  var fare = {
 							  status:"PENDING",
 							  action: cancel ? "X" : "A",

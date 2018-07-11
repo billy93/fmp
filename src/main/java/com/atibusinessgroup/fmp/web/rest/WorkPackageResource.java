@@ -66,7 +66,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.atibusinessgroup.fmp.domain.TariffNumber;
+import com.atibusinessgroup.fmp.domain.AtpcoMasterTariff;
 import com.atibusinessgroup.fmp.domain.User;
 import com.atibusinessgroup.fmp.domain.WorkPackage;
 import com.atibusinessgroup.fmp.domain.WorkPackage.ApproveConfig;
@@ -89,7 +89,7 @@ import com.atibusinessgroup.fmp.repository.ContractFareFMPRepository;
 import com.atibusinessgroup.fmp.repository.CounterRepository;
 import com.atibusinessgroup.fmp.repository.FormRepository;
 import com.atibusinessgroup.fmp.repository.PriorityRepository;
-import com.atibusinessgroup.fmp.repository.TariffNumberRepository;
+import com.atibusinessgroup.fmp.repository.AtpcoMasterTariffRepository;
 import com.atibusinessgroup.fmp.repository.UserRepository;
 import com.atibusinessgroup.fmp.repository.WorkPackageFareHistoryDataRepository;
 import com.atibusinessgroup.fmp.repository.WorkPackageFilterRepository;
@@ -151,13 +151,13 @@ public class WorkPackageResource {
     private final CounterRepository counterRepository;
     private final PriorityRepository priorityRepository;
     private final MailService mailService;
-    private final TariffNumberRepository tariffNumberRepository;
+    private final AtpcoMasterTariffRepository tariffNumberRepository;
     private final WorkPackageFilterRepository packagefilterRepository;
     private final AtpcoFareRepository atpcoFareRepository;
 
     public WorkPackageResource(WorkPackageService workPackageService, WorkPackageFareService workPackageFareService, TargetDistributionService targetDistributionService, BusinessAreaService businessAreaService, ReviewLevelService reviewLevelService, UserService userService, UserRepository userRepository, WorkPackageHistoryService workPackageHistoryService,
     		ContractFMPRepository contractFMPRepository, FormRepository formRepository, WorkPackageHistoryDataRepository workPackageHistoryDataRepository,
-    		WorkPackageFareHistoryDataRepository workPackageFareHistoryDataRepository, ContractFareFMPRepository contractFareFMPRepository, CounterRepository counterRepository, PriorityRepository priorityRepository, MailService mailService, TariffNumberRepository tariffNumberRepository, WorkPackageFilterRepository packagefilterRepository, AtpcoFareRepository atpcoFareRepository) {
+    		WorkPackageFareHistoryDataRepository workPackageFareHistoryDataRepository, ContractFareFMPRepository contractFareFMPRepository, CounterRepository counterRepository, PriorityRepository priorityRepository, MailService mailService, AtpcoMasterTariffRepository tariffNumberRepository, WorkPackageFilterRepository packagefilterRepository, AtpcoFareRepository atpcoFareRepository) {
         this.workPackageService = workPackageService;
         this.workPackageFareService = workPackageFareService;
         this.targetDistributionService = targetDistributionService;
@@ -612,7 +612,7 @@ public class WorkPackageResource {
                 List<Object> value = entry.getValue();
 
                 int i=0;
-                TariffNumber tfNumber = new TariffNumber();
+                AtpcoMasterTariff tfNumber = new AtpcoMasterTariff();
                 for(Object o : value) {
                 	if(header.contentEquals("Status")) {
                 		fares.get(i).setStatus("PENDING");
@@ -782,7 +782,7 @@ public class WorkPackageResource {
                 List<Object> value = entry.getValue();
 
                 int i=0;
-                TariffNumber tfNumber = new TariffNumber();
+                AtpcoMasterTariff tfNumber = new AtpcoMasterTariff();
                 for(Object o : value) {
                 	if(header.contentEquals("Status")) {
                 		fares.get(i).setStatus("PENDING");
@@ -944,7 +944,7 @@ public class WorkPackageResource {
                    List<Object> value = entry.getValue();
 
                    int i=0;
-                   TariffNumber tfNumber = new TariffNumber();
+                   AtpcoMasterTariff tfNumber = new AtpcoMasterTariff();
                    for(Object o : value) {
                    	if(header.contentEquals("Status")) {
                    		fares.get(i).setStatus("PENDING");
@@ -1067,7 +1067,7 @@ public class WorkPackageResource {
                 List<Object> value = entry.getValue();
 
                 int i=0;
-                TariffNumber tfNumber = new TariffNumber();
+                AtpcoMasterTariff tfNumber = new AtpcoMasterTariff();
                 for(Object o : value) {
                 	if(header.contentEquals("Status")) {
                 		fares.get(i).setStatus("PENDING");
@@ -1222,7 +1222,7 @@ public class WorkPackageResource {
                 List<Object> value = entry.getValue();
 
                 int i=0;
-                TariffNumber tfNumber = new TariffNumber();
+                AtpcoMasterTariff tfNumber = new AtpcoMasterTariff();
                 for(Object o : value) {
                 	if(header.contentEquals("Type")) {
                 		fares.get(i).setWaiverType(String.valueOf(o));
@@ -5165,8 +5165,8 @@ public class WorkPackageResource {
 
 	        List<WorkPackageFareSheet> fareSheet = workPackage.getFareSheet();
 	        List<WorkPackageFareSheet> addonFareSheet = workPackage.getAddonFareSheet();
-	        Set<TariffNumber> fareTariffNumber = new HashSet<TariffNumber>();
-	        Set<TariffNumber> addonFareTariffNumber = new HashSet<TariffNumber>();
+	        Set<AtpcoMasterTariff> fareTariffNumber = new HashSet<AtpcoMasterTariff>();
+	        Set<AtpcoMasterTariff> addonFareTariffNumber = new HashSet<AtpcoMasterTariff>();
 	        for(WorkPackageFareSheet sheet : fareSheet) {
 	        	List<WorkPackageFare> fares = sheet.getFares();
 	        	for(WorkPackageFare fare : fares) {
@@ -5183,7 +5183,7 @@ public class WorkPackageResource {
 
 	        workPackage.setFilingDetail(new FilingDetail());
 	        workPackage.getFilingDetail().setAtpcoFile(batchBuilder.toString());
-	        for(TariffNumber tariff : fareTariffNumber) {
+	        for(AtpcoMasterTariff tariff : fareTariffNumber) {
 	        	FilingDetailTariff fdt = new FilingDetailTariff();
 	        	fdt.cxr = "GA";
 	        	fdt.gov = "XX";
@@ -5192,7 +5192,7 @@ public class WorkPackageResource {
 	        	fdt.tarType = "Fare";
 	        	workPackage.getFilingDetail().getFilingDetailTarif().add(fdt);
 	        }
-	        for(TariffNumber tariff : addonFareTariffNumber) {
+	        for(AtpcoMasterTariff tariff : addonFareTariffNumber) {
 	        	FilingDetailTariff fdt = new FilingDetailTariff();
 	        	fdt.cxr = "GA";
 	        	fdt.gov = "XX";
@@ -5230,8 +5230,8 @@ public class WorkPackageResource {
 
         List<WorkPackageFareSheet> fareSheet = workPackage.getFareSheet();
         List<WorkPackageFareSheet> addonFareSheet = workPackage.getAddonFareSheet();
-        Set<TariffNumber> fareTariffNumber = new HashSet<TariffNumber>();
-        Set<TariffNumber> addonFareTariffNumber = new HashSet<TariffNumber>();
+        Set<AtpcoMasterTariff> fareTariffNumber = new HashSet<AtpcoMasterTariff>();
+        Set<AtpcoMasterTariff> addonFareTariffNumber = new HashSet<AtpcoMasterTariff>();
         for(WorkPackageFareSheet sheet : fareSheet) {
         	List<WorkPackageFare> fares = sheet.getFares();
         	for(WorkPackageFare fare : fares) {
@@ -5246,7 +5246,7 @@ public class WorkPackageResource {
         }
         workPackage.setFilingDetail(new FilingDetail());
         
-        for(TariffNumber tariff : fareTariffNumber) {
+        for(AtpcoMasterTariff tariff : fareTariffNumber) {
         	FilingDetailTariff fdt = new FilingDetailTariff();
         	fdt.cxr = "GA";
         	fdt.gov = "XX";
@@ -5255,7 +5255,7 @@ public class WorkPackageResource {
         	fdt.tarType = "Fare";
         	workPackage.getFilingDetail().getFilingDetailTarif().add(fdt);
         }
-        for(TariffNumber tariff : addonFareTariffNumber) {
+        for(AtpcoMasterTariff tariff : addonFareTariffNumber) {
         	FilingDetailTariff fdt = new FilingDetailTariff();
         	fdt.cxr = "GA";
         	fdt.gov = "XX";
