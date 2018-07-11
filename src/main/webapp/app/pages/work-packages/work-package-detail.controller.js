@@ -24,11 +24,17 @@
     function WorkPackageDetailController($window, $sce, currencies,tariffNumber,tariffNumberAddOn, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups, Currency, atpcoFareTypes, ClipboardSheet, Clipboard, $timeout) {
     	var vm = this;
 
-    	window.onbeforeunload = function () {
+    	window.onbeforeunload = function (e) {
     		   // handle the exit event
-    		return false;
+    		return "Please click 'Stay on this Page' if you did this unintentionally";
     	};
-
+    	
+    	window.addEventListener("beforeunload", function() {
+    		console.log(event);
+    		console.log(event.srcElement.URL);
+    		console.log(event.target.URL);
+    	});
+    	
     	vm.editorConfig = {
 		    sanitize: false,
 		    toolbar: [
@@ -41,8 +47,10 @@
     	
     	$scope.$on("$destroy", function() {
 	    	WorkPackage.closeEditor(vm.workPackage, closedSuccess, closedFailure);
-	      	  function closedSuccess (result) {}
-	      	  function closedFailure (error) {} 
+	      	  function closedSuccess (result) {
+	      	  }
+	      	  function closedFailure (error) {
+	      	  } 
     	   });
     	
         vm.currentTab = [];
@@ -1898,10 +1906,11 @@
         		Clipboard.findCurrent({}, onFindSuccess, onFindError);
         		
         		function onFindSuccess(result){
-//        			console.log(result);
+        			console.log(result);
         			
         			for(var i=0;i<result.fares.length;i++){
             			if(vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'REGULAR'){
+//            				console.log("BOOKING CLASS : "+result.fares[i].bookingClass);
             				vm.workPackage.fares.push({
             					status:"PENDING",
             					carrier:"GA",
@@ -5344,7 +5353,6 @@
 			  }
 			  else if(result.page == 'AFD_QUERY'){
 				  for(var x=0;x<result.content.length;x++){
-//					  console.log(result.content[x]);
 					  var tariffNumber = null;
 					  for(var y=0;y<vm.tariffNumber.length;y++){	
 			    		  if(vm.tariffNumber[y].tarNo == result.content[x].tariffNo){

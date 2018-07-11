@@ -66,6 +66,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.atibusinessgroup.fmp.domain.AtpcoMasterTariff;
 import com.atibusinessgroup.fmp.domain.TariffNumber;
 import com.atibusinessgroup.fmp.domain.User;
 import com.atibusinessgroup.fmp.domain.WorkPackage;
@@ -81,9 +82,9 @@ import com.atibusinessgroup.fmp.domain.WorkPackageFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
 import com.atibusinessgroup.fmp.domain.WorkPackageHistory;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
-import com.atibusinessgroup.fmp.domain.enumeration.PackageType;
 import com.atibusinessgroup.fmp.domain.enumeration.Status;
 import com.atibusinessgroup.fmp.repository.AtpcoFareRepository;
+import com.atibusinessgroup.fmp.repository.AtpcoMasterTariffRepository;
 import com.atibusinessgroup.fmp.repository.ContractFMPRepository;
 import com.atibusinessgroup.fmp.repository.ContractFareFMPRepository;
 import com.atibusinessgroup.fmp.repository.CounterRepository;
@@ -206,7 +207,6 @@ public class WorkPackageResource {
             		workPackage.setReviewLevel("LSO");
             	}
         	}
-
         }
 
 
@@ -334,7 +334,18 @@ public class WorkPackageResource {
         wp.setWpid(null);
 
         User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
-        wp.setReviewLevel(user.getReviewLevels().get(0));
+        Optional<User> userLogin = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
+        if(userLogin.get().getReviewLevels().size()==1) {
+        	wp.setReviewLevel(userLogin.get().getReviewLevels().get(0));
+        }else {
+        	if(userLogin.get().getReviewLevels().indexOf("HO") > -1){
+        		wp.setReviewLevel("HO");
+        	}else {
+        		if(userLogin.get().getReviewLevels().indexOf("LSO") > -1){
+        			wp.setReviewLevel("LSO");
+            	}
+        	}
+        }
         wp.setComment(null);
         wp.setInterofficeComment(null);
         wp.setFilingInstructionData(null);
@@ -429,7 +440,19 @@ public class WorkPackageResource {
         wp.setWpid(null);
 
         User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
-        wp.setReviewLevel(user.getReviewLevels().get(0));
+        
+        Optional<User> userLogin = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
+        if(userLogin.get().getReviewLevels().size()==1) {
+        	wp.setReviewLevel(userLogin.get().getReviewLevels().get(0));
+        }else {
+        	if(userLogin.get().getReviewLevels().indexOf("HO") > -1){
+        		wp.setReviewLevel("HO");
+        	}else {
+        		if(userLogin.get().getReviewLevels().indexOf("LSO") > -1){
+        			wp.setReviewLevel("LSO");
+            	}
+        	}
+        }
         wp.setCreatedBy(null);
         wp.setCreatedDate(null);
         wp.setLastModifiedBy(null);
@@ -480,7 +503,7 @@ public class WorkPackageResource {
         }
 
         Comment flagComment = new Comment();
-        flagComment.setComment("This workpackage was reused from Workpackage "+tempId); 
+        flagComment.setComment("This workpackage was replace from Workpackage "+tempId); 
         flagComment.setCreatedTime(ZonedDateTime.now());
         flagComment.setUsername(SecurityUtils.getCurrentUserLogin().get());
         
@@ -636,7 +659,7 @@ public class WorkPackageResource {
                 List<Object> value = entry.getValue();
 
                 int i=0;
-                TariffNumber tfNumber = new TariffNumber();
+                AtpcoMasterTariff tfNumber = new AtpcoMasterTariff();
                 for(Object o : value) {
                 	if(header.contentEquals("Status")) {
                 		fares.get(i).setStatus("PENDING");
@@ -806,7 +829,7 @@ public class WorkPackageResource {
                 List<Object> value = entry.getValue();
 
                 int i=0;
-                TariffNumber tfNumber = new TariffNumber();
+                AtpcoMasterTariff tfNumber = new AtpcoMasterTariff();
                 for(Object o : value) {
                 	if(header.contentEquals("Status")) {
                 		fares.get(i).setStatus("PENDING");
@@ -968,7 +991,7 @@ public class WorkPackageResource {
                    List<Object> value = entry.getValue();
 
                    int i=0;
-                   TariffNumber tfNumber = new TariffNumber();
+                   AtpcoMasterTariff tfNumber = new AtpcoMasterTariff();
                    for(Object o : value) {
                    	if(header.contentEquals("Status")) {
                    		fares.get(i).setStatus("PENDING");
@@ -1091,7 +1114,7 @@ public class WorkPackageResource {
                 List<Object> value = entry.getValue();
 
                 int i=0;
-                TariffNumber tfNumber = new TariffNumber();
+                AtpcoMasterTariff tfNumber = new AtpcoMasterTariff();
                 for(Object o : value) {
                 	if(header.contentEquals("Status")) {
                 		fares.get(i).setStatus("PENDING");
@@ -1246,7 +1269,7 @@ public class WorkPackageResource {
                 List<Object> value = entry.getValue();
 
                 int i=0;
-                TariffNumber tfNumber = new TariffNumber();
+                AtpcoMasterTariff tfNumber = new AtpcoMasterTariff();
                 for(Object o : value) {
                 	if(header.contentEquals("Type")) {
                 		fares.get(i).setWaiverType(String.valueOf(o));
