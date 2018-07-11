@@ -28,8 +28,6 @@
         }
 
         vm.exportRateSheetCSV = function(){
-      	  console.log(vm.title);
-      	  console.log(vm.workPackage)
           var wprs = {
         		  wp : vm.workPackage,
         		  ruleText : vm.ruleText,

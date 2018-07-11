@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('WorkPackageWaiverRateSheetDialogController', WorkPackageWaiverRateSheetDialogController);
 
-    WorkPackageWaiverRateSheetDialogController.$inject = ['$scope', 'FileSaver', 'DataUtils', '$uibModalInstance', 'WorkPackage', '$state', 'entity', 'index'];
+    WorkPackageWaiverRateSheetDialogController.$inject = ['$scope', 'FileSaver', 'DataUtils', '$uibModalInstance', 'WorkPackage', '$state', 'entity', 'index', '$stateParams', '$window'];
 
-    function WorkPackageWaiverRateSheetDialogController($scope, FileSaver, DataUtils, $uibModalInstance, WorkPackage, $state, entity, index) {
+    function WorkPackageWaiverRateSheetDialogController($scope, FileSaver, DataUtils, $uibModalInstance, WorkPackage, $state, entity, index, $stateParams, $window) {
 
         var vm = this;
         vm.workPackage = entity;
@@ -22,11 +22,43 @@
         vm.faresData = [];
         vm.fares = [];
         vm.index = index;
-        
+
         function clear () {
             $uibModalInstance.dismiss('cancel');
         }
-        
+
+        vm.exportRateSheetCSV = function(){
+            var wprs = {
+                wp : vm.workPackage,
+                ruleText : vm.ruleText,
+                index : vm.index,
+                header : vm.title
+            }
+            WorkPackage.exportRateSheetCSVWaiver(wprs, onExportSuccess, onExportFailure);
+            function onExportSuccess(result){
+                var fileType = "data:text/csv;charset=utf-8,";
+                var templateFilename = "RateSheetWaiver.csv";
+                var blob = b64toBlob(result.file, fileType);
+                FileSaver.saveAs(blob, templateFilename);
+            }
+
+            function onExportFailure(){
+                alert('Export to CSV failed');
+            }
+        }
+
+        vm.exportRateSheetScreen = function(data){
+            var wprs = {
+                wp : vm.workPackage,
+                sheetData: data,
+                ruleText: vm.ruleText,
+                index: vm.index,
+                header: vm.title
+            }
+            var window = $window.open("#/work-package-detail/screen", "_blank");
+            window.variable = wprs;
+        }
+
         vm.exportRateSheet  = function(){
       	  console.log(vm.title);
           var wprs = {
@@ -42,12 +74,12 @@
   			var blob = b64toBlob(result.file, fileType);
   			FileSaver.saveAs(blob, templateFilename);
     	  }
-    	  
+
     	  function onExportFailure(){
     		  alert('Export to PDF failed');
-    	  }    	  
+    	  }
         }
-        
+
         function clear () {
             $uibModalInstance.dismiss('cancel');
         }
@@ -67,13 +99,13 @@
   			var blob = b64toBlob(result.file, fileType);
   			FileSaver.saveAs(blob, templateFilename);
     	  }
-    	  
+
     	  function onExportFailure(){
     		  alert('Export to Excel failed');
-    	  }    	  
+    	  }
         }
-        
-        
+
+
         vm.exportRateSheetExcels  = function(){
         	  console.log(vm.title);
             var wprs = {
@@ -89,13 +121,13 @@
     			var blob = b64toBlob(result.file, fileType);
     			FileSaver.saveAs(blob, templateFilename);
       	  }
-      	  
+
       	  function onExportFailure(){
       		  alert('Export to Excel failed');
-      	  }    	  
+      	  }
           }
-        
-        
+
+
         vm.exportRateSheetWord  = function(){
       	  console.log(vm.title);
           var wprs = {
@@ -111,12 +143,12 @@
   			var blob = b64toBlob(result.file, fileType);
   			FileSaver.saveAs(blob, templateFilename);
     	  }
-    	  
+
     	  function onExportFailure(){
     		  alert('Export to word failed');
-    	  }    	  
+    	  }
         }
-        
+
         function b64toBlob(b64Data, contentType, sliceSize) {
         	contentType = contentType || '';
   		  	sliceSize = sliceSize || 512;
@@ -141,10 +173,10 @@
 
   		  return blob;
         }
-                
+
         vm.submit = function(){
 			vm.selectHeader = false;
-	
+
 	    	if (vm.title.length > 0){
 	        	vm.isNull = false;
 	        }else{
@@ -154,18 +186,18 @@
 	    	vm.allFares =[]
 			for(var x= 0; x<vm.workPackage.waiverFareSheet[vm.index].fares.length; x++){
 				vm.allFares.push(vm.workPackage.waiverFareSheet[vm.index].fares[x]);
-			}	
+			}
 			for(var y=0; y<vm.allFares.length;y++){
 				vm.fares = [];
 				for (var j = 0; j < vm.selectedHeader.length; j++) {
 	            	getFares(vm.selectedHeader[j],y);
 				}
 				vm.faresData.push(vm.fares);
-			}      	
-        	
+			}
+
         }
-        
-        vm.addOriginalAuthorities = function () {       	
+
+        vm.addOriginalAuthorities = function () {
         	if (vm.header[0] != undefined) {
         		if(vm.header.length>1){
         			for(var l=0; l<vm.header.length;l++){
@@ -208,30 +240,30 @@
             	setTitle(vm.selectedHeader[i]);
         	}
         }
-        
+
         vm.removeAllSelectedAuthorities = function(){
         	vm.selectedHeader = [];
         	vm.title = [];
         }
-        
-        vm.removeSelectedAuthorities = function () { 
+
+        vm.removeSelectedAuthorities = function () {
         	var index = vm.title.indexOf(vm.removedHeader[0])
         	console.log(vm.removedHeader[0], index);
-        	
+
         	if (index > -1) {
-        		vm.title.splice(index, 1);            
-        		vm.selectedHeader.splice(index, 1);   
+        		vm.title.splice(index, 1);
+        		vm.selectedHeader.splice(index, 1);
         		console.log(vm.title, vm.selectedHeader);
-        	}         	
+        	}
         }
-        
+
         function getFares(data,y){
         	switch (data) {
         	case "type" :
         		vm.fares.push(vm.allFares[y].waiverType);
         	    break;
         	case "fullPartial":
-        		vm.fares.push(vm.allFares[y].waiverFullPartial);          	
+        		vm.fares.push(vm.allFares[y].waiverFullPartial);
         	    break;
         	case "pnr" :
         		vm.fares.push(vm.allFares[y].waiverPnr);
@@ -291,16 +323,16 @@
         		vm.fares.push(vm.allFares[y].waiverTotalLost);
         		break;
         	case "approver" :
-        		vm.fares.push(vm.allFares[y].waiverApprover);       	    
+        		vm.fares.push(vm.allFares[y].waiverApprover);
         		break;
         	case "remark" :
-        		vm.fares.push(vm.allFares[y].waiverRemark);	               		
+        		vm.fares.push(vm.allFares[y].waiverRemark);
         		break;
         	default:
         		break;
 			}
         }
-        
+
         function setTitle(data){
         	console.log(data);
         	switch (data) {
@@ -308,7 +340,7 @@
         		vm.title.push("Type");
         	    break;
         	case "fullPartial":
-        		vm.title.push("Full/Partial");            	
+        		vm.title.push("Full/Partial");
         	    break;
         	case "pnr" :
         		vm.title.push("PNR");
@@ -368,7 +400,7 @@
         		vm.title.push("Total Lost");
         		break;
         	case "approver" :
-        		vm.title.push("Approver");        	    
+        		vm.title.push("Approver");
         		break;
         	case "remark" :
         		vm.title.push("Remark");
