@@ -113,12 +113,21 @@ public class CompetitorMonitoringCustomRepository {
 				}
 				
 				if(param.getOrigin() != null && !param.getOrigin().isEmpty()) {
-					int dash = param.getOrigin().indexOf("-");
-					String orig = param.getOrigin().substring(0, dash);
-					String dest = param.getOrigin().substring(dash+1, param.getOrigin().length());
+					List<String> listOrigin = new ArrayList<>();
+					List<String> listDest = new ArrayList<>();
+					String[] origDestArr = Arrays.stream(param.getOrigin().split(",")).map(String::trim).toArray(String[]::new);
+					for(int i=0; i< origDestArr.length; i++) {
+						int dash = origDestArr[i].indexOf("-");
+						String orig = origDestArr[i].substring(0, dash);
+						String dest = origDestArr[i].substring(dash+1, origDestArr[i].length());
+						
+						listOrigin.add(orig);
+						listDest.add(dest);
+					}
 					
-					queries.add(new BasicDBObject("origin_city", orig));
-					queries.add(new BasicDBObject("destination_city", dest));
+					queries.add(new BasicDBObject("origin_city", new BasicDBObject("$in", listOrigin)));
+					queries.add(new BasicDBObject("destination_city", new BasicDBObject("$in", listDest)));
+					
 					
 				} else {
 					queries.add(new BasicDBObject("origin_city", new BasicDBObject("$exists", "true")));
@@ -160,7 +169,51 @@ public class CompetitorMonitoringCustomRepository {
 			}
 		});
 		
+		
+		List<String> listPP = new ArrayList<>();
+		if(param.getPublicPrivate() != null && !param.getPublicPrivate().isEmpty()) {
+			listPP.add(param.getPublicPrivate());
+		} else {
+			listPP.add("public");
+			listPP.add("private");
+		}
+		
+		listAggregationOps.add(new AggregationOperation() {
+			
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject lookup = new BasicDBObject();
+				BasicDBObject query = new BasicDBObject();
+				query.append("from", CollectionName.ATPCO_MASTER_TARIFF);
+				query.append("let", new BasicDBObject("tar_no", "$tar_no"));
+				query.append("pipeline", Arrays.asList(new BasicDBObject("$match", 
+						new BasicDBObject("$expr", 
+								new BasicDBObject("$and", 
+										Arrays.asList(
+												new BasicDBObject("$eq", Arrays.asList("$tar_no","$$tar_no")),
+												new BasicDBObject("$in", Arrays.asList("$pp", listPP))
+												)
+										)
+								)
+						)));
+				query.append("as", "m_tariff");
+				lookup.append("$lookup", query);
+				return lookup;
+			}
+		});
+		
+		listAggregationOps.add(new AggregationOperation() {
+			
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject match = new BasicDBObject();
+				match.append("$match", new BasicDBObject("m_tariff", new BasicDBObject("$ne", Arrays.asList())));
+				return match;
+			}
+		});
+		
 		Aggregation aggregation = newAggregation(listAggregationOps);
+		
 		
 		LinkedHashMap<String, String> fareCategories = new LinkedHashMap<>();
 		LinkedHashMap<String, String> fareFootnotes = new LinkedHashMap<>();
@@ -339,6 +392,8 @@ public class CompetitorMonitoringCustomRepository {
 			
 			
 		}
+		
+		System.out.println(aggregation);
 		
 		return new PageImpl<>(afdQueries, pageable, afdQueries.size());
 	}
