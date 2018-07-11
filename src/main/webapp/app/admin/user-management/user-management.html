@@ -48,13 +48,27 @@
 	                                </div>
 	                            </div>
 	                        </td>
-	                        <td style="white-space: normal; min-width: 240px">
+	                        <!-- <td style="white-space: normal; min-width: 240px">
 	                            <div class="agent-list-wrapper">
 	                                <div class="agent-list" ng-repeat="businessArea in user.businessAreas">
 	                                    <span>{{businessArea}}</span>
 	                                </div>
 	                            </div>
-	                        </td>
+	                        </td> -->
+	                        <td>
+		                    	<div>
+			                    	<table class="sub-table">
+			                    		<thead>
+			                    			<tr><th colspan="2"><center>List</center></th></tr>
+			                    		</thead>
+			                    		<tbody>
+			                    			<tr ng-repeat="businessArea in user.businessAreas track by $index">
+			                    				<td>{{businessArea}}</td>
+			                    			</tr>
+			                    		</tbody>
+			                    	</table>
+		                    	</div>
+		                    </td>
 	                        <td>
 			                    <button class="btn btn-danger btn-xs" ng-click="vm.setActive(user, true)" ng-show="!user.activated"
 			                           >Deactivated</button>
