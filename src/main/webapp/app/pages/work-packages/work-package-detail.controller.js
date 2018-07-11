@@ -5310,7 +5310,6 @@
 			  }
 			  else if(result.page == 'AFD_QUERY'){
 				  for(var x=0;x<result.content.length;x++){
-//					  console.log(result.content[x]);
 					  var tariffNumber = null;
 					  for(var y=0;y<vm.tariffNumber.length;y++){	
 			    		  if(vm.tariffNumber[y].tarNo == result.content[x].tariffNo){
@@ -5320,8 +5319,6 @@
 			    	  }
 					  
 					  if(vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'REGULAR'){
-						  console.log("BOOKING CLASS");
-						  console.log(result.content[x].bookingClass);
 						  var fare = {
 							  status:"PENDING",
 							  action: cancel ? "X" : "A",
