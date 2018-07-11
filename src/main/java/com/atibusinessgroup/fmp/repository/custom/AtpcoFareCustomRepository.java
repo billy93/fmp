@@ -637,15 +637,35 @@ public class AtpcoFareCustomRepository {
 				BasicDBObject and = new BasicDBObject();
 				List<BasicDBObject> queries = new ArrayList<>();
 				
-//				if (param.getCarrier() != null && !param.getCarrier().isEmpty()) {
-//					BasicDBObject carrier = new BasicDBObject();
-//					carrier.append("cxr_cd", new BasicDBObject("$in",  Arrays.stream(param.getCarrier().split(",")).map(String::trim).toArray(String[]::new)));
-//					queries.add(carrier);
-//				} else {
-//					BasicDBObject carrier = new BasicDBObject();
-//					carrier.append("cxr_cd", new BasicDBObject("$exists", "true"));
-//					queries.add(carrier);
-//				}
+				if (param.getCarrier() != null && !param.getCarrier().isEmpty()) {
+					BasicDBObject carrier = new BasicDBObject();
+					carrier.append("cxr_code", new BasicDBObject("$in",  Arrays.stream(param.getCarrier().split(",")).map(String::trim).toArray(String[]::new)));
+					queries.add(carrier);
+				} else {
+					BasicDBObject carrier = new BasicDBObject();
+					carrier.append("cxr_code", new BasicDBObject("$exists", "true"));
+					queries.add(carrier);
+				}
+				
+				if (param.getOrigin() != null && !param.getOrigin().isEmpty()) {
+					BasicDBObject origin = new BasicDBObject();
+					origin.append("market_origin", new BasicDBObject("$in",  Arrays.stream(param.getOrigin().split(",")).map(String::trim).toArray(String[]::new)));
+					queries.add(origin);
+				} else {
+					BasicDBObject origin = new BasicDBObject();
+					origin.append("market_origin", new BasicDBObject("$exists", "true"));
+					queries.add(origin);
+				}
+				
+				if (param.getDestination() != null && !param.getDestination().isEmpty()) {
+					BasicDBObject destination = new BasicDBObject();
+					destination.append("market_destination", new BasicDBObject("$in",  Arrays.stream(param.getDestination().split(",")).map(String::trim).toArray(String[]::new)));
+					queries.add(destination);
+				} else {
+					BasicDBObject destination = new BasicDBObject();
+					destination.append("market_destination", new BasicDBObject("$exists", "true"));
+					queries.add(destination);
+				}
 				
 				if (queries.size() > 0) {
 					and.append("$and", queries);
@@ -687,7 +707,8 @@ public class AtpcoFareCustomRepository {
     		}
     		
         	for (AtpcoAddOn a1addon:a1addons) {
-        		addOns.add(afdQueryMapper.convertAtpcoAddOn(a1addon));
+        		Date focusDate = atpcoRecordService.resolveFocusDate(param.getEffectiveDateTo(), a1addon.getDates_tar_eff(), a1addon.getDates_disc());
+        		addOns.add(afdQueryMapper.convertAtpcoAddOn(a1addon, focusDate));
         		
         		if (addOns.size() == pageable.getPageSize()) {
     				isCompleted = true;
