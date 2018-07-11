@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import com.atibusinessgroup.fmp.constant.CollectionName;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord8;
+import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord1FareClassInformation;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByRuleNoCxrTarNo;
 import com.atibusinessgroup.fmp.domain.dto.FareClassGroup;
 import com.atibusinessgroup.fmp.domain.dto.FareClassQuery;
@@ -546,6 +547,18 @@ public class AtpcoRuleQueryCustomRepository {
 		List<AggregationOperation> aggregationOperations = getFareClassGroupAggregation(param);
 		Aggregation aggregation = newAggregation(aggregationOperations);
 		List<FareClassQuery> result = mongoTemplate.aggregate(aggregation, FareClassQuery.class, FareClassQuery.class).getMappedResults();
+		for (FareClassQuery fareClassQuery : result) {
+			for (AtpcoRecord1FareClassInformation fci:fareClassQuery.getFareClassInformation()) {
+				for (String rbd:fci.getRbd()) {
+					if (rbd != null && !rbd.trim().isEmpty() && !fareClassQuery.getBkcd().contains(rbd.trim())) {
+						fareClassQuery.getBkcd().add(rbd.trim());
+					}
+				}
+				if (fci.getPassengerType() != null && !fci.getPassengerType().trim().isEmpty() && !fareClassQuery.getPaxType().contains(fci.getPassengerType().trim())) {
+					fareClassQuery.getPaxType().add(fci.getPassengerType().trim());
+				}
+			}
+		}
 		return result;
 	}
 	
@@ -813,12 +826,11 @@ public class AtpcoRuleQueryCustomRepository {
 				project.append("day_of_week_type", "$day_of_week_type");
 				project.append("fare_type", "$fare_type");
 				project.append("owrt", "$owrt");
-				project.append("bkcd", "");
 				project.append("normal_special", "");
 				project.append("display_type", "");
-				project.append("pax_type", "");
 				project.append("dates_eff", "$dates_eff");
 				project.append("dates_disc", "$dates_disc");
+				project.append("fare_class_information", "$fare_class_information");
 				
 				return new BasicDBObject("$project", project);
 			}

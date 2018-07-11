@@ -1,6 +1,8 @@
 package com.atibusinessgroup.fmp.domain.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -65,23 +67,23 @@ public class FareClassQuery implements Serializable {
 	@Field("owrt")
 	private String owrt;
 	
-	@Field("bkcd")
-	private String bkcd;
-	
 	@Field("normal_special")
 	private String normalSpecial;
 	
 	@Field("display_type")
 	private String displayType;
 	
-	@Field("pax_type")
-	private String paxType;
-	
 	@Field("dates_eff")
 	private String datesEff;
 	
 	@Field("dates_disc")
 	private String datesDisc;
+	
+	@Field("fare_class_information")
+    private List<AtpcoRecord1FareClassInformation> fareClassInformation = new ArrayList<>();
+	
+	private List<String> bkcd = new ArrayList<>();
+	private List<String> paxType = new ArrayList<>();
 
 	public String getId() {
 		return id;
@@ -227,14 +229,6 @@ public class FareClassQuery implements Serializable {
 		this.owrt = owrt;
 	}
 
-	public String getBkcd() {
-		return bkcd;
-	}
-
-	public void setBkcd(String bkcd) {
-		this.bkcd = bkcd;
-	}
-
 	public String getNormalSpecial() {
 		return normalSpecial;
 	}
@@ -249,14 +243,6 @@ public class FareClassQuery implements Serializable {
 
 	public void setDisplayType(String displayType) {
 		this.displayType = displayType;
-	}
-
-	public String getPaxType() {
-		return paxType;
-	}
-
-	public void setPaxType(String paxType) {
-		this.paxType = paxType;
 	}
 
 	public String getDatesEff() {
@@ -274,6 +260,30 @@ public class FareClassQuery implements Serializable {
 	public void setDatesDisc(String datesDisc) {
 		this.datesDisc = datesDisc;
 	}
+	
+	public List<AtpcoRecord1FareClassInformation> getFareClassInformation() {
+		return fareClassInformation;
+	}
+
+	public void setFareClassInformation(List<AtpcoRecord1FareClassInformation> fareClassInformation) {
+		this.fareClassInformation = fareClassInformation;
+	}
+
+	public List<String> getBkcd() {
+		return bkcd;
+	}
+
+	public void setBkcd(List<String> bkcd) {
+		this.bkcd = bkcd;
+	}
+	
+	public List<String> getPaxType() {
+		return paxType;
+	}
+
+	public void setPaxType(List<String> paxType) {
+		this.paxType = paxType;
+	}
 
 	@Override
 	public String toString() {
@@ -281,9 +291,9 @@ public class FareClassQuery implements Serializable {
 				+ description + ", ruleNo=" + ruleNo + ", fareClass=" + fareClass + ", seqNo=" + seqNo + ", geoType1="
 				+ geoType1 + ", geoLoc1=" + geoLoc1 + ", geoType2=" + geoType2 + ", geoLoc2=" + geoLoc2 + ", ftnt="
 				+ ftnt + ", rtgNo=" + rtgNo + ", seasonType=" + seasonType + ", dowType=" + dowType + ", fareType="
-				+ fareType + ", owrt=" + owrt + ", bkcd=" + bkcd + ", normalSpecial=" + normalSpecial + ", displayType="
-				+ displayType + ", paxType=" + paxType + ", datesEff=" + datesEff + ", datesDisc=" + datesDisc + "]";
+				+ fareType + ", owrt=" + owrt + ", normalSpecial=" + normalSpecial + ", displayType=" + displayType
+				+ ", datesEff=" + datesEff + ", datesDisc=" + datesDisc + ", fareClassInformation="
+				+ fareClassInformation + ", bkcd=" + bkcd + ", paxType=" + paxType + "]";
 	}
 
-	
 }
