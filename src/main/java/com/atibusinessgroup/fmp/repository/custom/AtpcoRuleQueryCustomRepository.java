@@ -807,8 +807,8 @@ public class AtpcoRuleQueryCustomRepository {
 				project.append("day_of_week_type", "$day_of_week_type");
 				project.append("fare_type", "$fare_type");
 				project.append("owrt", "$owrt");
-				project.append("normal_special", "");
-				project.append("display_type", "");
+				project.append("normal_special", "$prc_cat");
+				project.append("display_type", "$dis_cat");
 				project.append("dates_eff", "$dates_eff");
 				project.append("dates_disc", "$dates_disc");
 				project.append("fare_class_information", "$fare_class_information");

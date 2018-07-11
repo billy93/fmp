@@ -1,9 +1,3 @@
-<style>
-	.page-wrapper .page-content {
-		padding-bottom: 60px;
-	}
-</style>
-
 <div class="panel">
 	<div class="panel-body">
 		<div class="filter-hero">
@@ -315,172 +309,186 @@
 				</div>
 				<br/>
 				<div class="table-responsive" style="overflow-y:hidden; max-height: initial; padding-bottom: 0">
-			        <table class="table table-striped table-bordered datatable table-header-fixed">
-			            <thead style="padding-right: 17px; background-color: #64768a">
-			                <tr>
-			                    <th class="th-fixed">ID</th>
-			                    <th class="th-fixed">Source</th>
-			                    <th class="th-fixed">S/C</th>
-			                    <th class="th-fixed">Tar No</th>
-			                    <th class="th-fixed">Tar Cd</th>
-			                    <th class="th-fixed">Cxr</th>
-			                    <th class="th-fixed">Orig</th>
-			                    <th class="th-fixed">Orig Cn</th>
-			                    <th class="th-fixed">Dest</th>
-			                    <th class="th-fixed">Dest Cn</th>
-			                    <th class="th-fixed">Fare Cls</th>
-			                    <th class="th-fixed">Bkg Cls</th> 
-			                    <th class="th-fixed">Cabin</th>
-			                    <th class="th-fixed">OW/RT</th>
-			                    <th class="th-fixed">Ftnt</th>
-			                    <th class="th-fixed">Rtg No</th>
-			                    <th class="th-fixed">Rule No</th>
-			                    <th class="th-fixed">MPM</th>
-			                    <th class="th-fixed">Curr</th>
-			                    <th class="th-fixed">Base Amt</th>
-<!-- 			                    <th ng-if="vm.showTFC">Error</th> -->
-<!-- 			                    <th ng-if="vm.showTFC">TFC Calc Date</th> -->
-<!-- 			                    <th ng-if="vm.showTFC">TFC Focus Date</th> -->
-<!-- 			                    <th ng-if="vm.showTFC">YQYR</th> -->
-<!-- 			                    <th ng-if="vm.showTFC">Taxes</th> -->
-<!-- 			                    <th class="th-fixed">TFC <span ng-click="vm.showTFC = !vm.showTFC"><i ng-if="vm.showTFC" class="glyphicon glyphicon-minus"></i><i ng-if="!vm.showTFC" class="glyphicon glyphicon-plus"></i></span></th> -->
-<!-- 			                    <th class="th-fixed">AIF</th> -->
-<!-- 			                    <th class="th-fixed">Itinerary</th> -->
-			                    <th class="th-fixed">Override Ind</th>
-			                    <th class="th-fixed">Eff Date</th>
-			                    <th class="th-fixed">Disc Date</th>
-			                    <th class="th-fixed">GFS Ref</th>
-			                    <th class="th-fixed">Global</th>
-			                    <th class="th-fixed">Rule Focus Date</th>
-			                    <th class="th-fixed">Sellable</th>
-			                    <th class="th-fixed">Travel Start</th>
-			                    <th class="th-fixed">Travel End</th>
-			                    <th class="th-fixed">Travel Complete</th>
-			                    <th class="th-fixed">Sale Start</th>
-			                    <th class="th-fixed">Sale End</th>
-			                    <th class="th-fixed">Res Start</th>
-			                    <th class="th-fixed">Res End</th>
-			                    <th class="th-fixed">Min Stay</th>
-			                    <th class="th-fixed">Max Stay</th>
-			                    <th class="th-fixed">Adv Pur</th>
-			                    <th class="th-fixed">DOW In</th>
-			                    <th class="th-fixed">DOW Out</th>
-			                    <th class="th-fixed">Season</th>
-			                    <th class="th-fixed">F Season Date</th>
-			                    <th class="th-fixed">L Season Date</th>
-			                    <th class="th-fixed">Travel Date Ranges</th>
-			                    <th class="th-fixed">Fare Type</th>
-			                    <th class="th-fixed">Pax Type</th>
-			                    <th class="th-fixed">WO Id</th>
-			                    <th class="th-fixed">WO Name</th>
-			                    <th class="th-fixed">Tour Code</th>
-			                    <th class="th-fixed">Cat 50 Title</th>
-			                    <th class="th-fixed">Group Fare</th>
-<!-- 			                    <th class="th-fixed">Ref Amt</th> -->
-<!-- 			                    <th class="th-fixed">Ref YQYR</th> -->
-<!-- 			                    <th class="th-fixed">Ref Taxes</th> -->
-<!-- 			                    <th class="th-fixed">Ref TFC</th> -->
-<!-- 			                    <th class="th-fixed">Ref AIF</th> -->
-			                </tr>
-			            </thead>
-			            <tbody id="tbody-afd">
-			                <tr class="tr-afd" ng-repeat="afdQuery in vm.afdQueries track by afdQuery.fareId" ng-click="vm.setSelectedRow($index, afdQuery); vm.getRules(afdQuery)" ng-class="{'selected': vm.selectedRows[$index] == afdQuery}">
-			                    <td>{{$index + 1}}</td>
-			                    <td>{{afdQuery.source}}</td>
-			                    <td>{{afdQuery.sc}}</td>
-			                    <td>{{afdQuery.tariffNo}}</td>
-			                    <td>{{afdQuery.tariffCode}}</td>
-			                    <td>{{afdQuery.carrierCode}}</td>
-			                    <td>{{afdQuery.originCity}}</td>
-			                    <td>{{afdQuery.originCountry}}</td>
-			                    <td>{{afdQuery.destinationCity}}</td>
-			                    <td>{{afdQuery.destinationCountry}}</td>
-			                    <td>{{afdQuery.fareClassCode}}</td>
-			                    <td><span ng-repeat="value in afdQuery.bookingClass track by $index">{{value}}<span ng-if="$index < afdQuery.bookingClass.length - 1">, </span></span></td>
-			                    <td>{{afdQuery.cabin}}</td>
-			                    <td><span ng-if="afdQuery.owrt == '1'">OW</span><span ng-if="afdQuery.owrt == '2'">RT</span><span ng-if="afdQuery.owrt == '3'">OO</span></td>
-			                    <td>{{afdQuery.footnote}}</td>
-			                    <td>{{afdQuery.routingNo}}</td>
-			                    <td>{{afdQuery.ruleNo}}</td>
-			                    <td>{{afdQuery.maximumPermittedMileage}}</td>
-			                    <td>{{afdQuery.currencyCode}}</td>
-			                    <td>{{afdQuery.baseAmount}}</td>
-<!-- 			                    <td ng-if="vm.showTFC"></td> -->
-<!-- 			                    <td ng-if="vm.showTFC"></td> -->
-<!-- 			                    <td ng-if="vm.showTFC"></td> -->
-<!-- 			                    <td ng-if="vm.showTFC"></td> -->
-<!-- 			                    <td ng-if="vm.showTFC"></td> -->
-<!-- 			                    <td></td> -->
-<!-- 			                    <td></td> -->
-<!-- 			                    <td></td> -->
-			                    <td></td>
-			                    <td><span ng-if="afdQuery.effectiveDate != 'indef'">{{afdQuery.effectiveDate | date:vm.dateFormat:vm.timezone}}</span></td>
-			                	<td><span ng-if="afdQuery.discontinueDate != 'indef'">{{afdQuery.discontinueDate | date:vm.dateFormat:vm.timezone}}</span></td>
-			                	<td><span ng-if="afdQuery.gfsDate != undefined && afdQuery.gfsDate != null">{{afdQuery.gfsDate | date:vm.dateFormat:vm.timezone}} | {{afdQuery.gfsReference}}</span></td>
-			                	<td>{{afdQuery.globalIndicator}}</td>
-			                	<td><span ng-if="afdQuery.ruleFocusDate != 'indef'">{{afdQuery.focusDate | date:vm.dateFormat:vm.timezone}}</span></td>
-			                	<td></td>
-			                	<td>
-			                		<span ng-if="afdQuery.firstTravelDate != null && afdQuery.firstTravelDate != ''">{{afdQuery.firstTravelDate | date:vm.dateFormat:vm.timezone}}</span>
-			                	</td>
-			                	<td>
-			                		<span ng-if="afdQuery.lastTravelDate != null && afdQuery.lastTravelDate != ''">{{afdQuery.lastTravelDate | date:vm.dateFormat:vm.timezone}}</span>
-			                	</td>
-			                	<td>
-			                		<span ng-repeat="value in afdQuery.travelDates track by $index">{{value.completeDate | date:vm.dateFormat:vm.timezone}}<span ng-if="$index < afdQuery.travelDates.length - 1">, </span></span>
-			                	</td>
-			                	<td>
-			                		<span ng-if="afdQuery.firstSaleDate != null && afdQuery.firstSaleDate != ''">{{afdQuery.firstSaleDate | date:vm.dateFormat:vm.timezone}}</span>
-			                	</td>
-			                	<td>
-			                		<span ng-if="afdQuery.lastSaleDate != null && afdQuery.lastSaleDate != ''">{{afdQuery.lastSaleDate | date:vm.dateFormat:vm.timezone}}</span>
-			                	</td>
-			                	<td>
-			                		<span ng-if="afdQuery.firstResDate != null && afdQuery.firstResDate != ''">{{afdQuery.firstResDate | date:vm.dateFormat:vm.timezone}}</span>
-			                	</td>
-			                	<td>
-			                		<span ng-if="afdQuery.lastResDate != null && afdQuery.lastResDate != ''">{{afdQuery.lastResDate | date:vm.dateFormat:vm.timezone}}</span>
-			                	</td>
-			                	<td><span ng-repeat="value in afdQuery.minStay track by $index">{{value}}<span ng-if="$index < afdQuery.minStay.length - 1">, </span></span></td>
-			                	<td><span ng-repeat="value in afdQuery.maxStay track by $index">{{value}}<span ng-if="$index < afdQuery.maxStay.length - 1">, </span></span></td>
-			                	<td><span ng-repeat="value in afdQuery.advancePurchase track by $index">{{value}}<span ng-if="$index < afdQuery.advancePurchase.length - 1">, </span></span></td>
-			                	<td></td>
-			                	<td></td>
-			                	<td>{{afdQuery.season}}</td>
-			                	<td><span ng-if="afdQuery.firstSeasonDate != 'indef'">{{afdQuery.firstSeasonDate | date:vm.dateFormat:vm.timezone}}</span></td>
-			                	<td><span ng-if="afdQuery.lastSeasonDate != 'indef'">{{afdQuery.lastSeasonDate | date:vm.dateFormat:vm.timezone}}</span></td>
-			                	<td>
-			                		<span ng-if="afdQuery.firstTravelDate == null || afdQuery.firstTravelDate == ''">XXXXXXXX</span><span ng-if="afdQuery.firstTravelDate != null && afdQuery.firstTravelDate != ''">{{afdQuery.firstTravelDate | date:vm.dateFormat:vm.timezone}}</span>
-			                		<span ng-if="afdQuery.lastTravelDate == null || afdQuery.lastTravelDate == ''"> | XXXXXXXX</span><span ng-if="afdQuery.lastTravelDate != null && afdQuery.lastTravelDate != ''"> | {{afdQuery.lastTravelDate | date:vm.dateFormat:vm.timezone}}</span>
-			                	</td>
-			               		<td>{{afdQuery.fareType}}</td>
-			                	<td><span ng-repeat="value in afdQuery.paxType track by $index">{{value}}<span ng-if="$index < afdQuery.paxType.length - 1">, </span></span></td>
-			                	<td><a ui-sref="work-package-detail({id:afdQuery.wpObjectId})">{{afdQuery.wpId}}</a></td>
-			                	<td>{{afdQuery.wpName}}</td>
-			                	<td><span ng-repeat="value in afdQuery.tourCode track by $index">{{value}}<span ng-if="$index < afdQuery.tourCode.length - 1">, </span></span></td>
-			                	<td><span ng-repeat="value in afdQuery.cat50Title track by $index">{{value}}<span ng-if="$index < afdQuery.cat50Title.length - 1">, </span></span></td>
-			                	<td></td>
-<!-- 			                	<td></td> -->
-<!-- 			                	<td></td> -->
-<!-- 			                	<td></td> -->
-<!-- 			                	<td></td> -->
-<!-- 			                	<td></td> -->
-			                </tr>
-			                <tr infinite-scroll="vm.loadPage(vm.page + 1)" infinite-scroll-disabled="vm.disableInfiniteScroll || vm.isLastPage || vm.isLoading" infinite-scroll-container="'#tbody-afd'"></tr>
-			            </tbody>
-			        </table>
-			        <div>
-			        	<div class="col-md-12 text-center" ng-show="vm.isLoading">
-							<div class="spinner">
-							  <div class="double-bounce1"></div>
-							  <div class="double-bounce2"></div>
-							</div>
+					<div class="absolute-table">
+						<table class="table table-striped table-bordered datatable table-header-fixed">
+				            <thead>
+				                <tr>
+				                    <th class="th-fixed">ID</th>
+				                    <th class="th-fixed">Source</th>
+				                    <th class="th-fixed">S/C</th>
+				                    <th class="th-fixed">Tar No</th>
+				                    <th class="th-fixed">Tar Cd</th>
+				                    <th class="th-fixed">Cxr</th>
+				                    <th class="th-fixed">Orig</th>
+				                    <th class="th-fixed">Orig Cn</th>
+				                    <th class="th-fixed">Dest</th>
+				                    <th class="th-fixed">Dest Cn</th>
+				                    <th class="th-fixed">Fare Cls</th>
+				                    <th class="th-fixed">Bkg Cls</th> 
+				                    <th class="th-fixed">Cabin</th>
+				                    <th class="th-fixed">OW/RT</th>
+				                    <th class="th-fixed">Ftnt</th>
+				                    <th class="th-fixed">Rtg No</th>
+				                    <th class="th-fixed">Rule No</th>
+				                    <th class="th-fixed">MPM</th>
+				                    <th class="th-fixed">Curr</th>
+				                    <th class="th-fixed">Base Amt</th>
+	<!-- 			                    <th ng-if="vm.showTFC">Error</th> -->
+	<!-- 			                    <th ng-if="vm.showTFC">TFC Calc Date</th> -->
+	<!-- 			                    <th ng-if="vm.showTFC">TFC Focus Date</th> -->
+	<!-- 			                    <th ng-if="vm.showTFC">YQYR</th> -->
+	<!-- 			                    <th ng-if="vm.showTFC">Taxes</th> -->
+	<!-- 			                    <th class="th-fixed">TFC <span ng-click="vm.showTFC = !vm.showTFC"><i ng-if="vm.showTFC" class="glyphicon glyphicon-minus"></i><i ng-if="!vm.showTFC" class="glyphicon glyphicon-plus"></i></span></th> -->
+	<!-- 			                    <th class="th-fixed">AIF</th> -->
+	<!-- 			                    <th class="th-fixed">Itinerary</th> -->
+				                    <th class="th-fixed">Override Ind</th>
+				                    <th class="th-fixed">Eff Date</th>
+				                    <th class="th-fixed">Disc Date</th>
+				                    <th class="th-fixed">GFS Ref</th>
+				                    <th class="th-fixed">Global</th>
+				                    <th class="th-fixed">Rule Focus Date</th>
+				                    <th class="th-fixed">Sellable</th>
+				                    <th class="th-fixed">Travel Start</th>
+				                    <th class="th-fixed">Travel End</th>
+				                    <th class="th-fixed">Travel Complete</th>
+				                    <th class="th-fixed">Sale Start</th>
+				                    <th class="th-fixed">Sale End</th>
+				                    <th class="th-fixed">Res Start</th>
+				                    <th class="th-fixed">Res End</th>
+				                    <th class="th-fixed">Min Stay</th>
+				                    <th class="th-fixed">Max Stay</th>
+				                    <th class="th-fixed">Adv Pur</th>
+				                    <th class="th-fixed">DOW In</th>
+				                    <th class="th-fixed">DOW Out</th>
+				                    <th class="th-fixed">Season</th>
+				                    <th class="th-fixed">F Season Date</th>
+				                    <th class="th-fixed">L Season Date</th>
+				                    <th class="th-fixed">Travel Date Ranges</th>
+				                    <th class="th-fixed">Fare Type</th>
+				                    <th class="th-fixed">Pax Type</th>
+				                    <th class="th-fixed">WO Id</th>
+				                    <th class="th-fixed">WO Name</th>
+				                    <th class="th-fixed">Tour Code</th>
+				                    <th class="th-fixed">Cat 50 Title</th>
+				                    <th class="th-fixed">Group Fare</th>
+	<!-- 			                    <th class="th-fixed">Ref Amt</th> -->
+	<!-- 			                    <th class="th-fixed">Ref YQYR</th> -->
+	<!-- 			                    <th class="th-fixed">Ref Taxes</th> -->
+	<!-- 			                    <th class="th-fixed">Ref TFC</th> -->
+	<!-- 			                    <th class="th-fixed">Ref AIF</th> -->
+				                </tr>
+				            </thead>
+				            <tbody id="tbody-afd">
+				                <tr class="tr-afd" ng-repeat="afdQuery in vm.afdQueries track by afdQuery.fareId" ng-click="vm.setSelectedRow($index, afdQuery); vm.getRules(afdQuery)" ng-class="{'selected': vm.selectedRows[$index] == afdQuery}">
+				                    <td>{{$index + 1}}</td>
+				                    <td>{{afdQuery.source}}</td>
+				                    <td>{{afdQuery.sc}}</td>
+				                    <td>{{afdQuery.tariffNo}}</td>
+				                    <td>{{afdQuery.tariffCode}}</td>
+				                    <td>{{afdQuery.carrierCode}}</td>
+				                    <td>{{afdQuery.originCity}}</td>
+				                    <td>{{afdQuery.originCountry}}</td>
+				                    <td>{{afdQuery.destinationCity}}</td>
+				                    <td>{{afdQuery.destinationCountry}}</td>
+				                    <td>{{afdQuery.fareClassCode}}</td>
+				                    <td><span ng-repeat="value in afdQuery.bookingClass track by $index">{{value}}<span ng-if="$index < afdQuery.bookingClass.length - 1">, </span></span></td>
+				                    <td>{{afdQuery.cabin}}</td>
+				                    <td><span ng-if="afdQuery.owrt == '1'">OW</span><span ng-if="afdQuery.owrt == '2'">RT</span><span ng-if="afdQuery.owrt == '3'">OO</span></td>
+				                    <td>{{afdQuery.footnote}}</td>
+				                    <td>{{afdQuery.routingNo}}</td>
+				                    <td>{{afdQuery.ruleNo}}</td>
+				                    <td>{{afdQuery.maximumPermittedMileage}}</td>
+				                    <td>{{afdQuery.currencyCode}}</td>
+				                    <td>{{afdQuery.baseAmount}}</td>
+	<!-- 			                    <td ng-if="vm.showTFC"></td> -->
+	<!-- 			                    <td ng-if="vm.showTFC"></td> -->
+	<!-- 			                    <td ng-if="vm.showTFC"></td> -->
+	<!-- 			                    <td ng-if="vm.showTFC"></td> -->
+	<!-- 			                    <td ng-if="vm.showTFC"></td> -->
+	<!-- 			                    <td></td> -->
+	<!-- 			                    <td></td> -->
+	<!-- 			                    <td></td> -->
+				                    <td></td>
+				                    <td><span ng-if="afdQuery.effectiveDate != 'indef'">{{afdQuery.effectiveDate | date:vm.dateFormat:vm.timezone}}</span></td>
+				                	<td><span ng-if="afdQuery.discontinueDate != 'indef'">{{afdQuery.discontinueDate | date:vm.dateFormat:vm.timezone}}</span></td>
+				                	<td><span ng-if="afdQuery.gfsDate != undefined && afdQuery.gfsDate != null">{{afdQuery.gfsDate | date:vm.dateFormat:vm.timezone}} | {{afdQuery.gfsReference}}</span></td>
+				                	<td>{{afdQuery.globalIndicator}}</td>
+				                	<td><span ng-if="afdQuery.ruleFocusDate != 'indef'">{{afdQuery.focusDate | date:vm.dateFormat:vm.timezone}}</span></td>
+				                	<td></td>
+				                	<td>
+				                		<span ng-if="afdQuery.firstTravelDate != null && afdQuery.firstTravelDate != ''">{{afdQuery.firstTravelDate | date:vm.dateFormat:vm.timezone}}</span>
+				                	</td>
+				                	<td>
+				                		<span ng-if="afdQuery.lastTravelDate != null && afdQuery.lastTravelDate != ''">{{afdQuery.lastTravelDate | date:vm.dateFormat:vm.timezone}}</span>
+				                	</td>
+				                	<td>
+				                		<span ng-repeat="value in afdQuery.travelDates track by $index">{{value.completeDate | date:vm.dateFormat:vm.timezone}}<span ng-if="$index < afdQuery.travelDates.length - 1">, </span></span>
+				                	</td>
+				                	<td>
+				                		<span ng-if="afdQuery.firstSaleDate != null && afdQuery.firstSaleDate != ''">{{afdQuery.firstSaleDate | date:vm.dateFormat:vm.timezone}}</span>
+				                	</td>
+				                	<td>
+				                		<span ng-if="afdQuery.lastSaleDate != null && afdQuery.lastSaleDate != ''">{{afdQuery.lastSaleDate | date:vm.dateFormat:vm.timezone}}</span>
+				                	</td>
+				                	<td>
+				                		<span ng-if="afdQuery.firstResDate != null && afdQuery.firstResDate != ''">{{afdQuery.firstResDate | date:vm.dateFormat:vm.timezone}}</span>
+				                	</td>
+				                	<td>
+				                		<span ng-if="afdQuery.lastResDate != null && afdQuery.lastResDate != ''">{{afdQuery.lastResDate | date:vm.dateFormat:vm.timezone}}</span>
+				                	</td>
+				                	<td><span ng-repeat="value in afdQuery.minStay track by $index">{{value}}<span ng-if="$index < afdQuery.minStay.length - 1">, </span></span></td>
+				                	<td><span ng-repeat="value in afdQuery.maxStay track by $index">{{value}}<span ng-if="$index < afdQuery.maxStay.length - 1">, </span></span></td>
+				                	<td><span ng-repeat="value in afdQuery.advancePurchase track by $index">{{value}}<span ng-if="$index < afdQuery.advancePurchase.length - 1">, </span></span></td>
+				                	<td></td>
+				                	<td></td>
+				                	<td>{{afdQuery.season}}</td>
+				                	<td><span ng-if="afdQuery.firstSeasonDate != 'indef'">{{afdQuery.firstSeasonDate | date:vm.dateFormat:vm.timezone}}</span></td>
+				                	<td><span ng-if="afdQuery.lastSeasonDate != 'indef'">{{afdQuery.lastSeasonDate | date:vm.dateFormat:vm.timezone}}</span></td>
+				                	<td>
+				                		<span ng-if="afdQuery.firstTravelDate == null || afdQuery.firstTravelDate == ''">XXXXXXXX</span><span ng-if="afdQuery.firstTravelDate != null && afdQuery.firstTravelDate != ''">{{afdQuery.firstTravelDate | date:vm.dateFormat:vm.timezone}}</span>
+				                		<span ng-if="afdQuery.lastTravelDate == null || afdQuery.lastTravelDate == ''"> | XXXXXXXX</span><span ng-if="afdQuery.lastTravelDate != null && afdQuery.lastTravelDate != ''"> | {{afdQuery.lastTravelDate | date:vm.dateFormat:vm.timezone}}</span>
+				                	</td>
+				               		<td>{{afdQuery.fareType}}</td>
+				                	<td><span ng-repeat="value in afdQuery.paxType track by $index">{{value}}<span ng-if="$index < afdQuery.paxType.length - 1">, </span></span></td>
+				                	<td><a ui-sref="work-package-detail({id:afdQuery.wpObjectId})">{{afdQuery.wpId}}</a></td>
+				                	<td>{{afdQuery.wpName}}</td>
+				                	<td><span ng-repeat="value in afdQuery.tourCode track by $index">{{value}}<span ng-if="$index < afdQuery.tourCode.length - 1">, </span></span></td>
+				                	<td><span ng-repeat="value in afdQuery.cat50Title track by $index">{{value}}<span ng-if="$index < afdQuery.cat50Title.length - 1">, </span></span></td>
+				                	<td></td>
+	<!-- 			                	<td></td> -->
+	<!-- 			                	<td></td> -->
+	<!-- 			                	<td></td> -->
+	<!-- 			                	<td></td> -->
+	<!-- 			                	<td></td> -->
+				                </tr>
+				                <tr infinite-scroll="vm.loadPage(vm.page + 1)" infinite-scroll-disabled="vm.disableInfiniteScroll || vm.isLastPage || vm.isLoading" infinite-scroll-container="'#tbody-afd'"></tr>
+				            </tbody>
+				        </table>
+					</div>
+			        <div class="text-center fixed-wrapper-inside">
+						<div class="svg-loader" ng-show="vm.isLoading">
+						  	<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+								width="24px" height="30px" viewBox="0 0 24 30" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+							    <rect x="0" y="10" width="4" height="10" fill="#333" opacity="0.2">
+							    	<animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0s" dur="1.5s" repeatCount="indefinite" />
+							    	<animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0s" dur="1.5s" repeatCount="indefinite" />
+							    	<animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0s" dur="1.5s" repeatCount="indefinite" />
+							    </rect>
+							    <rect x="8" y="10" width="4" height="10" fill="#333"  opacity="0.2">
+							    	<animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0.3s" dur="1.5s" repeatCount="indefinite" />
+							    	<animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0.3s" dur="1.5s" repeatCount="indefinite" />
+							    	<animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0.3s" dur="1.5s" repeatCount="indefinite" />
+							    </rect>
+							    <rect x="16" y="10" width="4" height="10" fill="#333"  opacity="0.2">
+							    	<animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0.6s" dur="1.5s" repeatCount="indefinite" />
+							    	<animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0.6s" dur="1.5s" repeatCount="indefinite" />
+							    	<animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0.6s" dur="1.5s" repeatCount="indefinite" />
+							    </rect>
+							</svg>
 						</div>
-						<div class="col-md-12 text-center">
-							<label ng-show="(vm.noDataAvailable || vm.afdQueries.length == 0) && !vm.isLoading" style="text-align: center; margin: 0">No Data Available</label>
-							<label ng-show="vm.isLastPage && !vm.noDataAvailable" style="text-align: center; margin: 0">You have reached the end of the page &nbsp;<i style="font-size: 10px !important;" class="glyphicon glyphicon-chevron-up"></i></label>
-						</div>
-			        </div>
+						<div class="center-div" ng-if="(vm.noDataAvailable || vm.afdQueries.length == 0) && !vm.isLoading">No Data Available</div>
+						<div class="center-div" ng-if="vm.isLastPage && !vm.noDataAvailable">You have reached the end of the page &nbsp;<i style="font-size: 8px !important; top: 0" class="glyphicon glyphicon-chevron-up"></i></div>
+					</div>
 			    </div>
 			</div>
 		</div>
