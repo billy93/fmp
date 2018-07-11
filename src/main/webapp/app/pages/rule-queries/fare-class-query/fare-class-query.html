@@ -101,16 +101,30 @@
 						<div class="box-body">
 							<div class="table-wrapper">
 								<div class="datatable-wrapper form-inline">
-									<div class="table-responsive">
-										<table class="table table-striped table-bordered datatable">
-											<thead>
+									<div class="clearfix">
+										<div class="pull-left w50" style="margin-bottom: -10px;">
+											<div class="datatable-length">
+												<label>
+													<select class="form-control" ng-model="vm.itemsPerPage" ng-change="vm.changeItemsPerPage()">
+														<option value="10">10</option>
+														<option value="15">15</option>
+														<option value="20">20</option>
+													</select>
+													 records per page
+												</label>
+											</div>
+										</div>
+									</div>
+									<div class="table-responsive table-fare-group">
+										<table class="table table-striped table-bordered datatable table-header-fixed">
+											<thead style="padding-right: 17px; background-color: #64768a">
 												<tr>
-													<th>No</th>
-													<th>CXR</th>
-													<th>TAR NO</th>
-													<th>TAR CD</th>
-													<th>DESCRIPTION</th>
-													<th>RULE NO</th>
+													<th class="th-fixed">No</th>
+													<th class="th-fixed">CXR</th>
+													<th class="th-fixed">TAR NO</th>
+													<th class="th-fixed">TAR CD</th>
+													<th class="th-fixed">DESCRIPTION</th>
+													<th class="th-fixed">RULE NO</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -152,7 +166,7 @@
 										class="btn btn-default small" ng-disabled="vm.fareClassSelectedRow == null">Construction Details</button>
 								</div>
 							</div>
-							<div class="table-wrapper table-afd">
+							<div class="table-wrapper table-fare-class">
 								<div class="datatable-wrapper form-inline">
 									<div class="table-responsive">
 										<table class="table table-striped table-bordered datatable table-header-fixed">
@@ -233,10 +247,10 @@
 											<td>{{fareClassDetail.dowType}}</td>
 											<td>{{fareClassDetail.fareType}}</td>
 											<td>{{fareClassDetail.owrt}}</td>
-											<td>{{fareClassDetail.bkcd}}</td>
+											<td><span ng-repeat="value in fareClassDetail.bkcd track by $index">{{value}}<span ng-if="$index < fareClassDetail.bkcd.length - 1">, </span></span></td>
 											<td>{{fareClassDetail.normalSpecial}}</td>
 											<td>{{fareClassDetail.displayType}}</td>
-											<td>{{fareClassDetail.paxType}}</td>
+											<td><span ng-repeat="value in fareClassDetail.paxType track by $index">{{value}}<span ng-if="$index < fareClassDetail.paxType.length - 1">, </span></span></td>
 											<td>{{fareClassDetail.datesEff | date:'medium'}}</td>
 											<td>{{fareClassDetail.datesDisc}}</td>
 										</tr>
