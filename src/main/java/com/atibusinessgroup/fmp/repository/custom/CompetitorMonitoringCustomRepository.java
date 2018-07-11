@@ -172,7 +172,8 @@ public class CompetitorMonitoringCustomRepository {
 		
 		List<String> listPP = new ArrayList<>();
 		if(param.getPublicPrivate() != null && !param.getPublicPrivate().isEmpty()) {
-			listPP.add(param.getPublicPrivate());
+			
+			listPP.add(param.getPublicPrivate().toLowerCase());
 		} else {
 			listPP.add("public");
 			listPP.add("private");
@@ -202,15 +203,18 @@ public class CompetitorMonitoringCustomRepository {
 			}
 		});
 		
-		listAggregationOps.add(new AggregationOperation() {
+		if(param.getPublicPrivate() != null && !param.getPublicPrivate().isEmpty()) {
 			
-			@Override
-			public DBObject toDBObject(AggregationOperationContext context) {
-				BasicDBObject match = new BasicDBObject();
-				match.append("$match", new BasicDBObject("m_tariff", new BasicDBObject("$ne", Arrays.asList())));
-				return match;
-			}
-		});
+			listAggregationOps.add(new AggregationOperation() {
+				
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					BasicDBObject match = new BasicDBObject();
+					match.append("$match", new BasicDBObject("m_tariff", new BasicDBObject("$ne", Arrays.asList())));
+					return match;
+				}
+			});
+		}
 		
 		Aggregation aggregation = newAggregation(listAggregationOps);
 		
