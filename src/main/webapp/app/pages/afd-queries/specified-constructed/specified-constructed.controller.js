@@ -165,8 +165,8 @@
                 	vm.isLastPage = data.lastPage;
                 	vm.lastIndex = data.lastIndex;
                 	
-                    for (var i = 0; i < data.afdQueries.length; i++) {
-                    	vm.afdQueries.push(data.afdQueries[i]);
+                    for (var i = 0; i < data.specifiedConstructed.length; i++) {
+                    	vm.afdQueries.push(data.specifiedConstructed[i]);
                     }
                     
                     console.log(data);

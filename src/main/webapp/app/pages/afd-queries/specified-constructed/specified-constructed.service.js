@@ -7,7 +7,7 @@
     SpecifiedConstructed.$inject = ['$resource'];
 
     function SpecifiedConstructed ($resource) {
-        var resourceUrl =  'api/afd-queries/:id';
+        var resourceUrl =  'api/afd-queries/specified-constructed/:id';
 
         return $resource(resourceUrl, {}, {
             'query': { method: 'POST'},

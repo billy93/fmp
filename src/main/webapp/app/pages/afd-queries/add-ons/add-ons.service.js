@@ -7,7 +7,7 @@
     AddOns.$inject = ['$resource'];
 
     function AddOns ($resource) {
-        var resourceUrl =  'api/afd-queries/add-ons';
+        var resourceUrl =  'api/afd-queries/add-ons/:id';
 
         return $resource(resourceUrl, {}, {
             'query': { method: 'POST'},
