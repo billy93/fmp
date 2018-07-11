@@ -27,24 +27,26 @@
         }
         
         function loadAll() {
-        	vm.queryParams.page = vm.page - 1;
-        	vm.queryParams.size = vm.itemsPerPage;
-        	
-        	vm.queryParams.ruleTarNo = vm.paramTarNo;
-        	vm.queryParams.cxr = vm.paramCarrier;
-        	
-        	Rec8FareByRule.query(vm.queryParams, onSuccess, onError);
-        	
-            function onSuccess(data, headers) {
-                vm.links = ParseLinks.parse(headers('link'));
-                vm.totalItems = headers('X-Total-Count');
-                vm.queryCount = vm.totalItems;
-                vm.record8 = data;
-            }
-            
-            function onError(error) {
-                AlertService.error(error.data.message);
-            }
+        	if(vm.paramCarrier != null) {
+	        	vm.queryParams.page = vm.page - 1;
+	        	vm.queryParams.size = vm.itemsPerPage;
+	        	
+	        	vm.queryParams.ruleTarNo = vm.paramTarNo;
+	        	vm.queryParams.cxr = vm.paramCarrier;
+	        	
+	        	Rec8FareByRule.query(vm.queryParams, onSuccess, onError);
+	        	
+	            function onSuccess(data, headers) {
+	                vm.links = ParseLinks.parse(headers('link'));
+	                vm.totalItems = headers('X-Total-Count');
+	                vm.queryCount = vm.totalItems;
+	                vm.record8 = data;
+	            }
+	            
+	            function onError(error) {
+	                AlertService.error(error.data.message);
+	            }
+        	}
         }
         
         function clearFilter() {
