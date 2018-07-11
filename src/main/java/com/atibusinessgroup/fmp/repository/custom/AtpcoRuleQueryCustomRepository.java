@@ -255,15 +255,17 @@ public class AtpcoRuleQueryCustomRepository {
 		
 		Aggregation aggregation = newAggregation(aggregationOperations);
 		
+		System.out.println(aggregation);
+		
 		aggregationOperations.add(skip);
 
 		aggregationOperations.add(limit);
 
 		Aggregation aggregationPagination = newAggregation(aggregationOperations);
 
-		List<AtpcoRecord8> result = mongoTemplate.aggregate(aggregationPagination, CollectionName.ATPCO_RECORD_8, AtpcoRecord8.class).getMappedResults();
+		List<AtpcoRecord8> result = mongoTemplate.aggregate(aggregationPagination, CollectionName.ATPCO_MASTER_TARIFF, AtpcoRecord8.class).getMappedResults();
 		
-		return new PageImpl<>(result, pageable, mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_RECORD_8, AtpcoRecord8.class).getMappedResults().size());
+		return new PageImpl<>(result, pageable, mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_MASTER_TARIFF, AtpcoRecord8.class).getMappedResults().size());
 	
 	}
 	
