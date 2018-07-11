@@ -19,7 +19,10 @@
                     }
                     return data;
                 }
-            },        
+            }, 
+            'getFareClassGroups': { method: 'GET', url:'api/fare-class-query/groups', isArray: true },
+            'getFareClassText': { method: 'GET', url:'api/fare-class-query/text', isArray: true },
+            'getFareClassConstructionDetails': { method: 'GET', url:'api/fare-class-query/construction-details', isArray: true },
         });
     }
 })();

@@ -134,10 +134,10 @@
 		                    <td>{{agent.discontinueDateTime | date}}</td>
 		                    <td>{{agent.isDeleted}}</td>
 		                    <td>
-		                    	<table class="table table-stripped table-bordered datatable sub-table"  ng-if="agent.agentPcc != null && agent.agentPcc.length > 0">
+		                    	<table class="sub-table"  ng-if="agent.agentPcc != null && agent.agentPcc.length > 0">
 		                    		<thead>
-		                    			<tr><th  colspan="2"><center>PCC</center></th></tr>
-		                    			<tr>
+		                    			<tr><th colspan="2" style="min-width: 145px"><center>PCC</center></th></tr>
+		                    			<tr class="sub-second-th">
 		                    				<th>Pseudo City</th>
 		                    				<th>CRS</th>
 		                    			</tr>			                    			

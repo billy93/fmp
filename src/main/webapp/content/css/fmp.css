@@ -3251,6 +3251,9 @@ p {
 .mt5px {
   margin-top: 5px !important; }
 
+.pb0 {
+  padding-bottom: 0 !important; }
+
 .pb1 {
   padding-bottom: 1em !important; }
 
@@ -3811,7 +3814,7 @@ p {
     position: relative;
     margin-bottom: 15px;
     max-height: 390px;
-    padding-bottom: 10px;
+    padding-bottom: 30px;
     overflow: auto; }
     .table-wrapper .table-responsive.main-table {
       max-height: 550px; }
@@ -3874,7 +3877,7 @@ p {
         .table-wrapper table.sub-table thead tr:first-child th:after {
           cursor: pointer;
           position: absolute;
-          top: 5px;
+          top: 6px;
           right: 5px;
           content: "\f067";
           font-family: FontAwesome;
@@ -4155,6 +4158,17 @@ body {
   left: 0;
   background: #ddd; }
 
+.vikram {
+  position: absolute;
+  width: 60vw;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%) rotate(90deg);
+  -ms-transform: translate(-50%, -50%) rotate(90deg);
+  transform: translate(-50%, -50%) rotate(90deg);
+  -webkit-filter: blur(1rem);
+  filter: blur(1rem); }
+
 /* Revealer effects */
 .anim--effect-4 .page:first-child {
   background: #28282D; }
@@ -4304,11 +4318,47 @@ table.uib-daypicker thead:first-child tr th {
 table.uib-daypicker tbody td {
   padding: 5px !important; }
 
+@media screen and (max-width: 1200px) {
+  table.uib-daypicker tbody td {
+    padding: 2px !important; }
+    table.uib-daypicker tbody td .btn {
+      padding: 7px 10px 6px; } }
+
 .dropdown-menu.datetime-picker-dropdown {
   position: relative !important; }
 
 .absolute-datepicker .dropdown-menu.datetime-picker-dropdown {
   position: absolute !important; }
+  @media screen and (max-width: 1200px) {
+    .absolute-datepicker .dropdown-menu.datetime-picker-dropdown {
+      padding: 8px 5px 1px; } }
+  .absolute-datepicker .dropdown-menu.datetime-picker-dropdown .btn-default {
+    border: 1px solid #f4f4f4;
+    background: #fff;
+    color: inherit;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    -webkit-transition: .3s all;
+    -o-transition: .3s all;
+    transition: .3s all; }
+    .absolute-datepicker .dropdown-menu.datetime-picker-dropdown .btn-default i {
+      font-size: 11px; }
+    .absolute-datepicker .dropdown-menu.datetime-picker-dropdown .btn-default:hover {
+      background: #5697ce;
+      color: #fff; }
+    .absolute-datepicker .dropdown-menu.datetime-picker-dropdown .btn-default.active {
+      background: #ffc700; }
+      .absolute-datepicker .dropdown-menu.datetime-picker-dropdown .btn-default.active:hover {
+        background-color: #ffca0f; }
+      .absolute-datepicker .dropdown-menu.datetime-picker-dropdown .btn-default.active .text-info {
+        color: inherit;
+        font-weight: 600; }
+  .absolute-datepicker .dropdown-menu.datetime-picker-dropdown th .btn-default {
+    background: #5697ce;
+    color: #fff; }
+  .absolute-datepicker .dropdown-menu.datetime-picker-dropdown .text-muted {
+    color: #999;
+    opacity: .7; }
 
 .form-control.input-date {
   min-width: 90px; }

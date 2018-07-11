@@ -7,7 +7,7 @@
 	<div class="panel">
 		<div class="panel-body">
 			<div ng-repeat="cat in vm.categoryRules track by $index">
-				<div ng-if="cat.textFormat != ''">
+				<div ng-if="cat.textFormat != '' && cat.textFormat != null">
 					<label style="font-size: 14px; color: #000; text-transform: uppercase;">Category {{cat.catNo}} - {{cat.catName}}</label>
 					<pre class="transparent">{{cat.textFormat}}</pre>
 					<br/>

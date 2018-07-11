@@ -1,28 +1,37 @@
 package com.atibusinessgroup.fmp.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.atibusinessgroup.fmp.domain.RbdQuery;
-import com.atibusinessgroup.fmp.domain.dto.SpecifiedConstructed;
-import com.atibusinessgroup.fmp.domain.dto.Category;
-import com.atibusinessgroup.fmp.service.RbdqueryService;
-import com.atibusinessgroup.fmp.web.rest.errors.BadRequestAlertException;
-import com.atibusinessgroup.fmp.web.rest.util.HeaderUtil;
-import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import com.atibusinessgroup.fmp.domain.RbdQuery;
+import com.atibusinessgroup.fmp.domain.dto.RuleQueryParam;
+import com.atibusinessgroup.fmp.repository.custom.AtpcoRbdQueryCustomRepository;
+import com.atibusinessgroup.fmp.service.RbdqueryService;
+import com.atibusinessgroup.fmp.web.rest.errors.BadRequestAlertException;
+import com.atibusinessgroup.fmp.web.rest.util.HeaderUtil;
+import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
+import com.codahale.metrics.annotation.Timed;
 
-import java.util.List;
-import java.util.Optional;
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing Rbdquery.
@@ -36,9 +45,12 @@ public class RbdQueryResource {
     private static final String ENTITY_NAME = "rbdquery";
 
     private final RbdqueryService rbdqueryService;
+    
+    private final AtpcoRbdQueryCustomRepository rbdQueryCustomRepository;
 
-    public RbdQueryResource(RbdqueryService rbdqueryService) {
+    public RbdQueryResource(RbdqueryService rbdqueryService, AtpcoRbdQueryCustomRepository rbdQueryCustomRepository) {
         this.rbdqueryService = rbdqueryService;
+        this.rbdQueryCustomRepository = rbdQueryCustomRepository;
     }
 
     /**
@@ -89,11 +101,19 @@ public class RbdQueryResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of rbdqueries in body
      */
-    @GetMapping("/rbdqueries")
+    @PostMapping("/rbdqueries/all")
     @Timed
-    public ResponseEntity<List<RbdQuery>> getAllRbdqueries(Pageable pageable) {
-        log.debug("REST request to get a page of Rbdqueries");
-        Page<RbdQuery> page = rbdqueryService.findAll(pageable);
+    public ResponseEntity<List<RbdQuery>> getAllRbdqueries(@RequestBody RuleQueryParam params) {
+        log.debug("REST request to get a page of Rbdqueries: {}, {}", params.toString());
+        
+        Pageable pageable = new PageRequest(params.getPage(), params.getSize());
+        
+//        Page<RbdQuery> page = rbdqueryService.findAll(pageable);
+        
+        //Custom
+        Page<RbdQuery> page = rbdQueryCustomRepository.getRbdByParams(params, pageable);
+        
+        
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/rbdqueries");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -124,14 +144,5 @@ public class RbdQueryResource {
         log.debug("REST request to delete Rbdquery : {}", id);
         rbdqueryService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
-    }
-    
-    @GetMapping("/rbdqueries/rbd")
-    @Timed
-    public ResponseEntity<List<Category>> getAfdQueryRules(SpecifiedConstructed afdQuery) {
-        log.debug("REST request to get AfdQueries rules: {}", afdQuery);
-        String a = "aaaa";
-        System.out.println(a);
-        return null;
     }
 }

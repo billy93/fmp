@@ -10,7 +10,7 @@
         var resourceUrl =  'api/rbdqueries/:id';
 
         return $resource(resourceUrl, {}, {
-            'query': { method: 'GET', isArray: true},
+            'query': { method: 'POST', isArray: true, url:'api/rbdqueries/all'},
             'get': {
                 method: 'GET',
                 transformResponse: function (data) {

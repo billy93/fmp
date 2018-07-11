@@ -22,15 +22,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.atibusinessgroup.fmp.constant.CategoryName;
 import com.atibusinessgroup.fmp.constant.CategoryType;
+import com.atibusinessgroup.fmp.domain.TariffNumber;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoFootnoteRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord8;
+import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByRuleNoCxrTarNo;
 import com.atibusinessgroup.fmp.domain.dto.Category;
+import com.atibusinessgroup.fmp.domain.dto.CategoryTextFormatAndAttribute;
 import com.atibusinessgroup.fmp.domain.dto.DataTable;
+import com.atibusinessgroup.fmp.domain.dto.FareClassGroup;
+import com.atibusinessgroup.fmp.domain.dto.FareClassQuery;
+import com.atibusinessgroup.fmp.domain.dto.FareClassQueryParam;
 import com.atibusinessgroup.fmp.domain.dto.Rec8Param;
 import com.atibusinessgroup.fmp.domain.dto.RuleQuery;
 import com.atibusinessgroup.fmp.domain.dto.RuleQueryParam;
+import com.atibusinessgroup.fmp.repository.TariffNumberRepository;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoFareCustomRepository;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoRuleQueryCustomRepository;
 import com.atibusinessgroup.fmp.service.AtpcoRecordService;
@@ -53,12 +61,15 @@ public class RuleQueryResource {
 	private final AtpcoFareCustomRepository atpcoFareCustomRepository;
 
 	private final AtpcoRecordService atpcoRecordService;
+	
+	private final TariffNumberRepository tariffNumberRepository;
 
 	public RuleQueryResource(AtpcoRuleQueryCustomRepository atpcoRuleQueryCustomRepository,
-			RuleQueryMapper ruleQueryMapper, AtpcoFareCustomRepository atpcoFareCustomRepository, AtpcoRecordService atpcoRecordService) {
+			RuleQueryMapper ruleQueryMapper, AtpcoFareCustomRepository atpcoFareCustomRepository, AtpcoRecordService atpcoRecordService,
+			TariffNumberRepository tariffNumberRepository) {
 		this.atpcoRuleQueryCustomRepository = atpcoRuleQueryCustomRepository;
 		this.ruleQueryMapper = ruleQueryMapper;
-
+		this.tariffNumberRepository = tariffNumberRepository;
 		this.atpcoFareCustomRepository = atpcoFareCustomRepository;
 		this.atpcoRecordService = atpcoRecordService;
 
@@ -158,38 +169,56 @@ public class RuleQueryResource {
 
 		String recordId = ruleQuery.getTarNo() + ruleQuery.getCxr() + ruleQuery.getRuleNo() + "";
 
-		List<AtpcoRecord2GroupByCatNo> arecords2 = atpcoFareCustomRepository.findAtpcoRecord2ByRecordId(recordId);
+		List<AtpcoRecord2> arecords2 = atpcoRuleQueryCustomRepository.getListRecord2ById(recordId);
 
+		TariffNumber ftntTn = tariffNumberRepository.findOneByTarNoAndType(ruleQuery.getTarNo(), "FARE RULE");
+		String ftntTcd = null;
+		
+		if (ftntTn != null) {
+			ftntTcd = ftntTn.getTarCd();
+		}
+		
 		for (Map.Entry<String, String> entry : categories.entrySet()) {
-			List<DataTable> dataTables = new ArrayList<>();
+			AtpcoRecord2 matchedFRecord2 = null;
 			
-			for (AtpcoRecord2GroupByCatNo arecord2 : arecords2) {
+			for (AtpcoRecord2 arecord2 : arecords2) {
+				
 				if (arecord2.getCatNo().contentEquals(entry.getKey())) {
-					for (AtpcoRecord2 record2 : arecord2.getRecords2()) {
-						for (DataTable dt:record2.getDataTables()) {
-							if (!dataTables.contains(dt)) {
-								dataTables.add(dt);
-							}
-						}
-					}
+					matchedFRecord2 = arecord2;
 					break;
 				}
 			}
 			
 			Category cat = new Category();
 			cat.setCatName(entry.getValue());
-			cat.setType(CategoryType.RULE);
 
 			try {
 				cat.setCatNo(Integer.parseInt(entry.getKey()));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
-			if (dataTables.size() > 0) {
-				cat.setCatAttributes(atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), dataTables, CategoryType.RULE).getAttributes());
+			
+			String type = "";
+			
+			if (matchedFRecord2 != null) {
+				List<DataTable> dataTables = new ArrayList<>();
+				
+				for (DataTable dt:matchedFRecord2.getDataTables()) {
+					if (!dataTables.contains(dt)) {
+						dataTables.add(dt);
+					}
+				}
+				
+				type = CategoryType.RULE;
+	        	String textFormat = atpcoRecordService.generateCategoryTextHeader(CategoryType.RULE, ruleQuery.getTarNo(), ftntTcd, null, matchedFRecord2.getSequenceNo(), matchedFRecord2.getEffectiveDateObject());
+        		CategoryTextFormatAndAttribute ctfa = atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), dataTables, CategoryType.RULE);
+        		textFormat += ctfa.getTextFormat();
+        		cat.getCatAttributes().addAll(ctfa.getAttributes());
+        		
+        		cat.setType(type);
+            	cat.setTextFormat(textFormat);
 			}
-
+			
 			result.add(cat);
 		}
 
@@ -198,14 +227,37 @@ public class RuleQueryResource {
 	
 	@PostMapping("/fare-class-query")
 	@Timed
-	public ResponseEntity<List<AtpcoRecord8>> getAllFareClassQueries(@RequestBody Rec8Param param) {
+	public ResponseEntity<List<FareClassGroup>> getAllFareClassQueries(@RequestBody FareClassQueryParam param) {
+		System.out.println("param : "+param);
 		Pageable pageable = new PageRequest(param.getPage(), param.getSize());
-		
-		Page<AtpcoRecord8> result = atpcoRuleQueryCustomRepository.getListRec8(param, pageable);
-		
+		Page<FareClassGroup> result = atpcoRuleQueryCustomRepository.getListFareClasses(param, pageable);
 		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(result, "/api/fare-class-query");
 		
 		return new ResponseEntity<>(result.getContent(), headers, HttpStatus.OK);
+	}
+	
+	@GetMapping("/fare-class-query/groups")
+	@Timed
+	public ResponseEntity<List<FareClassQuery>> getFareClassGroups(FareClassGroup param) {
+		List<FareClassQuery> result = atpcoRuleQueryCustomRepository.getFareClassGroups(param);
+		
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/fare-class-query/text")
+	@Timed
+	public ResponseEntity<List<String>> getFareClassText(FareClassQuery param) {
+		List<String> resultList = atpcoRuleQueryCustomRepository.getFareClassText(param);
+		
+		return new ResponseEntity<>(resultList, HttpStatus.OK);
+	}
+	
+	@GetMapping("/fare-class-query/construction-details")
+	@Timed
+	public ResponseEntity<List<String>> getFareClassConstructionDetails(FareClassQuery param) {
+		List<String> resultList = atpcoRuleQueryCustomRepository.getFareClassConstructionDetails(param);
+		
+		return new ResponseEntity<>(resultList, HttpStatus.OK);
 	}
 
 	@PostMapping("/rec8-fare-by-rule")

@@ -327,6 +327,8 @@ public class WorkPackageResource {
     public ResponseEntity<WorkPackage> reuseWorkPackage(@RequestBody WorkPackage wp) throws URISyntaxException {
         log.debug("REST request to save reuse WorkPackage : {}", wp);
        
+        String tempId = wp.getWpid();
+        
         wp.setReuseFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
@@ -381,6 +383,16 @@ public class WorkPackageResource {
         	}
         }
 
+        Comment flagComment = new Comment();
+        flagComment.setComment("This workpackage was reused from Workpackage "+tempId); 
+        flagComment.setCreatedTime(ZonedDateTime.now());
+        flagComment.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        
+        List<Comment> comment = new ArrayList<>();
+        comment.add(flagComment);
+        
+        
+        wp.setComment(comment);
         wp.setStatus(Status.NEW);
         wp.setQueuedDate(Instant.now());
 
@@ -410,6 +422,8 @@ public class WorkPackageResource {
     public ResponseEntity<WorkPackage> replaceWorkPackage(@RequestBody WorkPackage wp) throws URISyntaxException {
         log.debug("REST request to save reuse WorkPackage : {}", wp);
        
+        String tempId = wp.getWpid();
+        
         wp.setReplaceFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
@@ -465,6 +479,16 @@ public class WorkPackageResource {
         	}
         }
 
+        Comment flagComment = new Comment();
+        flagComment.setComment("This workpackage was reused from Workpackage "+tempId); 
+        flagComment.setCreatedTime(ZonedDateTime.now());
+        flagComment.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        
+        List<Comment> comment = new ArrayList<>();
+        comment.add(flagComment);
+        
+        
+        wp.setComment(comment);
         wp.setStatus(Status.NEW);
         wp.setQueuedDate(Instant.now());
 
@@ -2061,6 +2085,7 @@ public class WorkPackageResource {
 				if(workPackage.getName() == null || workPackage.getName().contentEquals("")) {
 					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 		    		err1.setMessage("Name is required");
+		    		err1.setField("name");
 		    		errorHeader.add(err1);
 				}
 			}else if(workPackage.getReviewLevel().toUpperCase().contentEquals("HO")) {
@@ -2114,27 +2139,38 @@ public class WorkPackageResource {
 				if(workPackage.getName() == null || workPackage.getName().contentEquals("")) {
 					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 		    		err1.setMessage("Name is required");
+		    		err1.setField("name");
+		    		errorHeader.add(err1);
+				}
+				if(workPackage.getPriority() == null || workPackage.getPriority().contentEquals("")) {
+					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setMessage("Priority is required");
+		    		err1.setField("priority");
 		    		errorHeader.add(err1);
 				}
 			}else if(workPackage.getReviewLevel().toUpperCase().contentEquals("HO")) {
 				if(workPackage.getName() == null || workPackage.getName().contentEquals("")) {
 					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 		    		err1.setMessage("Name is required");
+		    		err1.setField("name");
 		    		errorHeader.add(err1);
 				}
 				if(workPackage.getPriority() == null || workPackage.getPriority().contentEquals("")) {
 					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 		    		err1.setMessage("Priority is required");
+		    		err1.setField("priority");
 		    		errorHeader.add(err1);
 				}
 				if(workPackage.getDistributionDate() == null) {
 					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 		    		err1.setMessage("Distribution Date is required");
+		    		err1.setField("distributionDate");
 		    		errorHeader.add(err1);
 				}
 				if(workPackage.getInterofficeComment() == null || workPackage.getInterofficeComment().size() < 1) {
 					WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 		    		err1.setMessage("IN is required");
+		    		err1.setField("interofficeComment");
 		    		errorHeader.add(err1);
 				}
 			}
@@ -2254,6 +2290,14 @@ public class WorkPackageResource {
 								}
 							}
 						}else if(workPackage.getReviewLevel().contentEquals("HO")) {
+							if(wpfs.getApprovalReference() == null || wpfs.getApprovalReference().contentEquals("")) {
+								//List Error
+					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setIndex(index+"");
+					    		err1.setField("approvalReference");
+					    		err1.setMessage("Approval reference is required");
+					    		errors.add(err1);
+							}
 							if(fare.getStatus() == null || fare.getStatus().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
@@ -2854,7 +2898,330 @@ public class WorkPackageResource {
 		    	}
 			}
 			else if(workPackage.getTargetDistribution().contentEquals("MARKET")) {
-				
+				WorkPackage.Validation.Tab tab1 = new WorkPackage.Validation.Tab();
+	    		tab1.setName(wpfs.getAddonFaresName());
+	    		tab1.setType("Addon");
+	    		tab1.setIndex(sheetIndex+"");
+	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
+
+	    			List<String> rejectStatus = new ArrayList<>();
+		    		List<WorkPackageFare> fares = wpfs.getFares();
+		    		
+		    		int index = 0;
+					for(WorkPackageFare fare : fares) {
+						if(fare.getStatus() != null || !fare.getStatus().contentEquals("")) {
+							if(fare.getStatus().contentEquals("REJECTED")) {
+								rejectStatus.add("REJECTED");
+							}
+						}
+
+						if(workPackage.getReviewLevel().contentEquals("LSO")) {
+							if(wpfs.getAddonFaresName() == null || wpfs.getAddonFaresName().contentEquals("")) {
+								//List Error
+					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setMessage("Description is required");
+					    		err1.setIndex(index+"");
+					    		errors.add(err1);
+							}
+							if(fare.getOrigin() == null || fare.getOrigin().contentEquals("")) {
+								//List Error
+					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setMessage("Origin is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareOrigin");
+					    		errors.add(err1);
+							}
+							if(fare.getDestination() == null || fare.getDestination().contentEquals("")) {
+								//List Error
+					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setMessage("Destination is required");
+					    		err1.setField("addonFareDestination");
+					    		err1.setIndex(index+"");
+					    		errors.add(err1);
+							}
+							if(fare.getTypeOfJourney() == null || fare.getTypeOfJourney().contentEquals("")) {
+								//List Error
+					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setMessage("OW/RT is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareTypeOfJourney");
+					    		errors.add(err1);
+							}
+							if(fare.getCurrency() == null || fare.getCurrency().contentEquals("")) {
+								//List Error
+					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setMessage("Currency is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareCurrency");
+					    		errors.add(err1);
+							}
+							if(fare.getAmount() == null || fare.getAmount().contentEquals("")) {
+								//List Error
+								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setMessage("Base Amt is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareAmount");
+					    		errors.add(err1);			
+							}
+
+							if(fare.getTravelStart() != null && fare.getTravelEnd() != null) {
+								if(fare.getTravelStart().after(fare.getTravelEnd())) {
+									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+						    		err1.setMessage("Travel Start Date must be less than or equal to Travel End Date");
+						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareTravelStartDate");
+						    		errors.add(err1);
+								}else if(fare.getTravelEnd().before(fare.getTravelStart())) {
+									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+						    		err1.setMessage("Travel End Date cannot be earlier than Sales End Date");
+						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareTravelEndDate");
+						    		errors.add(err1);
+								}
+							}
+							else {
+								if(fare.getTravelStart() == null) {
+									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+						    		err1.setMessage("Travel Start Date cannot be blank");
+						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareTravelStartDate");
+						    		errors.add(err1);
+								}
+								if(fare.getTravelEnd() == null) {
+									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+						    		err1.setMessage("Travel End Date cannot be blank");
+						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareTravelEndDate");
+
+						    		errors.add(err1);
+								}
+							}
+
+							if(fare.getSaleStart() != null && fare.getSaleEnd() != null) {
+								if(fare.getSaleStart().after(fare.getSaleEnd())) {
+									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+						    		err1.setMessage("Sale Start Date must be less than or equal to Sale End Date");
+						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareSaleStartDate");						    		
+						    		errors.add(err1);
+								}
+								if(fare.getSaleStart().after(fare.getTravelStart())) {
+									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+						    		err1.setMessage("Sale Start Date must be before or equal to Travel Start Date");
+						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareSaleStartDate");						    		
+						    		errors.add(err1);
+								}
+							}
+						}else if(workPackage.getReviewLevel().contentEquals("HO")) {
+							if(wpfs.getAddonFaresName() == null || wpfs.getAddonFaresName().contentEquals("")) {
+								//List Error
+					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setMessage("Description is required");
+					    		err1.setIndex(index+"");
+					    		errors.add(err1);
+							}
+							if(fare.getOrigin() == null || fare.getOrigin().contentEquals("")) {
+								//List Error
+					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setMessage("Origin is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareOrigin");
+					    		errors.add(err1);
+							}
+							if(fare.getDestination() == null || fare.getDestination().contentEquals("")) {
+								//List Error
+					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setMessage("Destination is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareDestination");
+					    		errors.add(err1);
+							}
+							if(fare.getTypeOfJourney() == null || fare.getTypeOfJourney().contentEquals("")) {
+								//List Error
+					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setMessage("OW/RT is required");
+					    		err1.setField("addonFareTypeOfJourney");
+
+					    		err1.setIndex(index+"");
+					    		errors.add(err1);
+							}
+							if(fare.getCurrency() == null || fare.getCurrency().contentEquals("")) {
+								//List Error
+					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setMessage("Currency is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareCurrency");
+
+					    		errors.add(err1);
+							}
+							if(fare.getAmount() == null || fare.getAmount().contentEquals("")) {
+								//List Error
+								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setMessage("Base Amt is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareAmount");
+
+					    		errors.add(err1);			
+							}
+							if(fare.getTravelStart() != null && fare.getTravelEnd() != null) {
+								if(fare.getTravelStart().after(fare.getTravelEnd())) {
+									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+						    		err1.setMessage("Travel Start Date must be less than or equal to Travel End Date");
+						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareTravelStartDate");
+						    		errors.add(err1);
+								}else if(fare.getTravelEnd().before(fare.getTravelStart())) {
+									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+						    		err1.setMessage("Travel End Date cannot be earlier than Sales End Date");
+						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareTravelEndDate");
+						    		errors.add(err1);
+								}
+							}
+							if(fare.getSaleStart() != null && fare.getSaleEnd() != null) {
+								if(fare.getSaleStart().after(fare.getSaleEnd())) {
+									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+						    		err1.setMessage("Sale Start Date must be less than or equal to Sale End Date");
+						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareSaleStartDate");
+						    		errors.add(err1);
+								}
+								if(fare.getSaleStart().after(fare.getTravelStart())) {
+									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+						    		err1.setMessage("Sale Start Date must be before  or equal to Travel Starte Date");
+						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareSaleStartDate");
+						    		errors.add(err1);
+								}
+							}
+						}
+						/*else if(workPackage.getReviewLevel().toUpperCase().contentEquals("DISTRIBUTION")) {
+							if(fare.getTariffNumber().getTarNo() == null || fare.getTariffNumber().getTarNo().contentEquals("")) {
+								//List Error
+					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setMessage("Tarno is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareTarno");
+
+					    		errors.add(err1);
+							}
+							if(fare.getTariffNumber().getTarCd() == null || fare.getTariffNumber().getTarCd().contentEquals("")) {
+								//List Error
+					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setMessage("TarCd is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareTarcd");
+					    		errors.add(err1);
+							}
+							if(fare.getOrigin() == null || fare.getOrigin().contentEquals("")) {
+								//List Error
+					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setMessage("Origin is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareOrigin");
+					    		errors.add(err1);
+							}
+							if(fare.getDestination() == null || fare.getDestination().contentEquals("")) {
+								//List Error
+					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setMessage("Destination is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareDestination");
+					    		errors.add(err1);
+							}
+							if(fare.getBucket() == null || fare.getBucket().contentEquals("")) {
+								//List Error
+					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setMessage("Add On Bucket is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareBucket");
+					    		errors.add(err1);
+							}
+							if(fare.getTypeOfJourney() == null || fare.getTypeOfJourney().contentEquals("")) {
+								//List Error
+					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setMessage("OW/RT is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareTypeOfJourney");
+					    		errors.add(err1);
+							}
+							if(fare.getZone() == null || fare.getZone().contentEquals("")) {
+								//List Error
+					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setMessage("Zone is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareZone");
+					    		errors.add(err1);
+							}
+							if(fare.getRtgno() == null || fare.getRtgno().contentEquals("")) {
+								//List Error
+					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setMessage("RtgNo is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareRtgno");
+					    		errors.add(err1);
+							}
+							if(fare.getCurrency() == null || fare.getCurrency().contentEquals("")) {
+								//List Error
+					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+					    		err1.setMessage("Currency is required");
+					    		err1.setIndex(index+"");
+					    		err1.setField("addonFareCurrency");
+					    		errors.add(err1);
+							}
+							if(fare.getTravelStart() != null && fare.getTravelEnd() != null) {
+								if(fare.getTravelStart().after(fare.getTravelEnd())) {
+									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+						    		err1.setMessage("Travel Start Date must be less than or equal to Travel End Date");
+						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareTravelStartDate");
+						    		errors.add(err1);
+								}else if(fare.getTravelEnd().before(fare.getTravelStart())) {
+									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+						    		err1.setMessage("Travel End Date cannot be earlier than Sales End Date");
+						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareTravelEndDate");
+						    		errors.add(err1);
+								}
+							}
+							if(fare.getSaleStart() != null && fare.getSaleEnd() != null) {
+								if(fare.getSaleStart().after(fare.getSaleEnd())) {
+									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+						    		err1.setMessage("Sale Start Date must be less than or equal to Sale End Date");
+						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareSaleStartDate");
+						    		errors.add(err1);
+								}
+								if(fare.getSaleStart().after(fare.getTravelStart())) {
+									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+						    		err1.setMessage("Sale Start Date must be before  or equal to Travel Starte Date");
+						    		err1.setIndex(index+"");
+						    		err1.setField("addonFareSaleStartDate");
+						    		errors.add(err1);
+								}
+							}
+						}*/
+						index++;
+					}
+					if(rejectStatus.size() == fares.size()) {
+						WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+			    		err1.setMessage("Worksheet cannot be empty or have all items rejected");
+			    		errors.add(err1);
+					}
+	    		tab1.setError(errors);
+
+
+	    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
+	    		if(warnings.size() > 0) {
+	    			tab1.setWarning(warnings);
+	    		}
+
+	    		errorsCount += errors.size();
+	    		warningsCount += warnings.size();
+	    	if(errors.size() > 0 || warnings.size() > 0) {
+	    		tabs.add(tab1);
+	    	}
 			}
 	    	sheetIndex++;
 		}
@@ -3738,7 +4105,7 @@ public class WorkPackageResource {
 					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
-							if(wpfs.getWaiverAgentName() == null || wpfs.getWaiverAgentName().contentEquals("")) {
+							if(fare.getWaiverAgentName() == null || fare.getWaiverAgentName().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Agent Name is required");
@@ -3746,7 +4113,7 @@ public class WorkPackageResource {
 					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
-							if(wpfs.getWaiverIataNo() == null || wpfs.getWaiverIataNo().contentEquals("")) {
+							if(fare.getWaiverIataNo() == null || fare.getWaiverIataNo().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("IATA No is required");
@@ -3867,7 +4234,7 @@ public class WorkPackageResource {
 					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
-							if(wpfs.getWaiverAgentName() == null || wpfs.getWaiverAgentName().contentEquals("")) {
+							if(fare.getWaiverAgentName() == null || fare.getWaiverAgentName().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Agent Name is required");
@@ -3875,7 +4242,7 @@ public class WorkPackageResource {
 					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
-							if(wpfs.getWaiverIataNo() == null || wpfs.getWaiverIataNo().contentEquals("")) {
+							if(fare.getWaiverIataNo() == null || fare.getWaiverIataNo().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("IATA No is required");

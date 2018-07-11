@@ -1,3 +1,9 @@
+<style>
+	.specloc-datepicker .datetime-picker-dropdown{
+		left: -140px !important;
+	}
+</style>
+
 <div class="content-title">
 	<h2>Exchange Rates Query</h2>
 	<jhi-alert></jhi-alert>
@@ -31,7 +37,7 @@
 								</div>
 							</div>
 							<div class="pull-left col-md-4 no-lpad">
-								<div class="form-group">
+								<div class="form-group absolute-datepicker">
 									<div class="custom-label semibold">Active Date</div>
 									<div class="row no-mar">
 										<div class="col-md-6 no-lpad">
@@ -40,7 +46,7 @@
 												enable-time="false" name="dateFrom" id="datepicker" 
 												ng-model="vm.queryParams.dateFrom" placeholder="From"/>
 										</div>
-										<div class="col-md-6 no-pad">
+										<div class="col-md-6 no-pad specloc-datepicker">
 											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'dateTo')" 
 												is-open="vm.datePickerOpenStatus['dateTo']" datetime-picker="{{vm.dateFormat}}" 
 												enable-time="false" name="dateTo" id="datepicker" 
