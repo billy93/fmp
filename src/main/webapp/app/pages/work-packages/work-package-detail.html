@@ -282,6 +282,7 @@
 						    	<a ng-click="vm.save(true)">Save and Validate</a>
 						    	<a ng-click="vm.createBatch()" ng-show="vm.workPackage.type == 'REGULAR' && vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.workPackage.status != 'READY_TO_RELEASE'" ng-disabled="vm.workPackage.status == 'READY_TO_RELEASE'">Create Batches</a>
 						    	<a ng-click="vm.reviseBatch()" ng-show="vm.workPackage.type == 'REGULAR' && vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.workPackage.status == 'READY_TO_RELEASE'" ng-disabled="vm.workPackage.status != 'READY_TO_RELEASE'">Revise Batches</a>
+						    	<a ng-click="vm.complete()" ng-show="vm.workPackage.type == 'REGULAR' && vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.workPackage.status == 'READY_TO_RELEASE'" ng-disabled="vm.workPackage.status != 'READY_TO_RELEASE'">Complete</a>						    	
 						    </li>
 						</ul>
 					</div>	
