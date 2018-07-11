@@ -1,13 +1,9 @@
 package com.atibusinessgroup.fmp.web.rest;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,12 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
-import com.atibusinessgroup.fmp.domain.dto.AfdQuery;
 import com.atibusinessgroup.fmp.domain.dto.AfdQueryParam;
-import com.atibusinessgroup.fmp.domain.dto.AfdQueryWrapper;
-import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteQueryGroup;
 import com.atibusinessgroup.fmp.domain.dto.Category;
+import com.atibusinessgroup.fmp.domain.dto.SpecifiedConstructed;
 import com.atibusinessgroup.fmp.repository.AtpcoRecord0Repository;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoFareCustomRepository;
 import com.atibusinessgroup.fmp.repository.custom.CompetitorMonitoringCustomRepository;
@@ -76,10 +69,10 @@ public class CompetitorMonitoringResource {
      */
     @PostMapping("/competitor-monitoring")
     @Timed
-    public ResponseEntity<List<AfdQuery>> getAllQueries(@RequestBody AfdQueryParam param) {
+    public ResponseEntity<List<SpecifiedConstructed>> getAllQueries(@RequestBody AfdQueryParam param) {
     	
     	Pageable pageable = new PageRequest(param.getPage(), param.getSize());
-    	Page<AfdQuery> page = competitorMonitoringCustomRepository.getCompetitorQueries(param, pageable);
+    	Page<SpecifiedConstructed> page = competitorMonitoringCustomRepository.getCompetitorQueries(param, pageable);
     	HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/footnote-queries");
     	
 		return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
@@ -107,7 +100,7 @@ public class CompetitorMonitoringResource {
      */
     @GetMapping("/competitor-monitoring/rules")
     @Timed
-    public ResponseEntity<List<Category>> getAfdQueryRules(AfdQuery afdQuery) {
+    public ResponseEntity<List<Category>> getAfdQueryRules(SpecifiedConstructed afdQuery) {
         return afdQueryResource.getAfdQueryRules(afdQuery);
     }
     

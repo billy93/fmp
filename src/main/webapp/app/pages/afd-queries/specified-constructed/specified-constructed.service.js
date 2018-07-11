@@ -2,15 +2,15 @@
     'use strict';
     angular
         .module('fmpApp')
-        .factory('Rbdquery', Rbdquery);
+        .factory('SpecifiedConstructed', SpecifiedConstructed);
 
-    Rbdquery.$inject = ['$resource'];
+    SpecifiedConstructed.$inject = ['$resource'];
 
-    function Rbdquery ($resource) {
-        var resourceUrl =  'api/rbdqueries/:id';
+    function SpecifiedConstructed ($resource) {
+        var resourceUrl =  'api/afd-queries/:id';
 
         return $resource(resourceUrl, {}, {
-            'query': { method: 'POST', isArray: true, url:'api/rbdqueries/all'},
+            'query': { method: 'POST'},
             'get': {
                 method: 'GET',
                 transformResponse: function (data) {
@@ -21,7 +21,7 @@
                 }
             },
             'update': { method:'PUT' },
-            'getRbd': { method: 'GET', url:'api/rbdqueries/rbd', isArray: true }
+            'getRules': { method: 'POST', url:'api/afd-queries/rules', isArray: true }
         });
     }
 })();

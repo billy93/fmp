@@ -26,10 +26,10 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFootnoteRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord1;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
-import com.atibusinessgroup.fmp.domain.dto.AfdQuery;
 import com.atibusinessgroup.fmp.domain.dto.AfdQueryParam;
 import com.atibusinessgroup.fmp.domain.dto.CategoryObject;
 import com.atibusinessgroup.fmp.domain.dto.DataTable;
+import com.atibusinessgroup.fmp.domain.dto.SpecifiedConstructed;
 import com.atibusinessgroup.fmp.service.AtpcoRecordService;
 import com.atibusinessgroup.fmp.service.mapper.AfdQueryMapper;
 import com.mongodb.BasicDBObject;
@@ -49,9 +49,9 @@ public class CompetitorMonitoringCustomRepository {
 		
 	}
 	
-	public Page<AfdQuery> getCompetitorQueries(AfdQueryParam param, Pageable pageable) {
+	public Page<SpecifiedConstructed> getCompetitorQueries(AfdQueryParam param, Pageable pageable) {
 		
-		List<AfdQuery> afdQueries = new ArrayList<>();
+		List<SpecifiedConstructed> afdQueries = new ArrayList<>();
 		
 		List<AggregationOperation> listAggregationOps = new ArrayList<>();
 		
@@ -324,7 +324,7 @@ public class CompetitorMonitoringCustomRepository {
 			}
 //			System.out.println(matchedRecord1.toString());
 			
-			AfdQuery afdQuery = afdQueryMapper.convertAtpcoFare(afare, matchedRecord1, null, null, null, null, cat14s, cat15s, null, null, null,
+			SpecifiedConstructed afdQuery = afdQueryMapper.convertAtpcoFare(afare, matchedRecord1, null, null, null, null, cat14s, cat15s, null, null, null,
         			footnote14s, footnote15s, focusDate);
         	
 			

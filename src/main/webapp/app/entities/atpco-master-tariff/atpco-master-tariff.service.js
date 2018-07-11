@@ -2,15 +2,15 @@
     'use strict';
     angular
         .module('fmpApp')
-        .factory('Rbdquery', Rbdquery);
+        .factory('AtpcoMasterTariff', AtpcoMasterTariff);
 
-    Rbdquery.$inject = ['$resource'];
+    AtpcoMasterTariff.$inject = ['$resource'];
 
-    function Rbdquery ($resource) {
-        var resourceUrl =  'api/rbdqueries/:id';
+    function AtpcoMasterTariff ($resource) {
+        var resourceUrl =  'api/atpco-master-tariff/:id';
 
         return $resource(resourceUrl, {}, {
-            'query': { method: 'POST', isArray: true, url:'api/rbdqueries/all'},
+            'query': { method: 'GET', isArray: true},
             'get': {
                 method: 'GET',
                 transformResponse: function (data) {
@@ -21,7 +21,8 @@
                 }
             },
             'update': { method:'PUT' },
-            'getRbd': { method: 'GET', url:'api/rbdqueries/rbd', isArray: true }
+            'getAll': { method: 'GET', isArray: true, url:"api/atpco-master-tariff/getAll"},
+            'getAllGlobal': { method: 'GET', isArray: true, url:"api/atpco-master-tariff/getAllGlobal"},
         });
     }
 })();

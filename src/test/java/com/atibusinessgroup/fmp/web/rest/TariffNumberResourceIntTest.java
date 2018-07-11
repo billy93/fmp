@@ -2,8 +2,8 @@ package com.atibusinessgroup.fmp.web.rest;
 
 import com.atibusinessgroup.fmp.FmpApp;
 
-import com.atibusinessgroup.fmp.domain.TariffNumber;
-import com.atibusinessgroup.fmp.repository.TariffNumberRepository;
+import com.atibusinessgroup.fmp.domain.AtpcoMasterTariff;
+import com.atibusinessgroup.fmp.repository.AtpcoMasterTariffRepository;
 import com.atibusinessgroup.fmp.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Test class for the TariffNumberResource REST controller.
  *
- * @see TariffNumberResource
+ * @see AtpcoMasterTariffResource
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = FmpApp.class)
@@ -49,7 +49,7 @@ public class TariffNumberResourceIntTest {
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
     @Autowired
-    private TariffNumberRepository tariffNumberRepository;
+    private AtpcoMasterTariffRepository tariffNumberRepository;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -62,12 +62,12 @@ public class TariffNumberResourceIntTest {
 
     private MockMvc restTariffNumberMockMvc;
 
-    private TariffNumber tariffNumber;
+    private AtpcoMasterTariff tariffNumber;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final TariffNumberResource tariffNumberResource = new TariffNumberResource(tariffNumberRepository, null);
+        final AtpcoMasterTariffResource tariffNumberResource = new AtpcoMasterTariffResource(tariffNumberRepository, null);
         this.restTariffNumberMockMvc = MockMvcBuilders.standaloneSetup(tariffNumberResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -81,7 +81,7 @@ public class TariffNumberResourceIntTest {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static TariffNumber createEntity() {
+    public static AtpcoMasterTariff createEntity() {
 //        TariffNumber tariffNumber = new TariffNumber()
 //            .tarNo(DEFAULT_TAR_NO)
 //            .tarCd(DEFAULT_TAR_CD)
@@ -108,9 +108,9 @@ public class TariffNumberResourceIntTest {
             .andExpect(status().isCreated());
 
         // Validate the TariffNumber in the database
-        List<TariffNumber> tariffNumberList = tariffNumberRepository.findAll();
+        List<AtpcoMasterTariff> tariffNumberList = tariffNumberRepository.findAll();
         assertThat(tariffNumberList).hasSize(databaseSizeBeforeCreate + 1);
-        TariffNumber testTariffNumber = tariffNumberList.get(tariffNumberList.size() - 1);
+        AtpcoMasterTariff testTariffNumber = tariffNumberList.get(tariffNumberList.size() - 1);
         assertThat(testTariffNumber.getTarNo()).isEqualTo(DEFAULT_TAR_NO);
         assertThat(testTariffNumber.getTarCd()).isEqualTo(DEFAULT_TAR_CD);
         assertThat(testTariffNumber.getGlobal()).isEqualTo(DEFAULT_GLOBAL);
@@ -131,7 +131,7 @@ public class TariffNumberResourceIntTest {
             .andExpect(status().isBadRequest());
 
         // Validate the TariffNumber in the database
-        List<TariffNumber> tariffNumberList = tariffNumberRepository.findAll();
+        List<AtpcoMasterTariff> tariffNumberList = tariffNumberRepository.findAll();
         assertThat(tariffNumberList).hasSize(databaseSizeBeforeCreate);
     }
 
@@ -181,7 +181,7 @@ public class TariffNumberResourceIntTest {
         int databaseSizeBeforeUpdate = tariffNumberRepository.findAll().size();
 
         // Update the tariffNumber
-        TariffNumber updatedTariffNumber = tariffNumberRepository.findOne(tariffNumber.getId());
+        AtpcoMasterTariff updatedTariffNumber = tariffNumberRepository.findOne(tariffNumber.getId());
 //        updatedTariffNumber
 //            .tarNo(UPDATED_TAR_NO)
 //            .tarCd(UPDATED_TAR_CD)
@@ -194,9 +194,9 @@ public class TariffNumberResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the TariffNumber in the database
-        List<TariffNumber> tariffNumberList = tariffNumberRepository.findAll();
+        List<AtpcoMasterTariff> tariffNumberList = tariffNumberRepository.findAll();
         assertThat(tariffNumberList).hasSize(databaseSizeBeforeUpdate);
-        TariffNumber testTariffNumber = tariffNumberList.get(tariffNumberList.size() - 1);
+        AtpcoMasterTariff testTariffNumber = tariffNumberList.get(tariffNumberList.size() - 1);
         assertThat(testTariffNumber.getTarNo()).isEqualTo(UPDATED_TAR_NO);
         assertThat(testTariffNumber.getTarCd()).isEqualTo(UPDATED_TAR_CD);
         assertThat(testTariffNumber.getGlobal()).isEqualTo(UPDATED_GLOBAL);
@@ -216,7 +216,7 @@ public class TariffNumberResourceIntTest {
             .andExpect(status().isCreated());
 
         // Validate the TariffNumber in the database
-        List<TariffNumber> tariffNumberList = tariffNumberRepository.findAll();
+        List<AtpcoMasterTariff> tariffNumberList = tariffNumberRepository.findAll();
         assertThat(tariffNumberList).hasSize(databaseSizeBeforeUpdate + 1);
     }
 
@@ -232,16 +232,16 @@ public class TariffNumberResourceIntTest {
             .andExpect(status().isOk());
 
         // Validate the database is empty
-        List<TariffNumber> tariffNumberList = tariffNumberRepository.findAll();
+        List<AtpcoMasterTariff> tariffNumberList = tariffNumberRepository.findAll();
         assertThat(tariffNumberList).hasSize(databaseSizeBeforeDelete - 1);
     }
 
     @Test
     public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(TariffNumber.class);
-        TariffNumber tariffNumber1 = new TariffNumber();
+        TestUtil.equalsVerifier(AtpcoMasterTariff.class);
+        AtpcoMasterTariff tariffNumber1 = new AtpcoMasterTariff();
         tariffNumber1.setId("id1");
-        TariffNumber tariffNumber2 = new TariffNumber();
+        AtpcoMasterTariff tariffNumber2 = new AtpcoMasterTariff();
         tariffNumber2.setId(tariffNumber1.getId());
         assertThat(tariffNumber1).isEqualTo(tariffNumber2);
         tariffNumber2.setId("id2");

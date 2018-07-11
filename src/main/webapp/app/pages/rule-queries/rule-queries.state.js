@@ -11,7 +11,7 @@
         $stateProvider
         .state('rule-queries', {
         	parent: 'app',
-            url: '/rule-queries/{tab}',
+            url: '/rule-queries',
             data: {
                 authorities: ['ROLE_USER'],
                 pageTitle: 'Rule Query'
@@ -39,6 +39,7 @@
 				}
             },
             params : {
+            	tab: 1,
 				page : {
 					value : '1',
 					squash : true

@@ -9,17 +9,17 @@
 
     function stateConfig($stateProvider) {
         $stateProvider
-        .state('rbdquery', {
-            parent: 'app',
-            url: '/rbdquery?page&sort&search',
+        .state('atpco-master-tariff', {
+            parent: 'entity',
+            url: '/atpco-master-tariff?page&sort&search',
             data: {
                 authorities: ['ROLE_USER'],
-                pageTitle: 'Rbdqueries'
+                pageTitle: 'TariffNumbers'
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/pages/rbd-query/rbd-queries.html',
-                    controller: 'RbdqueryController',
+                    templateUrl: 'app/entities/atpco-master-tariff/atpco-master-tariff.html',
+                    controller: 'AtpcoMasterTariffController',
                     controllerAs: 'vm'
                 }
             },
@@ -35,16 +35,6 @@
                 search: null
             },
             resolve: {
-            	params: [function() {
-            		return {
-            			cxr: null,
-                		ruleTarNo: null,
-                		ruleNo: null,
-                		effectiveDateFrom: null,
-                		chart1: null,
-                		chart2: null
-                	}
-            	}],
                 pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
                     return {
                         page: PaginationUtil.parsePage($stateParams.page),
@@ -56,27 +46,27 @@
                 }],
             }
         })
-        .state('rbdquery-detail', {
-            parent: 'rbdquery',
-            url: '/rbdquery/{id}',
+        .state('atpco-master-tariff-detail', {
+            parent: 'atpco-master-tariff',
+            url: '/atpco-master-tariff/{id}',
             data: {
                 authorities: ['ROLE_USER'],
-                pageTitle: 'Rbdquery'
+                pageTitle: 'AtpcoMasterTariff'
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/pages/rbd-query/rbd-query-detail.html',
-                    controller: 'RbdqueryDetailController',
+                    templateUrl: 'app/entities/atpco-master-tariff/atpco-master-tariff-detail.html',
+                    controller: 'AtpcoMasterTariffDetailController',
                     controllerAs: 'vm'
                 }
             },
             resolve: {
-                entity: ['$stateParams', 'Rbdquery', function($stateParams, Rbdquery) {
-                    return Rbdquery.get({id : $stateParams.id}).$promise;
+                entity: ['$stateParams', 'AtpcoMasterTariff', function($stateParams, AtpcoMasterTariff) {
+                    return AtpcoMasterTariff.get({id : $stateParams.id}).$promise;
                 }],
                 previousState: ["$state", function ($state) {
                     var currentStateData = {
-                        name: $state.current.name || 'rbdquery',
+                        name: $state.current.name || 'atpco-master-tariff',
                         params: $state.params,
                         url: $state.href($state.current.name, $state.params)
                     };
@@ -84,22 +74,22 @@
                 }]
             }
         })
-        .state('rbdquery-detail.edit', {
-            parent: 'rbdquery-detail',
+        .state('atpco-master-tariff-detail.edit', {
+            parent: 'atpco-master-tariff-detail',
             url: '/detail/edit',
             data: {
                 authorities: ['ROLE_USER']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/pages/rbd-query/rbd-query-dialog.html',
-                    controller: 'RbdqueryDialogController',
+                    templateUrl: 'app/entities/atpco-master-tariff/atpco-master-tariff-dialog.html',
+                    controller: 'AtpcoMasterTariffDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
-                        entity: ['Rbdquery', function(Rbdquery) {
-                            return Rbdquery.get({id : $stateParams.id}).$promise;
+                        entity: ['AtpcoMasterTariff', function(AtpcoMasterTariff) {
+                            return AtpcoMasterTariff.get({id : $stateParams.id}).$promise;
                         }]
                     }
                 }).result.then(function() {
@@ -109,81 +99,81 @@
                 });
             }]
         })
-        .state('rbdquery.new', {
-            parent: 'rbdquery',
+        .state('atpco-master-tariff.new', {
+            parent: 'atpco-master-tariff',
             url: '/new',
             data: {
                 authorities: ['ROLE_USER']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/pages/rbd-query/rbd-query-dialog.html',
-                    controller: 'RbdqueryDialogController',
+                    templateUrl: 'app/entities/atpco-master-tariff/atpco-master-tariff-dialog.html',
+                    controller: 'AtpcoMasterTariffDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
                         entity: function () {
                             return {
-                                recordBatch: null,
-                                recordSequence: null,
-                                recType: null,
-                                action: null,
+                                tarNo: null,
+                                tarCd: null,
+                                global: null,
+                                description: null,
                                 id: null
                             };
                         }
                     }
                 }).result.then(function() {
-                    $state.go('rbdquery', null, { reload: 'rbdquery' });
+                    $state.go('atpco-master-tariff', null, { reload: 'atpco-master-tariff' });
                 }, function() {
-                    $state.go('rbdquery');
+                    $state.go('atpco-master-tariff');
                 });
             }]
         })
-        .state('rbdquery.edit', {
-            parent: 'rbdquery',
+        .state('atpco-master-tariff.edit', {
+            parent: 'atpco-master-tariff',
             url: '/{id}/edit',
             data: {
                 authorities: ['ROLE_USER']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/pages/rbd-query/rbd-query-dialog.html',
-                    controller: 'RbdqueryDialogController',
+                    templateUrl: 'app/entities/atpco-master-tariff/atpco-master-tariff-dialog.html',
+                    controller: 'AtpcoMasterTariffDialogController',
                     controllerAs: 'vm',
                     backdrop: 'static',
                     size: 'lg',
                     resolve: {
-                        entity: ['Rbdquery', function(Rbdquery) {
-                            return Rbdquery.get({id : $stateParams.id}).$promise;
+                        entity: ['AtpcoMasterTariff', function(AtpcoMasterTariff) {
+                            return AtpcoMasterTariff.get({id : $stateParams.id}).$promise;
                         }]
                     }
                 }).result.then(function() {
-                    $state.go('rbdquery', null, { reload: 'rbdquery' });
+                    $state.go('atpco-master-tariff', null, { reload: 'atpco-master-tariff' });
                 }, function() {
                     $state.go('^');
                 });
             }]
         })
-        .state('rbdquery.delete', {
-            parent: 'rbdquery',
+        .state('atpco-master-tariff.delete', {
+            parent: 'atpco-master-tariff',
             url: '/{id}/delete',
             data: {
                 authorities: ['ROLE_USER']
             },
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
-                    templateUrl: 'app/pages/rbd-query/rbd-query-delete-dialog.html',
-                    controller: 'RbdqueryDeleteController',
+                    templateUrl: 'app/entities/atpco-master-tariff/atpco-master-tariff-delete-dialog.html',
+                    controller: 'AtpcoMasterTariffDeleteController',
                     controllerAs: 'vm',
                     size: 'md',
                     resolve: {
-                        entity: ['Rbdquery', function(Rbdquery) {
-                            return Rbdquery.get({id : $stateParams.id}).$promise;
+                        entity: ['AtpcoMasterTariff', function(AtpcoMasterTariff) {
+                            return AtpcoMasterTariff.get({id : $stateParams.id}).$promise;
                         }]
                     }
                 }).result.then(function() {
-                    $state.go('rbdquery', null, { reload: 'rbdquery' });
+                    $state.go('atpco-master-tariff', null, { reload: 'atpco-master-tariff' });
                 }, function() {
                     $state.go('^');
                 });

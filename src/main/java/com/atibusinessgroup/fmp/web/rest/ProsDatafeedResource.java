@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.atibusinessgroup.fmp.domain.dto.AfdQuery;
+import com.atibusinessgroup.fmp.domain.dto.SpecifiedConstructed;
 import com.atibusinessgroup.fmp.service.ProsDatafeedService;
 import com.codahale.metrics.annotation.Timed;
 
@@ -38,10 +38,10 @@ public class ProsDatafeedResource {
 	 */
 	@PostMapping("/pros-datafeed")
 	@Timed
-	public ResponseEntity<List<AfdQuery>> getProsDatafeed(@RequestBody String param) {
+	public ResponseEntity<List<SpecifiedConstructed>> getProsDatafeed(@RequestBody String param) {
 		log.debug("REST request to get a page of getProsDatafeed: {}", param);
 			
-		List<AfdQuery> result = new ArrayList<>();
+		List<SpecifiedConstructed> result = new ArrayList<>();
 
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}

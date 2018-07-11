@@ -19,24 +19,27 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.atibusinessgroup.fmp.constant.CategoryName;
 import com.atibusinessgroup.fmp.constant.CategoryType;
-import com.atibusinessgroup.fmp.domain.TariffNumber;
+import com.atibusinessgroup.fmp.domain.AtpcoMasterTariff;
 import com.atibusinessgroup.fmp.domain.VoltrasFare;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFootnoteRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord0;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2Cat10;
-import com.atibusinessgroup.fmp.domain.dto.AfdQuery;
+import com.atibusinessgroup.fmp.domain.dto.AddOnParam;
+import com.atibusinessgroup.fmp.domain.dto.AddOnsWrapper;
+import com.atibusinessgroup.fmp.domain.dto.AfdQueryAddOns;
 import com.atibusinessgroup.fmp.domain.dto.AfdQueryParam;
-import com.atibusinessgroup.fmp.domain.dto.AfdQueryWrapper;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.Category;
 import com.atibusinessgroup.fmp.domain.dto.CategoryTextFormatAndAttribute;
 import com.atibusinessgroup.fmp.domain.dto.DataTable;
 import com.atibusinessgroup.fmp.domain.dto.GeneralRuleApplication;
+import com.atibusinessgroup.fmp.domain.dto.SpecifiedConstructed;
+import com.atibusinessgroup.fmp.domain.dto.SpecifiedConstructedWrapper;
 import com.atibusinessgroup.fmp.domain.dto.WorkPackageMarketFare;
 import com.atibusinessgroup.fmp.repository.AtpcoRecord0Repository;
-import com.atibusinessgroup.fmp.repository.TariffNumberRepository;
+import com.atibusinessgroup.fmp.repository.AtpcoMasterTariffRepository;
 import com.atibusinessgroup.fmp.repository.VoltrasFareRepository;
 import com.atibusinessgroup.fmp.repository.WorkPackageRepositoryImpl;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoFareCustomRepository;
@@ -57,11 +60,11 @@ public class AfdQueryResource {
 	private final VoltrasFareRepository voltrasFareRepository;
 	private final WorkPackageRepositoryImpl workPackageRepositoryImpl;
 	private final AfdQueryMapper afdQueryMapper;
-	private final TariffNumberRepository tariffNumberRepository;
+	private final AtpcoMasterTariffRepository tariffNumberRepository;
 	
     public AfdQueryResource(AtpcoRecord0Repository atpcoRecord0Repository, AtpcoFareCustomRepository atpcoFareCustomRepository, 
     		AtpcoRecordService atpcoRecordService, WorkPackageRepositoryImpl workPackageRepositoryImpl, AfdQueryMapper afdQueryMapper,
-    		VoltrasFareRepository voltrasFareRepository, TariffNumberRepository tariffNumberRepository) {
+    		VoltrasFareRepository voltrasFareRepository, AtpcoMasterTariffRepository tariffNumberRepository) {
     	this.atpcoRecord0Repository = atpcoRecord0Repository;
     	this.atpcoFareCustomRepository = atpcoFareCustomRepository;
     	this.atpcoRecordService = atpcoRecordService;
@@ -104,29 +107,29 @@ public class AfdQueryResource {
     }
     
     /**
-     * POST  /afd-queries : get all the afd queries.
+     * POST  /afd-queries/specified-constructed : get all the afd queries.
      *
      * @param query params, pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of afdQueries in body
      */
-    @PostMapping("/afd-queries")
+    @PostMapping("/afd-queries/specified-constructed")
     @Timed
-    public ResponseEntity<AfdQueryWrapper> getAllAfdQueries(@RequestBody AfdQueryParam param) {
-        log.debug("REST request to get a page of AfdQueries: {}", param);
+    public ResponseEntity<SpecifiedConstructedWrapper> getAllAfdQuerySpecifiedConstructed(@RequestBody AfdQueryParam param) {
+        log.debug("REST request to get a page of SpecifiedConstructed: {}", param);
         
-        AfdQueryWrapper result = new AfdQueryWrapper();
+        SpecifiedConstructedWrapper result = new SpecifiedConstructedWrapper();
         
         if (param != null && param.getSource() != null) {
         	Pageable pageable = new PageRequest(param.getPage(), param.getSize());
             
-            List<AfdQuery> afdQueries = new ArrayList<>();
+            List<SpecifiedConstructed> fares = new ArrayList<>();
             boolean isLastPage = false;
             int lastIndex = 0;
             
             //ATPCO
             if (param.getSource() != null && param.getSource().contentEquals("A")) {
-            	AfdQueryWrapper atpco = atpcoFareCustomRepository.findAtpcoFareAfdQueryWithRecords(param, pageable);
-                afdQueries.addAll(atpco.getAfdQueries());
+            	SpecifiedConstructedWrapper atpco = atpcoFareCustomRepository.findAtpcoFareAfdQueryWithRecords(param, pageable);
+            	fares.addAll(atpco.getSpecifiedConstructed());
                 isLastPage = atpco.isLastPage();
                 lastIndex = atpco.getLastIndex();
             }
@@ -138,7 +141,7 @@ public class AfdQueryResource {
             	for (int i = 0; i < rawMarkets.getContent().size(); i++) {
             		WorkPackageMarketFare market = rawMarkets.getContent().get(i);
             		String fareId = market.getId() + i;
-            		afdQueries.add(afdQueryMapper.convertMarketFare(market.getFare(), market.getId(), fareId, market.getWoId(), market.getWoName()));
+            		fares.add(afdQueryMapper.convertMarketFare(market.getFare(), market.getId(), fareId, market.getWoId(), market.getWoName()));
             	}
             	
             	if (rawMarkets.getTotalPages() == pageable.getPageNumber()) {
@@ -152,7 +155,7 @@ public class AfdQueryResource {
             	
             	for (int i = 0; i < rawWebs.getContent().size(); i++) {
             		VoltrasFare web = rawWebs.getContent().get(i);
-            		afdQueries.add(afdQueryMapper.convertVoltrasFare(web));
+            		fares.add(afdQueryMapper.convertVoltrasFare(web));
             	}
             	
             	if (rawWebs.getTotalPages() == pageable.getPageNumber()) {
@@ -165,7 +168,7 @@ public class AfdQueryResource {
             	
             }
             
-            result.setAfdQueries(afdQueries);
+            result.setSpecifiedConstructed(fares);
             result.setLastPage(isLastPage);
             result.setLastIndex(lastIndex);
         }
@@ -180,7 +183,7 @@ public class AfdQueryResource {
      */
     @PostMapping("/afd-queries/rules")
     @Timed
-    public ResponseEntity<List<Category>> getAfdQueryRules(@RequestBody AfdQuery afdQuery) {
+    public ResponseEntity<List<Category>> getAfdQueryRules(@RequestBody SpecifiedConstructed afdQuery) {
         log.debug("REST request to get AfdQueries rules: {}", afdQuery);
         
         List<Category> result = new ArrayList<>();
@@ -191,8 +194,8 @@ public class AfdQueryResource {
         List<AtpcoFootnoteRecord2GroupByCatNo> frecords2 = atpcoFareCustomRepository.findAtpcoFootnoteRecord2ByRecordId(afdQuery.getTariffNo() + afdQuery.getCarrierCode() + afdQuery.getFootnote() + "");
         
         String ruleTcd = null;
-        TariffNumber generalTn = null;
-        TariffNumber ruleTn = tariffNumberRepository.findOneByTarNoAndType(afdQuery.getTariffNo(), "FARE RULE");
+        AtpcoMasterTariff generalTn = null;
+        AtpcoMasterTariff ruleTn = tariffNumberRepository.findOneByTarNoAndType(afdQuery.getTariffNo(), "FARE RULE");
         
         if (ruleTn != null) {
         	ruleTcd = ruleTn.getTarCd();
@@ -386,6 +389,47 @@ public class AfdQueryResource {
 //    		System.out.println();
 //    		System.out.println();
 //    	}
+        
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+    
+    /**
+     * POST  /afd-queries/add-ons : get all the afd queries add ons.
+     *
+     * @param query params, pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of Addons in body
+     */
+    @PostMapping("/afd-queries/add-ons")
+    @Timed
+    public ResponseEntity<AddOnsWrapper> getAllAfdQueryAddOns(@RequestBody AddOnParam param) {
+        log.debug("REST request to get a page of AfdQuery AddOns: {}", param);
+        
+        AddOnsWrapper result = new AddOnsWrapper();
+        
+        if (param != null && param.getSource() != null) {
+        	Pageable pageable = new PageRequest(param.getPage(), param.getSize());
+            
+            List<AfdQueryAddOns> addOns = new ArrayList<>();
+            boolean isLastPage = false;
+            int lastIndex = 0;
+            
+            //ATPCO
+            if (param.getSource() != null && param.getSource().contentEquals("A")) {
+            	AddOnsWrapper atpco = atpcoFareCustomRepository.findAtpcoAddOn(param, pageable);
+            	addOns.addAll(atpco.getAddOns());
+            	isLastPage = atpco.isLastPage();
+                lastIndex = atpco.getLastIndex();
+            }
+            
+            //Market
+            if (param.getSource().contentEquals("M")) {
+            	
+            }
+            
+            result.setAddOns(addOns);
+            result.setLastPage(isLastPage);
+            result.setLastIndex(lastIndex);
+        }
         
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

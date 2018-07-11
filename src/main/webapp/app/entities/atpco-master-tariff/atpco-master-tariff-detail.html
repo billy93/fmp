@@ -1,0 +1,39 @@
+
+<div>
+    <h2><span>Tariff Number</span> {{vm.tariffNumber.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="dl-horizontal jh-entity-details">
+        <dt><span>Tar No</span></dt>
+        <dd>
+            <span>{{vm.tariffNumber.tarNo}}</span>
+        </dd>
+        <dt><span>Tar Cd</span></dt>
+        <dd>
+            <span>{{vm.tariffNumber.tarCd}}</span>
+        </dd>
+         <dt><span>Type</span></dt>
+        <dd>
+            <span>{{vm.tariffNumber.type}}</span>
+        </dd>
+        <dt><span>Global</span></dt>
+        <dd>
+            <span>{{vm.tariffNumber.global}}</span>
+        </dd>
+        <dt><span>Description</span></dt>
+        <dd>
+            <span>{{vm.tariffNumber.description}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            ui-sref="{{ vm.previousState }}"
+            class="btn btn-back linkClick">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+
+    <button type="button" ui-sref="tariff-number-detail.edit({id:vm.tariffNumber.id})" class="btn btn-primary">
+        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="hidden-sm-down"> Edit</span>
+    </button>
+</div>
