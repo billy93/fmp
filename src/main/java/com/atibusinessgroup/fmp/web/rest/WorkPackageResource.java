@@ -207,7 +207,6 @@ public class WorkPackageResource {
             		workPackage.setReviewLevel("LSO");
             	}
         	}
-
         }
 
 
@@ -335,7 +334,18 @@ public class WorkPackageResource {
         wp.setWpid(null);
 
         User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
-        wp.setReviewLevel(user.getReviewLevels().get(0));
+        Optional<User> userLogin = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
+        if(userLogin.get().getReviewLevels().size()==1) {
+        	wp.setReviewLevel(userLogin.get().getReviewLevels().get(0));
+        }else {
+        	if(userLogin.get().getReviewLevels().indexOf("HO") > -1){
+        		wp.setReviewLevel("HO");
+        	}else {
+        		if(userLogin.get().getReviewLevels().indexOf("LSO") > -1){
+        			wp.setReviewLevel("LSO");
+            	}
+        	}
+        }
         wp.setComment(null);
         wp.setInterofficeComment(null);
         wp.setFilingInstructionData(null);
@@ -430,7 +440,19 @@ public class WorkPackageResource {
         wp.setWpid(null);
 
         User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get()).get();
-        wp.setReviewLevel(user.getReviewLevels().get(0));
+        
+        Optional<User> userLogin = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
+        if(userLogin.get().getReviewLevels().size()==1) {
+        	wp.setReviewLevel(userLogin.get().getReviewLevels().get(0));
+        }else {
+        	if(userLogin.get().getReviewLevels().indexOf("HO") > -1){
+        		wp.setReviewLevel("HO");
+        	}else {
+        		if(userLogin.get().getReviewLevels().indexOf("LSO") > -1){
+        			wp.setReviewLevel("LSO");
+            	}
+        	}
+        }
         wp.setCreatedBy(null);
         wp.setCreatedDate(null);
         wp.setLastModifiedBy(null);
@@ -481,7 +503,7 @@ public class WorkPackageResource {
         }
 
         Comment flagComment = new Comment();
-        flagComment.setComment("This workpackage was reused from Workpackage "+tempId); 
+        flagComment.setComment("This workpackage was replace from Workpackage "+tempId); 
         flagComment.setCreatedTime(ZonedDateTime.now());
         flagComment.setUsername(SecurityUtils.getCurrentUserLogin().get());
         
