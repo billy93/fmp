@@ -119,11 +119,12 @@ public class DateUtil {
 			Date paramDate = (Date) date;
 			
 			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(paramDate);
 			calendar.set(Calendar.HOUR_OF_DAY, 0);
 			calendar.set(Calendar.MINUTE, 0);
 			calendar.set(Calendar.SECOND, 0);
 			calendar.set(Calendar.MILLISECOND, 0);
-			calendar.setTime(paramDate);
+			
 			
 			
 			calendar.add(Calendar.DATE, day);

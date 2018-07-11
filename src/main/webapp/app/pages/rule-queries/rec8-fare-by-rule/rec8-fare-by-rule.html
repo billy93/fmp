@@ -9,18 +9,12 @@
 							<div class="form-group">
 								<div class="custom-label semibold">Carrier</div>
 								<div class="input-group">
-								<input type="text" class="form-control" name="carrier"
-									id="carrier" ng-minlength="2"
-									ng-model="vm.paramCarrier" uppercase 
-									required/>
-									<span ng-click="vm.showCarrierModal()" class="input-group-addon"><i class="fa fa-folder"></i>
+									<input type="text" class="form-control" name="cxr" id="cxr" ng-class="{'must-fill' : rec8Form.cxr.$invalid}"
+										ng-minlength="2" ng-model="vm.paramCarrier" placeholder="minimum 2 characters.." uppercase required />
+
+									<span ng-click="vm.showCarrierModal()"
+										class="input-group-addon"><i class="fa fa-folder"></i>
 									</span>
-								</div>
-								<div ng-show="rec8Form.carrier.$invalid">
-									<p class="help-block" ng-show="rec8Form.carrier.$error.required">
-										This field is required.</p>
-									<p class="help-block" ng-show="rec8Form.carrier.$error.minlength">
-										Minimum 2 letters</p>
 								</div>
 							</div>
 							<div class="form-group">
