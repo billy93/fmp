@@ -2,12 +2,12 @@
     'use strict';
     angular
         .module('fmpApp')
-        .factory('AfdQuery', AfdQuery);
+        .factory('AddOns', AddOns);
 
-    AfdQuery.$inject = ['$resource'];
+    AddOns.$inject = ['$resource'];
 
-    function AfdQuery ($resource) {
-        var resourceUrl =  'api/afd-queries/:id';
+    function AddOns ($resource) {
+        var resourceUrl =  'api/afd-queries/add-ons';
 
         return $resource(resourceUrl, {}, {
             'query': { method: 'POST'},

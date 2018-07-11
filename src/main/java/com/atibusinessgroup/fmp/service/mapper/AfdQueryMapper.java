@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.atibusinessgroup.fmp.domain.TariffNumber;
 import com.atibusinessgroup.fmp.domain.VoltrasFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageFare;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoAddOn;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterFareMatrix;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord1;
@@ -24,7 +25,8 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat27;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat35;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat35Ticketing;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat50;
-import com.atibusinessgroup.fmp.domain.dto.AfdQuery;
+import com.atibusinessgroup.fmp.domain.dto.SpecifiedConstructed;
+import com.atibusinessgroup.fmp.domain.dto.AfdQueryAddOns;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoDateWrapper;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord1FareClassInformation;
 import com.atibusinessgroup.fmp.domain.dto.CategoryObject;
@@ -49,11 +51,11 @@ public class AfdQueryMapper {
 		this.tariffNumberRepository = tariffNumberRepository;
 	}
 	
-	public AfdQuery convertAtpcoFare(AtpcoFare afare, AtpcoRecord1 record1, List<CategoryObject> cat03s, List<CategoryObject> cat05s, List<CategoryObject> cat06s, List<CategoryObject> cat07s, 
+	public SpecifiedConstructed convertAtpcoFare(AtpcoFare afare, AtpcoRecord1 record1, List<CategoryObject> cat03s, List<CategoryObject> cat05s, List<CategoryObject> cat06s, List<CategoryObject> cat07s, 
 			List<CategoryObject> cat14s, List<CategoryObject> cat15s, List<CategoryObject> cat27s, List<CategoryObject> cat35s, List<CategoryObject> cat50s, List<CategoryObject> footnote14s, 
 			List<CategoryObject> footnote15s, Date focusDate) {
 
-		AfdQuery result = new AfdQuery();
+		SpecifiedConstructed result = new SpecifiedConstructed();
 		
 		//AtpcoFare attributes
 		result.setFareId(afare.getId());
@@ -377,8 +379,8 @@ public class AfdQueryMapper {
 		return result;
 	}
 
-	public AfdQuery convertMarketFare(WorkPackageFare fare, String wpObjectId, String fareId, String woId, String woName) {
-		AfdQuery result = new AfdQuery();
+	public SpecifiedConstructed convertMarketFare(WorkPackageFare fare, String wpObjectId, String fareId, String woId, String woName) {
+		SpecifiedConstructed result = new SpecifiedConstructed();
 		
 		result.setFareId(fareId);
 		result.setSource("M");
@@ -421,8 +423,8 @@ public class AfdQueryMapper {
 		return result;
 	}
 
-	public AfdQuery convertVoltrasFare(VoltrasFare vf) {
-		AfdQuery result = new AfdQuery();
+	public SpecifiedConstructed convertVoltrasFare(VoltrasFare vf) {
+		SpecifiedConstructed result = new SpecifiedConstructed();
 		
 		result.setFareId(vf.getId());
 		result.setSource("W");
@@ -436,6 +438,44 @@ public class AfdQueryMapper {
 		result.setOwrt(vf.getOwrt());
 		result.setCurrencyCode(vf.getCurrency());
 		result.setBaseAmount(TypeConverterUtil.convertStringToDouble(vf.getPrice().getLow() + ""));
+		
+		return result;
+	}
+
+	public AfdQueryAddOns convertAtpcoAddOn(AtpcoAddOn addOn) {
+		AfdQueryAddOns result = new AfdQueryAddOns();
+		
+		result.setId(addOn.get_id());
+		result.setSource("A");
+		result.setTariffNo(addOn.getTar_no());
+		
+		if (result.getTariffNo() != null) {
+			TariffNumber tn = tariffNumberRepository.findOneByTarNo(addOn.getTar_no());
+			if (tn != null && tn.getTarCd() != null) {
+				result.setTariffCode(tn.getTarCd());
+			}
+		}
+		
+		result.setCarrierCode(addOn.getCxr_code());
+		result.setZone(addOn.getAdd_on_zone());
+		result.setOriginCity(addOn.getMarket_origin());
+		result.setOriginCountry(addOn.getCountry_code_origin());
+		result.setDestinationCity(addOn.getMarket_destination());
+		result.setDestinationCountry(addOn.getCountry_code_destination());
+		result.setFareClassCode(addOn.getFare_class_cd());
+		result.setOwrt(addOn.getOw_rt());
+		result.setFootnote1(addOn.getFtnt());
+		result.setRoutingNo(addOn.getRtg_no());
+		
+		if (addOn.getAdd_on() != null) {
+			result.setCurrencyCode(addOn.getAdd_on().getAdd_on_cur_cd());
+			result.setBaseAmount(addOn.getAdd_on().getAdd_on_amount().bigDecimalValue().doubleValue());
+		}
+		
+		result.setEffectiveDate(addOn.getDates_tar_eff());
+		result.setDiscontinueDate(addOn.getDates_disc());
+		result.setGfsDate(addOn.getGfs_date());
+		result.setGfsReference(addOn.getGfs_number());
 		
 		return result;
 	}

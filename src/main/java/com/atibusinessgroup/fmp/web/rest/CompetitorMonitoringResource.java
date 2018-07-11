@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
-import com.atibusinessgroup.fmp.domain.dto.AfdQuery;
+import com.atibusinessgroup.fmp.domain.dto.SpecifiedConstructed;
 import com.atibusinessgroup.fmp.domain.dto.AfdQueryParam;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteQueryGroup;
 import com.atibusinessgroup.fmp.domain.dto.Category;
@@ -105,7 +105,7 @@ public class CompetitorMonitoringResource {
      */
     @GetMapping("/competitor-monitoring/rules")
     @Timed
-    public ResponseEntity<List<Category>> getAfdQueryRules(AfdQuery afdQuery) {
+    public ResponseEntity<List<Category>> getAfdQueryRules(SpecifiedConstructed afdQuery) {
         return afdQueryResource.getAfdQueryRules(afdQuery);
     }
     

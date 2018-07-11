@@ -2,7 +2,7 @@ package com.atibusinessgroup.fmp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.atibusinessgroup.fmp.domain.RbdQuery;
-import com.atibusinessgroup.fmp.domain.dto.AfdQuery;
+import com.atibusinessgroup.fmp.domain.dto.SpecifiedConstructed;
 import com.atibusinessgroup.fmp.domain.dto.Category;
 import com.atibusinessgroup.fmp.service.RbdqueryService;
 import com.atibusinessgroup.fmp.web.rest.errors.BadRequestAlertException;
@@ -128,7 +128,7 @@ public class RbdQueryResource {
     
     @GetMapping("/rbdqueries/rbd")
     @Timed
-    public ResponseEntity<List<Category>> getAfdQueryRules(AfdQuery afdQuery) {
+    public ResponseEntity<List<Category>> getAfdQueryRules(SpecifiedConstructed afdQuery) {
         log.debug("REST request to get AfdQueries rules: {}", afdQuery);
         String a = "aaaa";
         System.out.println(a);
