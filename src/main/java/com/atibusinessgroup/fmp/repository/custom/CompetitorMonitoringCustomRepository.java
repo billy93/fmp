@@ -150,7 +150,7 @@ public class CompetitorMonitoringCustomRepository {
 				
 				if (param.getRuleNo() != null && !param.getRuleNo().isEmpty()) {
 					BasicDBObject ruleNo = new BasicDBObject();
-					ruleNo.append("rules_no", param.getRuleNo());
+					ruleNo.append("rules_no", new BasicDBObject("$in",  Arrays.stream(param.getRuleNo().split(",")).map(String::trim).toArray(String[]::new)));
 					queries.add(ruleNo);
 				} else {
 					BasicDBObject ruleNo = new BasicDBObject();
