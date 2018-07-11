@@ -13,11 +13,11 @@ public class RuleQueryMapper {
 
 		RuleQuery result = new RuleQuery();
 		
-		result.setCxr(record2Group.getCarrierCode());
+		result.setCxr(record2Group.getCxr());
 		result.setRuleNo(record2Group.getRuleNo());
-		result.setTarNo(record2Group.getRuleTariffNo());
+		result.setTarNo(record2Group.getTarNo());
 		result.setSrc("A");
-		result.setType(record2Group.getType());
+		result.setType(record2Group.getTarCd());
 		
 		return result;
 	}

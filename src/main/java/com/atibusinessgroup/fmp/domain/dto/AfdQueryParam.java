@@ -5,7 +5,8 @@ import java.util.Date;
 public class AfdQueryParam {
 	
 	private String carrier;
-	private String source;	private String publicPrivate;
+	private String source;	
+	private String publicPrivate;
 	private String tariff;
 	private String globalIndicator;
 	private String gaFareType;

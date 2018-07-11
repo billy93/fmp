@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 /**
  * A TariffNumber.
  */
-@Document(collection = "master_tariff")
+@Document(collection = "tariff_number")
 public class TariffNumber implements Serializable {
 
     private static final long serialVersionUID = 1L;

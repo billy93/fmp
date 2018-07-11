@@ -5,32 +5,12 @@
         .module('fmpApp')
         .controller('AfdQueryController', AfdQueryController);
 
-    AfdQueryController.$inject = ['$state', 'AfdQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', 'tariffNumbers', 'cities', '$uibModal', 'Clipboard', 'Timezone', 'atpcoMasterFareType', 'globals', 'passengers', 'fareTypes', 'DateUtils'];
+    AfdQueryController.$inject = ['$state', '$stateParams'];
 
-    function AfdQueryController($state, AfdQuery, ParseLinks, AlertService, paginationConstants, queryParams, tariffNumbers, cities, $uibModal, Clipboard, Timezone, atpcoMasterFareType, globals, passengers, fareTypes, DateUtils) {
+    function AfdQueryController($state, $stateParams) {
 
         var vm = this;
-        vm.loadPage = loadPage;
-        vm.itemsPerPage = paginationConstants.itemsPerPage;
-//        vm.itemsPerPage = 100;
-        vm.queryParams = queryParams;
-        vm.loadAll = loadAll;
-        vm.query = query;
-        vm.toTopPage = toTopPage;
-        vm.checkValidParameters = checkValidParameters;
-        vm.setSelectedRow = setSelectedRow;
-        vm.getRules = getRules;
-        vm.showCategoryDetail = showCategoryDetail;
-        vm.showFareDetail = showFareDetail;
-        vm.copyAfdQueryFares = copyAfdQueryFares;
-        vm.selectAll = selectAll;
-        vm.showLegend = showLegend;
-        vm.viewFullText = viewFullText;
-        vm.showErrorModal = showErrorModal;
-        vm.selectedRows = [];
-        vm.selectedFares = [];
-        vm.timezone = Timezone.GMT7;
-        vm.infoMessage = null;
+        vm.tab = $stateParams.tab;
         
         vm.afdQueries = [];
         vm.reset = reset;

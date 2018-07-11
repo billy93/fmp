@@ -3,10 +3,10 @@ package com.atibusinessgroup.fmp.domain.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AfdQueryWrapper {
+public class SpecifiedConstructedWrapper {
 	private boolean isLastPage = false;
 	private int lastIndex = 0;
-	private List<AfdQuery> afdQueries = new ArrayList<>();
+	private List<SpecifiedConstructed> specifiedConstructed = new ArrayList<>();
 	
 	public boolean isLastPage() {
 		return isLastPage;
@@ -19,26 +19,26 @@ public class AfdQueryWrapper {
 	public int getLastIndex() {
 		return lastIndex;
 	}
-
+	
 	public void setLastIndex(int lastIndex) {
 		this.lastIndex = lastIndex;
 	}
-
-	public List<AfdQuery> getAfdQueries() {
-		return afdQueries;
+	
+	public List<SpecifiedConstructed> getSpecifiedConstructed() {
+		return specifiedConstructed;
 	}
 	
-	public void setAfdQueries(List<AfdQuery> afdQueries) {
-		this.afdQueries = afdQueries;
+	public void setSpecifiedConstructed(List<SpecifiedConstructed> specifiedConstructed) {
+		this.specifiedConstructed = specifiedConstructed;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((afdQueries == null) ? 0 : afdQueries.hashCode());
 		result = prime * result + (isLastPage ? 1231 : 1237);
 		result = prime * result + lastIndex;
+		result = prime * result + ((specifiedConstructed == null) ? 0 : specifiedConstructed.hashCode());
 		return result;
 	}
 
@@ -53,18 +53,18 @@ public class AfdQueryWrapper {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		AfdQueryWrapper other = (AfdQueryWrapper) obj;
-		if (afdQueries == null) {
-			if (other.afdQueries != null) {
-				return false;
-			}
-		} else if (!afdQueries.equals(other.afdQueries)) {
-			return false;
-		}
+		SpecifiedConstructedWrapper other = (SpecifiedConstructedWrapper) obj;
 		if (isLastPage != other.isLastPage) {
 			return false;
 		}
 		if (lastIndex != other.lastIndex) {
+			return false;
+		}
+		if (specifiedConstructed == null) {
+			if (other.specifiedConstructed != null) {
+				return false;
+			}
+		} else if (!specifiedConstructed.equals(other.specifiedConstructed)) {
 			return false;
 		}
 		return true;
@@ -72,7 +72,7 @@ public class AfdQueryWrapper {
 
 	@Override
 	public String toString() {
-		return "AfdQueryWrapper [isLastPage=" + isLastPage + ", lastIndex=" + lastIndex + ", afdQueries=" + afdQueries
-				+ "]";
+		return "AfdQueryWrapper [isLastPage=" + isLastPage + ", lastIndex=" + lastIndex + ", specifiedConstructed="
+				+ specifiedConstructed + "]";
 	}
 }

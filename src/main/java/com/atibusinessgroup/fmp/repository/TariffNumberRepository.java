@@ -1,9 +1,9 @@
 package com.atibusinessgroup.fmp.repository;
 
-import com.atibusinessgroup.fmp.domain.TariffNumber;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
+import com.atibusinessgroup.fmp.domain.TariffNumber;
 
 /**
  * Spring Data MongoDB repository for the TariffNumber entity.

@@ -3,7 +3,7 @@ package com.atibusinessgroup.fmp.domain.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AfdQuery {
+public class SpecifiedConstructed {
 	private String fareId;
 	private String source;
 	private String sc;
@@ -714,7 +714,7 @@ public class AfdQuery {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		AfdQuery other = (AfdQuery) obj;
+		SpecifiedConstructed other = (SpecifiedConstructed) obj;
 		if (advancePurchase == null) {
 			if (other.advancePurchase != null) {
 				return false;
@@ -1144,31 +1144,5 @@ public class AfdQuery {
 			return false;
 		}
 		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "AfdQuery [fareId=" + fareId + ", source=" + source + ", sc=" + sc + ", tariffNo=" + tariffNo
-				+ ", tariffCode=" + tariffCode + ", carrierCode=" + carrierCode + ", originCity=" + originCity
-				+ ", originCountry=" + originCountry + ", destinationCity=" + destinationCity + ", destinationCountry="
-				+ destinationCountry + ", fareClassCode=" + fareClassCode + ", bookingClass=" + bookingClass
-				+ ", cabin=" + cabin + ", owrt=" + owrt + ", footnote=" + footnote + ", routingNo=" + routingNo
-				+ ", ruleNo=" + ruleNo + ", maximumPermittedMileage=" + maximumPermittedMileage + ", currencyCode="
-				+ currencyCode + ", baseAmount=" + baseAmount + ", error=" + error + ", tfcCalculationDate="
-				+ tfcCalculationDate + ", tfcFocusDate=" + tfcFocusDate + ", yqyr=" + yqyr + ", taxes=" + taxes
-				+ ", tfc=" + tfc + ", aif=" + aif + ", itinerary=" + itinerary + ", overrideIndicator="
-				+ overrideIndicator + ", effectiveDate=" + effectiveDate + ", discontinueDate=" + discontinueDate
-				+ ", gfsReference=" + gfsReference + ", gfsDate=" + gfsDate + ", globalIndicator=" + globalIndicator
-				+ ", focusDate=" + focusDate + ", sellable=" + sellable + ", minStay=" + minStay + ", maxStay="
-				+ maxStay + ", advancePurchase=" + advancePurchase + ", dowIn=" + dowIn + ", dowOut=" + dowOut
-				+ ", season=" + season + ", dayOfWeekType=" + dayOfWeekType + ", travelDateRanges=" + travelDateRanges
-				+ ", fareType=" + fareType + ", paxType=" + paxType + ", wpObjectId=" + wpObjectId + ", wpId=" + wpId
-				+ ", wpName=" + wpName + ", tourCode=" + tourCode + ", cat50Title=" + cat50Title + ", groupFare="
-				+ groupFare + ", refAmount=" + refAmount + ", refYqyr=" + refYqyr + ", refTaxes=" + refTaxes
-				+ ", refTfc=" + refTfc + ", refAif=" + refAif + ", firstSeasonDate=" + firstSeasonDate
-				+ ", lastSeasonDate=" + lastSeasonDate + ", seasonDates=" + seasonDates + ", firstTravelDate="
-				+ firstTravelDate + ", lastTravelDate=" + lastTravelDate + ", travelDates=" + travelDates
-				+ ", firstSaleDate=" + firstSaleDate + ", lastSaleDate=" + lastSaleDate + ", firstResDate="
-				+ firstResDate + ", lastResDate=" + lastResDate + ", saleDates=" + saleDates + "]";
 	}
 }

@@ -23,9 +23,14 @@
         vm.showTariffModal = showTariffModal;
         vm.showCarrierModal = showCarrierModal;
         
+        vm.showLegend = showLegend;
+        vm.viewFullText = viewFullText;
+        
         vm.datePickerOpenStatus = {};
         vm.dateFormat = "yyyy-MM-dd";
         vm.openCalendar = openCalendar;
+        
+        vm.showCategoryDetail = showCategoryDetail;
         
         vm.openTooltip = true;
         
@@ -75,18 +80,20 @@
         }
         
         function getRules2(ruleQuery) {
+        	vm.isLoadingRule = true;
         	RuleQuery.getRules2(ruleQuery, function(data) {
         		vm.ruleQueryCategories2 = data;
+        		console.log(vm.ruleQueryCategories2);
+        		vm.isLoadingRule = false;
         	}, function(error) {
         		console.log(error);
+        		vm.isLoadingRule = false;
         	});
         }        
         
         function showDetail() {
         	$("#tblDetail").show();
         	$("#tblDetail").focus();
-        	$("#tblDetail").css("display","block");
-        	$("#tblDetail").css("max-height","440px");
         	$("#ruleCategories").show();
         	
         }
@@ -137,22 +144,24 @@
         }
         
         function showCategoryDetail(category) {
-        	$uibModal.open({
-                templateUrl: 'app/pages/modals/category-modal.html',
-                controller: 'CategoryModalController',
-                controllerAs: 'vm',
-                backdrop: 'static',
-                size: 'lg',
-                windowClass: 'full',
-                resolve: {
-                    entity: category
-                }
-            }).result.then(function() {
-                $state.go('rule-queries', {}, { reload: false });
-            }, function() {
-                $state.go('rule-queries');
-            });
-        }
+			$uibModal.open({
+				templateUrl : 'app/pages/modals/category-modal.html',
+				controller : 'CategoryModalController',
+				controllerAs : 'vm',
+				backdrop : 'static',
+				size : 'lg',
+				windowClass : 'full',
+				resolve : {
+					entity : category
+				}
+			}).result.then(function() {
+				$state.go('rule-queries', {}, {
+					reload : false
+				});
+			}, function() {
+				$state.go('rule-queries');
+			});
+		}
         
         function showTariffModal() {
         	$uibModal.open({
@@ -182,6 +191,40 @@
                 windowClass: 'full',
                 resolve: {
                 	entity: vm
+                }
+            }).result.then(function() {
+                $state.go('rule-queries', {}, { reload: false });
+            }, function() {
+                $state.go('rule-queries');
+            });
+        }
+        
+        function showLegend() {
+        	$uibModal.open({
+                templateUrl: 'app/pages/modals/legend-modal.html',
+                controller: 'LegendModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'md'
+            }).result.then(function() {
+                $state.go('rule-queries', {}, { reload: false });
+            }, function() {
+                $state.go('rule-queries');
+            });
+        }
+        
+        function viewFullText() {
+        	$uibModal.open({
+                templateUrl: 'app/pages/modals/full-text-modal.html',
+                controller: 'FullTextModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full',
+                resolve: {
+                    entity: {
+                    	categories: vm.ruleQueryCategories2
+                    }
                 }
             }).result.then(function() {
                 $state.go('rule-queries', {}, { reload: false });

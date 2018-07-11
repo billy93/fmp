@@ -66,6 +66,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.atibusinessgroup.fmp.domain.AtpcoMasterTariff;
 import com.atibusinessgroup.fmp.domain.TariffNumber;
 import com.atibusinessgroup.fmp.domain.User;
 import com.atibusinessgroup.fmp.domain.WorkPackage;
@@ -81,9 +82,9 @@ import com.atibusinessgroup.fmp.domain.WorkPackageFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
 import com.atibusinessgroup.fmp.domain.WorkPackageHistory;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
-import com.atibusinessgroup.fmp.domain.enumeration.PackageType;
 import com.atibusinessgroup.fmp.domain.enumeration.Status;
 import com.atibusinessgroup.fmp.repository.AtpcoFareRepository;
+import com.atibusinessgroup.fmp.repository.AtpcoMasterTariffRepository;
 import com.atibusinessgroup.fmp.repository.ContractFMPRepository;
 import com.atibusinessgroup.fmp.repository.ContractFareFMPRepository;
 import com.atibusinessgroup.fmp.repository.CounterRepository;
@@ -327,6 +328,8 @@ public class WorkPackageResource {
     public ResponseEntity<WorkPackage> reuseWorkPackage(@RequestBody WorkPackage wp) throws URISyntaxException {
         log.debug("REST request to save reuse WorkPackage : {}", wp);
        
+        String tempId = wp.getWpid();
+        
         wp.setReuseFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
@@ -381,6 +384,16 @@ public class WorkPackageResource {
         	}
         }
 
+        Comment flagComment = new Comment();
+        flagComment.setComment("This workpackage was reused from Workpackage "+tempId); 
+        flagComment.setCreatedTime(ZonedDateTime.now());
+        flagComment.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        
+        List<Comment> comment = new ArrayList<>();
+        comment.add(flagComment);
+        
+        
+        wp.setComment(comment);
         wp.setStatus(Status.NEW);
         wp.setQueuedDate(Instant.now());
 
@@ -410,6 +423,8 @@ public class WorkPackageResource {
     public ResponseEntity<WorkPackage> replaceWorkPackage(@RequestBody WorkPackage wp) throws URISyntaxException {
         log.debug("REST request to save reuse WorkPackage : {}", wp);
        
+        String tempId = wp.getWpid();
+        
         wp.setReplaceFrom(wp.getWpid());
         wp.setId(null);
         wp.setWpid(null);
@@ -465,6 +480,16 @@ public class WorkPackageResource {
         	}
         }
 
+        Comment flagComment = new Comment();
+        flagComment.setComment("This workpackage was reused from Workpackage "+tempId); 
+        flagComment.setCreatedTime(ZonedDateTime.now());
+        flagComment.setUsername(SecurityUtils.getCurrentUserLogin().get());
+        
+        List<Comment> comment = new ArrayList<>();
+        comment.add(flagComment);
+        
+        
+        wp.setComment(comment);
         wp.setStatus(Status.NEW);
         wp.setQueuedDate(Instant.now());
 
@@ -612,7 +637,7 @@ public class WorkPackageResource {
                 List<Object> value = entry.getValue();
 
                 int i=0;
-                TariffNumber tfNumber = new TariffNumber();
+                AtpcoMasterTariff tfNumber = new AtpcoMasterTariff();
                 for(Object o : value) {
                 	if(header.contentEquals("Status")) {
                 		fares.get(i).setStatus("PENDING");
@@ -782,7 +807,7 @@ public class WorkPackageResource {
                 List<Object> value = entry.getValue();
 
                 int i=0;
-                TariffNumber tfNumber = new TariffNumber();
+                AtpcoMasterTariff tfNumber = new AtpcoMasterTariff();
                 for(Object o : value) {
                 	if(header.contentEquals("Status")) {
                 		fares.get(i).setStatus("PENDING");
@@ -944,7 +969,7 @@ public class WorkPackageResource {
                    List<Object> value = entry.getValue();
 
                    int i=0;
-                   TariffNumber tfNumber = new TariffNumber();
+                   AtpcoMasterTariff tfNumber = new AtpcoMasterTariff();
                    for(Object o : value) {
                    	if(header.contentEquals("Status")) {
                    		fares.get(i).setStatus("PENDING");
@@ -1067,7 +1092,7 @@ public class WorkPackageResource {
                 List<Object> value = entry.getValue();
 
                 int i=0;
-                TariffNumber tfNumber = new TariffNumber();
+                AtpcoMasterTariff tfNumber = new AtpcoMasterTariff();
                 for(Object o : value) {
                 	if(header.contentEquals("Status")) {
                 		fares.get(i).setStatus("PENDING");
@@ -1222,7 +1247,7 @@ public class WorkPackageResource {
                 List<Object> value = entry.getValue();
 
                 int i=0;
-                TariffNumber tfNumber = new TariffNumber();
+                AtpcoMasterTariff tfNumber = new AtpcoMasterTariff();
                 for(Object o : value) {
                 	if(header.contentEquals("Type")) {
                 		fares.get(i).setWaiverType(String.valueOf(o));
@@ -4081,7 +4106,7 @@ public class WorkPackageResource {
 					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
-							if(wpfs.getWaiverAgentName() == null || wpfs.getWaiverAgentName().contentEquals("")) {
+							if(fare.getWaiverAgentName() == null || fare.getWaiverAgentName().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Agent Name is required");
@@ -4089,7 +4114,7 @@ public class WorkPackageResource {
 					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
-							if(wpfs.getWaiverIataNo() == null || wpfs.getWaiverIataNo().contentEquals("")) {
+							if(fare.getWaiverIataNo() == null || fare.getWaiverIataNo().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("IATA No is required");
@@ -4210,7 +4235,7 @@ public class WorkPackageResource {
 					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
-							if(wpfs.getWaiverAgentName() == null || wpfs.getWaiverAgentName().contentEquals("")) {
+							if(fare.getWaiverAgentName() == null || fare.getWaiverAgentName().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("Agent Name is required");
@@ -4218,7 +4243,7 @@ public class WorkPackageResource {
 					    		err1.setIndex(index+"");
 					    		errors.add(err1);
 							}
-							if(wpfs.getWaiverIataNo() == null || wpfs.getWaiverIataNo().contentEquals("")) {
+							if(fare.getWaiverIataNo() == null || fare.getWaiverIataNo().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 					    		err1.setMessage("IATA No is required");

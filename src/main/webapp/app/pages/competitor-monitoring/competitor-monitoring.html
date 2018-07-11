@@ -9,7 +9,7 @@
 			<div class="filter-area">
 				<div class="clearfix">
 					<form name="queryForm" role="form" novalidate>
-						<div class="col-md-4">
+						<div class="col-md-3">
 							<div class="form-group">
 								<div class="custom-label semibold">Carrier</div>
 								<input type="text" class="form-control" name="carrier"
@@ -30,7 +30,7 @@
 							</div>
 						</div>
 						
-						<div class="col-md-4">
+						<div class="col-md-3">
 							<div class="form-group">
 								<div class="custom-label semibold">Rule No</div>
 								<input type="text" class="form-control" name="ruleNo"
@@ -38,29 +38,33 @@
 									uppercase />
 							</div>
 							<div class="form-group">
-								<div class="custom-label semibold">Source</div>
-								<select class="form-control" name="gaFareType" id="gaFareType"
-									ng-disabled="vm.queryParams.source != 'M'"
-									ng-model="vm.queryParams.gaFareType">
-									<option value="{{value}}"
-										ng-repeat="value in vm.gaFareTypes track by $index">{{value}}</option>
-								</select>
+									<div class="custom-label semibold">Source</div>
+									<select class="form-control" name="source" id="source" ng-init="vm.queryParams.source = 'A'" ng-model="vm.queryParams.source">
+										<option value="{{value.key}}" ng-repeat="value in vm.sources track by $index">{{value.value}}</option>
+									</select>
 							</div>
 							<div class="form-group">
-								<div class="custom-label semibold">FBC</div>
+								<div class="custom-label semibold">Fare Basis</div>
 								<input type="text" class="form-control" name="fareBasis"
 									id="fareBasis" ng-model="vm.queryParams.fareBasis" />
 							</div>
 						</div>
 						
-						<div class="col-md-4">
+						<div class="col-md-6">
+							<div class="form-group mb0">
+								<div class="form-group">
+									<div class="custom-label semibold">Public/Private</div>
+									<select class="form-control" name="publicPrivate" id="publicPrivate" ng-model="vm.queryParams.publicPrivate">
+										<option value="{{value.key}}" ng-repeat="value in vm.publicPrivate track by $index">{{value.value}}</option>
+									</select>
+								</div>
+							</div>
 							<div class="form-group mb0">
 								<div class="custom-label semibold">Travel Date</div>
 								<div class="row no-mar">
 									<div class="col-md-4 no-lpad">
 										<input type="text" class="form-control"
 											ng-click="vm.openCalendar($event, 'travelDateFrom')"
-											ng-disabled="true"
 											is-open="vm.datePickerOpenStatus['travelDateFrom']"
 											datetime-picker="{{vm.dateFormat}}" enable-time="false"
 											name="travelDateFrom" id="datepicker"
@@ -69,7 +73,6 @@
 									<div class="col-md-4 no-lpad">
 										<input type="text" class="form-control"
 											ng-click="vm.openCalendar($event, 'travelDateTo')"
-											ng-disabled="true"
 											is-open="vm.datePickerOpenStatus['travelDateTo']"
 											datetime-picker="{{vm.dateFormat}}" enable-time="false"
 											name="travelDateTo" id="datepicker"
@@ -79,7 +82,7 @@
 										<select class="form-control" name="travelDateOption"
 											id="travelDateOption"
 											ng-init="vm.queryParams.travelDateOption = vm.dateOptions[0].key"
-											ng-model="vm.queryParams.travelDateOption" ng-disabled="true">
+											ng-model="vm.queryParams.travelDateOption">
 											<option value="{{value.key}}"
 												ng-repeat="value in vm.dateOptions track by $index">{{value.value}}</option>
 										</select>
@@ -92,7 +95,6 @@
 									<div class="col-md-4 no-lpad">
 										<input type="text" class="form-control"
 											ng-click="vm.openCalendar($event, 'saleDateFrom')"
-											ng-disabled="true"
 											is-open="vm.datePickerOpenStatus['saleDateFrom']"
 											datetime-picker="{{vm.dateFormat}}" enable-time="false"
 											name="saleDateFrom" id="datepicker"
@@ -101,7 +103,6 @@
 									<div class="col-md-4 no-lpad">
 										<input type="text" class="form-control"
 											ng-click="vm.openCalendar($event, 'saleDateTo')"
-											ng-disabled="true"
 											is-open="vm.datePickerOpenStatus['saleDateTo']"
 											datetime-picker="{{vm.dateFormat}}" enable-time="false"
 											name="saleDateTo" id="datepicker"
@@ -111,7 +112,7 @@
 										<select class="form-control" name="saleDateOption"
 											id="saleDateOption"
 											ng-init="vm.queryParams.saleDateOption = vm.dateOptions[0].key"
-											ng-model="vm.queryParams.saleDateOption" ng-disabled="true">
+											ng-model="vm.queryParams.saleDateOption">
 											<option value="{{value.key}}"
 												ng-repeat="value in vm.dateOptions track by $index">{{value.value}}</option>
 										</select>
@@ -125,8 +126,9 @@
 											name="includeConstructed"
 											ng-model="vm.queryParams.includeConstructed"
 											ng-disabled="true"> Calculate TFC
-										</label> <label> <input type="checkbox" name="appendResults"
-											ng-model="vm.queryParams.appendResults" ng-disabled="true">
+										</label> 
+										<label> <input type="checkbox" name="appendResults"
+											ng-model="vm.queryParams.appendResults" disabled="true">
 											Lowest level only
 										</label>
 									</div>
@@ -135,14 +137,16 @@
 						</div>
 						<div class="col-md-12 clearfix">
 							<div class="pull-right pv1">
-								<button type="reset" ng-click="vm.reset()"
-									class="btn btn-default small mb1">Reset</button>
-								<button type="button" class="btn btn-default small mb1"
-									ng-click="vm.generateGraph(vm.compMonitoring)"
-									ng-disabled="vm.compMonitoring.length == 0 || vm.compMonitoring.length == null">Generate
-									Chart</button>
+								
 								<button type="button" class="btn btn-default small mb1"
 									ng-click="vm.loadAll()">Query</button>
+								<button type="button" class="btn btn-default small mb1"
+									ng-click="vm.generateGraph(vm.tempData)"
+									ng-disabled="vm.compMonitoring.length == 0 || vm.compMonitoring.length == null">Generate
+									Chart</button>
+								<button type="reset" ng-click="vm.reset()"
+									class="btn btn-default small mb1">Reset</button>
+								
 							</div>
 						</div>
 					</form>
@@ -150,7 +154,7 @@
 			</div>
 		</div>
 
-		<div class="table-wrapper" ng-if="vm.compMonitoring">
+		<div class="table-wrapper" ng-if="vm.tempData.length > 0">
 			<div class="datatable-wrapper form-inline">
 				<div class="table-responsive">
 					<table class="table table-striped table-bordered datatable">
@@ -183,23 +187,22 @@
 							</tr>
 						</thead>
 						<tbody
-							ng-repeat="afdQuery in vm.compMonitoring track by afdQuery.atpcoFareId">
+							ng-repeat="afdQuery in vm.compMonitoring track by afdQuery.fareId">
 							<tr ng-click="vm.selectedRow = afdQuery;"
 								ng-class="{'selected': vm.selectedRow == afdQuery}">
-								<td><a ui-sref="system-parameter-detail({id:afdQuery.id})">{{$index
-										+ 1}}</a></td>
+								<td><a ui-sref="system-parameter-detail({id:afdQuery.id})">{{($index + 1)+((vm.page-1)*vm.itemsPerPage) }}</a></td>
 								<td>{{afdQuery.carrierCode}}</td>
 								<td>{{afdQuery.originCity}}-{{afdQuery.destinationCity}}</td>
-								<td><span ng-if="afdQuery.travelStartDate != 'indef'">{{afdQuery.travelStartDate
+								<td><span ng-if="afdQuery.travelStartDate != 'indef'">{{afdQuery.firstTravelDate
 										| date:'ddMMMyyyy'}}</span></td>
-								<td><span ng-if="afdQuery.travelEndDate != 'indef'">{{afdQuery.travelEndDate
+								<td><span ng-if="afdQuery.travelEndDate != 'indef'">{{afdQuery.lastTravelDate
 										| date:'ddMMMyyyy'}}</span></td>
-								<td><span ng-if="afdQuery.saleStartDate != 'indef'">{{afdQuery.saleStartDate
+								<td><span ng-if="afdQuery.saleStartDate != 'indef'">{{afdQuery.firstSaleDate
 										| date:'ddMMMyyyy'}}</span></td>
-								<td><span ng-if="afdQuery.saleEndDate != 'indef'">{{afdQuery.saleEndDate
+								<td><span ng-if="afdQuery.saleEndDate != 'indef'">{{afdQuery.lastSaleDate
 										| date:'ddMMMyyyy'}}</span></td>
 								<td>{{afdQuery.cabin}}</td>
-								<td>{{afdQuery.bookingClass}}</td>
+								<td><span ng-repeat="value in afdQuery.bookingClass track by $index">{{value}}<span ng-if="$index < afdQuery.bookingClass.length - 1">, </span></span></td>
 								<td><span ng-if="afdQuery.owrt == '1'">OW</span><span
 									ng-if="afdQuery.owrt == '2'">RT</span><span
 									ng-if="afdQuery.owrt == '3'">OO</span></td>
@@ -238,52 +241,29 @@
 		<!--       		</div> -->
 		<!--    		</div> -->
 
-		<div class="text-center" ng-if="vm.compMonitoring">
+		<div class="text-center" ng-if="vm.tempData.length > 0">
 			<jhi-item-count page="vm.page" total="vm.queryCount"
 				items-per-page="vm.itemsPerPage"></jhi-item-count>
 			<uib-pagination class="pagination-sm" total-items="vm.totalItems"
 				items-per-page="vm.itemsPerPage" ng-model="vm.page"
-				ng-change="vm.loadAll()"></uib-pagination>
+				ng-change="vm.getNextPage()"></uib-pagination>
 			<br/>
 		<br/>
 		
-		<div id="chartOptions" class="form-inline" hidden="hidden">
-           
+		<div id="chartOptions" class="form-inline" hidden="hidden" ng-if="vm.tempData.length > 0">  
            <div class="form-group" style="margin-left:10px; margin-bottom:10px; !important">
             <label for="barThickness">Bar Thickness : </label>
-            <select class="form-control" id="barThickness" style="width:100px;">
-              <option value="0.01">1</option>
-              <option value="0.02">2</option>
-              <option value="0.03">3</option>
-              <option value="0.04">4</option>
-              <option value="0.05">5</option>
-              <option value="0.06">6</option>
-              <option value="0.07">7</option>
-              <option value="0.08">8</option>
-              <option value="0.09">9</option>
-              <option value="0.1">10</option>
-            </select>
+           <input id="barThickness" ng-model="vm.barThickness" type="text" class="number-only"></input>
           </div> 
 
           <div class="form-group" style="margin-left:10px; margin-bottom:10px; !important">
             <label for="barOpacity">Bar Opacity : </label>
-            <select class="form-control" id="barOpacity" style="width:100px;">
-              <option value="0.06">1</option>
-              <option value="0.07">2</option>
-              <option value="0.08">3</option>
-              <option value="0.09">4</option>
-              <option value="0.1">5</option>
-              <option value="0.2">6</option>
-              <option value="0.3">7</option>
-              <option value="0.4">8</option>
-              <option value="0.5">9</option>
-              <option value="0.6">10</option>
-            </select>
+           <input id="barOpacity" ng-model="vm.barOpacity" type="text" class="number-only"></input>
           </div> 
           
           <div class="form-group" style="margin-left:10px; margin-bottom:10px; !important">
           
-            <button type="button" class="btn btn-default small" ng-click="vm.generateGraph(vm.compMonitoring)">Re-Generate</button>
+            <button type="button" class="btn btn-default small" ng-click="vm.generateGraph(vm.tempData)">Re-Generate</button>
             </div>
         </div>
       
@@ -295,6 +275,6 @@
 <!-- 				ng-change="vm.loadAll()"></uib-pagination> -->
 		</div>
 		
-		<div id="container" class="col-md-12 no-pad" style="height:600px;" hidden="hidden"></div>
+		<div id="container" class="col-md-12 no-pad" style="height:600px;" hidden="hidden" ng-if="vm.tempData.length > 0"></div>
 	</div>
 </div>

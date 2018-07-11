@@ -1,0 +1,36 @@
+
+<style>
+	.page-wrapper .page-content {
+		padding-bottom: 60px;
+	}
+</style>
+
+<div class="content-title">
+	<h2>AFD Query</h2>
+	<jhi-alert></jhi-alert>
+</div>
+<div class="panel">
+	<div class="tab-wrapper">
+		<div class="clearfix tab-body">
+			<ul class="clearfix nav-responsive nav nav-tabs">
+				<li ng-class="{active:vm.tab == 1}"><a
+					ng-click="vm.tab = 1">Specified & Constructed</a></li>
+				<li ng-class="{active:vm.tab == 2}"><a
+					ng-click="vm.tab = 2">Add-Ons</a></li>
+				<li ng-class="{active:vm.tab == 3}"><a
+					ng-click="vm.tab = 3">FBR Query</a></li>
+			</ul>
+			<div class="tab-content">
+				<div ng-class="{active:vm.tab == 1}" class="tab-pane" id="specifiedConstructed">
+					<div ui-view="specified-constructed" ng-if="vm.tab == 1"></div>
+				</div>
+				<div ng-class="{active:vm.tab == 2}" class="tab-pane" id="addOns">
+					<div ui-view="add-ons" ng-if="vm.tab == 2"></div>
+				</div>
+				<div ng-class="{active:vm.tab == 3}" class="tab-pane" id="fbrQuery">
+					<div ui-view="fbr-query" ng-if="vm.tab == 3"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div

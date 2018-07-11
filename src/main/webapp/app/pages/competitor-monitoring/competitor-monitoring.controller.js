@@ -28,27 +28,31 @@
 		vm.showCategoryDetail = showCategoryDetail;
 		vm.showLegend = showLegend;
 		vm.viewFullText = viewFullText;
+		
+		vm.getNextPage = getNextPage;
 
 		vm.reset = reset;
 		vm.page = 1;
+		
+		vm.barThickness = 8;
+		vm.barOpacity = 1;
 
 		vm.datePickerOpenStatus = {};
 		vm.dateFormat = "yyyy-MM-dd";
 		vm.openCalendar = openCalendar;
+		
+		vm.checkValidParameters = checkValidParameters;
+		
+		vm.compMonitoring = null;
+		
+		vm.tempData = [];
 
-		vm.sources = [ {
-			key : "",
-			value : "Select Source"
-		}, {
-			key : "A",
-			value : "A - ATPCO"
-		}, {
-			key : "M",
-			value : "M - Market"
-		}, {
-			key : "W",
-			value : "W - Web"
-		}, ]
+		vm.sources = [
+        	{key: "A", value: "A - ATPCO"},
+        	{key: "M", value: "M - Market"},
+        	{key: "W", value: "W - Web"},
+        	{key: "C", value: "C - Competitor Private"}
+        ]
 
 		vm.publicPrivate = [ {
 			key : "",
@@ -96,18 +100,28 @@
 		vm.paxTypes = "?";
 
 		vm.cabins = "?";
+		
+		vm.infoMessage = null;
+		vm.showErrorModal = showErrorModal;
 
 		// vm.loadAll();
 		
 		function loadAll() {
+			
+			vm.infoMessage = vm.checkValidParameters();
+    		
+    		if (vm.infoMessage != 'Valid') {
+        		vm.showErrorModal(vm.infoMessage);
+        		return;
+        	}
+    		
 			vm.categoryRules = null;
 			vm.currentCompetitorMonitoring = null;
+			vm.tempData = [];
 
-			vm.queryParams.page = vm.page - 1;
+			vm.page = 1;
+			vm.queryParams.page = vm.page-1;
         	vm.queryParams.size = vm.itemsPerPage;
-
-//			vm.checkRuleNoGA();
-//			vm.splitOrigDest(vm.queryParams.origDest);
 			
 			CompetitorMonitoring.query(vm.queryParams, onSuccess, onError);
 			
@@ -116,10 +130,10 @@
 				vm.links = ParseLinks.parse(headers('link'));
 				vm.totalItems = headers('X-Total-Count');
 				vm.queryCount = vm.totalItems;
-				vm.compMonitoring = data;
+				vm.tempData = data;
+				vm.getNextPage();
 				vm.graphEnabled = isDisabled();
 				
-				console.log(data);
 			}
 
 			function onError(error) {
@@ -138,7 +152,7 @@
 				CompetitorMonitoring.getRules(compMonitoring, function(data) {
 					vm.categoryRules = data;
 					vm.currentCompetitorMonitoring = compMonitoring;
-					// console.log(vm.categoryRules);
+					
 				}, function(error) {
 					console.log(error);
 				});
@@ -149,7 +163,6 @@
 				vm.queryParams.page = 0;
 				vm.queryParams.size = vm.totalItems;
 				CompetitorMonitoring.getChartData(vm.queryParams, function(data) {
-//				console.log(data);
 					vm.generateGraph(data);
 				}, function(error) {
 					console.log(error);
@@ -170,47 +183,50 @@
 			$('#chartOptions').hide();
 			vm.compMonitoring = null;
 			vm.queryParams = {
-				carrier : null,
-				source : null,
-				publicPrivate : null,
-				tariff : null,
-				globalIndicator : null,
-				gaFareType : null,
-				fareType : null,
-				fareBasis : null,
-				origin : null,
-				destination : null,
-				owrt : null,
-				footnote : null,
-				ruleNo : null,
-				routingNo : null,
-				woId : null,
-				effectiveDateFrom : null,
-				effectiveDateTo : null,
-				effectiveDateOption : null,
-				saleDateFrom : null,
-				saleDateTo : null,
-				saleDateOption : null,
-				travelDateFrom : null,
-				travelDateTo : null,
-				travelDateOption : null,
-				seasonDateFrom : null,
-				seasonDateTo : null,
-				seasonDateOption : null,
-				amountRange : null,
-				tourCode : null,
-				paxType : null,
-				cabin : null,
-				bookingClass : null,
-				advancePurchase : null,
-				minStay : null,
-				maxStay : null,
-				includeConstructed : false,
-				appendResults : false,
-				biDirectional : false,
-				calculateTfc : false
-			}
+	        		carrier: null,
+	        		source: vm.sources[0].key,
+	        		publicPrivate: null,
+	        		tariff: null,
+	        		globalIndicator: null,
+	        		gaFareType: null,
+	        		fareType: null,
+	        		fareBasis: null,
+	        		origin: null,
+	        		destination: null,
+	        		owrt: null,
+	        		footnote: null,
+	        		ruleNo: null,
+	        		routingNo: null,
+	        		woId: null,
+	        		effectiveDateFrom: null,
+	        		effectiveDateTo: null,
+	        		effectiveDateOption: vm.dateOptions[0].key,
+	        		saleDateFrom: null,
+	        		saleDateTo: null,
+	        		saleDateOption: vm.dateOptions[0].key,
+	        		travelDateFrom: null,
+	        		travelDateTo: null,
+	        		travelDateOption: vm.dateOptions[0].key,
+	        		seasonDateFrom: null,
+	        		seasonDateTo: null,
+	        		seasonDateOption: vm.dateOptions[0].key,
+	        		amountRange: null,
+	        		tourCode: null,
+	        		paxType: null,
+	        		cabin: null,
+	        		bookingClass: null,
+	        		advancePurchase: null,
+	        		minStay: null,
+	        		maxStay: null,
+	        		includeConstructed: false,
+	        		appendResults: false,
+	        		biDirectional: false,
+	        		calculateTfc: false
+	        	}
 
+			vm.tempData = [];
+			vm.barThickness = 8;
+			vm.barOpacity = 1;
 //			vm.loadAll();
 		}
 
@@ -297,15 +313,10 @@
 
 				$('#container').show();
 				$('#chartOptions').show();
-				
-				$('#barThickness option[value="0.04"]').attr("selected",true);
-				$('#barOpacity option[value="0.1"]').attr("selected",true);
-			  	
 				var fares = data;
-				console.log(fares);
 			  
-			      var barThickness = $('#barThickness').val();;
-			      var barOpacity = $('#barOpacity').val();;
+			      var barThickness = vm.barThickness/100;
+			      var barOpacity = vm.barOpacity/10;
 			      
 			      var totalData = fares.length;
 			      var items = [];
@@ -321,6 +332,8 @@
 			      var catLogo = [];
 			      var catWidth = $('#container').width/categories.length;
 			      var cabColor = '';
+			      var min = 0;
+	        	  var minTemp = 0;
 			    
 			      
 			    for(var j=0;j<categories.length;j++) {
@@ -340,18 +353,19 @@
 			          }
 			          
 			          if(fares[k].cabin != undefined || fares[k].cabin != null) {
+			        	
 			        	  var lowVal = parseFloat(String(amt))-(parseFloat(String(amt))*parseFloat(String(barThickness)));
 				           dataGraph.push({'x':j,'name':fares[k].cabin,'bookingClass':fares[k].bookingClass,'color':cabColor,'high':amt,'low':lowVal});
 			          }
 			        }
 			    }
+			      
 			      var objCat = {'name':categories[j], 'data':dataGraph};
 			      dataGroup.push(objCat);
+			      
 			    }
-			
-
-			  console.log(dataGroup);
-			  
+			    
+						  
 			  
 			  var chartOptions = {
 			          chart : {
@@ -400,7 +414,7 @@
 			            enabled : true,
 			            useHTML: true,
 			            formatter: function() {
-			              return '<span>price : '+this.point.high+'</span> <br/> <span>cabin : '+this.point.name+'</span> </br> <span>class : '+this.point.bookingClass+'</span>';
+			              return '<span>price : '+this.point.high+'</span> <br/> <span>cabin : '+this.point.name+'</span> </br> <span>RBD : '+this.point.bookingClass+'</span>';
 			
 			          }
 			          },
@@ -423,6 +437,60 @@
 	              chart1.redraw();
       
 		}
+		
+		function getNextPage() {
+			
+			vm.compMonitoring = vm.tempData.slice((vm.page-1)*vm.itemsPerPage, (vm.page)*vm.itemsPerPage);
+			
+		}
+		
+		function checkValidParameters() {
+			var msg = "Error: One set of the following is required.\n\tCarrier and Origin-Destination\n\tCarrier and Fare Basis\n";
+			
+        	if ((vm.queryParams.carrier != null && vm.queryParams.carrier != '' && vm.queryParams.origin != null && vm.queryParams.origin != '') ||
+        		(vm.queryParams.origin != null && vm.queryParams.fareBasis != null && vm.queryParams.origin != '' && vm.queryParams.fareBasis != '') ||
+        		(vm.queryParams.carrier != null && vm.queryParams.fareBasis != null && vm.queryParams.carrier != '' && vm.queryParams.fareBasis != '')) {
+        		var x = vm.queryParams.carrier.indexOf(",");
+    			var y = vm.queryParams.origin.indexOf("-");
+    			
+    			if((x > -1) && (y > -1)) {
+    				var cxr2 = vm.queryParams.carrier.charAt(x+1);
+    				var orig2 = vm.queryParams.origin.substr(y+1);
+    				
+    				if((cxr2 != null && cxr2 != "") && (orig2 != null && orig2 != "")) {
+    					msg =  'Valid';
+    				}
+    				else {
+    					msg = "Error: One set of the following is required.\n\t2 Carriers are required\n\tDestination is required\n";
+    				}
+    				
+    			} else {
+    				msg = "Error: One set of the following is required.\n\t2 Carriers are required\n\tDestination is required\n";
+    			}
+        		
+        	}
+        	
+        	return msg;
+        }
+		
+		function showErrorModal(message) {
+        	$uibModal.open({
+                templateUrl: 'app/pages/modals/info-modal.html',
+                controller: 'InfoModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'md',
+                resolve: {
+                    entity: {
+                    	message: message
+                    }	
+                }
+            }).result.then(function() {
+                $state.go('competitor-monitoring', {}, { reload: false });
+            }, function() {
+                $state.go('competitor-monitoring');
+            });
+        }
 
 	}
 })();

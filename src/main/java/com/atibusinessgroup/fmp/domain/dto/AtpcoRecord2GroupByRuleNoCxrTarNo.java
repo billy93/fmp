@@ -4,49 +4,67 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 public class AtpcoRecord2GroupByRuleNoCxrTarNo {
 	
-	@Field("rule_tar_no")
-    private String ruleTariffNo;
+	@Field("tarNo")
+    private String tarNo;
 	
-	@Field("cxr_code")
-    private String carrierCode;
+	@Field("cxr")
+    private String cxr;
 	
-	@Field("rule_no")
+	@Field("ruleNo")
     private String ruleNo;
 	
-	@Field("type")
-    private String type;
+	@Field("tarCd")
+    private String tarCd;
 	
-	public String getRuleTariffNo() {
-		return ruleTariffNo;
+	@Field("total")
+    private String total;
+
+	public String getTarNo() {
+		return tarNo;
 	}
-	public void setRuleTariffNo(String ruleTariffNo) {
-		this.ruleTariffNo = ruleTariffNo;
+
+	public void setTarNo(String tarNo) {
+		this.tarNo = tarNo;
 	}
-	public String getCarrierCode() {
-		return carrierCode;
+
+	public String getCxr() {
+		return cxr;
 	}
-	public void setCarrierCode(String carrierCode) {
-		this.carrierCode = carrierCode;
+
+	public void setCxr(String cxr) {
+		this.cxr = cxr;
 	}
+
 	public String getRuleNo() {
 		return ruleNo;
 	}
+
 	public void setRuleNo(String ruleNo) {
 		this.ruleNo = ruleNo;
 	}
-	public String getType() {
-		return type;
+
+	public String getTarCd() {
+		return tarCd;
 	}
-	public void setType(String type) {
-		this.type = type;
+
+	public void setTarCd(String tarCd) {
+		this.tarCd = tarCd;
 	}
-	
+
+	public String getTotal() {
+		return total;
+	}
+
+	public void setTotal(String total) {
+		this.total = total;
+	}
+
 	@Override
 	public String toString() {
-		return "AtpcoRecord2GroupByRuleNoCxrTarNo [ruleTariffNo=" + ruleTariffNo + ", carrierCode=" + carrierCode
-				+ ", ruleNo=" + ruleNo + ", type=" + type + "]";
+		return "AtpcoRecord2GroupByRuleNoCxrTarNo [tarNo=" + tarNo + ", cxr=" + cxr + ", ruleNo=" + ruleNo + ", tarCd="
+				+ tarCd + ", total=" + total + "]";
 	}
-    
+	
 	
 	
 	

@@ -29,19 +29,23 @@ import org.springframework.stereotype.Service;
 
 import com.atibusinessgroup.fmp.constant.CategoryName;
 import com.atibusinessgroup.fmp.constant.CollectionName;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoAddOn;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFootnoteRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord1;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2Cat10;
-import com.atibusinessgroup.fmp.domain.dto.AfdQuery;
+import com.atibusinessgroup.fmp.domain.dto.AddOnParam;
+import com.atibusinessgroup.fmp.domain.dto.AddOnsWrapper;
+import com.atibusinessgroup.fmp.domain.dto.AfdQueryAddOns;
 import com.atibusinessgroup.fmp.domain.dto.AfdQueryParam;
-import com.atibusinessgroup.fmp.domain.dto.AfdQueryWrapper;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFareAfdQueryWithRecords;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.CategoryObject;
 import com.atibusinessgroup.fmp.domain.dto.DataTable;
+import com.atibusinessgroup.fmp.domain.dto.SpecifiedConstructed;
+import com.atibusinessgroup.fmp.domain.dto.SpecifiedConstructedWrapper;
 import com.atibusinessgroup.fmp.service.AtpcoRecordService;
 import com.atibusinessgroup.fmp.service.mapper.AfdQueryMapper;
 import com.atibusinessgroup.fmp.service.util.DateUtil;
@@ -66,10 +70,10 @@ public class AtpcoFareCustomRepository {
 		maximumDate = DateUtil.getMinOrMaxDate("Max");
 	}
 	
-	public AfdQueryWrapper findAtpcoFareAfdQueryWithRecords(AfdQueryParam param, Pageable pageable) {
-		AfdQueryWrapper result = new AfdQueryWrapper();
+	public SpecifiedConstructedWrapper findAtpcoFareAfdQueryWithRecords(AfdQueryParam param, Pageable pageable) {
+		SpecifiedConstructedWrapper result = new SpecifiedConstructedWrapper();
 		
-		List<AfdQuery> afdQueries = new ArrayList<>();
+		List<SpecifiedConstructed> afdQueries = new ArrayList<>();
 		
 		LinkedHashMap<String, String> fareCategories = new LinkedHashMap<>();
 		LinkedHashMap<String, String> fareFootnotes = new LinkedHashMap<>();
@@ -494,7 +498,7 @@ public class AtpcoFareCustomRepository {
                 	}
             	}
             	
-            	AfdQuery afdQuery = afdQueryMapper.convertAtpcoFare(afare, matchedRecord1, cat03s, cat05s, cat06s, cat07s, cat14s, cat15s, cat27s, cat35s, cat50s,
+            	SpecifiedConstructed afdQuery = afdQueryMapper.convertAtpcoFare(afare, matchedRecord1, cat03s, cat05s, cat06s, cat07s, cat14s, cat15s, cat27s, cat35s, cat50s,
             			footnote14s, footnote15s, focusDate);
             	
             	if ((param.getFareType() != null && !param.getFareType().isEmpty()) || (param.getPaxType() != null && !param.getPaxType().isEmpty()) ||
@@ -541,7 +545,7 @@ public class AtpcoFareCustomRepository {
     	
     	result.setLastPage(isLastPage);
     	result.setLastIndex(skipSize + index);
-    	result.setAfdQueries(afdQueries);
+    	result. setSpecifiedConstructed(afdQueries);
 		
 		return result;
 	}
@@ -614,6 +618,95 @@ public class AtpcoFareCustomRepository {
 		Aggregation aggregation = newAggregation(aggregationOperations);
 		
 		List<AtpcoFootnoteRecord2GroupByCatNo> result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_FOOTNOTE_RECORD_2, AtpcoFootnoteRecord2GroupByCatNo.class).getMappedResults();
+		
+		return result;
+	}
+	
+	public AddOnsWrapper findAtpcoAddOn(AddOnParam param, Pageable pageable) {
+		
+		AddOnsWrapper result = new AddOnsWrapper();
+		
+		List<AfdQueryAddOns> addOns = new ArrayList<>();
+		
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject match = new BasicDBObject();
+				BasicDBObject and = new BasicDBObject();
+				List<BasicDBObject> queries = new ArrayList<>();
+				
+//				if (param.getCarrier() != null && !param.getCarrier().isEmpty()) {
+//					BasicDBObject carrier = new BasicDBObject();
+//					carrier.append("cxr_cd", new BasicDBObject("$in",  Arrays.stream(param.getCarrier().split(",")).map(String::trim).toArray(String[]::new)));
+//					queries.add(carrier);
+//				} else {
+//					BasicDBObject carrier = new BasicDBObject();
+//					carrier.append("cxr_cd", new BasicDBObject("$exists", "true"));
+//					queries.add(carrier);
+//				}
+				
+				if (queries.size() > 0) {
+					and.append("$and", queries);
+				}
+				
+				match.append("$match", and);
+				
+				return match;
+			}
+		});
+		
+		int index = 0, currentAggregationLoop = 0, skipSize = 0, limitSize = pageable.getPageSize();
+    	boolean isLastPage = false, isCompleted = false;
+    	
+		while (!isCompleted) {
+    		skipSize = param.getLastIndex() + (currentAggregationLoop * limitSize);
+    		
+    		if (currentAggregationLoop > 0) {
+    			aggregationOperations.remove(aggregationOperations.size() - 1);
+    			aggregationOperations.remove(aggregationOperations.size() - 1);
+    		}
+    		
+    		SkipOperation skip = new SkipOperation(skipSize);
+    		aggregationOperations.add(skip);
+    		
+    		LimitOperation limit = new LimitOperation(limitSize);
+    		aggregationOperations.add(limit);
+    		
+    		Aggregation aggregation = newAggregation(aggregationOperations);
+    		
+    		AggregationResults<AtpcoAddOn> a1addons = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_ADD_ON, AtpcoAddOn.class);
+        	
+    		if (a1addons.getMappedResults().size() == 0) {
+    			isCompleted = true;
+    			isLastPage = true;
+    			index = 0;
+    		} else {
+    			index = 1;
+    		}
+    		
+        	for (AtpcoAddOn a1addon:a1addons) {
+        		addOns.add(afdQueryMapper.convertAtpcoAddOn(a1addon));
+        		
+        		if (addOns.size() == pageable.getPageSize()) {
+    				isCompleted = true;
+    				break;
+    			}
+    			
+    			index++;
+        	}
+        	
+        	currentAggregationLoop++;
+		}
+		
+		if (!isLastPage && addOns.size() < pageable.getPageSize()) {
+    		isLastPage = true;
+    	}
+    	
+    	result.setLastPage(isLastPage);
+    	result.setLastIndex(skipSize + index);
+    	result. setAddOns(addOns);
 		
 		return result;
 	}
