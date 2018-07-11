@@ -4040,7 +4040,8 @@ tr td.highlighted {
   width: 100%;
   white-space: nowrap;
   overflow: auto;
-  padding-bottom: 50px; }
+  padding-bottom: 50px;
+  background-color: #f9f9f9; }
   .absolute-table .table-header-fixed thead {
     padding-right: 17px;
     background-color: #64768a; }
@@ -4656,7 +4657,7 @@ label.tree_label:after {
   margin-top: -35px; }
   .svg-loader svg path,
   .svg-loader svg rect {
-    fill: #FF6700; }
+    fill: #ff2500d1; }
 
 .center-div {
   position: absolute;
@@ -4666,6 +4667,22 @@ label.tree_label:after {
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   margin-top: -11px; }
+
+.wrapper-location {
+  position: relative;
+  width: 100%;
+  height: 40px; }
+  .wrapper-location .monitoring-location {
+    font-size: 18px;
+    font-weight: 600;
+    color: #ff2500d1;
+    letter-spacing: .8px;
+    position: absolute;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+    border-bottom: 1px solid #ff2500d1; }
 
 /* General Demo Style */
 body, html {
