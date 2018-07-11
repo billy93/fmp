@@ -84,7 +84,6 @@ import com.atibusinessgroup.fmp.domain.WorkPackageHistory;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
 import com.atibusinessgroup.fmp.domain.enumeration.Status;
 import com.atibusinessgroup.fmp.repository.AtpcoFareRepository;
-import com.atibusinessgroup.fmp.repository.AtpcoMasterTariffRepository;
 import com.atibusinessgroup.fmp.repository.ContractFMPRepository;
 import com.atibusinessgroup.fmp.repository.ContractFareFMPRepository;
 import com.atibusinessgroup.fmp.repository.CounterRepository;
@@ -4957,10 +4956,22 @@ public class WorkPackageResource {
         String reviewLevel = result.getReviewLevel();
 
         if(result.getSidewayReviewLevel() == null) {
+        	WorkPackageHistory history = new WorkPackageHistory();
+	        history.setWorkPackage(new ObjectId(result.getId()));
+	        history.setType("PASSSIDEWAY");
+	        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+	        workPackageHistoryService.save(history);
+	        
     		result.setSidewayReviewLevel(reviewLevel);
     		result.setReviewLevel("ROUTE_MANAGEMENT");
         }
         else {
+        	WorkPackageHistory history = new WorkPackageHistory();
+	        history.setWorkPackage(new ObjectId(result.getId()));
+	        history.setType("RETURN");
+	        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
+	        workPackageHistoryService.save(history);
+	        
      		result.setReviewLevel(result.getSidewayReviewLevel());
     		result.setSidewayReviewLevel(null);
         }
@@ -4969,12 +4980,6 @@ public class WorkPackageResource {
         result.setStatus(Status.PENDING);
         result.setQueuedDate(Instant.now());
         workPackageService.save(result);
-
-        WorkPackageHistory history = new WorkPackageHistory();
-        history.setWorkPackage(new ObjectId(result.getId()));
-        history.setType("PASSSIDEWAY");
-        history.setUsername(SecurityUtils.getCurrentUserLogin().get());
-        workPackageHistoryService.save(history);
 
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -5285,7 +5290,7 @@ public class WorkPackageResource {
 
         WorkPackageHistory history = new WorkPackageHistory();
         history.setWorkPackage(new ObjectId(result.getId()));
-        history.setType("REFERBACK");
+        history.setType("REFER");
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
 
