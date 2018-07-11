@@ -1,13 +1,11 @@
 package com.atibusinessgroup.fmp.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.atibusinessgroup.fmp.domain.CityGroup;
-import com.atibusinessgroup.fmp.domain.State;
-import com.atibusinessgroup.fmp.repository.CityGroupRepository;
-import com.atibusinessgroup.fmp.web.rest.errors.BadRequestAlertException;
-import com.atibusinessgroup.fmp.web.rest.util.HeaderUtil;
-import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
+import java.lang.reflect.Field;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -15,13 +13,24 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import com.atibusinessgroup.fmp.domain.City;
+import com.atibusinessgroup.fmp.domain.CityGroup;
+import com.atibusinessgroup.fmp.repository.CityGroupRepository;
+import com.atibusinessgroup.fmp.web.rest.errors.BadRequestAlertException;
+import com.atibusinessgroup.fmp.web.rest.util.HeaderUtil;
+import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
+import com.codahale.metrics.annotation.Timed;
 
-import java.util.List;
-import java.util.Optional;
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing CityGroup.
@@ -118,21 +127,81 @@ public class CityGroupResource {
 //        }
     }
 
+    public static class CityGroupFilter{
+    	
+    	
+    	public CityGroupFilter() {
+			// TODO Auto-generated constructor stub
+		}
+    	
+		public City cities;
+
+        private String code;
+        private String operator;
+        private String description;
+        
+		public City getCities() {
+			return cities;
+		}
+		public void setCities(City cities) {
+			this.cities = cities;
+		}
+		public String getCode() {
+			return code;
+		}
+		public void setCode(String code) {
+			this.code = code;
+		}
+		public String getOperator() {
+			return operator;
+		}
+		public void setOperator(String operator) {
+			this.operator = operator;
+		}
+		public String getDescription() {
+			return description;
+		}
+		public void setDescription(String description) {
+			this.description = description;
+		}
+		@Override
+		public String toString() {
+			return "CityGroupFilter [cities=" + cities + ", code=" + code + ", operator=" + operator + ", description="
+					+ description + "]";
+		}        
+    }
     /**
      * GET  /city-groups : get all the cityGroups.
      *
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of cityGroups in body
+     * @throws IllegalAccessException 
      */
     @GetMapping("/city-groups")
     @Timed
-    public ResponseEntity<List<CityGroup>> getAllCityGroups(Pageable pageable) {
-        log.debug("REST request to get a page of CityGroups");
-        Page<CityGroup> page = cityGroupRepository.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/city-groups");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    public ResponseEntity<List<CityGroup>> getAllCityGroups(CityGroupFilter filter, Pageable pageable) throws IllegalAccessException {
+        log.debug("REST request to get a page of CityGroups {}", filter);
+        if(checkNull(filter)) {
+        	 Page<CityGroup> page = cityGroupRepository.findAll(pageable);
+             HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/city-groups");
+             return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        }else {
+        	 Page<CityGroup> page = cityGroupRepository.findCustom(filter, pageable);
+             HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/city-groups");
+             return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        }
+       
     }
     
+    public boolean checkNull(Object object) throws IllegalAccessException {
+        for (Field f : object.getClass().getDeclaredFields()) {
+        	f.setAccessible(true);
+            if (f.get(object) != null) {
+                return false;
+            }
+        }
+        return true;            
+    }
     /**
      * GET  /city-groups : get all the city-groups.
      *
