@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.atibusinessgroup.fmp.domain.TariffNumber;
+import com.atibusinessgroup.fmp.domain.AtpcoMasterTariff;
 import com.atibusinessgroup.fmp.domain.VoltrasFare;
 import com.atibusinessgroup.fmp.domain.WorkPackageFare;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoAddOn;
@@ -31,7 +31,7 @@ import com.atibusinessgroup.fmp.domain.dto.AtpcoDateWrapper;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord1FareClassInformation;
 import com.atibusinessgroup.fmp.domain.dto.CategoryObject;
 import com.atibusinessgroup.fmp.domain.dto.TextTable;
-import com.atibusinessgroup.fmp.repository.TariffNumberRepository;
+import com.atibusinessgroup.fmp.repository.AtpcoMasterTariffRepository;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoRecord3CategoryCustomRepository;
 import com.atibusinessgroup.fmp.service.AtpcoMasterFareMatrixService;
 import com.atibusinessgroup.fmp.service.util.AtpcoDataConverterUtil;
@@ -43,9 +43,9 @@ public class AfdQueryMapper {
 	
 	private final AtpcoMasterFareMatrixService atpcoMasterFareMatrixService;
 	private final AtpcoRecord3CategoryCustomRepository atpcoRecord3CategoryCustomRepository;
-	private final TariffNumberRepository tariffNumberRepository;
+	private final AtpcoMasterTariffRepository tariffNumberRepository;
 	
-	public AfdQueryMapper(AtpcoMasterFareMatrixService atpcoMasterFareMatrixService, AtpcoRecord3CategoryCustomRepository atpcoRecord3CategoryCustomRepository, TariffNumberRepository tariffNumberRepository) {
+	public AfdQueryMapper(AtpcoMasterFareMatrixService atpcoMasterFareMatrixService, AtpcoRecord3CategoryCustomRepository atpcoRecord3CategoryCustomRepository, AtpcoMasterTariffRepository tariffNumberRepository) {
 		this.atpcoMasterFareMatrixService = atpcoMasterFareMatrixService;
 		this.atpcoRecord3CategoryCustomRepository = atpcoRecord3CategoryCustomRepository;
 		this.tariffNumberRepository = tariffNumberRepository;
@@ -63,7 +63,7 @@ public class AfdQueryMapper {
 		result.setSc("S");
 		result.setTariffNo(afare.getTariffNo());
 		
-		TariffNumber tn = tariffNumberRepository.findOneByTarNo(result.getTariffNo());
+		AtpcoMasterTariff tn = tariffNumberRepository.findOneByTarNo(result.getTariffNo());
 		if (tn != null && tn.getTarCd() != null) {
 			result.setTariffCode(tn.getTarCd());
 		}
@@ -450,7 +450,7 @@ public class AfdQueryMapper {
 		result.setTariffNo(addOn.getTar_no());
 		
 		if (result.getTariffNo() != null) {
-			TariffNumber tn = tariffNumberRepository.findOneByTarNo(addOn.getTar_no());
+			AtpcoMasterTariff tn = tariffNumberRepository.findOneByTarNo(addOn.getTar_no());
 			if (tn != null && tn.getTarCd() != null) {
 				result.setTariffCode(tn.getTarCd());
 			}

@@ -9,8 +9,8 @@ import org.springframework.data.mongodb.core.mapping.Field;
 /**
  * A TariffNumber.
  */
-@Document(collection = "tariff_number")
-public class TariffNumber implements Serializable {
+@Document(collection = "master_tariff")
+public class AtpcoMasterTariff implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -105,7 +105,7 @@ public class TariffNumber implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		TariffNumber other = (TariffNumber) obj;
+		AtpcoMasterTariff other = (AtpcoMasterTariff) obj;
 		if (description == null) {
 			if (other.description != null)
 				return false;
