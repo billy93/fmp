@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('RuleQueryController', RuleQueryController);
 
-    RuleQueryController.$inject = ['$state', '$stateParams', 'RuleQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', '$uibModal'];
+    RuleQueryController.$inject = ['$state', '$stateParams', 'RuleQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'Timezone', 'pagingParams', '$uibModal'];
 
-    function RuleQueryController($state, $stateParams, RuleQuery, ParseLinks, AlertService, paginationConstants, pagingParams, $uibModal) {
+    function RuleQueryController($state, $stateParams, RuleQuery, ParseLinks, AlertService, paginationConstants, Timezone, pagingParams, $uibModal) {
     	
         var vm = this;
         vm.itemsPerPage = paginationConstants.itemsPerPage;
@@ -32,6 +32,8 @@
         
         vm.showCategoryDetail = showCategoryDetail;
         
+        vm.timezone = Timezone.GMT7;
+        
         vm.openTooltip = true;
         
         if($stateParams.ruleQueryFilter != null){
@@ -44,25 +46,29 @@
         }
         
         function loadAll() {
-
-        	vm.queryParams.page = vm.page - 1;
-        	vm.queryParams.size = vm.itemsPerPage;
-        	
-        	vm.queryParams.cxr = vm.paramCarrier;
-        	vm.queryParams.ruleTarNo = vm.paramTarNo;
-        	
-        	RuleQuery.query(vm.queryParams, onSuccess, onError);
-        	
-            function onSuccess(data, headers) {
-                vm.links = ParseLinks.parse(headers('link'));
-                vm.totalItems = headers('X-Total-Count');
-                vm.queryCount = vm.totalItems;
-                vm.ruleQueries = data;
-            }
-            
-            function onError(error) {
-                AlertService.error(error.data.message);
-            }
+        	if(vm.paramCarrier != null) {
+        		vm.ruleQueries = null;
+        		vm.ruleQueryCategories = null;
+        		vm.ruleQueryCategories2 = null
+	        	vm.queryParams.page = vm.page - 1;
+	        	vm.queryParams.size = vm.itemsPerPage;
+	        	
+	        	vm.queryParams.cxr = vm.paramCarrier;
+	        	vm.queryParams.ruleTarNo = vm.paramTarNo;
+	        	
+	        	RuleQuery.query(vm.queryParams, onSuccess, onError);
+	        	
+	            function onSuccess(data, headers) {
+	                vm.links = ParseLinks.parse(headers('link'));
+	                vm.totalItems = headers('X-Total-Count');
+	                vm.queryCount = vm.totalItems;
+	                vm.ruleQueries = data;
+	            }
+	            
+	            function onError(error) {
+	                AlertService.error(error.data.message);
+	            }
+        	}
     	
         }
 
@@ -83,7 +89,6 @@
         	vm.isLoadingRule = true;
         	RuleQuery.getRules2(ruleQuery, function(data) {
         		vm.ruleQueryCategories2 = data;
-        		console.log(vm.ruleQueryCategories2);
         		vm.isLoadingRule = false;
         	}, function(error) {
         		console.log(error);
@@ -108,17 +113,16 @@
         	e.preventDefault();
             e.stopPropagation();
             
-            cosole.log("date :: "+date);
-            
+            vm.datePickerOpenStatus = {};
             vm.datePickerOpenStatus[date] = true;
         }
         
         function resetFilter() {
         	vm.clearFilter();
-            
         	vm.ruleQueries = null;
-        	vm.ruleQueryCategories = null;
-        	vm.ruleQueryCategories2 = null;
+    		vm.ruleQueryCategories = null;
+    		vm.ruleQueryCategories2 = null
+        	
         }
         
         function clearFilter() {

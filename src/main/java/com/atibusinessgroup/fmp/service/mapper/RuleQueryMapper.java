@@ -16,8 +16,8 @@ public class RuleQueryMapper {
 		result.setCxr(record2Group.getCxr());
 		result.setRuleNo(record2Group.getRuleNo());
 		result.setTarNo(record2Group.getTarNo());
-		result.setSrc("A");
-		result.setType(record2Group.getTarCd());
+		result.setSrc("ATP");
+		result.setType(record2Group.getType());
 		
 		return result;
 	}

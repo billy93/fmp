@@ -12,6 +12,7 @@
         var vm = this;
         vm.itemsPerPage = paginationConstants.itemsPerPage;
         vm.loadAll = loadAll;
+        vm.changeItemsPerPage = changeItemsPerPage;
         vm.clearFilter = clearFilter;
         vm.resetFilter = resetFilter;
         vm.page = 1;
@@ -48,10 +49,35 @@
                 	vm.fareClassSelectedRow = null;
                 	vm.fareClassDetails = null;
                 }
+                
+                $(document).ready(function(){
+            		var _parents = $('.table-fare-group').find('thead');
+            		var _th = _parents.find('.th-fixed');
+            		var _tr = _parents.siblings('tbody').find('tr:first-child');
+            		var _td = _tr.find('td');
+            		var _length = _th.length;
+            		_th.last().css('border-right','none');
+            		for(var i=0;i<_length;i++){
+            			var _width = _th.eq(i).outerWidth();
+            			var _width2 = _td.eq(i).outerWidth();
+            			if(_width > _width2){
+            				_td.eq(i).css('min-width', _width);
+            				_td.eq(i).css('width', _width);
+            			}
+            			else{
+            				_th.eq(i).css('min-width', _width2);
+            				_th.eq(i).css('width', _width2);
+            			}
+            		}
+            	});
             }
             function onError(error) {
                 AlertService.error(error.data.message);
             }
+        }
+        
+        function changeItemsPerPage() {
+        	vm.loadAll();
         }
         
         function clearFilter() {
@@ -88,7 +114,7 @@
             	vm.fareClassDetails = [vm.fareClassSelectedRow];
             	
             	$(document).ready(function(){
-            		var _parents = $('.table-afd').find('thead');
+            		var _parents = $('.table-fare-class').find('thead');
             		var _th = _parents.find('.th-fixed');
             		var _tr = _parents.siblings('tbody').find('tr:first-child');
             		var _td = _tr.find('td');

@@ -64,6 +64,7 @@
         	e.preventDefault();
             e.stopPropagation();
             
+            vm.datePickerOpenStatus = {};
             vm.datePickerOpenStatus[date] = true;
         }
         
