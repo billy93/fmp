@@ -6,7 +6,7 @@
 
     AtpcoMasterTariff.$inject = ['$resource'];
 
-    function TariffNumber ($resource) {
+    function AtpcoMasterTariff ($resource) {
         var resourceUrl =  'api/atpco-master-tariff/:id';
 
         return $resource(resourceUrl, {}, {
