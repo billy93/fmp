@@ -450,7 +450,7 @@ public class AfdQueryMapper {
 		result.setTariffNo(addOn.getTar_no());
 		
 		if (result.getTariffNo() != null) {
-			TariffNumber tn = tariffNumberRepository.findOneByTarNo(addOn.getTar_no());
+			AtpcoMasterTariff tn = tariffNumberRepository.findOneByTarNo(addOn.getTar_no());
 			if (tn != null && tn.getTarCd() != null) {
 				result.setTariffCode(tn.getTarCd());
 			}
