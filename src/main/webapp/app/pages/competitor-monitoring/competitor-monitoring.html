@@ -250,7 +250,7 @@
 			<br/>
 		<br/>
 		
-		<div id="chartOptions" class="form-inline" hidden="hidden" ng-if="vm.tempData.length > 0">  
+		<div id="chartOptions" class="form-inline mb2" hidden="hidden" ng-if="vm.tempData.length > 0">  
            <div class="form-group" style="margin-left:10px; margin-bottom:10px; !important">
             <label for="barThickness">Bar Thickness : </label>
            <input id="barThickness" ng-model="vm.barThickness" type="text" class="number-only"></input>
@@ -265,6 +265,10 @@
           
             <button type="button" class="btn btn-default small" ng-click="vm.generateGraph(vm.tempData)">Re-Generate</button>
             </div>
+        </div>
+        
+        <div class="text-center wrapper-location mb1">
+        	<div class="monitoring-location"><span>JKT</span> - <span>SIN</span></div>
         </div>
       
 										
