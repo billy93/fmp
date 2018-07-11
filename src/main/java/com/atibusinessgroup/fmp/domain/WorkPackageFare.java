@@ -91,7 +91,7 @@ public class WorkPackageFare implements Serializable {
     private String recommendedAmount;
     
     @Field("tariff_number")
-    private AtpcoMasterTariff tariffNumber;
+    private TariffNumber tariffNumber;
     
     @Field("tarno")
     private String tarno;
@@ -684,11 +684,11 @@ public class WorkPackageFare implements Serializable {
 		this.baseFareBasis = baseFareBasis;
 	}
 
-	public AtpcoMasterTariff getTariffNumber() {
+	public TariffNumber getTariffNumber() {
 		return tariffNumber;
 	}
 
-	public void setTariffNumber(AtpcoMasterTariff tariffNumber) {
+	public void setTariffNumber(TariffNumber tariffNumber) {
 		this.tariffNumber = tariffNumber;
 	}
 
