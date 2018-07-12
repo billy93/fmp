@@ -1,0 +1,226 @@
+<div class="content-title">
+	<h2>Internet Query</h2>
+	<jhi-alert></jhi-alert>
+</div>
+<div class="panel">
+	<div class="panel-body">
+		<div class="filter-hero">
+			<div class="filter-label semibold show">Hide Filter</div>
+			<div class="filter-area">
+				<div class="clearfix">
+					<form name="queryForm" role="form" novalidate>
+						<div class="col-md-12 no-pad">
+							<div class="pull-left col-md-2 no-lpad">
+								<div class="form-group">	
+									<div class="custom-label semibold">Carrier</div>
+									<div class="input-group">
+										<input type="text" class="form-control" name="cxr" id="cxr" ng-class="{'must-fill' : queryForm.cxr.$invalid}"
+											ng-minlength="2" ng-model="vm.paramCarrier" placeholder="minimum 2 characters.." uppercase required />
+	
+										<span ng-click="vm.showCarrierModal()"
+											class="input-group-addon"><i class="fa fa-folder"></i>
+										</span>
+									</div>
+								</div>
+								<div class="form-group">	
+									<div class="custom-label semibold">Website</div>
+									<div class="input-group">
+										<input type="text" class="form-control" name="website" id="website" ng-model="vm.paramWebsite" uppercase />
+										<span ng-click="vm.showWebsiteModal()"
+											class="input-group-addon"><i class="fa fa-folder"></i>
+										</span>
+									</div>
+								</div>
+							</div>
+							<div class="pull-left col-md-2 no-lpad">
+								<div class="form-group">	
+									<div class="custom-label semibold">Origin</div>
+									<input type="text" class="form-control" name="origin" id="origin" ng-model="vm.queryParams.origin" uppercase/>
+								</div>
+								<div class="form-group">	
+									<div class="custom-label semibold">Destination</div>
+									<input type="text" class="form-control" name="destination" id="destination" ng-model="vm.queryParams.destination" uppercase />
+								</div>
+							</div>
+							<div class="pull-left col-md-3 no-lpad">
+								<div class="form-group">	
+									<div class="custom-label semibold">Depart From Date</div>
+									<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'departDateFrom')" 
+										is-open="vm.datePickerOpenStatus['departDateFrom']" datetime-picker="{{vm.dateFormat}}" 
+										enable-time="false" name="departDateFrom" id="departDateFrom" 
+										ng-model="vm.queryParams.departDateFrom" placeholder="Depart From Date"/>
+								</div>
+								<div class="form-group">	
+									<div class="custom-label semibold">Depart To Date</div>
+									<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'departDateTo')" 
+										is-open="vm.datePickerOpenStatus['departDateTo']" datetime-picker="{{vm.dateFormat}}" 
+										enable-time="false" name="departDateTo" id="departDateTo" 
+										ng-model="vm.queryParams.departDateTo" placeholder="Depart From To"/>
+								</div>
+								<div class="form-group">	
+									<div class="custom-label semibold">Depart DOW</div>
+									<select class="form-control" name="departDOW" id="departDOW" ng-model="vm.queryParams.departDOW">
+										<option value="{{dayOfWeek.key}}" ng-repeat="dayOfWeek in vm.dayOfWeekList track by $index">{{dayOfWeek.value}}</option>
+									</select>
+								</div>
+							</div>
+							<div class="pull-left col-md-3 no-lpad">
+								<div class="form-group">	
+									<div class="custom-label semibold">Capture From Date</div>
+									<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'captureDateFrom')" 
+										is-open="vm.datePickerOpenStatus['captureDateFrom']" datetime-picker="{{vm.dateFormat}}" 
+										enable-time="false" name="captureDateFrom" id="captureDateFrom" 
+										ng-model="vm.queryParams.captureDateFrom" placeholder="Capture From Date"/>
+								</div>
+								<div class="form-group">	
+									<div class="custom-label semibold">Capture To Date</div>
+									<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'captureDateTo')" 
+										is-open="vm.datePickerOpenStatus['captureDateTo']" datetime-picker="{{vm.dateFormat}}" 
+										enable-time="false" name="captureDateTo" id="captureDateTo" 
+										ng-model="vm.queryParams.captureDateTo" placeholder="Capture From To"/>
+								</div>
+								<div class="form-group">	
+									<div class="custom-label semibold">Market Group</div>
+									<input type="text" class="form-control" name="marketGroup" id="marketGroup" ng-model="vm.queryParams.marketGroup" ng-disabled="true" uppercase />
+								</div>
+							</div>
+							<div class="pull-left col-md-2 no-lpad">
+								<div class="form-group">
+									<div class="custom-label semibold">Additional Options</div>
+									<div class="checkbox-wrapper">
+										<label>
+											<input type="checkbox" name="biDirectional" ng-model="vm.queryParams.biDirectional" ng-disabled="true"> 
+											Bi-directional
+										</label>
+										<br/>
+										<label>
+											<input type="checkbox" name="appendResults" ng-model="vm.queryParams.appendResults" ng-disabled="true"> 
+											Append Results
+										</label>
+										<br/>
+										<label>
+											<input type="checkbox" name="appendResults" ng-model="vm.queryParams.queryByGroup" ng-disabled="true"> 
+											Query By Group
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="clearfix">
+							<div class="pull-right pv1">
+								<button type="button"
+										class="btn btn-default small"
+										ng-disabled="queryForm.$invalid"
+										ng-click="vm.loadAll();">Query</button>
+								<button type="button"
+										class="btn btn-default small"
+										ng-click="vm.clearFilter();">Clear</button>
+								<button type="reset"
+										ng-click="vm.resetFilter();"
+										class="btn btn-default small">Reset</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="table-wrapper">
+			<div class="datatable-wrapper form-inline">
+				<div class="clearfix">
+					<div class="pull-left">
+						<div class="datatable-length">
+							<label>
+								<select class="form-control" ng-model="vm.itemsPerPage" ng-change="vm.changeItemsPerPage()">
+									<option value="10">10</option>
+									<option value="15">15</option>
+									<option value="20">20</option>
+								</select>
+								 records per page
+							</label>
+						</div>
+					</div>
+					<div class="pull-right">
+						<div class="clearfix">
+							<div class="pull-right ml1">
+								<select class="form-control" name="summarizeType" id="summarizeType" ng-model="vm.queryParams.summarizeType">
+									<option value="{{summarizeType.key}}" ng-repeat="summarizeType in vm.summarizeType track by $index">{{summarizeType.value}}</option>
+								</select>
+							</div>
+							<div class="pull-right">
+								<button type="button" class="btn btn-default small">Hide</button>
+								<button type="button" class="btn btn-default small">Copy</button>
+								<button type="button" class="btn btn-default small">Print/Export</button>
+								<button type="button" class="btn btn-default small">Filter/Sort</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="table-responsive table-internet-query">
+					<table class="table table-striped table-bordered datatable table-header-fixed">
+						<thead style="padding-right: 17px; background-color: #64768a">
+							<tr>
+								<th class="th-fixed">No</th>
+								<th class="th-fixed">WEBSITE</th>
+								<th class="th-fixed">CAPTURE DATE</th>
+								<th class="th-fixed">A/P DAYS</th>
+								<th class="th-fixed">CXR</th>
+								<th class="th-fixed">AIRLINE</th>
+								<th class="th-fixed">TRIP TYPE</th>
+								<th class="th-fixed">ORIG</th>
+								<th class="th-fixed">ORIG. NAME</th>
+								<th class="th-fixed">DEST</th>
+								<th class="th-fixed">DEST. NAME</th>
+								<th class="th-fixed">FARE BASIS</th>
+								<th class="th-fixed">DEPARTURE</th>
+								<th class="th-fixed">DEPART TIME</th>
+								<th class="th-fixed">RETURN</th>
+								<th class="th-fixed">RETURN TIME</th>
+								<th class="th-fixed">FLIGHT NO</th>
+								<th class="th-fixed">BASE AMT</th>
+								<th class="th-fixed">TAXES</th>
+								<th class="th-fixed">AIF</th>
+								<th class="th-fixed">CURR</th>
+								<th class="th-fixed">REF AMT({{vm.queryParams.currency}})</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="internetQuery in vm.internetQueries" 
+								ng-click="vm.selectedRow = internetQuery;"
+								ng-class="{'selected': vm.selectedRow == internetQuery}">
+								<td>{{(vm.queryParams.page * vm.queryParams.size) + $index + 1}}</td>
+								<td>{{internetQuery.website}}</td>
+								<td>{{internetQuery.captureDateTime | date:'medium'}}</td>
+								<td>{{internetQuery.apDays}}</td>
+								<td>{{internetQuery.cxr}}</td>
+								<td>{{internetQuery.airline}}</td>
+								<td>{{internetQuery.tripType}}</td>
+								<td>{{internetQuery.origin}}</td>
+								<td>{{internetQuery.originName}}</td>
+								<td>{{internetQuery.destination}}</td>
+								<td>{{internetQuery.destinationName}}</td>
+								<td>{{internetQuery.fareBasis}}</td>
+								<td>{{internetQuery.departDateTime | date:'medium'}}</td>
+								<td></td>
+								<td>{{internetQuery.returnDateTime | date:'medium'}}</td>
+								<td></td>
+								<td>{{internetQuery.flightNumber}}</td>
+								<td>{{internetQuery.baseAmtBD}}</td>
+								<td>{{internetQuery.taxesBD}}</td>
+								<td>{{internetQuery.aifBD}}</td>
+								<td>{{internetQuery.currency}}</td>
+								<td>{{internetQuery.refAmt}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="text-center">
+					<jhi-item-count page="vm.page" total="vm.queryCount"
+						items-per-page="vm.itemsPerPage"></jhi-item-count>
+					<uib-pagination class="pagination-sm"
+						total-items="vm.totalItems" items-per-page="vm.itemsPerPage"
+						ng-model="vm.page" ng-change="vm.loadAll()"></uib-pagination>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
