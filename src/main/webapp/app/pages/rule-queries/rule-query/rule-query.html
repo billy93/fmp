@@ -9,7 +9,7 @@
 							<div class="form-group">
 								<div class="custom-label semibold">Carrier</div>
 								<div class="input-group">
-									<input type="text" class="form-control" name="cxr" id="cxr" ng-class="{'must-fill' : queryForm.cxr.$invalid}"
+									<input type="text" class="form-control  no-comma" name="cxr" id="cxr" ng-class="{'must-fill' : queryForm.cxr.$invalid}"
 										ng-minlength="2" ng-model="vm.paramCarrier" placeholder="minimum 2 characters.." uppercase required />
 
 									<span ng-click="vm.showCarrierModal()"
@@ -19,7 +19,7 @@
 							</div>
 							<div class="form-group">
 								<div class="custom-label semibold">Rule Number</div>
-								<input type="text" class="form-control" name="ruleNo"
+								<input type="text" class="form-control no-comma" name="ruleNo"
 									id="ruleNo" ng-model="vm.queryParams.ruleNo" uppercase />
 							</div>
 							<div class="form-group">
@@ -39,7 +39,7 @@
 								<div class="custom-label semibold">Tariff Number</div>
 								<div class="input-group">
 									<input id="ruleTarNo" type="text" name="ruleTarNo"
-										class="form-control" ng-model="vm.paramTarNo" uppercase>
+										class="form-control no-comma" ng-model="vm.paramTarNo" uppercase>
 									<span ng-click="vm.showTariffModal()" class="input-group-addon"><i
 										class="fa fa-folder"></i> </span>
 								</div>
