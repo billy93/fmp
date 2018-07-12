@@ -442,7 +442,7 @@ public class AfdQueryMapper {
 		return result;
 	}
 
-	public AfdQueryAddOns convertAtpcoAddOn(AtpcoAddOn addOn) {
+	public AfdQueryAddOns convertAtpcoAddOn(AtpcoAddOn addOn, Date focusDate) {
 		AfdQueryAddOns result = new AfdQueryAddOns();
 		
 		result.setId(addOn.get_id());
@@ -476,6 +476,7 @@ public class AfdQueryMapper {
 		result.setDiscontinueDate(addOn.getDates_disc());
 		result.setGfsDate(addOn.getGfs_date());
 		result.setGfsReference(addOn.getGfs_number());
+		result.setFocusDate(focusDate);
 		
 		return result;
 	}

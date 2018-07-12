@@ -265,7 +265,15 @@
 				                    <td>{{addOn.baseAmount}}</td>
 				                  	<td><span ng-if="addOn.effectiveDate != 'indef'">{{addOn.effectiveDate | date:vm.dateFormat:vm.timezone}}</span></td>
 				                	<td><span ng-if="addOn.discontinueDate != 'indef'">{{addOn.discontinueDate | date:vm.dateFormat:vm.timezone}}</span></td>
-				                   	<td><span ng-if="addOn.gfsDate != undefined && addOn.gfsDate != null">{{addOn.gfsDate | date:vm.dateFormat:vm.timezone}} | {{addOn.gfsReference}}</span></td>
+				                   	<td><span ng-if="addOn.gfsDate != undefined && addOn.gfsDate != null">{{addOn.gfsDate | date:vm.dateFormat:vm.timezone}} - {{addOn.gfsReference}}</span></td>
+				                	<td><span ng-if="addOn.focusDate != 'indef'">{{addOn.focusDate | date:vm.dateFormat:vm.timezone}}</span></td>
+				                	<td><span ng-if="addOn.firstTravelDate != null && addOn.firstTravelDate != ''">{{addOn.firstTravelDate | date:vm.dateFormat:vm.timezone}}</span></td>
+				                	<td><span ng-if="addOn.lastTravelDate != null && addOn.lastTravelDate != ''">{{addOn.lastTravelDate | date:vm.dateFormat:vm.timezone}}</span></td>
+				                	<td><span ng-repeat="value in addOn.travelDates track by $index">{{value.completeDate | date:vm.dateFormat:vm.timezone}}<span ng-if="$index < addOn.travelDates.length - 1">, </span></span></td>
+				                	<td><span ng-if="addOn.firstSaleDate != null && addOn.firstSaleDate != ''">{{addOn.firstSaleDate | date:vm.dateFormat:vm.timezone}}</span></td>
+				                	<td><span ng-if="addOn.lastSaleDate != null && addOn.lastSaleDate != ''">{{addOn.lastSaleDate | date:vm.dateFormat:vm.timezone}}</span></td>
+				                	<td></td>
+				                	<td>{{addOn.wpId}}</td>
 				                </tr>
 				                <tr infinite-scroll="vm.loadPage(vm.page + 1)" infinite-scroll-disabled="vm.disableInfiniteScroll || vm.isLastPage || vm.isLoading" infinite-scroll-container="'#tbody-afd'"></tr>
 				            </tbody>

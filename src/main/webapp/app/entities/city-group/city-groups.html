@@ -5,6 +5,72 @@
 	</div>
 	<div class="panel">
 		<div class="panel-body">
+			<!-- filter -->
+					<div class="filter-hero">
+						<div class="filter-label semibold show">Hide Filter</div>
+						<div class="filter-area">
+							<div class="clearfix">
+								<div class="pull-left w50 ph5px">
+									<div class="form-group">
+										<div class="custom-label semibold">City Group Code :</div>
+										<input type="text" class="form-control" ng-model="vm.cityGroupCode"  />
+										<div class="custom-label semibold">City Group Description :</div>
+										<input type="text" class="form-control" ng-model="vm.cityGroupDescription"  />
+									</div>
+								</div>
+								<div class="pull-left w50 ph5px">
+									<div class="pull-left w50 ph5px">
+										<div class="form-group">
+											<div class="clearfix">
+												<div class="custom-label semibold">City Code :</div>
+												<input type="text" class="form-control" ng-model="vm.cityCode"  />
+												<div>
+													<label>
+												     	<input type="radio" ng-model="vm.operator" value="and"> And </label>
+												    </label><t>
+												    <label>
+												     	<input type="radio" ng-model="vm.operator" value="or"> Or </label>
+												    </label>
+												</div>
+												<div class="custom-label semibold">Country</div>
+												<input type="text" class="form-control" ng-model="vm.countryCode"  />
+											</div>
+										</div>
+									</div>
+									<div class="pull-left w50 ph5px">
+										<div class="form-group">
+											<div class="clearfix">
+												<button class="btn btn-default" ng-click = "vm.queryFilter()">
+								                    <span >
+								                        Query
+								                    </span>
+								                </button>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="clearfix">
+												<button class="btn btn-default" ng-click = "vm.clearFilter()">
+								                    <span >
+								                        Clear
+								                    </span>
+								                </button>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="clearfix">
+												<button class="btn btn-default" ng-click = "vm.resetFilter()">
+								                    <span >
+								                        Reset
+								                    </span>
+								                </button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- end of filter -->
 			<div class="container-fluid">
 		        <div class="row">
 		            <div class="col-md-12 no-pad text-right">
@@ -25,6 +91,7 @@
 			                    <th jh-sort-by="id"><span>ID</span> <span class="glyphicon glyphicon-sort"></span></th>
 			                    <th jh-sort-by="code"><span>Code</span> <span class="glyphicon glyphicon-sort"></span></th>
 			                    <th jh-sort-by="description"><span>Description</span> <span class="glyphicon glyphicon-sort"></span></th>
+			                    <th><span>Cities</span></th>
 			                    <th></th>
 			                </tr>
 			            </thead>
@@ -33,6 +100,27 @@
 			                    <td><a ui-sref="city-group-detail({id:cityGroup.id})">{{cityGroup.id}}</a></td>
 			                    <td>{{cityGroup.code}}</td>
 			                    <td>{{cityGroup.description}}</td>
+			                    <td>
+			                    	<div>
+				                    	<table class="sub-table">
+				                    		<thead>
+				                    			<tr><th colspan="2"><center>Code</center></th></tr>
+				                    			<tr class="sub-second-th">
+				                    				<th>City</th>
+				                    				<th>Country</th>
+				                    			</tr>
+				                    		</thead>
+				                    		<tbody>
+				                    			<tr ng-repeat="city in cityGroup.cities track by $index">
+				                    				<td>{{city.cityCode}}</td>
+				                    				<td>
+				                    					{{city.countryCode}}
+				                    				</td>
+				                    			</tr>
+				                    		</tbody>
+				                    	</table>
+			                    	</div>
+			                    </td>
 			                    <td class="text-right">
 			                        <div class="btn-group flex-btn-group-container">
 			                            <button type="submit"

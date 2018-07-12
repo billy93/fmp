@@ -39,6 +39,9 @@ public class City implements Serializable {
 	@Field("worldarea_code")
 	private String worldareaCode;
 
+	public City() {
+		// TODO Auto-generated constructor stub
+	}
 	// jhipster-needle-entity-add-field - JHipster will add fields here, do not
 	// remove
 	public String getId() {

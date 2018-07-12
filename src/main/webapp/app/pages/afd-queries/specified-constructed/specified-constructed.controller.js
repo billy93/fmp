@@ -79,14 +79,15 @@
         vm.disableInfiniteScroll = true;
         
         vm.datePickerOpenStatus = {};
-        vm.dateFormat = "dd-MM-yyyy";
+        vm.dateFormat = "dd/MM/yyyy";
         vm.openCalendar = openCalendar;
         
-        vm.tariffs = TariffNumber.getAll().$promise;
-        vm.fareTypes = AtpcoMasterFareType.getAll().$promise;
-        vm.globalIndicators = TariffNumber.getAllGlobal().$promise;
-        vm.paxTypes = Passenger.getAll().$promise;
-        vm.cities = City.getAll().$promise;
+        vm.tariffs = TariffNumber.getAll();
+        console.log(vm.tariffs);
+        vm.fareTypes = AtpcoMasterFareType.getAll();
+        vm.globalIndicators = TariffNumber.getAllGlobal();
+        vm.paxTypes = Passenger.getAll();
+        vm.cities = City.getAll();
         
         vm.sources = [
         	{key: "A", value: "A - ATPCO"},
@@ -120,7 +121,7 @@
         	{key: "Y", value: "Economy"}
         ];
        
-        vm.gaFareTypes = FareType.getAll().$promise;
+        vm.gaFareTypes = FareType.getAll();
         
         function query() {
         	vm.afdQueries = [];

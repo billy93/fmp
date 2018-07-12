@@ -53,14 +53,12 @@
         vm.disableInfiniteScroll = true;
         
         vm.datePickerOpenStatus = {};
-        vm.dateFormat = "dd-MM-yyyy";
+        vm.dateFormat = "dd/MM/yyyy";
         vm.openCalendar = openCalendar;
         
         vm.sources = [
         	{key: "A", value: "A - ATPCO"},
-        	{key: "M", value: "M - Market"},
-        	{key: "W", value: "W - Web"},
-        	{key: "C", value: "C - Competitor Private"}
+        	{key: "M", value: "M - Market"}
         ]
         
         vm.publicPrivate = [
