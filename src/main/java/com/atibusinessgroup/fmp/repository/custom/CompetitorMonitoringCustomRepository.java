@@ -137,20 +137,21 @@ public class CompetitorMonitoringCustomRepository {
 				}
 				
 				if(param.getOrigin() != null && !param.getOrigin().isEmpty()) {
-					List<String> listOrigin = new ArrayList<>();
-					List<String> listDest = new ArrayList<>();
+				
+					List<BasicDBObject> andOrigin = new ArrayList<>();
 					String[] origDestArr = Arrays.stream(param.getOrigin().split(",")).map(String::trim).toArray(String[]::new);
 					for(int i=0; i< origDestArr.length; i++) {
 						int dash = origDestArr[i].indexOf("-");
 						String orig = origDestArr[i].substring(0, dash);
 						String dest = origDestArr[i].substring(dash+1, origDestArr[i].length());
 						
-						listOrigin.add(orig);
-						listDest.add(dest);
+						BasicDBObject origCity = new BasicDBObject("origin_city", orig);
+						BasicDBObject origDest = new BasicDBObject("destination_city", dest);
+						andOrigin.add(new BasicDBObject("$and", Arrays.asList(origCity, origDest)));
+						
 					}
 					
-					queries.add(new BasicDBObject("origin_city", new BasicDBObject("$in", listOrigin)));
-					queries.add(new BasicDBObject("destination_city", new BasicDBObject("$in", listDest)));
+					queries.add(new BasicDBObject("$or", andOrigin));
 					
 					
 				} else {
@@ -174,7 +175,7 @@ public class CompetitorMonitoringCustomRepository {
 				
 				List<BasicDBObject> listRuleNo = new ArrayList<>();
 				
-				if(param.getRuleNo() == null && param.getOcRuleNo() == null ) {
+				if((param.getRuleNo() == null || param.getRuleNo().isEmpty()) && (param.getOcRuleNo() == null || param.getOcRuleNo().isEmpty())) {
 					BasicDBObject ruleNo = new BasicDBObject();
 					ruleNo.append("rules_no", new BasicDBObject("$exists", "true"));
 					queries.add(ruleNo);
