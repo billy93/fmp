@@ -81,6 +81,10 @@ public class CityGroupRepositoryImpl implements CityGroupRepositoryCustomAnyName
 
 	@Override
 	public List<CityGroup> findCustom(CityGroupFilter filter) {
+		List<CityGroup> cityGroups = null;
+		if(filter.getOperator() == null) {
+			filter.setOperator("or");
+		}
 		Criteria codeCriteria = new Criteria();
 		if(filter.getCode() != null) {
 			codeCriteria = Criteria.where("code").regex(filter.getCode(),"i");
@@ -89,9 +93,32 @@ public class CityGroupRepositoryImpl implements CityGroupRepositoryCustomAnyName
 		if(filter.getDescription() != null) {
 			descriptionCriteria = Criteria.where("description").regex(filter.getDescription(),"i");
 		}
-		Query query = new Query(new Criteria().andOperator(codeCriteria, descriptionCriteria));
 		
-		List<CityGroup> cityGroups = mongoTemplate.find(query, CityGroup.class);
+		Criteria cityCriteria = new Criteria();
+		if(filter.getCities().getCityCode() != null) {
+			cityCriteria = Criteria.where("cities.city_code").regex(filter.getCities().getCityCode(),"i");
+		}
+		Criteria countryCriteria = new Criteria();
+		if(filter.getCities().getCountryCode() != null) {
+			countryCriteria = Criteria.where("cities.country_code").regex(filter.getCities().getCountryCode(),"i");
+		}
+			
+		if(filter.getOperator().equals("or")) {			
+			Criteria c = new Criteria().andOperator(
+					new Criteria().andOperator(codeCriteria, descriptionCriteria),
+					new Criteria().orOperator(cityCriteria,countryCriteria));
+			
+			Query query = new Query(c);
+			cityGroups = mongoTemplate.find(query, CityGroup.class);
+			
+		}else if(filter.getOperator().equals("and")){
+			Criteria c = new Criteria().andOperator(
+					new Criteria().andOperator(codeCriteria, descriptionCriteria),
+					new Criteria().andOperator(cityCriteria,countryCriteria));
+			
+			Query query = new Query(c);
+			cityGroups = mongoTemplate.find(query, CityGroup.class);
+		}
 		
 		return cityGroups;
 	}

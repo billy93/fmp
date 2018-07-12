@@ -319,13 +319,13 @@
 	 							<div class="form-group mb0">
 									<div class="checkbox-wrapper inline">
 										<label>
-											<input type="checkbox" name="">													
+											<input type="checkbox" ng-model="vm.filter.bookingClass.replace.check">													
 										</label>
 									</div>
 								</div>
 	 						</div>
 	 						<div class="pull-left ph5px w30">
-	 							<input type="text" name="" class="form-control inline" disabled="">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.bookingClass.replace.check" ng-model="vm.filter.bookingClass.replace.value">
 	 						</div>
 	 					</div>
 	 					<div class="clearfix">
@@ -349,8 +349,21 @@
 								</select>
 	 						</div>
 	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.cabin.replace.check">													
+										</label>
+									</div>
+								</div>						
 	 						</div>
 	 						<div class="pull-left ph5px w30">
+	 							<select class="form-control" ng-disabled="!vm.filter.cabin.replace.check" ng-model="vm.filter.cabin.replace.value">
+									<option value="Y">Y - Economy</option>
+									<option value="F">F - First Class</option>
+									<option value="C">C - Business</option>
+									<option value="R">R - Premium Economy</option>
+								</select>
 	 						</div>
 	 					</div>
 	 					<div class="clearfix">
@@ -367,14 +380,26 @@
 	 						</div>
 	 						<div class="pull-left ph5px w30">
 								<select class="form-control" ng-disabled="!vm.filter.typeOfJourney.check" ng-model="vm.filter.typeOfJourney.search">
-									<option>One Way</option>
-									<option>Return</option>
-									<option>One Way Only</option>
+									<option value="1">One Way</option>
+									<option value="2">Return</option>
+									<option value="3">One Way Only</option>
 								</select>
 	 						</div>
 	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.typeOfJourney.replace.check">													
+										</label>
+									</div>
+								</div>	
 	 						</div>
 	 						<div class="pull-left ph5px w30">
+	 							<select class="form-control" ng-disabled="!vm.filter.typeOfJourney.replace.check" ng-model="vm.filter.typeOfJourney.replace.value">
+									<option value="1">One Way</option>
+									<option value="2">Return</option>
+									<option value="3">One Way Only</option>
+								</select>
 	 						</div>
 	 					</div>
 	 					<div class="clearfix">
@@ -384,18 +409,25 @@
 	 							<div class="form-group mb0">
 									<div class="checkbox-wrapper inline">
 										<label>
-											<input type="checkbox"  ng-model="vm.filter.footnote.check">													
+											<input type="checkbox"  ng-model="vm.filter.footnote1.check">													
 										</label>
 									</div>
 								</div>
 	 						</div>
 	 						<div class="pull-left ph5px w30">
-								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.footnote.check" ng-model="vm.filter.footnote.search">
+								<input type="text" class="form-control inline" uppercase ng-disabled="!vm.filter.footnote1.check" ng-model="vm.filter.footnote1.search">
 	 						</div>
-	 						<div class="pull-left ph5px w15">
-	 							
-	 						</div>
-	 						<div class="pull-left ph5px w20">
+	 						<div class="pull-left ph5px w5">
+ 								<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.footnote1.replace.check">													
+										</label>
+									</div>
+								</div>
+							</div>	 						
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.footnote1.replace.check" ng-model="vm.filter.footnote1.replace.value">
 	 							
 	 						</div>
 	 					</div>
@@ -412,13 +444,19 @@
 								</div>
 	 						</div>
 	 						<div class="pull-left ph5px w30">
-								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.rtgno.check" ng-model="vm.filter.rtgno.search">
+								<input type="text" class="form-control inline" uppercase ng-disabled="!vm.filter.rtgno.check" ng-model="vm.filter.rtgno.search">
 	 						</div>
-	 						<div class="pull-left ph5px w15">
-	 							
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.rtgno.replace.check">													
+										</label>
+									</div>
+								</div>
 	 						</div>
-	 						<div class="pull-left ph5px w20">
-	 							
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.rtgno.replace.check" ng-model="vm.filter.rtgno.replace.value">	 							
 	 						</div>
 	 					</div>
 	 					<div class="clearfix">
@@ -436,11 +474,17 @@
 	 						<div class="pull-left ph5px w30">
 								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.ruleno.check" ng-model="vm.filter.ruleno.search">
 	 						</div>
-	 						<div class="pull-left ph5px w15">
-	 							
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.ruleno.replace.check">													
+										</label>
+									</div>
+								</div>	 						
 	 						</div>
-	 						<div class="pull-left ph5px w20">
-	 							
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.ruleno.replace.check" ng-model="vm.filter.ruleno.replace.value">	 	
 	 						</div>
 	 					</div>
 	 					<div class="clearfix">
@@ -450,20 +494,27 @@
 	 							<div class="form-group mb0">
 									<div class="checkbox-wrapper inline">
 										<label>
-											<input type="checkbox"  ng-model="vm.filter.currency.check">													
+											<input type="checkbox" ng-model="vm.filter.currency.check">													
 										</label>
 									</div>
 								</div>
 	 						</div>
 	 						<div class="pull-left ph5px w30">
-								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.currency.check" ng-model="vm.filter.currency.search">
+								<input type="text" class="form-control inline" uppercase ng-disabled="!vm.filter.currency.check" ng-model="vm.filter.currency.search">
 	 						</div>
-	 						<div class="pull-left ph5px w15">
-	 							
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.currency.replace.check">													
+										</label>
+									</div>
+								</div>	 						
 	 						</div>
-	 						<div class="pull-left ph5px w20">
-	 							
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.currency.replace.check" ng-model="vm.filter.currency.replace.value">	 		 						
 	 						</div>
+
 	 					</div>
 	 					<div class="clearfix">
 	 						<div class="pull-left ph5px w30 mt5px">Amount
@@ -478,13 +529,19 @@
 								</div>
 	 						</div>
 	 						<div class="pull-left ph5px w30">
-								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.amount.check" ng-model="vm.filter.amount.search">
+								<input type="text" class="form-control inline" uppercase ng-disabled="!vm.filter.amount.check" ng-model="vm.filter.amount.search">
 	 						</div>
-	 						<div class="pull-left ph5px w15">
-	 							
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.amount.replace.check">													
+										</label>
+									</div>
+								</div>
 	 						</div>
-	 						<div class="pull-left ph5px w20">
-	 							
+	 						<div class="pull-left ph5px w30">
+	 								<input type="text" class="form-control inline" ng-disabled="!vm.filter.amount.replace.check" ng-model="vm.filter.amount.replace.value">	 		 							 						
 	 						</div>
 	 					</div>
 	 					<div class="clearfix">
@@ -500,13 +557,20 @@
 								</div>
 	 						</div>
 	 						<div class="pull-left ph5px w30">
-								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.aif.check" ng-model="vm.filter.aif.search">
+								<input type="text" class="form-control inline" uppercase ng-disabled="!vm.filter.aif.check" ng-model="vm.filter.aif.search">
 	 						</div>
-	 						<div class="pull-left ph5px w15">
-	 							
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.aif.replace.check">													
+										</label>
+									</div>
+								</div>
 	 						</div>
-	 						<div class="pull-left ph5px w20">
-	 							
+	 						<div class="pull-left ph5px w30">
+								<input type="text" class="form-control inline" ng-disabled="!vm.filter.aif.replace.check" ng-model="vm.filter.aif.replace.value">	 		 							 						
+	 						
 	 						</div>
 	 					</div>
 	 					<div class="clearfix">
@@ -527,7 +591,7 @@
 									<input id="field_travelStartDate" 
 										ng-disabled="!vm.filter.travelStart.check"
 										type="text"
-										name="travelStartDate" id="field_travelEndDate"
+										name="travelStartDate" id="field_travelStartDate"
 		                				class="form-control input-date"					                				
 		                				ng-model="vm.filter.travelStart.search" 
 							            datetime-picker="{{dateformat}}" 
@@ -540,10 +604,28 @@
 								</div>
 	 						</div>
 	 						<div class="pull-left ph5px w5">
-	 							
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.travelStart.replace.check">													
+										</label>
+									</div>
+								</div>
 	 						</div>
 	 						<div class="pull-left ph5px w30">
-	 							
+	 							<input id="field_travelEndDate" 
+										ng-disabled="!vm.filter.travelEnd.check"
+										type="text"
+										name="travelStartDate" id="field_travelEndDate"
+		                				class="form-control input-date"					                				
+		                				ng-model="vm.filter.travelStart.search" 
+							            datetime-picker="{{dateformat}}" 
+							            enable-time="false"
+							            is-open="vm.datePickerOpenStatus['travelStartDate']">
+									
+									<span ng-click="vm.openCalendar('travelStartDate')" class="input-group-addon disabled">
+										<i class="fa fa-calendar"></i>
+									</span>
 	 						</div>
 	 					</div>
 	 					<div class="clearfix">
@@ -672,10 +754,10 @@
 	 						<div class="pull-left ph5px w30">
 								<input type="text" name="" class="form-control inline" ng-disabled="!vm.filter.comment.check" ng-model="vm.filter.comment.search">
 	 						</div>
-	 						<div class="pull-left ph5px w15">
+	 						<div class="pull-left ph5px w5">
 	 							
 	 						</div>
-	 						<div class="pull-left ph5px w20">
+	 						<div class="pull-left ph5px w30">
 	 							
 	 						</div>
 	 					</div>
@@ -756,10 +838,10 @@
 	 						<div class="pull-left ph5px w30">
 								<input type="text" name="" class="form-control inline" ng-disabled="!vm.filter.retesheetComment.check" ng-model="vm.filter.retesheetComment.search">
 	 						</div>
-	 						<div class="pull-left ph5px w15">
+	 						<div class="pull-left ph5px w5">
 	 							
 	 						</div>
-	 						<div class="pull-left ph5px w20">
+	 						<div class="pull-left ph5px w30">
 	 							
 	 						</div>
 	 					</div>

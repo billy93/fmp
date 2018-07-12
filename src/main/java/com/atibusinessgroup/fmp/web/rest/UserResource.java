@@ -57,6 +57,7 @@ import com.atibusinessgroup.fmp.web.rest.util.HeaderUtil;
 import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
 import com.codahale.metrics.annotation.Timed;
 
+import ch.qos.logback.core.filter.Filter;
 import io.github.jhipster.web.util.ResponseUtil;
 
 /**
@@ -207,21 +208,72 @@ public class UserResource {
 				HeaderUtil.createAlert("A user is updated with identifier " + userDTO.getLogin(), userDTO.getLogin()));
 	}
 
+	
+	public static class UserFilter{
+		public String username;
+		public String firstName;
+		public String lastName;
+		public String email;
+		
+		public String getUsername() {
+			return username;
+		}
+		public void setUsername(String username) {
+			this.username = username;
+		}
+		public String getFirstName() {
+			return firstName;
+		}
+		public void setFirstName(String firstName) {
+			this.firstName = firstName;
+		}
+		public String getLastName() {
+			return lastName;
+		}
+		public void setLastName(String lastName) {
+			this.lastName = lastName;
+		}
+		public String getEmail() {
+			return email;
+		}
+		public void setEmail(String email) {
+			this.email = email;
+		}
+		
+	}
 	/**
 	 * GET /users : get all users.
 	 *
 	 * @param pageable
 	 *            the pagination information
 	 * @return the ResponseEntity with status 200 (OK) and with body all users
+	 * @throws IllegalAccessException 
 	 */
 	@GetMapping("/users")
 	@Timed
-	public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
-		final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
-		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
-		return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+	public ResponseEntity<List<UserDTO>> getAllUsers(UserFilter filter, Pageable pageable) throws IllegalAccessException {		
+		if(checkNull(filter)) {	
+			final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
+			HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
+			return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+		} else {
+			final Page<UserDTO> page = userRepository.findCustom(filter, pageable);
+			HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
+			return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+		}
+		
 	}
-
+	
+	 public boolean checkNull(Object object) throws IllegalAccessException {
+	        for (Field f : object.getClass().getDeclaredFields()) {
+	        	f.setAccessible(true);
+	            if (f.get(object) != null) {
+	                return false;
+	            }
+	        }
+	        return true;            
+	    }
+	 
 	/**
 	 * @return a string list of the all of the roles
 	 */

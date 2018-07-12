@@ -6,7 +6,7 @@
     	</button>
 	</div>
     <div class="modal-body">
-    
+
 	    <div ng-if="vm.selectHeader">
 	    	<div class="form-group mb5px">
 	            <label >Select Fields</label>
@@ -46,7 +46,7 @@
 								<div class="action-ratesheet js-removeAll-ratesheet" ng-click="vm.removeAllSelectedAuthorities()">REMOVE ALL</div>
 								<div class="action-ratesheet js-remove-ratesheet" ng-click="vm.removeSelectedAuthorities()">REMOVE</div>
 							</div>
-						</div>									
+						</div>
 					</div>
 					<div class="pull-left w35">
 						<select class="form-control right-select" multiple name="header" ng-model="vm.removedHeader">
@@ -54,12 +54,12 @@
 			            </select>
 					</div>
 				</div>
-	        </div>	
+	        </div>
 			<div class="form-group">
 				<label>Rule Text</label>
 				<textarea class="form-control" rows="3" ng-model="vm.ruleText"></textarea>
 			</div>
-	    </div>    	
+	    </div>
 	    <div ng-if="!vm.selectHeader" style="text-align: center;">
 	    	<img class="logo-img" src="content/images/GA_logo.png"  alt="logo" style="width: 130px; height: 100px; margin-bottom: 15px;"/>
    			<div ng-model="vm.workPackage ">
@@ -76,7 +76,7 @@
 				            <thead>
 				                <tr >
 				                	<th ng-if="!vm.isNull">No</th>
-				                	<th ng-repeat="title in vm.title track by $index">{{title}}</th>               		
+				                	<th ng-repeat="title in vm.title track by $index">{{title}}</th>
 				                </tr>
 				            </thead>
 				           	<tbody>
@@ -105,7 +105,7 @@
 			            	</tbody>
 						</table>
 			    	</div>
-		    	</div> 
+		    	</div>
 	    	</div>
 			<div>
 				<span>RULE TEXT : {{vm.ruleText}}</span><br>
@@ -116,8 +116,10 @@
   		<div ng-if="vm.selectHeader">
             <button type="submit" class="btn btn-secondary" data-dismiss="modal" ng-click="vm.submit()">Submit</button>
 	        <button type="button" ng-click="vm.clear()" class="btn btn-back" data-dismiss="modal">Close</button>
-	  	</div>	  		    
+	  	</div>
 	    <div ng-if="!vm.selectHeader">
+            <button type="submit" class="btn btn-secondary" data-dismiss="modal" ng-click="vm.exportRateSheetCSV()">To CSV</button>
+            <button type="submit" class="btn btn-secondary" data-dismiss="modal" ng-click="vm.exportRateSheetScreen(vm.faresData)">To Screen</button>
     		<button type="submit" class="btn btn-secondary" data-dismiss="modal" ng-click="vm.exportRateSheet()">To PDF</button>
     		<button type="submit" class="btn btn-secondary" data-dismiss="modal" ng-click="vm.exportRateSheetExcel()">To Excel</button>
     		<button type="submit" class="btn btn-secondary" data-dismiss="modal" ng-click="vm.exportRateSheetExcels()">To Excel(xls)</button>
