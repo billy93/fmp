@@ -403,7 +403,7 @@
 																    	<a ng-click="vm.fillDown(workPackageSheet)" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)">Fill Down</a>
 																    </li>	
 																     <li>
-															    		<a ng-click="vm.searchReplace(workPackageSheet)" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)">Search/Replace</a>
+															    		<a ng-click="vm.searchReplace('fare-table'+$index, workPackageSheet)" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)">Search/Replace</a>
 															   		 </li>
 																     <li>
 															    		<a ng-click="vm.copySelectedFares(workPackageSheet, 'workorder-fares')" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)}" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Copy Selected Rows</a>
@@ -451,7 +451,7 @@
 												</div>
 											</div>
 											<div class="table-responsive">
-												<table class="table table-stripped table-bordered datatable" ng-init="vm.sort(workPackageSheet, '#')">
+												<table id="fare-table{{$index}}" class="table table-stripped table-bordered datatable" ng-init="vm.sort(workPackageSheet, '#')">
 													<thead>
 														<tr role="row">
 															<th class="sorting_asc" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" aria-sort="ascending">No</th>
@@ -706,10 +706,10 @@
 								                				ng-class="{'must-fill': editForm.editFormATPCO.amount{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"																			            
 													            ng-model="fare.amount"  style="min-width: 80px">									                												                			
 									               			</td>
-									               			<td id="amtDiff">
+									               			<td id="amtDiff" ng-class="{highlighted:fare.field['amount']}">
 									               				<input class="form-control" disabled ng-model="fare.amtDiff" style="min-width:100px"/>
 									               			</td>
-									               			<td id="amtPercentDiff">
+									               			<td id="amtPercentDiff" ng-class="{highlighted:fare.field['amount']}">
 									               				<input class="form-control" disabled ng-model="fare.amtPercentDiff" style="min-width:100px"/>
 									               			</td>
 									               			<td id="aif" ng-click="vm.tdClick(workPackageSheet, fare, 'aif', $event)" ng-class="{highlighted:fare.field['aif'], changed : vm.diff[fare.id].indexOf('aif') > -1}">

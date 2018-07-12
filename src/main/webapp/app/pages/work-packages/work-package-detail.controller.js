@@ -2072,7 +2072,7 @@
  	    	}
  	    }
  	    
- 	    vm.searchReplace = function(fareSheet, filter){
+ 	    vm.searchReplace = function(table, fareSheet, filter){
  	    	$uibModal.open({
 	            templateUrl: 'app/pages/work-packages/work-package-search-replace-dialog.html',
 	            controller: 'WorkPackageSearchReplaceDialogController',
@@ -2091,8 +2091,8 @@
 	            	}
 	            }
  	    	}).result.then(function(workPackageFareFilter) {
- 	    		
  	    		function checkField(workPackageFareFilter, type, fare){
+ 	    			//regular
  	    			var listField = [
     	    			workPackageFareFilter.no.check && workPackageFareFilter.no.search != null ? 'no' : null,
     	    			workPackageFareFilter.status.check && workPackageFareFilter.status.search != null ? 'status' : null,
@@ -2105,6 +2105,7 @@
     	    			workPackageFareFilter.fareBasis.check && workPackageFareFilter.fareBasis.search != null ? 'fareBasis' : null,
     	    			workPackageFareFilter.bookingClass.check && workPackageFareFilter.bookingClass.search != null ? 'bookingClass' : null,
     	    	    	workPackageFareFilter.cabin.check && workPackageFareFilter.cabin.search != null ? 'cabin' : null,
+    	    	    	workPackageFareFilter.footnote1.check && workPackageFareFilter.footnote1.search != null ? 'footnote1' : null,
     	    	    	workPackageFareFilter.typeOfJourney.check && workPackageFareFilter.typeOfJourney.search != null ? 'typeOfJourney' : null,
     	    	    	workPackageFareFilter.rtgno.check && workPackageFareFilter.rtgno.search != null ? 'rtgno' : null,
     	    	    	workPackageFareFilter.ruleno.check && workPackageFareFilter.ruleno.search != null ? 'ruleno' : null,
@@ -2125,10 +2126,17 @@
  	    			if(type == 'and'){
 	 	    			found = true;
 	 	    			for(var x=0;x<listField.length;x++){
-	 	    				if(listField[x] != null){
-	 	    					if(getDescendantProp(fare, listField[x]) != getDescendantProp(workPackageFareFilter, listField[x]+'.search')){
-//	 	    					if(fare[listField[x]] != workPackageFareFilter[listField[x]].search){
-	 	    						found = false;
+	 	    				if(listField[x] != null){	 
+	 	    					if(listField[x] == 'travelStart' || listField[x] == 'travelEnd' || listField[x] == 'saleStart' || listField[x] == 'saleEnd' || listField[x] == 'travelComplete'){
+	 	    						var date = DateUtils.convertLocalDateToServer(fare[listField[x]]);
+	 	    						if(date != getDescendantProp(workPackageFareFilter, listField[x]+'.search')){
+		 	    						found = false;
+	 	    						}
+	 	    					}
+	 	    					else{
+		 	    					if(getDescendantProp(fare, listField[x]) != getDescendantProp(workPackageFareFilter, listField[x]+'.search')){
+			 	    					found = false;
+			 	    				}	 	    						
 	 	    					}
 	 	    				}
 	 	    			}
@@ -2136,9 +2144,16 @@
  	    			else if(type == 'or'){
  	    				for(var x=0;x<listField.length;x++){
 	 	    				if(listField[x] != null){
-	 	    					if(getDescendantProp(fare, listField[x]) != getDescendantProp(workPackageFareFilter, listField[x]+'.search')){
-//	 	    					if(fare[listField[x]] == workPackageFareFilter[listField[x]].search){
-	 	    						found = true;
+	 	    					if(listField[x] == 'travelStart' || listField[x] == 'travelEnd' || listField[x] == 'saleStart' || listField[x] == 'saleEnd' || listField[x] == 'travelComplete'){
+	 	    						var date = DateUtils.convertLocalDateToServer(fare[listField[x]]);
+	 	    						if(date == getDescendantProp(workPackageFareFilter, listField[x]+'.search')){
+		 	    						found = true;
+	 	    						}
+	 	    					}
+	 	    					else{
+		 	    					if(getDescendantProp(fare, listField[x]) == getDescendantProp(workPackageFareFilter, listField[x]+'.search')){
+			 	    					found = true;
+			 	    				}	 	    						
 	 	    					}
 	 	    				}
 	 	    			}
@@ -2147,26 +2162,36 @@
  	    		}
  	    		
  	    		function replaceField(workPackageFareFilter, fare){
+ 	    			//regular
  	    			var listField = [
     	    			workPackageFareFilter.status.replace.check && workPackageFareFilter.status.replace.value != null ? 'status' : null,
     					workPackageFareFilter.origin.replace.check && workPackageFareFilter.origin.replace.value != null ? 'origin' : null,
     					workPackageFareFilter.destination.replace.check && workPackageFareFilter.destination.replace.value != null ? 'destination' : null,
     					workPackageFareFilter.fareBasis.replace.check && workPackageFareFilter.fareBasis.replace.value != null ? 'fareBasis' : null,
     					workPackageFareFilter.bookingClass.replace.check && workPackageFareFilter.bookingClass.replace.value != null ? 'bookingClass' : null,
+    	    			workPackageFareFilter.cabin.replace.check && workPackageFareFilter.cabin.replace.value != null ? 'cabin' : null,
+    	    			workPackageFareFilter.typeOfJourney.replace.check && workPackageFareFilter.typeOfJourney.replace.value != null ? 'typeOfJourney' : null,
+    	    	    	workPackageFareFilter.footnote1.replace.check && workPackageFareFilter.footnote1.replace.value != null ? 'footnote1' : null,
+    	    			workPackageFareFilter.rtgno.replace.check && workPackageFareFilter.rtgno.replace.value != null ? 'rtgno' : null,
+    	    	    	workPackageFareFilter.ruleno.replace.check && workPackageFareFilter.ruleno.replace.value != null ? 'ruleno' : null,
+    	    	    	workPackageFareFilter.currency.replace.check && workPackageFareFilter.currency.replace.value != null ? 'currency' : null,
+    	    	    	workPackageFareFilter.amount.replace.check && workPackageFareFilter.amount.replace.value != null ? 'amount' : null,
+    	    	    	workPackageFareFilter.aif.replace.check && workPackageFareFilter.aif.search != null ? 'aif' : null,
+    	    	    	workPackageFareFilter.travelStart.vcheck && workPackageFareFilter.travelStart.replace.value != null ? 'travelStart' : null,
+    	    	    	workPackageFareFilter.travelEnd.replace.check && workPackageFareFilter.travelEnd.replace.value != null ? 'travelEnd' : null,
+    	    	    	workPackageFareFilter.saleStart.replace.check && workPackageFareFilter.saleStart.replace.value != null ? 'saleStart' : null,
+    	    	    	workPackageFareFilter.saleEnd.replace.check && workPackageFareFilter.saleEnd.replace.value != null ? 'saleEnd' : null,
+    	    	    	workPackageFareFilter.travelComplete.replace.check && workPackageFareFilter.travelComplete.replace.value != null ? 'travelComplete' : null,
+    	    	    	workPackageFareFilter.travelCompleteIndicator.replace.check && workPackageFareFilter.travelCompleteIndicator.replace.value != null ? 'travelCompleteIndicator' : null,
+    	    	    	workPackageFareFilter.comment.replace.check && workPackageFareFilter.comment.replace.value != null ? 'comment' : null,
+    	    	    	workPackageFareFilter.ratesheetComment.replace.check && workPackageFareFilter.ratesheetComment.replace.value != null ? 'ratesheetComment' : null,
+    	    		
     	    		];
  	    			
  	    			for(var x=0;x<listField.length;x++){
  	    				if(listField[x] != null){
  	    					fare[listField[x]] = getDescendantProp(workPackageFareFilter, listField[x]+'.replace.value');
-// 	    					if(getDescendantProp(fare, listField[x]) != getDescendantProp(workPackageFareFilter, listField[x]+'.replace.search')){
-// 	    					if(fare[listField[x]] == workPackageFareFilter[listField[x]].search){
-// 	    						found = true;
-// 	    					}
  	    				}
- 	    				
-// 	    				if(listField[x] != null){
-// 	    					fare[listField[x]] = workPackageFareFilter.status.replace.value;
-// 	    				}
  	    			}
  	    		}
  	    		
@@ -2178,10 +2203,7 @@
     	    	}
 	    		
 	    		for(var i = 0; i < fareSheet.fares.length; i++){
-	    			if(fareSheet.fares[i].field == null || fareSheet.fares[i].field == undefined){
-    					fareSheet.fares[i].field = {};
-    		    	}
-	    			fareSheet.fares[i].field['no'] =  false;
+	    			fareSheet.fares[i].field = {};
 	    		}
 	    		
 	    		var find = false;
@@ -2192,12 +2214,23 @@
     					fareSheet.fares[i].field = {};
     		    	}
 	    			
-	    			fareSheet.fares[i].field['no'] =  false;
+	    			//Unselect
+	    			//fareSheet.fares[i].field['no'] =  false;
 	    			
 	    			if(checkField(workPackageFareFilter, workPackageFareFilter.andor, fareSheet.fares[i])){
     					find = true;
-    					fareSheet.fares[i].field['no'] =  true;
     					
+    					//select all field   
+    					var tableEl = document.querySelector( '#'+table );
+    					
+    					//regular fare column size
+    					var fromColumn = 0;
+    					var toColumn = 29;
+	    				for(var f=fromColumn; f<=toColumn;f++){
+	    					  var column = angular.element(tableEl.rows[i+1].cells[f]).attr('id');
+	    					  fareSheet.fares[i].field[column] = true;
+	    				}
+	    				
     					if(i+1 == fareSheet.fares.length){
     						workPackageFareFilter.index = 0;
     					}
@@ -2221,12 +2254,9 @@
 	    			if(workPackageFareFilter.message == null){
 	    				workPackageFareFilter.message = "No Matches found, continue search at the beginning?";
 	    			}
-//	    			else{
-//	    				workPackageFareFilter.message = "No matches found";
-//	    			}
 	    		}
 	    		
-    	    	vm.searchReplace(fareSheet, workPackageFareFilter);        	    
+    	    	vm.searchReplace(table, fareSheet, workPackageFareFilter);        	    
             }, function() {
         			
             });
