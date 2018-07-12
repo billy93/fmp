@@ -189,7 +189,7 @@
 								ng-class="{'selected': vm.selectedRow == internetQuery}">
 								<td>{{(vm.queryParams.page * vm.queryParams.size) + $index + 1}}</td>
 								<td>{{internetQuery.website}}</td>
-								<td>{{internetQuery.captureDateTime | date:'medium'}}</td>
+								<td>{{internetQuery.captureDateTime | date:'dd MMM yyyy'}}</td>
 								<td>{{internetQuery.apDays}}</td>
 								<td>{{internetQuery.cxr}}</td>
 								<td>{{internetQuery.airline}}</td>
@@ -199,10 +199,10 @@
 								<td>{{internetQuery.destination}}</td>
 								<td>{{internetQuery.destinationName}}</td>
 								<td>{{internetQuery.fareBasis}}</td>
-								<td>{{internetQuery.departDateTime | date:'medium'}}</td>
-								<td></td>
-								<td>{{internetQuery.returnDateTime | date:'medium'}}</td>
-								<td></td>
+								<td>{{internetQuery.departDateTime | date:'dd MMM yyyy'}}</td>
+								<td>{{internetQuery.departDateTime | date:'HH:mm:ss'}}</td>
+								<td>{{internetQuery.returnDateTime | date:'dd MMM yyyy'}}</td>
+								<td>{{internetQuery.returnDateTime | date:'HH:mm:ss'}}</td>
 								<td>{{internetQuery.flightNumber}}</td>
 								<td>{{internetQuery.baseAmtBD}}</td>
 								<td>{{internetQuery.taxesBD}}</td>
