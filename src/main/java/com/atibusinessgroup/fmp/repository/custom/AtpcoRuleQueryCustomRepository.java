@@ -666,7 +666,7 @@ public class AtpcoRuleQueryCustomRepository {
 		aggregationOperations.add(new AggregationOperation() {
 			@Override
 			public DBObject toDBObject(AggregationOperationContext context) {
-				return new BasicDBObject("$unwind", "$master_tariff");
+				return new BasicDBObject("$unwind", new BasicDBObject("path", "$master_tariff").append("preserveNullAndEmptyArrays", true));
 			}
 		});
 		
@@ -779,7 +779,7 @@ public class AtpcoRuleQueryCustomRepository {
 		aggregationOperations.add(new AggregationOperation() {
 			@Override
 			public DBObject toDBObject(AggregationOperationContext context) {
-				return new BasicDBObject("$unwind", "$master_tariff");
+				return new BasicDBObject("$unwind", new BasicDBObject("path", "$master_tariff").append("preserveNullAndEmptyArrays", true));
 			}
 		});
 		
