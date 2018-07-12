@@ -5,13 +5,13 @@
         .module('fmpApp')
         .controller('MasterTariffModalController', MasterTariffModalController);
 
-    MasterTariffModalController.$inject = ['$state', 'entity', '$uibModalInstance', 'TariffNumber'];
+    MasterTariffModalController.$inject = ['$state', 'entity', '$uibModalInstance', 'AtpcoMasterTariff'];
 
-    function MasterTariffModalController($state, entity, $uibModalInstance, TariffNumber) {
+    function MasterTariffModalController($state, entity, $uibModalInstance, AtpcoMasterTariff) {
     	 var vm = this;
          vm.clear = clear;
          vm.parent = entity;
-         vm.tariffNumber = TariffNumber;
+         vm.tariffNumber = AtpcoMasterTariff;
          vm.option = { searchType:'tarNo' };
          vm.selectedRow = vm.tariffNumber[0];
          vm.sortType     = 'tarNo'; // set the default sort type
@@ -34,7 +34,6 @@
          }
          
          vm.select = function(){
-        	 console.log(vm.parent);
         	 vm.parent.paramTarNo = vm.selectedRow.tarNo;
          	$uibModalInstance.close(vm.selectedRow);
          }
@@ -44,6 +43,7 @@
         
          vm.tariffNumber.getAll(function(data) {
          	vm.tariffs = data;
+         	console.log(data);
          });
         
         

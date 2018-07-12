@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.atibusinessgroup.fmp.constant.CategoryName;
 import com.atibusinessgroup.fmp.constant.CategoryType;
+import com.atibusinessgroup.fmp.domain.AtpcoMasterTariff;
 import com.atibusinessgroup.fmp.domain.TariffNumber;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFootnoteRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
@@ -38,6 +39,7 @@ import com.atibusinessgroup.fmp.domain.dto.FareClassQueryParam;
 import com.atibusinessgroup.fmp.domain.dto.Rec8Param;
 import com.atibusinessgroup.fmp.domain.dto.RuleQuery;
 import com.atibusinessgroup.fmp.domain.dto.RuleQueryParam;
+import com.atibusinessgroup.fmp.repository.AtpcoMasterTariffRepository;
 import com.atibusinessgroup.fmp.repository.TariffNumberRepository;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoFareCustomRepository;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoRuleQueryCustomRepository;
@@ -62,16 +64,16 @@ public class RuleQueryResource {
 
 	private final AtpcoRecordService atpcoRecordService;
 	
-	private final TariffNumberRepository tariffNumberRepository;
+	private final AtpcoMasterTariffRepository atpcoMasterTariffRepository;
 
 	public RuleQueryResource(AtpcoRuleQueryCustomRepository atpcoRuleQueryCustomRepository,
 			RuleQueryMapper ruleQueryMapper, AtpcoFareCustomRepository atpcoFareCustomRepository, AtpcoRecordService atpcoRecordService,
-			TariffNumberRepository tariffNumberRepository) {
+			TariffNumberRepository tariffNumberRepository, AtpcoMasterTariffRepository atpcoMasterTariffRepository) {
 		this.atpcoRuleQueryCustomRepository = atpcoRuleQueryCustomRepository;
 		this.ruleQueryMapper = ruleQueryMapper;
-		this.tariffNumberRepository = tariffNumberRepository;
 		this.atpcoFareCustomRepository = atpcoFareCustomRepository;
 		this.atpcoRecordService = atpcoRecordService;
+		this.atpcoMasterTariffRepository = atpcoMasterTariffRepository;
 
 		categories.put("001", CategoryName.CAT_001);
 		categories.put("002", CategoryName.CAT_002);
@@ -96,6 +98,7 @@ public class RuleQueryResource {
 		categories.put("021", CategoryName.CAT_021);
 		categories.put("022", CategoryName.CAT_022);
 		categories.put("023", CategoryName.CAT_023);
+		categories.put("025", CategoryName.CAT_025);
 		categories.put("026", CategoryName.CAT_026);
 		categories.put("027", CategoryName.CAT_027);
 		categories.put("028", CategoryName.CAT_028);
@@ -171,7 +174,7 @@ public class RuleQueryResource {
 
 		List<AtpcoRecord2> arecords2 = atpcoRuleQueryCustomRepository.getListRecord2ById(recordId);
 
-		TariffNumber ftntTn = tariffNumberRepository.findOneByTarNoAndType(ruleQuery.getTarNo(), "FARE RULE");
+		AtpcoMasterTariff ftntTn = atpcoMasterTariffRepository.findOneByTarNo(ruleQuery.getTarNo());
 		String ftntTcd = null;
 		
 		if (ftntTn != null) {

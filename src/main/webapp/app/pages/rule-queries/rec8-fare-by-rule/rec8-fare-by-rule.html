@@ -113,10 +113,10 @@
 								<td>{{rec8.fare_geo_scope_loc_2}}</td>
 								<td><span ng-if="rec8.dates_eff=='indef'"></span><span
 									ng-if="rec8.dates_eff != 'indef'">{{rec8.dates_eff
-										| date:'medium'}}</span></td>
+										| date:vm.dateFormat:vm.timezone}}</span></td>
 								<td><span ng-if="rec8.dates_disc=='indef'"></span><span
 									ng-if="rec8.dates_disc != 'indef'">{{rec8.dates_disc
-										| date:'medium'}}</span></td>
+										| date:vm.dateFormat:vm.timezone}}</span></td>
 							</tr>
 						</tbody>
 					</table>

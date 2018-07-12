@@ -7,7 +7,7 @@
     AtpcoMasterTariff.$inject = ['$resource'];
 
     function AtpcoMasterTariff ($resource) {
-        var resourceUrl =  'api/atpco-master-tariff/:id';
+        var resourceUrl =  'api/atpcoMasterTariff/:id';
 
         return $resource(resourceUrl, {}, {
             'query': { method: 'GET', isArray: true},
@@ -21,8 +21,8 @@
                 }
             },
             'update': { method:'PUT' },
-            'getAll': { method: 'GET', isArray: true, url:"api/atpco-master-tariff/getAll"},
-            'getAllGlobal': { method: 'GET', isArray: true, url:"api/atpco-master-tariff/getAllGlobal"},
+            'getAll': { method: 'GET', isArray: true, url:"api/atpcoMasterTariff/getAll"},
+            'getAllGlobal': { method: 'GET', isArray: true, url:"api/atpcoMasterTariff/getAllGlobal"},
         });
     }
 })();

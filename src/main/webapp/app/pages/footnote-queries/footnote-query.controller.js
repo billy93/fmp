@@ -4,9 +4,9 @@
 	angular.module('fmpApp').controller('FootnoteQueryController',
 			FootnoteQueryController);
 
-	FootnoteQueryController.$inject = [ '$state', '$stateParams', 'FootnoteQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', '$uibModal' ];
+	FootnoteQueryController.$inject = [ '$state', '$stateParams', 'Timezone', 'FootnoteQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', '$uibModal' ];
 
-	function FootnoteQueryController($state, $stateParams, FootnoteQuery, ParseLinks, AlertService, paginationConstants, queryParams, $uibModal) {
+	function FootnoteQueryController($state, $stateParams, Timezone, FootnoteQuery, ParseLinks, AlertService, paginationConstants, queryParams, $uibModal) {
 
 		var vm = this;
 		vm.loadPage = loadPage;
@@ -23,6 +23,7 @@
 		vm.datePickerOpenStatus = {};
 		vm.dateFormat = "yyyy-MM-dd";
 		vm.openCalendar = openCalendar;
+		vm.timezone = Timezone.GMT7;
 		
 		vm.paramCarrier = null;
 		vm.paramTarNo = null;
