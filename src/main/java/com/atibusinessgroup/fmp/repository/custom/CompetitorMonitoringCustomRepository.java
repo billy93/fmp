@@ -18,6 +18,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperationContext;
+import org.springframework.data.mongodb.core.aggregation.LimitOperation;
+import org.springframework.data.mongodb.core.aggregation.SkipOperation;
 import org.springframework.stereotype.Service;
 
 import com.atibusinessgroup.fmp.constant.CategoryName;
@@ -55,6 +57,26 @@ public class CompetitorMonitoringCustomRepository {
 		
 		List<AggregationOperation> listAggregationOps = new ArrayList<>();
 		
+		String[] ocCarrier = null;
+		
+		List<String> listOcCarrier = null;
+		
+		if (param.getCarrier() != null && !param.getCarrier().isEmpty()) {
+			ocCarrier = param.getCarrier().split(",");
+			if(ocCarrier.length>1) {
+				listOcCarrier = new ArrayList<String>(Arrays.asList(ocCarrier));
+				for(int i=0; i< listOcCarrier.size(); i++) {
+					if(listOcCarrier.get(i).equalsIgnoreCase("GA")) {
+						listOcCarrier.remove(i);
+					}
+				}
+			}
+			
+		}
+		
+
+		final List<String> listOcCarrierFinal = listOcCarrier;
+		
 		listAggregationOps.add(new AggregationOperation() {
 			
 			@Override
@@ -64,6 +86,7 @@ public class CompetitorMonitoringCustomRepository {
 				List<BasicDBObject> queries = new ArrayList<>();
 				
 				if (param.getCarrier() != null && !param.getCarrier().isEmpty()) {
+					
 					BasicDBObject carrier = new BasicDBObject();
 					carrier.append("cxr_cd", new BasicDBObject("$in",  Arrays.stream(param.getCarrier().split(",")).map(String::trim).toArray(String[]::new)));
 					queries.add(carrier);
@@ -78,6 +101,7 @@ public class CompetitorMonitoringCustomRepository {
 				if (param.getFareBasis() != null && !param.getFareBasis().isEmpty()) {
 					BasicDBObject fbcOr = new BasicDBObject();
 					String[] fbcParts = param.getFareBasis().split(",");
+					
 					List<BasicDBObject> orQueries = new ArrayList<>();
 					
 					for (String fbc:fbcParts) {
@@ -148,14 +172,37 @@ public class CompetitorMonitoringCustomRepository {
 				
 				queries.add(new BasicDBObject("ftnt", new BasicDBObject("$exists", "true")));
 				
-				if (param.getRuleNo() != null && !param.getRuleNo().isEmpty()) {
-					BasicDBObject ruleNo = new BasicDBObject();
-					ruleNo.append("rules_no", new BasicDBObject("$in",  Arrays.stream(param.getRuleNo().split(",")).map(String::trim).toArray(String[]::new)));
-					queries.add(ruleNo);
-				} else {
+				List<BasicDBObject> listRuleNo = new ArrayList<>();
+				
+				if(param.getRuleNo() == null && param.getOcRuleNo() == null ) {
 					BasicDBObject ruleNo = new BasicDBObject();
 					ruleNo.append("rules_no", new BasicDBObject("$exists", "true"));
 					queries.add(ruleNo);
+				} else {
+					
+					if (param.getRuleNo() != null && !param.getRuleNo().isEmpty()) {
+						BasicDBObject andMatch = new BasicDBObject();
+						List<BasicDBObject> ruleNo = new ArrayList<>();
+						ruleNo.add(new BasicDBObject("rules_no", new BasicDBObject("$in",  Arrays.stream(param.getRuleNo().split(",")).map(String::trim).toArray(String[]::new))));
+						ruleNo.add(new BasicDBObject("cxr_cd", "GA"));
+						andMatch.append("$and", ruleNo);
+						listRuleNo.add(andMatch);
+						
+					}
+					
+					if (param.getOcRuleNo() != null && !param.getOcRuleNo().isEmpty()) {
+						BasicDBObject andMatch = new BasicDBObject();
+						List<BasicDBObject> ruleNo = new ArrayList<>();
+						ruleNo.add(new BasicDBObject("rules_no", new BasicDBObject("$in",  Arrays.stream(param.getOcRuleNo().split(",")).map(String::trim).toArray(String[]::new))));
+						ruleNo.add(new BasicDBObject("cxr_cd", new BasicDBObject("$in", listOcCarrierFinal)));
+						andMatch.append("$and", ruleNo);
+						listRuleNo.add(andMatch);
+						
+					}
+					
+					BasicDBObject orRuleNo = new BasicDBObject();
+					orRuleNo.append("$or", listRuleNo);
+					queries.add(orRuleNo);
 				}
 				
 				queries.add(new BasicDBObject("rtg_no", new BasicDBObject("$exists", "true")));
@@ -216,9 +263,6 @@ public class CompetitorMonitoringCustomRepository {
 			});
 		}
 		
-		Aggregation aggregation = newAggregation(listAggregationOps);
-		
-		
 		LinkedHashMap<String, String> fareCategories = new LinkedHashMap<>();
 		LinkedHashMap<String, String> fareFootnotes = new LinkedHashMap<>();
 		LinkedHashMap<String, String> footnotes = new LinkedHashMap<>();
@@ -235,169 +279,201 @@ public class CompetitorMonitoringCustomRepository {
     		ruleCategories.add(entry.getKey());
     	}
     	
-		for (AtpcoFare afare : mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_FARE, AtpcoFare.class).getMappedResults()) {
-
-			List<AggregationOperation> listAgg = new ArrayList<>();
-			List<CategoryObject> cat14s = null;
-        	List<CategoryObject> cat15s = null;
-        	List<CategoryObject> footnote14s = null;
-        	List<CategoryObject> footnote15s = null;
-			
-			listAgg.add(new AggregationOperation() {
+    	int currentAggregationLoop = 0, skipSize = 0, limitSize = 100;
+    	boolean isCompleted = false;
+    	
+    	while (!isCompleted) {
+    		skipSize = param.getLastIndex() + (currentAggregationLoop * limitSize);
+    		if (currentAggregationLoop > 0) {
+    			listAggregationOps.remove(listAggregationOps.size() - 1);
+    			listAggregationOps.remove(listAggregationOps.size() - 1);
+    		}
+    		
+    		SkipOperation skip = new SkipOperation(skipSize);
+    		listAggregationOps.add(skip);
+    		
+    		LimitOperation limit = new LimitOperation(limitSize);
+    		listAggregationOps.add(limit);
+    		
+    		Aggregation aggregation = newAggregation(listAggregationOps);
+    		
+    		System.out.println(aggregation);
+    		
+    		List<AtpcoFare> afares = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_FARE, AtpcoFare.class).getMappedResults();
+    		
+    		if (afares.size() == 0) {
+    			isCompleted = true;
+    		}
+    		
+			for (AtpcoFare afare : afares) {
+	
+				List<AggregationOperation> listAgg = new ArrayList<>();
+				List<CategoryObject> cat14s = null;
+	        	List<CategoryObject> cat15s = null;
+	        	List<CategoryObject> footnote14s = null;
+	        	List<CategoryObject> footnote15s = null;
 				
-				@Override
-				public DBObject toDBObject(AggregationOperationContext context) {
-					BasicDBObject match = new BasicDBObject();
-					match.append("$match", new BasicDBObject("record_id", afare.getTariffNo()+afare.getCarrierCode()+afare.getRuleNo()+afare.getFareClassCode()));
-					return match;
-				}
-			});
-			
-			Aggregation aggRec1 = newAggregation(listAgg);
-
-	    	AtpcoRecord1 matchedRecord1 = null;
-			Date focusDate = null;
-			focusDate = atpcoRecordService.resolveFocusDate(null, afare.getTariffEffectiveDateObject(), afare.getDiscontinueDateObject());
-			
-			
-			for (AtpcoRecord1 record1 : mongoTemplate.aggregate(aggRec1, CollectionName.ATPCO_RECORD_1, AtpcoRecord1.class).getMappedResults()) {
-				boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afare.getOriginCity(), "C", afare.getDestinationCity(), afare.getOwrt(), afare.getRoutingNo(), afare.getFootnote(), focusDate,
-						record1.getGeoType1(), record1.getGeoLoc1(), record1.getGeoType2(), record1.getGeoLoc2(), record1.getOwrt(), record1.getRoutingNo(), record1.getFootnote(), record1.getEffectiveDateObject(), record1.getDiscontinueDateObject());
-	    		
-	    		if (matched) {
-	    			matchedRecord1 = record1;
-	    			break;
-	    		}
-			}
-			
-			if(afare.getFootnote() != null && !afare.getFootnote().trim().isEmpty()) {
-				
-				//Footnote
-				
-				List<AggregationOperation> listAggFtnt = new ArrayList<>();
-				
-				listAggFtnt.add(new AggregationOperation() {
+				listAgg.add(new AggregationOperation() {
 					
 					@Override
 					public DBObject toDBObject(AggregationOperationContext context) {
 						BasicDBObject match = new BasicDBObject();
-						match.append("$match", new BasicDBObject("record_id", afare.getTariffNo()+afare.getCarrierCode()+afare.getFootnote()));
+						match.append("$match", new BasicDBObject("record_id", afare.getTariffNo()+afare.getCarrierCode()+afare.getRuleNo()+afare.getFareClassCode()));
 						return match;
 					}
 				});
 				
-				Aggregation aggregateFtnt = newAggregation(listAggFtnt);
+				Aggregation aggRec1 = newAggregation(listAgg);
+	
+		    	AtpcoRecord1 matchedRecord1 = null;
+				Date focusDate = null;
+				focusDate = atpcoRecordService.resolveFocusDate(null, afare.getTariffEffectiveDateObject(), afare.getDiscontinueDateObject());
 				
-				for (Map.Entry<String, String> entry : footnotes.entrySet()) {
-            		AtpcoFootnoteRecord2 matchedRecord2 = null;
 				
-					for (AtpcoFootnoteRecord2 record2:mongoTemplate.aggregate(aggregateFtnt, CollectionName.ATPCO_FOOTNOTE_RECORD_2, AtpcoFootnoteRecord2.class).getMappedResults()) {
+				for (AtpcoRecord1 record1 : mongoTemplate.aggregate(aggRec1, CollectionName.ATPCO_RECORD_1, AtpcoRecord1.class).getMappedResults()) {
+					boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afare.getOriginCity(), "C", afare.getDestinationCity(), afare.getOwrt(), afare.getRoutingNo(), afare.getFootnote(), focusDate,
+							record1.getGeoType1(), record1.getGeoLoc1(), record1.getGeoType2(), record1.getGeoLoc2(), record1.getOwrt(), record1.getRoutingNo(), record1.getFootnote(), record1.getEffectiveDateObject(), record1.getDiscontinueDateObject());
+		    		
+		    		if (matched) {
+		    			matchedRecord1 = record1;
+		    			break;
+		    		}
+				}
+				
+				if(afare.getFootnote() != null && !afare.getFootnote().trim().isEmpty()) {
+					
+					//Footnote
+					
+					List<AggregationOperation> listAggFtnt = new ArrayList<>();
+					
+					listAggFtnt.add(new AggregationOperation() {
 						
-						if (record2.getCatNo().contentEquals(entry.getKey())) {
-								boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afare.getOriginCity(), "C", afare.getDestinationCity(), afare.getOwrt(), afare.getRoutingNo(), afare.getFootnote(), focusDate,
-			        					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
-			                	
-			            		if (matched) {
-			            			matchedRecord2 = record2;
-			            			break;
-			            		} 
-                    		
-                    		break;
-                    	}
+						@Override
+						public DBObject toDBObject(AggregationOperationContext context) {
+							BasicDBObject match = new BasicDBObject();
+							match.append("$match", new BasicDBObject("record_id", afare.getTariffNo()+afare.getCarrierCode()+afare.getFootnote()));
+							return match;
+						}
+					});
+					
+					Aggregation aggregateFtnt = newAggregation(listAggFtnt);
+					
+					for (Map.Entry<String, String> entry : footnotes.entrySet()) {
+	            		AtpcoFootnoteRecord2 matchedRecord2 = null;
+					
+						for (AtpcoFootnoteRecord2 record2:mongoTemplate.aggregate(aggregateFtnt, CollectionName.ATPCO_FOOTNOTE_RECORD_2, AtpcoFootnoteRecord2.class).getMappedResults()) {
+							
+							if (record2.getCatNo().contentEquals(entry.getKey())) {
+									boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afare.getOriginCity(), "C", afare.getDestinationCity(), afare.getOwrt(), afare.getRoutingNo(), afare.getFootnote(), focusDate,
+				        					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
+				                	
+				            		if (matched) {
+				            			matchedRecord2 = record2;
+				            			break;
+				            		} 
+	                    		
+	                    		break;
+	                    	}
+						}
+							
+							
+							if (matchedRecord2 != null && matchedRecord2.getDataTables() != null && matchedRecord2.getDataTables().size() > 0) {
+		                		List<CategoryObject> ftntCats = atpcoRecordService.getAndConvertCategoryObjectDataTable(entry.getKey(), matchedRecord2.getDataTables(), "Footnote");
+		                		
+		                		
+		                		switch (entry.getKey()) {
+		                			case "014": 
+		                					footnote14s = ftntCats;
+		                				break;
+		                			case "015": 
+		                					footnote15s = ftntCats;
+		    							break;
+		                		}
+		                	}
+		        			
 					}
+					
+					
+				} else {
+					//Rule
+					
+					List<AggregationOperation> listAggRule  = new ArrayList<>();
+					
+					listAggRule.add(new AggregationOperation() {
 						
-						
-						if (matchedRecord2 != null && matchedRecord2.getDataTables() != null && matchedRecord2.getDataTables().size() > 0) {
-	                		List<CategoryObject> ftntCats = atpcoRecordService.getAndConvertCategoryObjectDataTable(entry.getKey(), matchedRecord2.getDataTables(), "Footnote");
-	                		
+						@Override
+						public DBObject toDBObject(AggregationOperationContext context) {
+							BasicDBObject match = new BasicDBObject();
+							match.append("$match", new BasicDBObject("record_id", afare.getTariffNo()+afare.getCarrierCode()+afare.getFareClassCode()));
+							return match;
+						}
+					});
+					
+					Aggregation aggregateRule = newAggregation(listAggRule);
+					
+	            	for (Map.Entry<String, String> entry : fareCategories.entrySet()) {
+	            		AtpcoRecord2 matchedRecord2 = null;
+	            		
+	            		for (AtpcoRecord2 record2:mongoTemplate.aggregate(aggregateRule, CollectionName.ATPCO_RECORD_2, AtpcoRecord2.class).getMappedResults()) {
+	            			if (record2.getCatNo().contentEquals(entry.getKey())) {
+	            			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afare.getOriginCity(), "C", afare.getDestinationCity(), afare.getFareClassCode(), afare.getFareType(), matchedRecord1 != null ? matchedRecord1.getSeasonType() : null, matchedRecord1 != null ? matchedRecord1.getDayOfWeekType() : null, afare.getOwrt(), afare.getRoutingNo(), afare.getFootnote(), focusDate,
+	            					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getFareClass(), record2.getFareType(), record2.getSeasonType(), record2.getDayOfWeekType(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
+		                    	
+		                		if (matched) {
+		                			matchedRecord2 = record2;
+		                			break;
+		                		} 
+	            			}
+	            		}
+	            		
+	            		if (matchedRecord2 != null && matchedRecord2.getDataTables() != null && matchedRecord2.getDataTables().size() > 0) {
+	            			List<DataTable> rec2DataTables = matchedRecord2.getDataTables();
+	            			
+	            			for (Iterator<DataTable> iterator = rec2DataTables.iterator(); iterator.hasNext();) {
+	            				DataTable dt = iterator.next();
+	            				if (!dt.getCatNo().contentEquals(entry.getKey())) {
+	            					iterator.remove();
+	            				}
+	            			}
+	            			
+	                		List<CategoryObject> rules = atpcoRecordService.getAndConvertCategoryObjectDataTable(entry.getKey(), rec2DataTables, "Rule");
 	                		
 	                		switch (entry.getKey()) {
-	                			case "014": 
-	                					footnote14s = ftntCats;
-	                				break;
-	                			case "015": 
-	                					footnote15s = ftntCats;
-	    							break;
+	                		case "014": 
+	                				cat14s = rules;
+								break; 
+	                		case "015":
+	                				cat15s = rules;
+								break;
 	                		}
 	                	}
-	        			
+	            	}
 				}
+	//			System.out.println(matchedRecord1.toString());
 				
+				SpecifiedConstructed afdQuery = afdQueryMapper.convertAtpcoFare(afare, matchedRecord1, null, null, null, null, cat14s, cat15s, null, null, null,
+	        			footnote14s, footnote15s, focusDate);
+	        	
 				
-			} else {
-				//Rule
+				if (param.getSaleDateFrom() != null || param.getSaleDateTo() != null || param.getTravelDateFrom() != null || param.getTravelDateTo() != null) {
+	        		if (atpcoRecordService.compareValueWithParamDate(afdQuery.getSaleDates(), param.getSaleDateFrom(), param.getSaleDateTo(), param.getSaleDateOption()) &&
+	            		atpcoRecordService.compareValueWithParamDate(afdQuery.getTravelDates(), param.getTravelDateFrom(), param.getTravelDateTo(), param.getTravelDateOption())) {
+	            		afdQueries.add(afdQuery);
+	            	}
+	        	} else {
+	        		afdQueries.add(afdQuery);
+	        	}
 				
-				List<AggregationOperation> listAggRule  = new ArrayList<>();
-				
-				listAggRule.add(new AggregationOperation() {
-					
-					@Override
-					public DBObject toDBObject(AggregationOperationContext context) {
-						BasicDBObject match = new BasicDBObject();
-						match.append("$match", new BasicDBObject("record_id", afare.getTariffNo()+afare.getCarrierCode()+afare.getFareClassCode()));
-						return match;
-					}
-				});
-				
-				Aggregation aggregateRule = newAggregation(listAggRule);
-				
-            	for (Map.Entry<String, String> entry : fareCategories.entrySet()) {
-            		AtpcoRecord2 matchedRecord2 = null;
-            		
-            		for (AtpcoRecord2 record2:mongoTemplate.aggregate(aggregateRule, CollectionName.ATPCO_RECORD_2, AtpcoRecord2.class).getMappedResults()) {
-            			if (record2.getCatNo().contentEquals(entry.getKey())) {
-            			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afare.getOriginCity(), "C", afare.getDestinationCity(), afare.getFareClassCode(), afare.getFareType(), matchedRecord1 != null ? matchedRecord1.getSeasonType() : null, matchedRecord1 != null ? matchedRecord1.getDayOfWeekType() : null, afare.getOwrt(), afare.getRoutingNo(), afare.getFootnote(), focusDate,
-            					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getFareClass(), record2.getFareType(), record2.getSeasonType(), record2.getDayOfWeekType(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
-	                    	
-	                		if (matched) {
-	                			matchedRecord2 = record2;
-	                			break;
-	                		} 
-            			}
-            		}
-            		
-            		if (matchedRecord2 != null && matchedRecord2.getDataTables() != null && matchedRecord2.getDataTables().size() > 0) {
-            			List<DataTable> rec2DataTables = matchedRecord2.getDataTables();
-            			
-            			for (Iterator<DataTable> iterator = rec2DataTables.iterator(); iterator.hasNext();) {
-            				DataTable dt = iterator.next();
-            				if (!dt.getCatNo().contentEquals(entry.getKey())) {
-            					iterator.remove();
-            				}
-            			}
-            			
-                		List<CategoryObject> rules = atpcoRecordService.getAndConvertCategoryObjectDataTable(entry.getKey(), rec2DataTables, "Rule");
-                		
-                		switch (entry.getKey()) {
-                		case "014": 
-                				cat14s = rules;
-							break; 
-                		case "015":
-                				cat15s = rules;
-							break;
-                		}
-                	}
-            	}
-			}
-//			System.out.println(matchedRecord1.toString());
-			
-			SpecifiedConstructed afdQuery = afdQueryMapper.convertAtpcoFare(afare, matchedRecord1, null, null, null, null, cat14s, cat15s, null, null, null,
-        			footnote14s, footnote15s, focusDate);
-        	
-			
-			if (param.getSaleDateFrom() != null || param.getSaleDateTo() != null || param.getTravelDateFrom() != null || param.getTravelDateTo() != null) {
-        		if (atpcoRecordService.compareValueWithParamDate(afdQuery.getSaleDates(), param.getSaleDateFrom(), param.getSaleDateTo(), param.getSaleDateOption()) &&
-            		atpcoRecordService.compareValueWithParamDate(afdQuery.getTravelDates(), param.getTravelDateFrom(), param.getTravelDateTo(), param.getTravelDateOption())) {
-            		afdQueries.add(afdQuery);
-            	}
-        	} else {
-        		afdQueries.add(afdQuery);
+				if (afdQueries.size() == 2000) {
+    				isCompleted = true;
+    				break;
+    			}
         	}
-			
-			
-		}
+        	
+        	currentAggregationLoop++;
+    	}
 		
-		System.out.println(aggregation);
+//		System.out.println(aggregation);
 		
 		return new PageImpl<>(afdQueries, pageable, afdQueries.size());
 	}

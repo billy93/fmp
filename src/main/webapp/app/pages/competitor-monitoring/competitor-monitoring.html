@@ -31,35 +31,47 @@
 						</div>
 						
 						<div class="col-md-3">
-							<div class="form-group">
-								<div class="custom-label semibold">Rule No</div>
-								<input type="text" class="form-control" name="ruleNo"
-									id="ruleNo" ng-model="vm.queryParams.ruleNo" maxlength="4"
-									uppercase />
+							<div class="col-md-6">
+								<div class="form-group">
+									<div class="custom-label semibold">GA Rule No</div>
+									<input type="text" class="form-control" name="ruleNo"
+										id="ruleNo" ng-model="vm.queryParams.ruleNo"
+										uppercase />
+								</div>
 							</div>
-							<div class="form-group">
-									<div class="custom-label semibold">Source</div>
-									<select class="form-control" name="source" id="source" ng-init="vm.queryParams.source = 'A'" ng-model="vm.queryParams.source">
-										<option value="{{value.key}}" ng-repeat="value in vm.sources track by $index">{{value.value}}</option>
-									</select>
+							<div class="col-md-6">
+								<div class="form-group">
+									<div class="custom-label semibold">OC Rule No</div>
+									<input type="text" class="form-control" name="ocRuleNo"
+										id="ocRuleNo" ng-model="vm.queryParams.ocRuleNo"
+										uppercase />
+								</div>
 							</div>
-							<div class="form-group">
-								<div class="custom-label semibold">Fare Basis</div>
-								<input type="text" class="form-control" name="fareBasis"
-									id="fareBasis" ng-model="vm.queryParams.fareBasis" />
+							<div class="col-md-12">
+								<div class="form-group">
+										<div class="custom-label semibold">Source</div>
+										<select class="form-control" name="source" id="source" ng-init="vm.queryParams.source = 'A'" ng-model="vm.queryParams.source">
+											<option value="{{value.key}}" ng-repeat="value in vm.sources track by $index">{{value.value}}</option>
+										</select>
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Fare Basis</div>
+									<input type="text" class="form-control" name="fareBasis"
+										id="fareBasis" ng-model="vm.queryParams.fareBasis" />
+								</div>
 							</div>
+							
+							
 						</div>
 						
 						<div class="col-md-6">
-							<div class="form-group mb0">
-								<div class="form-group">
+							<div class="form-group">
 									<div class="custom-label semibold">Public/Private</div>
-									<select class="form-control" name="publicPrivate" id="publicPrivate" ng-model="vm.queryParams.publicPrivate">
+									<select class="form-control  no-lpad" name="publicPrivate" id="publicPrivate" ng-model="vm.queryParams.publicPrivate">
 										<option value="{{value.key}}" ng-repeat="value in vm.publicPrivate track by $index">{{value.value}}</option>
 									</select>
-								</div>
 							</div>
-							<div class="form-group mb0">
+							<div class="form-group">
 								<div class="custom-label semibold">Travel Date</div>
 								<div class="row no-mar">
 									<div class="col-md-4 no-lpad">
@@ -154,82 +166,85 @@
 			</div>
 		</div>
 
-		<div class="table-wrapper" ng-if="vm.compMonitoring.length > 0">
+		<div class="table-wrapper table-afd" ng-if="vm.compMonitoring.length > 0">
 			<div class="datatable-wrapper form-inline">
-				<div class="table-responsive">
-					<table class="table table-striped table-bordered datatable">
-						<thead>
-							<tr>
-								<th>NO</th>
-								<th>CARRIER</th>
-								<th>TARIFF CODE</th>
-								<th>TARIFF NO</th>
-								<th>ORIG-DEST</th>
-								<th>TRAVEL START</th>
-								<th>TRAVEL END</th>
-								<th>SALE START</th>
-								<th>SALE END</th>
-								<th>CABIN</th>
-								<th>BOOKING CLASS</th>
-								<th>OW / RT</th>
-								<th>RULE NO</th>
-								<th>SOURCE</th>
-								<th>FARE CLASS</th>
-								<th>CURR</th>
-								<th>AMOUNT</th>
-								<th ng-if="vm.showTFC">Error</th>
-								<th ng-if="vm.showTFC">TFC Calc Date</th>
-								<th ng-if="vm.showTFC">TFC Focus Date</th>
-								<th ng-if="vm.showTFC">YQYR</th>
-								<th ng-if="vm.showTFC">Taxes</th>
-								<th>TFC <span ng-click="vm.showTFC = !vm.showTFC"><i
-										ng-if="vm.showTFC" class="glyphicon glyphicon-minus"></i><i
-										ng-if="!vm.showTFC" class="glyphicon glyphicon-plus"></i></span></th>
-							</tr>
-						</thead>
-						<tbody
-							ng-repeat="afdQuery in vm.compMonitoring track by afdQuery.fareId">
-							<tr ng-click="vm.selectedRow = afdQuery;"
-								ng-class="{'selected': vm.selectedRow == afdQuery}">
-								<td><a ui-sref="system-parameter-detail({id:afdQuery.id})">{{($index + 1)+((vm.page-1)*vm.itemsPerPage) }}</a></td>
-								<td>{{afdQuery.carrierCode}}</td>
-								<td>{{afdQuery.tariffCode}}</td>
-								<td>{{afdQuery.tariffNo}}</td>
-								<td>{{afdQuery.originCity}}-{{afdQuery.destinationCity}}</td>
-								<td><span ng-if="afdQuery.travelStartDate != 'indef'">{{afdQuery.firstTravelDate
-										| date:'ddMMMyyyy'}}</span></td>
-								<td><span ng-if="afdQuery.travelEndDate != 'indef'">{{afdQuery.lastTravelDate
-										| date:'ddMMMyyyy'}}</span></td>
-								<td><span ng-if="afdQuery.saleStartDate != 'indef'">{{afdQuery.firstSaleDate
-										| date:'ddMMMyyyy'}}</span></td>
-								<td><span ng-if="afdQuery.saleEndDate != 'indef'">{{afdQuery.lastSaleDate
-										| date:'ddMMMyyyy'}}</span></td>
-								<td>{{afdQuery.cabin}}</td>
-								<td><span ng-repeat="value in afdQuery.bookingClass track by $index">{{value}}<span ng-if="$index < afdQuery.bookingClass.length - 1">, </span></span></td>
-								<td><span ng-if="afdQuery.owrt == '1'">OW</span><span
-									ng-if="afdQuery.owrt == '2'">RT</span><span
-									ng-if="afdQuery.owrt == '3'">OO</span></td>
-								<td>{{afdQuery.ruleNo}}</td>
-								<td>{{afdQuery.source}}</td>
-								<td>{{afdQuery.fareClassCode}}</td>
-								<td>{{afdQuery.currencyCode}}</td>
-								<td>{{afdQuery.baseAmount}}</td>
-								<td ng-if="vm.showTFC">=TFC=</td>
-								<td ng-if="vm.showTFC">=TFC=</td>
-								<td ng-if="vm.showTFC">=TFC=</td>
-								<td ng-if="vm.showTFC">=TFC=</td>
-								<td ng-if="vm.showTFC">=TFC=</td>
-								<td>=TFC=</td>
-							</tr>
-						</tbody>
-					</table>
+				<div class="table-responsive" style="overflow-y:hidden; max-height: initial; padding-bottom: 0">
+					<div class="absolute-table">
+						<table class="table table-striped table-bordered datatable table-header-fixed">
+							<thead>
+								<tr>
+									<th  class="th-fixed">NO</th>
+									<th  class="th-fixed">CARRIER</th>
+									<th  class="th-fixed">TARIFF CODE</th>
+									<th  class="th-fixed">TARIFF NO</th>
+									<th  class="th-fixed">ORIG-DEST</th>
+									<th  class="th-fixed">TRAVEL START</th>
+									<th  class="th-fixed">TRAVEL END</th>
+									<th  class="th-fixed">SALE START</th>
+									<th  class="th-fixed">SALE END</th>
+									<th  class="th-fixed">CABIN</th>
+									<th  class="th-fixed">BOOKING CLASS</th>
+									<th  class="th-fixed">OW / RT</th>
+									<th  class="th-fixed">RULE NO</th>
+									<th  class="th-fixed">SOURCE</th>
+									<th  class="th-fixed">FARE CLASS</th>
+									<th  class="th-fixed">CURR</th>
+									<th  class="th-fixed">AMOUNT</th>
+	<!-- 								<th ng-if="vm.showTFC">Error</th> -->
+	<!-- 								<th ng-if="vm.showTFC">TFC Calc Date</th> -->
+	<!-- 								<th ng-if="vm.showTFC">TFC Focus Date</th> -->
+	<!-- 								<th ng-if="vm.showTFC">YQYR</th> -->
+	<!-- 								<th ng-if="vm.showTFC">Taxes</th> -->
+	<!-- 								<th  class="th-fixed">TFC <span ng-click="vm.showTFC = !vm.showTFC"><i -->
+	<!-- 										ng-if="vm.showTFC" class="glyphicon glyphicon-minus"></i><i -->
+	<!-- 										ng-if="!vm.showTFC" class="glyphicon glyphicon-plus"></i></span></th> -->
+								</tr>
+							</thead>
+							<tbody id="tbody-afd" style="overflow-x:hidden">
+								<tr class="tr-afd" 
+								 ng-repeat="afdQuery in vm.compMonitoring track by afdQuery.fareId" ng-click="vm.selectedRow = afdQuery;"
+									ng-class="{'selected': vm.selectedRow == afdQuery}">
+									<td><a ui-sref="system-parameter-detail({id:afdQuery.id})">{{($index + 1)+((vm.page-1)*vm.itemsPerPage) }}</a></td>
+									<td>{{afdQuery.carrierCode}}</td>
+									<td>{{afdQuery.tariffCode}}</td>
+									<td>{{afdQuery.tariffNo}}</td>
+									<td>{{afdQuery.originCity}}-{{afdQuery.destinationCity}}</td>
+									<td><span ng-if="afdQuery.travelStartDate != 'indef'">{{afdQuery.firstTravelDate
+											| date:'ddMMMyyyy'}}</span></td>
+									<td><span ng-if="afdQuery.travelEndDate != 'indef'">{{afdQuery.lastTravelDate
+											| date:'ddMMMyyyy'}}</span></td>
+									<td><span ng-if="afdQuery.saleStartDate != 'indef'">{{afdQuery.firstSaleDate
+											| date:'ddMMMyyyy'}}</span></td>
+									<td><span ng-if="afdQuery.saleEndDate != 'indef'">{{afdQuery.lastSaleDate
+											| date:'ddMMMyyyy'}}</span></td>
+									<td>{{afdQuery.cabin}}</td>
+									<td><span ng-repeat="value in afdQuery.bookingClass track by $index">{{value}}<span ng-if="$index < afdQuery.bookingClass.length - 1">, </span></span></td>
+									<td><span ng-if="afdQuery.owrt == '1'">OW</span><span
+										ng-if="afdQuery.owrt == '2'">RT</span><span
+										ng-if="afdQuery.owrt == '3'">OO</span></td>
+									<td>{{afdQuery.ruleNo}}</td>
+									<td>{{afdQuery.source}}</td>
+									<td>{{afdQuery.fareClassCode}}</td>
+									<td>{{afdQuery.currencyCode}}</td>
+									<td>{{afdQuery.baseAmount}}</td>
+	<!-- 								<td ng-if="vm.showTFC">=TFC=</td> -->
+	<!-- 								<td ng-if="vm.showTFC">=TFC=</td> -->
+	<!-- 								<td ng-if="vm.showTFC">=TFC=</td> -->
+	<!-- 								<td ng-if="vm.showTFC">=TFC=</td> -->
+	<!-- 								<td ng-if="vm.showTFC">=TFC=</td> -->
+	<!-- 								<td>=TFC=</td> -->
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
 		
 		<div class="text-center" ng-if="vm.compMonitoring.length > 0">
 			<div class="form-group">
-				Showing {{vm.totalItems}} items.
+				<span ng-if="vm.compMonitoring.length < 2000">Showing {{vm.totalItems}} items.</span>
+				<span ng-if="vm.compMonitoring.length == 2000" style="color:red">Maximum items exceeded. Showing {{vm.totalItems}} items.</span>
 			</div>
 			<br/>
 		
