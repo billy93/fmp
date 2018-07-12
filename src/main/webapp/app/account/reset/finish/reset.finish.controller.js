@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('ResetFinishController', ResetFinishController);
 
-    ResetFinishController.$inject = ['$stateParams', '$timeout', 'Auth', 'LoginService'];
+    ResetFinishController.$inject = ['$stateParams', '$timeout', 'Auth', 'LoginService', 'Principal'];
 
-    function ResetFinishController ($stateParams, $timeout, Auth, LoginService) {
+    function ResetFinishController ($stateParams, $timeout, Auth, LoginService,Principal) {
         var vm = this;
 
         vm.keyMissing = angular.isUndefined($stateParams.key);
@@ -21,7 +21,16 @@
         vm.minLength = 8;
         vm.maxLength = 30;
         vm.errorMessage = null;
-
+        
+        Principal.identity().then(function(account) {
+        	console.log(account);
+        	if(account != null){
+        		console.log("Log out first");
+        		Auth.logout();
+        	}
+        });
+        
+        
         $timeout(function (){angular.element('#password').focus();});
 
         function finishReset() {

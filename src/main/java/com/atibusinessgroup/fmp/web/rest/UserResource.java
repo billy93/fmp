@@ -57,6 +57,7 @@ import com.atibusinessgroup.fmp.web.rest.util.HeaderUtil;
 import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
 import com.codahale.metrics.annotation.Timed;
 
+import ch.qos.logback.core.filter.Filter;
 import io.github.jhipster.web.util.ResponseUtil;
 
 /**
@@ -213,15 +214,27 @@ public class UserResource {
 	 * @param pageable
 	 *            the pagination information
 	 * @return the ResponseEntity with status 200 (OK) and with body all users
+	 * @throws IllegalAccessException 
 	 */
 	@GetMapping("/users")
 	@Timed
-	public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable) {
-		final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
-		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
-		return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+	public ResponseEntity<List<UserDTO>> getAllUsers(UserDTO filter, Pageable pageable) throws IllegalAccessException {		
+		log.debug("Called FILTER {}", filter.getLogin() == null && filter.getEmail() == null && filter.getFirstName() == null && filter.getLastName() == null);
+		if(filter.getLogin() == null && filter.getEmail() == null && filter.getFirstName() == null && filter.getLastName() == null) {	
+			log.debug("USER Biasa");
+			final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
+			HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
+			return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+		} else {
+			log.debug("USER FILTER");
+			final Page<UserDTO> page = userRepository.findCustom(filter, pageable);
+			log.debug("USER FILTER {}", page);
+			HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
+			return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+		}
+		
 	}
-
+	
 	/**
 	 * @return a string list of the all of the roles
 	 */
