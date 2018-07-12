@@ -18,7 +18,6 @@
 		vm.itemsPerPage = paginationConstants.itemsPerPage;
 		vm.queryParams = queryParams;
 		vm.loadAll = loadAll;
-		vm.splitOrigDest = splitOrigDest;
 		vm.generateGraph = generateGraph;
 		vm.graphDisabled = true;
 		vm.isDisabled = isDisabled;
@@ -29,7 +28,6 @@
 		vm.showLegend = showLegend;
 		vm.viewFullText = viewFullText;
 		
-		vm.getNextPage = getNextPage;
 
 		vm.reset = reset;
 		vm.page = 1;
@@ -43,9 +41,7 @@
 		
 		vm.checkValidParameters = checkValidParameters;
 		
-		vm.compMonitoring = null;
-		
-		vm.tempData = [];
+		vm.compMonitoring = [];
 
 		vm.sources = [
         	{key: "A", value: "A - ATPCO"},
@@ -108,6 +104,7 @@
 		
 		function loadAll() {
 			
+			
 			vm.infoMessage = vm.checkValidParameters();
     		
     		if (vm.infoMessage != 'Valid') {
@@ -117,7 +114,7 @@
     		
 			vm.categoryRules = null;
 			vm.currentCompetitorMonitoring = null;
-			vm.tempData = [];
+			vm.compMonitoring = [];
 
 			vm.page = 1;
 			vm.queryParams.page = vm.page-1;
@@ -130,10 +127,30 @@
 				vm.links = ParseLinks.parse(headers('link'));
 				vm.totalItems = headers('X-Total-Count');
 				vm.queryCount = vm.totalItems;
-				vm.tempData = data;
-				vm.getNextPage();
+				vm.compMonitoring = data;
 				vm.graphEnabled = isDisabled();
 				
+				$(document).ready(function(){
+					var _parents = $('.table-afd').find('thead');
+	        		var _th = _parents.find('.th-fixed');
+	        		var _tr = _parents.siblings('tbody').find('tr:first-child');
+	        		var _td = _tr.find('td');
+	        		var _length = _th.length;
+	        		_th.last().css('border-right','none');
+	        		for(var i=0;i<_length;i++){
+	        			var _width = _th.eq(i).outerWidth();
+	        			var _width2 = _td.eq(i).outerWidth();
+	        			if(_width > _width2){
+	        				_td.eq(i).css('min-width', _width);
+	        				_td.eq(i).css('width', _width);
+	        			}
+	        			else{
+	        				_th.eq(i).css('min-width', _width2);
+	        				_th.eq(i).css('width', _width2);
+	        			}
+	        		}
+					
+				});
 			}
 
 			function onError(error) {
@@ -179,9 +196,9 @@
 		}
 
 		function reset() {
+			$('#containerTitle').hide();
 			$('#container').hide();
 			$('#chartOptions').hide();
-			vm.compMonitoring = null;
 			vm.queryParams = {
 	        		carrier: null,
 	        		source: vm.sources[0].key,
@@ -196,6 +213,7 @@
 	        		owrt: null,
 	        		footnote: null,
 	        		ruleNo: null,
+	        		ocRuleNo: null,
 	        		routingNo: null,
 	        		woId: null,
 	        		effectiveDateFrom: null,
@@ -224,7 +242,7 @@
 	        		calculateTfc: false
 	        	}
 
-			vm.tempData = [];
+			vm.compMonitoring = [];
 			vm.barThickness = 8;
 			vm.barOpacity = 1;
 //			vm.loadAll();
@@ -287,19 +305,6 @@
 				$state.go('afd-query');
 			});
 		}
-
-		function splitOrigDest(origDest) {
-			if(origDest != null && origDest.trim() != '') {
-				origDest = origDest+""; //converting to string, otherwise got an error here...
-				var chr = origDest.indexOf("-");
-				var orig = origDest.substring(0, chr);
-				var dest = origDest.substring(chr + 1, origDest.length);
-
-				vm.queryParams.origin = orig;
-				vm.queryParams.destination = dest;
-			}
-			
-		}
 		
 		function isDisabled() {
 			if(vm.compMonitoring.length > 0) {
@@ -311,6 +316,7 @@
 
 		function generateGraph(data) {
 
+				$('#containerTitle').show();
 				$('#container').show();
 				$('#chartOptions').show();
 				var fares = data;
@@ -422,6 +428,9 @@
 			            columnrange : {
 			              stickyTracking : false,
 			              grouping : false
+			            },
+			            series:{
+			                turboThreshold:2000
 			            }
 			          },
 			          legend : {
@@ -436,12 +445,6 @@
 	              var chart1 = new Highcharts.Chart(chartOptions);
 	              chart1.redraw();
       
-		}
-		
-		function getNextPage() {
-			
-			vm.compMonitoring = vm.tempData.slice((vm.page-1)*vm.itemsPerPage, (vm.page)*vm.itemsPerPage);
-			
 		}
 		
 		function checkValidParameters() {
