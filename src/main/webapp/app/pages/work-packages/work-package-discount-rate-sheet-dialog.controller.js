@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('WorkPackageDiscountRateSheetDialogController', WorkPackageDiscountRateSheetDialogController);
 
-    WorkPackageDiscountRateSheetDialogController.$inject = ['$scope', 'FileSaver', 'DataUtils', '$uibModalInstance', 'WorkPackage', '$state', 'entity', 'index'];
+    WorkPackageDiscountRateSheetDialogController.$inject = ['$scope', 'FileSaver', 'DataUtils', '$uibModalInstance', 'WorkPackage', '$state', 'entity', 'index', '$stateParams', '$window'];
 
-    function WorkPackageDiscountRateSheetDialogController($scope, FileSaver, DataUtils, $uibModalInstance, WorkPackage, $state, entity, index) {
+    function WorkPackageDiscountRateSheetDialogController($scope, FileSaver, DataUtils, $uibModalInstance, WorkPackage, $state, entity, index, $stateParams, $window) {
 
         var vm = this;
         vm.workPackage = entity;
@@ -22,11 +22,43 @@
         vm.faresData = [];
         vm.fares = [];
         vm.index = index;
-        
+
         function clear () {
             $uibModalInstance.dismiss('cancel');
         }
-        
+
+        vm.exportRateSheetCSV = function(){
+            var wprs = {
+                wp : vm.workPackage,
+                ruleText : vm.ruleText,
+                index : vm.index,
+                header : vm.title
+            }
+            WorkPackage.exportRateSheetCSVDiscount(wprs, onExportSuccess, onExportFailure);
+            function onExportSuccess(result){
+                var fileType = "data:text/csv;charset=utf-8,";
+                var templateFilename = "RateSheetDiscount.csv";
+                var blob = b64toBlob(result.file, fileType);
+                FileSaver.saveAs(blob, templateFilename);
+            }
+
+            function onExportFailure(){
+                alert('Export to CSV failed');
+            }
+        }
+
+        vm.exportRateSheetScreen = function(data){
+            var wprs = {
+                wp : vm.workPackage,
+                sheetData: data,
+                ruleText: vm.ruleText,
+                index: vm.index,
+                header: vm.title
+            }
+            var window = $window.open("#/work-package-detail/screen", "_blank");
+            window.variable = wprs;
+        }
+
         vm.exportRateSheet  = function(){
       	  console.log(vm.title);
           var wprs = {
@@ -42,16 +74,16 @@
   			var blob = b64toBlob(result.file, fileType);
   			FileSaver.saveAs(blob, templateFilename);
     	  }
-    	  
+
     	  function onExportFailure(){
     		  alert('Export to PDF failed');
-    	  }    	  
+    	  }
         }
-        
+
         function clear () {
             $uibModalInstance.dismiss('cancel');
         }
-        
+
         vm.exportRateSheetExcel  = function(){
       	  console.log(vm.title);
           var wprs = {
@@ -67,12 +99,12 @@
   			var blob = b64toBlob(result.file, fileType);
   			FileSaver.saveAs(blob, templateFilename);
     	  }
-    	  
+
     	  function onExportFailure(){
     		  alert('Export to Excel failed');
-    	  }    	  
+    	  }
         }
-        
+
         vm.exportRateSheetExcels  = function(){
         	  console.log(vm.title);
             var wprs = {
@@ -88,12 +120,12 @@
     			var blob = b64toBlob(result.file, fileType);
     			FileSaver.saveAs(blob, templateFilename);
       	  }
-      	  
+
       	  function onExportFailure(){
       		  alert('Export to Excel failed');
-      	  }    	  
+      	  }
           }
-        
+
         vm.exportRateSheetWord  = function(){
         	  console.log(vm.title);
             var wprs = {
@@ -109,12 +141,12 @@
     			var blob = b64toBlob(result.file, fileType);
     			FileSaver.saveAs(blob, templateFilename);
       	  }
-      	  
+
       	  function onExportFailure(){
       		  alert('Export to Excel failed');
-      	  }    	  
+      	  }
           }
-        
+
         function b64toBlob(b64Data, contentType, sliceSize) {
         	contentType = contentType || '';
   		  	sliceSize = sliceSize || 512;
@@ -139,33 +171,33 @@
 
   		  return blob;
         }
-                
+
         vm.submit = function(){
 			vm.selectHeader = false;
-	
+
 	    	if (vm.title.length > 0){
 	        	vm.isNull = false;
 	        }else{
 	        	vm.isNull = true;
 	        }
-	    	
+
 	    	vm.allFares =[]
 			for(var x= 0; x<vm.workPackage.discountFareSheet[vm.index].fares.length; x++){
 				vm.allFares.push(vm.workPackage.discountFareSheet[vm.index].fares[x]);
 			}
 	    	console.log(vm.allFares);
-	
+
 			for(var y=0; y<vm.allFares.length;y++){
 				vm.fares = [];
 				for (var j = 0; j < vm.selectedHeader.length; j++) {
 	            	getFares(vm.selectedHeader[j],y);
 				}
 				vm.faresData.push(vm.fares);
-			}      	
-        	
+			}
+
         }
-        
-        vm.addOriginalAuthorities = function () {       	
+
+        vm.addOriginalAuthorities = function () {
         	if (vm.header[0] != undefined) {
         		if(vm.header.length>1){
         			for(var l=0; l<vm.header.length;l++){
@@ -215,30 +247,30 @@
             	setTitle(vm.selectedHeader[i]);
         	}
         }
-        
+
         vm.removeAllSelectedAuthorities = function(){
         	vm.selectedHeader = [];
         	vm.title = [];
         }
-        
-        vm.removeSelectedAuthorities = function () { 
+
+        vm.removeSelectedAuthorities = function () {
         	var index = vm.title.indexOf(vm.removedHeader[0])
         	console.log(vm.removedHeader[0], index);
-        	
+
         	if (index > -1) {
-        		vm.title.splice(index, 1);            
-        		vm.selectedHeader.splice(index, 1);   
+        		vm.title.splice(index, 1);
+        		vm.selectedHeader.splice(index, 1);
         		console.log(vm.title, vm.selectedHeader);
-        	}         	
+        	}
         }
-        
+
         function getFares(data,y){
         	switch (data) {
         	case "status" :
         		vm.fares.push(vm.allFares[y].status);
         	    break;
         	case "fbrTariffCode":
-        		vm.fares.push(vm.allFares[y].tarcd);            	
+        		vm.fares.push(vm.allFares[y].tarcd);
         	    break;
         	case "loc1Type" :
         		vm.fares.push(vm.allFares[y].loc1Type);
@@ -286,7 +318,7 @@
         		vm.fares.push(vm.allFares[y].ticketDesignator);
         		break;
         	case "baseFareOWRT" :
-        		vm.fares.push(vm.allFares[y].typeOfJourney);        	    
+        		vm.fares.push(vm.allFares[y].typeOfJourney);
         		break;
         	case "global" :
         		vm.fares.push(vm.allFares[y].global);
@@ -304,13 +336,13 @@
         		vm.fares.push(vm.allFares[y].newTypeOfJourney);
         		break;
         	case "newBkgCd" :
-        		vm.fares.push(vm.allFares[y].newBookingCode); 
+        		vm.fares.push(vm.allFares[y].newBookingCode);
         		break;
         	case "travelStart" :
         		vm.fares.push(vm.allFares[y].travelStart);
         		break;
         	case "travelEnd" :
-        		vm.fares.push(vm.allFares[y].travelEnd);              		
+        		vm.fares.push(vm.allFares[y].travelEnd);
         		break;
         	case "saleStart" :
         		vm.fares.push(vm.allFares[y].saleStart);
@@ -319,19 +351,19 @@
         		vm.fares.push(vm.allFares[y].saleEnd);
         		break;
         	case "comment" :
-        		vm.fares.push(vm.allFares[y].comment);              		
+        		vm.fares.push(vm.allFares[y].comment);
         		break;
         	case "travelComplete" :
-        		vm.fares.push(vm.allFares[y].travelComplete);               		
+        		vm.fares.push(vm.allFares[y].travelComplete);
         		break;
         	case "travelCompleteIndicator" :
-        		vm.fares.push(vm.allFares[y].travelCompleteIndicator);	               		
+        		vm.fares.push(vm.allFares[y].travelCompleteIndicator);
         		break;
         	default:
         		break;
 			}
         }
-        
+
         function setTitle(data){
         	console.log(data);
         	switch (data) {
@@ -339,7 +371,7 @@
         		vm.title.push("Status");
         	    break;
         	case "fbrTariffCode":
-        		vm.title.push("FBR Tariff Code");            	
+        		vm.title.push("FBR Tariff Code");
         	    break;
         	case "loc1Type" :
         		vm.title.push("Loc 1 Type");
@@ -399,7 +431,7 @@
         		vm.title.push("Rtg No Tarno");
         		break;
         	case "newFareCls" :
-        		vm.title.push("New FareCls");        	    
+        		vm.title.push("New FareCls");
         		break;
         	case "newOWRT" :
         		vm.title.push("New OW/RT");
@@ -411,7 +443,7 @@
         		vm.title.push("Travel Start");
         		break;
         	case "travelEnd" :
-        		vm.title.push("Travel End");   
+        		vm.title.push("Travel End");
         		break;
         	case "saleStart" :
         		vm.title.push("Sales Start");
@@ -420,13 +452,13 @@
         		vm.title.push("Sales End");
         		break;
         	case "comment" :
-        		vm.title.push("Comment");  
+        		vm.title.push("Comment");
         		break;
         	case "travelComplete" :
-        		vm.title.push("Travel Complete"); 
+        		vm.title.push("Travel Complete");
         		break;
         	case "travelCompleteIndicator" :
-        		vm.title.push("Travel Complete Indicator");  
+        		vm.title.push("Travel Complete Indicator");
         		break;
         	default:
         		break;
