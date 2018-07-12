@@ -591,7 +591,7 @@
 									<input id="field_travelStartDate" 
 										ng-disabled="!vm.filter.travelStart.check"
 										type="text"
-										name="travelStartDate" id="field_travelEndDate"
+										name="travelStartDate" id="field_travelStartDate"
 		                				class="form-control input-date"					                				
 		                				ng-model="vm.filter.travelStart.search" 
 							            datetime-picker="{{dateformat}}" 
@@ -613,7 +613,19 @@
 								</div>
 	 						</div>
 	 						<div class="pull-left ph5px w30">
-	 							
+	 							<input id="field_travelEndDate" 
+										ng-disabled="!vm.filter.travelEnd.check"
+										type="text"
+										name="travelStartDate" id="field_travelEndDate"
+		                				class="form-control input-date"					                				
+		                				ng-model="vm.filter.travelStart.search" 
+							            datetime-picker="{{dateformat}}" 
+							            enable-time="false"
+							            is-open="vm.datePickerOpenStatus['travelStartDate']">
+									
+									<span ng-click="vm.openCalendar('travelStartDate')" class="input-group-addon disabled">
+										<i class="fa fa-calendar"></i>
+									</span>
 	 						</div>
 	 					</div>
 	 					<div class="clearfix">

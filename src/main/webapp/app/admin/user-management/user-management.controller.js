@@ -41,7 +41,7 @@
 
         function loadAll () {
             User.query({
-            	"login" : vm.loginName,
+            	"username" : vm.loginName,
             	"email" : vm.email,
             	"firstName" : vm.firstName,
             	"lastName" : vm.lastName,

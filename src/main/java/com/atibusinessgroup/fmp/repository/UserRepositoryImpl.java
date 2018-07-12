@@ -11,7 +11,9 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.repository.support.PageableExecutionUtils;
 
+import com.atibusinessgroup.fmp.domain.User;
 import com.atibusinessgroup.fmp.service.dto.UserDTO;
+import com.atibusinessgroup.fmp.web.rest.UserResource.UserFilter;
 
 public class UserRepositoryImpl implements UserRepositoryCustomAnyName{
 	 
@@ -19,53 +21,52 @@ public class UserRepositoryImpl implements UserRepositoryCustomAnyName{
     MongoTemplate mongoTemplate;
 
 	@Override
-	public Page<UserDTO> findCustom(UserDTO filter, Pageable pageable) {
-		System.out.println("filter : "+filter);
+	public Page<UserDTO> findCustom(UserFilter filter, Pageable pageable) {
 		Criteria loginCriteria = new Criteria();
-		if(filter.getLogin() !=null) {
-			loginCriteria  = Criteria.where("agent_name").regex(filter.getLogin(),"i");
+		if(filter.getUsername() != null && !filter.getUsername().contentEquals("")) {
+			loginCriteria  = Criteria.where("login").regex(filter.getUsername(),"i");
 		}
 		Criteria emailCriteria = new Criteria();
-		if(filter.getEmail() !=null) {
-			emailCriteria = Criteria.where("agent_type").regex(filter.getEmail(),"i");
+		if(filter.getEmail() !=null && !filter.getEmail().contentEquals("")) {
+			emailCriteria = Criteria.where("email").regex(filter.getEmail(),"i");
 		}
 		Criteria firstNameCriteria = new Criteria();
-		if(filter.getFirstName()!=null) {
-			firstNameCriteria = Criteria.where("agent_category").regex(filter.getFirstName(),"i");
+		if(filter.getFirstName()!=null && !filter.getFirstName().contentEquals("")) {
+			firstNameCriteria = Criteria.where("first_name").regex(filter.getFirstName(),"i");
 		}
 		Criteria lastNameCriteria = new Criteria();
-		if(filter.getLastName() !=null) {
-			lastNameCriteria = Criteria.where("pos_country").regex(filter.getLastName(),"i");
+		if(filter.getLastName() !=null && !filter.getLastName().contentEquals("")) {
+			lastNameCriteria = Criteria.where("last_name").regex(filter.getLastName(),"i");
 		}
 		
 		Query query = new Query(new Criteria().andOperator(
 				loginCriteria, emailCriteria, firstNameCriteria,lastNameCriteria
-			)).with(pageable);
-		List<UserDTO> userDTOs = mongoTemplate.find(query, UserDTO.class);
-		Page<UserDTO> page = PageableExecutionUtils.getPage(
+		)).with(pageable);
+		List<User> userDTOs = mongoTemplate.find(query, User.class);
+		Page<User> page = PageableExecutionUtils.getPage(
 				userDTOs, 
 				pageable,
-				() -> mongoTemplate.count(query, UserDTO.class));
-		return page;
+				() -> mongoTemplate.count(query, User.class));
+		return page.map(UserDTO::new);
 	}
 
 	@Override
-	public List<UserDTO> findCustom(UserDTO filter) {
+	public List<UserDTO> findCustom(UserFilter filter) {
 		Criteria loginCriteria = new Criteria();
-		if(filter.getLogin() !=null) {
-			loginCriteria  = Criteria.where("agent_name").regex(filter.getLogin(),"i");
+		if(filter.getUsername() !=null) {
+			loginCriteria  = Criteria.where("login").regex(filter.getUsername(),"i");
 		}
 		Criteria emailCriteria = new Criteria();
 		if(filter.getEmail() !=null) {
-			emailCriteria = Criteria.where("agent_type").regex(filter.getEmail(),"i");
+			emailCriteria = Criteria.where("email").regex(filter.getEmail(),"i");
 		}
 		Criteria firstNameCriteria = new Criteria();
 		if(filter.getFirstName()!=null) {
-			firstNameCriteria = Criteria.where("agent_category").regex(filter.getFirstName(),"i");
+			firstNameCriteria = Criteria.where("first_name").regex(filter.getFirstName(),"i");
 		}
 		Criteria lastNameCriteria = new Criteria();
 		if(filter.getLastName() !=null) {
-			lastNameCriteria = Criteria.where("pos_country").regex(filter.getLastName(),"i");
+			lastNameCriteria = Criteria.where("last_name").regex(filter.getLastName(),"i");
 		}
 		
 		Query query = new Query(new Criteria().andOperator(
