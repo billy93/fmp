@@ -13,7 +13,7 @@
 							<div class="form-group">
 								<div class="custom-label semibold">Carrier</div>
 								<div class="input-group">
-									<input type="text" class="form-control" name="cxr" id="cxr" ng-class="{'must-fill' : ftntQueryForm.cxr.$invalid}"
+									<input type="text" class="form-control no-comma" name="cxr" id="cxr" ng-class="{'must-fill' : ftntQueryForm.cxr.$invalid}"
 										ng-minlength="2" ng-model="vm.paramCarrier" placeholder="minimum 2 characters.." uppercase required />
 
 									<span ng-click="vm.showCarrierModal()"
@@ -25,7 +25,7 @@
 							<div class="form-group">
 								<div class="custom-label semibold">Footnote</div>
 								<div class="no-rpad">
-									<input type="text" class="form-control" name="footNote"
+									<input type="text" class="form-control no-comma" name="footNote"
 										id="ftnt" ng-model="vm.queryParams.ftnt" uppercase />
 								</div>
 							</div>
@@ -44,7 +44,7 @@
 								<div class="custom-label semibold">Tariff Number</div>
 								<div class="input-group">
 									<input id="ftntTarNo" type="text" name="ftntTarNo"
-										class="form-control" ng-model="vm.paramTarNo" uppercase>
+										class="form-control no-comma" ng-model="vm.paramTarNo" uppercase>
 
 									<span ng-click="vm.showTariffModal()" class="input-group-addon"><i
 										class="fa fa-folder"></i> </span>
@@ -95,6 +95,7 @@
 										<select class="form-control" name="saleOption" id="saleOpt"
 											ng-model="vm.queryParams.saleDateType"
 											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '014'">
+											<option></option>
 											<option value="1">Active In</option>
 											<option value="2">Exact Match</option>
 										</select>
@@ -127,6 +128,7 @@
 										<select class="form-control" name="travelOption"
 											id="travelOpt" ng-model="vm.queryParams.travelDateType"
 											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '015'">
+											<option></option>
 											<option value="1">Active In</option>
 											<option value="2">Exact Match</option>
 										</select>
@@ -151,7 +153,7 @@
 										<select class="form-control" name="travelOption"
 											id="travelOpt" ng-model="vm.queryParams.travelOpt"
 											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '015'">
-											
+											<option></option>
 											<option value="P">P - Trip Completed</option>
 											<option value="C">C - Trip Commence</option>
 										</select>
@@ -160,6 +162,7 @@
 										<select class="form-control" name="completedOption"
 											id="completedOption"
 											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '015'">
+											<option></option>
 											<option value="2">Exact Match</option>
 										</select>
 									</div>

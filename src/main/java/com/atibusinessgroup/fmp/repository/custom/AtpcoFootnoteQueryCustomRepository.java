@@ -318,7 +318,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 
 									matchFilter.add(new BasicDBObject("$or", Arrays.asList(
 											new BasicDBObject("cat014.travel_dates_exp", "indef"),
-											new BasicDBObject("cat014.travel_dates_exp", new BasicDBObject("$lte", DateUtil.convertObjectToDate(param.getTravelDateFrom()))))
+											new BasicDBObject("cat014.travel_dates_exp", new BasicDBObject("$gte", DateUtil.convertObjectToDate(param.getTravelDateFrom()))))
 									));
 									
 								} else {
@@ -330,7 +330,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 							} else {
 								matchFilter.add(new BasicDBObject("$or", Arrays.asList(
 										new BasicDBObject("cat014.travel_dates_exp", "indef"),
-										new BasicDBObject("cat014.travel_dates_exp", new BasicDBObject("$lte", DateUtil.convertObjectToDate(param.getTravelDateFrom()))))
+										new BasicDBObject("cat014.travel_dates_exp", new BasicDBObject("$gte", DateUtil.convertObjectToDate(param.getTravelDateFrom()))))
 								));
 							}
 							
@@ -671,7 +671,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 								new BasicDBObject("$expr", 
 										new BasicDBObject("$and", Arrays.asList(
 												new BasicDBObject("$eq", Arrays.asList("$tar_no","$$tar_no")),
-												new BasicDBObject("$eq", Arrays.asList("$type","FARE")),
+												new BasicDBObject("$eq", Arrays.asList("$type","FARE RULE")),
 												new BasicDBObject("$eq", Arrays.asList("$pp","public"))
 												))
 										)
@@ -1151,7 +1151,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 								new BasicDBObject("$expr", 
 										new BasicDBObject("$and", Arrays.asList(
 												new BasicDBObject("$eq", Arrays.asList("$tar_no","$$tar_no")),
-												new BasicDBObject("$eq", Arrays.asList("$type","FARE")),
+												new BasicDBObject("$eq", Arrays.asList("$type","FARE RULE")),
 												new BasicDBObject("$eq", Arrays.asList("$pp","public"))
 												))
 										)
