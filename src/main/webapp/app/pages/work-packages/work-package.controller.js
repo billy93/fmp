@@ -312,6 +312,104 @@
         	}
         }
         
+        vm.rightClick = function(field){
+        	var value=[];
+        	for(var l=0; l< vm.workPackages.length; l++){
+        		if(!vm.workPackages[l].hide){
+	        		if(value.indexOf(vm.workPackages[l][field]) < 0){
+	        			value.push(vm.workPackages[l][field]);
+	        		}
+        		}
+        	}
+        	vm.filterDialog(value, field);
+        }
+        
+        vm.filterList = [];
+        vm.filterDialog = function(value,field){
+      	  $uibModal.open({
+                templateUrl: 'app/pages/work-packages/work-package-filter-dialog.html',
+                controller: 'WorkPackageFilterDialogController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full-page-modal',
+                resolve: {
+                    value : function(){
+  	              		return value;
+  	              	},
+                    field : function(){
+  	              		return field;
+  	              	},
+                }
+  			}).result.then(function(result) {
+  				if(result.key == 'distinctValue'){
+	  				vm.filterList.push({key:field, value:result.value});
+	  				for(var l=0; l< vm.workPackages.length; l++){
+	  					var countTrue = [];
+	  					for(var m=0;m<vm.filterList.length;m++){
+	  						if(vm.workPackages[l][vm.filterList[m].key] == vm.filterList[m].value){
+	  							countTrue.push(true);
+	  						}
+	  					}  					
+	  					
+	  					if(countTrue.length == vm.filterList.length){
+	  						vm.workPackages[l].hide = false;
+	  					}
+	  					else{
+	  						vm.workPackages[l].hide = true;
+	  					}
+	  	        	}
+  				}
+  				else if(result.key == 'removeAllColumnFilter'){
+  					vm.filterList = [];
+  					vm.loadAll();
+  				}
+  				else if(result.key == 'removeThisColumnFilter'){
+  					for(var x=0;x<vm.filterList.length;x++){
+  						if(vm.filterList[x].key == field){
+  							var index = vm.filterList.indexOf(vm.filterList[x]);
+  							vm.filterList.splice(index, 1);
+  						}
+  					}
+  					for(var l=0; l< vm.workPackages.length; l++){
+	  					var countTrue = [];
+	  					for(var m=0;m<vm.filterList.length;m++){
+	  						if(vm.workPackages[l][vm.filterList[m].key] == vm.filterList[m].value){
+	  							countTrue.push(true);
+	  						}
+	  					}  					
+	  					
+	  					if(countTrue.length == vm.filterList.length){
+	  						vm.workPackages[l].hide = false;
+	  					}
+	  					else{
+	  						vm.workPackages[l].hide = true;
+	  					}
+	  	        	}
+  				}
+  				else if(result.key == 'removeLastColumnFilter'){
+					vm.filterList.splice(vm.filterList.length-1, 1);
+  					for(var l=0; l< vm.workPackages.length; l++){
+	  					var countTrue = [];
+	  					for(var m=0;m<vm.filterList.length;m++){
+	  						if(vm.workPackages[l][vm.filterList[m].key] == vm.filterList[m].value){
+	  							countTrue.push(true);
+	  						}
+	  					}  					
+	  					
+	  					if(countTrue.length == vm.filterList.length){
+	  						vm.workPackages[l].hide = false;
+	  					}
+	  					else{
+	  						vm.workPackages[l].hide = true;
+	  					}
+	  	        	}
+  				}
+            }, function() {
+        			
+            });
+        }
+        
         vm.printExport = function(){
         	var exportConfig = {
         		workPackageFilter:vm.workPackageFilter,
