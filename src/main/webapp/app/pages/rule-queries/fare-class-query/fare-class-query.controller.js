@@ -20,6 +20,8 @@
         vm.fareClassGroupText = fareClassGroupText;
         vm.constructDetails = constructDetails;
         vm.getFareClassDetails = getFareClassDetails;
+        vm.showTariffModal = showTariffModal;
+        vm.showCarrierModal = showCarrierModal;
         
         if($stateParams.fareClasssQueryFilter != null){
         	vm.queryParams = $stateParams.fareClasssQueryFilter;
@@ -30,8 +32,12 @@
         }
         
         function loadAll() {
+        	if(vm.paramCarrier != null) {
         	vm.queryParams.page = vm.page - 1;
 			vm.queryParams.size = vm.itemsPerPage;
+			
+			vm.queryParams.cxr = vm.paramCarrier;
+        	vm.queryParams.ruleTarNo = vm.paramTarNo;
 			
 			FareClassQuery.query(vm.queryParams, onSuccess, onError);
             
@@ -74,6 +80,7 @@
             function onError(error) {
                 AlertService.error(error.data.message);
             }
+        	}
         }
         
         function changeItemsPerPage() {
@@ -179,6 +186,42 @@
         
         function getFareClassDetails(fareClassQuery) {
         	vm.fareClassDetails = [fareClassQuery];
+        }
+        
+        function showTariffModal() {
+        	$uibModal.open({
+                templateUrl: 'app/pages/modals/tariff-modal.html',
+                controller: 'MasterTariffModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full',
+                resolve: {
+                	entity: vm
+                }
+            }).result.then(function() {
+                $state.go('rule-queries', {}, { reload: false });
+            }, function() {
+                $state.go('rule-queries');
+            });
+        }
+        
+        function showCarrierModal() {
+        	$uibModal.open({
+                templateUrl: 'app/pages/modals/carrier-modal.html',
+                controller: 'MasterCarrierModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full',
+                resolve: {
+                	entity: vm
+                }
+            }).result.then(function() {
+                $state.go('rule-queries', {}, { reload: false });
+            }, function() {
+                $state.go('rule-queries');
+            });
         }
     }
 })();
