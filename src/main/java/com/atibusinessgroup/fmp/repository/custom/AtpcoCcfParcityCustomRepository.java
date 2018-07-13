@@ -90,4 +90,24 @@ public class AtpcoCcfParcityCustomRepository {
 		
 		return result;
 	}
+	
+	public List<AtpcoCcfParcity> findAllByCountryCode(String country) {
+		
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject match = new BasicDBObject();
+				match.append("$match", new BasicDBObject("city_country", country));
+				return match;
+			}
+		});
+		
+		Aggregation aggregation = newAggregation(aggregationOperations);
+		
+		List<AtpcoCcfParcity> result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_CCF_PARCITY, AtpcoCcfParcity.class).getMappedResults();
+		
+		return result;
+	}
 }

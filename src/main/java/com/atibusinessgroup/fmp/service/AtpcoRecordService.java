@@ -346,28 +346,36 @@ public class AtpcoRecordService {
 			rFareClass = rFareClass.trim();
 			
 			if (rFareClass.contains("-")) {
-				rFareClass += "-";
+				if (!rFareClass.endsWith("-")) {
+					rFareClass += "-";
+				}
 				String[] parts = rFareClass.split("-");
 				for (String part: parts) {
-					if (fFareClass.indexOf(part) != -1) {
-						int from = fFareClass.indexOf(part) - 1;
-						int to = from + part.length() + 1;
-						
-						try {
-							if (CharUtils.isAsciiNumeric(fFareClass.charAt(from + 1)) && CharUtils.isAsciiNumeric(fFareClass.charAt(from))) {
-								match = false;
+					if (!part.isEmpty()) {
+						if (rFareClass.startsWith("-") && fFareClass.indexOf(part) == 0) {
+							match = false;
+						} else if (!rFareClass.startsWith("-") && rFareClass.endsWith("-") && fFareClass.indexOf(part) != 0) {
+							match = false;
+						} else if (fFareClass.indexOf(part) != -1) {
+							int from = fFareClass.indexOf(part) - 1;
+							int to = from + part.length() + 1;
+							
+							try {
+								if (CharUtils.isAsciiNumeric(fFareClass.charAt(from + 1)) && CharUtils.isAsciiNumeric(fFareClass.charAt(from))) {
+									match = false;
+								}
+							} catch (Exception e) {
 							}
-						} catch (Exception e) {
-						}
-						
-						try {
-							if (CharUtils.isAsciiNumeric(fFareClass.charAt(to - 1)) && CharUtils.isAsciiNumeric(fFareClass.charAt(to))) {
-								match = false;
+							
+							try {
+								if (CharUtils.isAsciiNumeric(fFareClass.charAt(to - 1)) && CharUtils.isAsciiNumeric(fFareClass.charAt(to))) {
+									match = false;
+								}
+							} catch (Exception e) {
 							}
-						} catch (Exception e) {
+						} else {
+							match = false;
 						}
-					} else {
-						match = false;
 					}
 					
 					if (!match) {

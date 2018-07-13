@@ -25,11 +25,11 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat27;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat35;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat35Ticketing;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat50;
-import com.atibusinessgroup.fmp.domain.dto.SpecifiedConstructed;
 import com.atibusinessgroup.fmp.domain.dto.AfdQueryAddOns;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoDateWrapper;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord1FareClassInformation;
 import com.atibusinessgroup.fmp.domain.dto.CategoryObject;
+import com.atibusinessgroup.fmp.domain.dto.SpecifiedConstructed;
 import com.atibusinessgroup.fmp.domain.dto.TextTable;
 import com.atibusinessgroup.fmp.repository.AtpcoMasterTariffRepository;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoRecord3CategoryCustomRepository;
@@ -123,6 +123,9 @@ public class AfdQueryMapper {
 				AtpcoRecord3Cat03 cat03 = (AtpcoRecord3Cat03) cat03o.getCategory();
 				String first = DateUtil.convertSeasonDayMonthYearFormat(cat03.getDate_start_dd(), cat03.getDate_start_mm(), cat03.getDate_start_yy());
 				try {
+					if (first.contains("XXXX")) {
+						first = first.replace("XXXX", new SimpleDateFormat("yyyyMMMdd").format(new Date()).substring(0, 4));
+					}
 					Date dfirst = new SimpleDateFormat("ddMMMyyyy").parse(first);
 					firsts.add(dfirst);
 					range.setStartDate(dfirst);
@@ -131,6 +134,9 @@ public class AfdQueryMapper {
 				
 				String last = DateUtil.convertSeasonDayMonthYearFormat(cat03.getDate_stop_dd(), cat03.getDate_stop_mm(), cat03.getDate_stop_yy());
 				try {
+					if (last.contains("XXXX")) {
+						last.replace("XXXX", new SimpleDateFormat("yyyyMMMdd").format(new Date()).substring(0, 4));
+					}
 					Date dlast = new SimpleDateFormat("ddMMMyyyy").parse(last);
 					lasts.add(dlast);
 					range.setEndDate(dlast);
