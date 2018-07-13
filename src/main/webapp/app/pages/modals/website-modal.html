@@ -1,0 +1,58 @@
+<form name="editForm" role="form" novalidate ng-submit="vm.save()">
+    <div class="modal-header">
+    	<h5 class="modal-title" id="carrierLabel">Select a website</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+      	<div class="clearfix mb1">
+      		<div class="pull-left ph5px w25">
+				<div class="form-group">
+					<label>Enter Search String</label>
+					<input type="text" name="search" ng-change="vm.search()" class="form-control" ng-model="vm.option.search">																
+				</div>
+			</div>      		
+      	</div>
+      	<div class="box-detail">
+ 			<div class="box-header">List Carrier</div>	
+	  		<div class="box-body">
+	  			<div class="table-wrapper">
+					<div class="datatable-wrapper form-inline">
+						<div class="table-responsive">
+							<table class="table table-stripped table-bordered datatable">
+								<thead>
+									<tr role="row">
+										<th>
+								            No.
+										</th>
+										<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" ng-click="vm.sortType = 'website'; vm.sortReverse = !vm.sortReverse">
+								            Website
+								            <span ng-show="vm.sortType == 'website' && !vm.sortReverse" class="fa fa-caret-down"></span>
+								            <span ng-show="vm.sortType == 'website' && vm.sortReverse" class="fa fa-caret-up"></span>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr role="row" 
+										ng-click="vm.rowHighlighted(website)" ng-dblclick="vm.select()" ng-class="{'selected': cxr === vm.selectedRow}"
+										class="datatable-row" ng-repeat="website in (vm.filteredWebsites = (vm.websites | filter:vm.option.search | orderBy:vm.sortType:vm.sortReverse)) track by $index">
+										<td>
+											{{$index + 1}}
+										</td>
+										<td>
+											{{website}}
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+	  		</div>		      				
+		</div>
+   	</div>
+    <div class="modal-footer">
+    	<button type="submit" class="btn btn-secondary" ng-click="vm.select()" data-translate="entity.action.save">OK</button>
+        <button type="button" ng-click="vm.clear()" class="btn btn-back" data-dismiss="modal">Close</button>
+    </div>
+</form>

@@ -214,6 +214,16 @@ $(function(){
          return false;
 	});
 	
+	$(document).on('keydown','.no-comma',function(e){
+		 var key = e.which || e.keyCode;
+
+        if (!e.shiftKey && !e.altKey && !e.ctrlKey &&
+        		key == 188)
+            return false;
+
+        return true;
+	});
+	
 //	$(document).on('click','.table-wrapper tbody tr',function(e){
 //		e.preventDefault();
 //		var _parent = $(this).parents('.table');

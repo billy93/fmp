@@ -29,10 +29,11 @@
         vm.datePickerOpenStatus = {};
         vm.dateFormat = "yyyy-MM-dd";
         vm.openCalendar = openCalendar;
+        vm.timezone = Timezone.GMT7;
         
         vm.showCategoryDetail = showCategoryDetail;
         
-        vm.timezone = Timezone.GMT7;
+        
         
         vm.openTooltip = true;
         

@@ -14,12 +14,12 @@
                 data = angular.fromJson(data);
                 data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
                 data.newCreatedDate = DateUtils.convertDateTimeFromServer(data.createdDate);
-                
+
                 data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
                 data.discExpiryDate = DateUtils.convertDateTimeFromServer(data.discExpiryDate);
                 data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
                 data.lockedSince = DateUtils.convertDateTimeFromServer(data.lockedSince);
-                
+
                 data.saleDate = DateUtils.convertDateFromServer(data.saleDate);
 
                 if(data.fareSheet.length > 0){
@@ -31,7 +31,7 @@
                     			fares[y].travelEnd = DateUtils.convertDateFromServer(fares[y].travelEnd);
                     			fares[y].saleStart = DateUtils.convertDateFromServer(fares[y].saleStart);
                     			fares[y].saleEnd = DateUtils.convertDateFromServer(fares[y].saleEnd);
-                    			fares[y].travelComplete = DateUtils.convertDateFromServer(fares[y].travelComplete);                    			
+                    			fares[y].travelComplete = DateUtils.convertDateFromServer(fares[y].travelComplete);
                     		}
                 		}
                 	}
@@ -82,7 +82,7 @@
                 		}
                 	}
                 }
-                
+
             	if(data.filingDetail != null && data.filingDetail.filingDetailTarif != null){
             		for(var x=0;x<data.filingDetail.filingDetailTarif.length;x++){
 		                if(data.filingDetail.filingDetailTarif[x].batch.length > 0){
@@ -92,14 +92,14 @@
 		                }
             		}
             	}
-            	
+
             	if(data.filingDetail != null && data.filingDetail.createdDate != null){
             		data.filingDetail.createdDate = DateUtils.convertDateTimeFromServer(data.filingDetail.createdDate);
             	}
             	if(data.filingDetail != null && data.filingDetail.releaseDate != null){
             		data.filingDetail.releaseDate = DateUtils.convertDateTimeFromServer(data.filingDetail.releaseDate);
             	}
-                
+
             }
         	return data;
         }
@@ -182,9 +182,11 @@
 	        'exportRateSheetExcel': { method: 'POST',  url:'api/work-packages/export-ratesheet-excel'},
 	        'exportRateSheetWord': { method: 'POST',  url:'api/work-packages/export-ratesheet-word'},
 	        'exportRateSheetDiscount': { method: 'POST',  url:'api/work-packages/export-ratesheet-discount'},
+            'exportRateSheetCSVDiscount': { method: 'POST',  url:'api/work-packages/export-ratesheet-csv-discount'},
 	        'exportRateSheetExcelDiscount': { method: 'POST',  url:'api/work-packages/export-ratesheet-excel-discount'},
 	        'exportRateSheetWordDiscount': { method: 'POST',  url:'api/work-packages/export-ratesheet-word-discount'},
 	        'exportRateSheetWaiver': { method: 'POST',  url:'api/work-packages/export-ratesheet-waiver'},
+            'exportRateSheetCSVWaiver': { method: 'POST',  url:'api/work-packages/export-ratesheet-csv-waiver'},
 	        'exportRateSheetExcelWaiver': { method: 'POST',  url:'api/work-packages/export-ratesheet-excel-waiver'},
 	        'exportRateSheetWordWaiver': { method: 'POST',  url:'api/work-packages/export-ratesheet-word-waiver'},
 	        'downloadMarketRules': { method: 'POST',  url:'api/work-packages/download-market-rules'},

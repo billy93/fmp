@@ -24,6 +24,7 @@ public class CategoryName {
 	public final static String CAT_021 = "Agents Disc";
 	public final static String CAT_022 = "Other Disc";
 	public final static String CAT_023 = "Misc Tags";
+	public final static String CAT_025 = "Fare By Rule";
 	public final static String CAT_026 = "Groups";
 	public final static String CAT_027 = "Tours";
 	public final static String CAT_028 = "Visit Cntry";

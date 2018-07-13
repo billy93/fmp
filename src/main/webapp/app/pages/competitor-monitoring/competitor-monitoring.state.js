@@ -39,6 +39,7 @@
                 		owrt: null,
                 		footnote: null,
                 		ruleNo: null,
+                		ocRuleNo: null,
                 		routingNo: null,
                 		woId: null,
                 		effectiveDateFrom: null,

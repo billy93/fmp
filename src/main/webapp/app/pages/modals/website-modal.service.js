@@ -2,12 +2,12 @@
     'use strict';
     angular
         .module('fmpApp')
-        .factory('AtpcoMasterTariff', AtpcoMasterTariff);
+        .factory('MasterWebsite', MasterWebsite);
 
-    AtpcoMasterTariff.$inject = ['$resource'];
+    MasterWebsite.$inject = ['$resource'];
 
-    function AtpcoMasterTariff ($resource) {
-        var resourceUrl =  'api/atpcoMasterTariff/:id';
+    function MasterWebsite ($resource) {
+        var resourceUrl =  'api/master-website/:id';
 
         return $resource(resourceUrl, {}, {
             'query': { method: 'GET', isArray: true},
@@ -21,8 +21,7 @@
                 }
             },
             'update': { method:'PUT' },
-            'getAll': { method: 'GET', isArray: true, url:"api/atpcoMasterTariff/getAll"},
-            'getAllGlobal': { method: 'GET', isArray: true, url:"api/atpcoMasterTariff/getAllGlobal"},
+            'getAll': { method: 'GET', isArray: true, url:"api/master-website/getAll"},
         });
     }
 })();
