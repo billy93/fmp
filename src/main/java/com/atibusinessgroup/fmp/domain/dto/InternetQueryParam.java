@@ -18,6 +18,8 @@ public class InternetQueryParam {
 	private boolean appendResults;
 	private boolean queryByGroup;
 	private boolean myMarketOnly;
+	private String currency;
+	private int summarizeType;
 	
 	private int page;
 	private int size;
@@ -106,6 +108,18 @@ public class InternetQueryParam {
 	public void setMyMarketOnly(boolean myMarketOnly) {
 		this.myMarketOnly = myMarketOnly;
 	}
+	public String getCurrency() {
+		return currency;
+	}
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+	public int getSummarizeType() {
+		return summarizeType;
+	}
+	public void setSummarizeType(int summarizeType) {
+		this.summarizeType = summarizeType;
+	}
 	public int getPage() {
 		return page;
 	}
@@ -125,8 +139,8 @@ public class InternetQueryParam {
 				+ destination + ", departDateFrom=" + departDateFrom + ", departDateTo=" + departDateTo + ", departDOW="
 				+ departDOW + ", captureDateFrom=" + captureDateFrom + ", captureDateTo=" + captureDateTo
 				+ ", marketGroup=" + marketGroup + ", biDirectional=" + biDirectional + ", appendResults="
-				+ appendResults + ", queryByGroup=" + queryByGroup + ", myMarketOnly=" + myMarketOnly + ", page=" + page
-				+ ", size=" + size + "]";
+				+ appendResults + ", queryByGroup=" + queryByGroup + ", myMarketOnly=" + myMarketOnly + ", currency="
+				+ currency + ", summarizeType=" + summarizeType + ", page=" + page + ", size=" + size + "]";
 	}
 	
 

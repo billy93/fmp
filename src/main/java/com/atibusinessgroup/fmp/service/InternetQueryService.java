@@ -46,7 +46,49 @@ public class InternetQueryService {
 		this.voltrasFareRepository = voltrasFareRepository;
 	}
 	
-	public Page<InternetQuery> getAllInternetQueries(InternetQueryParam param, Pageable pageable) {
+	public Page<InternetQuery> getSummarizeCaptDateQueries(InternetQueryParam param, Pageable pageable) {
+		List<AggregationOperation> aggregationOperations = getAggregationOperation(param);
+		Aggregation aggregation = newAggregation(aggregationOperations);
+		SkipOperation skip = new SkipOperation(pageable.getPageNumber() * pageable.getPageSize());
+		aggregationOperations.add(skip);
+		LimitOperation limit = new LimitOperation(pageable.getPageSize());
+		aggregationOperations.add(limit);
+		Aggregation aggregationPagination = newAggregation(aggregationOperations);
+		
+		List<InternetQuery> result = mongoTemplate.aggregate(aggregationPagination, InternetQuery.class, InternetQuery.class).getMappedResults();
+		long allResultCount = mongoTemplate.aggregate(aggregation, InternetQuery.class, InternetQuery.class).getMappedResults().size();
+		
+		for (InternetQuery internetQuery : result) {
+			internetQuery.setBaseAmtBD(internetQuery.getBaseAmt().bigDecimalValue());
+			internetQuery.setTaxesBD(internetQuery.getTaxes().bigDecimalValue());
+			internetQuery.setAifBD(internetQuery.getAif().bigDecimalValue());
+		}
+		
+		return new PageImpl<>(result, pageable, allResultCount);
+	}
+	
+	public Page<InternetQuery> getSummarizeDeptDateQueries(InternetQueryParam param, Pageable pageable) {
+		List<AggregationOperation> aggregationOperations = getAggregationOperation(param);
+		Aggregation aggregation = newAggregation(aggregationOperations);
+		SkipOperation skip = new SkipOperation(pageable.getPageNumber() * pageable.getPageSize());
+		aggregationOperations.add(skip);
+		LimitOperation limit = new LimitOperation(pageable.getPageSize());
+		aggregationOperations.add(limit);
+		Aggregation aggregationPagination = newAggregation(aggregationOperations);
+		
+		List<InternetQuery> result = mongoTemplate.aggregate(aggregationPagination, InternetQuery.class, InternetQuery.class).getMappedResults();
+		long allResultCount = mongoTemplate.aggregate(aggregation, InternetQuery.class, InternetQuery.class).getMappedResults().size();
+		
+		for (InternetQuery internetQuery : result) {
+			internetQuery.setBaseAmtBD(internetQuery.getBaseAmt().bigDecimalValue());
+			internetQuery.setTaxesBD(internetQuery.getTaxes().bigDecimalValue());
+			internetQuery.setAifBD(internetQuery.getAif().bigDecimalValue());
+		}
+		
+		return new PageImpl<>(result, pageable, allResultCount);
+	}
+	
+	public Page<InternetQuery> getDontSummarizeQueries(InternetQueryParam param, Pageable pageable) {
 		List<AggregationOperation> aggregationOperations = getAggregationOperation(param);
 		Aggregation aggregation = newAggregation(aggregationOperations);
 		SkipOperation skip = new SkipOperation(pageable.getPageNumber() * pageable.getPageSize());
