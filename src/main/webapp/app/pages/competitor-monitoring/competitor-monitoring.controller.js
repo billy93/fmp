@@ -27,7 +27,6 @@
 		vm.showCategoryDetail = showCategoryDetail;
 		vm.showLegend = showLegend;
 		vm.viewFullText = viewFullText;
-		
 
 		vm.reset = reset;
 		vm.page = 1;
@@ -76,6 +75,9 @@
 		}, ]
 
 		vm.dateOptions = [ {
+			key : "",
+			value : ""
+		},{
 			key : "A",
 			value : "Active In"
 		}, {
@@ -199,6 +201,7 @@
 			$('#containerTitle').hide();
 			$('#container').hide();
 			$('#chartOptions').hide();
+			$('#containerLegend').hide();
 			vm.queryParams = {
 	        		carrier: null,
 	        		source: vm.sources[0].key,
@@ -316,135 +319,147 @@
 
 		function generateGraph(data) {
 
-				$('#containerTitle').show();
-				$('#container').show();
-				$('#chartOptions').show();
-				var fares = data;
-			  
-			      var barThickness = vm.barThickness/100;
-			      var barOpacity = vm.barOpacity/10;
-			      
-			      var totalData = fares.length;
-			      var items = [];
-			      var dataGroup = [];
-			      var dataGraph = [];
-			    
-						for(var i=0;i<fares.length;i++) {
-							items.push(fares[i].carrierCode);
-						}
-			    
-						var categories = Array.from(new Set(items));
-			    
-			      var catLogo = [];
-			      var catWidth = $('#container').width/categories.length;
-			      var cabColor = '';
-			      var min = 0;
-	        	  var minTemp = 0;
-			    
-			      
-			    for(var j=0;j<categories.length;j++) {
-			      for(var k=0;k<fares.length;k++) {
-			    	  
-			        if(fares[k].carrierCode==categories[j]) {
-			          var amt = String(fares[k].baseAmount);
-			          
-			          if(fares[k].cabin == 'Y') {
-			        	  cabColor = 'rgba(255,0,0,'+barOpacity+')';
-			          } else if(fares[k].cabin == 'W') {
-			        	  cabColor = 'rgba(0,255,0,'+barOpacity+')';
-			          } else if(fares[k].cabin == 'F') {
-			        	  cabColor = 'rgba(0,0,255,'+barOpacity+')';
+
+			$('#containerTitle').show();
+			$('#container').show();
+			$('#containerLegend').show();
+			$('#chartOptions').show();
+			
+			 var fares = data;
+		  
+		      var barThickness = vm.barThickness/100;
+		      var barOpacity = vm.barOpacity/10;
+		      
+		      var totalData = fares.length;
+		      var items = [];
+		      var dataGroup = [];
+		      var xGroup = [];
+		      var dataGraph = [];
+		      var cabins = [];
+		      var low = [];
+		      
+			  for(var i=0;i<fares.length;i++) {
+				  items.push(fares[i].carrierCode);
+				  cabins.push(fares[i].cabin);
+			  }
+		      
+			  var categories = Array.from(new Set(items));
+			  var groupedCabin = Array.from(new Set(cabins));
+		    
+		      var catLogo = [];
+		      var catWidth = $('#container').width/categories.length;
+		      var cabColor = '';
+		      var min = 0;
+        	  var minTemp = 0;
+		    
+		      
+		    for(var j=0;j<categories.length;j++) {
+		      for(var k=0;k<fares.length;k++) {
+		    	  
+		        if(fares[k].carrierCode==categories[j]) {
+		          var amt = String(fares[k].baseAmount);
+		          
+		          if(fares[k].cabin != undefined || fares[k].cabin != null) {
+		        	  
+		        	var red = 'rgba(255,0,0,'+barOpacity+')';
+		        	var green = 'rgba(0,255,0,'+barOpacity+')';
+		        	var blue = 'rgba(0,0,255,'+barOpacity+')';
+		        	var yellow = 'rgba(255,255,0,'+barOpacity+')';
+		        	  
+		        	  if(fares[k].cabin == 'F') {
+			        	  cabColor = blue;
 			          } else if(fares[k].cabin == 'J') {
-			        	  cabColor = 'rgba(255,255,0,'+barOpacity+')';
+			        	  cabColor = yellow;
+			          } else if(fares[k].cabin == 'W') {
+			        	  cabColor = green;
+			          } else if(fares[k].cabin == 'Y') {
+			        	  cabColor = red;
 			          }
-			          
-			          if(fares[k].cabin != undefined || fares[k].cabin != null) {
-			        	
-			        	  var lowVal = parseFloat(String(amt))-(parseFloat(String(amt))*parseFloat(String(barThickness)));
-				           dataGraph.push({'x':j,'name':fares[k].cabin,'bookingClass':fares[k].bookingClass,'color':cabColor,'high':amt,'low':lowVal});
-			          }
-			        }
-			    }
-			      
-			      var objCat = {'name':categories[j], 'data':dataGraph};
-			      dataGroup.push(objCat);
-			      
-			    }
-			    
-						  
-			  
-			  var chartOptions = {
-			          chart : {
-			            renderTo : 'container',
-			            type : 'columnrange',
-			            zoomType : 'xy',
-			            inverted : false,
-			          },
-			          credits : {
-			            enabled : false
-			          },
-			          title : {
-			            text : ''
-			          },
-			          xAxis :
-			            [{
-			               type : 'category',
-			               categories : categories,
-			               gridLineWidth : 2,
-			            },{
-			              linkedTo: 0,
-			              type : 'category',
-			              categories : categories,
-			              opposite:true,
-			              labels: {
-			              useHTML: true,
-			              formatter: function() {
-//			              if(this.value == "GA")
-//			                  return '<img src="http://3.bp.blogspot.com/_UZImdYAiry8/SV9oVvC_WqI/AAAAAAAAOZI/vWKb9Pjuhl4/s400/Logo_garuda_indonesia.png" style="width:'+catWidth+'px; vertical-align: middle; height:50px;" />';
-//			              else
-//			                  return this.value;
-			          }
-			      }
-			            }],
-			
-			
-			          yAxis : {
-			            type : 'logarithmic',
-			            minorTickInterval: 0.1,
-			            tickmarkPlacement : 'on',
-			            title : {
-			              text : 'Price'
-			            }
-			          },
-			          tooltip : {
-			            enabled : true,
-			            useHTML: true,
-			            formatter: function() {
-			              return '<span>price : '+this.point.high+'</span> <br/> <span>cabin : '+this.point.name+'</span> </br> <span>RBD : '+this.point.bookingClass+'</span>';
-			
-			          }
-			          },
-			          plotOptions : {
-			            columnrange : {
-			              stickyTracking : false,
-			              grouping : false
-			            },
-			            series:{
-			                turboThreshold:2000
-			            }
-			          },
-			          legend : {
-			            enabled : false
-			          },
-			          scrollbar : {
-			            enabled : true
-			          },
-			          series : dataGroup
-			        };
-			  
-	              var chart1 = new Highcharts.Chart(chartOptions);
-	              chart1.redraw();
-      
+		        	
+		        	  var lowVal = parseFloat(String(amt))-(parseFloat(String(amt))*parseFloat(String(barThickness)));
+		        	  dataGraph.push({'x':j,'name':fares[k].cabin,'bookingClass':fares[k].bookingClass,'color':cabColor,'high':amt,'low':lowVal});
+		        	  
+		          }
+		        }
+		      }
+		    }
+		  dataGroup.push({'name':categories[j], 'data':dataGraph});
+		    
+		  console.log(dataGraph);
+		  
+		  var chartOptions = {
+		          chart : {
+		            renderTo : 'container',
+		            type : 'columnrange',
+		            zoomType : 'xy',
+		            inverted : false,
+		          },
+		          credits : {
+		            enabled : false
+		          },
+		          title : {
+		            text : ''
+		          },
+		          xAxis :
+		            [{
+		               type : 'category',
+		               categories : categories,
+		               gridLineWidth : 2,
+		            },{
+		              linkedTo: 0,
+		              type : 'category',
+		              categories : categories,
+		              opposite:true,
+		              labels: {
+		              useHTML: true,
+		              formatter: function() {
+//		              if(this.value == "GA")
+//		                  return '<img src="http://3.bp.blogspot.com/_UZImdYAiry8/SV9oVvC_WqI/AAAAAAAAOZI/vWKb9Pjuhl4/s400/Logo_garuda_indonesia.png" style="width:'+catWidth+'px; vertical-align: middle; height:50px;" />';
+//		              else
+//		                  return this.value;
+		          }
+		      }
+		            }],
+		
+		
+		          yAxis : {
+		            type : 'logarithmic',
+		            minorTickInterval: 0.1,
+		            tickmarkPlacement : 'on',
+		            title : {
+		              text : 'Price'
+		            }
+		          },
+		          tooltip : {
+		            enabled : true,
+		            useHTML: true,
+		            formatter: function() {
+		              return '<span>price : '+this.point.high+'</span> <br/> <span>cabin : '+this.point.name+'</span> </br> <span>RBD : '+this.point.bookingClass+'</span>';
+		
+		          }
+		          },
+		          plotOptions : {
+		            columnrange : {
+		              stickyTracking : false,
+		              grouping : false
+		            },
+		            series:{
+		                turboThreshold:2000
+		            }
+		          },
+		          legend : {
+		            enabled : false
+		          },
+		          scrollbar : {
+		            enabled : true
+		          },
+		          series : dataGroup
+		        };
+		  
+              var chart1 = new Highcharts.Chart(chartOptions);
+              chart1.redraw();
+  
+	
 		}
 		
 		function checkValidParameters() {

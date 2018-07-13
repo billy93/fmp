@@ -140,7 +140,7 @@
 											ng-disabled="true"> Calculate TFC
 										</label> 
 										<label> <input type="checkbox" name="appendResults"
-											ng-model="vm.queryParams.appendResults" disabled="true">
+											ng-model="vm.queryParams.appendResults" disabled="disabled">
 											Lowest level only
 										</label>
 									</div>
@@ -273,5 +273,27 @@
         </div>
 		
 		<div id="container" class="col-md-12 no-pad" style="height:600px;" hidden="hidden" ng-if="vm.compMonitoring.length > 0"></div>
+		
+		<div id="containerLegend" ng-if="vm.compMonitoring.length > 0" hidden="hidden" style="margin : 10px;">
+			<div class="custom-label semibold">Color Legend : </div>
+			<br/>
+			<table>
+				<tbody>
+					<tr>
+						<td valign="middle"><div style="background-color:red; width:50px; height:12px; float: left; margin-right:15px"></div><label>Y</label></td>
+					</tr>
+						
+					<tr>
+						<td valign="middle"><div style="background-color:green; width:50px; height:12px; float: left; margin-right:15px"></div><label>W</label></td>
+					</tr>
+					<tr>
+						<td valign="middle"><div style="background-color:blue; width:50px; height:12px; float: left; margin-right:15px"></div><label>F</label></td>
+					</tr>
+					<tr>
+						<td valign="middle"><div style="background-color:yellow; width:50px; height:12px; float: left; margin-right:15px"></div><label>J</label></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </div>
