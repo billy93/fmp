@@ -4,9 +4,9 @@
 	angular.module('fmpApp').controller('FootnoteQueryController',
 			FootnoteQueryController);
 
-	FootnoteQueryController.$inject = [ '$state', '$stateParams', 'FootnoteQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', '$uibModal' ];
+	FootnoteQueryController.$inject = [ '$state', '$stateParams', 'Timezone', 'FootnoteQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', '$uibModal' ];
 
-	function FootnoteQueryController($state, $stateParams, FootnoteQuery, ParseLinks, AlertService, paginationConstants, queryParams, $uibModal) {
+	function FootnoteQueryController($state, $stateParams, Timezone, FootnoteQuery, ParseLinks, AlertService, paginationConstants, queryParams, $uibModal) {
 
 		var vm = this;
 		vm.loadPage = loadPage;
@@ -23,6 +23,7 @@
 		vm.datePickerOpenStatus = {};
 		vm.dateFormat = "yyyy-MM-dd";
 		vm.openCalendar = openCalendar;
+		vm.timezone = Timezone.GMT7;
 		
 		vm.paramCarrier = null;
 		vm.paramTarNo = null;
@@ -37,6 +38,10 @@
         
         vm.loadAvailable = loadAvailable;
         vm.loadExpired = loadExpired;
+        
+        vm.showLegend = showLegend;
+        vm.viewFullText = viewFullText;
+        
         vm.loadAll();
         
         $("#catNo").change(function() {
@@ -55,6 +60,7 @@
 			if(vm.paramCarrier != null) {
 				vm.footnoteQueries = null;
 				vm.footnoteQueryCategories = null;
+				vm.footnoteQueryCategories2 = null;
 				
 				vm.queryParams.page = vm.page - 1;
 				vm.queryParams.size = vm.itemsPerPage;
@@ -178,6 +184,7 @@
 
 			vm.footnoteQueries = null;
 			vm.footnoteQueryCategories = null;
+			vm.footnoteQueryCategories2 = null;
 			
 			vm.paramCarrier = null;
 			vm.paramTarNo = null;
@@ -243,5 +250,39 @@
 				$state.go('footnote-query');
 			});
 		}
+		
+		function showLegend() {
+        	$uibModal.open({
+                templateUrl: 'app/pages/modals/legend-modal.html',
+                controller: 'LegendModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'md'
+            }).result.then(function() {
+                $state.go('footnote-query', {}, { reload: false });
+            }, function() {
+                $state.go('footnote-query');
+            });
+        }
+        
+        function viewFullText() {
+        	$uibModal.open({
+                templateUrl: 'app/pages/modals/full-text-modal.html',
+                controller: 'FullTextModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full',
+                resolve: {
+                    entity: {
+                    	categories: vm.footnoteQueryCategories2
+                    }
+                }
+            }).result.then(function() {
+                $state.go('footnote-query', {}, { reload: false });
+            }, function() {
+                $state.go('footnote-query');
+            });
+        }
 	}
 })();

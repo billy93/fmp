@@ -52,6 +52,8 @@ public class AtpcoRuleQueryCustomRepository {
 		List<AggregationOperation> aggregationOperations = getAggregationGroupingByType(param, pageable);
 		
 		Aggregation aggregation = newAggregation(aggregationOperations);
+		
+		System.out.println(aggregation);
 
 		List<AtpcoRecord2GroupByRuleNoCxrTarNo> result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_RECORD_2, AtpcoRecord2GroupByRuleNoCxrTarNo.class).getMappedResults();
 		
@@ -119,62 +121,6 @@ public class AtpcoRuleQueryCustomRepository {
 		List<AggregationOperation> aggregationOperations = new ArrayList<>();
 		
 		aggregationOperations.add(new AggregationOperation() {
-			
-			@Override
-			public DBObject toDBObject(AggregationOperationContext context) {
-				BasicDBObject match = new BasicDBObject();
-				BasicDBObject query = new BasicDBObject();
-				
-				query.append("type", "FARE BY RULE");
-				query.append("pp", "public");
-				
-				match.append("$match", query);
-				return match;
-			}
-		});
-		
-		aggregationOperations.add(new AggregationOperation() {
-			
-			@Override
-			public DBObject toDBObject(AggregationOperationContext context) {
-				BasicDBObject lookup = new BasicDBObject();
-				BasicDBObject query = new BasicDBObject();
-				query.append("from", CollectionName.ATPCO_RECORD_8);
-				query.append("localField", "tar_no");
-				query.append("foreignField", "tariff");
-				query.append("as", "rec8");
-				lookup.append("$lookup", query);
-				return lookup;
-			}
-		});
-		
-		aggregationOperations.add(new AggregationOperation() {
-			
-			@Override
-			public DBObject toDBObject(AggregationOperationContext context) {
-				BasicDBObject match = new BasicDBObject();
-				BasicDBObject query = new BasicDBObject();
-				
-				query.append("rec8", new BasicDBObject("$ne", Arrays.asList()));
-				
-				match.append("$match", query);
-				return match;
-			}
-		});
-		
-		aggregationOperations.add(new AggregationOperation() {
-			
-			@Override
-			public DBObject toDBObject(AggregationOperationContext context) {
-				BasicDBObject unwind = new BasicDBObject();
-				
-				unwind.append("$unwind", "$rec8");
-				
-				return unwind;
-			}
-		});
-
-		aggregationOperations.add(new AggregationOperation() {
 			@Override
 			public DBObject toDBObject(AggregationOperationContext context) {
 				BasicDBObject match = new BasicDBObject();
@@ -184,39 +130,39 @@ public class AtpcoRuleQueryCustomRepository {
 				
 			
 				if (param.getCxr() != null && !param.getCxr().isEmpty()) {
-					and.add(new BasicDBObject("rec8.cxr_code", param.getCxr()));
+					and.add(new BasicDBObject("cxr_code", param.getCxr()));
 				} else {
-					and.add(new BasicDBObject("rec8.cxr_code", new BasicDBObject("$ne", "")));
+					and.add(new BasicDBObject("cxr_code", new BasicDBObject("$exists", true)));
 				}
 				
 				if (param.getRuleNo() != null && !param.getRuleNo().isEmpty()) {
-					and.add(new BasicDBObject("rec8.rule_no", param.getRuleNo()));
+					and.add(new BasicDBObject("rule_no", param.getRuleNo()));
 				} else {
-					and.add(new BasicDBObject("rec8.rule_no", new BasicDBObject("$ne", "")));
+					and.add(new BasicDBObject("rule_no", new BasicDBObject("$exists", true)));
 				}
 
 				if (param.getRuleTarNo() != null && !param.getRuleTarNo().isEmpty()) {
-					and.add(new BasicDBObject("rec8.tariff", param.getRuleTarNo()));
+					and.add(new BasicDBObject("tariff", param.getRuleTarNo()));
 				} else {
-					and.add(new BasicDBObject("rec8.tariff", new BasicDBObject("$ne", "")));
+					and.add(new BasicDBObject("tariff", new BasicDBObject("$exists", true)));
 				}
 				
 				if (param.getAccountCode() != null && !param.getAccountCode().isEmpty()) {
-					and.add(new BasicDBObject("rec8.account_code", param.getAccountCode()));
+					and.add(new BasicDBObject("account_code", param.getAccountCode()));
 				} else {
-					and.add(new BasicDBObject("rec8.account_code", new BasicDBObject("$exists", true)));
+					and.add(new BasicDBObject("account_code", new BasicDBObject("$exists", true)));
 				}
 				
 				
 				if(param.isIncludeDisc()) {
 					and.add(new BasicDBObject("$or", Arrays.asList(
-							new BasicDBObject("rec8.dates_disc", new BasicDBObject("$lte", today).append("$gte", twoYearsBefore)), 
-							new BasicDBObject("rec8.dates_disc", "indef"))));
+							new BasicDBObject("dates_disc", new BasicDBObject("$lte", today).append("$gte", twoYearsBefore)), 
+							new BasicDBObject("dates_disc", "indef"))));
 					
 				} else {
 					and.add(new BasicDBObject("$or", Arrays.asList(
-							new BasicDBObject("rec8.dates_disc", new BasicDBObject("$gte", today)), 
-							new BasicDBObject("rec8.dates_disc", "indef"))));
+							new BasicDBObject("dates_disc", new BasicDBObject("$gte", today)), 
+							new BasicDBObject("dates_disc", "indef"))));
 				}
 
 				if (and.size() > 0) {
@@ -229,24 +175,83 @@ public class AtpcoRuleQueryCustomRepository {
 			}
 		});
 		
+		
+		
+		aggregationOperations.add(new AggregationOperation() {
+			
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject lookup = new BasicDBObject();
+				BasicDBObject query = new BasicDBObject();
+				query.append("from", CollectionName.ATPCO_MASTER_TARIFF);
+				query.append("localField", "tariff");
+				query.append("foreignField", "tar_no");
+				query.append("as", "m_tariff");
+				lookup.append("$lookup", query);
+				return lookup;
+			}
+		});
+		
+//		aggregationOperations.add(new AggregationOperation() {
+//			
+//			@Override
+//			public DBObject toDBObject(AggregationOperationContext context) {
+//				BasicDBObject match = new BasicDBObject();
+//				BasicDBObject query = new BasicDBObject();
+//				
+//				query.append("rec8", new BasicDBObject("$ne", Arrays.asList()));
+//				
+//				match.append("$match", query);
+//				return match;
+//			}
+//		});
+//		
+		aggregationOperations.add(new AggregationOperation() {
+			
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject unwind = new BasicDBObject();
+				
+				unwind.append("$unwind", new BasicDBObject("path",  "$m_tariff").append("preserveNullAndEmptyArrays", true));
+				
+				return unwind;
+			}
+		});
+
+//		aggregationOperations.add(new AggregationOperation() {
+//			
+//			@Override
+//			public DBObject toDBObject(AggregationOperationContext context) {
+//				BasicDBObject match = new BasicDBObject();
+//				BasicDBObject query = new BasicDBObject();
+//				
+//				query.append("m_tariff.type", "FARE BY RULE");
+//				query.append("m_tariff.pp", "public");
+//				
+//				match.append("$match", query);
+//				return match;
+//			}
+//		});
+		
+		
 		aggregationOperations.add(new AggregationOperation() {
 			@Override
 			public DBObject toDBObject(AggregationOperationContext context) {
 				BasicDBObject projection = new BasicDBObject();
 				projection.append("$project", 
-						new BasicDBObject("cxr_code", "$rec8.cxr_code")
-						.append("tariff", "$rec8.tariff")
-						.append("tar_cd", "$tar_cd")
-						.append("tar_desc", "$description")
-						.append("rule_no", "$rec8.rule_no")
-						.append("cat35", "$rec8.cat35")
-						.append("prim_pass_type", "$rec8.prim_pass_type")
-						.append("account_code", "$rec8.account_code")
-						.append("fare_geo_scope_global", "$rec8.fare_geo_scope_global")
-						.append("fare_geo_scope_loc_1", "$rec8.fare_geo_scope_loc_1")
-						.append("fare_geo_scope_loc_2", "$rec8.fare_geo_scope_loc_2")
-						.append("dates_eff","$rec8.dates_eff")
-						.append("dates_disc", "$rec8.dates_disc")
+						new BasicDBObject("cxr_code", "$cxr_code")
+						.append("tariff", "$tariff")
+						.append("tar_cd", "$m_tariff.tar_cd")
+						.append("description", "$m_tariff.description")
+						.append("rule_no", "$rule_no")
+						.append("cat35", "$cat35")
+						.append("prim_pass_type", "$prim_pass_type")
+						.append("account_code", "$account_code")
+						.append("fare_geo_scope_global", "$fare_geo_scope_global")
+						.append("fare_geo_scope_loc_1", "$fare_geo_scope_loc_1")
+						.append("fare_geo_scope_loc_2", "$fare_geo_scope_loc_2")
+						.append("dates_eff","$dates_eff")
+						.append("dates_disc", "$dates_disc")
 						);
 				return projection;
 			}
@@ -263,9 +268,9 @@ public class AtpcoRuleQueryCustomRepository {
 
 		Aggregation aggregationPagination = newAggregation(aggregationOperations);
 
-		List<AtpcoRecord8> result = mongoTemplate.aggregate(aggregationPagination, CollectionName.ATPCO_MASTER_TARIFF, AtpcoRecord8.class).getMappedResults();
+		List<AtpcoRecord8> result = mongoTemplate.aggregate(aggregationPagination, CollectionName.ATPCO_RECORD_8, AtpcoRecord8.class).getMappedResults();
 		
-		return new PageImpl<>(result, pageable, mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_MASTER_TARIFF, AtpcoRecord8.class).getMappedResults().size());
+		return new PageImpl<>(result, pageable, mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_RECORD_8, AtpcoRecord8.class).getMappedResults().size());
 	
 	}
 	
@@ -403,16 +408,8 @@ public class AtpcoRuleQueryCustomRepository {
 		aggregationOperations.add(new AggregationOperation() {
 			@Override
 			public DBObject toDBObject(AggregationOperationContext context) {
-				BasicDBObject unwind = new BasicDBObject("$unwind", "$m_tariff");
+				BasicDBObject unwind = new BasicDBObject("$unwind", new BasicDBObject("path", "$m_tariff").append("preserveNullAndEmptyArrays", true));
 				return unwind;
-			}
-		});
-		
-		aggregationOperations.add(new AggregationOperation() {
-			@Override
-			public DBObject toDBObject(AggregationOperationContext context) {
-				BasicDBObject match = new BasicDBObject("$match", new BasicDBObject("m_tariff", new BasicDBObject("$ne", Arrays.asList())));
-				return match;
 			}
 		});
 		
@@ -669,7 +666,7 @@ public class AtpcoRuleQueryCustomRepository {
 		aggregationOperations.add(new AggregationOperation() {
 			@Override
 			public DBObject toDBObject(AggregationOperationContext context) {
-				return new BasicDBObject("$unwind", "$master_tariff");
+				return new BasicDBObject("$unwind", new BasicDBObject("path", "$master_tariff").append("preserveNullAndEmptyArrays", true));
 			}
 		});
 		
@@ -782,7 +779,7 @@ public class AtpcoRuleQueryCustomRepository {
 		aggregationOperations.add(new AggregationOperation() {
 			@Override
 			public DBObject toDBObject(AggregationOperationContext context) {
-				return new BasicDBObject("$unwind", "$master_tariff");
+				return new BasicDBObject("$unwind", new BasicDBObject("path", "$master_tariff").append("preserveNullAndEmptyArrays", true));
 			}
 		});
 		
