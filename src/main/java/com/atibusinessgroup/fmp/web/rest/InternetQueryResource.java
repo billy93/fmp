@@ -39,8 +39,15 @@ public class InternetQueryResource {
     @Timed
     public ResponseEntity<List<InternetQuery>> getAllInternetQueries(@RequestBody InternetQueryParam param) {
 		Pageable pageable = new PageRequest(param.getPage(), param.getSize());
-		Page<InternetQuery> result = internetQueryService.getAllInternetQueries(param, pageable);
+		Page<InternetQuery> result = null;
 		
+		if(param.getSummarizeType() == 0) {
+			result = internetQueryService.getSummarizeCaptDateQueries(param, pageable);
+		} else if(param.getSummarizeType() == 1) {
+			result = internetQueryService.getSummarizeDeptDateQueries(param, pageable);
+		} else if(param.getSummarizeType() == 2) {
+			result = internetQueryService.getDontSummarizeQueries(param, pageable);
+		}
 		HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(result, "/api/internet-queries");
 		
 		return new ResponseEntity<>(result.getContent(), headers, HttpStatus.OK);

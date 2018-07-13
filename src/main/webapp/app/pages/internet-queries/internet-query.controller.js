@@ -22,9 +22,6 @@
         vm.showCarrierModal = showCarrierModal;
         vm.showWebsiteModal = showWebsiteModal;
         vm.updateDataView = updateDataView;
-        vm.summarizeByCaptDateView = summarizeByCaptDateView;
-        vm.summarizeByDeptDateView = summarizeByDeptDateView;
-        vm.dontSummarizeView = dontSummarizeView;
         
         if($stateParams.internetQueryFilter != null){
         	vm.queryParams = $stateParams.internetQueryFilter;
@@ -47,7 +44,6 @@
                 vm.totalItems = headers('X-Total-Count');
                 vm.queryCount = vm.totalItems;
                 vm.internetQueries = data;
-                vm.dontSummarizeView();
                 
                 $(document).ready(function(){
             		var _parents = $('.table-internet-query').find('thead');
@@ -152,25 +148,8 @@
         }
         
         function updateDataView() {
-        	if(vm.queryParams.summarizeType == "0") {
-            	vm.summarizeByCaptDateView();
-            } else if(vm.queryParams.summarizeType == "1") {
-            	vm.summarizeByDeptDateView();
-            } else if(vm.queryParams.summarizeType == "2") {
-            	vm.dontSummarizeView();
-            } 
-        }
-        
-        function summarizeByCaptDateView() {
-        	console.log("summarizeByCaptDateView");
-        }
-        
-        function summarizeByDeptDateView() {
-        	console.log("summarizeByDeptDateView");
-        }
-        
-        function dontSummarizeView() {
-        	console.log("dontSummarizeView");
+        	vm.page = 1;
+    		vm.loadAll(); 
         }
         
         vm.dayOfWeekList = [
