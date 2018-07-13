@@ -90,7 +90,7 @@
 							<div class="clearfix mb1">
 								<div class="pull-right text-right">
 									<button type="button" id="btnLoadFare"
-										class="btn btn-default small" ng-click="vm.loadAll();">Query</button>
+										class="btn btn-default small" ng-click="vm.loadAll();" ng-disabled="fareClassForm.$invalid || vm.isLoading">Query</button>
 									<button type="button" id="btnClearFare"
 										class="btn btn-default small" ng-click="vm.clearFilter();">Clear</button>
 									<button type="reset" id="btnResetFare"

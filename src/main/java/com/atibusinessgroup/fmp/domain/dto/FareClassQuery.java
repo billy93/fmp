@@ -80,7 +80,7 @@ public class FareClassQuery implements Serializable {
 	private String datesDisc;
 	
 	@Field("fare_class_information")
-    private List<AtpcoRecord1FareClassInformation> fareClassInformation = new ArrayList<>();
+    private AtpcoRecord1FareClassInformation fareClassInformation;
 	
 	private List<String> bkcd = new ArrayList<>();
 	private List<String> paxType = new ArrayList<>();
@@ -261,11 +261,11 @@ public class FareClassQuery implements Serializable {
 		this.datesDisc = datesDisc;
 	}
 	
-	public List<AtpcoRecord1FareClassInformation> getFareClassInformation() {
+	public AtpcoRecord1FareClassInformation getFareClassInformation() {
 		return fareClassInformation;
 	}
 
-	public void setFareClassInformation(List<AtpcoRecord1FareClassInformation> fareClassInformation) {
+	public void setFareClassInformation(AtpcoRecord1FareClassInformation fareClassInformation) {
 		this.fareClassInformation = fareClassInformation;
 	}
 
