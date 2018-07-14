@@ -3,6 +3,8 @@ package com.atibusinessgroup.fmp.constant;
 public class CollectionName {
 	public final static String ATPCO_ADD_ON = "atpco_addon";
 	
+	public final static String ATPCO_YQYR_S1 = "atpco_yqyr_s1";
+	
 	public final static String ATPCO_FARE = "atpco_fare";
 	public final static String ATPCO_RECORD_0 = "atpco_record_0";
 	public final static String ATPCO_RECORD_1 = "atpco_record_1";
