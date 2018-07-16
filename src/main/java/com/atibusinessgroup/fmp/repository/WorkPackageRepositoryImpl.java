@@ -6,6 +6,8 @@ import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +30,12 @@ import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
 import com.atibusinessgroup.fmp.domain.dto.AfdQueryParam;
 import com.atibusinessgroup.fmp.domain.dto.WorkPackageMarketFare;
 import com.atibusinessgroup.fmp.security.SecurityUtils;
+import com.atibusinessgroup.fmp.service.util.DateUtil;
 import com.atibusinessgroup.fmp.web.rest.WorkPackageResource.WorkPackageQuery;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+
+import ch.qos.logback.core.status.Status;
 
 
 public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAnyName {
@@ -69,7 +74,7 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		}
 		Criteria targetCriteria = new Criteria();
 		if(filter.getDistribution() != null) {
-			targetCriteria = Criteria.where("target_distribution").regex(filter.getDistribution(),"i");
+			targetCriteria = Criteria.where("target_distribution").is(filter.getDistribution());
 		}
 		Criteria typeCriteria = new Criteria();
 		if(filter.getWpType() != null) {
@@ -77,15 +82,72 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		}
 		Criteria businessCriteria = new Criteria();
 		if(filter.getBusinessAreas() != null) {
-			businessCriteria = Criteria.where("business_area").regex(filter.getBusinessAreas(),"i");
+			businessCriteria = Criteria.where("business_area").is(filter.getBusinessAreas());
 		}
 		Criteria createdCriteria = new Criteria();
 		if(filter.getCreator() != null) {
-			createdCriteria = Criteria.where("created_by").regex(filter.getCreator(),"i");
-		}		
+			createdCriteria = Criteria.where("created_by").regex(filter.getCreator().getLogin(),"i");
+		}
+		
+		Criteria createdDateCriteria = new Criteria();
+		if(filter.getCreatedDateFrom() !=null && filter.getCreatedDateTo() != null) {
+			Date from = DateUtil.convertObjectToDate(filter.getCreatedDateFrom());
+			
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(filter.getCreatedDateTo());
+			calendar.set(Calendar.HOUR_OF_DAY, 23);
+			calendar.set(Calendar.MINUTE, 59);
+			calendar.set(Calendar.SECOND, 59);
+			calendar.set(Calendar.MILLISECOND, 0);
+			Date to = calendar.getTime();
+			
+			createdDateCriteria = Criteria.where("created_date").gte(from).lte(to);
+		}else if(filter.getCreatedDateFrom() !=null) {
+			Date from = DateUtil.convertObjectToDate(filter.getCreatedDateFrom());
+			createdDateCriteria = Criteria.where("created_date").gte(from);
+		}else if(filter.getCreatedDateTo() !=null) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(filter.getCreatedDateTo());
+			calendar.set(Calendar.HOUR_OF_DAY, 23);
+			calendar.set(Calendar.MINUTE, 59);
+			calendar.set(Calendar.SECOND, 59);
+			calendar.set(Calendar.MILLISECOND, 0);
+			Date to = calendar.getTime();
+			createdDateCriteria = Criteria.where("created_date").lte(to);
+		}
+		
+		
+		Criteria filingDateCriteria = new Criteria();
+		if(filter.getFilingDateFrom() !=null && filter.getFilingDateTo() != null) {
+			System.out.println(filter.getFilingDateFrom());
+			System.out.println(filter.getFilingDateTo());
+			Date from = DateUtil.convertObjectToDate(filter.getFilingDateFrom());
+			
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(filter.getFilingDateTo());
+			calendar.set(Calendar.HOUR_OF_DAY, 23);
+			calendar.set(Calendar.MINUTE, 59);
+			calendar.set(Calendar.SECOND, 59);
+			calendar.set(Calendar.MILLISECOND, 0);
+			Date to = calendar.getTime();
+			
+			filingDateCriteria = Criteria.where("filing_date").gte(from).lte(to);
+		}else if(filter.getFilingDateFrom() !=null) {
+			Date from = DateUtil.convertObjectToDate(filter.getFilingDateFrom());
+			filingDateCriteria = Criteria.where("filing_date").gte(from);
+		}else if(filter.getFilingDateTo() !=null) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(filter.getFilingDateTo());
+			calendar.set(Calendar.HOUR_OF_DAY, 23);
+			calendar.set(Calendar.MINUTE, 59);
+			calendar.set(Calendar.SECOND, 59);
+			calendar.set(Calendar.MILLISECOND, 0);
+			Date to = calendar.getTime();
+			filingDateCriteria = Criteria.where("filing_date").lte(to);
+		}
 				
 		Query query = new Query(new Criteria().andOperator(wpIDCriteria,nameCriteria,statusCriteria,
-				targetCriteria,typeCriteria, businessCriteria, createdCriteria))
+				targetCriteria,typeCriteria, businessCriteria, createdCriteria, createdDateCriteria, filingDateCriteria))
 				.with(pageable);
 		
 		List<WorkPackage> workPackages = mongoTemplate.find(query, WorkPackage.class);

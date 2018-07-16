@@ -113,6 +113,13 @@
                     return transformResponse(data);
                 }
             },
+            'getQuery': {
+                method: 'GET',
+                url:'api/work-packages/view/:id',
+                transformResponse: function (data) {
+                    return transformResponse(data);
+                }
+            },
             'update': { method:'PUT' },
             'createFromRecommendation': {
             	    method:'POST', url:'api/work-packages/create/fromRecommendation'

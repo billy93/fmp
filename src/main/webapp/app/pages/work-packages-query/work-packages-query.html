@@ -67,6 +67,23 @@
 												</div>
 											</div>
 											<div class="form-group mb0">
+												<div class="custom-label semibold">Filing Date From/To</div>
+												<div class="row no-mar">
+													<div class="col-md-6 no-lpad absolute-datepicker">
+														<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'filingDateFrom')" 
+															is-open="vm.datePickerOpenStatus['filingDateFrom']" datetime-picker="{{vm.dateFormat}}" 
+															enable-time="false" name="filingDateFrom" id="datepicker" 
+															ng-model="vm.filingDateFrom" placeholder="From"/>
+													</div>
+													<div class="col-md-6 no-pad absolute-datepicker">
+														<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'filingDateTo')"
+															is-open="vm.datePickerOpenStatus['filingDateTo']" datetime-picker="{{vm.dateFormat}}" 
+															enable-time="false" name="filingDateTo" id="datepicker" 
+															ng-model="vm.filingDateTo" placeholder="To"/>
+													</div>
+												</div>
+											</div>
+											<div class="form-group mb0">
 												<div class="custom-label semibold">GFS Date From/To</div>
 												<div class="row no-mar">
 													<div class="col-md-6 no-lpad absolute-datepicker">
@@ -167,8 +184,9 @@
 										<label>
 											<select class="form-control" ng-model="vm.itemsPerPage" ng-change="vm.changeItemsPerPage()">
 												<option value="10">10</option>
-												<option value="15">15</option>
 												<option value="20">20</option>
+												<option value="35">35</option>
+												<option value="50">50</option>
 											</select>
 											 records per page
 										</label>
@@ -192,23 +210,23 @@
 										<tr role="row" jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
 											<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Action</th>
 											<th class="sorting_asc" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" aria-sort="ascending">No</th>
-											<th jh-sort-by="reviewLevel" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Review Level <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="status" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Status <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="wpid" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">WO ID <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="name" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">WO Name <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="businessArea" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Business Area <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="fareType" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Fare Types <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="priority" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Priority <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="filingDate" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Filing Date <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="reuseFrom" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Reuse from <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="replaceFrom" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Replace from <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="reviewLevel" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Review Level <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="targetDistribution" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Distribution Type <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="queuedDate" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Queued Date<span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="filingDate" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Filing Date <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="createdDate" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Created Date <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="createdBy" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Created By <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="lockedBy" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Locked By <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="lockedSince" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Locked Since <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="type" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">WO Type <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="fareType" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Fare Types <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="reuseFrom" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Reuse from <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="replaceFrom" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Replace from <span class="glyphicon glyphicon-sort"></span></th>
+											<th jh-sort-by="queuedDate" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Queued Date<span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="approvalReference" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Approval Reference <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="lastModifiedDate" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Last Modified Date <span class="glyphicon glyphicon-sort"></span></th>
 											<th jh-sort-by="lastModifiedBy" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Last Modified By <span class="glyphicon glyphicon-sort"></span></th>
@@ -229,11 +247,19 @@
 						                        </div>
 						                    </td>
 						                    <td><a ui-sref="work-package-view-only({id:workPackage.id})">{{$index+1}}</a></td>
-						                    <td ng-right-click="vm.rightClick('reviewLevel')">{{workPackage.reviewLevel}}</td>
 						                    <td ng-right-click="vm.rightClick('status')">{{workPackage.status}}</td>
 						                    <td ng-right-click="vm.rightClick('wpid')">{{workPackage.wpid}}</td>
 						                    <td ng-right-click="vm.rightClick('name')">{{workPackage.name}}</td>
 						                    <td ng-right-click="vm.rightClick('businessArea')">{{workPackage.businessArea}}</td>
+						                    <td ng-right-click="vm.rightClick('priority')">{{workPackage.priority}}</td>
+						                    <td ng-right-click="vm.rightClick('reviewLevel')">{{workPackage.reviewLevel}}</td>
+						                    <td ng-right-click="vm.rightClick('targetDistribution')">{{workPackage.targetDistribution}}</td>
+						                    <td ng-right-click="vm.rightClick('filingDate')">{{workPackage.filingDate | date:'ddMMMyyyy'}}</td>
+						                    <td ng-right-click="vm.rightClick('createdDate')">{{workPackage.createdDate | date:'ddMMMyyyy'}}</td>
+						                    <td ng-right-click="vm.rightClick('createdBy')">{{workPackage.createdBy}}</td>
+						                    <td ng-right-click="vm.rightClick('lockedBy')">{{workPackage.lockedBy}}</td>
+						                    <td ng-right-click="vm.rightClick('lockedSince')">{{workPackage.lockedSince | date:'medium'}}</td>
+						                    <td ng-right-click="vm.rightClick('type')">{{workPackage.type}}</td>
 						                    <td>
 						                    	<div>
 							                    	<table ng-if="workPackage.specifiedFares" class="sub-table">
@@ -309,17 +335,9 @@
 						                    		</tbody>
 						                    	</table>
 						                    </td>
-						                    <td ng-right-click="vm.rightClick('priority')">{{workPackage.priority}}</td>
-						                    <td ng-right-click="vm.rightClick('filingDate')">{{workPackage.filingDate | date:'ddMMMyyyy'}}</td>
 						                    <td ng-right-click="vm.rightClick('reuseFrom')">{{workPackage.reuseFrom}}</td>
 						                    <td ng-right-click="vm.rightClick('replaceFrom')">{{workPackage.replaceFrom}}</td>
-						                    <td ng-right-click="vm.rightClick('targetDistribution')">{{workPackage.targetDistribution}}</td>
 						                    <td ng-right-click="vm.rightClick('queuedDate')">{{workPackage.queuedDate | date:'medium'}}</td>
-						                    <td ng-right-click="vm.rightClick('createdDate')">{{workPackage.createdDate | date:'medium'}}</td>
-						                    <td ng-right-click="vm.rightClick('createdBy')">{{workPackage.createdBy}}</td>
-						                    <td ng-right-click="vm.rightClick('lockedBy')">{{workPackage.lockedBy}}</td>
-						                    <td ng-right-click="vm.rightClick('lockedSince')">{{workPackage.lockedSince | date:'medium'}}</td>
-						                    <td ng-right-click="vm.rightClick('type')">{{workPackage.type}}</td>
 						                    <td>
 						                    	<div>
 							                    	<table ng-if="workPackage.specifiedFares" class="sub-table">
@@ -345,25 +363,6 @@
 						                    <td ng-right-click="vm.rightClick('lastModifiedBy')">{{workPackage.lastModifiedBy}}</td>
 						                    <td><input type="checkbox" disabled ng-model="workPackage.marketFareSheet[0].groupFares"/></td>
 										</tr>
-										<!-- <tr ng-show="vm.workPackageActionButton[$index]">
-											<td colspan="18" style="text-align: left !important; padding-left: 40px">
-												<div class="btn btn-app" ng-click="vm.unlock($index)" ng-if="workPackage.locked">
-													<i class="fa fa-unlock"></i>Unlock
-												</div>
-												<div class="btn btn-app" ng-click="vm.reuse($index)">
-													<i class="fa fa-recycle"></i>Reuse
-												</div>
-												<div class="btn btn-app" ng-click="vm.replace($index)" ng-show="workPackage.targetDistribution != 'ATPCO'">
-													<i class="fa fa-reply"></i>Replace
-												</div>
-												<div class="btn btn-app" ng-click="vm.withdraw($index)">
-													<i class="fa fa-ban"></i>Withdraw
-												</div>
-												<div class="btn btn-app" ng-click="vm.showHistory($index)">
-													<i class="fa fa-history"></i>History
-												</div>
-											</td>
-										</tr> -->
 									</tbody>
 								</table>
 							</div>
@@ -373,22 +372,6 @@
 						        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage"
 						         ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
 						    </div>
-							<div class="clearfix data-on">
-								<div class="pull-left dataTables_info">
-									Showing 1 to 10 of 57 entries
-								</div>
-								<div class="pull-right dataTables_paginate">
-									<ul class="pagination">
-									    <li class="previous disabled"><a href="#">Previous</a></li>
-									    <li class="active"><a href="#">1</a></li>
-									    <li><a href="#">2</a></li>
-									    <li><a href="#">3</a></li>
-								      	<li><a href="#">4</a></li>
-								      	<li><a href="#">5</a></li>
-								      	<li class="next"><a href="#">Next</a></li>
-									</ul>
-								</div>
-							</div>
 						</div>
 					</div>
 					<!-- end of table -->

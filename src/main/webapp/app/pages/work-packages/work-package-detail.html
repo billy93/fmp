@@ -243,8 +243,8 @@
 		<div class="panel-body">
 			<div class="clearfix mb1">
 				<div class="pull-right">
-					<button class="btn btn-default small" ng-click="vm.resendApprove()" ng-if="vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.user.reviewLevels.indexOf('HO') > -1">Generate IN</button>
-					<button class="btn btn-default small" ng-click="vm.viewRecipients()" ng-if="vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.user.reviewLevels.indexOf('HO') > -1">View IN Recipients</button>
+					<button class="btn btn-default small view-only" ng-click="vm.resendApprove()" ng-if="vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.user.reviewLevels.indexOf('HO') > -1">Generate IN</button>
+					<button class="btn btn-default small view-only" ng-click="vm.viewRecipients()" ng-if="vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.user.reviewLevels.indexOf('HO') > -1">View IN Recipients</button>
 					<div class="button-group dropdown custom">
 						<button class="btn btn-default small view-only" ng-disabled="(vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO'
 						&& vm.workPackage.status=='DISTRIBUTED')  || vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)">
@@ -312,7 +312,7 @@
 						</ul>
 					</div>
 					<button ng-if="vm.isViewOnly != true" class="btn btn-default small view-only" ng-click="vm.save(false)" ng-disabled="vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)">Save</button>
-					<button class="btn btn-default small" ng-click="vm.close()" ng-disabled="vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) ">Close</button>
+					<button class="btn btn-default small" ng-click="vm.close()">Close</button>
 				</div>
 			</div>
 
@@ -393,7 +393,7 @@
 												<div class="pull-left">
 													<div class="clearfix">
 														<div class="pull-right datatable-button">
-															<div class="button-group dropdown custom">
+															<div class="button-group dropdown custom" ng-if="vm.isViewOnly != true">
 																<button class="btn btn-default small btn-secondary view-only" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></i></button>
 																<ul class="dropdown-menu custom" role="menu">
 																    <li>
@@ -434,6 +434,14 @@
 																    <li>
 																   	 <a ng-click="vm.expandCityGroup(workPackageSheet, 'discount')" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)">Expand City Groups</a>
 																    </li>
+																</ul>
+															</div>
+															<div class="button-group dropdown custom" ng-if="vm.isViewOnly == true">
+																<button class="btn btn-default small btn-secondary" >Edit<i class="fa fa-caret-down"></i></button>
+																<ul class="dropdown-menu custom" role="menu">
+																   <li>
+															    		<a ng-click="vm.copySelectedFares(workPackageSheet, 'workorder-fares')" >Copy Selected Rows</a>
+															   		</li>
 																</ul>
 															</div>
 															<button class="btn btn-default small btn-secondary view-only" ngf-select  ngf-change="vm.importFare($file, $index)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)">Import</button>
@@ -876,7 +884,7 @@
 												<div class="pull-left">
 													<div class="clearfix">
 														<div class="pull-right datatable-button">
-															<div class="button-group dropdown custom">
+															<div class="button-group dropdown custom" ng-if="vm.isViewOnly != true">
 																<button class="btn btn-default small btn-secondary view-only" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></i></button>
 																<ul class="dropdown-menu custom" role="menu">
 																	<li>
@@ -916,6 +924,14 @@
 																    <li>
 																   	 <a ng-click="vm.expandCityGroup(workPackageSheet)" ng-disabled="vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)" ng-class="{'poiv-none':vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}">Expand City Groups</a>
 																    </li>
+																</ul>
+															</div>
+															<div class="button-group dropdown custom" ng-if="vm.isViewOnly != false">
+																<button class="btn btn-default small btn-secondary" >Edit<i class="fa fa-caret-down"></i></button>
+																<ul class="dropdown-menu custom" role="menu">
+																   <li>
+															    		<a ng-click="vm.copySelectedFares(workPackageSheet, 'workorder-fares')" >Copy Selected Rows</a>
+															   		</li>
 																</ul>
 															</div>
 															<button class="btn btn-default small btn-secondary view-only" ngf-select ngf-change="vm.importFareAddon($file, $index)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Import</button>
@@ -1696,7 +1712,7 @@
 						                <div class="pull-left">
 						                  <div class="clearfix">
 						                    <div class="pull-right datatable-button">
-						                      <div class="button-group dropdown custom">
+						                      <div class="button-group dropdown custom" ng-if="vm.isViewOnly != true">
 						                        <button class="btn btn-default small btn-secondary view-only" ng-disabled="vm.workPackage.status=='WITHDRAWN' || vm.workPackage.status=='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none': (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || vm.workPackage.status == 'WITHDRAWN' || vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></i></button>
 						                        <ul class="dropdown-menu custom" role="menu">
 						                            <li>
@@ -1725,6 +1741,14 @@
 												    </li>
 						                        </ul>
 						                      </div>
+						                      <div class="button-group dropdown custom" ng-if="vm.isViewOnly != false">
+													<button class="btn btn-default small btn-secondary" >Edit<i class="fa fa-caret-down"></i></button>
+													<ul class="dropdown-menu custom" role="menu">
+													   <li>
+												    		<a ng-click="vm.copySelectedFares(workPackageSheet, 'workorder-fares')" >Copy Selected Rows</a>
+												   		</li>
+													</ul>
+												</div>
 						                      <button class="btn btn-default small btn-secondary view-only" ngf-select ngf-change="vm.importFareDiscount($file)" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Import</button>
 						                      <button class="btn btn-default small btn-secondary" ng-click="vm.exportFaresDiscount()" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Export</button>
 						                      <button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.agent(vm.reviewOnly(vm.workPackage))" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Agents</button>
@@ -2656,7 +2680,7 @@
 						&& vm.workPackage.status=='DISTRIBUTED' }">
 												<div class="clearfix">
 													<div class="pull-right datatable-button">
-														<div class="button-group dropdown custom">
+														<div class="button-group dropdown custom" ng-if="vm.isViewOnly != true">
 															<button class="btn btn-default small btn-secondary view-only" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)}"></i></button>
 															<ul class="dropdown-menu custom" role="menu">
 															    <li>
@@ -2694,6 +2718,14 @@
 															    </li>
 															</ul>
 														</div>
+														<div class="button-group dropdown custom" ng-if="vm.isViewOnly != false">
+																<button class="btn btn-default small btn-secondary" >Edit<i class="fa fa-caret-down"></i></button>
+																<ul class="dropdown-menu custom" role="menu">
+																   <li>
+															    		<a ng-click="vm.copySelectedFares(workPackageSheet, 'workorder-fares')" >Copy Selected Rows</a>
+															   		</li>
+																</ul>
+															</div>
 														<button class="btn btn-default small btn-secondary view-only" ngf-select  ngf-change="vm.importFareMarket($file, $index)" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Import</button>
 														<button class="btn btn-default small btn-secondary" ng-click="vm.exportFaresMarket($index)" ng-disabled=" vm.lockedOnly(vm.workPackage)">Export</button>
 														<button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.agent(vm.reviewOnly(vm.workPackage))" ng-disabled="vm.lockedOnly(vm.workPackage)">Agents</button>
@@ -3170,7 +3202,7 @@
 											<div class="pull-left">
 												<div class="clearfix">
 													<div class="pull-right datatable-button">
-														<div class="button-group dropdown custom">
+														<div class="button-group dropdown custom" ng-if="vm.isViewOnly != true">
 															<button class="btn btn-default small btn-secondary view-only" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)}"></i></button>
 															<ul class="dropdown-menu custom" role="menu">
 																<li>
@@ -3212,6 +3244,14 @@
 															    </li>
 															</ul>
 														</div>
+														<div class="button-group dropdown custom" ng-if="vm.isViewOnly != false">
+																<button class="btn btn-default small btn-secondary" >Edit<i class="fa fa-caret-down"></i></button>
+																<ul class="dropdown-menu custom" role="menu">
+																   <li>
+															    		<a ng-click="vm.copySelectedFares(workPackageSheet, 'workorder-fares')" >Copy Selected Rows</a>
+															   		</li>
+																</ul>
+															</div>
 														<button class="btn btn-default small btn-secondary view-only" ngf-select ngf-change="vm.importFareAddon($file, $index)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Import</button>
 														<button class="btn btn-default small btn-secondary" ng-click="vm.exportFaresAddon($index)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Export</button>
 														<button class="btn btn-default small btn-secondary view-only" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Publish</button>
@@ -3748,7 +3788,7 @@
 											<div class="pull-left">
 												<div class="clearfix">
 													<div class="pull-right datatable-button" ng-class="{'poiv-none' : (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}">
-														<div class="button-group dropdown custom">
+														<div class="button-group dropdown custom" ng-if="vm.isViewOnly != true">
 															<button class="btn btn-default small btn-secondary view-only" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')}"></i></button>
 															<ul class="dropdown-menu custom" role="menu">
 															    <li>
@@ -3783,7 +3823,14 @@
 																    </li>
 															</ul>
 														</div>
-
+														<div class="button-group dropdown custom" ng-if="vm.isViewOnly != false">
+																<button class="btn btn-default small btn-secondary" >Edit<i class="fa fa-caret-down"></i></button>
+																<ul class="dropdown-menu custom" role="menu">
+																   <li>
+															    		<a ng-click="vm.copySelectedFares(workPackageSheet, 'workorder-fares')" >Copy Selected Rows</a>
+															   		</li>
+																</ul>
+															</div>
 														<button class="btn btn-default small btn-secondary view-only" ngf-select  ngf-change="vm.importFareWaiver($file, $index)" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Import</button>
 														<button class="btn btn-default small btn-secondary" ng-click="vm.exportFaresWaiver($index)" ng-disabled="vm.workPackage.status=='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Export</button>
 														<button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.agent(vm.reviewOnly(vm.workPackage))" ng-disabled="vm.workPackage.status=='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Agents</button>

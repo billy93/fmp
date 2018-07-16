@@ -147,7 +147,7 @@
             },
             resolve: {
                 entity: ['$stateParams', 'WorkPackage', function($stateParams, WorkPackage) {
-                    return WorkPackage.get({id : $stateParams.id}).$promise;
+                    return WorkPackage.getQuery({id : $stateParams.id}).$promise;
                 }],
                 user: ['$stateParams', 'User', 'Principal', function($stateParams, User, Principal) {
                 	return Principal.identity().then(function(account) {
@@ -197,7 +197,7 @@
                 }],
                 previousState: ["$state", function ($state) {
                     var currentStateData = {
-                        name: $state.current.name || 'work-package',
+                        name: $state.current.name || 'work-package-query',
                         params: $state.params,
                         url: $state.href($state.current.name, $state.params)
                     };

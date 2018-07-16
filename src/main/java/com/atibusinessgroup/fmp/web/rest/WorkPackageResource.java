@@ -53,6 +53,7 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -2776,7 +2777,7 @@ public class WorkPackageResource {
 									}
 								}
 							}else if(workPackage.getReviewLevel().toUpperCase().contentEquals("DISTRIBUTION")) {
-								if(fare.getTariffNumber().getTarNo() == null || fare.getTariffNumber().getTarNo().contentEquals("")) {
+								if(fare.getTariffNumber() == null || fare.getTariffNumber().getTarNo() == null || fare.getTariffNumber().getTarNo().contentEquals("")) {
 									//List Error
 						    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Tarno is required");
@@ -2785,7 +2786,7 @@ public class WorkPackageResource {
 
 						    		errors.add(err1);
 								}
-								if(fare.getTariffNumber().getTarCd() == null || fare.getTariffNumber().getTarCd().contentEquals("")) {
+								if(fare.getTariffNumber() == null || fare.getTariffNumber().getTarCd() == null || fare.getTariffNumber().getTarCd().contentEquals("")) {
 									//List Error
 						    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("TarCd is required");
@@ -4441,6 +4442,8 @@ public class WorkPackageResource {
         private String wpType;
         private Date createdDateFrom;
         private Date createdDateTo;
+        private Date filingDateFrom;
+        private Date filingDateTo;
         private Date gfsDateFrom;
         private Date gfsDateTo;
         private Date distribDateFrom;
@@ -4449,9 +4452,11 @@ public class WorkPackageResource {
         private Date discDateTo;
         private String fareClass;
         private String businessAreas;
-        private String creator;
+        private User creator;
         private String approval;
         private String gfs;
+    	private int page;
+    	private int size;
         
 		public WorkPackageQuery() {
 		}
@@ -4546,10 +4551,10 @@ public class WorkPackageResource {
 		public void setBusinessAreas(String businessAreas) {
 			this.businessAreas = businessAreas;
 		}
-		public String getCreator() {
+		public User getCreator() {
 			return creator;
 		}
-		public void setCreator(String creator) {
+		public void setCreator(User creator) {
 			this.creator = creator;
 		}
 		public String getApproval() {
@@ -4565,15 +4570,52 @@ public class WorkPackageResource {
 			this.gfs = gfs;
 		}
 
+		public int getPage() {
+			return page;
+		}
+
+		public void setPage(int page) {
+			this.page = page;
+		}
+
+		public int getSize() {
+			return size;
+		}
+
+		public void setSize(int size) {
+			this.size = size;
+		}
+		
+
+		public Date getFilingDateFrom() {
+			return filingDateFrom;
+		}
+
+		public void setFilingDateFrom(Date filingDateFrom) {
+			this.filingDateFrom = filingDateFrom;
+		}
+
+		public Date getFilingDateTo() {
+			return filingDateTo;
+		}
+
+		public void setFilingDateTo(Date filingDateTo) {
+			this.filingDateTo = filingDateTo;
+		}
+
 		@Override
 		public String toString() {
 			return "WorkPackageQuery [wpID=" + wpID + ", name=" + name + ", status=" + status + ", distribution="
 					+ distribution + ", wpType=" + wpType + ", createdDateFrom=" + createdDateFrom + ", createdDateTo="
-					+ createdDateTo + ", gfsDateFrom=" + gfsDateFrom + ", gfsDateTo=" + gfsDateTo + ", distribDateFrom="
+					+ createdDateTo + ", filingDateFrom=" + filingDateFrom + ", filingDateTo=" + filingDateTo
+					+ ", gfsDateFrom=" + gfsDateFrom + ", gfsDateTo=" + gfsDateTo + ", distribDateFrom="
 					+ distribDateFrom + ", distribDateTo=" + distribDateTo + ", discDateFrom=" + discDateFrom
 					+ ", discDateTo=" + discDateTo + ", fareClass=" + fareClass + ", businessAreas=" + businessAreas
-					+ ", creator=" + creator + ", approval=" + approval + ", gfs=" + gfs + "]";
-		}  
+					+ ", creator=" + creator + ", approval=" + approval + ", gfs=" + gfs + ", page=" + page + ", size="
+					+ size + "]";
+		}
+
+		
    }
    
     
@@ -4586,8 +4628,9 @@ public class WorkPackageResource {
      */
     @PostMapping("/work-packages/query")
     @Timed
-    public ResponseEntity<List<WorkPackage>> getAllQueryWorkPackages(@RequestBody WorkPackageQuery filter, Pageable pageable) {
-        log.debug("REST request to get a page of query WorkPackages custom {}", filter);
+    public ResponseEntity<List<WorkPackage>> getAllQueryWorkPackages(@RequestBody WorkPackageQuery filter) {
+        log.debug("REST request to get a page of query WorkPackages custom {}, {}", filter);
+        Pageable pageable = new PageRequest(filter.getPage(), filter.getSize());
         Page<WorkPackage> page = workPackageService.findCustomQuery(filter, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/work-packages/query");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
@@ -4723,6 +4766,44 @@ public class WorkPackageResource {
 //        if(workPackage.getVersion() == null) {
 //        	workPackage.setVersion("current");
 //        }
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(workPackage));
+    }
+    
+    /**
+     * GET  /work-packages/view/:id : get the "id" workPackage.
+     *
+     * @param id the id of the workPackage to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the workPackage, or with status 404 (Not Found)
+     */
+    @GetMapping("/work-packages/view/{id}")
+    @Timed
+    public ResponseEntity<WorkPackage> viewOnlyWorkPackage(@PathVariable String id) {
+        log.debug("View Only : {}", id);
+        WorkPackage workPackage = workPackageService.findOne(id);
+        /*if(workPackage.getStatus() == Status.PENDING || workPackage.getStatus() == Status.REFERRED) {
+        	workPackage.setStatus(Status.REVIEWING);
+        	workPackageService.save(workPackage);
+        }
+
+        Boolean needLocked = false;
+        Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
+		if(user.get().getReviewLevels().indexOf(workPackage.getReviewLevel()) > -1){
+			needLocked = true;
+		}
+
+        if(!workPackage.isLocked() && needLocked) {
+        	workPackage.setLocked(true);
+            workPackage.setLockedBy(SecurityUtils.getCurrentUserLogin().get());
+            workPackage.setLockedSince(ZonedDateTime.now());
+            workPackage = workPackageService.save(workPackage);
+        }
+
+        if(!workPackage.isOpened()) {
+        	workPackage.setOpened(true);
+        	workPackage.setOpenedBy(SecurityUtils.getCurrentUserLogin().get());
+        	workPackage.setOpenedSince(ZonedDateTime.now());
+        	workPackage = workPackageService.save(workPackage);
+        }*/
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(workPackage));
     }
 
