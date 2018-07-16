@@ -195,6 +195,7 @@
 	        'updateLatestFare' : { method: 'POST',  url:'api/work-packages/update-latest-fare'},
 	        'updateActionCodes' : { method: 'POST',  url:'api/work-packages/update-action-codes'},
 	        'refreshTariff' : { method: 'POST',  url:'api/work-packages/refresh-tariff'},
+	        'customQuery': { method: 'POST', url:'api/work-packages/query', isArray:true}
         });
     }
 })();

@@ -4431,6 +4431,167 @@ public class WorkPackageResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/work-packages");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+    
+    
+    public static class WorkPackageQuery {
+   	 	private String wpID;
+        private String name;
+        private String status;
+        private String distribution;
+        private String wpType;
+        private Date createdDateFrom;
+        private Date createdDateTo;
+        private Date gfsDateFrom;
+        private Date gfsDateTo;
+        private Date distribDateFrom;
+        private Date distribDateTo;
+        private Date discDateFrom;
+        private Date discDateTo;
+        private String fareClass;
+        private String businessAreas;
+        private String creator;
+        private String approval;
+        private String gfs;
+        
+		public WorkPackageQuery() {
+		}
+		
+		public String getWpID() {
+			return wpID;
+		}
+		public void setWpID(String wpID) {
+			this.wpID = wpID;
+		}
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public String getStatus() {
+			return status;
+		}
+		public void setStatus(String status) {
+			this.status = status;
+		}
+		public String getDistribution() {
+			return distribution;
+		}
+		public void setDistribution(String distribution) {
+			this.distribution = distribution;
+		}
+		public String getWpType() {
+			return wpType;
+		}
+		public void setWpType(String wpType) {
+			this.wpType = wpType;
+		}
+		public Date getCreatedDateFrom() {
+			return createdDateFrom;
+		}
+		public void setCreatedDateFrom(Date createdDateFrom) {
+			this.createdDateFrom = createdDateFrom;
+		}
+		public Date getCreatedDateTo() {
+			return createdDateTo;
+		}
+		public void setCreatedDateTo(Date createdDateTo) {
+			this.createdDateTo = createdDateTo;
+		}
+		public Date getGfsDateFrom() {
+			return gfsDateFrom;
+		}
+		public void setGfsDateFrom(Date gfsDateFrom) {
+			this.gfsDateFrom = gfsDateFrom;
+		}
+		public Date getGfsDateTo() {
+			return gfsDateTo;
+		}
+		public void setGfsDateTo(Date gfsDateTo) {
+			this.gfsDateTo = gfsDateTo;
+		}
+		public Date getDistribDateFrom() {
+			return distribDateFrom;
+		}
+		public void setDistribDateFrom(Date distribDateFrom) {
+			this.distribDateFrom = distribDateFrom;
+		}
+		public Date getDistribDateTo() {
+			return distribDateTo;
+		}
+		public void setDistribDateTo(Date distribDateTo) {
+			this.distribDateTo = distribDateTo;
+		}
+		public Date getDiscDateFrom() {
+			return discDateFrom;
+		}
+		public void setDiscDateFrom(Date discDateFrom) {
+			this.discDateFrom = discDateFrom;
+		}
+		public Date getDiscDateTo() {
+			return discDateTo;
+		}
+		public void setDiscDateTo(Date discDateTo) {
+			this.discDateTo = discDateTo;
+		}
+		public String getFareClass() {
+			return fareClass;
+		}
+		public void setFareClass(String fareClass) {
+			this.fareClass = fareClass;
+		}
+		public String getBusinessAreas() {
+			return businessAreas;
+		}
+		public void setBusinessAreas(String businessAreas) {
+			this.businessAreas = businessAreas;
+		}
+		public String getCreator() {
+			return creator;
+		}
+		public void setCreator(String creator) {
+			this.creator = creator;
+		}
+		public String getApproval() {
+			return approval;
+		}
+		public void setApproval(String approval) {
+			this.approval = approval;
+		}
+		public String getGfs() {
+			return gfs;
+		}
+		public void setGfs(String gfs) {
+			this.gfs = gfs;
+		}
+
+		@Override
+		public String toString() {
+			return "WorkPackageQuery [wpID=" + wpID + ", name=" + name + ", status=" + status + ", distribution="
+					+ distribution + ", wpType=" + wpType + ", createdDateFrom=" + createdDateFrom + ", createdDateTo="
+					+ createdDateTo + ", gfsDateFrom=" + gfsDateFrom + ", gfsDateTo=" + gfsDateTo + ", distribDateFrom="
+					+ distribDateFrom + ", distribDateTo=" + distribDateTo + ", discDateFrom=" + discDateFrom
+					+ ", discDateTo=" + discDateTo + ", fareClass=" + fareClass + ", businessAreas=" + businessAreas
+					+ ", creator=" + creator + ", approval=" + approval + ", gfs=" + gfs + "]";
+		}  
+   }
+   
+    
+    
+    /**
+     * GET  /work-packages-query : get all the workPackages query.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of workPackages in body
+     */
+    @PostMapping("/work-packages/query")
+    @Timed
+    public ResponseEntity<List<WorkPackage>> getAllQueryWorkPackages(@RequestBody WorkPackageQuery filter, Pageable pageable) {
+        log.debug("REST request to get a page of query WorkPackages custom {}", filter);
+        Page<WorkPackage> page = workPackageService.findCustomQuery(filter, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/work-packages/query");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
 
     /**
      * GET  /workPackagefilter/:id : get the "id" workPackagefilter.

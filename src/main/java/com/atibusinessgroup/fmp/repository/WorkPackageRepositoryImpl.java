@@ -28,6 +28,7 @@ import com.atibusinessgroup.fmp.domain.WorkPackageFilter;
 import com.atibusinessgroup.fmp.domain.dto.AfdQueryParam;
 import com.atibusinessgroup.fmp.domain.dto.WorkPackageMarketFare;
 import com.atibusinessgroup.fmp.security.SecurityUtils;
+import com.atibusinessgroup.fmp.web.rest.WorkPackageResource.WorkPackageQuery;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
@@ -52,6 +53,51 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		return page;
 	}
 
+	@Override
+	public Page<WorkPackage> findCustomQuery(WorkPackageQuery filter, Pageable pageable) {
+		Criteria wpIDCriteria = new Criteria();
+		if(filter.getWpID() != null) {
+			wpIDCriteria = Criteria.where("wpid").is(filter.getWpID());
+		}		
+		Criteria nameCriteria = new Criteria();
+		if(filter.getName() != null) {
+			nameCriteria = Criteria.where("name").regex(filter.getName(),"i");
+		}		
+		Criteria statusCriteria = new Criteria();
+		if(filter.getStatus() != null) {
+			statusCriteria = Criteria.where("status").regex(filter.getStatus(),"i");
+		}
+		Criteria targetCriteria = new Criteria();
+		if(filter.getDistribution() != null) {
+			targetCriteria = Criteria.where("target_distribution").regex(filter.getDistribution(),"i");
+		}
+		Criteria typeCriteria = new Criteria();
+		if(filter.getWpType() != null) {
+			typeCriteria = Criteria.where("type").regex(filter.getWpType(),"i");
+		}
+		Criteria businessCriteria = new Criteria();
+		if(filter.getBusinessAreas() != null) {
+			businessCriteria = Criteria.where("business_area").regex(filter.getBusinessAreas(),"i");
+		}
+		Criteria createdCriteria = new Criteria();
+		if(filter.getCreator() != null) {
+			createdCriteria = Criteria.where("created_by").regex(filter.getCreator(),"i");
+		}		
+				
+		Query query = new Query(new Criteria().andOperator(wpIDCriteria,nameCriteria,statusCriteria,
+				targetCriteria,typeCriteria, businessCriteria, createdCriteria))
+				.with(pageable);
+		
+		List<WorkPackage> workPackages = mongoTemplate.find(query, WorkPackage.class);
+
+		Page<WorkPackage> page = PageableExecutionUtils.getPage(
+				workPackages, 
+				pageable, 
+				() -> mongoTemplate.count(query, WorkPackage.class));
+
+		return page;
+	}
+	
 	public Criteria findByQuery(WorkPackageFilter wpFilter){
 		// TODO Auto-generated method stub
 		
