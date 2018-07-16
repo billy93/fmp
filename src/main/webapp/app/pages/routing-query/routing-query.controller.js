@@ -21,6 +21,7 @@
         vm.showTariffModal = showTariffModal;
         vm.showCarrierModal = showCarrierModal;
         vm.showRoutingDetailModal = showRoutingDetailModal;
+        vm.isLoading = false;
         
         vm.datePickerOpenStatus = {};
         vm.dateFormat = "yyyy-MM-dd";
@@ -35,6 +36,7 @@
         }
 
         function loadAll() {
+        	vm.isLoading = true;
         	vm.queryParams.page = vm.page - 1;
 			vm.queryParams.size = vm.itemsPerPage;
 			
@@ -48,10 +50,12 @@
                 vm.totalItems = headers('X-Total-Count');
                 vm.queryCount = vm.totalItems;
                 vm.routingqueries = data;
+                vm.isLoading = false;
             }
             
             function onError(error) {
                 AlertService.error(error.data.message);
+                vm.isLoading = false;
             }
         }
         
