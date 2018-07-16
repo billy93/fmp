@@ -169,6 +169,12 @@
 												<input type="text" class="form-control" ng-model="vm.gfs"  />
 											</div>
 										</div>
+										<div class="form-group">
+											<div class="form-group mb0">
+												<button class="btn btn-default small" ng-click="vm.query()">Query</button>
+												<button class="btn btn-default small" ng-click="vm.reset()">Reset</button>
+											</div>
+										</div>
 									</div>
 							</div>
 						</div>
@@ -195,9 +201,9 @@
 								<div>
 									<div class="clearfix">
 										<div class="pull-right datatable-button">
-											<button class="btn btn-default small" ng-click="vm.refresh()">Refresh</button>
-											<button class="btn btn-default small" ng-click="vm.query()">Query</button>
-											<button class="btn btn-default small" ng-click="vm.reset()">Reset</button>
+<!-- 											<button class="btn btn-default small" ng-click="vm.refresh()">Refresh</button> -->
+<!-- 											<button class="btn btn-default small" ng-click="vm.query()">Query</button> -->
+<!-- 											<button class="btn btn-default small" ng-click="vm.reset()">Reset</button> -->
 <!-- 											<button class="btn btn-default small" ng-click="vm.printExport()">Print/Export</button> -->
 <!-- 											<button class="btn btn-default small" ng-click="vm.reuse()"></i> Reuse</button> -->
 										</div>
@@ -370,7 +376,7 @@
 							<div class="text-center">
 						        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
 						        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage"
-						         ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
+						         ng-model="vm.page" ng-change="vm.loadQuery()"></uib-pagination>
 						    </div>
 						</div>
 					</div>

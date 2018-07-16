@@ -12,11 +12,9 @@
         vm.reviewLevel = true;
         vm.woStatus = true;
         vm.distributionType = true;
-        vm.loadPage = loadPage;
         vm.workPackageActionButton = [];
         vm.predicate = pagingParams.predicate;
-        vm.reverse = pagingParams.ascending;
-        vm.transition = transition;
+        vm.page = 1;
         
         vm.login =user;
         vm.optionDistribution = ['ATPCO', 'MARKET'];
@@ -27,7 +25,6 @@
         vm.datePickerOpenStatus = {};
         vm.dateFormat = "dd/MM/yyyy";
         vm.openCalendar = openCalendar;
-        vm.workPackageQuery =null;
         if($stateParams.size != null || $stateParams.size != undefined){
         	vm.itemsPerPage = $stateParams.size;
         }
@@ -38,8 +35,31 @@
 
         vm.loadQuery = loadQuery;        
         vm.loadQuery(); 
-                
-        function loadQuery () {
+        
+        vm.queryParam = {
+          		 wpID : null,
+              	 name : null,
+              	 status : null,
+              	 distribution : null,
+              	 wpType : null,
+              	 createdDateFrom : null,
+              	 createdDateTo : null,
+              	 filingDateFrom : null,
+              	 filingDateTo : null,
+              	 gfsDateFrom : null,
+              	 gfsDateTo : null,
+              	 distribDateFrom : null,
+              	 distribDateTo : null,
+              	 discDateFrom : null,
+              	 discDateTo : null,
+              	 fareClass : null,
+              	 businessAreas : null,
+              	 creator : null,
+              	 approval : null,
+              	 gfs : null
+          	};
+                       
+        function loadQuery () { 
         	WorkPackage.customQuery({
         		wpID : vm.wpID,
             	name : vm.name,
@@ -61,7 +81,7 @@
             	creator : vm.creator,
             	approval : vm.approval,
             	gfs : vm.gfs,
-            	page: pagingParams.page - 1,
+            	page: vm.page,
                 size: vm.itemsPerPage,
                 sort: sort()}, onSuccess, onError);
             function sort() {
@@ -76,25 +96,11 @@
                 vm.totalItems = headers('X-Total-Count');
                 vm.queryCount = vm.totalItems;
                 vm.workPackages = data;
-                vm.page = pagingParams.page;
                 vm.timezone = headers('timezone');
             }
             function onError(error) {
                 AlertService.error(error.data.message);
             }
-        }
-
-        function loadPage(page) {
-            vm.page = page;
-            vm.transition();
-        }
-
-        function transition() {
-            $state.transitionTo($state.$current, {
-            	page: vm.page,
-                size: vm.itemsPerPage,
-                sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc')
-            });
         }
 
         vm.rowSelected = function(idx, workPackage){

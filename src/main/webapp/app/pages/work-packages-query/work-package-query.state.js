@@ -11,7 +11,7 @@
         $stateProvider
         .state('work-package-query', {
             parent: 'app',
-            url: '/work-package-query?page&sort&search',
+            url: '/work-package-query',
             data: {
                 authorities: ['ROLE_USER'],
                 pageTitle: 'Work Queue'
