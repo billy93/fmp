@@ -5,19 +5,20 @@
         .module('fmpApp')
         .controller('WorkPackageSearchReplaceDialogController', WorkPackageSearchReplaceDialogController);
 
-    WorkPackageSearchReplaceDialogController.$inject = ['$scope', 'FileSaver', 'DataUtils', 'DateUtils', '$uibModalInstance', 'WorkPackage', '$state', 'Agent', 'filter', 'fareSheet'];
+    WorkPackageSearchReplaceDialogController.$inject = ['$scope', 'FileSaver', 'DataUtils', 'DateUtils', '$uibModalInstance', 'WorkPackage', '$state', 'Agent', 'filter', 'fareSheet', 'workPackage'];
 
-    function WorkPackageSearchReplaceDialogController($scope, FileSaver, DataUtils, DateUtils, $uibModalInstance, WorkPackage, $state, Agent, filter, fareSheet) {
+    function WorkPackageSearchReplaceDialogController($scope, FileSaver, DataUtils, DateUtils, $uibModalInstance, WorkPackage, $state, Agent, filter, fareSheet, workPackage) {
 
         var vm = this;
         vm.clear = clear;
-        
+        vm.workPackage = workPackage;
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
         $scope.dateformat = "dd/MM/yyyy";
         function openCalendar (date) {
             vm.datePickerOpenStatus[date] = true;
         }
+        
         vm.filter = {
         	andor:'and',
         	no:{
@@ -172,7 +173,19 @@
         		replace:{
     				check:false
     			}
-        	}
+        	},
+        	bucket:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
+        	zone:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
         };
         vm.originalFilter = angular.copy(vm.filter);
         

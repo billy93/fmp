@@ -2081,6 +2081,9 @@
 	            size: 'lg',
 	            windowClass: 'full-page-modal',
 	            resolve: {
+	            	workPackage: function(){
+	            		return vm.workPackage;
+	            	},
 	            	fareSheet: function(){
 	            		return fareSheet;
 	            	},
@@ -2120,6 +2123,9 @@
     	    	    	workPackageFareFilter.travelCompleteIndicator.check && workPackageFareFilter.travelCompleteIndicator.search != null && workPackageFareFilter.travelCompleteIndicator.search != '' ? 'travelCompleteIndicator' : null,
     	    	    	workPackageFareFilter.comment.check && workPackageFareFilter.comment.search != null && workPackageFareFilter.comment.search != '' ? 'comment' : null,
     	    	    	workPackageFareFilter.ratesheetComment.check && workPackageFareFilter.ratesheetComment.search != null && workPackageFareFilter.ratesheetComment.search != '' ? 'ratesheetComment' : null,
+    	    	    			
+    	    	    	//addon
+    	    	    	workPackageFareFilter.bucket.check && workPackageFareFilter.bucket.search != null && workPackageFareFilter.bucket.search != '' ? 'bucket' : null,
     	    		];
  	    			
  	    			var found = false;
@@ -2185,6 +2191,11 @@
     	    	    	workPackageFareFilter.travelCompleteIndicator.replace.check && workPackageFareFilter.travelCompleteIndicator.replace.value != null && workPackageFareFilter.travelCompleteIndicator.replace.value != '' ? 'travelCompleteIndicator' : null,
     	    	    	workPackageFareFilter.comment.replace.check && workPackageFareFilter.comment.replace.value != null && workPackageFareFilter.comment.replace.value != '' ? 'comment' : null,
     	    	    	workPackageFareFilter.ratesheetComment.replace.check && workPackageFareFilter.ratesheetComment.replace.value != null && workPackageFareFilter.ratesheetComment.replace.value != '' ? 'ratesheetComment' : null,    	    		
+    	    	    			
+    	    	    	//addon
+    	    	    	workPackageFareFilter.bucket.replace.check && workPackageFareFilter.bucket.replace.value != null && workPackageFareFilter.bucket.replace.value != '' ? 'bucket' : null,    	    		
+    	    	    	workPackageFareFilter.zone.replace.check && workPackageFareFilter.zone.replace.value != null && workPackageFareFilter.zone.replace.value != '' ? 'zone' : null,    	    		
+
     	    		];
  	    			
  	    			for(var x=0;x<listField.length;x++){
@@ -2224,7 +2235,7 @@
     					
     					//regular fare column size
     					var fromColumn = 0;
-    					var toColumn = 29;
+    					var toColumn = 50;
 	    				for(var f=fromColumn; f<=toColumn;f++){
 	    					  var column = angular.element(tableEl.rows[i+1].cells[f]).attr('id');
 	    					  fareSheet.fares[i].field[column] = true;
