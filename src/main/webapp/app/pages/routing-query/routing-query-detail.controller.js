@@ -5,35 +5,32 @@
         .module('fmpApp')
         .controller('RoutingqueryDetailController', RoutingqueryDetailController);
 
-    RoutingqueryDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'previousState', 'entity', 'Routingquery'];
+    RoutingqueryDetailController.$inject = ['$scope', '$uibModalInstance', 'entity'];
 
-    function RoutingqueryDetailController($scope, $rootScope, $stateParams, previousState, entity, Routingquery) {
+    function RoutingqueryDetailController($scope, $uibModalInstance, entity) {
         var vm = this;
 
         vm.routingquery = entity;
-        console.log("ini");
-        console.log(entity);
-        vm.previousState = previousState.name;
         vm.selectTab = selectTab;
+        vm.print = print;
+        vm.exportData = exportData;
+        vm.clear = clear;
         
         vm.currentTab = [true, false, false];
-        $("#tab-0").show();
-    	$("#tab-1").hide();
-    	$("#tab-2").hide();
 
-        var unsubscribe = $rootScope.$on('fmpApp:routingqueryUpdate', function(event, result) {
-            vm.routingquery = result;
-        });
-        $scope.$on('$destroy', unsubscribe);
-        
         function selectTab(index) {
         	vm.currentTab = [false, false, false];
-        	$("#tab-0").hide();
-        	$("#tab-1").hide();
-        	$("#tab-2").hide();
-        	
         	vm.currentTab[index] = true;
-        	$("#tab-"+index).show();
+        }
+        
+        function print() {
+        }
+        
+        function exportData() {
+        }
+        
+        function clear() {
+            $uibModalInstance.dismiss('cancel');
         }
     }
     
