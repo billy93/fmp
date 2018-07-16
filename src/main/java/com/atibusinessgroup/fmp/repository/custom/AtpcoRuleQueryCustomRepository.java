@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -524,17 +525,17 @@ public class AtpcoRuleQueryCustomRepository {
 	public List<FareClassQuery> getFareClassGroups(FareClassGroup param) {
 		List<AggregationOperation> aggregationOperations = getFareClassGroupAggregation(param);
 		Aggregation aggregation = newAggregation(aggregationOperations);
+		System.out.println("aggregation "+aggregation);
 		List<FareClassQuery> result = mongoTemplate.aggregate(aggregation, FareClassQuery.class, FareClassQuery.class).getMappedResults();
 		for (FareClassQuery fareClassQuery : result) {
-			for (AtpcoRecord1FareClassInformation fci:fareClassQuery.getFareClassInformation()) {
-				for (String rbd:fci.getRbd()) {
-					if (rbd != null && !rbd.trim().isEmpty() && !fareClassQuery.getBkcd().contains(rbd.trim())) {
-						fareClassQuery.getBkcd().add(rbd.trim());
-					}
+			AtpcoRecord1FareClassInformation fci = fareClassQuery.getFareClassInformation();
+			for (String rbd:fci.getRbd()) {
+				if (rbd != null && !rbd.trim().isEmpty() && !fareClassQuery.getBkcd().contains(rbd.trim())) {
+					fareClassQuery.getBkcd().add(rbd.trim());
 				}
-				if (fci.getPassengerType() != null && !fci.getPassengerType().trim().isEmpty() && !fareClassQuery.getPaxType().contains(fci.getPassengerType().trim())) {
-					fareClassQuery.getPaxType().add(fci.getPassengerType().trim());
-				}
+			}
+			if (fci.getPassengerType() != null && !fci.getPassengerType().trim().isEmpty() && !fareClassQuery.getPaxType().contains(fci.getPassengerType().trim())) {
+				fareClassQuery.getPaxType().add(fci.getPassengerType().trim());
 			}
 		}
 		return result;
@@ -568,23 +569,19 @@ public class AtpcoRuleQueryCustomRepository {
 			}
 		});
 		
-		if (param.getPsgrType() != null && !param.getPsgrType().isEmpty()) {
-			aggregationOperations.add(new AggregationOperation() {
-				@Override
-				public DBObject toDBObject(AggregationOperationContext context) {
-					return new BasicDBObject("$unwind", "$fare_class_information");
-				}
-			});
-		}
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				return new BasicDBObject("$unwind", "$fare_class_information");
+			}
+		});
 		
-		if (param.getBookingClass() != null && !param.getBookingClass().isEmpty()) {
-			aggregationOperations.add(new AggregationOperation() {
-				@Override
-				public DBObject toDBObject(AggregationOperationContext context) {
-					return new BasicDBObject("$unwind", "$fare_class_information.rbd");
-				}
-			});
-		}
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				return new BasicDBObject("$unwind", "$fare_class_information.rbd");
+			}
+		});
 		
 		if ((param.getPsgrType() != null && !param.getPsgrType().isEmpty()) || (param.getBookingClass() != null && !param.getBookingClass().isEmpty())) {
 			aggregationOperations.add(new AggregationOperation() {
@@ -595,7 +592,7 @@ public class AtpcoRuleQueryCustomRepository {
 						match.append("fare_class_information.psgr_type", param.getPsgrType());
 					}
 					if (param.getBookingClass() != null && !param.getBookingClass().isEmpty()) {
-						match.append("fare_class_information.rbd", new BasicDBObject("$regex", param.getBookingClass()).append("$options", "i"));
+						match.append("fare_class_information.rbd", Pattern.compile(param.getBookingClass(), Pattern.CASE_INSENSITIVE));
 					}
 					
 					return new BasicDBObject("$match", match);
@@ -716,23 +713,19 @@ public class AtpcoRuleQueryCustomRepository {
 			}
 		});
 		
-		if (param.getPsgrType() != null && !param.getPsgrType().isEmpty()) {
-			aggregationOperations.add(new AggregationOperation() {
-				@Override
-				public DBObject toDBObject(AggregationOperationContext context) {
-					return new BasicDBObject("$unwind", "$fare_class_information");
-				}
-			});
-		}
-		
-		if (param.getBookingClass() != null && !param.getBookingClass().isEmpty()) {
-			aggregationOperations.add(new AggregationOperation() {
-				@Override
-				public DBObject toDBObject(AggregationOperationContext context) {
-					return new BasicDBObject("$unwind", "$fare_class_information.rbd");
-				}
-			});
-		}
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				return new BasicDBObject("$unwind", "$fare_class_information");
+			}
+		});
+	
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				return new BasicDBObject("$unwind", "$fare_class_information.rbd");
+			}
+		});
 		
 		if ((param.getPsgrType() != null && !param.getPsgrType().isEmpty()) || (param.getBookingClass() != null && !param.getBookingClass().isEmpty())) {
 			aggregationOperations.add(new AggregationOperation() {

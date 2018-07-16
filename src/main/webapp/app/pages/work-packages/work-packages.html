@@ -252,7 +252,7 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr id="tr{{$index}}" ng-repeat="workPackage in vm.workPackages track by $index"  
+										<tr id="tr{{$index}}" ng-if="!workPackage.hide" ng-repeat="workPackage in vm.workPackages track by $index"  
 										    role="row" class="datatable-row"
 											ng-class="{selected: workPackage === vm.selectedRow}"
 											ng-click="vm.rowSelected($index, workPackage)">
@@ -266,11 +266,11 @@
 						                        </div>
 						                    </td>
 						                    <td><a ui-sref="work-package-detail({id:workPackage.id})">{{$index+1}}</a></td>
-						                    <td>{{workPackage.reviewLevel}}</td>
-						                    <td>{{workPackage.status}}</td>
-						                    <td>{{workPackage.wpid}}</td>
-						                    <td>{{workPackage.name}}</td>
-						                    <td>{{workPackage.businessArea}}</td>
+						                    <td ng-right-click="vm.rightClick('reviewLevel')">{{workPackage.reviewLevel}}</td>
+						                    <td ng-right-click="vm.rightClick('status')">{{workPackage.status}}</td>
+						                    <td ng-right-click="vm.rightClick('wpid')">{{workPackage.wpid}}</td>
+						                    <td ng-right-click="vm.rightClick('name')">{{workPackage.name}}</td>
+						                    <td ng-right-click="vm.rightClick('businessArea')">{{workPackage.businessArea}}</td>
 						                    <td>
 						                    	<div>
 							                    	<table ng-if="workPackage.specifiedFares" class="sub-table">
@@ -346,17 +346,17 @@
 						                    		</tbody>
 						                    	</table>
 						                    </td>
-						                    <td>{{workPackage.priority}}</td>
-						                    <td>{{workPackage.filingDate | date:'ddMMMyyyy'}}</td>
-						                    <td>{{workPackage.reuseFrom}}</td>
-						                    <td>{{workPackage.replaceFrom}}</td>
-						                    <td>{{workPackage.targetDistribution}}</td>
-						                    <td>{{workPackage.queuedDate | date:'medium'}}</td>
-						                    <td>{{workPackage.createdDate | date:'medium'}}</td>
-						                    <td>{{workPackage.createdBy}}</td>
-						                    <td>{{workPackage.lockedBy}}</td>
-						                    <td>{{workPackage.lockedSince | date:'medium'}}</td>
-						                    <td>{{workPackage.type}}</td>
+						                    <td ng-right-click="vm.rightClick('priority')">{{workPackage.priority}}</td>
+						                    <td ng-right-click="vm.rightClick('filingDate')">{{workPackage.filingDate | date:'ddMMMyyyy'}}</td>
+						                    <td ng-right-click="vm.rightClick('reuseFrom')">{{workPackage.reuseFrom}}</td>
+						                    <td ng-right-click="vm.rightClick('replaceFrom')">{{workPackage.replaceFrom}}</td>
+						                    <td ng-right-click="vm.rightClick('targetDistribution')">{{workPackage.targetDistribution}}</td>
+						                    <td ng-right-click="vm.rightClick('queuedDate')">{{workPackage.queuedDate | date:'medium'}}</td>
+						                    <td ng-right-click="vm.rightClick('createdDate')">{{workPackage.createdDate | date:'medium'}}</td>
+						                    <td ng-right-click="vm.rightClick('createdBy')">{{workPackage.createdBy}}</td>
+						                    <td ng-right-click="vm.rightClick('lockedBy')">{{workPackage.lockedBy}}</td>
+						                    <td ng-right-click="vm.rightClick('lockedSince')">{{workPackage.lockedSince | date:'medium'}}</td>
+						                    <td ng-right-click="vm.rightClick('type')">{{workPackage.type}}</td>
 						                    <td>
 						                    	<div>
 							                    	<table ng-if="workPackage.specifiedFares" class="sub-table">
@@ -378,8 +378,8 @@
 							                    	</table>
 						                    	</div>
 						                    </td>
-						                    <td>{{workPackage.lastModifiedDate | date:'medium'}}</td>
-						                    <td>{{workPackage.lastModifiedBy}}</td>
+						                    <td ng-right-click="vm.rightClick('lastModifiedDate')">{{workPackage.lastModifiedDate | date:'medium'}}</td>
+						                    <td ng-right-click="vm.rightClick('lastModifiedBy')">{{workPackage.lastModifiedBy}}</td>
 						                    <td><input type="checkbox" disabled ng-model="workPackage.marketFareSheet[0].groupFares"/></td>
 										</tr>
 										<!-- <tr ng-show="vm.workPackageActionButton[$index]">

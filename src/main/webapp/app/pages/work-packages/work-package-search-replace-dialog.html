@@ -276,6 +276,35 @@
 	 						</div>
 	 					</div>
 	 					<div class="clearfix">
+	 						<div class="pull-left ph5px w30 mt5px">Addon Bucket
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.bucket.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" class="form-control inline" uppercase ng-disabled="!vm.filter.bucket.check" ng-model="vm.filter.bucket.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.bucket.replace.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" uppercase class="form-control inline" ng-disabled="!vm.filter.bucket.replace.check" ng-model="vm.filter.bucket.replace.value">
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix">
 	 						<div class="pull-left ph5px w30 mt5px">Fare Class
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -436,6 +465,34 @@
 	 						<div class="pull-left ph5px w30">
 	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.footnote1.replace.check" ng-model="vm.filter.footnote1.replace.value">
 	 							
+	 						</div>
+	 					</div>
+	 					<div class="clearfix">
+	 						<div class="pull-left ph5px w30 mt5px">Zone
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.zone.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" class="form-control inline" uppercase ng-disabled="!vm.filter.zone.check" ng-model="vm.filter.zone.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.zone.replace.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" uppercase class="form-control inline" ng-disabled="!vm.filter.zone.replace.check" ng-model="vm.filter.zone.replace.value">
 	 						</div>
 	 					</div>
 	 					<div class="clearfix">

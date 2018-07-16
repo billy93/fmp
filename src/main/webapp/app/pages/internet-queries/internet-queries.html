@@ -25,7 +25,7 @@
 								<div class="form-group">	
 									<div class="custom-label semibold">Website</div>
 									<div class="input-group">
-										<input type="text" class="form-control" name="website" id="website" ng-model="vm.paramWebsite" uppercase />
+										<input type="text" class="form-control no-comma" name="website" id="website" ng-model="vm.paramWebsite" uppercase />
 										<span ng-click="vm.showWebsiteModal()"
 											class="input-group-addon"><i class="fa fa-folder"></i>
 										</span>
@@ -35,11 +35,11 @@
 							<div class="pull-left col-md-2 no-lpad">
 								<div class="form-group">	
 									<div class="custom-label semibold">Origin</div>
-									<input type="text" class="form-control" name="origin" id="origin" ng-model="vm.queryParams.origin" uppercase/>
+									<input type="text" class="form-control no-comma" name="origin" id="origin" ng-model="vm.queryParams.origin" uppercase/>
 								</div>
 								<div class="form-group">	
 									<div class="custom-label semibold">Destination</div>
-									<input type="text" class="form-control" name="destination" id="destination" ng-model="vm.queryParams.destination" uppercase />
+									<input type="text" class="form-control no-comma" name="destination" id="destination" ng-model="vm.queryParams.destination" uppercase />
 								</div>
 							</div>
 							<div class="pull-left col-md-3 no-lpad">
@@ -142,7 +142,7 @@
 					<div class="pull-right">
 						<div class="clearfix">
 							<div class="pull-right ml1">
-								<select class="form-control" name="summarizeType" id="summarizeType" ng-model="vm.queryParams.summarizeType">
+								<select class="form-control" name="summarizeType" id="summarizeType" ng-model="vm.queryParams.summarizeType" ng-change="vm.updateDataView()">
 									<option value="{{summarizeType.key}}" ng-repeat="summarizeType in vm.summarizeType track by $index">{{summarizeType.value}}</option>
 								</select>
 							</div>
@@ -151,12 +151,65 @@
 								<button type="button" class="btn btn-default small">Copy</button>
 								<button type="button" class="btn btn-default small">Print/Export</button>
 								<button type="button" class="btn btn-default small">Filter/Sort</button>
+								<button type="button" class="btn btn-default small">Currency : {{vm.queryParams.currency}}</button>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="table-responsive table-internet-query">
-					<table class="table table-striped table-bordered datatable table-header-fixed">
+					<table class="table table-striped table-bordered datatable table-header-fixed" ng-if="vm.queryParams.summarizeType == 0">
+						<thead style="padding-right: 17px; background-color: #64768a">
+							<tr>
+								<th class="th-fixed">No</th>
+								<th class="th-fixed">CXR</th>
+								<th class="th-fixed">ORIG</th>
+								<th class="th-fixed">DEST</th>
+								<th class="th-fixed">A/P DAYS</th>
+								<th class="th-fixed">WEBSITE</th>
+								<th class="th-fixed" ng-repeat="dateStr in vm.dateList">{{dateStr}}</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="internetQuery in vm.internetQueries" 
+								ng-click="vm.selectedRow = internetQuery;"
+								ng-class="{'selected': vm.selectedRow == internetQuery}">
+								<td>{{(vm.queryParams.page * vm.queryParams.size) + $index + 1}}</td>
+								<td>{{internetQuery.cxr}}</td>
+								<td>{{internetQuery.origin}}</td>
+								<td>{{internetQuery.destination}}</td>
+								<td>{{internetQuery.apDays}}</td>
+								<td>{{internetQuery.website}}</td>
+								<td ng-repeat="price in internetQuery.datePrice">{{price}}</td>
+							</tr>
+						</tbody>
+					</table>
+					<table class="table table-striped table-bordered datatable table-header-fixed" ng-if="vm.queryParams.summarizeType == 1">
+						<thead style="padding-right: 17px; background-color: #64768a">
+							<tr>
+								<th class="th-fixed">No</th>
+								<th class="th-fixed">CXR</th>
+								<th class="th-fixed">ORIG</th>
+								<th class="th-fixed">DEST</th>
+								<th class="th-fixed">A/P DAYS</th>
+								<th class="th-fixed">WEBSITE</th>
+								<th class="th-fixed" ng-repeat="dateStr in vm.dateList">{{dateStr}}</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="internetQuery in vm.internetQueries" 
+								ng-click="vm.selectedRow = internetQuery;"
+								ng-class="{'selected': vm.selectedRow == internetQuery}">
+								<td>{{(vm.queryParams.page * vm.queryParams.size) + $index + 1}}</td>
+								<td>{{internetQuery.cxr}}</td>
+								<td>{{internetQuery.origin}}</td>
+								<td>{{internetQuery.destination}}</td>
+								<td>{{internetQuery.apDays}}</td>
+								<td>{{internetQuery.website}}</td>
+								<td ng-repeat="price in internetQuery.datePrice">{{price}}</td>
+							</tr>
+						</tbody>
+					</table>
+					<table class="table table-striped table-bordered datatable table-header-fixed" ng-if="vm.queryParams.summarizeType == 2">
 						<thead style="padding-right: 17px; background-color: #64768a">
 							<tr>
 								<th class="th-fixed">No</th>

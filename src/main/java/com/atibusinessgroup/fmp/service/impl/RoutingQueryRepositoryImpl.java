@@ -580,7 +580,7 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 //		log.debug("ambil data mulai");
 //		log.debug(pageable.toString());
 //		log.debug("aggregationPagination "+aggregationPagination);
-//		log.debug("aggregation "+aggregation);
+		log.debug("aggregation "+aggregation);
 		List<RoutingQuery> result = mongoTemplate.aggregate(aggregationPagination, RoutingQuery.class, RoutingQuery.class).getMappedResults();
 		long allResultCount = mongoTemplate.aggregate(aggregation, RoutingQuery.class, RoutingQuery.class).getMappedResults().size();
 		
@@ -611,64 +611,27 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 			@Override
 			public DBObject toDBObject(AggregationOperationContext context) {
 				BasicDBObject match = new BasicDBObject();
-				BasicDBObject and = new BasicDBObject();
-				List<BasicDBObject> queries = new ArrayList<>();
 				
 				if (param.getTarNo() != null && !param.getTarNo().isEmpty()) {
-					BasicDBObject linkNo = new BasicDBObject();
-					linkNo.append("tar_no", param.getTarNo());
-					queries.add(linkNo);
+					match.append("tar_no", param.getTarNo());
 				}
-
 				if (param.getCarrier() != null && !param.getCarrier().isEmpty()) {
-					BasicDBObject cxr = new BasicDBObject();
-					cxr.append("cxr_cd", param.getCarrier());
-					queries.add(cxr);
+					match.append("cxr_cd", new BasicDBObject("$in", Arrays.asList(param.getCarrier().split(","))));
 				}
-
 				if (param.getRoutingNo() != null && !param.getRoutingNo().isEmpty()) {
-					BasicDBObject rtg = new BasicDBObject();
-					rtg.append("rtg_no", param.getRoutingNo());
-					queries.add(rtg);
+					match.append("rtg_no", param.getRoutingNo());
 				}
-				
 				if (param.getEffectiveDateFrom() != null && param.getEffectiveDateTo() != null) {
-					BasicDBObject effectiveDate = new BasicDBObject();
-					effectiveDate.append("dates_effective", new BasicDBObject("$lte", param.getEffectiveDateFrom()));
-					queries.add(effectiveDate);
-					
-					BasicDBObject discontinueDate = new BasicDBObject();
-					BasicDBObject discontinueDateGte = new BasicDBObject();
-					BasicDBObject discontinueDateIndef = new BasicDBObject();
-					discontinueDateGte.append("dates_discontinue", new BasicDBObject("$gte", param.getEffectiveDateTo()));
-					discontinueDateIndef.append("dates_discontinue", "indef");
-					discontinueDate.append("$or", Arrays.asList(discontinueDateGte, discontinueDateIndef));
-					queries.add(discontinueDate);
+					match.append("dates_effective", new BasicDBObject("$lte", param.getEffectiveDateFrom()));
+					match.append("$or", Arrays.asList(new BasicDBObject("dates_discontinue", new BasicDBObject("$gte", param.getEffectiveDateTo())), new BasicDBObject("dates_discontinue", "indef")));
 				} else if(param.getEffectiveDateFrom() != null) {
-					BasicDBObject effectiveDate = new BasicDBObject();
-					effectiveDate.append("dates_effective", new BasicDBObject("$lte", param.getEffectiveDateFrom()));
-					queries.add(effectiveDate);
-					
-					BasicDBObject discontinueDate = new BasicDBObject();
-					discontinueDate.append("dates_discontinue", "indef");
-					queries.add(discontinueDate);
+					match.append("dates_effective", new BasicDBObject("$lte", param.getEffectiveDateFrom()));
+					match.append("dates_discontinue", "indef");
 				} else if(param.getEffectiveDateTo() != null) {
-					BasicDBObject discontinueDate = new BasicDBObject();
-					BasicDBObject discontinueDateGte = new BasicDBObject();
-					BasicDBObject discontinueDateIndef = new BasicDBObject();
-					discontinueDateGte.append("dates_discontinue", new BasicDBObject("$gte", param.getEffectiveDateTo()));
-					discontinueDateIndef.append("dates_discontinue", "indef");
-					discontinueDate.append("$or", Arrays.asList(discontinueDateGte, discontinueDateIndef));
-					queries.add(discontinueDate);
+					match.append("$or", Arrays.asList(new BasicDBObject("dates_discontinue", new BasicDBObject("$gte", param.getEffectiveDateTo())), new BasicDBObject("dates_discontinue", "indef")));
 				}
 				
-				if (queries.size() > 0) {
-					and.append("$and", queries);
-				}
-				
-				match.append("$match", and);
-				
-				return match;
+				return new BasicDBObject("$match", match);
 			}
 		});
 		
