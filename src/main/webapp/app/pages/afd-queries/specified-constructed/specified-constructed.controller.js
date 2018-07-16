@@ -67,7 +67,7 @@
         vm.selectAll = selectAll;
         vm.showLegend = showLegend;
         vm.viewFullText = viewFullText;
-        vm.showErrorModal = showErrorModal;
+        vm.showInfoModal = showInfoModal;
         vm.selectCity = selectCity;
         vm.selectedRows = [];
         vm.selectedFares = [];
@@ -137,7 +137,7 @@
         		vm.infoMessage = vm.checkValidParameters();
         		
         		if (vm.infoMessage != 'Valid') {
-            		vm.showErrorModal(vm.infoMessage);
+            		vm.showInfoModal(vm.infoMessage);
             		return;
             	}
         		
@@ -444,7 +444,7 @@
             });
         }
         
-        function showErrorModal(message) {
+        function showInfoModal(message) {
         	$uibModal.open({
                 templateUrl: 'app/pages/modals/info-modal.html',
                 controller: 'InfoModalController',

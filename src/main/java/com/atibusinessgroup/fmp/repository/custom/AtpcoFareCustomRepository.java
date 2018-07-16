@@ -4,6 +4,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.newA
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -36,10 +37,13 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoFootnoteRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord1;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2Cat10;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat14;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat15;
 import com.atibusinessgroup.fmp.domain.dto.AddOnParam;
 import com.atibusinessgroup.fmp.domain.dto.AddOnsWrapper;
 import com.atibusinessgroup.fmp.domain.dto.AfdQueryAddOns;
 import com.atibusinessgroup.fmp.domain.dto.AfdQueryParam;
+import com.atibusinessgroup.fmp.domain.dto.AtpcoDateWrapper;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFareAfdQueryWithRecords;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByCatNo;
@@ -52,6 +56,8 @@ import com.atibusinessgroup.fmp.service.mapper.AfdQueryMapper;
 import com.atibusinessgroup.fmp.service.util.DateUtil;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
+
+import net.logstash.logback.encoder.org.apache.commons.lang.CharUtils;
 
 @Service
 public class AtpcoFareCustomRepository {	
@@ -294,6 +300,36 @@ public class AtpcoFareCustomRepository {
 					}
 					
 					queries.add(effective);
+				}
+				
+				if (param.getAmountRange() != null && !param.getAmountRange().trim().isEmpty()) {
+					try {
+						String oamount = param.getAmountRange().trim();
+						BasicDBObject amount = new BasicDBObject();
+						
+						if (oamount.contains(">=")) {
+							Double val = Double.parseDouble(oamount.replace(">=", ""));
+							amount.append("fare_origin_amount", new BasicDBObject("$gte", val));
+						} else if (oamount.contains(">")) {
+							Double val = Double.parseDouble(oamount.replace(">", ""));
+							amount.append("fare_origin_amount", new BasicDBObject("$gt", val));
+						} else if (oamount.contains("<=")) {
+							Double val = Double.parseDouble(oamount.replace("<=", ""));
+							amount.append("fare_origin_amount", new BasicDBObject("$lte", val));
+						} else if (oamount.contains("<")) {
+							Double val = Double.parseDouble(oamount.replace("<", ""));
+							amount.append("fare_origin_amount", new BasicDBObject("$lt", val));
+						} else if (oamount.contains("=")) {
+							Double val = Double.parseDouble(oamount.replace("=", ""));
+							amount.append("fare_origin_amount", val);
+						} else {
+							Double val = Double.parseDouble(oamount);
+							amount.append("fare_origin_amount", val);
+						}
+						
+						queries.add(amount);
+					} catch (Exception e) {
+					}
 				}
 					
 				if (queries.size() > 0) {
@@ -659,6 +695,10 @@ public class AtpcoFareCustomRepository {
 		
 		List<AfdQueryAddOns> addOns = new ArrayList<>();
 		
+		LinkedHashMap<String, String> footnotes = new LinkedHashMap<>();
+		footnotes.put("014", CategoryName.CAT_014);
+    	footnotes.put("015", CategoryName.CAT_015);
+    	
 		List<AggregationOperation> aggregationOperations = new ArrayList<>();
 		
 		aggregationOperations.add(new AggregationOperation() {
@@ -676,6 +716,26 @@ public class AtpcoFareCustomRepository {
 					BasicDBObject carrier = new BasicDBObject();
 					carrier.append("cxr_code", new BasicDBObject("$exists", "true"));
 					queries.add(carrier);
+				}
+				
+				if (param.getTariff() != null && !param.getTariff().isEmpty()) {
+					BasicDBObject tariff = new BasicDBObject();
+					tariff.append("tar_no", param.getTariff());
+					queries.add(tariff);
+				} else {
+					BasicDBObject tariff = new BasicDBObject();
+					tariff.append("tar_no", new BasicDBObject("$exists", "true"));
+					queries.add(tariff);
+				}
+				
+				if (param.getOwrt() != null && !param.getOwrt().isEmpty()) {
+					BasicDBObject owrt = new BasicDBObject();
+					owrt.append("ow_rt", param.getOwrt());
+					queries.add(owrt);
+				} else {
+					BasicDBObject owrt = new BasicDBObject();
+					owrt.append("ow_rt", new BasicDBObject("$exists", "true"));
+					queries.add(owrt);
 				}
 				
 				if (param.getOrigin() != null && !param.getOrigin().isEmpty()) {
@@ -716,6 +776,77 @@ public class AtpcoFareCustomRepository {
 					BasicDBObject zone = new BasicDBObject();
 					zone.append("add_on_zone", new BasicDBObject("$exists", "true"));
 					queries.add(zone);
+				}
+				
+				if (param.getRouteNo() != null && !param.getRouteNo().isEmpty()) {
+					BasicDBObject route = new BasicDBObject();
+					route.append("rtg_no", param.getRouteNo());
+					queries.add(route);
+				} else {
+					BasicDBObject route = new BasicDBObject();
+					route.append("rtg_no", new BasicDBObject("$exists", "true"));
+					queries.add(route);
+				}
+				
+				Date paramFrom = DateUtil.convertObjectToDate(param.getEffectiveDateFrom());
+				Date paramTo = DateUtil.convertObjectToDate(param.getEffectiveDateTo());
+			
+				if (paramFrom == null) {
+					paramFrom = minimumDate;
+				}
+				
+				if (paramTo == null) {
+					paramTo = maximumDate;
+				}
+				
+				if (param.getEffectiveDateOption() != null && param.getEffectiveDateOption().contentEquals("A")) {
+					BasicDBObject effective = new BasicDBObject();
+					effective.append("$and", 
+							Arrays.asList(new BasicDBObject("$or", Arrays.asList(new BasicDBObject("dates_tar_eff", "indef"), new BasicDBObject("dates_tar_eff", new BasicDBObject("$lte", paramTo)))), 
+									new BasicDBObject("$or", Arrays.asList(new BasicDBObject("dates_disc", "indef"), new BasicDBObject("dates_disc", new BasicDBObject("$gte", paramFrom))))));
+					queries.add(effective);
+				} else if (param.getEffectiveDateOption() != null && param.getEffectiveDateOption().contentEquals("E")) {
+					BasicDBObject effective = new BasicDBObject();
+					if (param.getEffectiveDateFrom() != null && param.getEffectiveDateTo() != null) {
+						effective.append("$and", Arrays.asList(new BasicDBObject("dates_tar_eff", new BasicDBObject("$eq", paramFrom)), 
+								new BasicDBObject("dates_disc", new BasicDBObject("$eq", paramTo))));
+					} else if (param.getEffectiveDateFrom() == null && param.getEffectiveDateTo() != null) {
+						effective.append("dates_disc", new BasicDBObject("$eq", paramTo));
+					} else if (param.getEffectiveDateTo() == null && param.getEffectiveDateFrom() != null) {
+						effective.append("dates_tar_eff", new BasicDBObject("$eq", paramFrom));
+					}
+					
+					queries.add(effective);
+				}
+				
+				if (param.getAmountRange() != null && !param.getAmountRange().trim().isEmpty()) {
+					try {
+						String oamount = param.getAmountRange().trim();
+						BasicDBObject amount = new BasicDBObject();
+						
+						if (oamount.contains(">=")) {
+							Double val = Double.parseDouble(oamount.replace(">=", ""));
+							amount.append("add_on.add_on_amount", new BasicDBObject("$gte", val));
+						} else if (oamount.contains(">")) {
+							Double val = Double.parseDouble(oamount.replace(">", ""));
+							amount.append("add_on.add_on_amount", new BasicDBObject("$gt", val));
+						} else if (oamount.contains("<=")) {
+							Double val = Double.parseDouble(oamount.replace("<=", ""));
+							amount.append("add_on.add_on_amount", new BasicDBObject("$lte", val));
+						} else if (oamount.contains("<")) {
+							Double val = Double.parseDouble(oamount.replace("<", ""));
+							amount.append("add_on.add_on_amount", new BasicDBObject("$lt", val));
+						} else if (oamount.contains("=")) {
+							Double val = Double.parseDouble(oamount.replace("=", ""));
+							amount.append("add_on.add_on_amount", val);
+						} else {
+							Double val = Double.parseDouble(oamount);
+							amount.append("add_on.add_on_amount", val);
+						}
+						
+						queries.add(amount);
+					} catch (Exception e) {
+					}
 				}
 				
 				if (queries.size() > 0) {
@@ -759,7 +890,108 @@ public class AtpcoFareCustomRepository {
     		
         	for (AtpcoAddOn a1addon:a1addons) {
         		Date focusDate = atpcoRecordService.resolveFocusDate(param.getEffectiveDateTo(), a1addon.getDates_tar_eff(), a1addon.getDates_disc());
-        		addOns.add(afdQueryMapper.convertAtpcoAddOn(a1addon, focusDate));
+        		
+        		String footnote1 = null, footnote2 = null;
+        		
+        		if (a1addon.getFtnt() != null && !a1addon.getFtnt().trim().isEmpty()) {
+        			String ftnt = a1addon.getFtnt();
+        			if (ftnt.length() == 2) {
+        				if (!CharUtils.isAsciiNumeric(ftnt.charAt(0))) {
+        					footnote1 = ftnt.charAt(0) + "";
+        					footnote2 = ftnt.charAt(1) + "";
+        				} else {
+        					footnote1 = a1addon.getFtnt();
+        				}
+        			} else {
+        				footnote1 = a1addon.getFtnt();
+        			}
+        		}
+        		
+        		Date travelStart = null, travelEnd = null, travelComplete = null, saleStart = null, saleEnd = null;
+        		
+        		if (footnote1 != null && !footnote1.contentEquals("F") && !footnote1.contentEquals("T")) {
+        			List<CategoryObject> footnote14s = null;
+                	List<CategoryObject> footnote15s = null;
+                	
+                	List<AtpcoFootnoteRecord2GroupByCatNo> frecord2s = findAtpcoFootnoteRecord2ByRecordId(a1addon.getTar_no() + a1addon.getCxr_code() + footnote1);
+                	
+                	for (Map.Entry<String, String> entry : footnotes.entrySet()) {
+                		AtpcoFootnoteRecord2 matchedRecord2 = null;
+                    	
+                    	for (AtpcoFootnoteRecord2GroupByCatNo arecord2:frecord2s) {
+                        	if (arecord2.getCatNo().contentEquals(entry.getKey())) {
+                        		for (AtpcoFootnoteRecord2 record2:arecord2.getRecords2()) {
+                        			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", a1addon.getMarket_origin(), "C", a1addon.getMarket_destination(), a1addon.getOw_rt(), a1addon.getRtg_no(), footnote1, focusDate,
+                        					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
+                                	
+                            		if (matched) {
+                            			matchedRecord2 = record2;
+                            			break;
+                            		} 
+                        		}
+                        		
+                        		break;
+                        	}
+                        }	
+                    	
+                    	if (matchedRecord2 != null && matchedRecord2.getDataTables() != null && matchedRecord2.getDataTables().size() > 0) {
+                    		List<CategoryObject> ftntCats = atpcoRecordService.getAndConvertCategoryObjectDataTable(entry.getKey(), matchedRecord2.getDataTables(), "Footnote");
+                    		
+                    		switch (entry.getKey()) {
+                    			case "014": footnote14s = ftntCats;
+                    						break;
+                    			case "015": footnote15s = ftntCats;
+            								break;
+                    		}
+                    	}
+                	}
+                	
+                	if (footnote14s != null) {
+            			List<Date> firsts = new ArrayList<>();
+            			List<Date> lasts = new ArrayList<>();
+            			for (CategoryObject footnote14:footnote14s) {
+            				AtpcoRecord3Cat14 cat14 = (AtpcoRecord3Cat14) footnote14.getCategory();
+            				Date s = DateUtil.convertObjectToDate(cat14.getTravel_dates_comm());
+            				if (s != null) {
+            					firsts.add(s);
+            				}
+            				Date e = DateUtil.convertObjectToDate(cat14.getTravel_dates_exp());
+            				if (e != null) {
+            					lasts.add(e);
+            				}
+            			}
+            			if (firsts.size() > 0) {
+            				travelStart = Collections.min(firsts);
+            			}
+            			if (lasts.size() > 0) {
+            				travelEnd = Collections.max(lasts);
+            			}
+                	}
+                	
+                	if (footnote15s != null) {
+                		List<Date> firsts = new ArrayList<>();
+            			List<Date> lasts = new ArrayList<>();
+            			for (CategoryObject footnote15:footnote15s) {
+            				AtpcoRecord3Cat15 cat15 = (AtpcoRecord3Cat15) footnote15.getCategory();
+            				Date s = DateUtil.convertObjectToDate(cat15.getSales_dates_earliest_tktg());
+            				if (s != null) {
+            					firsts.add(s);
+            				}
+            				Date e = DateUtil.convertObjectToDate(cat15.getSales_dates_latest_tktg());
+            				if (e != null) {
+            					lasts.add(e);
+            				}
+            			}
+            			if (firsts.size() > 0) {
+            				saleStart = Collections.min(firsts);
+            			}
+            			if (lasts.size() > 0) {
+            				saleEnd = Collections.max(lasts);
+            			}
+                	}
+        		}
+        		
+        		addOns.add(afdQueryMapper.convertAtpcoAddOn(a1addon, footnote1, footnote2, focusDate, travelStart, travelEnd, travelComplete, saleStart, saleEnd));
         		
         		if (addOns.size() == pageable.getPageSize()) {
     				isCompleted = true;

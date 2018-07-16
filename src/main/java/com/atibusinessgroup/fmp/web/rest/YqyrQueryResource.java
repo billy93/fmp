@@ -26,18 +26,17 @@ public class YqyrQueryResource {
 	
     public YqyrQueryResource(AtpcoYqyrCustomRepository atpcoYqyrCustomRepository) {
     	this.atpcoYqyrCustomRepository = atpcoYqyrCustomRepository;
-    	
     }
     
     /**
-     * POST  /yqyr-queries : get all the afd queries.
+     * POST  /yqyr-queries : get all the yqyr queries.
      *
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of afdQueries in body
      */
     @PostMapping("/yqyr-queries")
     @Timed
-    public ResponseEntity<YqyrWrapper> getAllAfdQueries(@RequestBody YqyrQueryParam param) {
+    public ResponseEntity<YqyrWrapper> getAllYqyrs(@RequestBody YqyrQueryParam param) {
         log.debug("REST request to get a page of YqyrQueries: {}", param);
         
         YqyrWrapper result = new YqyrWrapper();

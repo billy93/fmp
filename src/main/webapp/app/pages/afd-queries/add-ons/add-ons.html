@@ -38,11 +38,21 @@
 							<div class="pull-left col-md-6 no-lpad">
 								<div class="form-group">
 									<div class="custom-label semibold">Origin</div>
-									<input type="text" class="form-control" name="origin" id="origin" ng-model="vm.queryParams.origin" uppercase/>
+									<span class="input-group">
+										<input type="text" class="form-control" name="origin" id="origin" ng-model="vm.queryParams.origin" uppercase/>
+										<span class="input-group-addon" ng-click="$event.stopPropagation(); vm.selectCity('Origin')">
+											<i class="fa fa-folder"></i>
+										</span>
+									</span>
 								</div>
 								<div class="form-group">
 									<div class="custom-label semibold">Destination</div>
-									<input type="text" class="form-control" name="destination" id="destination" ng-model="vm.queryParams.destination" uppercase/>
+									<span class="input-group">
+										<input type="text" class="form-control" name="destination" id="destination" ng-model="vm.queryParams.destination" uppercase/>
+										<span class="input-group-addon" ng-click="$event.stopPropagation(); vm.selectCity('Origin')">
+											<i class="fa fa-folder"></i>
+										</span>
+									</span>
 								</div>
 								<div class="form-group">
 									<div class="custom-label semibold">Add-On Bucket</div>
@@ -65,7 +75,7 @@
 								
 								<div class="form-group">
 									<div class="custom-label semibold">Zone No</div>
-									<input type="number" class="form-control" name="zoneNo" id="zoneNo" ng-model="vm.queryParams.zoneNo" maxlength="3"/>
+									<input type="text" class="form-control" name="zoneNo" id="zoneNo" ng-model="vm.queryParams.zoneNo" maxlength="3"/>
 								</div>
 							</div>
 						</div>
@@ -139,7 +149,12 @@
 								</div>
 								<div class="form-group">
 									<div class="custom-label semibold">Amount Range</div>
-									<input type="text" class="form-control" name="amountRange" id="amountRange" ng-model="vm.queryParams.amountRange" ng-disabled="true"/>
+									<span class="input-group">
+										<input type="text" class="form-control" name="amountRange" id="amountRange" ng-model="vm.queryParams.amountRange"/>
+										<span class="input-group-addon" ng-click="$event.stopPropagation(); vm.showInfoModal('Use the following format\n=X means equal to X\n>  means greater than X\n>= means greater than or equal to X\n<  means less than X\n<= means less than or equal to X\n')">
+											<i class="fa fa-question"></i>
+										</span>
+									</span>
 								</div>
 								<div class="row no-mar">
 									<div class="col-md-6 no-lpad">

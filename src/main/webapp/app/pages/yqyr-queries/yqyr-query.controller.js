@@ -57,7 +57,7 @@
         ]
         
         function query() {
-        	vm.yqyr = [];
+        	vm.yqyrs = [];
         	vm.page = 0;
         	vm.lastIndex = 0;
         	vm.isLastPage = false;
