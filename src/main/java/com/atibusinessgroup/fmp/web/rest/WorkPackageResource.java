@@ -68,6 +68,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.atibusinessgroup.fmp.domain.AtpcoMasterTariff;
+import com.atibusinessgroup.fmp.domain.BusinessArea;
 import com.atibusinessgroup.fmp.domain.TariffNumber;
 import com.atibusinessgroup.fmp.domain.User;
 import com.atibusinessgroup.fmp.domain.WorkPackage;
@@ -4451,7 +4452,7 @@ public class WorkPackageResource {
         private Date discDateFrom;
         private Date discDateTo;
         private String fareClass;
-        private String businessAreas;
+        private BusinessArea businessArea;
         private User creator;
         private String approval;
         private String gfs;
@@ -4545,11 +4546,11 @@ public class WorkPackageResource {
 		public void setFareClass(String fareClass) {
 			this.fareClass = fareClass;
 		}
-		public String getBusinessAreas() {
-			return businessAreas;
+		public BusinessArea getBusinessAreas() {
+			return businessArea;
 		}
-		public void setBusinessAreas(String businessAreas) {
-			this.businessAreas = businessAreas;
+		public void setBusinessAreas(BusinessArea businessArea) {
+			this.businessArea = businessArea;
 		}
 		public User getCreator() {
 			return creator;
@@ -4610,7 +4611,7 @@ public class WorkPackageResource {
 					+ createdDateTo + ", filingDateFrom=" + filingDateFrom + ", filingDateTo=" + filingDateTo
 					+ ", gfsDateFrom=" + gfsDateFrom + ", gfsDateTo=" + gfsDateTo + ", distribDateFrom="
 					+ distribDateFrom + ", distribDateTo=" + distribDateTo + ", discDateFrom=" + discDateFrom
-					+ ", discDateTo=" + discDateTo + ", fareClass=" + fareClass + ", businessAreas=" + businessAreas
+					+ ", discDateTo=" + discDateTo + ", fareClass=" + fareClass + ", businessAreas=" + businessArea
 					+ ", creator=" + creator + ", approval=" + approval + ", gfs=" + gfs + ", page=" + page + ", size="
 					+ size + "]";
 		}

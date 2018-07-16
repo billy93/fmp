@@ -82,11 +82,11 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		}
 		Criteria businessCriteria = new Criteria();
 		if(filter.getBusinessAreas() != null) {
-			businessCriteria = Criteria.where("business_area").is(filter.getBusinessAreas());
+			businessCriteria = Criteria.where("business_area").regex(filter.getBusinessAreas().getName(),"i");
 		}
 		Criteria createdCriteria = new Criteria();
 		if(filter.getCreator() != null) {
-			createdCriteria = Criteria.where("created_by").regex(filter.getCreator().getLogin(),"i");
+			createdCriteria = Criteria.where("created_by").is(filter.getCreator().getLogin());
 		}
 		
 		Criteria createdDateCriteria = new Criteria();
@@ -119,8 +119,6 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		
 		Criteria filingDateCriteria = new Criteria();
 		if(filter.getFilingDateFrom() !=null && filter.getFilingDateTo() != null) {
-			System.out.println(filter.getFilingDateFrom());
-			System.out.println(filter.getFilingDateTo());
 			Date from = DateUtil.convertObjectToDate(filter.getFilingDateFrom());
 			
 			Calendar calendar = Calendar.getInstance();
@@ -146,8 +144,63 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 			filingDateCriteria = Criteria.where("filing_date").lte(to);
 		}
 				
+		Criteria distribDateCriteria = new Criteria();
+		if(filter.getDistribDateFrom() !=null && filter.getDistribDateTo() != null) {
+			Date from = DateUtil.convertObjectToDate(filter.getDistribDateFrom());
+			
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(filter.getDistribDateTo());
+			calendar.set(Calendar.HOUR_OF_DAY, 23);
+			calendar.set(Calendar.MINUTE, 59);
+			calendar.set(Calendar.SECOND, 59);
+			calendar.set(Calendar.MILLISECOND, 0);
+			Date to = calendar.getTime();
+			
+			distribDateCriteria = Criteria.where("distribution_date").gte(from).lte(to);
+		}else if(filter.getDistribDateFrom() !=null) {
+			Date from = DateUtil.convertObjectToDate(filter.getDistribDateFrom());
+			distribDateCriteria = Criteria.where("distribution_date").gte(from);
+		}else if(filter.getDistribDateTo() !=null) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(filter.getDistribDateTo());
+			calendar.set(Calendar.HOUR_OF_DAY, 23);
+			calendar.set(Calendar.MINUTE, 59);
+			calendar.set(Calendar.SECOND, 59);
+			calendar.set(Calendar.MILLISECOND, 0);
+			Date to = calendar.getTime();
+			distribDateCriteria = Criteria.where("distribution_date").lte(to);
+		}
+		
+		Criteria discDateCriteria = new Criteria();
+		if(filter.getDiscDateFrom() !=null && filter.getDiscDateTo() != null) {
+			Date from = DateUtil.convertObjectToDate(filter.getDiscDateFrom());
+			
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(filter.getDiscDateTo());
+			calendar.set(Calendar.HOUR_OF_DAY, 23);
+			calendar.set(Calendar.MINUTE, 59);
+			calendar.set(Calendar.SECOND, 59);
+			calendar.set(Calendar.MILLISECOND, 0);
+			Date to = calendar.getTime();
+			
+			discDateCriteria = Criteria.where("discontinue_date").gte(from).lte(to);
+		}else if(filter.getDiscDateFrom() !=null) {
+			Date from = DateUtil.convertObjectToDate(filter.getDiscDateFrom());
+			discDateCriteria = Criteria.where("discontinue_date").gte(from);
+		}else if(filter.getDiscDateTo() !=null) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(filter.getDiscDateTo());
+			calendar.set(Calendar.HOUR_OF_DAY, 23);
+			calendar.set(Calendar.MINUTE, 59);
+			calendar.set(Calendar.SECOND, 59);
+			calendar.set(Calendar.MILLISECOND, 0);
+			Date to = calendar.getTime();
+			discDateCriteria = Criteria.where("discontinue_date").lte(to);
+		}
+		
 		Query query = new Query(new Criteria().andOperator(wpIDCriteria,nameCriteria,statusCriteria,
-				targetCriteria,typeCriteria, businessCriteria, createdCriteria, createdDateCriteria, filingDateCriteria))
+				targetCriteria,typeCriteria, businessCriteria, createdCriteria, createdDateCriteria, 
+				filingDateCriteria, distribDateCriteria, discDateCriteria))
 				.with(pageable);
 		
 		List<WorkPackage> workPackages = mongoTemplate.find(query, WorkPackage.class);
