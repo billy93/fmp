@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('InternetQueryController', InternetQueryController);
 
-    InternetQueryController.$inject = ['$state', '$stateParams', 'InternetQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', '$uibModal'];
+    InternetQueryController.$inject = ['$state', '$stateParams', 'InternetQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', '$uibModal', 'FileSaver'];
 
-    function InternetQueryController($state, $stateParams, InternetQuery, ParseLinks, AlertService, paginationConstants, pagingParams, $uibModal) {
+    function InternetQueryController($state, $stateParams, InternetQuery, ParseLinks, AlertService, paginationConstants, pagingParams, $uibModal, FileSaver) {
 
         var vm = this;
         vm.itemsPerPage = paginationConstants.itemsPerPage;
@@ -22,7 +22,9 @@
         vm.showCarrierModal = showCarrierModal;
         vm.showWebsiteModal = showWebsiteModal;
         vm.updateDataView = updateDataView;
+        vm.isLoading = false;
         vm.dateList = [];
+        vm.printExport = printExport;
         
         if($stateParams.internetQueryFilter != null){
         	vm.queryParams = $stateParams.internetQueryFilter;
@@ -33,6 +35,7 @@
         }
         
         function loadAll() {
+        	vm.isLoading = true;
         	vm.queryParams.page = vm.page - 1;
 			vm.queryParams.size = vm.itemsPerPage;
 			vm.queryParams.cxr = vm.paramCarrier;
@@ -51,6 +54,7 @@
                 		vm.dateList.push(k);
                 	});
                 }
+                vm.isLoading = false;
                 
                 $(document).ready(function(){
             		var _parents = $('.table-internet-query').find('thead');
@@ -75,6 +79,7 @@
             }
             function onError(error) {
                 AlertService.error(error.data.message);
+                vm.isLoading = false;
             }
         }
         
@@ -97,7 +102,7 @@
         			biDirectional: null,
         			appendResults: null,
         			queryByGroup: null,
-        			currency: "IDR",
+        			currency: "USD",
         			summarizeType: "2"
         	};
         	
@@ -158,6 +163,55 @@
         function updateDataView() {
         	vm.page = 1;
     		vm.loadAll(); 
+        }
+        
+        function printExport() {
+        	vm.isLoading = true;
+        	var exportConfig = {
+        		internetQueryParam : vm.queryParams,
+        		outputTo : 'excel',
+        		gridLines : true,
+        		columnHeaders : true,
+        		onlySelectedRows : true
+        	};
+
+        	InternetQuery.exportQueue(exportConfig, function onExportSuccess(result){
+        		var fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+       			var templateFilename = "Internet_Query.xlsx";
+       			var blob = b64toBlob(result.file, fileType);
+       			FileSaver.saveAs(blob, templateFilename);
+       			vm.isLoading = false;
+        	}, function onExportFailed(error){
+        		 AlertService.error(error.data.message);
+                 vm.isLoading = false;
+        	});
+        }
+        
+        function b64toBlob(b64Data, contentType, sliceSize) {
+        	contentType = contentType || '';
+			sliceSize = sliceSize || 512;
+
+			var byteCharacters = atob(b64Data);
+			var byteArrays = [];
+
+			for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+				var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+				var byteNumbers = new Array(slice.length);
+				for (var i = 0; i < slice.length; i++) {
+					byteNumbers[i] = slice.charCodeAt(i);
+				}
+
+				var byteArray = new Uint8Array(byteNumbers);
+
+				byteArrays.push(byteArray);
+			}
+
+			var blob = new Blob(byteArrays, {
+				type : contentType
+			});
+
+			return blob;
         }
         
         vm.dayOfWeekList = [
