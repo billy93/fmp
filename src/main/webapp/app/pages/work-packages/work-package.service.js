@@ -22,7 +22,7 @@
 
                 data.saleDate = DateUtils.convertDateFromServer(data.saleDate);
 
-                if(data.fareSheet.length > 0){
+                if(data.fareSheet != null && data.fareSheet.length > 0){
                 	for(var x=0;x<data.fareSheet.length;x++){
                 		var fares = data.fareSheet[x].fares;
                 		for(var y=0;y<fares.length;y++){
@@ -37,7 +37,7 @@
                 	}
                 }
 
-                if(data.addonFareSheet.length > 0){
+                if(data.addonFareSheet != null && data.addonFareSheet.length > 0){
                 	for(var x=0;x<data.addonFareSheet.length;x++){
                 		var fares = data.addonFareSheet[x].fares;
                 		for(var y=0;y<fares.length;y++){
@@ -52,7 +52,7 @@
                 	}
                 }
 
-                if(data.marketFareSheet.length > 0){
+                if(data.marketFareSheet != null && data.marketFareSheet.length > 0){
                 	for(var x=0;x<data.marketFareSheet.length;x++){
                 		var fares = data.marketFareSheet[x].fares;
                 		for(var y=0;y<fares.length;y++){
@@ -68,7 +68,7 @@
                 }
 
 
-                if(data.discountFareSheet.length > 0){
+                if(data.discountFareSheet != null && data.discountFareSheet.length > 0){
                 	for(var x=0;x<data.discountFareSheet.length;x++){
                 		var fares = data.discountFareSheet[x].fares;
                 		for(var y=0;y<fares.length;y++){
