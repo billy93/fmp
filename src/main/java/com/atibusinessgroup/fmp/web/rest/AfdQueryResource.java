@@ -1,6 +1,7 @@
 package com.atibusinessgroup.fmp.web.rest;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,8 +39,8 @@ import com.atibusinessgroup.fmp.domain.dto.GeneralRuleApplication;
 import com.atibusinessgroup.fmp.domain.dto.SpecifiedConstructed;
 import com.atibusinessgroup.fmp.domain.dto.SpecifiedConstructedWrapper;
 import com.atibusinessgroup.fmp.domain.dto.WorkPackageMarketFare;
-import com.atibusinessgroup.fmp.repository.AtpcoRecord0Repository;
 import com.atibusinessgroup.fmp.repository.AtpcoMasterTariffRepository;
+import com.atibusinessgroup.fmp.repository.AtpcoRecord0Repository;
 import com.atibusinessgroup.fmp.repository.VoltrasFareRepository;
 import com.atibusinessgroup.fmp.repository.WorkPackageRepositoryImpl;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoFareCustomRepository;
@@ -212,6 +213,24 @@ public class AfdQueryResource {
 
         	all : for (AtpcoRecord2GroupByCatNo arecord2:arecords2) {
             	if (arecord2.getCatNo().contentEquals(entry.getKey())) {
+            		if (entry.getKey().contentEquals("007")) {
+            			System.out.println("007TEST");
+            			for (AtpcoRecord2 record2:arecord2.getRecords2()) {
+            				System.out.println(record2.getSequenceNo());
+            			}
+            			
+            			arecord2.getRecords2().sort(new Comparator<AtpcoRecord2>() {
+            				@Override
+            				public int compare(AtpcoRecord2 o1, AtpcoRecord2 o2) {
+            					return o1.getSequenceNo().compareTo(o2.getSequenceNo());
+            				}
+            			});
+            			System.out.println("007AFTER");
+            			for (AtpcoRecord2 record2:arecord2.getRecords2()) {
+            				System.out.println(record2.getSequenceNo());
+            			}
+            		}
+            		
             		for (AtpcoRecord2 record2:arecord2.getRecords2()) {
             			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afdQuery.getOriginCity(), "C", afdQuery.getDestinationCity(), afdQuery.getFareClassCode(), afdQuery.getFareType(), afdQuery.getSeason(), afdQuery.getDayOfWeekType(), afdQuery.getOwrt(), afdQuery.getRoutingNo(), afdQuery.getFootnote(), afdQuery.getFocusDate(),
             					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getFareClass(), record2.getFareType(), record2.getSeasonType(), record2.getDayOfWeekType(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());

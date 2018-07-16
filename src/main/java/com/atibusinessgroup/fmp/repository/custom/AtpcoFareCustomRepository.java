@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import com.atibusinessgroup.fmp.constant.CategoryName;
 import com.atibusinessgroup.fmp.constant.CollectionName;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoAddOn;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoCcfParcity;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFootnoteRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord1;
@@ -58,13 +59,15 @@ public class AtpcoFareCustomRepository {
 	private final AfdQueryMapper afdQueryMapper;
 	private final AtpcoRecordService atpcoRecordService;
 	private final MongoTemplate mongoTemplate;
+	private final AtpcoCcfParcityCustomRepository atpcoCcfParcityCustomRepository;
 	
 	private Date minimumDate = null, maximumDate = null;
 
-	public AtpcoFareCustomRepository(AfdQueryMapper afdQueryMapper, AtpcoRecordService atpcoRecordService, MongoTemplate mongoTemplate) {
+	public AtpcoFareCustomRepository(AfdQueryMapper afdQueryMapper, AtpcoRecordService atpcoRecordService, MongoTemplate mongoTemplate, AtpcoCcfParcityCustomRepository atpcoCcfParcityCustomRepository) {
 		this.afdQueryMapper = afdQueryMapper;
 		this.atpcoRecordService = atpcoRecordService;
 		this.mongoTemplate = mongoTemplate;
+		this.atpcoCcfParcityCustomRepository = atpcoCcfParcityCustomRepository;
 		
 		minimumDate = DateUtil.getMinOrMaxDate("Min");
 		maximumDate = DateUtil.getMinOrMaxDate("Max");
@@ -165,8 +168,22 @@ public class AtpcoFareCustomRepository {
 				}
 				
 				if (param.getOrigin() != null && !param.getOrigin().isEmpty()) {
+					List<String> origins = new ArrayList<>();
+					String[] parts = param.getOrigin().split(",");
+					for (String part:parts) {
+						String originParam = part.trim();
+						if (originParam.length() == 2) {
+							List<AtpcoCcfParcity> cities = atpcoCcfParcityCustomRepository.findAllByCountryCode(originParam);
+							for (AtpcoCcfParcity city:cities) {
+								origins.add(city.getCity());
+							}
+						} else {
+							origins.add(originParam);
+						}
+					}
+					
 					BasicDBObject origin = new BasicDBObject();
-					origin.append("origin_city", new BasicDBObject("$in",  Arrays.stream(param.getOrigin().split(",")).map(String::trim).toArray(String[]::new)));
+					origin.append("origin_city", new BasicDBObject("$in",  origins));
 					queries.add(origin);
 				} else {
 					BasicDBObject origin = new BasicDBObject();
@@ -175,8 +192,22 @@ public class AtpcoFareCustomRepository {
 				}
 				
 				if (param.getDestination() != null && !param.getDestination().isEmpty()) {
+					List<String> destinations = new ArrayList<>();
+					String[] parts = param.getDestination().split(",");
+					for (String part:parts) {
+						String destParam = part.trim();
+						if (destParam.length() == 2) {
+							List<AtpcoCcfParcity> cities = atpcoCcfParcityCustomRepository.findAllByCountryCode(destParam);
+							for (AtpcoCcfParcity city:cities) {
+								destinations.add(city.getCity());
+							}
+						} else {
+							destinations.add(destParam);
+						}
+					}
+					
 					BasicDBObject destination = new BasicDBObject();
-					destination.append("destination_city", new BasicDBObject("$in",  Arrays.stream(param.getDestination().split(",")).map(String::trim).toArray(String[]::new)));
+					destination.append("destination_city", new BasicDBObject("$in", destinations));
 					queries.add(destination);
 				} else {
 					BasicDBObject destination = new BasicDBObject();
@@ -665,6 +696,26 @@ public class AtpcoFareCustomRepository {
 					BasicDBObject destination = new BasicDBObject();
 					destination.append("market_destination", new BasicDBObject("$exists", "true"));
 					queries.add(destination);
+				}
+				
+				if (param.getBucket() != null && !param.getBucket().isEmpty()) {
+					BasicDBObject bucket = new BasicDBObject();
+					bucket.append("fare_class_cd", param.getBucket());
+					queries.add(bucket);
+				} else {
+					BasicDBObject bucket = new BasicDBObject();
+					bucket.append("fare_class_cd", new BasicDBObject("$exists", "true"));
+					queries.add(bucket);
+				}
+				
+				if (param.getZoneNo() != null && !param.getZoneNo().isEmpty()) {
+					BasicDBObject zone = new BasicDBObject();
+					zone.append("add_on_zone", param.getZoneNo());
+					queries.add(zone);
+				} else {
+					BasicDBObject zone = new BasicDBObject();
+					zone.append("add_on_zone", new BasicDBObject("$exists", "true"));
+					queries.add(zone);
 				}
 				
 				if (queries.size() > 0) {

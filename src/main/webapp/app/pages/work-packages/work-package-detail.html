@@ -886,7 +886,7 @@
 																    	<a ng-click="vm.fillDown(workPackageSheet)" ng-disabled="vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)" ng-class="{'poiv-none':vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}">Fill Down</a>
 																    </li>
 																    <li>
-															    		<a ng-click="vm.searchReplace(workPackageSheet)" ng-disabled="vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)" ng-class="{'poiv-none':vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}">Search/Replace</a>
+															    		<a ng-click="vm.searchReplace('fare-regular-addon-table'+$index, workPackageSheet)" ng-disabled="vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)" ng-class="{'poiv-none':vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}">Search/Replace</a>
 															   		</li>
 															   		 <li>
 															    		<a ng-click="vm.copySelectedFares(workPackageSheet, 'workorder-addon-fares')" ng-disabled="vm.lockedOnly(vm.workPackage)" ng-class="{'poiv-none':vm.lockedOnly(vm.workPackage)}">Copy Selected Rows</a>
@@ -930,8 +930,8 @@
 													</div>
 												</div>
 											</div>
-											<div class="table-responsive">
-												<table class="table table-stripped table-bordered datatable">
+											<div class="table-responsive">											
+												<table id="fare-regular-addon-table{{$index}}" class="table table-stripped table-bordered datatable">
 													<thead>
 														<tr role="row">
 															<th>No</th>
@@ -1147,8 +1147,8 @@
 										                				|| editForm.editFormATPCO.addonFareAmount{{$parent.$index}}{{$index}}.$error.pattern && fare.action != 'Canceled'}"
 															            ng-model="fare.amount"/>
 									               			</td>
-									               			<td></td>
-									               			<td></td>
+									               			<td ng-class="{highlighted:fare.field['travelCompleteIndicator'], changed : vm.diff[fare.id].indexOf('travelCompleteIndicator') > -1}"></td>
+									               			<td ng-class="{highlighted:fare.field['travelCompleteIndicator'], changed : vm.diff[fare.id].indexOf('travelCompleteIndicator') > -1}"></td>
 
 										               		<td id="travelStart" ng-click="vm.tdClick(workPackageSheet, fare, 'travelStart', $event)" ng-class="{highlighted:fare.field['travelStart'], changed : vm.diff[fare.id].indexOf('travelStart') > -1}" >
 									               				<span class="input-group">
@@ -1249,7 +1249,7 @@
 																	</span>
 																</span>
 									               			</td>
-									               			<td id="travelCompleteIndicator" ng-click="vm.tdClick(workPackageSheet, fare, 'travelCompleteIndicator', $event)" ng-class="{changed : vm.diff[fare.id].indexOf('travelCompleteIndicator') > -1}">
+									               			<td id="travelCompleteIndicator" ng-click="vm.tdClick(workPackageSheet, fare, 'travelCompleteIndicator', $event)" ng-class="{highlighted:fare.field['travelCompleteIndicator'], changed : vm.diff[fare.id].indexOf('travelCompleteIndicator') > -1}">
 									               				<select class="form-control" name="addonFareTravelIndicator{{$index}}" id="field_travelIndicator"
 									                				ng-disabled="!vm.isEditable('addonFareTravelIndicator') || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)"
 									                				ng-required="vm.isRequired('addonFareTravelIndicator')"

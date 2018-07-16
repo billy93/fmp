@@ -180,10 +180,10 @@ public class CompetitorMonitoringCustomRepository {
 					ruleNo.append("rules_no", new BasicDBObject("$exists", "true"));
 					queries.add(ruleNo);
 				} else {
-					
+					BasicDBObject andMatch = new BasicDBObject();
+					List<BasicDBObject> ruleNo = new ArrayList<>();
 					if (param.getRuleNo() != null && !param.getRuleNo().isEmpty()) {
-						BasicDBObject andMatch = new BasicDBObject();
-						List<BasicDBObject> ruleNo = new ArrayList<>();
+						
 						ruleNo.add(new BasicDBObject("rules_no", new BasicDBObject("$in",  Arrays.stream(param.getRuleNo().split(",")).map(String::trim).toArray(String[]::new))));
 						ruleNo.add(new BasicDBObject("cxr_cd", "GA"));
 						andMatch.append("$and", ruleNo);
@@ -192,8 +192,6 @@ public class CompetitorMonitoringCustomRepository {
 					}
 					
 					if (param.getOcRuleNo() != null && !param.getOcRuleNo().isEmpty()) {
-						BasicDBObject andMatch = new BasicDBObject();
-						List<BasicDBObject> ruleNo = new ArrayList<>();
 						ruleNo.add(new BasicDBObject("rules_no", new BasicDBObject("$in",  Arrays.stream(param.getOcRuleNo().split(",")).map(String::trim).toArray(String[]::new))));
 						ruleNo.add(new BasicDBObject("cxr_cd", new BasicDBObject("$in", listOcCarrierFinal)));
 						andMatch.append("$and", ruleNo);
