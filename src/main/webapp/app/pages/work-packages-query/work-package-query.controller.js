@@ -35,30 +35,7 @@
 
         vm.loadQuery = loadQuery;        
         vm.loadQuery(); 
-        
-        vm.queryParam = {
-          		 wpID : null,
-              	 name : null,
-              	 status : null,
-              	 distribution : null,
-              	 wpType : null,
-              	 createdDateFrom : null,
-              	 createdDateTo : null,
-              	 filingDateFrom : null,
-              	 filingDateTo : null,
-              	 gfsDateFrom : null,
-              	 gfsDateTo : null,
-              	 distribDateFrom : null,
-              	 distribDateTo : null,
-              	 discDateFrom : null,
-              	 discDateTo : null,
-              	 fareClass : null,
-              	 businessAreas : null,
-              	 creator : null,
-              	 approval : null,
-              	 gfs : null
-          	};
-                       
+                              
         function loadQuery () { 
         	WorkPackage.customQuery({
         		wpID : vm.wpID,
@@ -77,11 +54,11 @@
             	discDateFrom : DateUtils.convertLocalDateToServer(vm.discDateFrom),
             	discDateTo : DateUtils.convertLocalDateToServer(vm.discDateTo),
             	fareClass : vm.fareClass,
-            	businessAreas : vm.businessAreas,
+            	businessArea : vm.businessAreas,
             	creator : vm.creator,
             	approval : vm.approval,
             	gfs : vm.gfs,
-            	page: vm.page,
+            	page: vm.page-1,
                 size: vm.itemsPerPage,
                 sort: sort()}, onSuccess, onError);
             function sort() {

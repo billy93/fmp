@@ -4546,12 +4546,15 @@ public class WorkPackageResource {
 		public void setFareClass(String fareClass) {
 			this.fareClass = fareClass;
 		}
-		public BusinessArea getBusinessAreas() {
+		
+		public BusinessArea getBusinessArea() {
 			return businessArea;
 		}
-		public void setBusinessAreas(BusinessArea businessArea) {
+
+		public void setBusinessArea(BusinessArea businessArea) {
 			this.businessArea = businessArea;
 		}
+
 		public User getCreator() {
 			return creator;
 		}
@@ -4611,12 +4614,11 @@ public class WorkPackageResource {
 					+ createdDateTo + ", filingDateFrom=" + filingDateFrom + ", filingDateTo=" + filingDateTo
 					+ ", gfsDateFrom=" + gfsDateFrom + ", gfsDateTo=" + gfsDateTo + ", distribDateFrom="
 					+ distribDateFrom + ", distribDateTo=" + distribDateTo + ", discDateFrom=" + discDateFrom
-					+ ", discDateTo=" + discDateTo + ", fareClass=" + fareClass + ", businessAreas=" + businessArea
+					+ ", discDateTo=" + discDateTo + ", fareClass=" + fareClass + ", businessArea=" + businessArea
 					+ ", creator=" + creator + ", approval=" + approval + ", gfs=" + gfs + ", page=" + page + ", size="
 					+ size + "]";
 		}
 
-		
    }
    
     

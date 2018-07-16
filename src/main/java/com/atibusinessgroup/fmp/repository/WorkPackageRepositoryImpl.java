@@ -81,12 +81,16 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 			typeCriteria = Criteria.where("type").regex(filter.getWpType(),"i");
 		}
 		Criteria businessCriteria = new Criteria();
-		if(filter.getBusinessAreas() != null) {
-			businessCriteria = Criteria.where("business_area").regex(filter.getBusinessAreas().getName(),"i");
+		if(filter.getBusinessArea() != null) {
+			businessCriteria = Criteria.where("business_area").is(filter.getBusinessArea().getName());
 		}
 		Criteria createdCriteria = new Criteria();
 		if(filter.getCreator() != null) {
 			createdCriteria = Criteria.where("created_by").is(filter.getCreator().getLogin());
+		}
+		Criteria approvalCriteria = new Criteria();
+		if(filter.getApproval() != null) {
+			approvalCriteria = Criteria.where("approval_reference").is(filter.getApproval());
 		}
 		
 		Criteria createdDateCriteria = new Criteria();
@@ -200,7 +204,7 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		
 		Query query = new Query(new Criteria().andOperator(wpIDCriteria,nameCriteria,statusCriteria,
 				targetCriteria,typeCriteria, businessCriteria, createdCriteria, createdDateCriteria, 
-				filingDateCriteria, distribDateCriteria, discDateCriteria))
+				filingDateCriteria, distribDateCriteria, discDateCriteria, approvalCriteria))
 				.with(pageable);
 		
 		List<WorkPackage> workPackages = mongoTemplate.find(query, WorkPackage.class);
