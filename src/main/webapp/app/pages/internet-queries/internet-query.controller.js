@@ -22,6 +22,7 @@
         vm.showCarrierModal = showCarrierModal;
         vm.showWebsiteModal = showWebsiteModal;
         vm.updateDataView = updateDataView;
+        vm.dateList = [];
         
         if($stateParams.internetQueryFilter != null){
         	vm.queryParams = $stateParams.internetQueryFilter;
@@ -44,6 +45,12 @@
                 vm.totalItems = headers('X-Total-Count');
                 vm.queryCount = vm.totalItems;
                 vm.internetQueries = data;
+                vm.dateList = [];
+                if((vm.internetQueries.length) > 0 && (vm.queryParams.summarizeType == "0" || vm.queryParams.summarizeType == "1")) {
+                	$.each(vm.internetQueries[0].datePrice, function(k, v) {
+                		vm.dateList.push(k);
+                	});
+                }
                 
                 $(document).ready(function(){
             		var _parents = $('.table-internet-query').find('thead');
@@ -96,6 +103,7 @@
         	
         	vm.paramCarrier = null;
         	vm.paramWebsite = null;
+        	vm.dateList = [];
         }
         
         function resetFilter() {

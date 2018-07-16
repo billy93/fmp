@@ -166,6 +166,7 @@
 								<th class="th-fixed">DEST</th>
 								<th class="th-fixed">A/P DAYS</th>
 								<th class="th-fixed">WEBSITE</th>
+								<th class="th-fixed" ng-repeat="dateStr in vm.dateList">{{dateStr}}</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -178,6 +179,7 @@
 								<td>{{internetQuery.destination}}</td>
 								<td>{{internetQuery.apDays}}</td>
 								<td>{{internetQuery.website}}</td>
+								<td ng-repeat="price in internetQuery.datePrice">{{price}}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -190,6 +192,7 @@
 								<th class="th-fixed">DEST</th>
 								<th class="th-fixed">A/P DAYS</th>
 								<th class="th-fixed">WEBSITE</th>
+								<th class="th-fixed" ng-repeat="dateStr in vm.dateList">{{dateStr}}</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -202,6 +205,7 @@
 								<td>{{internetQuery.destination}}</td>
 								<td>{{internetQuery.apDays}}</td>
 								<td>{{internetQuery.website}}</td>
+								<td ng-repeat="price in internetQuery.datePrice">{{price}}</td>
 							</tr>
 						</tbody>
 					</table>

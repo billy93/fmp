@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
@@ -61,7 +62,7 @@ public class InternetQueryService {
 		List<InternetQuery> result = mongoTemplate.aggregate(aggregationPagination, InternetQuery.class, InternetQuery.class).getMappedResults();
 		long allResultCount = mongoTemplate.aggregate(aggregation, InternetQuery.class, InternetQuery.class).getMappedResults().size();
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 		List<String> dateList = new ArrayList<>();
 		for (InternetQuery internetQuery : result) {
 			InternetQueryParam detailParam = new InternetQueryParam();
@@ -80,7 +81,6 @@ public class InternetQueryService {
 				}
 			}
 		}
-		dateList.sort(String.CASE_INSENSITIVE_ORDER);
 		
 		for (InternetQuery internetQuery : result) {
 			for (String captureSdf : dateList) {
@@ -102,6 +102,12 @@ public class InternetQueryService {
 			}
 		}
 		
+		for (InternetQuery internetQuery : result) {
+			Map<String, BigDecimal> oldDataPrice = internetQuery.getDatePrice();
+			Map<String, BigDecimal> newDataPrice = new TreeMap<String, BigDecimal>(oldDataPrice);
+			internetQuery.setDatePrice(newDataPrice);
+		}
+		
 		return new PageImpl<>(result, pageable, allResultCount);
 	}
 	
@@ -117,7 +123,7 @@ public class InternetQueryService {
 		List<InternetQuery> result = mongoTemplate.aggregate(aggregationPagination, InternetQuery.class, InternetQuery.class).getMappedResults();
 		long allResultCount = mongoTemplate.aggregate(aggregation, InternetQuery.class, InternetQuery.class).getMappedResults().size();
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 		List<String> dateList = new ArrayList<>();
 		for (InternetQuery internetQuery : result) {
 			InternetQueryParam detailParam = new InternetQueryParam();
@@ -136,7 +142,6 @@ public class InternetQueryService {
 				}
 			}
 		}
-		dateList.sort(String.CASE_INSENSITIVE_ORDER);
 		
 		for (InternetQuery internetQuery : result) {
 			for (String departSdf : dateList) {
@@ -156,6 +161,12 @@ public class InternetQueryService {
 				String departSdf = sdf.format(internetQueryDetail.getDepartDateTime());
 				internetQuery.getDatePrice().put(departSdf, internetQueryDetail.getAif().bigDecimalValue());
 			}
+		}
+		
+		for (InternetQuery internetQuery : result) {
+			Map<String, BigDecimal> oldDataPrice = internetQuery.getDatePrice();
+			Map<String, BigDecimal> newDataPrice = new TreeMap<String, BigDecimal>(oldDataPrice);
+			internetQuery.setDatePrice(newDataPrice);
 		}
 		
 		return new PageImpl<>(result, pageable, allResultCount);
@@ -302,7 +313,7 @@ public class InternetQueryService {
 								.append("destination", "$destination")
 								.append("ap_days", "$ap_days")
 								.append("website", "$website")
-								.append("capture_date_time", "$capture_date_time"));
+								.append("date", "$capture_date_time"));
 						
 						return new BasicDBObject("$group", query);
 					}
@@ -318,7 +329,7 @@ public class InternetQueryService {
 								.append("destination", "$destination")
 								.append("ap_days", "$ap_days")
 								.append("website", "$website")
-								.append("depart_date_time", "$depart_date_time"));
+								.append("date", "$depart_date_time"));
 						
 						return new BasicDBObject("$group", query);
 					}
@@ -335,8 +346,19 @@ public class InternetQueryService {
 					project.append("destination", "$_id.destination");
 					project.append("ap_days", "$_id.ap_days");
 					project.append("website", "$_id.website");
+					project.append("date", "$_id.date");
 					
 					return new BasicDBObject("$project", project);
+				}
+			});
+			
+			aggregationOperations.add(new AggregationOperation() {
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					BasicDBObject sort = new BasicDBObject();
+					sort.append("date", 1);
+					
+					return new BasicDBObject("$sort", sort);
 				}
 			});
 		}
