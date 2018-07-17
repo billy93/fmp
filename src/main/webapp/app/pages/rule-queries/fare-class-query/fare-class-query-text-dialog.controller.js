@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('FareClassTextController', FareClassTextController);
 
-    FareClassTextController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'FareClassQuery'];
+    FareClassTextController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', 'entity', 'FareClassQuery', 'AlertService'];
 
-    function FareClassTextController ($timeout, $scope, $stateParams, $uibModalInstance, entity, FareClassQuery) {
+    function FareClassTextController ($timeout, $scope, $stateParams, $uibModalInstance, entity, FareClassQuery, AlertService) {
         var vm = this;
 
         vm.fareClassQuery = entity;
@@ -26,6 +26,7 @@
         }
         
         function getText() {
+        	vm.fareClassQuery.fareClassInformation = null;
         	FareClassQuery.getFareClassText(vm.fareClassQuery, onSuccess, onError);
             
             function onSuccess(data, headers) {

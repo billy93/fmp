@@ -6,11 +6,7 @@
         <h4 class="modal-title" id="fareClassQueryText">Fare Class Text</h4>
     </div>
     <div class="modal-body">
-        <jhi-alert-error></jhi-alert-error>
-		<span ng-repeat="text in vm.text track by $index">
-			{{text}}
-			</br>
-		</span>
+        <pre class="transparent">{{vm.text[0]}}</pre>
     </div>
     <div class="modal-footer">
     	<button type="submit" class="btn btn-secondary">
