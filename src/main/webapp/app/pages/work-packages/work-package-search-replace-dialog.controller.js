@@ -412,6 +412,11 @@
         		];
         	}
         	else if(fareType == 'fare-market-addon'){
+        		var fields = [
+        			'status', 'carrier', 'action','origin', 'destination',
+        			'bucket', 'owrt', 'currency', 'amount', 
+        			'travelstart', 'travelend', 'salestart', 'saleend', 'comment', 'travelcomplete', 'travelcompleteindicator',
+        		];
         	}
         	else if(fareType == 'fare-discount'){
         		var fields = [
