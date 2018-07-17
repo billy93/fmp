@@ -1,9 +1,12 @@
 package com.atibusinessgroup.fmp.service.mapper;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoYqyrS1;
 import com.atibusinessgroup.fmp.domain.dto.TextTable;
+import com.atibusinessgroup.fmp.domain.dto.UserZoneTable;
 import com.atibusinessgroup.fmp.domain.dto.Yqyr;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoYqyrTableRepository;
 
@@ -54,55 +57,83 @@ public class YqyrQueryMapper {
 		}
 		
 		if (ayqyr.getJrny_geo_spec() != null) {
-			if (ayqyr.getJrny_geo_spec().getJrny_geo_spec_indicator() != null && !ayqyr.getJrny_geo_spec().getJrny_geo_spec_indicator().isEmpty()) {
-				result.setJourneyDirection(null);
+			if (ayqyr.getJrny_geo_spec().getJrny_geo_spec_indicator() != null) {
+				if (ayqyr.getJrny_geo_spec().getJrny_geo_spec_indicator().trim().isEmpty()) {
+					result.setJourneyDirection("Loc 1 <-->");
+				} else if (ayqyr.getJrny_geo_spec().getJrny_geo_spec_indicator().trim().contentEquals("A")) {
+					result.setJourneyDirection("Loc 1  -->");
+				}
 			}
 			
 			if (ayqyr.getJrny_geo_spec().getJrny_geo_spec_1_type() != null && !ayqyr.getJrny_geo_spec().getJrny_geo_spec_1_type().isEmpty()) {
 				String loc1 = "";
 				String type = convertGeoSpecType(ayqyr.getJrny_geo_spec().getJrny_geo_spec_1_type());
-				if (type != null) {
+				if (type != null && !type.contentEquals("Table178")) {
 					loc1 += type;
+					
+					if (ayqyr.getJrny_geo_spec().getJrny_geo_spec_1_value() != null && !ayqyr.getJrny_geo_spec().getJrny_geo_spec_1_value().isEmpty()) {
+						loc1 += " " + ayqyr.getJrny_geo_spec().getJrny_geo_spec_1_value();
+					}
+				} else {
+					if (ayqyr.getJrny_geo_spec().getJrny_geo_spec_1_value() != null && !ayqyr.getJrny_geo_spec().getJrny_geo_spec_1_value().trim().isEmpty()) {
+						loc1 = convertUserZoneTableToText(atpcoYqyrTableRepository.findUserTable178(ayqyr.getJrny_geo_spec().getJrny_geo_spec_1_value().trim()));
+					}
 				}
-				if (ayqyr.getJrny_geo_spec().getJrny_geo_spec_1_value() != null && !ayqyr.getJrny_geo_spec().getJrny_geo_spec_1_value().isEmpty()) {
-					loc1 += " " + ayqyr.getJrny_geo_spec().getJrny_geo_spec_1_value();
-				}
+				
 				result.setJourneyLoc1(loc1);
 			}
 			
 			if (ayqyr.getJrny_geo_spec().getJrny_geo_spec_2_type() != null && !ayqyr.getJrny_geo_spec().getJrny_geo_spec_2_type().isEmpty()) {
 				String loc2 = "";
 				String type = convertGeoSpecType(ayqyr.getJrny_geo_spec().getJrny_geo_spec_2_type());
-				if (type != null) {
+				if (type != null && !type.contentEquals("Table178")) {
 					loc2 += type;
+					
+					if (ayqyr.getJrny_geo_spec().getJrny_geo_spec_2_value() != null && !ayqyr.getJrny_geo_spec().getJrny_geo_spec_2_value().isEmpty()) {
+						loc2 += " " + ayqyr.getJrny_geo_spec().getJrny_geo_spec_2_value();
+					}
+				} else {
+					if (ayqyr.getJrny_geo_spec().getJrny_geo_spec_2_value() != null && !ayqyr.getJrny_geo_spec().getJrny_geo_spec_2_value().trim().isEmpty()) {
+						loc2 = convertUserZoneTableToText(atpcoYqyrTableRepository.findUserTable178(ayqyr.getJrny_geo_spec().getJrny_geo_spec_2_value().trim()));
+					}
 				}
-				if (ayqyr.getJrny_geo_spec().getJrny_geo_spec_2_value() != null && !ayqyr.getJrny_geo_spec().getJrny_geo_spec_2_value().isEmpty()) {
-					loc2 += " " + ayqyr.getJrny_geo_spec().getJrny_geo_spec_2_value();
-				}
+				
 				result.setJourneyLoc2(loc2);
 			}
 			
 			if (ayqyr.getJrny_geo_spec().getJrny_geo_spec_via_loc_type() != null && !ayqyr.getJrny_geo_spec().getJrny_geo_spec_via_loc_type().isEmpty()) {
 				String via = "";
 				String type = convertGeoSpecType(ayqyr.getJrny_geo_spec().getJrny_geo_spec_via_loc_type());
-				if (type != null) {
+				if (type != null && !type.contentEquals("Table178")) {
 					via += type;
+					
+					if (ayqyr.getJrny_geo_spec().getJrny_geo_spec_via_loc_value() != null && !ayqyr.getJrny_geo_spec().getJrny_geo_spec_via_loc_value().isEmpty()) {
+						via += " " + ayqyr.getJrny_geo_spec().getJrny_geo_spec_via_loc_value();
+					}
+				} else {
+					if (ayqyr.getJrny_geo_spec().getJrny_geo_spec_via_loc_value() != null && !ayqyr.getJrny_geo_spec().getJrny_geo_spec_via_loc_value().trim().isEmpty()) {
+						via = convertUserZoneTableToText(atpcoYqyrTableRepository.findUserTable178(ayqyr.getJrny_geo_spec().getJrny_geo_spec_via_loc_value().trim()));
+					}
 				}
-				if (ayqyr.getJrny_geo_spec().getJrny_geo_spec_via_loc_value() != null && !ayqyr.getJrny_geo_spec().getJrny_geo_spec_via_loc_value().isEmpty()) {
-					via += " " + ayqyr.getJrny_geo_spec().getJrny_geo_spec_via_loc_value();
-				}
+				
 				result.setJourneyVia(via);
 			}
 			
 			if (ayqyr.getJrny_geo_spec().getJrny_geo_spec_within_loc_type() != null && !ayqyr.getJrny_geo_spec().getJrny_geo_spec_within_loc_type().isEmpty()) {
 				String within = "";
 				String type = convertGeoSpecType(ayqyr.getJrny_geo_spec().getJrny_geo_spec_within_loc_type());
-				if (type != null) {
+				if (type != null && !type.contentEquals("Table178")) {
 					within += type;
+					
+					if (ayqyr.getJrny_geo_spec().getJrny_geo_spec_within_loc_value() != null && !ayqyr.getJrny_geo_spec().getJrny_geo_spec_within_loc_value().isEmpty()) {
+						within += " " + ayqyr.getJrny_geo_spec().getJrny_geo_spec_within_loc_value();
+					}
+				} else {
+					if (ayqyr.getJrny_geo_spec().getJrny_geo_spec_within_loc_value() != null && !ayqyr.getJrny_geo_spec().getJrny_geo_spec_within_loc_value().trim().isEmpty()) {
+						within = convertUserZoneTableToText(atpcoYqyrTableRepository.findUserTable178(ayqyr.getJrny_geo_spec().getJrny_geo_spec_within_loc_value().trim()));
+					}
 				}
-				if (ayqyr.getJrny_geo_spec().getJrny_geo_spec_within_loc_value() != null && !ayqyr.getJrny_geo_spec().getJrny_geo_spec_within_loc_value().isEmpty()) {
-					within += " " + ayqyr.getJrny_geo_spec().getJrny_geo_spec_within_loc_value();
-				}
+				
 				result.setJourneyWhollyWithin(within);
 			}
 		}
@@ -123,36 +154,54 @@ public class YqyrQueryMapper {
 			if (ayqyr.getSector().getSector_loc_1_type() != null && !ayqyr.getSector().getSector_loc_1_type().isEmpty()) {
 				String loc1 = "";
 				String type = convertGeoSpecType(ayqyr.getSector().getSector_loc_1_type());
-				if (type != null) {
+				if (type != null && !type.contentEquals("Table178")) {
 					loc1 += type;
+					
+					if (ayqyr.getSector().getSector_loc_1_value() != null && !ayqyr.getSector().getSector_loc_1_value().isEmpty()) {
+						loc1 += " " + ayqyr.getSector().getSector_loc_1_value();
+					}
+				} else {
+					if (ayqyr.getSector().getSector_loc_1_value() != null && !ayqyr.getSector().getSector_loc_1_value().trim().isEmpty()) {
+						loc1 = convertUserZoneTableToText(atpcoYqyrTableRepository.findUserTable178(ayqyr.getSector().getSector_loc_1_value().trim()));
+					}
 				}
-				if (ayqyr.getSector().getSector_loc_1_value() != null && !ayqyr.getSector().getSector_loc_1_value().isEmpty()) {
-					loc1 += " " + ayqyr.getSector().getSector_loc_1_value();
-				}
+				
 				result.setSectorLoc1(loc1);
 			}
 			
 			if (ayqyr.getSector().getSector_loc_2_type() != null && !ayqyr.getSector().getSector_loc_2_type().isEmpty()) {
 				String loc2 = "";
 				String type = convertGeoSpecType(ayqyr.getSector().getSector_loc_2_type());
-				if (type != null) {
+				if (type != null && !type.contentEquals("Table178")) {
 					loc2 += type;
+					
+					if (ayqyr.getSector().getSector_loc_2_value() != null && !ayqyr.getSector().getSector_loc_2_value().isEmpty()) {
+						loc2 += " " + ayqyr.getSector().getSector_loc_1_value();
+					}
+				} else {
+					if (ayqyr.getSector().getSector_loc_2_value() != null && !ayqyr.getSector().getSector_loc_2_value().trim().isEmpty()) {
+						loc2 = convertUserZoneTableToText(atpcoYqyrTableRepository.findUserTable178(ayqyr.getSector().getSector_loc_2_value().trim()));
+					}
 				}
-				if (ayqyr.getSector().getSector_loc_2_value() != null && !ayqyr.getSector().getSector_loc_2_value().isEmpty()) {
-					loc2 += " " + ayqyr.getSector().getSector_loc_2_value();
-				}
+				
 				result.setSectorLoc2(loc2);
 			}
 			
 			if (ayqyr.getSector().getSector_via_geo_type() != null && !ayqyr.getSector().getSector_via_geo_type().isEmpty()) {
 				String via = "";
 				String type = convertGeoSpecType(ayqyr.getSector().getSector_via_geo_type());
-				if (type != null) {
+				if (type != null && !type.contentEquals("Table178")) {
 					via += type;
+					
+					if (ayqyr.getSector().getSector_via_geo_value() != null && !ayqyr.getSector().getSector_via_geo_value().isEmpty()) {
+						via += " " + ayqyr.getSector().getSector_via_geo_value();
+					}
+				} else {
+					if (ayqyr.getSector().getSector_via_geo_value() != null && !ayqyr.getSector().getSector_via_geo_value().trim().isEmpty()) {
+						via = convertUserZoneTableToText(atpcoYqyrTableRepository.findUserTable178(ayqyr.getSector().getSector_via_geo_value().trim()));
+					}
 				}
-				if (ayqyr.getSector().getSector_via_geo_value() != null && !ayqyr.getSector().getSector_via_geo_value().isEmpty()) {
-					via += " " + ayqyr.getSector().getSector_via_geo_value();
-				}
+				
 				result.setSectorVia(via);
 			}
 			
@@ -266,6 +315,27 @@ public class YqyrQueryMapper {
 				text += line + "\n";
 			}
 			result.setComment(text);
+		}
+		
+		return result;
+	}
+	
+	private String convertUserZoneTableToText(List<UserZoneTable> uzts) {
+		String result = "";
+		
+		for (UserZoneTable uzt:uzts) {
+			String type = convertGeoSpecType(uzt.getGeo_loc_type());
+			if (type != null) {
+				if (uzt.getGeo_loc_value() != null && !uzt.getGeo_loc_value().trim().isEmpty()) {
+					if (uzt.getAppl() != null) {
+						if (uzt.getAppl().trim().isEmpty()) {
+							result += "Include " + type + " " + uzt.getGeo_loc_value().trim() + " ";
+						} else if (uzt.getAppl().trim().contentEquals("N")) {
+							result += "Exclude " + type + " " + uzt.getGeo_loc_value().trim() + " ";
+						}
+					}
+				}
+			}
 		}
 		
 		return result;

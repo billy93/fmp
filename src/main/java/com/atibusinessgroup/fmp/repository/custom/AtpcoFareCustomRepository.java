@@ -78,10 +78,10 @@ public class AtpcoFareCustomRepository {
 		maximumDate = DateUtil.getMinOrMaxDate("Max");
 	}
 	
-	public SpecifiedConstructedWrapper findAtpcoFareAfdQueryWithRecords(AfdQueryParam param, Pageable pageable) {
+	public SpecifiedConstructedWrapper findSpecifiedFares(AfdQueryParam param, Pageable pageable) {
 		SpecifiedConstructedWrapper result = new SpecifiedConstructedWrapper();
 		
-		List<SpecifiedConstructed> afdQueries = new ArrayList<>();
+		List<SpecifiedConstructed> scs = new ArrayList<>();
 		
 		LinkedHashMap<String, String> fareCategories = new LinkedHashMap<>();
 		LinkedHashMap<String, String> fareFootnotes = new LinkedHashMap<>();
@@ -588,13 +588,13 @@ public class AtpcoFareCustomRepository {
                 					param.getTravelDateTo(), param.getTravelDateOption()) &&
                 			atpcoRecordService.compareValueWithParamDate(afdQuery.getSeasonDates(), param.getSeasonDateFrom(), 
                 					param.getSeasonDateTo(), param.getSeasonDateOption())) {
-                		afdQueries.add(afdQuery);
+            			scs.add(afdQuery);
                 	}
             	} else {
-            		afdQueries.add(afdQuery);
+            		scs.add(afdQuery);
             	}
             	
-    			if (afdQueries.size() == pageable.getPageSize()) {
+    			if (scs.size() == pageable.getPageSize()) {
     				isCompleted = true;
     				break;
     			}
@@ -605,85 +605,21 @@ public class AtpcoFareCustomRepository {
         	currentAggregationLoop++;
     	}
     	
-    	if (!isLastPage && afdQueries.size() < pageable.getPageSize()) {
+    	if (!isLastPage && scs.size() < pageable.getPageSize()) {
     		isLastPage = true;
     	}
     	
     	result.setLastPage(isLastPage);
     	result.setLastIndex(skipSize + index);
-    	result. setSpecifiedConstructed(afdQueries);
+    	result. setSpecifiedConstructed(scs);
 		
 		return result;
 	}
 
-	public List<AtpcoRecord2GroupByCatNo> findAtpcoRecord2ByRecordId(String recordId) {
+	public SpecifiedConstructedWrapper findSpecifiedConstructedFares(AfdQueryParam param, Pageable pageable) {
+		SpecifiedConstructedWrapper result = new SpecifiedConstructedWrapper();
 		
-		List<AggregationOperation> aggregationOperations = new ArrayList<>();
-		
-		MatchOperation match = new MatchOperation(new Criteria("record_id").is(recordId));
-		aggregationOperations.add(match);
-		
-		aggregationOperations.add(new AggregationOperation() {
-			@Override
-			public DBObject toDBObject(AggregationOperationContext context) {
-				BasicDBObject group = new BasicDBObject();
-				BasicDBObject query = new BasicDBObject();
-				query.append("_id", "$cat_no");
-				query.append("record_2", new BasicDBObject("$push", "$$ROOT"));
-				group.append("$group", query);
-				return group;
-			}
-		});
-		
-		SortOperation sort = new SortOperation(new Sort(Direction.ASC, "_id"));
-		aggregationOperations.add(sort);
-		
-		Aggregation aggregation = newAggregation(aggregationOperations);
-		
-		List<AtpcoRecord2GroupByCatNo> result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_RECORD_2, AtpcoRecord2GroupByCatNo.class).getMappedResults();
-		
-		return result;
-	}
-	
-	public List<AtpcoRecord2Cat10> findAtpcoRecord2Cat10ByRecordId(String recordId) {
-		
-		List<AggregationOperation> aggregationOperations = new ArrayList<>();
-		
-		MatchOperation match = new MatchOperation(new Criteria("record_id").is(recordId));
-		aggregationOperations.add(match);
-		
-		Aggregation aggregation = newAggregation(aggregationOperations);
-		
-		List<AtpcoRecord2Cat10> result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_RECORD_2_10, AtpcoRecord2Cat10.class).getMappedResults();
-		
-		return result;
-	}
-
-	public List<AtpcoFootnoteRecord2GroupByCatNo> findAtpcoFootnoteRecord2ByRecordId(String recordId) {
-		
-		List<AggregationOperation> aggregationOperations = new ArrayList<>();
-		
-		MatchOperation match = new MatchOperation(new Criteria("record_id").is(recordId));
-		aggregationOperations.add(match);
-		
-		aggregationOperations.add(new AggregationOperation() {
-			@Override
-			public DBObject toDBObject(AggregationOperationContext context) {
-				BasicDBObject group = new BasicDBObject();
-				BasicDBObject query = new BasicDBObject();
-				query.append("_id", "$cat_no");
-				query.append("record_2", new BasicDBObject("$push", "$$ROOT"));
-				group.append("$group", query);
-				return group;
-			}
-		});
-		
-		SortOperation sort = new SortOperation(new Sort(Direction.ASC, "_id"));
-		aggregationOperations.add(sort);
-		
-		Aggregation aggregation = newAggregation(aggregationOperations);
-		
-		List<AtpcoFootnoteRecord2GroupByCatNo> result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_FOOTNOTE_RECORD_2, AtpcoFootnoteRecord2GroupByCatNo.class).getMappedResults();
+		List<SpecifiedConstructed> scs = new ArrayList<>();
 		
 		return result;
 	}
@@ -1013,4 +949,77 @@ public class AtpcoFareCustomRepository {
 		
 		return result;
 	}
+
+	public List<AtpcoRecord2GroupByCatNo> findAtpcoRecord2ByRecordId(String recordId) {
+		
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
+		MatchOperation match = new MatchOperation(new Criteria("record_id").is(recordId));
+		aggregationOperations.add(match);
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject group = new BasicDBObject();
+				BasicDBObject query = new BasicDBObject();
+				query.append("_id", "$cat_no");
+				query.append("record_2", new BasicDBObject("$push", "$$ROOT"));
+				group.append("$group", query);
+				return group;
+			}
+		});
+		
+		SortOperation sort = new SortOperation(new Sort(Direction.ASC, "_id"));
+		aggregationOperations.add(sort);
+		
+		Aggregation aggregation = newAggregation(aggregationOperations);
+		
+		List<AtpcoRecord2GroupByCatNo> result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_RECORD_2, AtpcoRecord2GroupByCatNo.class).getMappedResults();
+		
+		return result;
+	}
+	
+	public List<AtpcoRecord2Cat10> findAtpcoRecord2Cat10ByRecordId(String recordId) {
+		
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
+		MatchOperation match = new MatchOperation(new Criteria("record_id").is(recordId));
+		aggregationOperations.add(match);
+		
+		Aggregation aggregation = newAggregation(aggregationOperations);
+		
+		List<AtpcoRecord2Cat10> result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_RECORD_2_10, AtpcoRecord2Cat10.class).getMappedResults();
+		
+		return result;
+	}
+
+	public List<AtpcoFootnoteRecord2GroupByCatNo> findAtpcoFootnoteRecord2ByRecordId(String recordId) {
+		
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
+		MatchOperation match = new MatchOperation(new Criteria("record_id").is(recordId));
+		aggregationOperations.add(match);
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject group = new BasicDBObject();
+				BasicDBObject query = new BasicDBObject();
+				query.append("_id", "$cat_no");
+				query.append("record_2", new BasicDBObject("$push", "$$ROOT"));
+				group.append("$group", query);
+				return group;
+			}
+		});
+		
+		SortOperation sort = new SortOperation(new Sort(Direction.ASC, "_id"));
+		aggregationOperations.add(sort);
+		
+		Aggregation aggregation = newAggregation(aggregationOperations);
+		
+		List<AtpcoFootnoteRecord2GroupByCatNo> result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_FOOTNOTE_RECORD_2, AtpcoFootnoteRecord2GroupByCatNo.class).getMappedResults();
+		
+		return result;
+	}
+	
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.atibusinessgroup.fmp.constant.CollectionName;
 import com.atibusinessgroup.fmp.domain.dto.TextTable;
+import com.atibusinessgroup.fmp.domain.dto.UserZoneTable;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
@@ -49,6 +50,27 @@ public class AtpcoYqyrTableRepository {
 		Aggregation aggregation = newAggregation(aggregationOperations);
 		
 		TextTable result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_YQYR_TEXT_TABLE_196, TextTable.class).getUniqueMappedResult();
+		
+		return result;
+	}
+
+	public List<UserZoneTable> findUserTable178(String tableNo) {
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject match = new BasicDBObject();
+				BasicDBObject no = new BasicDBObject();
+				no.append("tbl_no", tableNo);
+				match.append("$match", no);
+				return match;
+			}
+		});
+		
+		Aggregation aggregation = newAggregation(aggregationOperations);
+		
+		List<UserZoneTable> result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_YQYR_USER_ZONE_TABLE_178, UserZoneTable.class).getMappedResults();
 		
 		return result;
 	}
