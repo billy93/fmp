@@ -20,6 +20,7 @@
                     return data;
                 }
             }, 
+            'exportQueue': {method:'POST', url:'api/internet-query/exportQueue'},
         });
     }
 })();
