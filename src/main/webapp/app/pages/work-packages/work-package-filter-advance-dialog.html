@@ -44,10 +44,10 @@
 									<select class="form-control" ng-model="vm.newFilterComparator" ng-init="vm.newFilterComparator='equal'">
 									<option value="equal" ng-selected=true>=</option>
 									<option value="between">Between </option>
-									<option value="greaterThan"> > </option>
-									<option value="greaterThanorEqual"> >= </option>
-									<option value="lessThan"> <  </option>
-									<option value="lessThanorEqual"> <=  </option>
+									<option value="greaterThan"> &gt; </option>
+									<option value="greaterThanorEqual"> &gt;= </option>
+									<option value="lessThan"> &lt;   </option>
+									<option value="lessThanorEqual"> &lt;=  </option>
 									<option value="oneOf">One of </option>
 									<option value="wildcard">Wildcard Match </option>									
 								</select>
@@ -248,7 +248,7 @@
 			</uib-tabset>
    	</div>
     <div class="modal-footer">
-    	<button type="submit" class="btn btn-secondary" ng-click="vm.advance()"> < Simple</button>
+    	<button type="submit" class="btn btn-secondary" ng-click="vm.simple()"> < Simple</button>
     	<button type="submit" class="btn btn-secondary" ng-click="vm.select()" data-translate="entity.action.save">OK</button>
         <button type="button" ng-click="vm.clear()" class="btn btn-back" data-dismiss="modal">Close</button>
     </div>
