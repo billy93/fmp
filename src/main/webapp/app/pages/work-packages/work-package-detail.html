@@ -7,7 +7,7 @@
 }
 </style>
 
-<form name="editForm" role="form" novalidate>
+<form name="editForm" role="form" novalidate ng-class="{'view-only':vm.isViewOnly}">
 	<div class="panel panel-detail">
 		<div class="panel-body">
 			<button class="btn btn-default small btn-back back js-back" data-id="0" ng-click="vm.close()"><i class="fa fa-arrow-left"></i>Close</button>
@@ -173,7 +173,7 @@
 										</div>
 										<div class="clearfix">
 											<div class="pull-right">
-												<button class="btn btn-default small btn-secondary" ng-click="vm.addComment()" ng-disabled="vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Send</button>
+												<button class="btn btn-default small btn-secondary view-only" ng-click="vm.addComment()" ng-disabled="vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Send</button>
 											</div>
 										</div>
 
@@ -199,7 +199,7 @@
 										</div>
 										<div class="clearfix">
 											<div class="pull-right">
-												<button class="btn btn-default small btn-secondary" id="btn-inter-office" ng-click="vm.addInterOffice()" ng-disabled="!vm.isEditable('ioComment') || vm.workPackage.status=='WITHDRAWN' || vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Send</button>
+												<button class="btn btn-default small btn-secondary view-only" id="btn-inter-office" ng-click="vm.addInterOffice()" ng-disabled="!vm.isEditable('ioComment') || vm.workPackage.status=='WITHDRAWN' || vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Send</button>
 											</div>
 										</div>
 										<div class="box-body">
@@ -243,10 +243,10 @@
 		<div class="panel-body">
 			<div class="clearfix mb1">
 				<div class="pull-right">
-					<button class="btn btn-default small" ng-click="vm.resendApprove()" ng-if="vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.user.reviewLevels.indexOf('HO') > -1">Generate IN</button>
-					<button class="btn btn-default small" ng-click="vm.viewRecipients()" ng-if="vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.user.reviewLevels.indexOf('HO') > -1">View IN Recipients</button>
+					<button class="btn btn-default small view-only" ng-click="vm.resendApprove()" ng-if="vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.user.reviewLevels.indexOf('HO') > -1">Generate IN</button>
+					<button class="btn btn-default small view-only" ng-click="vm.viewRecipients()" ng-if="vm.workPackage.reviewLevel == 'DISTRIBUTION' && vm.user.reviewLevels.indexOf('HO') > -1">View IN Recipients</button>
 					<div class="button-group dropdown custom">
-						<button class="btn btn-default small" ng-disabled="(vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO'
+						<button class="btn btn-default small view-only" ng-disabled="(vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO'
 						&& vm.workPackage.status=='DISTRIBUTED')  || vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)">
 						Workflow<i class="fa fa-caret-down" ng-class="{'poiv-none' :(vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO'
 						&& vm.workPackage.status=='DISTRIBUTED')  || vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}"></i></button>
@@ -275,7 +275,7 @@
 					</div>
 					<div class="button-group dropdown custom" ng-class="{'poiv-none' :(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') ||  (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO'
 						&& vm.workPackage.status=='DISTRIBUTED')}">
-						<button class="btn btn-default small" ng-disabled="vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)  || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO'
+						<button class="btn btn-default small view-only" ng-disabled="vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)  || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO'
 						&& vm.workPackage.status=='DISTRIBUTED')">Action <i class="fa fa-caret-down" ng-class="{'poiv-none' :vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}"></i></button>
 						<ul class="dropdown-menu custom" role="menu">
 						    <li>
@@ -287,7 +287,7 @@
 						</ul>
 					</div>
 					<div class="button-group dropdown custom" ng-class="{'poiv-none' :(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}">
-						<button class="btn btn-default small" ng-disabled="vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) ">Sheet <i class="fa fa-caret-down" ng-class="{'poiv-none' :vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage)}"></i></button>
+						<button class="btn btn-default small view-only" ng-disabled="vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) ">Sheet <i class="fa fa-caret-down" ng-class="{'poiv-none' :vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage)}"></i></button>
 						<ul class="dropdown-menu custom" role="menu">
 						    <li>
 						    	<a ng-disabled="vm.workPackage.reviewLevel == 'DISTRIBUTION' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO'
@@ -311,8 +311,8 @@
 						    </li>
 						</ul>
 					</div>
-					<button class="btn btn-default small" ng-click="vm.save(false)" ng-disabled="vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)">Save</button>
-					<button class="btn btn-default small" ng-click="vm.close()" ng-disabled="vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) ">Close</button>
+					<button ng-if="vm.isViewOnly != true" class="btn btn-default small view-only" ng-click="vm.save(false)" ng-disabled="vm.workPackage.status=='WITHDRAWN'|| vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)">Save</button>
+					<button class="btn btn-default small" ng-click="vm.close()">Close</button>
 				</div>
 			</div>
 
@@ -393,8 +393,8 @@
 												<div class="pull-left">
 													<div class="clearfix">
 														<div class="pull-right datatable-button">
-															<div class="button-group dropdown custom">
-																<button class="btn btn-default small btn-secondary" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></i></button>
+															<div class="button-group dropdown custom" ng-if="vm.isViewOnly != true">
+																<button class="btn btn-default small btn-secondary view-only" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></i></button>
 																<ul class="dropdown-menu custom" role="menu">
 																    <li>
 																    	<a ng-click="vm.clearSelection(workPackageSheet)" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)">Clear Selection</a>
@@ -436,15 +436,23 @@
 																    </li>
 																</ul>
 															</div>
-															<button class="btn btn-default small btn-secondary" ngf-select  ngf-change="vm.importFare($file, $index)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)">Import</button>
+															<div class="button-group dropdown custom" ng-if="vm.isViewOnly == true">
+																<button class="btn btn-default small btn-secondary" >Edit<i class="fa fa-caret-down"></i></button>
+																<ul class="dropdown-menu custom" role="menu">
+																   <li>
+															    		<a ng-click="vm.copySelectedFares(workPackageSheet, 'workorder-fares')" >Copy Selected Rows</a>
+															   		</li>
+																</ul>
+															</div>
+															<button class="btn btn-default small btn-secondary view-only" ngf-select  ngf-change="vm.importFare($file, $index)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)">Import</button>
 															<button class="btn btn-default small btn-secondary" ng-click="vm.exportFares($index)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage) ">Export</button>
-															<!-- <button class="btn btn-default small btn-secondary">Publish</button> -->
-															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.agent(vm.reviewOnly(vm.workPackage))" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || vm.lockedOnly(vm.workPackage)">Agents</button>
-															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN'|| vm.lockedOnly(vm.workPackage)">Rate Sheet</button>
-															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.routemap()" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Route Map</button>
-															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.moveUpFare(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Move Up</button>
-															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.moveDownFare(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Move Down</button>
-															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.footnote(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Footnote</button>
+															<!-- <button class="btn btn-default small btn-secondary view-only">Publish</button> -->
+															<button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.agent(vm.reviewOnly(vm.workPackage))" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || vm.lockedOnly(vm.workPackage)">Agents</button>
+															<button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.ratesheet()" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN'|| vm.lockedOnly(vm.workPackage)">Rate Sheet</button>
+															<button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.routemap()" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Route Map</button>
+															<button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.moveUpFare(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Move Up</button>
+															<button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.moveDownFare(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Move Down</button>
+															<button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.footnote(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Footnote</button>
 
 														</div>
 													</div>
@@ -876,8 +884,8 @@
 												<div class="pull-left">
 													<div class="clearfix">
 														<div class="pull-right datatable-button">
-															<div class="button-group dropdown custom">
-																<button class="btn btn-default small btn-secondary" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></i></button>
+															<div class="button-group dropdown custom" ng-if="vm.isViewOnly != true">
+																<button class="btn btn-default small btn-secondary view-only" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></i></button>
 																<ul class="dropdown-menu custom" role="menu">
 																	<li>
 																    	<a ng-click="vm.clearSelection(workPackageSheet)" ng-disabled="vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)" ng-class="{'poiv-none':vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}">Clear Selection</a>
@@ -918,14 +926,22 @@
 																    </li>
 																</ul>
 															</div>
-															<button class="btn btn-default small btn-secondary" ngf-select ngf-change="vm.importFareAddon($file, $index)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Import</button>
+															<div class="button-group dropdown custom" ng-if="vm.isViewOnly != false">
+																<button class="btn btn-default small btn-secondary" >Edit<i class="fa fa-caret-down"></i></button>
+																<ul class="dropdown-menu custom" role="menu">
+																   <li>
+															    		<a ng-click="vm.copySelectedFares(workPackageSheet, 'workorder-fares')" >Copy Selected Rows</a>
+															   		</li>
+																</ul>
+															</div>
+															<button class="btn btn-default small btn-secondary view-only" ngf-select ngf-change="vm.importFareAddon($file, $index)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Import</button>
 															<button class="btn btn-default small btn-secondary" ng-click="vm.exportFaresAddon($index)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Export</button>
-															<button class="btn btn-default small btn-secondary" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage)">Publish</button>
-															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.agent(vm.reviewOnly(vm.workPackage))" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Agents</button>
-															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN'  ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Rate Sheet</button>
-															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.moveUpFare(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Move Up</button>
-															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.moveDownFare(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Move Down</button>
-															<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.footnote(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Footnote</button>
+															<button class="btn btn-default small btn-secondary view-only" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage)">Publish</button>
+															<button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.agent(vm.reviewOnly(vm.workPackage))" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Agents</button>
+															<button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.ratesheet()" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN'  ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Rate Sheet</button>
+															<button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.moveUpFare(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Move Up</button>
+															<button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.moveDownFare(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Move Down</button>
+															<button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.footnote(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Footnote</button>
 														</div>
 													</div>
 												</div>
@@ -1280,10 +1296,10 @@
 										</div>
 										<div class="clearfix">
 											<div class="pull-right">
-												<button class="btn btn-default small btn-secondary" ng-click="vm.deleteCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Delete Comment</button>
-												<button class="btn btn-default small btn-secondary" ng-click="vm.collapseCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Collapse Deleted Comment</button>
-												<button class="btn btn-default small btn-secondary" ng-click="vm.expandCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Expand Deleted Comment</button>
-												<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Add Comment</button>
+												<button class="btn btn-default small btn-secondary view-only" ng-click="vm.deleteCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Delete Comment</button>
+												<button class="btn btn-default small btn-secondary view-only" ng-click="vm.collapseCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Collapse Deleted Comment</button>
+												<button class="btn btn-default small btn-secondary view-only" ng-click="vm.expandCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Expand Deleted Comment</button>
+												<button class="btn btn-default small btn-secondary view-only" ng-click="vm.addCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Add Comment</button>
 											</div>
 										</div>
 									</div>
@@ -1344,7 +1360,7 @@
 											                <button type="button" class="btn btn-secondary" ng-click="vm.openFile(attachment.fileContentType, attachment.file)" ng-disabled="attachment.fileName==null">
 											                    Open
 											                </button>
-											                <button type="button" ngf-select class="btn btn-secondary"
+											                <button type="button" ngf-select class="btn btn-secondary view-only"
 											                        ngf-change="vm.setFile($file, attachment)" ng-disabled="attachment.isDeleted||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || vm.workPackage.status=='WITHDRAWN'|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
 											                    Add file
 											                </button>
@@ -1504,8 +1520,8 @@
 												</div>
 												<div class="pull-left w40 ph5px">
 													<div class="btn-wrapper-action text-right">
-														<button class="btn btn-default small btn-secondary" ng-click="vm.addBatchNumber()" ng-disabled="vm.workPackage.reviewLevel == 'LSO' || vm.workPackage.reviewLevel == 'HO'">Add Batch Number</button>
-														<button class="btn btn-default small btn-secondary" ng-click="vm.removeBatchNumber()" ng-disabled="vm.workPackage.reviewLevel == 'LSO' || vm.workPackage.reviewLevel == 'HO'">Remove Batch Number</button>
+														<button class="btn btn-default small btn-secondary view-only" ng-click="vm.addBatchNumber()" ng-disabled="vm.workPackage.reviewLevel == 'LSO' || vm.workPackage.reviewLevel == 'HO'">Add Batch Number</button>
+														<button class="btn btn-default small btn-secondary view-only" ng-click="vm.removeBatchNumber()" ng-disabled="vm.workPackage.reviewLevel == 'LSO' || vm.workPackage.reviewLevel == 'HO'">Remove Batch Number</button>
 													</div>
 												</div>
 											</div>
@@ -1696,8 +1712,8 @@
 						                <div class="pull-left">
 						                  <div class="clearfix">
 						                    <div class="pull-right datatable-button">
-						                      <div class="button-group dropdown custom">
-						                        <button class="btn btn-default small btn-secondary" ng-disabled="vm.workPackage.status=='WITHDRAWN' || vm.workPackage.status=='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none': (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || vm.workPackage.status == 'WITHDRAWN' || vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></i></button>
+						                      <div class="button-group dropdown custom" ng-if="vm.isViewOnly != true">
+						                        <button class="btn btn-default small btn-secondary view-only" ng-disabled="vm.workPackage.status=='WITHDRAWN' || vm.workPackage.status=='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none': (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || vm.workPackage.status == 'WITHDRAWN' || vm.workPackage.status =='DISCONTINUED' || vm.lockedOnly(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></i></button>
 						                        <ul class="dropdown-menu custom" role="menu">
 						                            <li>
 												   		<a ng-click="vm.clearSelection(workPackageSheet)" ng-disabled="vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)" ng-class="{'poiv-none':vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}">Clear Selection</a>
@@ -1725,12 +1741,20 @@
 												    </li>
 						                        </ul>
 						                      </div>
-						                      <button class="btn btn-default small btn-secondary" ngf-select ngf-change="vm.importFareDiscount($file)" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Import</button>
+						                      <div class="button-group dropdown custom" ng-if="vm.isViewOnly != false">
+													<button class="btn btn-default small btn-secondary" >Edit<i class="fa fa-caret-down"></i></button>
+													<ul class="dropdown-menu custom" role="menu">
+													   <li>
+												    		<a ng-click="vm.copySelectedFares(workPackageSheet, 'workorder-fares')" >Copy Selected Rows</a>
+												   		</li>
+													</ul>
+												</div>
+						                      <button class="btn btn-default small btn-secondary view-only" ngf-select ngf-change="vm.importFareDiscount($file)" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Import</button>
 						                      <button class="btn btn-default small btn-secondary" ng-click="vm.exportFaresDiscount()" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Export</button>
-						                      <button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.agent(vm.reviewOnly(vm.workPackage))" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Agents</button>
-						                      <button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheetDiscount()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Rate Sheet</button>
-						                      <button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.moveUpFare(workPackageSheet)" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Move Up</button>
-											  <button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.moveDownFare(workPackageSheet)" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Move Down</button>
+						                      <button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.agent(vm.reviewOnly(vm.workPackage))" ng-disabled="vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Agents</button>
+						                      <button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.ratesheetDiscount()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Rate Sheet</button>
+						                      <button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.moveUpFare(workPackageSheet)" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Move Up</button>
+											  <button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.moveDownFare(workPackageSheet)" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Move Down</button>
 											</div>
 						                  </div>
 						                </div>
@@ -2259,10 +2283,10 @@
 										</div>
 										<div class="clearfix">
 											<div class="pull-right">
-												<button class="btn btn-default small btn-secondary" ng-click="vm.deleteCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Delete Comment</button>
-												<button class="btn btn-default small btn-secondary" ng-click="vm.collapseCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Collapse Deleted Comment</button>
-												<button class="btn btn-default small btn-secondary" ng-click="vm.expandCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Expand Deleted Comment</button>
-												<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Add Comment</button>
+												<button class="btn btn-default small btn-secondary view-only" ng-click="vm.deleteCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Delete Comment</button>
+												<button class="btn btn-default small btn-secondary view-only" ng-click="vm.collapseCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Collapse Deleted Comment</button>
+												<button class="btn btn-default small btn-secondary view-only" ng-click="vm.expandCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Expand Deleted Comment</button>
+												<button class="btn btn-default small btn-secondary view-only" ng-click="vm.addCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">Add Comment</button>
 											</div>
 										</div>
 									</div>
@@ -2321,7 +2345,7 @@
 										                <button type="button" class="btn btn-secondary" ng-click="vm.openFile(attachment.fileContentType, attachment.file)" ng-disabled="attachment.fileName==null">
 										                    Open
 										                </button>
-										                <button type="button" ngf-select class="btn btn-secondary"
+										                <button type="button" ngf-select class="btn btn-secondary view-only"
 										                        ngf-change="vm.setFile($file, attachment)" ng-disabled="attachment.isDeleted||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
 										                    Add file
 										                </button>
@@ -2472,8 +2496,8 @@
 										</div>
 										<div class="pull-left w40 ph5px">
 											<div class="btn-wrapper-action text-right">
-												<button class="btn btn-default small btn-secondary" ng-click="vm.addBatchNumber()" ng-disabled="vm.workPackage.reviewLevel == 'LSO' || vm.workPackage.reviewLevel == 'HO'">Add Batch Number</button>
-												<button class="btn btn-default small btn-secondary" ng-click="vm.removeBatchNumber()" ng-disabled="vm.workPackage.reviewLevel == 'LSO' || vm.workPackage.reviewLevel == 'HO'">Remove Batch Number</button>
+												<button class="btn btn-default small btn-secondary view-only" ng-click="vm.addBatchNumber()" ng-disabled="vm.workPackage.reviewLevel == 'LSO' || vm.workPackage.reviewLevel == 'HO'">Add Batch Number</button>
+												<button class="btn btn-default small btn-secondary view-only" ng-click="vm.removeBatchNumber()" ng-disabled="vm.workPackage.reviewLevel == 'LSO' || vm.workPackage.reviewLevel == 'HO'">Remove Batch Number</button>
 											</div>
 										</div>
 									</div>
@@ -2656,8 +2680,8 @@
 						&& vm.workPackage.status=='DISTRIBUTED' }">
 												<div class="clearfix">
 													<div class="pull-right datatable-button">
-														<div class="button-group dropdown custom">
-															<button class="btn btn-default small btn-secondary" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)}"></i></button>
+														<div class="button-group dropdown custom" ng-if="vm.isViewOnly != true">
+															<button class="btn btn-default small btn-secondary view-only" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)}"></i></button>
 															<ul class="dropdown-menu custom" role="menu">
 															    <li>
 															    	<a ng-click="vm.clearSelection(workPackageSheet)" ng-disabled="vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)" ng-class="{'poiv-none':vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}">Clear Selection</a>
@@ -2694,13 +2718,21 @@
 															    </li>
 															</ul>
 														</div>
-														<button class="btn btn-default small btn-secondary" ngf-select  ngf-change="vm.importFareMarket($file, $index)" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Import</button>
+														<div class="button-group dropdown custom" ng-if="vm.isViewOnly != false">
+																<button class="btn btn-default small btn-secondary" >Edit<i class="fa fa-caret-down"></i></button>
+																<ul class="dropdown-menu custom" role="menu">
+																   <li>
+															    		<a ng-click="vm.copySelectedFares(workPackageSheet, 'workorder-fares')" >Copy Selected Rows</a>
+															   		</li>
+																</ul>
+															</div>
+														<button class="btn btn-default small btn-secondary view-only" ngf-select  ngf-change="vm.importFareMarket($file, $index)" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Import</button>
 														<button class="btn btn-default small btn-secondary" ng-click="vm.exportFaresMarket($index)" ng-disabled=" vm.lockedOnly(vm.workPackage)">Export</button>
-														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.agent(vm.reviewOnly(vm.workPackage))" ng-disabled="vm.lockedOnly(vm.workPackage)">Agents</button>
-														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()" ng-disabled="vm.workPackage.status=='WITHDRAWN'|| vm.lockedOnly(vm.workPackage)">Rate Sheet</button>
-														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.moveUpFare(workPackageSheet)" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Move Up</button>
-														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.moveDownFare(workPackageSheet)" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Move Down</button>
-														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.footnote(workPackageSheet)">Footnote</button>
+														<button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.agent(vm.reviewOnly(vm.workPackage))" ng-disabled="vm.lockedOnly(vm.workPackage)">Agents</button>
+														<button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.ratesheet()" ng-disabled="vm.workPackage.status=='WITHDRAWN'|| vm.lockedOnly(vm.workPackage)">Rate Sheet</button>
+														<button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.moveUpFare(workPackageSheet)" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Move Up</button>
+														<button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.moveDownFare(workPackageSheet)" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)">Move Down</button>
+														<button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.footnote(workPackageSheet)">Footnote</button>
 												  </div>
 												</div>
 											</div>
@@ -3106,7 +3138,7 @@
 									                    <a class="a--open" ng-click="vm.openFile(marketRules.fileContentType, marketRules.file)" data-translate="entity.action.open" ng-disabled="attachment.fileName==null"><i class="fa fa-folder"></i> open</a>
 									                </div>
 									                <div class="action-btn-wrapper no-pad">
-									                	<button type="button" ngf-select class="btn btn-secondary"
+									                	<button type="button" ngf-select class="btn btn-secondary view-only"
 										                        ngf-change="vm.setFile($file, marketRules)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">
 										                    Add file
 										                </button>
@@ -3170,8 +3202,8 @@
 											<div class="pull-left">
 												<div class="clearfix">
 													<div class="pull-right datatable-button">
-														<div class="button-group dropdown custom">
-															<button class="btn btn-default small btn-secondary" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)}"></i></button>
+														<div class="button-group dropdown custom" ng-if="vm.isViewOnly != true">
+															<button class="btn btn-default small btn-secondary view-only" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)}"></i></button>
 															<ul class="dropdown-menu custom" role="menu">
 																<li>
 															    	<a ng-click="vm.clearSelection(workPackageSheet)" ng-disabled="vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)" ng-class="{'poiv-none':vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}">Clear Selection</a>
@@ -3212,14 +3244,22 @@
 															    </li>
 															</ul>
 														</div>
-														<button class="btn btn-default small btn-secondary" ngf-select ngf-change="vm.importFareAddon($file, $index)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Import</button>
+														<div class="button-group dropdown custom" ng-if="vm.isViewOnly != false">
+																<button class="btn btn-default small btn-secondary" >Edit<i class="fa fa-caret-down"></i></button>
+																<ul class="dropdown-menu custom" role="menu">
+																   <li>
+															    		<a ng-click="vm.copySelectedFares(workPackageSheet, 'workorder-fares')" >Copy Selected Rows</a>
+															   		</li>
+																</ul>
+															</div>
+														<button class="btn btn-default small btn-secondary view-only" ngf-select ngf-change="vm.importFareAddon($file, $index)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Import</button>
 														<button class="btn btn-default small btn-secondary" ng-click="vm.exportFaresAddon($index)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Export</button>
-														<button class="btn btn-default small btn-secondary" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Publish</button>
-														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.agent(vm.reviewOnly(vm.workPackage))" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Agents</button>
-														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheet()" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN'  ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Rate Sheet</button>
-														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.moveUpFare(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Move Up</button>
-														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.moveDownFare(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Move Down</button>
-														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.footnote(workPackageSheet)">Footnote</button>
+														<button class="btn btn-default small btn-secondary view-only" ng-disabled="vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Publish</button>
+														<button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.agent(vm.reviewOnly(vm.workPackage))" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Agents</button>
+														<button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.ratesheet()" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN'  ||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)">Rate Sheet</button>
+														<button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.moveUpFare(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Move Up</button>
+														<button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.moveDownFare(workPackageSheet)" ng-disabled="(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)">Move Down</button>
+														<button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.footnote(workPackageSheet)">Footnote</button>
 													</div>
 												</div>
 											</div>
@@ -3572,7 +3612,7 @@
 											                <button type="button" class="btn btn-secondary" ng-click="vm.openFile(attachment.fileContentType, attachment.file)" ng-disabled="attachment.fileName==null">
 											                    Open
 											                </button>
-											                <button type="button" ngf-select class="btn btn-secondary"
+											                <button type="button" ngf-select class="btn btn-secondary view-only"
 											                        ngf-change="vm.setFile($file, attachment)" ng-disabled="attachment.isDeleted||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
 											                    Add file
 											                </button>
@@ -3610,10 +3650,10 @@
 									</div>
 									<div class="clearfix">
 										<div class="pull-right">
-											<button class="btn btn-default small btn-secondary" ng-click="vm.deleteCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Delete Comment</button>
-											<button class="btn btn-default small btn-secondary" ng-click="vm.collapseCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Collapse Deleted Comment</button>
-											<button class="btn btn-default small btn-secondary" ng-click="vm.expandCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Expand Deleted Comment</button>
-											<button class="btn btn-default small btn-secondary" ng-click="vm.addCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Add Comment</button>
+											<button class="btn btn-default small btn-secondary view-only" ng-click="vm.deleteCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Delete Comment</button>
+											<button class="btn btn-default small btn-secondary view-only" ng-click="vm.collapseCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Collapse Deleted Comment</button>
+											<button class="btn btn-default small btn-secondary view-only" ng-click="vm.expandCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Expand Deleted Comment</button>
+											<button class="btn btn-default small btn-secondary view-only" ng-click="vm.addCommentFillingInstruction()" ng-disabled="vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage) || (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT') || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Add Comment</button>
 										</div>
 									</div>
 								</div>
@@ -3748,8 +3788,8 @@
 											<div class="pull-left">
 												<div class="clearfix">
 													<div class="pull-right datatable-button" ng-class="{'poiv-none' : (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT') > -1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}">
-														<div class="button-group dropdown custom">
-															<button class="btn btn-default small btn-secondary" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')}"></i></button>
+														<div class="button-group dropdown custom" ng-if="vm.isViewOnly != true">
+															<button class="btn btn-default small btn-secondary view-only" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage) || (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Edit<i class="fa fa-caret-down" ng-class="{'poiv-none':(vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')|| vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')}"></i></button>
 															<ul class="dropdown-menu custom" role="menu">
 															    <li>
 															    	<a ng-click="vm.clearSelection(workPackageSheet)" ng-disabled="vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)" ng-class="{'poiv-none':vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}">Clear Selection</a>
@@ -3783,11 +3823,18 @@
 																    </li>
 															</ul>
 														</div>
-
-														<button class="btn btn-default small btn-secondary" ngf-select  ngf-change="vm.importFareWaiver($file, $index)" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Import</button>
+														<div class="button-group dropdown custom" ng-if="vm.isViewOnly != false">
+																<button class="btn btn-default small btn-secondary" >Edit<i class="fa fa-caret-down"></i></button>
+																<ul class="dropdown-menu custom" role="menu">
+																   <li>
+															    		<a ng-click="vm.copySelectedFares(workPackageSheet, 'workorder-fares')" >Copy Selected Rows</a>
+															   		</li>
+																</ul>
+															</div>
+														<button class="btn btn-default small btn-secondary view-only" ngf-select  ngf-change="vm.importFareWaiver($file, $index)" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Import</button>
 														<button class="btn btn-default small btn-secondary" ng-click="vm.exportFaresWaiver($index)" ng-disabled="vm.workPackage.status=='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Export</button>
-														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.agent(vm.reviewOnly(vm.workPackage))" ng-disabled="vm.workPackage.status=='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Agents</button>
-														<button class="btn btn-default small btn-secondary" data-toggle="modal" ng-click="vm.ratesheetWaiver()" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Rate Sheet</button>
+														<button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.agent(vm.reviewOnly(vm.workPackage))" ng-disabled="vm.workPackage.status=='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Agents</button>
+														<button class="btn btn-default small btn-secondary view-only" data-toggle="modal" ng-click="vm.ratesheetWaiver()" ng-disabled="vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.lockedOnly(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')">Rate Sheet</button>
 													</div>
 												</div>
 											</div>
@@ -4237,7 +4284,7 @@
 										                <button type="button" class="btn btn-secondary" ng-click="vm.openFile(attachment.fileContentType, attachment.file)" ng-disabled="attachment.fileName==null">
 										                    Open
 										                </button>
-										                <button type="button" ngf-select class="btn btn-secondary"
+										                <button type="button" ngf-select class="btn btn-secondary view-only"
 										                        ngf-change="vm.setFile($file, attachment)" ng-disabled="attachment.isDeleted||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')">
 										                    Add file
 										                </button>

@@ -124,7 +124,88 @@
                         url: $state.href($state.current.name, $state.params)
                     };
                     return currentStateData;
-                }]
+                }],
+                viewOnly: function() {
+                	return false;
+                }
+            }
+        })
+        
+        .state('work-package-view-only', {
+            parent: 'work-package-query',
+            url: '/{id}/view',
+            data: {
+                authorities: ['ROLE_USER'],
+                pageTitle: 'Work Package'
+            },
+            views: {
+                'content@': {
+                    templateUrl: 'app/pages/work-packages/work-package-detail.html',
+                    controller: 'WorkPackageDetailController',
+                    controllerAs: 'vm'
+                }
+            },
+            resolve: {
+                entity: ['$stateParams', 'WorkPackage', function($stateParams, WorkPackage) {
+                    return WorkPackage.getQuery({id : $stateParams.id}).$promise;
+                }],
+                user: ['$stateParams', 'User', 'Principal', function($stateParams, User, Principal) {
+                	return Principal.identity().then(function(account) {
+                        return User.get({login : account.login}).$promise;
+                    });
+                }],
+                tariffNumber: ['$stateParams', 'TariffNumber', 'Principal', function($stateParams, TariffNumber, Principal) {
+                	return Principal.identity().then(function(account) {
+                        return TariffNumber.getAll().$promise;
+                    });
+                }],
+                tariffNumberAddOn: ['$stateParams', 'TariffNumberAddOn', 'Principal', function($stateParams, TariffNumberAddOn, Principal) {
+                	return Principal.identity().then(function(account) {
+                        return TariffNumberAddOn.getAll().$promise;
+                    });
+                }],
+                cities: ['$stateParams', 'City', 'Principal', function($stateParams, City, Principal) {
+                	return Principal.identity().then(function(account) {
+                        return City.getAll().$promise;
+                    });
+                }],
+                currencies: ['$stateParams', 'Currency', 'Principal', function($stateParams, Currency, Principal) {
+                	return Principal.identity().then(function(account) {
+                        return Currency.getAll().$promise;
+                    });
+                }],
+                fareTypes: ['FareType', function(FareType) {
+                    return FareType.getAll().$promise;
+                }],
+                businessAreas: ['User', function(User) {
+                    return User.getBusinessArea().$promise;
+                }],
+                priorities: ['Priority', function(Priority) {
+                    return Priority.getAll().$promise;
+                }],
+                passengers: ['Passenger', function(Passenger) {
+                    return Passenger.getAll().$promise;
+                }],
+                states: ['State', function(State) {
+                    return State.getAll().$promise;
+                }],
+                cityGroups: ['CityGroup', function(CityGroup) {
+                    return CityGroup.getAll().$promise;
+                }],
+                atpcoFareTypes: ['AtpcoMasterFareType', function(AtpcoMasterFareType) {
+                    return AtpcoMasterFareType.getAll().$promise;
+                }],
+                previousState: ["$state", function ($state) {
+                    var currentStateData = {
+                        name: $state.current.name || 'work-package-query',
+                        params: $state.params,
+                        url: $state.href($state.current.name, $state.params)
+                    };
+                    return currentStateData;
+                }],
+                viewOnly: function() {
+                	return true;
+                }
             }
         })
 

@@ -20,8 +20,8 @@
      * @param Clipboard
      * @returns
      */
-    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber','tariffNumberAddOn', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities', 'states', 'cityGroups', 'Currency', 'atpcoFareTypes', 'ClipboardSheet', 'Clipboard', '$timeout'];
-    function WorkPackageDetailController($window, $sce, currencies,tariffNumber,tariffNumberAddOn, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups, Currency, atpcoFareTypes, ClipboardSheet, Clipboard, $timeout) {
+    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber','tariffNumberAddOn', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities', 'states', 'cityGroups', 'Currency', 'atpcoFareTypes', 'ClipboardSheet', 'Clipboard', '$timeout', 'viewOnly'];
+    function WorkPackageDetailController($window, $sce, currencies,tariffNumber,tariffNumberAddOn, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups, Currency, atpcoFareTypes, ClipboardSheet, Clipboard, $timeout, viewOnly) {
     	var vm = this;
 
     	window.onbeforeunload = function (e) {
@@ -84,7 +84,16 @@
         $scope.dateformat = "dd/MM/yyyy";
         vm.optionFare = fareTypes;
         vm.atpcoFareTypes = atpcoFareTypes;
-                           
+                    
+        vm.isViewOnly = viewOnly;
+        
+        if (vm.isViewOnly) {
+        	$(document).ready(function() {
+        		$('.input-group-addon, iframe').addClass('disabled poiv-none');
+        		$('input, i, select, iframe, textarea').attr('disabled', 'disabled');
+        		$('.view-only').addClass('disabled', 'disabled');
+        	});
+        }
         
         vm.businessArea = {};
         for(var x=0;x<businessAreas.length;x++){
@@ -5247,17 +5256,21 @@
     	  }    	  
       };
       vm.close = function(){
-    	  if(vm.disabledField(vm.workPackage)){
-    		  $state.go("work-package");
+    	  if (vm.isViewOnly) {
+    		  $state.go("work-package-query");
     	  }else{
-        	  WorkPackage.unlock(vm.workPackage, onUnlockedSuccess, onUnlockedFailure);
-        	  function onUnlockedSuccess (result) {
+    		  if(vm.disabledField(vm.workPackage)){
         		  $state.go("work-package");
-        	  }
-        	  function onUnlockedFailure (error) {
-        		  
-        	  } 
-    	  }    	  
+        	  }else{
+            	  WorkPackage.unlock(vm.workPackage, onUnlockedSuccess, onUnlockedFailure);
+            	  function onUnlockedSuccess (result) {
+            		  $state.go("work-package");
+            	  }
+            	  function onUnlockedFailure (error) {
+            		  
+            	  } 
+        	  }  
+    	  }    	     	  
       }
       
       vm.isAllSelected = {};

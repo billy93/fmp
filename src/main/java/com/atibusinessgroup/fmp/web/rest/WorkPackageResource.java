@@ -53,6 +53,7 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -67,6 +68,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.atibusinessgroup.fmp.domain.AtpcoMasterTariff;
+import com.atibusinessgroup.fmp.domain.BusinessArea;
 import com.atibusinessgroup.fmp.domain.TariffNumber;
 import com.atibusinessgroup.fmp.domain.User;
 import com.atibusinessgroup.fmp.domain.WorkPackage;
@@ -2776,7 +2778,7 @@ public class WorkPackageResource {
 									}
 								}
 							}else if(workPackage.getReviewLevel().toUpperCase().contentEquals("DISTRIBUTION")) {
-								if(fare.getTariffNumber().getTarNo() == null || fare.getTariffNumber().getTarNo().contentEquals("")) {
+								if(fare.getTariffNumber() == null || fare.getTariffNumber().getTarNo() == null || fare.getTariffNumber().getTarNo().contentEquals("")) {
 									//List Error
 						    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("Tarno is required");
@@ -2785,7 +2787,7 @@ public class WorkPackageResource {
 
 						    		errors.add(err1);
 								}
-								if(fare.getTariffNumber().getTarCd() == null || fare.getTariffNumber().getTarCd().contentEquals("")) {
+								if(fare.getTariffNumber() == null || fare.getTariffNumber().getTarCd() == null || fare.getTariffNumber().getTarCd().contentEquals("")) {
 									//List Error
 						    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 						    		err1.setMessage("TarCd is required");
@@ -4431,6 +4433,211 @@ public class WorkPackageResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/work-packages");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+    
+    
+    public static class WorkPackageQuery {
+   	 	private String wpID;
+        private String name;
+        private String status;
+        private String distribution;
+        private String wpType;
+        private Date createdDateFrom;
+        private Date createdDateTo;
+        private Date filingDateFrom;
+        private Date filingDateTo;
+        private Date gfsDateFrom;
+        private Date gfsDateTo;
+        private Date distribDateFrom;
+        private Date distribDateTo;
+        private Date discDateFrom;
+        private Date discDateTo;
+        private String fareClass;
+        private BusinessArea businessArea;
+        private User creator;
+        private String approval;
+        private String gfs;
+    	private int page;
+    	private int size;
+        
+		public WorkPackageQuery() {
+		}
+		
+		public String getWpID() {
+			return wpID;
+		}
+		public void setWpID(String wpID) {
+			this.wpID = wpID;
+		}
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public String getStatus() {
+			return status;
+		}
+		public void setStatus(String status) {
+			this.status = status;
+		}
+		public String getDistribution() {
+			return distribution;
+		}
+		public void setDistribution(String distribution) {
+			this.distribution = distribution;
+		}
+		public String getWpType() {
+			return wpType;
+		}
+		public void setWpType(String wpType) {
+			this.wpType = wpType;
+		}
+		public Date getCreatedDateFrom() {
+			return createdDateFrom;
+		}
+		public void setCreatedDateFrom(Date createdDateFrom) {
+			this.createdDateFrom = createdDateFrom;
+		}
+		public Date getCreatedDateTo() {
+			return createdDateTo;
+		}
+		public void setCreatedDateTo(Date createdDateTo) {
+			this.createdDateTo = createdDateTo;
+		}
+		public Date getGfsDateFrom() {
+			return gfsDateFrom;
+		}
+		public void setGfsDateFrom(Date gfsDateFrom) {
+			this.gfsDateFrom = gfsDateFrom;
+		}
+		public Date getGfsDateTo() {
+			return gfsDateTo;
+		}
+		public void setGfsDateTo(Date gfsDateTo) {
+			this.gfsDateTo = gfsDateTo;
+		}
+		public Date getDistribDateFrom() {
+			return distribDateFrom;
+		}
+		public void setDistribDateFrom(Date distribDateFrom) {
+			this.distribDateFrom = distribDateFrom;
+		}
+		public Date getDistribDateTo() {
+			return distribDateTo;
+		}
+		public void setDistribDateTo(Date distribDateTo) {
+			this.distribDateTo = distribDateTo;
+		}
+		public Date getDiscDateFrom() {
+			return discDateFrom;
+		}
+		public void setDiscDateFrom(Date discDateFrom) {
+			this.discDateFrom = discDateFrom;
+		}
+		public Date getDiscDateTo() {
+			return discDateTo;
+		}
+		public void setDiscDateTo(Date discDateTo) {
+			this.discDateTo = discDateTo;
+		}
+		public String getFareClass() {
+			return fareClass;
+		}
+		public void setFareClass(String fareClass) {
+			this.fareClass = fareClass;
+		}
+		
+		public BusinessArea getBusinessArea() {
+			return businessArea;
+		}
+
+		public void setBusinessArea(BusinessArea businessArea) {
+			this.businessArea = businessArea;
+		}
+
+		public User getCreator() {
+			return creator;
+		}
+		public void setCreator(User creator) {
+			this.creator = creator;
+		}
+		public String getApproval() {
+			return approval;
+		}
+		public void setApproval(String approval) {
+			this.approval = approval;
+		}
+		public String getGfs() {
+			return gfs;
+		}
+		public void setGfs(String gfs) {
+			this.gfs = gfs;
+		}
+
+		public int getPage() {
+			return page;
+		}
+
+		public void setPage(int page) {
+			this.page = page;
+		}
+
+		public int getSize() {
+			return size;
+		}
+
+		public void setSize(int size) {
+			this.size = size;
+		}
+		
+
+		public Date getFilingDateFrom() {
+			return filingDateFrom;
+		}
+
+		public void setFilingDateFrom(Date filingDateFrom) {
+			this.filingDateFrom = filingDateFrom;
+		}
+
+		public Date getFilingDateTo() {
+			return filingDateTo;
+		}
+
+		public void setFilingDateTo(Date filingDateTo) {
+			this.filingDateTo = filingDateTo;
+		}
+
+		@Override
+		public String toString() {
+			return "WorkPackageQuery [wpID=" + wpID + ", name=" + name + ", status=" + status + ", distribution="
+					+ distribution + ", wpType=" + wpType + ", createdDateFrom=" + createdDateFrom + ", createdDateTo="
+					+ createdDateTo + ", filingDateFrom=" + filingDateFrom + ", filingDateTo=" + filingDateTo
+					+ ", gfsDateFrom=" + gfsDateFrom + ", gfsDateTo=" + gfsDateTo + ", distribDateFrom="
+					+ distribDateFrom + ", distribDateTo=" + distribDateTo + ", discDateFrom=" + discDateFrom
+					+ ", discDateTo=" + discDateTo + ", fareClass=" + fareClass + ", businessArea=" + businessArea
+					+ ", creator=" + creator + ", approval=" + approval + ", gfs=" + gfs + ", page=" + page + ", size="
+					+ size + "]";
+		}
+
+   }
+   
+    
+    
+    /**
+     * GET  /work-packages-query : get all the workPackages query.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of workPackages in body
+     */
+    @PostMapping("/work-packages/query")
+    @Timed
+    public ResponseEntity<List<WorkPackage>> getAllQueryWorkPackages(@RequestBody WorkPackageQuery filter) {
+        log.debug("REST request to get a page of query WorkPackages custom {}, {}", filter);
+        Pageable pageable = new PageRequest(filter.getPage(), filter.getSize());
+        Page<WorkPackage> page = workPackageService.findCustomQuery(filter, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/work-packages/query");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
 
     /**
      * GET  /workPackagefilter/:id : get the "id" workPackagefilter.
@@ -4562,6 +4769,44 @@ public class WorkPackageResource {
 //        if(workPackage.getVersion() == null) {
 //        	workPackage.setVersion("current");
 //        }
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(workPackage));
+    }
+    
+    /**
+     * GET  /work-packages/view/:id : get the "id" workPackage.
+     *
+     * @param id the id of the workPackage to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the workPackage, or with status 404 (Not Found)
+     */
+    @GetMapping("/work-packages/view/{id}")
+    @Timed
+    public ResponseEntity<WorkPackage> viewOnlyWorkPackage(@PathVariable String id) {
+        log.debug("View Only : {}", id);
+        WorkPackage workPackage = workPackageService.findOne(id);
+        /*if(workPackage.getStatus() == Status.PENDING || workPackage.getStatus() == Status.REFERRED) {
+        	workPackage.setStatus(Status.REVIEWING);
+        	workPackageService.save(workPackage);
+        }
+
+        Boolean needLocked = false;
+        Optional<User> user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().get());
+		if(user.get().getReviewLevels().indexOf(workPackage.getReviewLevel()) > -1){
+			needLocked = true;
+		}
+
+        if(!workPackage.isLocked() && needLocked) {
+        	workPackage.setLocked(true);
+            workPackage.setLockedBy(SecurityUtils.getCurrentUserLogin().get());
+            workPackage.setLockedSince(ZonedDateTime.now());
+            workPackage = workPackageService.save(workPackage);
+        }
+
+        if(!workPackage.isOpened()) {
+        	workPackage.setOpened(true);
+        	workPackage.setOpenedBy(SecurityUtils.getCurrentUserLogin().get());
+        	workPackage.setOpenedSince(ZonedDateTime.now());
+        	workPackage = workPackageService.save(workPackage);
+        }*/
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(workPackage));
     }
 

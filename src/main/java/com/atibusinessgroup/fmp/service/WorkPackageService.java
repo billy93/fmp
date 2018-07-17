@@ -51,6 +51,7 @@ import com.atibusinessgroup.fmp.repository.CounterRepository;
 import com.atibusinessgroup.fmp.repository.PriorityRepository;
 import com.atibusinessgroup.fmp.repository.WorkPackageRepository;
 import com.atibusinessgroup.fmp.security.SecurityUtils;
+import com.atibusinessgroup.fmp.web.rest.WorkPackageResource.WorkPackageQuery;
 
 
 /**
@@ -572,5 +573,9 @@ public class WorkPackageService {
 	public List<WorkPackage> findCustom(WorkPackageFilter workPackageFilter) {
 		log.debug("Export find work package : {}", workPackageFilter);
 		return workPackageRepository.findCustom(workPackageFilter);
+	}
+	
+	public Page<WorkPackage> findCustomQuery(WorkPackageQuery wpFilter, Pageable pageable){
+		return workPackageRepository.findCustomQuery(wpFilter, pageable);
 	}
 }
