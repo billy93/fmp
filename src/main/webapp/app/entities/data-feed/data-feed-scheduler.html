@@ -20,45 +20,25 @@
 						<div class="panel-body" ng-if="vm.tab==1">
 							<div class="clearfix">
 								<form name="autoExtractForm" role="form" ng-model="vm.autoExtractForm" novalidate>
-									<div class="col-md-12 no-lpad">
-										<div class="col-md-3 no-lpad">
-											<div class="form-group">
-												<label>Day</label> 
-												<select class="form-control" name="dayOfWeek" id="dayOfWeek" ng-model="vm.automaticData.dayOfWeek">
-													<option value="{{dayOfWeek.key}}" ng-repeat="dayOfWeek in vm.dayOfWeekList track by $index">{{dayOfWeek.value}}</option>
-												</select>
-											</div>
-										</div>
+									<div class="form-group">
+										<label>Day</label> 
+										<select class="form-control" name="dayOfWeek" id="dayOfWeek" ng-model="vm.automaticData.dayOfWeek" style="width: 321px">
+											<option value="{{dayOfWeek.key}}" ng-repeat="dayOfWeek in vm.dayOfWeekList track by $index">{{dayOfWeek.value}}</option>
+										</select>
 									</div>
-									<div class="col-md-12 no-lpad">
-										<div class="form-inline">
-											<label>Time</label>
-											<div uib-timepicker ng-model="vm.automaticData.startTime" show-meridian="false"></div>
-										</div>
+									<div class="form-inline form-group">
+										<label>Time</label> 
+										<div uib-timepicker ng-model="vm.automaticData.startTime" show-meridian="false"></div>
 									</div>
-									<div class="col-md-12 no-lpad">
-										<div class="col-md-3 no-lpad">
-											<div class="form-group">
-												<label>Filepath</label>
-												<input type="text" class="form-control" name="filepath" id="filepath" ng-model="vm.automaticData.filepath">
-											</div>
-										</div>
+									<div class="form-group mb2">
+										<label>Filepath</label>
+										<input type="text" class="form-control" name="filepath" id="filepath" ng-model="vm.automaticData.filepath" style="width: 321px">
 									</div>
-									<div class="pull-right col-md-12 no-lpad text-left">
-										<br /> <br />
-										<div class="clearfix">
-											<button type="button" class="btn btn-default small" ng-click="vm.triggerAutomatic()">Trigger Automatic Extraction</button>
-<!-- 											<button type="button" class="btn btn-default small" ng-click="vm.startScheduler()">Start All Scheduler</button> -->
-<!-- 											<button type="button" class="btn btn-default small" ng-click="vm.stopScheduler()">Stop All Scheduler</button> -->
-										</div>
-									</div>
-									<div class="pull-right col-md-12 no-lpad text-left">
-										<br /> <br />
-										<div class="clearfix">
-											<label style="width: 7%">Extraction Day</label><span>: {{vm.automaticData.dayOfWeekValue}}</span><br/>
-											<label style="width: 7%">Time</label><span>: {{vm.automaticData.timeValue}}</span><br/>
-											<label style="width: 7%">Filepath</label><span>: {{vm.automaticData.filepathValue}}</span><br/>
-											</div>
+									<button type="button" class="btn btn-default small mb1" ng-click="vm.triggerAutomatic()">Trigger Automatic Extraction</button>
+									<div class="clearfix">
+										<label style="width: 7%">Extraction Day</label><span>: {{vm.automaticData.dayOfWeekValue}}</span><br/>
+										<label style="width: 7%">Time</label><span>: {{vm.automaticData.timeValue}}</span><br/>
+										<label style="width: 7%">Filepath</label><span>: {{vm.automaticData.filepathValue}}</span><br/>
 										</div>
 									</div>
 								</form>

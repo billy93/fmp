@@ -65,13 +65,13 @@
 						</div>
 						
 						<div class="col-md-6">
-							<div class="form-group">
-									<div class="custom-label semibold">Public/Private</div>
-									<select class="form-control  no-lpad" name="publicPrivate" id="publicPrivate" ng-model="vm.queryParams.publicPrivate">
-										<option value="{{value.key}}" ng-repeat="value in vm.publicPrivate track by $index">{{value.value}}</option>
-									</select>
+							<div class="form-group absolute-datepicker">
+								<div class="custom-label semibold">Public/Private</div>
+								<select class="form-control  no-lpad" name="publicPrivate" id="publicPrivate" ng-model="vm.queryParams.publicPrivate">
+									<option value="{{value.key}}" ng-repeat="value in vm.publicPrivate track by $index">{{value.value}}</option>
+								</select>
 							</div>
-							<div class="form-group">
+							<div class="form-group absolute-datepicker">
 								<div class="custom-label semibold">Travel Date</div>
 								<div class="row no-mar">
 									<div class="col-md-4 no-lpad">
@@ -90,7 +90,7 @@
 											name="travelDateTo" id="datepicker"
 											ng-model="vm.queryParams.travelDateTo" placeholder="To" />
 									</div>
-									<div class="col-md-4 no-lpad">
+									<div class="col-md-4 no-pad">
 										<select class="form-control" name="travelDateOption"
 											id="travelDateOption"
 											ng-init="vm.queryParams.travelDateOption = vm.dateOptions[0].key"
@@ -101,7 +101,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="form-group">
+							<div class="form-group absolute-datepicker">
 								<div class="custom-label semibold">Sale Date</div>
 								<div class="row no-mar">
 									<div class="col-md-4 no-lpad">
@@ -120,7 +120,7 @@
 											name="saleDateTo" id="datepicker"
 											ng-model="vm.queryParams.saleDateTo" placeholder="To" />
 									</div>
-									<div class="col-md-4 no-lpad">
+									<div class="col-md-4 no-pad">
 										<select class="form-control" name="saleDateOption"
 											id="saleDateOption"
 											ng-init="vm.queryParams.saleDateOption = vm.dateOptions[0].key"
