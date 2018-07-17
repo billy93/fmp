@@ -2,6 +2,8 @@ package com.atibusinessgroup.fmp.service;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -10,6 +12,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
@@ -46,7 +50,129 @@ public class InternetQueryService {
 		this.voltrasFareRepository = voltrasFareRepository;
 	}
 	
-	public Page<InternetQuery> getAllInternetQueries(InternetQueryParam param, Pageable pageable) {
+	public Page<InternetQuery> getSummarizeCaptDateQueries(InternetQueryParam param, Pageable pageable) {
+		List<AggregationOperation> aggregationOperations = getAggregationOperationGroup(param, 0);
+		Aggregation aggregation = newAggregation(aggregationOperations);
+		SkipOperation skip = new SkipOperation(pageable.getPageNumber() * pageable.getPageSize());
+		aggregationOperations.add(skip);
+		LimitOperation limit = new LimitOperation(pageable.getPageSize());
+		aggregationOperations.add(limit);
+		Aggregation aggregationPagination = newAggregation(aggregationOperations);
+		
+		List<InternetQuery> result = mongoTemplate.aggregate(aggregationPagination, InternetQuery.class, InternetQuery.class).getMappedResults();
+		long allResultCount = mongoTemplate.aggregate(aggregation, InternetQuery.class, InternetQuery.class).getMappedResults().size();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+		List<String> dateList = new ArrayList<>();
+		for (InternetQuery internetQuery : result) {
+			InternetQueryParam detailParam = new InternetQueryParam();
+			detailParam.setCxr(internetQuery.getCxr());
+			detailParam.setWebsite(internetQuery.getWebsite());
+			detailParam.setOrigin(internetQuery.getOrigin());
+			detailParam.setDestination(internetQuery.getDestination());
+			detailParam.setApDays(internetQuery.getApDays());
+			aggregationOperations = getAggregationOperationGroupDetail(detailParam, 0);
+			aggregation = newAggregation(aggregationOperations);
+			List<InternetQuery> detailResults = mongoTemplate.aggregate(aggregation, InternetQuery.class, InternetQuery.class).getMappedResults();
+			for (InternetQuery internetQueryDetail : detailResults) {
+				String captureSdf = sdf.format(internetQueryDetail.getCaptureDateTime());
+				if(!dateList.contains(captureSdf)) {
+					dateList.add(captureSdf);
+				}
+			}
+		}
+		
+		for (InternetQuery internetQuery : result) {
+			for (String captureSdf : dateList) {
+				internetQuery.getDatePrice().put(captureSdf, null);
+			}
+			
+			InternetQueryParam detailParam = new InternetQueryParam();
+			detailParam.setCxr(internetQuery.getCxr());
+			detailParam.setWebsite(internetQuery.getWebsite());
+			detailParam.setOrigin(internetQuery.getOrigin());
+			detailParam.setDestination(internetQuery.getDestination());
+			detailParam.setApDays(internetQuery.getApDays());
+			aggregationOperations = getAggregationOperationGroupDetail(detailParam, 0);
+			aggregation = newAggregation(aggregationOperations);
+			List<InternetQuery> detailResults = mongoTemplate.aggregate(aggregation, InternetQuery.class, InternetQuery.class).getMappedResults();
+			for (InternetQuery internetQueryDetail : detailResults) {
+				String captureSdf = sdf.format(internetQueryDetail.getCaptureDateTime());
+				internetQuery.getDatePrice().put(captureSdf, internetQueryDetail.getAif().bigDecimalValue());
+			}
+		}
+		
+		for (InternetQuery internetQuery : result) {
+			Map<String, BigDecimal> oldDataPrice = internetQuery.getDatePrice();
+			Map<String, BigDecimal> newDataPrice = new TreeMap<String, BigDecimal>(oldDataPrice);
+			internetQuery.setDatePrice(newDataPrice);
+		}
+		
+		return new PageImpl<>(result, pageable, allResultCount);
+	}
+	
+	public Page<InternetQuery> getSummarizeDeptDateQueries(InternetQueryParam param, Pageable pageable) {
+		List<AggregationOperation> aggregationOperations = getAggregationOperationGroup(param, 1);
+		Aggregation aggregation = newAggregation(aggregationOperations);
+		SkipOperation skip = new SkipOperation(pageable.getPageNumber() * pageable.getPageSize());
+		aggregationOperations.add(skip);
+		LimitOperation limit = new LimitOperation(pageable.getPageSize());
+		aggregationOperations.add(limit);
+		Aggregation aggregationPagination = newAggregation(aggregationOperations);
+		
+		List<InternetQuery> result = mongoTemplate.aggregate(aggregationPagination, InternetQuery.class, InternetQuery.class).getMappedResults();
+		long allResultCount = mongoTemplate.aggregate(aggregation, InternetQuery.class, InternetQuery.class).getMappedResults().size();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+		List<String> dateList = new ArrayList<>();
+		for (InternetQuery internetQuery : result) {
+			InternetQueryParam detailParam = new InternetQueryParam();
+			detailParam.setCxr(internetQuery.getCxr());
+			detailParam.setWebsite(internetQuery.getWebsite());
+			detailParam.setOrigin(internetQuery.getOrigin());
+			detailParam.setDestination(internetQuery.getDestination());
+			detailParam.setApDays(internetQuery.getApDays());
+			aggregationOperations = getAggregationOperationGroupDetail(detailParam, 1);
+			aggregation = newAggregation(aggregationOperations);
+			List<InternetQuery> detailResults = mongoTemplate.aggregate(aggregation, InternetQuery.class, InternetQuery.class).getMappedResults();
+			for (InternetQuery internetQueryDetail : detailResults) {
+				String departSdf = sdf.format(internetQueryDetail.getDepartDateTime());
+				if(!dateList.contains(departSdf)) {
+					dateList.add(departSdf);
+				}
+			}
+		}
+		
+		for (InternetQuery internetQuery : result) {
+			for (String departSdf : dateList) {
+				internetQuery.getDatePrice().put(departSdf, null);
+			}
+			
+			InternetQueryParam detailParam = new InternetQueryParam();
+			detailParam.setCxr(internetQuery.getCxr());
+			detailParam.setWebsite(internetQuery.getWebsite());
+			detailParam.setOrigin(internetQuery.getOrigin());
+			detailParam.setDestination(internetQuery.getDestination());
+			detailParam.setApDays(internetQuery.getApDays());
+			aggregationOperations = getAggregationOperationGroupDetail(detailParam, 1);
+			aggregation = newAggregation(aggregationOperations);
+			List<InternetQuery> detailResults = mongoTemplate.aggregate(aggregation, InternetQuery.class, InternetQuery.class).getMappedResults();
+			for (InternetQuery internetQueryDetail : detailResults) {
+				String departSdf = sdf.format(internetQueryDetail.getDepartDateTime());
+				internetQuery.getDatePrice().put(departSdf, internetQueryDetail.getAif().bigDecimalValue());
+			}
+		}
+		
+		for (InternetQuery internetQuery : result) {
+			Map<String, BigDecimal> oldDataPrice = internetQuery.getDatePrice();
+			Map<String, BigDecimal> newDataPrice = new TreeMap<String, BigDecimal>(oldDataPrice);
+			internetQuery.setDatePrice(newDataPrice);
+		}
+		
+		return new PageImpl<>(result, pageable, allResultCount);
+	}
+	
+	public Page<InternetQuery> getDontSummarizeQueries(InternetQueryParam param, Pageable pageable) {
 		List<AggregationOperation> aggregationOperations = getAggregationOperation(param);
 		Aggregation aggregation = newAggregation(aggregationOperations);
 		SkipOperation skip = new SkipOperation(pageable.getPageNumber() * pageable.getPageSize());
@@ -167,6 +293,114 @@ public class InternetQueryService {
 					return new BasicDBObject("$match", match);
 				}
 			});
+		}
+		
+		return aggregationOperations;
+	}
+	
+	private List<AggregationOperation> getAggregationOperationGroup(InternetQueryParam param, int viewDataType) {
+		List<AggregationOperation> aggregationOperations = getAggregationOperation(param);
+		
+		if(viewDataType == 0 || viewDataType == 1) {
+			if(viewDataType == 0) {
+				aggregationOperations.add(new AggregationOperation() {
+					@Override
+					public DBObject toDBObject(AggregationOperationContext context) {
+						BasicDBObject query = new BasicDBObject();
+						query.append("_id", 
+								new BasicDBObject("cxr", "$cxr_code")
+								.append("origin", "$origin")
+								.append("destination", "$destination")
+								.append("ap_days", "$ap_days")
+								.append("website", "$website")
+								.append("date", "$capture_date_time"));
+						
+						return new BasicDBObject("$group", query);
+					}
+				});
+			} else if(viewDataType == 1) {
+				aggregationOperations.add(new AggregationOperation() {
+					@Override
+					public DBObject toDBObject(AggregationOperationContext context) {
+						BasicDBObject query = new BasicDBObject();
+						query.append("_id", 
+								new BasicDBObject("cxr", "$cxr_code")
+								.append("origin", "$origin")
+								.append("destination", "$destination")
+								.append("ap_days", "$ap_days")
+								.append("website", "$website")
+								.append("date", "$depart_date_time"));
+						
+						return new BasicDBObject("$group", query);
+					}
+				});
+			}
+			
+			aggregationOperations.add(new AggregationOperation() {
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					BasicDBObject project = new BasicDBObject();
+					project.append("_id", 0);
+					project.append("cxr", "$_id.cxr");
+					project.append("origin", "$_id.origin");
+					project.append("destination", "$_id.destination");
+					project.append("ap_days", "$_id.ap_days");
+					project.append("website", "$_id.website");
+					project.append("date", "$_id.date");
+					
+					return new BasicDBObject("$project", project);
+				}
+			});
+			
+			aggregationOperations.add(new AggregationOperation() {
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					BasicDBObject sort = new BasicDBObject();
+					sort.append("date", 1);
+					
+					return new BasicDBObject("$sort", sort);
+				}
+			});
+		}
+		
+		return aggregationOperations;
+	}
+	
+	private List<AggregationOperation> getAggregationOperationGroupDetail(InternetQueryParam param, int groupingType) {
+		List<AggregationOperation> aggregationOperations = getAggregationOperation(param);
+		
+		if(groupingType == 0 || groupingType == 1) {
+			aggregationOperations.add(new AggregationOperation() {
+				@Override
+				public DBObject toDBObject(AggregationOperationContext context) {
+					BasicDBObject match = new BasicDBObject();
+					match.append("ap_days", param.getApDays());
+					
+					return new BasicDBObject("$match", match);
+				}
+			});
+			
+			if(groupingType == 0) {
+				aggregationOperations.add(new AggregationOperation() {
+					@Override
+					public DBObject toDBObject(AggregationOperationContext context) {
+						BasicDBObject sort = new BasicDBObject();
+						sort.append("capture_date_time", 1);
+						
+						return new BasicDBObject("$sort", sort);
+					}
+				});
+			} else if(groupingType == 1) {
+				aggregationOperations.add(new AggregationOperation() {
+					@Override
+					public DBObject toDBObject(AggregationOperationContext context) {
+						BasicDBObject sort = new BasicDBObject();
+						sort.append("depart_date_time", 1);
+						
+						return new BasicDBObject("$sort", sort);
+					}
+				});
+			}
 		}
 		
 		return aggregationOperations;

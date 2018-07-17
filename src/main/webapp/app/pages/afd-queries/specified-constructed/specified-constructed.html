@@ -184,7 +184,12 @@
 								</div>
 								<div class="form-group">
 									<div class="custom-label semibold">Amount Range</div>
-									<input type="text" class="form-control" name="amountRange" id="amountRange" ng-model="vm.queryParams.amountRange" ng-disabled="true"/>
+									<span class="input-group">
+										<input type="text" class="form-control" name="amountRange" id="amountRange" ng-model="vm.queryParams.amountRange"/>
+										<span class="input-group-addon" ng-click="$event.stopPropagation(); vm.showInfoModal('Use the following format\n=X means equal to X\n>  means greater than X\n>= means greater than or equal to X\n<  means less than X\n<= means less than or equal to X\n')">
+											<i class="fa fa-question"></i>
+										</span>
+									</span>
 								</div>
 								<div class="row no-mar">
 									<div class="col-md-6 no-lpad">

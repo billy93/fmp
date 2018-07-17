@@ -1,5 +1,6 @@
 package com.atibusinessgroup.fmp.domain.atpco;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -12,8 +13,11 @@ import com.atibusinessgroup.fmp.domain.dto.YqyrService;
 import com.atibusinessgroup.fmp.domain.dto.YqyrTicketDates;
 
 @Document(collection = "atpco_yqyr_s1")
-public class AtpcoYqyr {
+public class AtpcoYqyrS1 {
 
+	@Id
+	private String id;
+	
 	@Field("sector")
 	private YqyrSector sector;
 
@@ -35,9 +39,6 @@ public class AtpcoYqyr {
 	@Field("mcn")
     private String mcn;
 
-	@Field("_id")
-    private String _id;
-
 	@Field("seq_no")
     private String seq_no;
 
@@ -51,7 +52,7 @@ public class AtpcoYqyr {
     private YqyrFiller filler;
 
 	@Field("batch_no")
-    private String batch_no;
+    private int batch_no;
 
 	@Field("rbd")
     private String rbd;
@@ -154,14 +155,6 @@ public class AtpcoYqyr {
 		this.mcn = mcn;
 	}
 
-	public String get_id() {
-		return _id;
-	}
-
-	public void set_id(String _id) {
-		this._id = _id;
-	}
-
 	public String getSeq_no() {
 		return seq_no;
 	}
@@ -194,11 +187,11 @@ public class AtpcoYqyr {
 		this.filler = filler;
 	}
 
-	public String getBatch_no() {
+	public int getBatch_no() {
 		return batch_no;
 	}
 
-	public void setBatch_no(String batch_no) {
+	public void setBatch_no(int batch_no) {
 		this.batch_no = batch_no;
 	}
 
@@ -322,14 +315,21 @@ public class AtpcoYqyr {
 		this.carrier_appl_tbl_190 = carrier_appl_tbl_190;
 	}
 
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((_id == null) ? 0 : _id.hashCode());
 		result = prime * result + ((batch_ci == null) ? 0 : batch_ci.hashCode());
 		result = prime * result + ((batch_date == null) ? 0 : batch_date.hashCode());
-		result = prime * result + ((batch_no == null) ? 0 : batch_no.hashCode());
+		result = prime * result + batch_no;
 		result = prime * result + ((batch_number == null) ? 0 : batch_number.hashCode());
 		result = prime * result + ((carrier_appl_tbl_190 == null) ? 0 : carrier_appl_tbl_190.hashCode());
 		result = prime * result + ((cxr_code == null) ? 0 : cxr_code.hashCode());
@@ -337,6 +337,7 @@ public class AtpcoYqyr {
 		result = prime * result + ((eqp == null) ? 0 : eqp.hashCode());
 		result = prime * result + ((fare_basis_code == null) ? 0 : fare_basis_code.hashCode());
 		result = prime * result + ((filler == null) ? 0 : filler.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((jrny_geo_spec == null) ? 0 : jrny_geo_spec.hashCode());
 		result = prime * result + ((mcn == null) ? 0 : mcn.hashCode());
 		result = prime * result + ((passenger_filler == null) ? 0 : passenger_filler.hashCode());
@@ -368,14 +369,7 @@ public class AtpcoYqyr {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		AtpcoYqyr other = (AtpcoYqyr) obj;
-		if (_id == null) {
-			if (other._id != null) {
-				return false;
-			}
-		} else if (!_id.equals(other._id)) {
-			return false;
-		}
+		AtpcoYqyrS1 other = (AtpcoYqyrS1) obj;
 		if (batch_ci == null) {
 			if (other.batch_ci != null) {
 				return false;
@@ -390,11 +384,7 @@ public class AtpcoYqyr {
 		} else if (!batch_date.equals(other.batch_date)) {
 			return false;
 		}
-		if (batch_no == null) {
-			if (other.batch_no != null) {
-				return false;
-			}
-		} else if (!batch_no.equals(other.batch_no)) {
+		if (batch_no != other.batch_no) {
 			return false;
 		}
 		if (batch_number == null) {
@@ -444,6 +434,13 @@ public class AtpcoYqyr {
 				return false;
 			}
 		} else if (!filler.equals(other.filler)) {
+			return false;
+		}
+		if (id == null) {
+			if (other.id != null) {
+				return false;
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
 		}
 		if (jrny_geo_spec == null) {
@@ -566,20 +563,6 @@ public class AtpcoYqyr {
 			return false;
 		}
 		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "AtpcoYqyr [sector=" + sector + ", passenger_filler=" + passenger_filler + ", fare_basis_code="
-				+ fare_basis_code + ", pot=" + pot + ", pos=" + pos + ", cxr_code=" + cxr_code + ", mcn=" + mcn
-				+ ", _id=" + _id + ", seq_no=" + seq_no + ", batch_ci=" + batch_ci + ", eqp=" + eqp + ", filler="
-				+ filler + ", batch_no=" + batch_no + ", rbd=" + rbd + ", txt_tbl_no_196=" + txt_tbl_no_196
-				+ ", batch_number=" + batch_number + ", jrny_geo_spec=" + jrny_geo_spec + ", batch_date=" + batch_date
-				+ ", rtn_to_orig=" + rtn_to_orig + ", passenger_type=" + passenger_type + ", service_type_tax="
-				+ service_type_tax + ", ticket_dates=" + ticket_dates + ", rec_type=" + rec_type
-				+ ", service_type_sub_code=" + service_type_sub_code + ", service=" + service + ", cxr_tbl_186="
-				+ cxr_tbl_186 + ", service_type_filler=" + service_type_filler + ", carrier_appl_tbl_190="
-				+ carrier_appl_tbl_190 + "]";
 	}
 }
 

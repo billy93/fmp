@@ -49,34 +49,6 @@
                 }],
             }
         })
-        .state('routingquery-detail', {
-            parent: 'app',
-            url: '/routingquery/{id}',
-            data: {
-                authorities: ['ROLE_USER'],
-                pageTitle: 'Routingquery'
-            },
-            views: {
-                'content@': {
-                    templateUrl: 'app/pages/routing-query/routing-query-detail.html',
-                    controller: 'RoutingqueryDetailController',
-                    controllerAs: 'vm'
-                }
-            },
-            resolve: {
-                entity: ['$stateParams', 'Routingquery', function($stateParams, Routingquery) {
-                    return Routingquery.get({id : $stateParams.id}).$promise;
-                }],
-                previousState: ["$state", function ($state) {
-                    var currentStateData = {
-                        name: $state.current.name || 'routingquery',
-                        params: $state.params,
-                        url: $state.href($state.current.name, $state.params)
-                    };
-                    return currentStateData;
-                }]
-            }
-        });
     }
 
 })();

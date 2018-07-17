@@ -2,6 +2,9 @@ package com.atibusinessgroup.fmp.domain.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bson.types.Decimal128;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,7 +19,7 @@ public class InternetQuery implements Serializable {
 	private String website;
 	
 	@Field("capture_date_time")
-	private Object captureDateTime;
+	private Date captureDateTime;
 	
 	@Field("ap_days")
 	private int apDays;
@@ -46,7 +49,7 @@ public class InternetQuery implements Serializable {
 	private String fareBasis;
 	
 	@Field("depart_date_time")
-	private Object departDateTime;
+	private Date departDateTime;
 	
 	@Field("return_date_time")
 	private Object returnDateTime;
@@ -75,6 +78,7 @@ public class InternetQuery implements Serializable {
 	private BigDecimal baseAmtBD;
 	private BigDecimal taxesBD;
 	private BigDecimal aifBD;
+	private Map<String, BigDecimal> datePrice = new HashMap<>();
 
 	public String getWebsite() {
 		return website;
@@ -84,11 +88,11 @@ public class InternetQuery implements Serializable {
 		this.website = website;
 	}
 
-	public Object getCaptureDateTime() {
+	public Date getCaptureDateTime() {
 		return captureDateTime;
 	}
 
-	public void setCaptureDateTime(Object captureDateTime) {
+	public void setCaptureDateTime(Date captureDateTime) {
 		this.captureDateTime = captureDateTime;
 	}
 
@@ -164,11 +168,11 @@ public class InternetQuery implements Serializable {
 		this.fareBasis = fareBasis;
 	}
 
-	public Object getDepartDateTime() {
+	public Date getDepartDateTime() {
 		return departDateTime;
 	}
 
-	public void setDepartDateTime(Object departDateTime) {
+	public void setDepartDateTime(Date departDateTime) {
 		this.departDateTime = departDateTime;
 	}
 
@@ -260,6 +264,14 @@ public class InternetQuery implements Serializable {
 		this.aifBD = aifBD;
 	}
 
+	public Map<String, BigDecimal> getDatePrice() {
+		return datePrice;
+	}
+
+	public void setDatePrice(Map<String, BigDecimal> datePrice) {
+		this.datePrice = datePrice;
+	}
+
 	@Override
 	public String toString() {
 		return "InternetQuery [website=" + website + ", captureDateTime=" + captureDateTime + ", apDays=" + apDays
@@ -268,7 +280,8 @@ public class InternetQuery implements Serializable {
 				+ ", fareBasis=" + fareBasis + ", departDateTime=" + departDateTime + ", returnDateTime="
 				+ returnDateTime + ", flightNumber=" + flightNumber + ", baseAmt=" + baseAmt + ", taxes=" + taxes
 				+ ", aif=" + aif + ", currency=" + currency + ", refAmt=" + refAmt + ", departDOW=" + departDOW
-				+ ", baseAmtBD=" + baseAmtBD + ", taxesBD=" + taxesBD + ", aifBD=" + aifBD + "]";
+				+ ", baseAmtBD=" + baseAmtBD + ", taxesBD=" + taxesBD + ", aifBD=" + aifBD + ", datePrice=" + datePrice
+				+ "]";
 	}
 
 

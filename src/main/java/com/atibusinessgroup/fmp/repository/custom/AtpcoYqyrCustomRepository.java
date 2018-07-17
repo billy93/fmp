@@ -1,6 +1,7 @@
 package com.atibusinessgroup.fmp.repository.custom;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregationOptions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +17,7 @@ import org.springframework.data.mongodb.core.aggregation.SkipOperation;
 import org.springframework.stereotype.Service;
 
 import com.atibusinessgroup.fmp.constant.CollectionName;
-import com.atibusinessgroup.fmp.domain.atpco.AtpcoYqyr;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoYqyrS1;
 import com.atibusinessgroup.fmp.domain.dto.Yqyr;
 import com.atibusinessgroup.fmp.domain.dto.YqyrQueryParam;
 import com.atibusinessgroup.fmp.domain.dto.YqyrWrapper;
@@ -70,6 +71,15 @@ public class AtpcoYqyrCustomRepository {
 			}
 		});
 		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject sort = new BasicDBObject();
+				sort.append("$sort", new BasicDBObject("cxr_code", 1).append("service_type_tax", 1).append("service_type_sub_code", 1).append("seq_no", 1));
+				return sort;
+			}
+		});
+		
 		int index = 0, currentAggregationLoop = 0, skipSize = 0, limitSize = pageable.getPageSize();
     	boolean isLastPage = false, isCompleted = false;
     	
@@ -87,12 +97,12 @@ public class AtpcoYqyrCustomRepository {
     		LimitOperation limit = new LimitOperation(limitSize);
     		aggregationOperations.add(limit);
     		
-    		Aggregation aggregation = newAggregation(aggregationOperations);
+    		Aggregation aggregation = newAggregation(aggregationOperations).withOptions(newAggregationOptions().allowDiskUse(true).build());
     		
-    		List<AtpcoYqyr> ayqyrs = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_YQYR_S1, AtpcoYqyr.class).getMappedResults();
+    		System.out.println(aggregation.toString());
+    		
+    		List<AtpcoYqyrS1> ayqyrs = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_YQYR_S1, AtpcoYqyrS1.class).getMappedResults();
         	
-    		System.out.println(ayqyrs.size());
-    		
     		if (ayqyrs.size() == 0) {
     			isCompleted = true;
     			isLastPage = true;
@@ -101,7 +111,7 @@ public class AtpcoYqyrCustomRepository {
     			index = 1;
     		}
     		
-        	for (AtpcoYqyr ayqyr:ayqyrs) {
+        	for (AtpcoYqyrS1 ayqyr:ayqyrs) {
         		yqyrs.add(yqyrQueryMapper.convertYqyr(ayqyr));
         		
         		if (yqyrs.size() == pageable.getPageSize()) {

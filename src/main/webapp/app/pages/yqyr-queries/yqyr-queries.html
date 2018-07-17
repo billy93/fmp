@@ -140,16 +140,121 @@
 				                <tr>
 				                	<th class="th-fixed">ID</th>
 				                    <th class="th-fixed">Carrier</th>
+				                    <th class="th-fixed">TC</th>
+				                    <th class="th-fixed">SC</th>
+				                    <th class="th-fixed">Sequence</th>
+				                    <th class="th-fixed">Fee Amount</th>
+				                    <th class="th-fixed">Currency</th>
+				                    <th class="th-fixed">Fee Percentage</th>
+				                   	<th class="th-fixed">Fee Include Tax</th>
+				                   	<th class="th-fixed">Fee Application</th>
+				                   	<th class="th-fixed">Journey Direction</th>
+				                   	<th class="th-fixed">Journey Loc 1</th>
+				                   	<th class="th-fixed">Journey Loc 2</th>
+				                   	<th class="th-fixed">Journey Via</th>
+				                   	<th class="th-fixed">Journey Wholly Within</th>
+				                   	<th class="th-fixed">Return To Origin</th>
+				                   	<th class="th-fixed">Sector/Portion Flag</th>
+				                   	<th class="th-fixed">Sector Direction</th>
+				                   	<th class="th-fixed">Sector Loc 1</th>
+				                   	<th class="th-fixed">Sector Loc 2</th>
+				                   	<th class="th-fixed">Sector Via</th>
+				                   	<th class="th-fixed">Stopover/Connection</th>
+				                   	<th class="th-fixed">Connection Max Time</th>
+				                   	<th class="th-fixed">Connections Exempt</th>
+				                   	<th class="th-fixed">International/Domestic</th>
+				                   	<th class="th-fixed">Point Of Sale</th>
+				                   	<th class="th-fixed">Point Of Sale Code</th>
+				                   	<th class="th-fixed">Point Of Ticketing</th>
+				                   	<th class="th-fixed">Pax Type</th>
+				                   	<th class="th-fixed">RBD</th>
+				                   	<th class="th-fixed">Fare Class</th>
+				                   	<th class="th-fixed">Ticket Designator</th>
+				                   	<th class="th-fixed">Carrier/Flight Application</th>
+				                   	<th class="th-fixed">Val Carrier</th>
+				                   	<th class="th-fixed">Equipment</th>
+				                   	<th class="th-fixed">Travel Eff Date</th>
+				                   	<th class="th-fixed">Travel Disc Date</th>
+				                   	<th class="th-fixed">Ticket Eff Date</th>
+				                   	<th class="th-fixed">Ticket Disc Date</th>
+				                   	<th class="th-fixed">Comment</th>
+				                   	
 				                </tr>
 				         	</thead>
 				         	<tbody id="tbody-afd">
 				                <tr class="tr-afd" ng-repeat="yqyr in vm.yqyrs track by yqyr.id" ng-click="vm.setSelectedRow($index, yqyr)" ng-class="{'selected': vm.selectedRows[$index] == yqyr}">
 				                    <td>{{$index + 1}}</td>
 				                    <td>{{yqyr.carrierCode}}</td>
+				                    <td>{{yqyr.tc}}</td>
+				                    <td>{{yqyr.sc}}</td>
+				                    <td>{{yqyr.sequenceInt}}</td>
+				                    <td><span ng-if="yqyr.feeAmount != 0">{{yqyr.feeAmount}}</span></td>
+				                    <td>{{yqyr.currencyCode}}</td>
+				                    <td><span ng-if="yqyr.feePct != 0">{{yqyr.feePct}}%</span></td>
+				                    <td><span ng-if="yqyr.feeIncludeTax"><i class="glyphicon glyphicon-ok"></i></span></span></td>
+				                    <td>{{yqyr.feeApplication}}</td>
+				                    <td>{{yqyr.journeyDirection}}</td>
+				                    <td>{{yqyr.journeyLoc1}}</td>
+				                    <td>{{yqyr.journeyLoc2}}</td>
+				                    <td>{{yqyr.journeyVia}}</td>
+				                    <td>{{yqyr.journeyWhollyWithin}}</td>
+				              		<td>{{yqyr.returnToOrigin}}</td>
+				              		<td>{{yqyr.sectorPortionFlag}}</td>
+				              		<td>{{yqyr.sectorDirection}}</td>
+				              		<td>{{yqyr.sectorLoc1}}</td>
+				              		<td>{{yqyr.sectorLoc2}}</td>
+				              		<td>{{yqyr.sectorVia}}</td>
+				              		<td>{{yqyr.stopoverConnection}}</td>
+				              		<td>{{yqyr.connectionMaxTime}}</td>
+				              		<td><span ng-if="yqyr.connectionsExempt"><i class="glyphicon glyphicon-ok"></i></span></td>
+				              		<td>{{yqyr.internationalDomestic}}</td>
+				              		<td>{{yqyr.pointOfSale}}</td>
+				              		<td>{{yqyr.pointOfSaleCode}}</td>
+				              		<td>{{yqyr.pointOfTicketing}}</td>
+				              		<td>{{yqyr.paxType}}</td>
+				              		<td>{{yqyr.rbd}}</td>
+				              		<td>{{yqyr.fareClass}}</td>
+				              		<td>{{yqyr.ticketDesignator}}</td>
+				              		<td>{{yqyr.carrierFlightApplication}}</td>
+				              		<td>{{yqyr.valCarrierCode}}</td>
+				              		<td>{{yqyr.equipment}}</td>
+				              		<td><span ng-if="yqyr.travelEffDate != null && yqyr.travelEffDate != 'indef'">{{yqyr.travelEffDate | date:vm.dateFormat:vm.timezone}}</span></td>
+				              		<td>
+				              			<span ng-if="yqyr.travelDiscDate != null && yqyr.travelDiscDate != 'indef'">{{yqyr.travelDiscDate | date:vm.dateFormat:vm.timezone}}</span>
+				              			<span ng-if="yqyr.travelDiscDate == 'indef'">NONE</span>
+				              		</td>
+				              		<td><span ng-if="yqyr.ticketEffDate != null && yqyr.ticketEffDate != 'indef'">{{yqyr.ticketEffDate | date:vm.dateFormat:vm.timezone}}</span></td>
+				              		<td><span ng-if="yqyr.ticketDiscDate != null && yqyr.ticketDiscDate != 'indef'">{{yqyr.ticketDiscDate | date:vm.dateFormat:vm.timezone}}</span></td>
+				              		<td>{{yqyr.comment | limitTo: 20}}<span ng-if="yqyr.comment != null">...</span></td>
 				         		</tr>
+				         		<tr infinite-scroll="vm.loadPage(vm.page + 1)" infinite-scroll-disabled="vm.disableInfiniteScroll || vm.isLastPage || vm.isLoading" infinite-scroll-container="'#tbody-afd'"></tr>
 				        	</tbody>
 				       	</table>
 				   	</div>
+				   	<div class="text-center fixed-wrapper-inside">
+						<div class="svg-loader" ng-show="vm.isLoading">
+						  	<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+								width="24px" height="30px" viewBox="0 0 24 30" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+							    <rect x="0" y="10" width="4" height="10" fill="#333" opacity="0.2">
+							    	<animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0s" dur="1.5s" repeatCount="indefinite" />
+							    	<animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0s" dur="1.5s" repeatCount="indefinite" />
+							    	<animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0s" dur="1.5s" repeatCount="indefinite" />
+							    </rect>
+							    <rect x="8" y="10" width="4" height="10" fill="#333"  opacity="0.2">
+							    	<animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0.3s" dur="1.5s" repeatCount="indefinite" />
+							    	<animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0.3s" dur="1.5s" repeatCount="indefinite" />
+							    	<animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0.3s" dur="1.5s" repeatCount="indefinite" />
+							    </rect>
+							    <rect x="16" y="10" width="4" height="10" fill="#333"  opacity="0.2">
+							    	<animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0.6s" dur="1.5s" repeatCount="indefinite" />
+							    	<animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0.6s" dur="1.5s" repeatCount="indefinite" />
+							    	<animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0.6s" dur="1.5s" repeatCount="indefinite" />
+							    </rect>
+							</svg>
+						</div>
+						<div class="center-div" ng-if="(vm.noDataAvailable || vm.yqyrs.length == 0) && !vm.isLoading">No Data Available</div>
+						<div class="center-div" ng-if="vm.isLastPage && !vm.noDataAvailable">You have reached the end of the page &nbsp;<i style="font-size: 8px !important; top: 0" class="glyphicon glyphicon-chevron-up"></i></div>
+					</div>
 				</div>
 			</div>
 		</div>

@@ -202,8 +202,6 @@ public class AfdQueryResource {
         	ruleTcd = ruleTn.getTarCd();
         }
         
-//        LinkedHashMap<String, List<DataTable>> unmatchedRec2CatDataTables = new LinkedHashMap<>();
-        
         for (Map.Entry<String, String> entry : categories.entrySet()) {
         	AtpcoRecord2 matchedGeneralRecord2 = null;
         	AtpcoRecord2 matchedRecord2 = null;
@@ -299,27 +297,6 @@ public class AfdQueryResource {
         	}
         	
         	if (matchedRecord2 != null && matchedRecord2.getDataTables() != null && matchedRecord2.getDataTables().size() > 0) {
-//        		List<DataTable> rec2DataTables = matchedRecord2.getDataTables();
-    			
-//        		System.out.println();
-//    			for (Iterator<DataTable> iterator = rec2DataTables.iterator(); iterator.hasNext();) {
-//    				DataTable dt = iterator.next();
-//    				System.out.println(dt.toString());
-//    				if (!dt.getCatNo().contentEquals(entry.getKey())) {
-//    					for (Map.Entry<String, List<DataTable>> ucdt:unmatchedRec2CatDataTables.entrySet()) {
-//    						if (ucdt.getKey().contentEquals(entry.getKey())) {
-//    							if (ucdt.getValue() == null) {
-//    								ucdt.setValue(new ArrayList<DataTable>());
-//    							}
-//    							
-//    							ucdt.getValue().add(dt);
-//    							break;
-//    						}
-//    					}
-//    					iterator.remove();
-//    				}
-//    			}
-    			
         		type += CategoryType.RULE;
         		textFormat += atpcoRecordService.generateCategoryTextHeader(CategoryType.RULE, afdQuery.getTariffNo(), ruleTcd, afdQuery.getRuleNo(), matchedRecord2.getSequenceNo(), matchedRecord2.getEffectiveDateObject());
         		CategoryTextFormatAndAttribute ctfa = atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), matchedRecord2.getDataTables(), CategoryType.RULE);
@@ -399,15 +376,6 @@ public class AfdQueryResource {
         	
         	result.add(cat);
         }
-        
-//        for (Map.Entry<String, List<DataTable>> ucdt:unmatchedRec2CatDataTables.entrySet()) {
-//    		System.out.println(ucdt.getKey());
-//    		for (DataTable dt:ucdt.getValue()) {
-//    			System.out.println(dt.toString());
-//    		}
-//    		System.out.println();
-//    		System.out.println();
-//    	}
         
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

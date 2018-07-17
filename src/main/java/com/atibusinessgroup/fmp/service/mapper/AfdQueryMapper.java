@@ -341,7 +341,6 @@ public class AfdQueryMapper {
 			List<Date> reslasts = new ArrayList<>();
 			for (CategoryObject footnote15:footnote15s) {
 				AtpcoDateWrapper range = new AtpcoDateWrapper();
-				
 				AtpcoRecord3Cat15 cat15 = (AtpcoRecord3Cat15) footnote15.getCategory();
 				Date s = DateUtil.convertObjectToDate(cat15.getSales_dates_earliest_tktg());
 				if (s != null) {
@@ -448,7 +447,7 @@ public class AfdQueryMapper {
 		return result;
 	}
 
-	public AfdQueryAddOns convertAtpcoAddOn(AtpcoAddOn addOn, Date focusDate) {
+	public AfdQueryAddOns convertAtpcoAddOn(AtpcoAddOn addOn, String footnote1, String footnote2, Date focusDate, Date travelStart, Date travelEnd, Date travelComplete, Date saleStart, Date saleEnd) {
 		AfdQueryAddOns result = new AfdQueryAddOns();
 		
 		result.setId(addOn.get_id());
@@ -470,7 +469,8 @@ public class AfdQueryMapper {
 		result.setDestinationCountry(addOn.getCountry_code_destination());
 		result.setFareClassCode(addOn.getFare_class_cd());
 		result.setOwrt(addOn.getOw_rt());
-		result.setFootnote1(addOn.getFtnt());
+		result.setFootnote1(footnote1);
+		result.setFootnote2(footnote2);
 		result.setRoutingNo(addOn.getRtg_no());
 		
 		if (addOn.getAdd_on() != null) {
@@ -483,6 +483,10 @@ public class AfdQueryMapper {
 		result.setGfsDate(addOn.getGfs_date());
 		result.setGfsReference(addOn.getGfs_number());
 		result.setFocusDate(focusDate);
+		result.setFirstTravelDate(travelStart);
+		result.setLastTravelDate(travelEnd);
+		result.setFirstSaleDate(saleStart);
+		result.setLastSaleDate(saleEnd);
 		
 		return result;
 	}
