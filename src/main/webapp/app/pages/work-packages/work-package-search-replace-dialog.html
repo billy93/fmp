@@ -66,18 +66,17 @@
 	 						<div class="pull-left ph5px w30">
 	 						</div>
 					 	</div>
-	 					<div class="clearfix">
-	 						<div class="pull-left ph5px w30 mt5px">Status
- 						</div>
- 						<div class="pull-left ph5px w5">
- 							<div class="form-group mb0">
-								<div class="checkbox-wrapper inline">
-									<label>
-										<input type="checkbox" ng-model="vm.filter.status.check">													
-									</label>
+	 					<div class="clearfix" ng-show="vm.showField('status')">
+	 						<div class="pull-left ph5px w30 mt5px">Status</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.status.check">													
+										</label>
+									</div>
 								</div>
-							</div>
-	 					</div>
+		 					</div>
 	 						<div class="pull-left ph5px w30">
 								<select class="form-control" ng-disabled="!vm.filter.status.check" ng-model="vm.filter.status.search">
 	 								<option value="">Select Option</option>
@@ -104,7 +103,7 @@
 								</select>
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('carrier')">
 	 						<div class="pull-left ph5px w30 mt5px">Cxr
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -132,7 +131,7 @@
 	 							<!-- <input type="text" class="form-control inline" disabled ng-model="vm.filter.carrier.replace.value"/>	 -->	 								
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('action')">
 	 						<div class="pull-left ph5px w30 mt5px">Action
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -159,7 +158,7 @@
 	 						<div class="pull-left ph5px w30">
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('tarno')">
 	 						<div class="pull-left ph5px w30 mt5px">Tar No
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -179,7 +178,7 @@
 	 						<div class="pull-left ph5px w30">
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('tarcd')">
 	 						<div class="pull-left ph5px w30 mt5px">Tar Cd
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -199,7 +198,7 @@
 	 						<div class="pull-left ph5px w30">
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('global')">
 	 						<div class="pull-left ph5px w30 mt5px">Global
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -219,7 +218,7 @@
 	 						<div class="pull-left ph5px w30">
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('origin')">
 	 						<div class="pull-left ph5px w30 mt5px">Origin
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -247,7 +246,7 @@
 	 							<input type="text" class="form-control inline" uppercase ng-model="vm.filter.origin.replace.value" ng-disabled="!vm.filter.origin.replace.check">
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('destination')">
 	 						<div class="pull-left ph5px w30 mt5px">Dest
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -275,7 +274,7 @@
 	 							<input type="text" uppercase class="form-control inline" ng-disabled="!vm.filter.destination.replace.check" ng-model="vm.filter.destination.replace.value">
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('bucket')">
 	 						<div class="pull-left ph5px w30 mt5px">Addon Bucket
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -303,8 +302,7 @@
 	 							<input type="text" uppercase class="form-control inline" ng-disabled="!vm.filter.bucket.replace.check" ng-model="vm.filter.bucket.replace.value">
 	 						</div>
 	 					</div>
-	 					
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('farebasis')">
 	 						<div class="pull-left ph5px w30 mt5px">Fare Class
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -332,7 +330,7 @@
 	 							<input type="text" uppercase class="form-control inline"  ng-disabled="!vm.filter.fareBasis.replace.check" ng-model="vm.filter.fareBasis.replace.value">
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('bookingclass')">
 	 						<div class="pull-left ph5px w30 mt5px">Booking Class
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -360,7 +358,67 @@
 	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.bookingClass.replace.check" ng-model="vm.filter.bookingClass.replace.value">
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('ssn')">
+	 						<div class="pull-left ph5px w30 mt5px">SSN
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.ssn.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<select class="form-control" ng-disabled="!vm.filter.ssn.check" ng-model="vm.filter.ssn.search">
+	 								<option value="">Select Option</option>
+									<option label="Christmas" value="C">Christmas</option>
+	 								<option label="Easter" value="E">Easter</option>
+	 								<option label="4th Level" value="F">4th Level</option>
+	 								<option label="High Peak" value="H">High Peak</option>
+	 								<option label="Basic" value="J">Basic</option>
+	 								<option label="Low/Off-Peak" value="L">Low/Off-Peak</option>
+	 								<option label="Chinese New Year" value="N">Chinese New Year</option>
+	 								<option label="Shoulder" value="O">Shoulder</option>
+	 								<option label="Peak Of Peak" value="P">Peak Of Peak</option>
+	 								<option label="Holiday Surcharge" value="Q">Holiday Surcharge</option>
+	 								<option label="5th Level" value="T">5th Level</option>
+	 								<option label="7th Level" value="Y">7th Level</option>
+	 								<option label="Second Winter" value="Z">Second Winter</option>
+								</select>
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.ssn.replace.check">													
+										</label>
+									</div>
+								</div>	
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<select class="form-control" ng-disabled="!vm.filter.ssn.replace.check" ng-model="vm.filter.ssn.replace.value">
+	 								<option value="">Select Option</option>
+	 								<option label="Christmas" value="C">Christmas</option>
+	 								<option label="Easter" value="E">Easter</option>
+	 								<option label="4th Level" value="F">4th Level</option>
+	 								<option label="High Peak" value="H">High Peak</option>
+	 								<option label="Basic" value="J">Basic</option>
+	 								<option label="Low/Off-Peak" value="L">Low/Off-Peak</option>
+	 								<option label="Chinese New Year" value="N">Chinese New Year</option>
+	 								<option label="Shoulder" value="O">Shoulder</option>
+	 								<option label="Peak Of Peak" value="P">Peak Of Peak</option>
+	 								<option label="Holiday Surcharge" value="Q">Holiday Surcharge</option>
+	 								<option label="5th Level" value="T">5th Level</option>
+	 								<option label="7th Level" value="Y">7th Level</option>
+	 								<option label="Second Winter" value="Z">Second Winter</option>
+								</select>
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('cabin')">
 	 						<div class="pull-left ph5px w30 mt5px">Cabin
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -400,7 +458,7 @@
 								</select>
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('owrt')">
 	 						<div class="pull-left ph5px w30 mt5px">OW/RT
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -438,7 +496,7 @@
 								</select>
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('footnote')">
 	 						<div class="pull-left ph5px w30 mt5px">Footnote
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -467,7 +525,7 @@
 	 							
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('zone')">
 	 						<div class="pull-left ph5px w30 mt5px">Zone
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -495,7 +553,7 @@
 	 							<input type="text" uppercase class="form-control inline" ng-disabled="!vm.filter.zone.replace.check" ng-model="vm.filter.zone.replace.value">
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('rtgno')">
 	 						<div class="pull-left ph5px w30 mt5px">Rtg No
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -523,7 +581,7 @@
 	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.rtgno.replace.check" ng-model="vm.filter.rtgno.replace.value">	 							
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('ruleno')">
 	 						<div class="pull-left ph5px w30 mt5px">Rule No
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -551,7 +609,7 @@
 	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.ruleno.replace.check" ng-model="vm.filter.ruleno.replace.value">	 	
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('currency')">
 	 						<div class="pull-left ph5px w30 mt5px">Currency
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -580,7 +638,7 @@
 	 						</div>
 
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('amount')">
 	 						<div class="pull-left ph5px w30 mt5px">Amount
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -608,7 +666,7 @@
 	 								<input type="text" class="form-control inline" ng-disabled="!vm.filter.amount.replace.check" ng-model="vm.filter.amount.replace.value">	 		 							 						
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('aif')">
 	 						<div class="pull-left ph5px w30 mt5px">Target AIF
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -637,7 +695,7 @@
 	 						
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('travelstart')">
 	 						<div class="pull-left ph5px w30 mt5px">Travel Start
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -692,7 +750,7 @@
 									</span>
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('travelend')">
 	 						<div class="pull-left ph5px w30 mt5px">Travel End
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -747,7 +805,7 @@
 									</span>
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('salestart')">
 	 						<div class="pull-left ph5px w30 mt5px">Sale Start
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -802,7 +860,7 @@
 									</span>
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('saleend')">
 	 						<div class="pull-left ph5px w30 mt5px">Sale End
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -857,7 +915,7 @@
 									</span>
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('comment')">
 	 						<div class="pull-left ph5px w30 mt5px">Comment
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -885,7 +943,7 @@
 								<input type="text" class="form-control inline" ng-disabled="!vm.filter.comment.replace.check" ng-model="vm.filter.comment.replace.value">	 		 							 							 						
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('travelcomplete')">
 	 						<div class="pull-left ph5px w30 mt5px">Travel Complete
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -940,8 +998,7 @@
 									</span>
 	 						</div>
 	 					</div>
-	 					
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('travelcompleteindicator')">
 	 						<div class="pull-left ph5px w30 mt5px">Travel Complete Indicator
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -977,8 +1034,7 @@
 								</select>
 	 						</div>
 	 					</div>
-	 					
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('ratesheetcomment')">
 	 						<div class="pull-left ph5px w30 mt5px">Ratesheet Comment
 	 						</div>
 	 						<div class="pull-left ph5px w5">
