@@ -186,6 +186,120 @@
     				check:false
     			}
         	},
+        	ssn:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
+        	loc1:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
+        	loc1Type:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
+        	loc2:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
+        	loc2Type:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
+        	baseFareBasis:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
+        	baseRuleNo:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
+        	baseTarcd:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
+        	calcType:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
+        	percentBaseFare:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
+        	discountSpecifiedAmount:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
+        	passengerType:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
+        	fareType:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
+        	ticketCode:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
+        	ticketDesignator:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
+        	rtgnoTarno:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
+        	newFareBasis:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
+        	newTypeOfJourney:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
+        	newBookingCode:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
         };
         vm.originalFilter = angular.copy(vm.filter);
         
@@ -300,6 +414,12 @@
         	else if(fareType == 'fare-market-addon'){
         	}
         	else if(fareType == 'fare-discount'){
+        		var fields = [
+        			'status', 'tarcd', 'loc1Type', 'loc1', 'loc2Type', 'loc2', 'basefarebasis', 'baseruleno', 'basetarcd', 'calctype',
+        			'percentbasefare', 'currency', 'discountspecifiedamount', 'passengertype', 'faretype', 'ticketcode', 'ticketdesignator',
+        			'owrt', 'global', 'rtgno', 'rtgnotarno', 'newfarebasis', 'newtypeofjourney', 'newbookingcode', 
+        			'travelstart', 'travelend', 'salestart', 'saleend', 'comment', 'travelcomplete', 'travelcompleteindicator',
+        		];
         	}
         	else if(fareType == 'fare-waiver'){
         	}
