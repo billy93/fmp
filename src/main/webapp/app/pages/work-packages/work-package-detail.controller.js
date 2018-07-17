@@ -2156,6 +2156,35 @@
     	    	    	workPackageFareFilter.newFareBasis.check && workPackageFareFilter.newFareBasis.search != null && workPackageFareFilter.newFareBasis.search != '' ? 'newFareBasis' : null,
     	    	    	workPackageFareFilter.newTypeOfJourney.check && workPackageFareFilter.newTypeOfJourney.search != null && workPackageFareFilter.newTypeOfJourney.search != '' ? 'newTypeOfJourney' : null,
     	    	    	workPackageFareFilter.newBookingCode.check && workPackageFareFilter.newBookingCode.search != null && workPackageFareFilter.newBookingCode.search != '' ? 'newBookingCode' : null,
+    	    	    			
+    	    	    	//waiver
+    	    			workPackageFareFilter.waiverAgentName.check && workPackageFareFilter.waiverAgentName.search != null && workPackageFareFilter.waiverAgentName.search != '' ? 'waiverAgentName' : null,
+    	    			workPackageFareFilter.waiverIataNo.check && workPackageFareFilter.waiverIataNo.search != null && workPackageFareFilter.waiverIataNo.search != '' ? 'waiverIataNo' : null,
+    	    			workPackageFareFilter.waiverIocNo.check && workPackageFareFilter.waiverIocNo.search != null && workPackageFareFilter.waiverIocNo.search != '' ? 'waiverIocNo' : null,
+    	    			workPackageFareFilter.waiverApprovalDate.check && workPackageFareFilter.waiverApprovalDate.search != null && workPackageFareFilter.waiverApprovalDate.search != '' ? 'waiverApprovalDate' : null,
+    	    			workPackageFareFilter.waiverType.check && workPackageFareFilter.waiverType.search != null && workPackageFareFilter.waiverType.search != '' ? 'waiverType' : null,
+    	    			workPackageFareFilter.waiverFullPartial.check && workPackageFareFilter.waiverFullPartial.search != null && workPackageFareFilter.waiverFullPartial.search != '' ? 'waiverFullPartial' : null,    	    						
+    	    			workPackageFareFilter.waiverPnr.check && workPackageFareFilter.waiverPnr.search != null && workPackageFareFilter.waiverPnr.search != '' ? 'waiverPnr' : null,    	    						
+    	    			workPackageFareFilter.waiverTktFrom.check && workPackageFareFilter.waiverTktFrom.search != null && workPackageFareFilter.waiverTktFrom.search != '' ? 'waiverTktFrom' : null,    	    						
+    	    			workPackageFareFilter.waiverTktTo.check && workPackageFareFilter.waiverTktTo.search != null && workPackageFareFilter.waiverTktTo.search != '' ? 'waiverTktTo' : null,    	    						
+    					workPackageFareFilter.waiverOri.check && workPackageFareFilter.waiverOri.search != null && workPackageFareFilter.waiverOri.search != '' ? 'waiverOri' : null,    	    						
+    					workPackageFareFilter.waiverDest.check && workPackageFareFilter.waiverDest.search != null && workPackageFareFilter.waiverDest.search != '' ? 'waiverDest' : null,    	    						
+    	    			workPackageFareFilter.waiverOriginalItinerary.check && workPackageFareFilter.waiverOriginalItinerary.search != null && workPackageFareFilter.waiverOriginalItinerary.search != '' ? 'waiverOriginalItinerary' : null,    	    						
+    	    			workPackageFareFilter.waiverNewItinerary.check && workPackageFareFilter.waiverNewItinerary.search != null && workPackageFareFilter.waiverNewItinerary.search != '' ? 'waiverNewItinerary' : null,    	    						
+
+    	    			workPackageFareFilter.waiverOriginalBasicFare.check && workPackageFareFilter.waiverOriginalBasicFare.search != null && workPackageFareFilter.waiverOriginalBasicFare.search != '' ? 'waiverOriginalBasicFare' : null,    	    						
+    	    			workPackageFareFilter.waiverNewBasicFare.check && workPackageFareFilter.waiverNewBasicFare.search != null && workPackageFareFilter.waiverNewBasicFare.search != '' ? 'waiverNewBasicFare' : null,    	    						
+    	    			workPackageFareFilter.waiverApprovedFare.check && workPackageFareFilter.waiverApprovedFare.search != null && workPackageFareFilter.waiverApprovedFare.search != '' ? 'waiverApprovedFare' : null,    	    						
+    	    			workPackageFareFilter.waiverFareLost.check && workPackageFareFilter.waiverFareLost.search != null && workPackageFareFilter.waiverFareLost.search != '' ? 'waiverFareLost' : null,    	    						
+    	    			workPackageFareFilter.waiverCalculatedPn.check && workPackageFareFilter.waiverCalculatedPn.search != null && workPackageFareFilter.waiverCalculatedPn.search != '' ? 'waiverCalculatedPn' : null,    	    						
+    	    			workPackageFareFilter.waiverOriginalPn.check && workPackageFareFilter.waiverOriginalPn.search != null && workPackageFareFilter.waiverOriginalPn.search != '' ? 'waiverOriginalPn' : null,    	    						
+    	    	    	workPackageFareFilter.waiverApprovedPn.check && workPackageFareFilter.waiverApprovedPn.search != null && workPackageFareFilter.waiverApprovedPn.search != '' ? 'waiverApprovedPn' : null,    	    						
+    	    	    	workPackageFareFilter.waiverPenaltyLostPercent.check && workPackageFareFilter.waiverPenaltyLostPercent.search != null && workPackageFareFilter.waiverPenaltyLostPercent.search != '' ? 'waiverPenaltyLostPercent' : null,    	    						
+    	    	    	workPackageFareFilter.waiverPenaltyLostAmount.check && workPackageFareFilter.waiverPenaltyLostAmount.search != null && workPackageFareFilter.waiverPenaltyLostAmount.search != '' ? 'waiverPenaltyLostAmount' : null,    	    						
+    	    	    	workPackageFareFilter.waiverCurrency.check && workPackageFareFilter.waiverCurrency.search != null && workPackageFareFilter.waiverCurrency.search != '' ? 'waiverCurrency' : null,    	    						
+    	    	    	workPackageFareFilter.waiverTotalPax.check && workPackageFareFilter.waiverTotalPax.search != null && workPackageFareFilter.waiverTotalPax.search != '' ? 'waiverTotalPax' : null,    	    						
+    	    	    	workPackageFareFilter.waiverTotalLost.check && workPackageFareFilter.waiverTotalLost.search != null && workPackageFareFilter.waiverTotalLost.search != '' ? 'waiverTotalLost' : null,    	    						
+    	    	    	workPackageFareFilter.waiverRemark.check && workPackageFareFilter.waiverRemark.search != null && workPackageFareFilter.waiverRemark.search != '' ? 'waiverRemark' : null,    	    						
      	    		];
  	    			
  	    			var found = false;
@@ -2246,6 +2275,38 @@
     	    	    	workPackageFareFilter.newFareBasis.replace.check && workPackageFareFilter.newFareBasis.replace.value != null && workPackageFareFilter.newFareBasis.replace.value != '' ? 'newFareBasis' : null,
     	    	    	workPackageFareFilter.newTypeOfJourney.replace.check && workPackageFareFilter.newTypeOfJourney.replace.value != null && workPackageFareFilter.newTypeOfJourney.replace.value != '' ? 'newTypeOfJourney' : null,
     	    	    	workPackageFareFilter.newBookingCode.replace.check && workPackageFareFilter.newBookingCode.replace.value != null && workPackageFareFilter.newBookingCode.replace.value != '' ? 'newBookingCode' : null,
+    	    	    	
+    	    	    	//waiver
+    	    			workPackageFareFilter.waiverAgentName.replace.check && workPackageFareFilter.waiverAgentName.replace.value != null && workPackageFareFilter.waiverAgentName.replace.value != '' ? 'waiverAgentName' : null,
+    	    			workPackageFareFilter.waiverIataNo.replace.check && workPackageFareFilter.waiverIataNo.replace.value != null && workPackageFareFilter.waiverIataNo.replace.value != '' ? 'waiverIataNo' : null,
+    	    			workPackageFareFilter.waiverIocNo.replace.check && workPackageFareFilter.waiverIocNo.replace.value != null && workPackageFareFilter.waiverIocNo.replace.value != '' ? 'waiverIocNo' : null,
+    	    			workPackageFareFilter.waiverApprovalDate.replace.check && workPackageFareFilter.waiverApprovalDate.replace.value != null && workPackageFareFilter.waiverApprovalDate.replace.value != '' ? 'waiverApprovalDate' : null,
+    	    			workPackageFareFilter.waiverType.replace.check && workPackageFareFilter.waiverType.replace.value != null && workPackageFareFilter.waiverType.replace.value != '' ? 'waiverType' : null,
+    	    			workPackageFareFilter.waiverFullPartial.replace.check && workPackageFareFilter.waiverFullPartial.replace.value != null && workPackageFareFilter.waiverFullPartial.replace.value != '' ? 'waiverFullPartial' : null,
+    	    			workPackageFareFilter.waiverPnr.replace.check && workPackageFareFilter.waiverPnr.replace.value != null && workPackageFareFilter.waiverPnr.replace.value != '' ? 'waiverPnr' : null,
+    	    			workPackageFareFilter.waiverTktFrom.replace.check && workPackageFareFilter.waiverTktFrom.replace.value != null && workPackageFareFilter.waiverTktFrom.replace.value != '' ? 'waiverTktFrom' : null,
+    	    			workPackageFareFilter.waiverTktTo.replace.check && workPackageFareFilter.waiverTktTo.replace.value != null && workPackageFareFilter.waiverTktTo.replace.value != '' ? 'waiverTktTo' : null,
+    	    					
+    	    			workPackageFareFilter.waiverOri.replace.check && workPackageFareFilter.waiverOri.replace.value != null && workPackageFareFilter.waiverOri.replace.value != '' ? 'waiverOri' : null,
+    	    			workPackageFareFilter.waiverDest.replace.check && workPackageFareFilter.waiverDest.replace.value != null && workPackageFareFilter.waiverDest.replace.value != '' ? 'waiverDest' : null,
+    	    			workPackageFareFilter.waiverOriginalItinerary.replace.check && workPackageFareFilter.waiverOriginalItinerary.replace.value != null && workPackageFareFilter.waiverOriginalItinerary.replace.value != '' ? 'waiverOriginalItinerary' : null,
+    	    		
+    					workPackageFareFilter.waiverNewItinerary.replace.check && workPackageFareFilter.waiverNewItinerary.replace.value != null && workPackageFareFilter.waiverNewItinerary.search != '' ? 'waiverNewItinerary' : null,    	    						
+    					workPackageFareFilter.waiverOriginalBasicFare.replace.check && workPackageFareFilter.waiverOriginalBasicFare.replace.value != null && workPackageFareFilter.waiverOriginalBasicFare.search != '' ? 'waiverOriginalBasicFare' : null,    	    						
+    							
+    	    			workPackageFareFilter.waiverNewBasicFare.replace.check && workPackageFareFilter.waiverNewBasicFare.replace.value != null && workPackageFareFilter.waiverNewBasicFare.replace.value != '' ? 'waiverNewBasicFare' : null,    	    						
+    	    			workPackageFareFilter.waiverApprovedFare.replace.check && workPackageFareFilter.waiverApprovedFare.replace.value != null && workPackageFareFilter.waiverApprovedFare.replace.value != '' ? 'waiverApprovedFare' : null,    	    						
+    	    			workPackageFareFilter.waiverFareLost.replace.check && workPackageFareFilter.waiverFareLost.replace.value != null && workPackageFareFilter.waiverFareLost.replace.value != '' ? 'waiverFareLost' : null,    	    						
+    	    			workPackageFareFilter.waiverCalculatedPn.replace.check && workPackageFareFilter.waiverCalculatedPn.replace.value != null && workPackageFareFilter.waiverCalculatedPn.replace.value != '' ? 'waiverCalculatedPn' : null,    	    						
+    	    			workPackageFareFilter.waiverOriginalPn.replace.check && workPackageFareFilter.waiverOriginalPn.replace.value != null && workPackageFareFilter.waiverOriginalPn.replace.value != '' ? 'waiverOriginalPn' : null,    	    						
+    	    	    	workPackageFareFilter.waiverApprovedPn.replace.check && workPackageFareFilter.waiverApprovedPn.replace.value != null && workPackageFareFilter.waiverApprovedPn.replace.value != '' ? 'waiverApprovedPn' : null,    	    						
+    	    	    	workPackageFareFilter.waiverPenaltyLostPercent.replace.check && workPackageFareFilter.waiverPenaltyLostPercent.replace.value != null && workPackageFareFilter.waiverPenaltyLostPercent.replace.value != '' ? 'waiverPenaltyLostPercent' : null,    	    						
+    	    	    	workPackageFareFilter.waiverPenaltyLostAmount.replace.check && workPackageFareFilter.waiverPenaltyLostAmount.replace.value != null && workPackageFareFilter.waiverPenaltyLostAmount.replace.value != '' ? 'waiverPenaltyLostAmount' : null,    	    						
+    	    	    	workPackageFareFilter.waiverCurrency.replace.check && workPackageFareFilter.waiverCurrency.replace.value != null && workPackageFareFilter.waiverCurrency.replace.value != '' ? 'waiverCurrency' : null,    	    						
+    	    	    	workPackageFareFilter.waiverTotalPax.replace.check && workPackageFareFilter.waiverTotalPax.replace.value != null && workPackageFareFilter.waiverTotalPax.replace.value != '' ? 'waiverTotalPax' : null,    	    						
+    	    	    	workPackageFareFilter.waiverTotalLost.replace.check && workPackageFareFilter.waiverTotalLost.replace.value != null && workPackageFareFilter.waiverTotalLost.replace.value != '' ? 'waiverTotalLost' : null,    	    						
+    	    	    	workPackageFareFilter.waiverRemark.replace.check && workPackageFareFilter.waiverRemark.replace.value != null && workPackageFareFilter.waiverRemark.replace.value != '' ? 'waiverRemark' : null,    	    						
+     	    		
     	    		];
  	    			
  	    			for(var x=0;x<listField.length;x++){
@@ -5471,6 +5532,19 @@
 	    			  result.content[x].no = workPackageSheet.fares.length+1;
 	    			  
 	    			  result.content[x].status = "PENDING";	    			     			  
+	    			  result.content[x].id = null;
+	    			  result.content[x].travelStart = DateUtils.convertDateTimeFromServer(result.content[x].travelStart);
+	    			  result.content[x].travelEnd = DateUtils.convertDateTimeFromServer(result.content[x].travelEnd);
+	    			  result.content[x].saleStart = DateUtils.convertDateTimeFromServer(result.content[x].saleStart);
+	    			  result.content[x].saleEnd = DateUtils.convertDateTimeFromServer(result.content[x].saleEnd);
+	    			  result.content[x].travelComplete = DateUtils.convertDateTimeFromServer(result.content[x].travelComplete);
+	        		  workPackageSheet.fares.push(result.content[x]);    			  
+	    		  }
+			  }
+			  else if(result.page == 'workorder-waiver-fares'){
+	    		  for(var x=0;x<result.content.length;x++){
+	    			  result.content[x].no = workPackageSheet.fares.length+1;
+	    			  
 	    			  result.content[x].id = null;
 	    			  result.content[x].travelStart = DateUtils.convertDateTimeFromServer(result.content[x].travelStart);
 	    			  result.content[x].travelEnd = DateUtils.convertDateTimeFromServer(result.content[x].travelEnd);

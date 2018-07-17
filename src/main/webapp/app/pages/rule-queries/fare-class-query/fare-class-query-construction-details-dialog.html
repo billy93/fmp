@@ -3,14 +3,23 @@
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                 ng-click="vm.clear()">&times;</button>
-        <h4 class="modal-title" id="fareClassQueryConstructions">Fare Class Constructions Detail</h4>
+        <h4 class="modal-title" id="fareClassQueryConstructions">Constructions Details For Fare Class {{vm.fareClass.fareClass}} ({{vm.fareClass.owrtType}})</h4>
     </div>
     <div class="modal-body">
-        <jhi-alert-error></jhi-alert-error>
-		<span ng-repeat="text in vm.text track by $index">
-			{{text}}
-			</br>
-		</span>
+		<pre class="transparent">Carrier: {{vm.fareClass.cxr}}   Tariff: {{vm.fareClass.tarNo}}   Tariff Code: {{vm.fareClass.tarCd}}   Rule No: {{vm.fareClass.ruleNo}}</pre>
+		<label> 
+			<input type="checkbox" ng-model="vm.cdP02.nucFlag" ng-disabled="true"> Fare class subject to neutral unit of currency
+		</label>
+		</br>
+		<label> 
+			<input type="checkbox" ng-model="vm.cdP02.usAllFlag" ng-disabled="true"> Constructs with ****** Add-ons within [Area]
+		</label>
+		</br>
+		<label> 
+			<input type="checkbox" ng-model="vm.cdP02.nusAllFlag" ng-disabled="true"> Constructs with ****** Add-ons within [Area]
+		</label>
+		<pre class="transparent">Constructs with {{vm.cdP02.usGen}} ***** Add-ons with [Area]</pre>
+		<pre class="transparent">Constructs with {{vm.cdP02.nusGen}} ***** Add-ons with [Area]</pre>
     </div>
     <div class="modal-footer">
     	<button type="button" class="btn btn-back" data-dismiss="modal" ng-click="vm.clear()">
