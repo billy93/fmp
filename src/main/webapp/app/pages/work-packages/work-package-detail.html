@@ -3212,7 +3212,7 @@
 															    	<a ng-click="vm.fillDown(workPackageSheet)" ng-disabled="vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)" ng-class="{'poiv-none':vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}">Fill Down</a>
 															    </li>
 															    <li>
-														    		<a ng-click="vm.searchReplace(workPackageSheet)" ng-disabled="vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)" ng-class="{'poiv-none':vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}">Search/Replace</a>
+														    		<a ng-click="vm.searchReplace('fare-market-addon', 'fare-market-addon-table'+$index, workPackageSheet)" ng-disabled="vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)" ng-class="{'poiv-none':vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}">Search/Replace</a>
 														   		</li>
 														   		 <li>
 														    		<a ng-click="vm.copySelectedFares(workPackageSheet, 'workorder-addon-fares')" ng-disabled="vm.lockedOnly(vm.workPackage)" ng-class="{'poiv-none':vm.lockedOnly(vm.workPackage)}">Copy Selected Rows</a>
@@ -3265,7 +3265,7 @@
 											</div>
 										</div>
 										<div class="table-responsive">
-											<table class="table table-stripped table-bordered datatable" jq-slider>
+											<table id="fare-market-addon-table{{$index}}" class="table table-stripped table-bordered datatable">
 												<thead>
 													<tr role="row">
 														<th>No</th>
@@ -3555,7 +3555,7 @@
 																</span>
 															</span>
 								               			</td>
-								               			<td>
+								               			<td id="travelCompleteIndicator" ng-click="vm.tdClick(workPackageSheet, fare, 'travelCompleteIndicator', $event)" ng-class="{highlighted:fare.field['travelCompleteIndicator']}">
 								               				<select class="form-control" name="addonFareTravelIndicator{{$index}}" id="field_travelIndicator"
 								                				ng-disabled="!vm.isEditable('addonFareTravelIndicator') || vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')"
 								                				ng-required="vm.isRequired('addonFareTravelIndicator')"
