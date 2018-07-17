@@ -41,23 +41,33 @@
 
         function loadAll () {
             User.query({
+            	"username" : vm.loginName,
+            	"email" : vm.email,
+            	"firstName" : vm.firstName,
+            	"lastName" : vm.lastName,
+            	
                 page: pagingParams.page - 1,
                 size: vm.itemsPerPage,
                 sort: sort()
             }, onSuccess, onError);
-        }
-
-        function onSuccess(data, headers) {
-            vm.links = ParseLinks.parse(headers('link'));
-            vm.totalItems = headers('X-Total-Count');
-            vm.queryCount = vm.totalItems;
-            vm.page = pagingParams.page;
-            vm.users = data;
-        }
-
-        function onError(error) {
-            AlertService.error(error.data.message);
-        }
+            function sort () {
+                var result = [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc')];
+                if (vm.predicate !== 'id') {
+                    result.push('id');
+                }
+                return result;
+            }
+            function onSuccess(data, headers) {
+                vm.links = ParseLinks.parse(headers('link'));
+                vm.totalItems = headers('X-Total-Count');
+                vm.queryCount = vm.totalItems;
+                vm.page = pagingParams.page;
+                vm.users = data;
+            }
+            function onError(error) {
+                AlertService.error(error.data.message);
+            }
+        }       
 
         function clear () {
             vm.user = {
@@ -68,13 +78,7 @@
             };
         }
 
-        function sort () {
-            var result = [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc')];
-            if (vm.predicate !== 'id') {
-                result.push('id');
-            }
-            return result;
-        }
+        
 
         function loadPage (page) {
             vm.page = page;
@@ -87,6 +91,17 @@
                 sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
                 search: vm.currentSearch
             });
+        }
+        
+        vm.queryFilter= function(){
+        	loadAll();
+        }
+        
+        vm.resetFilter = function(){
+        	vm.loginName = null;
+        	vm.email = null;
+        	vm.firstName = null;
+        	vm.lastName = null;
         }
     }
 })();

@@ -19,8 +19,16 @@
 
         loadAll();
 
+        
+        
         function loadAll () {
             CityGroup.query({
+            	"code" : vm.cityGroupCode,
+            	"description" : vm.cityGroupDescription,
+            	"cities.cityCode" : vm.cityCode,
+            	"operator" : vm.operator,
+            	"cities.countryCode" : vm.countryCode,
+            	
                 page: pagingParams.page - 1,
                 size: vm.itemsPerPage,
                 sort: sort()
@@ -38,6 +46,9 @@
                 vm.queryCount = vm.totalItems;
                 vm.cityGroups = data;
                 vm.page = pagingParams.page;
+                if(vm.operator == null){
+                	vm.operator = "or";
+                }
             }
             function onError(error) {
                 AlertService.error(error.data.message);
@@ -55,6 +66,22 @@
                 sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
                 search: vm.currentSearch
             });
+        }
+        
+        vm.queryFilter = function (){
+        	loadAll();
+        }
+        
+        vm.clearFilter = function (){
+        	//TODO
+        }
+        
+        vm.resetFilter = function (){
+        	vm.cityGroupCode = null;
+        	vm.cityGroupDescription = null;
+        	vm.cityCode = null;
+        	vm.operator = null;
+        	vm.countryCode = null;
         }
     }
 })();

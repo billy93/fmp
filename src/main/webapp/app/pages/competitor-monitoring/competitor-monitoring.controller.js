@@ -18,7 +18,6 @@
 		vm.itemsPerPage = paginationConstants.itemsPerPage;
 		vm.queryParams = queryParams;
 		vm.loadAll = loadAll;
-		vm.splitOrigDest = splitOrigDest;
 		vm.generateGraph = generateGraph;
 		vm.graphDisabled = true;
 		vm.isDisabled = isDisabled;
@@ -28,8 +27,6 @@
 		vm.showCategoryDetail = showCategoryDetail;
 		vm.showLegend = showLegend;
 		vm.viewFullText = viewFullText;
-		
-		vm.getNextPage = getNextPage;
 
 		vm.reset = reset;
 		vm.page = 1;
@@ -43,9 +40,7 @@
 		
 		vm.checkValidParameters = checkValidParameters;
 		
-		vm.compMonitoring = null;
-		
-		vm.tempData = [];
+		vm.compMonitoring = [];
 
 		vm.sources = [
         	{key: "A", value: "A - ATPCO"},
@@ -80,6 +75,9 @@
 		}, ]
 
 		vm.dateOptions = [ {
+			key : "",
+			value : ""
+		},{
 			key : "A",
 			value : "Active In"
 		}, {
@@ -108,6 +106,7 @@
 		
 		function loadAll() {
 			
+			
 			vm.infoMessage = vm.checkValidParameters();
     		
     		if (vm.infoMessage != 'Valid') {
@@ -117,7 +116,7 @@
     		
 			vm.categoryRules = null;
 			vm.currentCompetitorMonitoring = null;
-			vm.tempData = [];
+			vm.compMonitoring = [];
 
 			vm.page = 1;
 			vm.queryParams.page = vm.page-1;
@@ -130,10 +129,30 @@
 				vm.links = ParseLinks.parse(headers('link'));
 				vm.totalItems = headers('X-Total-Count');
 				vm.queryCount = vm.totalItems;
-				vm.tempData = data;
-				vm.getNextPage();
+				vm.compMonitoring = data;
 				vm.graphEnabled = isDisabled();
 				
+				$(document).ready(function(){
+					var _parents = $('.table-afd').find('thead');
+	        		var _th = _parents.find('.th-fixed');
+	        		var _tr = _parents.siblings('tbody').find('tr:first-child');
+	        		var _td = _tr.find('td');
+	        		var _length = _th.length;
+	        		_th.last().css('border-right','none');
+	        		for(var i=0;i<_length;i++){
+	        			var _width = _th.eq(i).outerWidth();
+	        			var _width2 = _td.eq(i).outerWidth();
+	        			if(_width > _width2){
+	        				_td.eq(i).css('min-width', _width);
+	        				_td.eq(i).css('width', _width);
+	        			}
+	        			else{
+	        				_th.eq(i).css('min-width', _width2);
+	        				_th.eq(i).css('width', _width2);
+	        			}
+	        		}
+					
+				});
 			}
 
 			function onError(error) {
@@ -179,9 +198,10 @@
 		}
 
 		function reset() {
+			$('#containerTitle').hide();
 			$('#container').hide();
 			$('#chartOptions').hide();
-			vm.compMonitoring = null;
+			$('#containerLegend').hide();
 			vm.queryParams = {
 	        		carrier: null,
 	        		source: vm.sources[0].key,
@@ -196,6 +216,7 @@
 	        		owrt: null,
 	        		footnote: null,
 	        		ruleNo: null,
+	        		ocRuleNo: null,
 	        		routingNo: null,
 	        		woId: null,
 	        		effectiveDateFrom: null,
@@ -224,7 +245,7 @@
 	        		calculateTfc: false
 	        	}
 
-			vm.tempData = [];
+			vm.compMonitoring = [];
 			vm.barThickness = 8;
 			vm.barOpacity = 1;
 //			vm.loadAll();
@@ -287,19 +308,6 @@
 				$state.go('afd-query');
 			});
 		}
-
-		function splitOrigDest(origDest) {
-			if(origDest != null && origDest.trim() != '') {
-				origDest = origDest+""; //converting to string, otherwise got an error here...
-				var chr = origDest.indexOf("-");
-				var orig = origDest.substring(0, chr);
-				var dest = origDest.substring(chr + 1, origDest.length);
-
-				vm.queryParams.origin = orig;
-				vm.queryParams.destination = dest;
-			}
-			
-		}
 		
 		function isDisabled() {
 			if(vm.compMonitoring.length > 0) {
@@ -311,137 +319,147 @@
 
 		function generateGraph(data) {
 
-				$('#container').show();
-				$('#chartOptions').show();
-				var fares = data;
-			  
-			      var barThickness = vm.barThickness/100;
-			      var barOpacity = vm.barOpacity/10;
-			      
-			      var totalData = fares.length;
-			      var items = [];
-			      var dataGroup = [];
-			      var dataGraph = [];
-			    
-						for(var i=0;i<fares.length;i++) {
-							items.push(fares[i].carrierCode);
-						}
-			    
-						var categories = Array.from(new Set(items));
-			    
-			      var catLogo = [];
-			      var catWidth = $('#container').width/categories.length;
-			      var cabColor = '';
-			      var min = 0;
-	        	  var minTemp = 0;
-			    
-			      
-			    for(var j=0;j<categories.length;j++) {
-			      for(var k=0;k<fares.length;k++) {
-			    	  
-			        if(fares[k].carrierCode==categories[j]) {
-			          var amt = String(fares[k].baseAmount);
-			          
-			          if(fares[k].cabin == 'Y') {
-			        	  cabColor = 'rgba(255,0,0,'+barOpacity+')';
-			          } else if(fares[k].cabin == 'W') {
-			        	  cabColor = 'rgba(0,255,0,'+barOpacity+')';
-			          } else if(fares[k].cabin == 'F') {
-			        	  cabColor = 'rgba(0,0,255,'+barOpacity+')';
+
+			$('#containerTitle').show();
+			$('#container').show();
+			$('#containerLegend').show();
+			$('#chartOptions').show();
+			
+			 var fares = data;
+		  
+		      var barThickness = vm.barThickness/100;
+		      var barOpacity = vm.barOpacity/10;
+		      
+		      var totalData = fares.length;
+		      var items = [];
+		      var dataGroup = [];
+		      var xGroup = [];
+		      var dataGraph = [];
+		      var cabins = [];
+		      var low = [];
+		      
+			  for(var i=0;i<fares.length;i++) {
+				  items.push(fares[i].carrierCode);
+				  cabins.push(fares[i].cabin);
+			  }
+		      
+			  var categories = Array.from(new Set(items));
+			  var groupedCabin = Array.from(new Set(cabins));
+		    
+		      var catLogo = [];
+		      var catWidth = $('#container').width/categories.length;
+		      var cabColor = '';
+		      var min = 0;
+        	  var minTemp = 0;
+		    
+		      
+		    for(var j=0;j<categories.length;j++) {
+		      for(var k=0;k<fares.length;k++) {
+		    	  
+		        if(fares[k].carrierCode==categories[j]) {
+		          var amt = String(fares[k].baseAmount);
+		          
+		          if(fares[k].cabin != undefined || fares[k].cabin != null) {
+		        	  
+		        	var red = 'rgba(255,0,0,'+barOpacity+')';
+		        	var green = 'rgba(0,255,0,'+barOpacity+')';
+		        	var blue = 'rgba(0,0,255,'+barOpacity+')';
+		        	var yellow = 'rgba(255,255,0,'+barOpacity+')';
+		        	  
+		        	  if(fares[k].cabin == 'F') {
+			        	  cabColor = blue;
 			          } else if(fares[k].cabin == 'J') {
-			        	  cabColor = 'rgba(255,255,0,'+barOpacity+')';
+			        	  cabColor = yellow;
+			          } else if(fares[k].cabin == 'W') {
+			        	  cabColor = green;
+			          } else if(fares[k].cabin == 'Y') {
+			        	  cabColor = red;
 			          }
-			          
-			          if(fares[k].cabin != undefined || fares[k].cabin != null) {
-			        	
-			        	  var lowVal = parseFloat(String(amt))-(parseFloat(String(amt))*parseFloat(String(barThickness)));
-				           dataGraph.push({'x':j,'name':fares[k].cabin,'bookingClass':fares[k].bookingClass,'color':cabColor,'high':amt,'low':lowVal});
-			          }
-			        }
-			    }
-			      
-			      var objCat = {'name':categories[j], 'data':dataGraph};
-			      dataGroup.push(objCat);
-			      
-			    }
-			    
-						  
-			  
-			  var chartOptions = {
-			          chart : {
-			            renderTo : 'container',
-			            type : 'columnrange',
-			            zoomType : 'xy',
-			            inverted : false,
-			          },
-			          credits : {
-			            enabled : false
-			          },
-			          title : {
-			            text : ''
-			          },
-			          xAxis :
-			            [{
-			               type : 'category',
-			               categories : categories,
-			               gridLineWidth : 2,
-			            },{
-			              linkedTo: 0,
-			              type : 'category',
-			              categories : categories,
-			              opposite:true,
-			              labels: {
-			              useHTML: true,
-			              formatter: function() {
-//			              if(this.value == "GA")
-//			                  return '<img src="http://3.bp.blogspot.com/_UZImdYAiry8/SV9oVvC_WqI/AAAAAAAAOZI/vWKb9Pjuhl4/s400/Logo_garuda_indonesia.png" style="width:'+catWidth+'px; vertical-align: middle; height:50px;" />';
-//			              else
-//			                  return this.value;
-			          }
-			      }
-			            }],
-			
-			
-			          yAxis : {
-			            type : 'logarithmic',
-			            minorTickInterval: 0.1,
-			            tickmarkPlacement : 'on',
-			            title : {
-			              text : 'Price'
-			            }
-			          },
-			          tooltip : {
-			            enabled : true,
-			            useHTML: true,
-			            formatter: function() {
-			              return '<span>price : '+this.point.high+'</span> <br/> <span>cabin : '+this.point.name+'</span> </br> <span>RBD : '+this.point.bookingClass+'</span>';
-			
-			          }
-			          },
-			          plotOptions : {
-			            columnrange : {
-			              stickyTracking : false,
-			              grouping : false
-			            }
-			          },
-			          legend : {
-			            enabled : false
-			          },
-			          scrollbar : {
-			            enabled : true
-			          },
-			          series : dataGroup
-			        };
-			  
-	              var chart1 = new Highcharts.Chart(chartOptions);
-	              chart1.redraw();
-      
-		}
+		        	
+		        	  var lowVal = parseFloat(String(amt))-(parseFloat(String(amt))*parseFloat(String(barThickness)));
+		        	  dataGraph.push({'x':j,'name':fares[k].cabin,'bookingClass':fares[k].bookingClass,'color':cabColor,'high':amt,'low':lowVal});
+		        	  
+		          }
+		        }
+		      }
+		    }
+		  dataGroup.push({'name':categories[j], 'data':dataGraph});
+		    
+		  console.log(dataGraph);
+		  
+		  var chartOptions = {
+		          chart : {
+		            renderTo : 'container',
+		            type : 'columnrange',
+		            zoomType : 'xy',
+		            inverted : false,
+		          },
+		          credits : {
+		            enabled : false
+		          },
+		          title : {
+		            text : ''
+		          },
+		          xAxis :
+		            [{
+		               type : 'category',
+		               categories : categories,
+		               gridLineWidth : 2,
+		            },{
+		              linkedTo: 0,
+		              type : 'category',
+		              categories : categories,
+		              opposite:true,
+		              labels: {
+		              useHTML: true,
+		              formatter: function() {
+//		              if(this.value == "GA")
+//		                  return '<img src="http://3.bp.blogspot.com/_UZImdYAiry8/SV9oVvC_WqI/AAAAAAAAOZI/vWKb9Pjuhl4/s400/Logo_garuda_indonesia.png" style="width:'+catWidth+'px; vertical-align: middle; height:50px;" />';
+//		              else
+//		                  return this.value;
+		          }
+		      }
+		            }],
 		
-		function getNextPage() {
-			
-			vm.compMonitoring = vm.tempData.slice((vm.page-1)*vm.itemsPerPage, (vm.page)*vm.itemsPerPage);
-			
+		
+		          yAxis : {
+		            type : 'logarithmic',
+		            minorTickInterval: 0.1,
+		            tickmarkPlacement : 'on',
+		            title : {
+		              text : 'Price'
+		            }
+		          },
+		          tooltip : {
+		            enabled : true,
+		            useHTML: true,
+		            formatter: function() {
+		              return '<span>price : '+this.point.high+'</span> <br/> <span>cabin : '+this.point.name+'</span> </br> <span>RBD : '+this.point.bookingClass+'</span>';
+		
+		          }
+		          },
+		          plotOptions : {
+		            columnrange : {
+		              stickyTracking : false,
+		              grouping : false
+		            },
+		            series:{
+		                turboThreshold:2000
+		            }
+		          },
+		          legend : {
+		            enabled : false
+		          },
+		          scrollbar : {
+		            enabled : true
+		          },
+		          series : dataGroup
+		        };
+		  
+              var chart1 = new Highcharts.Chart(chartOptions);
+              chart1.redraw();
+  
+	
 		}
 		
 		function checkValidParameters() {

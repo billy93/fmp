@@ -25,11 +25,11 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat27;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat35;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat35Ticketing;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat50;
-import com.atibusinessgroup.fmp.domain.dto.SpecifiedConstructed;
 import com.atibusinessgroup.fmp.domain.dto.AfdQueryAddOns;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoDateWrapper;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord1FareClassInformation;
 import com.atibusinessgroup.fmp.domain.dto.CategoryObject;
+import com.atibusinessgroup.fmp.domain.dto.SpecifiedConstructed;
 import com.atibusinessgroup.fmp.domain.dto.TextTable;
 import com.atibusinessgroup.fmp.repository.AtpcoMasterTariffRepository;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoRecord3CategoryCustomRepository;
@@ -123,6 +123,9 @@ public class AfdQueryMapper {
 				AtpcoRecord3Cat03 cat03 = (AtpcoRecord3Cat03) cat03o.getCategory();
 				String first = DateUtil.convertSeasonDayMonthYearFormat(cat03.getDate_start_dd(), cat03.getDate_start_mm(), cat03.getDate_start_yy());
 				try {
+					if (first.contains("XXXX")) {
+						first = first.replace("XXXX", new SimpleDateFormat("yyyyMMMdd").format(new Date()).substring(0, 4));
+					}
 					Date dfirst = new SimpleDateFormat("ddMMMyyyy").parse(first);
 					firsts.add(dfirst);
 					range.setStartDate(dfirst);
@@ -131,6 +134,9 @@ public class AfdQueryMapper {
 				
 				String last = DateUtil.convertSeasonDayMonthYearFormat(cat03.getDate_stop_dd(), cat03.getDate_stop_mm(), cat03.getDate_stop_yy());
 				try {
+					if (last.contains("XXXX")) {
+						last.replace("XXXX", new SimpleDateFormat("yyyyMMMdd").format(new Date()).substring(0, 4));
+					}
 					Date dlast = new SimpleDateFormat("ddMMMyyyy").parse(last);
 					lasts.add(dlast);
 					range.setEndDate(dlast);
@@ -335,7 +341,6 @@ public class AfdQueryMapper {
 			List<Date> reslasts = new ArrayList<>();
 			for (CategoryObject footnote15:footnote15s) {
 				AtpcoDateWrapper range = new AtpcoDateWrapper();
-				
 				AtpcoRecord3Cat15 cat15 = (AtpcoRecord3Cat15) footnote15.getCategory();
 				Date s = DateUtil.convertObjectToDate(cat15.getSales_dates_earliest_tktg());
 				if (s != null) {
@@ -442,7 +447,7 @@ public class AfdQueryMapper {
 		return result;
 	}
 
-	public AfdQueryAddOns convertAtpcoAddOn(AtpcoAddOn addOn) {
+	public AfdQueryAddOns convertAtpcoAddOn(AtpcoAddOn addOn, String footnote1, String footnote2, Date focusDate, Date travelStart, Date travelEnd, Date travelComplete, Date saleStart, Date saleEnd) {
 		AfdQueryAddOns result = new AfdQueryAddOns();
 		
 		result.setId(addOn.get_id());
@@ -464,7 +469,8 @@ public class AfdQueryMapper {
 		result.setDestinationCountry(addOn.getCountry_code_destination());
 		result.setFareClassCode(addOn.getFare_class_cd());
 		result.setOwrt(addOn.getOw_rt());
-		result.setFootnote1(addOn.getFtnt());
+		result.setFootnote1(footnote1);
+		result.setFootnote2(footnote2);
 		result.setRoutingNo(addOn.getRtg_no());
 		
 		if (addOn.getAdd_on() != null) {
@@ -476,6 +482,11 @@ public class AfdQueryMapper {
 		result.setDiscontinueDate(addOn.getDates_disc());
 		result.setGfsDate(addOn.getGfs_date());
 		result.setGfsReference(addOn.getGfs_number());
+		result.setFocusDate(focusDate);
+		result.setFirstTravelDate(travelStart);
+		result.setLastTravelDate(travelEnd);
+		result.setFirstSaleDate(saleStart);
+		result.setLastSaleDate(saleEnd);
 		
 		return result;
 	}

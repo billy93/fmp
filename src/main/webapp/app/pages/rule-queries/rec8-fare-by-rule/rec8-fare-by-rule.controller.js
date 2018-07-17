@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('Rec8FareByRuleController', Rec8FareByRuleController);
 
-    Rec8FareByRuleController.$inject = ['$state', '$stateParams', 'Rec8FareByRule', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', '$uibModal'];
+    Rec8FareByRuleController.$inject = ['$state', '$stateParams', 'Timezone', 'Rec8FareByRule', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', '$uibModal'];
 
-    function Rec8FareByRuleController($state, $stateParams, Rec8FareByRule, ParseLinks, AlertService, paginationConstants, pagingParams, $uibModal) {
+    function Rec8FareByRuleController($state, $stateParams, Timezone, Rec8FareByRule, ParseLinks, AlertService, paginationConstants, pagingParams, $uibModal) {
 
         var vm = this;
         vm.itemsPerPage = paginationConstants.itemsPerPage;
@@ -17,6 +17,8 @@
         vm.page = 1;
         vm.showCarrierModal = showCarrierModal;
         vm.showTariffModal = showTariffModal;
+        vm.dateFormat = "yyyy-MM-dd";
+        vm.timezone = Timezone.GMT7;
         
         if($stateParams.rec8FareByRuleFilter != null){
         	vm.queryParams = $stateParams.rec8FareByRuleFilter;
@@ -41,6 +43,7 @@
 	                vm.totalItems = headers('X-Total-Count');
 	                vm.queryCount = vm.totalItems;
 	                vm.record8 = data;
+	                console.log(data);
 	            }
 	            
 	            function onError(error) {

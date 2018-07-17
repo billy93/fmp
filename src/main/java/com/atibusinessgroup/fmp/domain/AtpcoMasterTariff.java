@@ -23,7 +23,7 @@ public class AtpcoMasterTariff implements Serializable {
     @Field("tar_cd")
     private String tarCd;
 
-    @Field("global")
+    @Field("gfs_global_area")
     private String global;
 
     @Field("description")
@@ -31,6 +31,9 @@ public class AtpcoMasterTariff implements Serializable {
     
     @Field("type")
     private String type;
+    
+    @Field("pp")
+    private String pp;
 
 	public String getId() {
 		return id;
@@ -80,8 +83,12 @@ public class AtpcoMasterTariff implements Serializable {
 		this.type = type;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public String getPp() {
+		return pp;
+	}
+
+	public void setPp(String pp) {
+		this.pp = pp;
 	}
 
 	@Override
@@ -91,6 +98,7 @@ public class AtpcoMasterTariff implements Serializable {
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((global == null) ? 0 : global.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((pp == null) ? 0 : pp.hashCode());
 		result = prime * result + ((tarCd == null) ? 0 : tarCd.hashCode());
 		result = prime * result + ((tarNo == null) ? 0 : tarNo.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
@@ -121,6 +129,11 @@ public class AtpcoMasterTariff implements Serializable {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
+		if (pp == null) {
+			if (other.pp != null)
+				return false;
+		} else if (!pp.equals(other.pp))
+			return false;
 		if (tarCd == null) {
 			if (other.tarCd != null)
 				return false;
@@ -141,9 +154,10 @@ public class AtpcoMasterTariff implements Serializable {
 
 	@Override
 	public String toString() {
-		return "TariffNumber [id=" + id + ", tarNo=" + tarNo + ", tarCd=" + tarCd + ", global=" + global
-				+ ", description=" + description + ", type=" + type + "]";
+		return "AtpcoMasterTariff [id=" + id + ", tarNo=" + tarNo + ", tarCd=" + tarCd + ", global=" + global
+				+ ", description=" + description + ", type=" + type + ", pp=" + pp + "]";
 	}
 
+    
     
 }

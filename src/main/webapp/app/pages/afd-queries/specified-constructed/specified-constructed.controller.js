@@ -5,53 +5,53 @@
         .module('fmpApp')
         .controller('SpecifiedConstructedController', SpecifiedConstructedController);
 
-    SpecifiedConstructedController.$inject = ['$state', 'SpecifiedConstructed', 'ParseLinks', 'AlertService', 'paginationConstants', 'TariffNumber', 'City', '$uibModal', 'Clipboard', 'Timezone', 'AtpcoMasterFareType', 'Passenger', 'DateUtils', 'FareType'];
+    SpecifiedConstructedController.$inject = ['$state', 'SpecifiedConstructed', 'ParseLinks', 'AlertService', 'paginationConstants', 'TariffNumber', 'City', 'CityGroup', '$uibModal', 'Clipboard', 'Timezone', 'AtpcoMasterFareType', 'Passenger', 'DateUtils', 'FareType'];
 
-    function SpecifiedConstructedController($state, SpecifiedConstructed, ParseLinks, AlertService, paginationConstants, TariffNumber, City, $uibModal, Clipboard, Timezone, AtpcoMasterFareType, Passenger, DateUtils, FareType) {
+    function SpecifiedConstructedController($state, SpecifiedConstructed, ParseLinks, AlertService, paginationConstants, TariffNumber, City, CityGroup, $uibModal, Clipboard, Timezone, AtpcoMasterFareType, Passenger, DateUtils, FareType) {
 
     	var vm = this;
     	 
     	vm.queryParams = {
-        		carrier: null,
-        		source: null,
-        		publicPrivate: null,
-        		tariff: null,
-        		globalIndicator: null,
-        		gaFareType: null,
-        		fareType: null,
-        		fareBasis: null,
-        		origin: null,
-        		destination: null,
-        		owrt: null,
-        		footnote: null,
-        		ruleNo: null,
-        		routingNo: null,
-        		woId: null,
-        		effectiveDateFrom: null,
-        		effectiveDateTo: null,
-        		effectiveDateOption: null,
-        		saleDateFrom: null,
-        		saleDateTo: null,
-        		saleDateOption: null,
-        		travelDateFrom: null,
-        		travelDateTo: null,
-        		travelDateOption: null,
-        		seasonDateFrom: null,
-        		seasonDateTo: null,
-        		seasonDateOption: null,
-        		amountRange: null,
-        		tourCode: null,
-        		paxType: null,
-        		cabin: null,
-        		bookingClass: null,
-        		advancePurchase: null,
-        		minStay: null,
-        		maxStay: null,
-        		includeConstructed: false,
-        		appendResults: false,
-        		biDirectional: false,
-        		calculateTfc: false
-        	};
+    		carrier: null,
+    		source: null,
+    		publicPrivate: null,
+    		tariff: null,
+    		globalIndicator: null,
+    		gaFareType: null,
+    		fareType: null,
+    		fareBasis: null,
+    		origin: null,
+    		destination: null,
+    		owrt: null,
+    		footnote: null,
+    		ruleNo: null,
+    		routingNo: null,
+    		woId: null,
+    		effectiveDateFrom: null,
+    		effectiveDateTo: null,
+    		effectiveDateOption: null,
+    		saleDateFrom: null,
+    		saleDateTo: null,
+    		saleDateOption: null,
+    		travelDateFrom: null,
+    		travelDateTo: null,
+    		travelDateOption: null,
+    		seasonDateFrom: null,
+    		seasonDateTo: null,
+    		seasonDateOption: null,
+    		amountRange: null,
+    		tourCode: null,
+    		paxType: null,
+    		cabin: null,
+    		bookingClass: null,
+    		advancePurchase: null,
+    		minStay: null,
+    		maxStay: null,
+    		includeConstructed: false,
+    		appendResults: false,
+    		biDirectional: false,
+    		calculateTfc: false
+    	};
     	
         vm.loadPage = loadPage;
         vm.itemsPerPage = paginationConstants.itemsPerPage;
@@ -67,7 +67,8 @@
         vm.selectAll = selectAll;
         vm.showLegend = showLegend;
         vm.viewFullText = viewFullText;
-        vm.showErrorModal = showErrorModal;
+        vm.showInfoModal = showInfoModal;
+        vm.selectCity = selectCity;
         vm.selectedRows = [];
         vm.selectedFares = [];
         vm.timezone = Timezone.GMT7;
@@ -79,14 +80,15 @@
         vm.disableInfiniteScroll = true;
         
         vm.datePickerOpenStatus = {};
-        vm.dateFormat = "dd-MM-yyyy";
+        vm.dateFormat = "dd/MM/yyyy";
         vm.openCalendar = openCalendar;
         
-        vm.tariffs = TariffNumber.getAll().$promise;
-        vm.fareTypes = AtpcoMasterFareType.getAll().$promise;
-        vm.globalIndicators = TariffNumber.getAllGlobal().$promise;
-        vm.paxTypes = Passenger.getAll().$promise;
-        vm.cities = City.getAll().$promise;
+        vm.tariffs = TariffNumber.getAll();
+        console.log(vm.tariffs);
+        vm.fareTypes = AtpcoMasterFareType.getAll();
+        vm.globalIndicators = TariffNumber.getAllGlobal();
+        vm.paxTypes = Passenger.getAll();
+        vm.cities = City.getAll();
         
         vm.sources = [
         	{key: "A", value: "A - ATPCO"},
@@ -120,7 +122,7 @@
         	{key: "Y", value: "Economy"}
         ];
        
-        vm.gaFareTypes = FareType.getAll().$promise;
+        vm.gaFareTypes = FareType.getAll();
         
         function query() {
         	vm.afdQueries = [];
@@ -135,7 +137,7 @@
         		vm.infoMessage = vm.checkValidParameters();
         		
         		if (vm.infoMessage != 'Valid') {
-            		vm.showErrorModal(vm.infoMessage);
+            		vm.showInfoModal(vm.infoMessage);
             		return;
             	}
         		
@@ -443,7 +445,7 @@
             });
         }
         
-        function showErrorModal(message) {
+        function showInfoModal(message) {
         	$uibModal.open({
                 templateUrl: 'app/pages/modals/info-modal.html',
                 controller: 'InfoModalController',
@@ -456,6 +458,26 @@
                     }	
                 }
             }).result.then(function() {
+                $state.go('afd-query', {}, { reload: false });
+            }, function() {
+                $state.go('afd-query');
+            });
+        }
+        
+        function selectCity(model) {
+        	$uibModal.open({
+                templateUrl: 'app/pages/modals/select-city-modal.html',
+                controller: 'SelectCityModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'md',
+            }).result.then(function(value) {
+            	if (model == 'Origin') {
+            		vm.queryParams.origin = value;
+            	} else if (model == 'Destination') {
+            		vm.queryParams.destination = value;
+            	}
+            	
                 $state.go('afd-query', {}, { reload: false });
             }, function() {
                 $state.go('afd-query');

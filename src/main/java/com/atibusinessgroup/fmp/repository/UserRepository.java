@@ -15,7 +15,7 @@ import com.atibusinessgroup.fmp.domain.User;
  * Spring Data MongoDB repository for the User entity.
  */
 @Repository
-public interface UserRepository extends MongoRepository<User, String> {
+public interface UserRepository extends MongoRepository<User, String>, UserRepositoryCustomAnyName {
 
     Optional<User> findOneByActivationKey(String activationKey);
     

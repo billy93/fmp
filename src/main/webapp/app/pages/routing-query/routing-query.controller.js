@@ -5,23 +5,23 @@
         .module('fmpApp')
         .controller('RoutingqueryController', RoutingqueryController);
 
-    RoutingqueryController.$inject = ['$state', '$stateParams', 'Routingquery', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams'];
+    RoutingqueryController.$inject = ['$state', '$stateParams', 'Routingquery', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', '$uibModal'];
 
-    function RoutingqueryController($state, $stateParams, Routingquery, ParseLinks, AlertService, paginationConstants, pagingParams) {
+    function RoutingqueryController($state, $stateParams, Routingquery, ParseLinks, AlertService, paginationConstants, pagingParams, $uibModal) {
 
         var vm = this;
-        
+        vm.itemsPerPage = paginationConstants.itemsPerPage;
         vm.loadAll = loadAll;
-        vm.loadPage = loadPage;
+        vm.changeItemsPerPage = changeItemsPerPage;
         vm.clearFilter = clearFilter;
         vm.resetFilter = resetFilter;
-        vm.predicate = pagingParams.predicate;
-        vm.reverse = pagingParams.ascending;
-        vm.transition = transition;
-        vm.itemsPerPage = paginationConstants.itemsPerPage;
+        vm.page = 1;
         vm.getDetails = getDetails;
         vm.getFullDetails = getFullDetails;
-        vm.changeItemsPerPage = changeItemsPerPage;
+        vm.showTariffModal = showTariffModal;
+        vm.showCarrierModal = showCarrierModal;
+        vm.showRoutingDetailModal = showRoutingDetailModal;
+        vm.isLoading = false;
         
         vm.datePickerOpenStatus = {};
         vm.dateFormat = "yyyy-MM-dd";
@@ -34,52 +34,29 @@
         	vm.clearFilter();
         	vm.itemsPerPage = "10";
         }
-        
-        vm.loadAll(false);
 
-        function loadAll(isQueryClick) {
-        	vm.queryParams.page = pagingParams.page - 1;
+        function loadAll() {
+        	vm.isLoading = true;
+        	vm.queryParams.page = vm.page - 1;
 			vm.queryParams.size = vm.itemsPerPage;
-			vm.queryParams.sort = sort();
+			
+			vm.queryParams.tarNo = vm.paramTarNo;
+			vm.queryParams.carrier = vm.paramCarrier;
 			
             Routingquery.query(vm.queryParams, onSuccess, onError);
             
-            function sort() {
-                var result = [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc')];
-                if (vm.predicate !== 'id') {
-                    result.push('id');
-                }
-                return result;
-            }
             function onSuccess(data, headers) {
-                vm.links = ParseLinks.parse(headers('link'));
+            	vm.links = ParseLinks.parse(headers('link'));
                 vm.totalItems = headers('X-Total-Count');
                 vm.queryCount = vm.totalItems;
                 vm.routingqueries = data;
-                vm.page = pagingParams.page;
+                vm.isLoading = false;
             }
+            
             function onError(error) {
                 AlertService.error(error.data.message);
+                vm.isLoading = false;
             }
-        	
-        	if(isQueryClick) {
-        		vm.page = 1;
-        		vm.transition();
-        	}
-        }
-
-        function loadPage(page) {
-            vm.page = page;
-            vm.transition();
-        }
-
-        function transition() {
-            $state.transitionTo($state.$current, {
-                page: vm.page,
-                sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
-                search: vm.currentSearch,
-                routingQueryFilter : vm.queryParams
-            });
         }
         
         function openCalendar (e, date) {
@@ -101,19 +78,22 @@
         			effectiveDateFrom: null,
         			effectiveDateTo: null,
         			showRoutesMaps: false
-        	}
+        	};
+        	vm.paramTarNo = null;
         }
         
         function resetFilter() {
         	vm.clearFilter();
-        	vm.loadAll(false);
+        	vm.routingqueries = null;
+        	vm.routingDetails = null;
+        	vm.routingFullDetails = null;
         }
         
         function getDetails(routingQuery) {
         	Routingquery.getDetails(routingQuery, function(data) {
         		vm.routingDetails = data;
         	}, function(error) {
-        		console.log(error);
+        		AlertService.error(error.data.message);
         	});
         }
         
@@ -121,12 +101,66 @@
         	Routingquery.getFullDetails(routingQuery, function(data) {
         		vm.routingFullDetails = data;
         	}, function(error) {
-        		console.log(error);
+        		AlertService.error(error.data.message);
         	});
         }
         
         function changeItemsPerPage() {
-        	vm.loadAll(false);
+        	vm.loadAll();
+        }
+        
+        function showTariffModal() {
+        	$uibModal.open({
+                templateUrl: 'app/pages/modals/tariff-modal.html',
+                controller: 'MasterTariffModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full',
+                resolve: {
+                	entity: vm
+                }
+            }).result.then(function() {
+                $state.go('routingquery', {}, { reload: false });
+            }, function() {
+                $state.go('routingquery');
+            });
+        }
+        
+        function showCarrierModal() {
+        	$uibModal.open({
+                templateUrl: 'app/pages/modals/carrier-modal.html',
+                controller: 'MasterCarrierModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full',
+                resolve: {
+                	entity: vm
+                }
+            }).result.then(function() {
+                $state.go('routingquery', {}, { reload: false });
+            }, function() {
+                $state.go('routingquery');
+            });
+        }
+        
+        function showRoutingDetailModal(routingQuery) {
+        	$uibModal.open({
+        		templateUrl: 'app/pages/routing-query/routing-query-detail.html',
+                controller: 'RoutingqueryDetailController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full',
+                resolve: {
+                	entity: Routingquery.get({id : routingQuery.id}).$promise
+                }
+            }).result.then(function() {
+                $state.go('routingquery', {}, { reload: false });
+            }, function() {
+                $state.go('routingquery');
+            });
         }
     }
 })();

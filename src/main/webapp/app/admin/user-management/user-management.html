@@ -5,6 +5,55 @@
 	</div>
 	<div class="panel">
 		<div class="panel-body">
+		<!-- filter -->
+					<div class="filter-hero">
+						<div class="filter-label semibold show">Hide Filter</div>
+						<div class="filter-area">
+							<div class="clearfix">
+								<div class="pull-left w50 ph5px">
+									<div class="form-group">
+										<div class="custom-label semibold">Login Name :</div>
+										<input type="text" class="form-control" ng-model="vm.loginName"  />
+										<div class="custom-label semibold">Email :</div>
+										<input type="text" class="form-control" ng-model="vm.email"  />
+									</div>
+								</div>
+								<div class="pull-left w50 ph5px">
+									<div class="pull-left w50 ph5px">
+										<div class="form-group">
+											<div class="clearfix">
+												<div class="custom-label semibold">First Name :</div>
+												<input type="text" class="form-control" ng-model="vm.firstName"  />
+												<div class="custom-label semibold">Last Name :</div>
+												<input type="text" class="form-control" ng-model="vm.lastName"  />
+											</div>
+										</div>
+									</div>
+									<div class="pull-left w50 ph5px">
+										<div class="form-group">
+											<div class="clearfix">
+												<button class="btn btn-default" ng-click = "vm.queryFilter()">
+								                    <span >
+								                        Query
+								                    </span>
+								                </button>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="clearfix">
+												<button class="btn btn-default" ng-click = "vm.resetFilter()">
+								                    <span >
+								                        Reset
+								                    </span>
+								                </button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+			<!-- end of filter -->
 			<div class="container-fluid">
 		        <div class="row">
 		            <div class="col-md-12 no-pad text-right">
@@ -48,13 +97,27 @@
 	                                </div>
 	                            </div>
 	                        </td>
-	                        <td style="white-space: normal; min-width: 240px">
+	                        <!-- <td style="white-space: normal; min-width: 240px">
 	                            <div class="agent-list-wrapper">
 	                                <div class="agent-list" ng-repeat="businessArea in user.businessAreas">
 	                                    <span>{{businessArea}}</span>
 	                                </div>
 	                            </div>
-	                        </td>
+	                        </td> -->
+	                        <td>
+		                    	<div>
+			                    	<table class="sub-table">
+			                    		<thead>
+			                    			<tr><th colspan="2"><center>List</center></th></tr>
+			                    		</thead>
+			                    		<tbody>
+			                    			<tr ng-repeat="businessArea in user.businessAreas track by $index">
+			                    				<td>{{businessArea}}</td>
+			                    			</tr>
+			                    		</tbody>
+			                    	</table>
+		                    	</div>
+		                    </td>
 	                        <td>
 			                    <button class="btn btn-danger btn-xs" ng-click="vm.setActive(user, true)" ng-show="!user.activated"
 			                           >Deactivated</button>

@@ -45,7 +45,8 @@
         vm.loadAll = loadAll;
         vm.query = query;
         vm.checkValidParameters = checkValidParameters;
-        vm.showErrorModal = showErrorModal;
+        vm.showInfoModal = showInfoModal;
+        vm.selectCity = selectCity;
         
         vm.addOns = [];
         vm.reset = reset;
@@ -53,14 +54,12 @@
         vm.disableInfiniteScroll = true;
         
         vm.datePickerOpenStatus = {};
-        vm.dateFormat = "dd-MM-yyyy";
+        vm.dateFormat = "dd/MM/yyyy";
         vm.openCalendar = openCalendar;
         
         vm.sources = [
         	{key: "A", value: "A - ATPCO"},
-        	{key: "M", value: "M - Market"},
-        	{key: "W", value: "W - Web"},
-        	{key: "C", value: "C - Competitor Private"}
+        	{key: "M", value: "M - Market"}
         ]
         
         vm.publicPrivate = [
@@ -94,7 +93,7 @@
         		vm.infoMessage = vm.checkValidParameters();
         		
         		if (vm.infoMessage != 'Valid') {
-            		vm.showErrorModal(vm.infoMessage);
+            		vm.showInfoModal(vm.infoMessage);
             		return;
             	}
         		
@@ -231,7 +230,7 @@
         	vm.travelDateTo = null;
         }
         
-        function showErrorModal(message) {
+        function showInfoModal(message) {
         	$uibModal.open({
                 templateUrl: 'app/pages/modals/info-modal.html',
                 controller: 'InfoModalController',
@@ -244,6 +243,26 @@
                     }	
                 }
             }).result.then(function() {
+                $state.go('afd-query', {}, { reload: false });
+            }, function() {
+                $state.go('afd-query');
+            });
+        }
+        
+        function selectCity(model) {
+        	$uibModal.open({
+                templateUrl: 'app/pages/modals/select-city-modal.html',
+                controller: 'SelectCityModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'md',
+            }).result.then(function(value) {
+            	if (model == 'Origin') {
+            		vm.queryParams.origin = value;
+            	} else if (model == 'Destination') {
+            		vm.queryParams.destination = value;
+            	}
+            	
                 $state.go('afd-query', {}, { reload: false });
             }, function() {
                 $state.go('afd-query');

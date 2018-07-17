@@ -38,11 +38,21 @@
 							<div class="pull-left col-md-6 no-lpad">
 								<div class="form-group">
 									<div class="custom-label semibold">Origin</div>
-									<input type="text" class="form-control" name="origin" id="origin" ng-model="vm.queryParams.origin" uppercase/>
+									<span class="input-group">
+										<input type="text" class="form-control" name="origin" id="origin" ng-model="vm.queryParams.origin" uppercase/>
+										<span class="input-group-addon" ng-click="$event.stopPropagation(); vm.selectCity('Origin')">
+											<i class="fa fa-folder"></i>
+										</span>
+									</span>
 								</div>
 								<div class="form-group">
 									<div class="custom-label semibold">Destination</div>
-									<input type="text" class="form-control" name="destination" id="destination" ng-model="vm.queryParams.destination" uppercase/>
+									<span class="input-group">
+										<input type="text" class="form-control" name="destination" id="destination" ng-model="vm.queryParams.destination" uppercase/>
+										<span class="input-group-addon" ng-click="$event.stopPropagation(); vm.selectCity('Origin')">
+											<i class="fa fa-folder"></i>
+										</span>
+									</span>
 								</div>
 								<div class="form-group">
 									<div class="custom-label semibold">Add-On Bucket</div>
@@ -65,7 +75,7 @@
 								
 								<div class="form-group">
 									<div class="custom-label semibold">Zone No</div>
-									<input type="number" class="form-control" name="zoneNo" id="zoneNo" ng-model="vm.queryParams.zoneNo" maxlength="3"/>
+									<input type="text" class="form-control" name="zoneNo" id="zoneNo" ng-model="vm.queryParams.zoneNo" maxlength="3"/>
 								</div>
 							</div>
 						</div>
@@ -139,7 +149,12 @@
 								</div>
 								<div class="form-group">
 									<div class="custom-label semibold">Amount Range</div>
-									<input type="text" class="form-control" name="amountRange" id="amountRange" ng-model="vm.queryParams.amountRange" ng-disabled="true"/>
+									<span class="input-group">
+										<input type="text" class="form-control" name="amountRange" id="amountRange" ng-model="vm.queryParams.amountRange"/>
+										<span class="input-group-addon" ng-click="$event.stopPropagation(); vm.showInfoModal('Use the following format\n=X means equal to X\n>  means greater than X\n>= means greater than or equal to X\n<  means less than X\n<= means less than or equal to X\n')">
+											<i class="fa fa-question"></i>
+										</span>
+									</span>
 								</div>
 								<div class="row no-mar">
 									<div class="col-md-6 no-lpad">
@@ -265,7 +280,15 @@
 				                    <td>{{addOn.baseAmount}}</td>
 				                  	<td><span ng-if="addOn.effectiveDate != 'indef'">{{addOn.effectiveDate | date:vm.dateFormat:vm.timezone}}</span></td>
 				                	<td><span ng-if="addOn.discontinueDate != 'indef'">{{addOn.discontinueDate | date:vm.dateFormat:vm.timezone}}</span></td>
-				                   	<td><span ng-if="addOn.gfsDate != undefined && addOn.gfsDate != null">{{addOn.gfsDate | date:vm.dateFormat:vm.timezone}} | {{addOn.gfsReference}}</span></td>
+				                   	<td><span ng-if="addOn.gfsDate != undefined && addOn.gfsDate != null">{{addOn.gfsDate | date:vm.dateFormat:vm.timezone}} - {{addOn.gfsReference}}</span></td>
+				                	<td><span ng-if="addOn.focusDate != 'indef'">{{addOn.focusDate | date:vm.dateFormat:vm.timezone}}</span></td>
+				                	<td><span ng-if="addOn.firstTravelDate != null && addOn.firstTravelDate != ''">{{addOn.firstTravelDate | date:vm.dateFormat:vm.timezone}}</span></td>
+				                	<td><span ng-if="addOn.lastTravelDate != null && addOn.lastTravelDate != ''">{{addOn.lastTravelDate | date:vm.dateFormat:vm.timezone}}</span></td>
+				                	<td><span ng-repeat="value in addOn.travelDates track by $index">{{value.completeDate | date:vm.dateFormat:vm.timezone}}<span ng-if="$index < addOn.travelDates.length - 1">, </span></span></td>
+				                	<td><span ng-if="addOn.firstSaleDate != null && addOn.firstSaleDate != ''">{{addOn.firstSaleDate | date:vm.dateFormat:vm.timezone}}</span></td>
+				                	<td><span ng-if="addOn.lastSaleDate != null && addOn.lastSaleDate != ''">{{addOn.lastSaleDate | date:vm.dateFormat:vm.timezone}}</span></td>
+				                	<td></td>
+				                	<td>{{addOn.wpId}}</td>
 				                </tr>
 				                <tr infinite-scroll="vm.loadPage(vm.page + 1)" infinite-scroll-disabled="vm.disableInfiniteScroll || vm.isLastPage || vm.isLoading" infinite-scroll-container="'#tbody-afd'"></tr>
 				            </tbody>
@@ -279,7 +302,7 @@
 							<div class="rect4"></div>
 							<div class="rect5"></div>
 						</div>
-						<div class="center-div" ng-if="(vm.noDataAvailable || vm.afdQueries.length == 0) && !vm.isLoading">No Data Available</div>
+						<div class="center-div" ng-if="(vm.noDataAvailable || vm.addOns.length == 0) && !vm.isLoading">No Data Available</div>
 						<div class="center-div" ng-if="vm.isLastPage && !vm.noDataAvailable">You have reached the end of the page &nbsp;<i style="font-size: 8px !important; top: 0" class="glyphicon glyphicon-chevron-up"></i></div>
 					</div>
 			    </div>

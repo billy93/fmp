@@ -10,7 +10,7 @@
         var resourceUrl =  'api/yqyr-queries/:id';
 
         return $resource(resourceUrl, {}, {
-            'query': { method: 'GET', isArray: true},
+            'query': { method: 'POST'},
             'get': {
                 method: 'GET',
                 transformResponse: function (data) {

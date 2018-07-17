@@ -5,19 +5,20 @@
         .module('fmpApp')
         .controller('WorkPackageSearchReplaceDialogController', WorkPackageSearchReplaceDialogController);
 
-    WorkPackageSearchReplaceDialogController.$inject = ['$scope', 'FileSaver', 'DataUtils', '$uibModalInstance', 'WorkPackage', '$state', 'Agent', 'filter', 'fareSheet'];
+    WorkPackageSearchReplaceDialogController.$inject = ['$scope', 'FileSaver', 'DataUtils', 'DateUtils', '$uibModalInstance', 'WorkPackage', '$state', 'Agent', 'filter', 'fareSheet', 'workPackage'];
 
-    function WorkPackageSearchReplaceDialogController($scope, FileSaver, DataUtils, $uibModalInstance, WorkPackage, $state, Agent, filter, fareSheet) {
+    function WorkPackageSearchReplaceDialogController($scope, FileSaver, DataUtils, DateUtils, $uibModalInstance, WorkPackage, $state, Agent, filter, fareSheet, workPackage) {
 
         var vm = this;
         vm.clear = clear;
-        
+        vm.workPackage = workPackage;
         vm.datePickerOpenStatus = {};
         vm.openCalendar = openCalendar;
-        $scope.dateformat = "yyyy-MM-dd";
+        $scope.dateformat = "dd/MM/yyyy";
         function openCalendar (date) {
             vm.datePickerOpenStatus[date] = true;
         }
+        
         vm.filter = {
         	andor:'and',
         	no:{
@@ -72,56 +73,119 @@
         	},
         	cabin:{
         		check:false,
+        		replace:{
+    				check:false
+    			}
         	},
         	typeOfJourney:{
         		check:false,
+        		replace:{
+    				check:false
+    			}
         	},        	
-        	footnote:{
+        	footnote1:{
         		check:false,
+        		replace:{
+    				check:false
+    			}
         	},
         	rtgno:{
         		check:false,
+        		replace:{
+    				check:false
+    			}
         	},
         	ruleno:{
         		check:false,
+        		replace:{
+    				check:false
+    			}
         	},
         	currency:{
         		check:false,
+        		replace:{
+    				check:false
+    			}
         	},
         	amount:{
         		check:false,
+        		replace:{
+    				check:false
+    			}
         	},
         	aif:{
         		check:false,
+        		replace:{
+    				check:false
+    			}
         	},
         	travelStart:{
         		check:false,
+        		replace:{
+    				check:false
+    			}
         	},
         	travelEnd:{
         		check:false,
+        		replace:{
+    				check:false
+    			}
         	},
         	saleStart:{
         		check:false,
+        		replace:{
+    				check:false
+    			}
         	},
         	saleEnd:{
         		check:false,
+        		replace:{
+    				check:false
+    			}
         	},
         	comment:{
         		check:false,
+        		replace:{
+    				check:false
+    			}
         	},
         	travelComplete:{
         		check:false,
+        		replace:{
+    				check:false
+    			}
         	},
         	travelCompleteIndicator:{
         		check:false,
+        		replace:{
+    				check:false
+    			}
         	},
         	ratesheetComment:{
         		check:false,
+        		replace:{
+    				check:false
+    			}
         	},
         	carrier:{
         		check:false,
-        		search:'GA'
-        	}
+        		search:'GA',
+        		replace:{
+    				check:false
+    			}
+        	},
+        	bucket:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
+        	zone:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
         };
         vm.originalFilter = angular.copy(vm.filter);
         
@@ -138,6 +202,7 @@
         }
         
         vm.find = function(){
+        	vm.mapFilter();
         	vm.filter.find = true;
         	vm.filter.replace = false;
         	vm.filter.replaceAll = false;
@@ -145,6 +210,7 @@
         }
         
         vm.replace = function(){
+        	vm.mapFilter();
         	vm.filter.replace = true;
         	vm.filter.replaceAll = false;
         	vm.filter.find = false;
@@ -152,11 +218,30 @@
         }
         
         vm.replaceAll = function(){
+        	vm.mapFilter();
         	vm.filter.replaceAll = true;
         	vm.filter.replace = false;
         	vm.filter.find = false;
         	$uibModalInstance.close(vm.filter);
         }
+        
+        vm.mapFilter = function(){
+        	if(vm.filter.travelStart.search != null){
+        		vm.filter.travelStart.search = DateUtils.convertLocalDateToServer(vm.filter.travelStart.search);
+        	}
+        	if(vm.filter.travelEnd.search != null){
+        		vm.filter.travelEnd.search = DateUtils.convertLocalDateToServer(vm.filter.travelEnd.search);
+        	}
+        	if(vm.filter.saleStart.search != null){
+        		vm.filter.saleStart.search = DateUtils.convertLocalDateToServer(vm.filter.saleStart.search);
+        	}
+        	if(vm.filter.saleEnd.search != null){
+        		vm.filter.saleEnd.search = DateUtils.convertLocalDateToServer(vm.filter.saleEnd.search);
+        	}
+        	if(vm.filter.travelComplete.search != null){
+        		vm.filter.travelComplete.search = DateUtils.convertLocalDateToServer(vm.filter.travelComplete.search);
+        	}
+        };
         
         vm.reset = function(){
         	 vm.filter = vm.originalFilter;

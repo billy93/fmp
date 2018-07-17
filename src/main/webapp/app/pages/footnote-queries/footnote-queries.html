@@ -13,8 +13,8 @@
 							<div class="form-group">
 								<div class="custom-label semibold">Carrier</div>
 								<div class="input-group">
-									<input type="text" class="form-control" name="cxr" id="cxr" ng-class="{'must-fill' : ftntQueryForm.cxr.$invalid}"
-										ng-minlength="2" ng-model="vm.paramCarrier" placeholder="minimum 2 characters.." uppercase required />
+									<input type="text" class="form-control no-comma" name="cxr" id="cxr" ng-class="{'must-fill' : ftntQueryForm.cxr.$invalid}"
+										ng-minlength="2" ng-model="vm.paramCarrier" placeholder="minimum 2 characters.." maxlength="3" uppercase required />
 
 									<span ng-click="vm.showCarrierModal()"
 										class="input-group-addon"><i class="fa fa-folder"></i>
@@ -25,8 +25,8 @@
 							<div class="form-group">
 								<div class="custom-label semibold">Footnote</div>
 								<div class="no-rpad">
-									<input type="text" class="form-control" name="footNote"
-										id="ftnt" ng-model="vm.queryParams.ftnt" uppercase />
+									<input type="text" class="form-control no-comma" name="footNote"
+										id="ftnt" ng-model="vm.queryParams.ftnt" maxlength="4" uppercase />
 								</div>
 							</div>
 							<div class="form-group">
@@ -44,7 +44,7 @@
 								<div class="custom-label semibold">Tariff Number</div>
 								<div class="input-group">
 									<input id="ftntTarNo" type="text" name="ftntTarNo"
-										class="form-control" ng-model="vm.paramTarNo" uppercase>
+										class="form-control no-comma" ng-model="vm.paramTarNo" maxlength="3" uppercase>
 
 									<span ng-click="vm.showTariffModal()" class="input-group-addon"><i
 										class="fa fa-folder"></i> </span>
@@ -55,7 +55,7 @@
 								<div class="no-rpad">
 									<select class="form-control" name="category" id="catNo"
 										ng-model="vm.queryParams.catNo">
-										<option value="">All</option>
+										<option value="">Select Category</option>
 										<option value="003">03 - Seasonality Only</option>
 										<option value="011">11 - Blackout Dates Only</option>
 										<option value="014">14 - Travel Restrictions Only</option>
@@ -95,6 +95,7 @@
 										<select class="form-control" name="saleOption" id="saleOpt"
 											ng-model="vm.queryParams.saleDateType"
 											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '014'">
+											<option></option>
 											<option value="1">Active In</option>
 											<option value="2">Exact Match</option>
 										</select>
@@ -127,6 +128,7 @@
 										<select class="form-control" name="travelOption"
 											id="travelOpt" ng-model="vm.queryParams.travelDateType"
 											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '015'">
+											<option></option>
 											<option value="1">Active In</option>
 											<option value="2">Exact Match</option>
 										</select>
@@ -151,7 +153,7 @@
 										<select class="form-control" name="travelOption"
 											id="travelOpt" ng-model="vm.queryParams.travelOpt"
 											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '015'">
-											
+											<option></option>
 											<option value="P">P - Trip Completed</option>
 											<option value="C">C - Trip Commence</option>
 										</select>
@@ -160,6 +162,7 @@
 										<select class="form-control" name="completedOption"
 											id="completedOption"
 											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '015'">
+											<option></option>
 											<option value="2">Exact Match</option>
 										</select>
 									</div>
@@ -274,19 +277,19 @@
 								<td>{{rq.routingNo}}</td>
 								<td>{{rq.ftnt}}</td>
 								<td><span ng-if="rq.effDate=='indef'"></span>
-									<span ng-if="rq.effDate!='indef'">{{rq.effDate | date:'medium'}}</span></td>
+									<span ng-if="rq.effDate!='indef'">{{rq.effDate | date:vm.dateFormat:vm.timezone}}</span></td>
 								<td><span ng-if="rq.discDate=='indef'"></span>
-									<span ng-if="rq.discDate!='indef'">{{rq.discDate | date:'medium'}}</span></td>
+									<span ng-if="rq.discDate!='indef'">{{rq.discDate | date:vm.dateFormat:vm.timezone}}</span></td>
 								<td><span ng-if="rq.travelStart=='indef'"></span>
-									<span ng-if="rq.travelStart!='indef'">{{rq.travelStart | date:'medium'}}</span></td>
+									<span ng-if="rq.travelStart!='indef'">{{rq.travelStart | date:vm.dateFormat:vm.timezone}}</span></td>
 								<td><span ng-if="rq.travelEnd=='indef'"></span>
-									<span ng-if="rq.travelEnd!='indef'">{{rq.travelEnd | date:'medium'}}</span></td>
+									<span ng-if="rq.travelEnd!='indef'">{{rq.travelEnd | date:vm.dateFormat:vm.timezone}}</span></td>
 								<td><span ng-if="rq.saleStart=='indef'"></span>
-									<span ng-if="rq.saleStart!='indef'">{{rq.saleStart | date:'medium'}}</span></td>
+									<span ng-if="rq.saleStart!='indef'">{{rq.saleStart | date:vm.dateFormat:vm.timezone}}</span></td>
 								<td><span ng-if="rq.saleEnd=='indef'"></span>
-									<span ng-if="rq.saleEnd!='indef'">{{rq.saleEnd | date:'medium'}}</span></td>
+									<span ng-if="rq.saleEnd!='indef'">{{rq.saleEnd | date:vm.dateFormat:vm.timezone}}</span></td>
 								<td><span ng-if="rq.travelComplete=='indef'"></span>
-									<span ng-if="rq.travelComplete!='indef'">{{rq.travelComplete | date:'medium'}}</span></td>
+									<span ng-if="rq.travelComplete!='indef'">{{rq.travelComplete | date:vm.dateFormat:vm.timezone}}</span></td>
 								<td>{{rq.travelCompInd}}</td>
 							</tr>
 						</tbody>

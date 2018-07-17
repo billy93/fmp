@@ -31,33 +31,47 @@
 						</div>
 						
 						<div class="col-md-3">
-							<div class="form-group">
-								<div class="custom-label semibold">Rule No</div>
-								<input type="text" class="form-control" name="ruleNo"
-									id="ruleNo" ng-model="vm.queryParams.ruleNo" maxlength="4"
-									uppercase />
+							<div class="col-md-6">
+								<div class="form-group">
+									<div class="custom-label semibold">GA Rule No</div>
+									<input type="text" class="form-control" name="ruleNo"
+										id="ruleNo" ng-model="vm.queryParams.ruleNo"
+										uppercase />
+								</div>
 							</div>
-							<div class="form-group">
-									<div class="custom-label semibold">Source</div>
-									<select class="form-control" name="source" id="source" ng-init="vm.queryParams.source = 'A'" ng-model="vm.queryParams.source">
-										<option value="{{value.key}}" ng-repeat="value in vm.sources track by $index">{{value.value}}</option>
-									</select>
+							<div class="col-md-6">
+								<div class="form-group">
+									<div class="custom-label semibold">OC Rule No</div>
+									<input type="text" class="form-control" name="ocRuleNo"
+										id="ocRuleNo" ng-model="vm.queryParams.ocRuleNo"
+										uppercase />
+								</div>
 							</div>
-							<div class="form-group">
-								<div class="custom-label semibold">Fare Basis</div>
-								<input type="text" class="form-control" name="fareBasis"
-									id="fareBasis" ng-model="vm.queryParams.fareBasis" />
+							<div class="col-md-12">
+								<div class="form-group">
+										<div class="custom-label semibold">Source</div>
+										<select class="form-control" name="source" id="source" ng-init="vm.queryParams.source = 'A'" ng-model="vm.queryParams.source">
+											<option value="{{value.key}}" ng-repeat="value in vm.sources track by $index">{{value.value}}</option>
+										</select>
+								</div>
+								<div class="form-group">
+									<div class="custom-label semibold">Fare Basis</div>
+									<input type="text" class="form-control" name="fareBasis"
+										id="fareBasis" ng-model="vm.queryParams.fareBasis" />
+								</div>
 							</div>
+							
+							
 						</div>
 						
 						<div class="col-md-6">
-							<div class="form-group">
+							<div class="form-group absolute-datepicker">
 								<div class="custom-label semibold">Public/Private</div>
-								<select class="form-control" name="publicPrivate" id="publicPrivate" ng-model="vm.queryParams.publicPrivate">
+								<select class="form-control  no-lpad" name="publicPrivate" id="publicPrivate" ng-model="vm.queryParams.publicPrivate">
 									<option value="{{value.key}}" ng-repeat="value in vm.publicPrivate track by $index">{{value.value}}</option>
 								</select>
 							</div>
-							<div class="form-group absolute-datepicker">
+							<div class="form-group">
 								<div class="custom-label semibold">Travel Date</div>
 								<div class="row no-mar">
 									<div class="col-md-4 no-lpad">
@@ -126,7 +140,7 @@
 											ng-disabled="true"> Calculate TFC
 										</label> 
 										<label> <input type="checkbox" name="appendResults"
-											ng-model="vm.queryParams.appendResults" disabled="true">
+											ng-model="vm.queryParams.appendResults" disabled="disabled">
 											Lowest level only
 										</label>
 									</div>
@@ -139,8 +153,8 @@
 								<button type="button" class="btn btn-default small mb1"
 									ng-click="vm.loadAll()">Query</button>
 								<button type="button" class="btn btn-default small mb1"
-									ng-click="vm.generateGraph(vm.tempData)"
-									ng-disabled="vm.compMonitoring.length == 0 || vm.compMonitoring.length == null">Generate
+									ng-click="vm.generateGraph(vm.compMonitoring)"
+									ng-disabled="vm.compMonitoring.length == 0 || vm.compMonitoring == null">Generate
 									Chart</button>
 								<button type="reset" ng-click="vm.reset()"
 									class="btn btn-default small mb1">Reset</button>
@@ -152,131 +166,134 @@
 			</div>
 		</div>
 
-		<div class="table-wrapper" ng-if="vm.tempData.length > 0">
+		<div class="table-wrapper table-afd" ng-if="vm.compMonitoring.length > 0">
 			<div class="datatable-wrapper form-inline">
-				<div class="table-responsive">
-					<table class="table table-striped table-bordered datatable">
-						<thead>
-							<tr>
-								<th>NO</th>
-								<th>CARRIER</th>
-								<th>ORIG-DEST</th>
-								<th>TRAVEL START</th>
-								<th>TRAVEL END</th>
-								<th>SALE START</th>
-								<th>SALE END</th>
-								<th>CABIN</th>
-								<th>BOOKING CLASS</th>
-								<th>OW / RT</th>
-								<th>RULE NO</th>
-								<th>SOURCE</th>
-								<th>FARE CLASS</th>
-								<th>PUBLIC / PRIVATE</th>
-								<th>CURR</th>
-								<th>AMOUNT</th>
-								<th ng-if="vm.showTFC">Error</th>
-								<th ng-if="vm.showTFC">TFC Calc Date</th>
-								<th ng-if="vm.showTFC">TFC Focus Date</th>
-								<th ng-if="vm.showTFC">YQYR</th>
-								<th ng-if="vm.showTFC">Taxes</th>
-								<th>TFC <span ng-click="vm.showTFC = !vm.showTFC"><i
-										ng-if="vm.showTFC" class="glyphicon glyphicon-minus"></i><i
-										ng-if="!vm.showTFC" class="glyphicon glyphicon-plus"></i></span></th>
-							</tr>
-						</thead>
-						<tbody
-							ng-repeat="afdQuery in vm.compMonitoring track by afdQuery.fareId">
-							<tr ng-click="vm.selectedRow = afdQuery;"
-								ng-class="{'selected': vm.selectedRow == afdQuery}">
-								<td><a ui-sref="system-parameter-detail({id:afdQuery.id})">{{($index + 1)+((vm.page-1)*vm.itemsPerPage) }}</a></td>
-								<td>{{afdQuery.carrierCode}}</td>
-								<td>{{afdQuery.originCity}}-{{afdQuery.destinationCity}}</td>
-								<td><span ng-if="afdQuery.travelStartDate != 'indef'">{{afdQuery.firstTravelDate
-										| date:'ddMMMyyyy'}}</span></td>
-								<td><span ng-if="afdQuery.travelEndDate != 'indef'">{{afdQuery.lastTravelDate
-										| date:'ddMMMyyyy'}}</span></td>
-								<td><span ng-if="afdQuery.saleStartDate != 'indef'">{{afdQuery.firstSaleDate
-										| date:'ddMMMyyyy'}}</span></td>
-								<td><span ng-if="afdQuery.saleEndDate != 'indef'">{{afdQuery.lastSaleDate
-										| date:'ddMMMyyyy'}}</span></td>
-								<td>{{afdQuery.cabin}}</td>
-								<td><span ng-repeat="value in afdQuery.bookingClass track by $index">{{value}}<span ng-if="$index < afdQuery.bookingClass.length - 1">, </span></span></td>
-								<td><span ng-if="afdQuery.owrt == '1'">OW</span><span
-									ng-if="afdQuery.owrt == '2'">RT</span><span
-									ng-if="afdQuery.owrt == '3'">OO</span></td>
-								<td>{{afdQuery.ruleNo}}</td>
-								<td>{{afdQuery.source}}</td>
-								<td>{{afdQuery.fareClassCode}}</td>
-								<td>=PUBLIC/PRIVATE=</td>
-								<td>{{afdQuery.currencyCode}}</td>
-								<td>{{afdQuery.baseAmount}}</td>
-								<td ng-if="vm.showTFC">=TFC=</td>
-								<td ng-if="vm.showTFC">=TFC=</td>
-								<td ng-if="vm.showTFC">=TFC=</td>
-								<td ng-if="vm.showTFC">=TFC=</td>
-								<td ng-if="vm.showTFC">=TFC=</td>
-								<td>=TFC=</td>
-							</tr>
-						</tbody>
-					</table>
+				<div class="table-responsive" style="overflow-y:hidden; max-height: initial; padding-bottom: 0">
+					<div class="absolute-table">
+						<table class="table table-striped table-bordered datatable table-header-fixed">
+							<thead>
+								<tr>
+									<th  class="th-fixed">NO</th>
+									<th  class="th-fixed">CARRIER</th>
+									<th  class="th-fixed">TARIFF CODE</th>
+									<th  class="th-fixed">TARIFF NO</th>
+									<th  class="th-fixed">ORIG-DEST</th>
+									<th  class="th-fixed">TRAVEL START</th>
+									<th  class="th-fixed">TRAVEL END</th>
+									<th  class="th-fixed">SALE START</th>
+									<th  class="th-fixed">SALE END</th>
+									<th  class="th-fixed">CABIN</th>
+									<th  class="th-fixed">BOOKING CLASS</th>
+									<th  class="th-fixed">OW / RT</th>
+									<th  class="th-fixed">RULE NO</th>
+									<th  class="th-fixed">SOURCE</th>
+									<th  class="th-fixed">FARE CLASS</th>
+									<th  class="th-fixed">CURR</th>
+									<th  class="th-fixed">AMOUNT</th>
+	<!-- 								<th ng-if="vm.showTFC">Error</th> -->
+	<!-- 								<th ng-if="vm.showTFC">TFC Calc Date</th> -->
+	<!-- 								<th ng-if="vm.showTFC">TFC Focus Date</th> -->
+	<!-- 								<th ng-if="vm.showTFC">YQYR</th> -->
+	<!-- 								<th ng-if="vm.showTFC">Taxes</th> -->
+	<!-- 								<th  class="th-fixed">TFC <span ng-click="vm.showTFC = !vm.showTFC"><i -->
+	<!-- 										ng-if="vm.showTFC" class="glyphicon glyphicon-minus"></i><i -->
+	<!-- 										ng-if="!vm.showTFC" class="glyphicon glyphicon-plus"></i></span></th> -->
+								</tr>
+							</thead>
+							<tbody id="tbody-afd" style="overflow-x:hidden">
+								<tr class="tr-afd" 
+								 ng-repeat="afdQuery in vm.compMonitoring track by afdQuery.fareId" ng-click="vm.selectedRow = afdQuery;"
+									ng-class="{'selected': vm.selectedRow == afdQuery}">
+									<td><a ui-sref="system-parameter-detail({id:afdQuery.id})">{{($index + 1)+((vm.page-1)*vm.itemsPerPage) }}</a></td>
+									<td>{{afdQuery.carrierCode}}</td>
+									<td>{{afdQuery.tariffCode}}</td>
+									<td>{{afdQuery.tariffNo}}</td>
+									<td>{{afdQuery.originCity}}-{{afdQuery.destinationCity}}</td>
+									<td><span ng-if="afdQuery.travelStartDate != 'indef'">{{afdQuery.firstTravelDate
+											| date:'ddMMMyyyy'}}</span></td>
+									<td><span ng-if="afdQuery.travelEndDate != 'indef'">{{afdQuery.lastTravelDate
+											| date:'ddMMMyyyy'}}</span></td>
+									<td><span ng-if="afdQuery.saleStartDate != 'indef'">{{afdQuery.firstSaleDate
+											| date:'ddMMMyyyy'}}</span></td>
+									<td><span ng-if="afdQuery.saleEndDate != 'indef'">{{afdQuery.lastSaleDate
+											| date:'ddMMMyyyy'}}</span></td>
+									<td>{{afdQuery.cabin}}</td>
+									<td><span ng-repeat="value in afdQuery.bookingClass track by $index">{{value}}<span ng-if="$index < afdQuery.bookingClass.length - 1">, </span></span></td>
+									<td><span ng-if="afdQuery.owrt == '1'">OW</span><span
+										ng-if="afdQuery.owrt == '2'">RT</span><span
+										ng-if="afdQuery.owrt == '3'">OO</span></td>
+									<td>{{afdQuery.ruleNo}}</td>
+									<td>{{afdQuery.source}}</td>
+									<td>{{afdQuery.fareClassCode}}</td>
+									<td>{{afdQuery.currencyCode}}</td>
+									<td>{{afdQuery.baseAmount}}</td>
+	<!-- 								<td ng-if="vm.showTFC">=TFC=</td> -->
+	<!-- 								<td ng-if="vm.showTFC">=TFC=</td> -->
+	<!-- 								<td ng-if="vm.showTFC">=TFC=</td> -->
+	<!-- 								<td ng-if="vm.showTFC">=TFC=</td> -->
+	<!-- 								<td ng-if="vm.showTFC">=TFC=</td> -->
+	<!-- 								<td>=TFC=</td> -->
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
 		</div>
 		
-		
-		
-
-		<!-- 		<div class="additional-info-wrapper" ng-if="vm.categoryRules"> -->
-		<!--      		<div class="additional-info" ng-click="vm.showCategoryDetail(cat)" ng-class="{'lightyellow': cat.catAttributes.length > 0 && cat.type.includes('F'), 'yellow': cat.catAttributes.length > 0 && cat.type.includes('R'), 'blue': cat.catAttributes.length > 0 && cat.type == 'G'}" ng-repeat="cat in vm.categoryRules track by cat.catNo"> -->
-		<!--         		{{cat.catNo}} {{cat.catName}} <span ng-if="cat.catAttributes.length > 0">({{cat.type}})</span> -->
-		<!--       		</div> -->
-		<!--       		<div class="additional-info action dropdown custom" ng-click="vm.actionClicked = !vm.actionClicked"> -->
-		<!--       			Actions <i class="fa fa-caret-down pull-right"></i> -->
-		<!--       			<div class="action-wrapper" ng-if="vm.actionClicked"> -->
-		<!--       				<a ng-click="vm.showLegend()">Show Legend</a> -->
-		<!--       				<a ng-click="vm.viewFullText()">View Full Text</a> -->
-		<!--       			</div> -->
-		<!--       		</div> -->
-		<!--    		</div> -->
-
-		<div class="text-center" ng-if="vm.tempData.length > 0">
-			<jhi-item-count page="vm.page" total="vm.queryCount"
-				items-per-page="vm.itemsPerPage"></jhi-item-count>
-			<uib-pagination class="pagination-sm" total-items="vm.totalItems"
-				items-per-page="vm.itemsPerPage" ng-model="vm.page"
-				ng-change="vm.getNextPage()"></uib-pagination>
+		<div class="text-center" ng-if="vm.compMonitoring.length > 0">
+			<div class="form-group">
+				<span ng-if="vm.compMonitoring.length < 2000">Showing {{vm.totalItems}} items.</span>
+				<span ng-if="vm.compMonitoring.length == 2000" style="color:red">Maximum items exceeded. Showing {{vm.totalItems}} items.</span>
+			</div>
 			<br/>
-		<br/>
 		
-		<div id="chartOptions" class="form-inline mb2" hidden="hidden" ng-if="vm.tempData.length > 0">  
-           <div class="form-group" style="margin-left:10px; margin-bottom:10px; !important">
-            <label for="barThickness">Bar Thickness : </label>
-           <input id="barThickness" ng-model="vm.barThickness" type="text" class="number-only"></input>
-          </div> 
-
-          <div class="form-group" style="margin-left:10px; margin-bottom:10px; !important">
-            <label for="barOpacity">Bar Opacity : </label>
-           <input id="barOpacity" ng-model="vm.barOpacity" type="text" class="number-only"></input>
-          </div> 
-          
-          <div class="form-group" style="margin-left:10px; margin-bottom:10px; !important">
-          
-            <button type="button" class="btn btn-default small" ng-click="vm.generateGraph(vm.tempData)">Re-Generate</button>
-            </div>
-        </div>
+			<div id="chartOptions" class="form-inline mb2" hidden="hidden" ng-if="vm.compMonitoring.length > 0">  
+	           <div class="form-group" style="margin-left:10px; margin-bottom:10px; !important">
+	            <label for="barThickness">Bar Thickness : </label>
+	           <input id="barThickness" ng-model="vm.barThickness" type="text" class="number-only"></input>
+	          </div> 
+	
+	          <div class="form-group" style="margin-left:10px; margin-bottom:10px; !important">
+	            <label for="barOpacity">Bar Opacity : </label>
+	           <input id="barOpacity" ng-model="vm.barOpacity" type="text" class="number-only"></input>
+	          </div> 
+	          
+	          <div class="form-group" style="margin-left:10px; margin-bottom:10px; !important">
+	          
+	            <button type="button" class="btn btn-default small" ng-click="vm.generateGraph(vm.compMonitoring)">Re-Generate</button>
+	            </div>
+	        </div>
         
-        <div class="text-center wrapper-location mb1">
-        	<div class="monitoring-location"><span>JKT</span> - <span>SIN</span></div>
-        </div>
-      
-										
-<!-- 			<jhi-item-count page="vm.page" total="vm.queryCount" -->
-<!-- 				items-per-page="vm.itemsPerPage"></jhi-item-count> -->
-<!-- 			<uib-pagination class="pagination-sm" total-items="vm.totalItems" -->
-<!-- 				items-per-page="vm.itemsPerPage" ng-model="vm.page" -->
-<!-- 				ng-change="vm.loadAll()"></uib-pagination> -->
 		</div>
 		
-		<div id="container" class="col-md-12 no-pad" style="height:600px;" hidden="hidden" ng-if="vm.tempData.length > 0"></div>
+		
+        <div id="containerTitle" class="text-center wrapper-location mb1" hidden="hidden" ng-if="vm.compMonitoring.length > 0">
+        	<div class="monitoring-location"><span>{{vm.queryParams.origin}}</span></div>
+        </div>
+		
+		<div id="container" class="col-md-12 no-pad" style="height:600px;" hidden="hidden" ng-if="vm.compMonitoring.length > 0"></div>
+		
+		<div id="containerLegend" ng-if="vm.compMonitoring.length > 0" hidden="hidden" style="margin : 10px;">
+			<div class="custom-label semibold">Color Legend : </div>
+			<br/>
+			<table>
+				<tbody>
+					<tr>
+						<td valign="middle"><div style="background-color:red; width:50px; height:12px; float: left; margin-right:15px"></div><label>Y</label></td>
+					</tr>
+						
+					<tr>
+						<td valign="middle"><div style="background-color:green; width:50px; height:12px; float: left; margin-right:15px"></div><label>W</label></td>
+					</tr>
+					<tr>
+						<td valign="middle"><div style="background-color:blue; width:50px; height:12px; float: left; margin-right:15px"></div><label>F</label></td>
+					</tr>
+					<tr>
+						<td valign="middle"><div style="background-color:yellow; width:50px; height:12px; float: left; margin-right:15px"></div><label>J</label></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </div>

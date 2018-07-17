@@ -9,8 +9,8 @@
 							<div class="form-group">
 								<div class="custom-label semibold">Carrier</div>
 								<div class="input-group">
-									<input type="text" class="form-control" name="cxr" id="cxr" ng-class="{'must-fill' : queryForm.cxr.$invalid}"
-										ng-minlength="2" ng-model="vm.paramCarrier" placeholder="minimum 2 characters.." uppercase required />
+									<input type="text" class="form-control  no-comma" name="cxr" id="cxr" ng-class="{'must-fill' : queryForm.cxr.$invalid}"
+										ng-minlength="2" ng-model="vm.paramCarrier" placeholder="minimum 2 characters.." maxlength="3" uppercase required />
 
 									<span ng-click="vm.showCarrierModal()"
 										class="input-group-addon"><i class="fa fa-folder"></i>
@@ -19,14 +19,14 @@
 							</div>
 							<div class="form-group">
 								<div class="custom-label semibold">Rule Number</div>
-								<input type="text" class="form-control" name="ruleNo"
-									id="ruleNo" ng-model="vm.queryParams.ruleNo" uppercase />
+								<input type="text" class="form-control no-comma" name="ruleNo"
+									id="ruleNo" ng-model="vm.queryParams.ruleNo" maxlength="4" uppercase />
 							</div>
 							<div class="form-group">
 								<div class="custom-label semibold">Rule Type</div>
 								<select class="form-control" name="ruleType" id="ruleType"
 									ng-model="vm.queryParams.type">
-									<option value="">All</option>
+									<option value="">Select Rule Type</option>
 									<option value="1">FARE BY RULE</option>
 									<option value="2">GENERAL RULE</option>
 									<option value="3">FARE RULE</option>
@@ -39,7 +39,7 @@
 								<div class="custom-label semibold">Tariff Number</div>
 								<div class="input-group">
 									<input id="ruleTarNo" type="text" name="ruleTarNo"
-										class="form-control" ng-model="vm.paramTarNo" uppercase>
+										class="form-control no-comma" ng-model="vm.paramTarNo" maxlength="3" uppercase>
 									<span ng-click="vm.showTariffModal()" class="input-group-addon"><i
 										class="fa fa-folder"></i> </span>
 								</div>
@@ -48,7 +48,7 @@
 								<div class="custom-label semibold">Category</div>
 								<select class="form-control" name="catNo" id="catNo"
 									ng-model="vm.queryParams.catNo">
-									<option value="">All</option>
+									<option value="">Select Category</option>
 									<option value="001">01 - Eligibility</option>
 									<option value="002">02 - Day/Time</option>
 									<option value="003">03 - Season App</option>
@@ -72,6 +72,7 @@
 									<option value="021">21 - Agents Disc</option>
 									<option value="022">22 - Other Disc</option>
 									<option value="023">23 - Misc Tags</option>
+									<option value="025">25 - Fare By Rule</option>
 									<option value="026">26 - Groups</option>
 									<option value="027">27 - Tours</option>
 									<option value="028">28 - Visit Cntry</option>
