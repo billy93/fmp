@@ -37,6 +37,7 @@
         vm.loadAll = loadAll;
         vm.query = query;
         vm.timezone = Timezone.GMT7;
+        vm.selectedRows = [];
         
         vm.yqyrs = [];
         vm.reset = reset;
@@ -60,6 +61,7 @@
         	vm.yqyrs = [];
         	vm.page = 0;
         	vm.lastIndex = 0;
+        	vm.selectedYqyr = null;
         	vm.isLastPage = false;
         	vm.loadAll();
         }

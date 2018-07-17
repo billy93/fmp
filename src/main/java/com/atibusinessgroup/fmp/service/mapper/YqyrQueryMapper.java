@@ -5,6 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoYqyrS1;
+import com.atibusinessgroup.fmp.domain.dto.CarrierApplicationTable;
+import com.atibusinessgroup.fmp.domain.dto.CarrierApplicationTableDataSegs;
+import com.atibusinessgroup.fmp.domain.dto.CarrierTable;
+import com.atibusinessgroup.fmp.domain.dto.CarrierTableDataSegs;
 import com.atibusinessgroup.fmp.domain.dto.TextTable;
 import com.atibusinessgroup.fmp.domain.dto.UserZoneTable;
 import com.atibusinessgroup.fmp.domain.dto.Yqyr;
@@ -308,13 +312,69 @@ public class YqyrQueryMapper {
 			result.setTicketDiscDate(ayqyr.getTicket_dates().getTicket_dates_last());
 		}
 		
+		if (ayqyr.getCarrier_appl_tbl_190() != null && !ayqyr.getCarrier_appl_tbl_190().trim().isEmpty() && !ayqyr.getCarrier_appl_tbl_190().trim().contentEquals("00000000")) {
+			CarrierApplicationTable cat = atpcoYqyrTableRepository.getCarrierApplicationTable190(ayqyr.getCarrier_appl_tbl_190().trim());	
+			if (cat != null) {
+				String catext = "";
+				for (CarrierApplicationTableDataSegs catd:cat.getData_segs()) {
+					if (catd.getAppl() != null) {
+						if (catd.getCxr() != null && !catd.getCxr().trim().isEmpty()) {
+							if (catd.getAppl().trim().isEmpty()) {
+								catext += "Include " + catd.getCxr().trim() + "\n";
+							} else if (catd.getAppl().trim().contentEquals("X")) {
+								catext += "Exclude " + catd.getCxr().trim() + "\n";
+							}
+						}
+					}
+				}
+				result.setValCarrierCode(catext);
+			}
+		}
+		
+		if (ayqyr.getCxr_tbl_186() != null && !ayqyr.getCxr_tbl_186().trim().isEmpty() && !ayqyr.getCxr_tbl_186().trim().contentEquals("00000000")) {
+			CarrierTable ct = atpcoYqyrTableRepository.findCarrierTable186(ayqyr.getCxr_tbl_186().trim());
+			if (ct != null) {
+				String ctext = "";
+				for (CarrierTableDataSegs seg:ct.getData_segs()) {
+					String stext = "";
+					if (seg.getMarketing_carrier() != null && !seg.getMarketing_carrier().trim().isEmpty()) {
+						stext += "Marketing: " + seg.getMarketing_carrier().trim();
+					}
+					if (seg.getOperating_carrier() != null && !seg.getOperating_carrier().trim().isEmpty()) {
+						if (!stext.isEmpty()) {
+							stext += ", ";
+						}
+						stext += "Operating: " + seg.getOperating_carrier().trim();
+					}
+					if (seg.getFlt_no_1() != null && !seg.getFlt_no_1().trim().isEmpty()) {
+						if (!stext.isEmpty()) {
+							stext += ", ";
+						}
+						stext += "Flight No: " + seg.getFlt_no_1().trim();
+					}
+					if (seg.getFlt_no_2() != null && !seg.getFlt_no_2().trim().isEmpty()) {
+						if (!stext.isEmpty()) {
+							stext += ", ";
+						}
+						stext += "through: " + seg.getFlt_no_2().trim();
+					}
+					if (!stext.isEmpty()) {
+						ctext += stext + "\n";
+					}
+				}
+				result.setCarrierFlightApplication(ctext);
+			}
+		}
+		
 		if (ayqyr.getTxt_tbl_no_196() != null && !ayqyr.getTxt_tbl_no_196().trim().isEmpty() && !ayqyr.getTxt_tbl_no_196().trim().contentEquals("00000000")) {
 			TextTable tt = atpcoYqyrTableRepository.findTextTable196(ayqyr.getTxt_tbl_no_196().trim());
-			String text = "";
-			for (String line:tt.getText()) {
-				text += line + "\n";
+			if (tt != null) {
+				String text = "";
+				for (String line:tt.getText()) {
+					text += line + "\n";
+				}
+				result.setComment(text);
 			}
-			result.setComment(text);
 		}
 		
 		return result;
@@ -329,9 +389,9 @@ public class YqyrQueryMapper {
 				if (uzt.getGeo_loc_value() != null && !uzt.getGeo_loc_value().trim().isEmpty()) {
 					if (uzt.getAppl() != null) {
 						if (uzt.getAppl().trim().isEmpty()) {
-							result += "Include " + type + " " + uzt.getGeo_loc_value().trim() + " ";
+							result += "Include " + type + " " + uzt.getGeo_loc_value().trim() + "\n";
 						} else if (uzt.getAppl().trim().contentEquals("N")) {
-							result += "Exclude " + type + " " + uzt.getGeo_loc_value().trim() + " ";
+							result += "Exclude " + type + " " + uzt.getGeo_loc_value().trim() + "\n";
 						}
 					}
 				}
