@@ -2139,7 +2139,24 @@
     	    	    			
     	    	    	//addon
     	    	    	workPackageFareFilter.bucket.check && workPackageFareFilter.bucket.search != null && workPackageFareFilter.bucket.search != '' ? 'bucket' : null,
-    	    		];
+    	    	    			
+    	    	    	//discount
+    	    	    	workPackageFareFilter.loc1Type.check && workPackageFareFilter.loc1Type.search != null && workPackageFareFilter.loc1Type.search != '' ? 'loc1Type' : null,
+    	    	    	workPackageFareFilter.loc1.check && workPackageFareFilter.loc1.search != null && workPackageFareFilter.loc1.search != '' ? 'loc1' : null,
+    	    	    	workPackageFareFilter.loc2Type.check && workPackageFareFilter.loc2Type.search != null && workPackageFareFilter.loc2Type.search != '' ? 'loc2Type' : null,
+    	    			workPackageFareFilter.loc2.check && workPackageFareFilter.loc2.search != null && workPackageFareFilter.loc2.search != '' ? 'loc2' : null,
+    	    	    	workPackageFareFilter.baseFareBasis.check && workPackageFareFilter.baseFareBasis.search != null && workPackageFareFilter.baseFareBasis.search != '' ? 'baseFareBasis' : null,
+    	    	    	workPackageFareFilter.baseRuleNo.check && workPackageFareFilter.baseRuleNo.search != null && workPackageFareFilter.baseRuleNo.search != '' ? 'baseRuleNo' : null,
+    	    	    	workPackageFareFilter.baseTarcd.check && workPackageFareFilter.baseTarcd.search != null && workPackageFareFilter.baseTarcd.search != '' ? 'baseTarcd' : null,
+    	    	    	workPackageFareFilter.calcType.check && workPackageFareFilter.calcType.search != null && workPackageFareFilter.calcType.search != '' ? 'calcType' : null,
+    	    	    	workPackageFareFilter.percentBaseFare.check && workPackageFareFilter.percentBaseFare.search != null && workPackageFareFilter.percentBaseFare.search != '' ? 'percentBaseFare' : null,
+    	    	    	workPackageFareFilter.discountSpecifiedAmount.check && workPackageFareFilter.discountSpecifiedAmount.search != null && workPackageFareFilter.discountSpecifiedAmount.search != '' ? 'discountSpecifiedAmount' : null,
+    	    	    	workPackageFareFilter.passengerType.check && workPackageFareFilter.passengerType.search != null && workPackageFareFilter.passengerType.search != '' ? 'passengerType' : null,
+    	    	    	workPackageFareFilter.rtgnoTarno.check && workPackageFareFilter.rtgnoTarno.search != null && workPackageFareFilter.rtgnoTarno.search != '' ? 'rtgnoTarno' : null,
+    	    	    	workPackageFareFilter.newFareBasis.check && workPackageFareFilter.newFareBasis.search != null && workPackageFareFilter.newFareBasis.search != '' ? 'newFareBasis' : null,
+    	    	    	workPackageFareFilter.newTypeOfJourney.check && workPackageFareFilter.newTypeOfJourney.search != null && workPackageFareFilter.newTypeOfJourney.search != '' ? 'newTypeOfJourney' : null,
+    	    	    	workPackageFareFilter.newBookingCode.check && workPackageFareFilter.newBookingCode.search != null && workPackageFareFilter.newBookingCode.search != '' ? 'newBookingCode' : null,
+     	    		];
  	    			
  	    			var found = false;
  	    			if(type == 'and'){
@@ -2210,6 +2227,25 @@
     	    	    	workPackageFareFilter.bucket.replace.check && workPackageFareFilter.bucket.replace.value != null && workPackageFareFilter.bucket.replace.value != '' ? 'bucket' : null,    	    		
     	    	    	workPackageFareFilter.zone.replace.check && workPackageFareFilter.zone.replace.value != null && workPackageFareFilter.zone.replace.value != '' ? 'zone' : null,    	    		
 
+    	    	    	//discount
+    	    	    	workPackageFareFilter.loc1Type.replace.check && workPackageFareFilter.loc1Type.replace.value != null && workPackageFareFilter.loc1Type.replace.value != '' ? 'loc1Type' : null,
+    	    	    	workPackageFareFilter.loc1.replace.check && workPackageFareFilter.loc1.replace.value != null && workPackageFareFilter.loc1.replace.value != '' ? 'loc1' : null,
+    	    	    	workPackageFareFilter.loc2Type.replace.check && workPackageFareFilter.loc2Type.replace.value != null && workPackageFareFilter.loc2Type.replace.value != '' ? 'loc2Type' : null,
+    	    	    	workPackageFareFilter.loc2.replace.check && workPackageFareFilter.loc2.replace.value != null && workPackageFareFilter.loc2.replace.value != '' ? 'loc2' : null,
+    	    	    	workPackageFareFilter.baseFareBasis.replace.check && workPackageFareFilter.baseFareBasis.replace.value != null && workPackageFareFilter.baseFareBasis.replace.value != '' ? 'baseFareBasis' : null,
+    	    	    	workPackageFareFilter.baseRuleNo.replace.check && workPackageFareFilter.baseRuleNo.replace.value != null && workPackageFareFilter.baseRuleNo.replace.value != '' ? 'baseRuleNo' : null,
+    	    	    	workPackageFareFilter.baseTarcd.replace.check && workPackageFareFilter.baseTarcd.replace.value != null && workPackageFareFilter.baseTarcd.replace.value != '' ? 'baseTarcd' : null,
+    	    	    	workPackageFareFilter.calcType.replace.check && workPackageFareFilter.calcType.replace.value != null && workPackageFareFilter.calcType.replace.value != '' ? 'calcType' : null,
+    	    	    	workPackageFareFilter.percentBaseFare.replace.check && workPackageFareFilter.percentBaseFare.replace.value != null && workPackageFareFilter.percentBaseFare.replace.value != '' ? 'percentBaseFare' : null,
+    	    	    	workPackageFareFilter.discountSpecifiedAmount.replace.check && workPackageFareFilter.discountSpecifiedAmount.replace.value != null && workPackageFareFilter.discountSpecifiedAmount.replace.value != '' ? 'discountSpecifiedAmount' : null,
+    	    	    	workPackageFareFilter.passengerType.replace.check && workPackageFareFilter.passengerType.replace.value != null && workPackageFareFilter.passengerType.replace.value != '' ? 'passengerType' : null,
+    	    	    	workPackageFareFilter.fareType.replace.check && workPackageFareFilter.fareType.replace.value != null && workPackageFareFilter.fareType.replace.value != '' ? 'fareType' : null,
+    	    	    	workPackageFareFilter.ticketCode.replace.check && workPackageFareFilter.ticketCode.replace.value != null && workPackageFareFilter.ticketCode.replace.value != '' ? 'ticketCode' : null,
+    	    	    	workPackageFareFilter.ticketDesignator.replace.check && workPackageFareFilter.ticketDesignator.replace.value != null && workPackageFareFilter.ticketDesignator.replace.value != '' ? 'ticketDesignator' : null,
+    	    	    	workPackageFareFilter.rtgnoTarno.replace.check && workPackageFareFilter.rtgnoTarno.replace.value != null && workPackageFareFilter.rtgnoTarno.replace.value != '' ? 'rtgnoTarno' : null,
+    	    	    	workPackageFareFilter.newFareBasis.replace.check && workPackageFareFilter.newFareBasis.replace.value != null && workPackageFareFilter.newFareBasis.replace.value != '' ? 'newFareBasis' : null,
+    	    	    	workPackageFareFilter.newTypeOfJourney.replace.check && workPackageFareFilter.newTypeOfJourney.replace.value != null && workPackageFareFilter.newTypeOfJourney.replace.value != '' ? 'newTypeOfJourney' : null,
+    	    	    	workPackageFareFilter.newBookingCode.replace.check && workPackageFareFilter.newBookingCode.replace.value != null && workPackageFareFilter.newBookingCode.replace.value != '' ? 'newBookingCode' : null,
     	    		];
  	    			
  	    			for(var x=0;x<listField.length;x++){
