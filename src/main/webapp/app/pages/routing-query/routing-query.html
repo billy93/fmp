@@ -70,12 +70,15 @@
 							<div class="pull-right pv1">
 								<button type="button"
 										class="btn btn-default small"
+										ng-disabled="vm.isLoading"
 										ng-click="vm.loadAll();">Query</button>
 								<button type="button"
 										class="btn btn-default small"
+										ng-disabled="vm.isLoading"
 										ng-click="vm.clearFilter();">Clear</button>
 								<button type="reset"
 										ng-click="vm.resetFilter();"
+										ng-disabled="vm.isLoading"
 										class="btn btn-default small">Reset</button>
 							</div>
 						</div>

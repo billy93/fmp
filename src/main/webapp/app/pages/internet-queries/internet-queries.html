@@ -89,7 +89,7 @@
 									<div class="custom-label semibold">Additional Options</div>
 									<div class="checkbox-wrapper">
 										<label>
-											<input type="checkbox" name="biDirectional" ng-model="vm.queryParams.biDirectional" ng-disabled="true"> 
+											<input type="checkbox" name="biDirectional" ng-model="vm.queryParams.biDirectional" ng-disabled="false"> 
 											Bi-directional
 										</label>
 										<br/>
@@ -110,12 +110,14 @@
 							<div class="pull-right pv1">
 								<button type="button"
 										class="btn btn-default small"
-										ng-disabled="queryForm.$invalid"
+										ng-disabled="queryForm.$invalid || vm.isLoading"
 										ng-click="vm.loadAll();">Query</button>
 								<button type="button"
 										class="btn btn-default small"
+										ng-disabled="vm.isLoading"
 										ng-click="vm.clearFilter();">Clear</button>
 								<button type="reset"
+										ng-disabled="vm.isLoading"
 										ng-click="vm.resetFilter();"
 										class="btn btn-default small">Reset</button>
 							</div>
@@ -147,11 +149,11 @@
 								</select>
 							</div>
 							<div class="pull-right">
-								<button type="button" class="btn btn-default small">Hide</button>
-								<button type="button" class="btn btn-default small">Copy</button>
-								<button type="button" class="btn btn-default small">Print/Export</button>
-								<button type="button" class="btn btn-default small">Filter/Sort</button>
-								<button type="button" class="btn btn-default small">Currency : {{vm.queryParams.currency}}</button>
+								<button type="button" class="btn btn-default small" ng-disabled="true">Hide</button>
+								<button type="button" class="btn btn-default small" ng-disabled="true">Copy</button>
+								<button type="button" class="btn btn-default small" ng-disabled="vm.internetQueries == null || vm.internetQueries.length < 1" ng-click="vm.printExport()">Print/Export</button>
+								<button type="button" class="btn btn-default small" ng-disabled="true">Filter/Sort</button>
+								<button type="button" class="btn btn-default small" ng-disabled="true">Currency : {{vm.queryParams.currency}}</button>
 							</div>
 						</div>
 					</div>

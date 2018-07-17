@@ -208,16 +208,34 @@ public class InternetQueryService {
 			public DBObject toDBObject(AggregationOperationContext context) {
 				BasicDBObject match = new BasicDBObject();
 				if (param.getCxr() != null && !param.getCxr().isEmpty()) {
-					match.append("carrier_code", param.getCxr());
+					match.append("carrier_code", new BasicDBObject("$in", Arrays.asList(param.getCxr().split(","))));
 				}
 				if (param.getWebsite() != null && !param.getWebsite().isEmpty()) {
 					match.append("site_name", param.getWebsite());
 				}
-				if (param.getOrigin() != null && !param.getOrigin().isEmpty()) {
-					match.append("origin", param.getOrigin());
-				}
-				if (param.getDestination() != null && !param.getDestination().isEmpty()) {
-					match.append("destination", param.getDestination());
+				
+				if(param.isBiDirectional()) {
+					List<String> od = new ArrayList<>();
+					if (param.getOrigin() != null && !param.getOrigin().isEmpty()) {
+						od.add(param.getOrigin());
+					}
+					if (param.getDestination() != null && !param.getDestination().isEmpty()) {
+						od.add(param.getDestination());
+					}
+					
+					if (param.getOrigin() != null && !param.getOrigin().isEmpty()) {
+						match.append("origin", new BasicDBObject("$in", od));
+					}
+					if (param.getDestination() != null && !param.getDestination().isEmpty()) {
+						match.append("destination", new BasicDBObject("$in", od));
+					}
+				} else {
+					if (param.getOrigin() != null && !param.getOrigin().isEmpty()) {
+						match.append("origin", param.getOrigin());
+					}
+					if (param.getDestination() != null && !param.getDestination().isEmpty()) {
+						match.append("destination", param.getDestination());
+					}
 				}
 				
 				if (param.getDepartDateFrom() != null && param.getDepartDateTo() != null) {
@@ -308,7 +326,7 @@ public class InternetQueryService {
 					public DBObject toDBObject(AggregationOperationContext context) {
 						BasicDBObject query = new BasicDBObject();
 						query.append("_id", 
-								new BasicDBObject("cxr", "$cxr_code")
+								new BasicDBObject("cxr", "$cxr")
 								.append("origin", "$origin")
 								.append("destination", "$destination")
 								.append("ap_days", "$ap_days")
@@ -324,7 +342,7 @@ public class InternetQueryService {
 					public DBObject toDBObject(AggregationOperationContext context) {
 						BasicDBObject query = new BasicDBObject();
 						query.append("_id", 
-								new BasicDBObject("cxr", "$cxr_code")
+								new BasicDBObject("cxr", "$cxr")
 								.append("origin", "$origin")
 								.append("destination", "$destination")
 								.append("ap_days", "$ap_days")

@@ -92,9 +92,9 @@
 									<button type="button" id="btnLoadFare"
 										class="btn btn-default small" ng-click="vm.loadAll();" ng-disabled="fareClassForm.$invalid || vm.isLoading">Query</button>
 									<button type="button" id="btnClearFare"
-										class="btn btn-default small" ng-click="vm.clearFilter();">Clear</button>
+										class="btn btn-default small" ng-click="vm.clearFilter();" ng-disabled="vm.isLoading">Clear</button>
 									<button type="reset" id="btnResetFare"
-										ng-click="vm.resetFilter();" class="btn btn-default small">Reset</button>
+										ng-click="vm.resetFilter();" class="btn btn-default small" ng-disabled="vm.isLoading">Reset</button>
 								</div>
 							</div>
 
