@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('WorkPackageSearchReplaceDialogController', WorkPackageSearchReplaceDialogController);
 
-    WorkPackageSearchReplaceDialogController.$inject = ['$scope', 'FileSaver', 'DataUtils', 'DateUtils', '$uibModalInstance', 'WorkPackage', '$state', 'Agent', 'filter', 'fareSheet', 'workPackage'];
+    WorkPackageSearchReplaceDialogController.$inject = ['$scope', 'FileSaver', 'DataUtils', 'DateUtils', '$uibModalInstance', 'WorkPackage', '$state', 'Agent', 'filter', 'fareSheet', 'workPackage', 'fareType'];
 
-    function WorkPackageSearchReplaceDialogController($scope, FileSaver, DataUtils, DateUtils, $uibModalInstance, WorkPackage, $state, Agent, filter, fareSheet, workPackage) {
+    function WorkPackageSearchReplaceDialogController($scope, FileSaver, DataUtils, DateUtils, $uibModalInstance, WorkPackage, $state, Agent, filter, fareSheet, workPackage, fareType) {
 
         var vm = this;
         vm.clear = clear;
@@ -222,6 +222,7 @@
         	vm.filter.replaceAll = true;
         	vm.filter.replace = false;
         	vm.filter.find = false;
+        	console.log(vm.filter);
         	$uibModalInstance.close(vm.filter);
         }
         
@@ -241,11 +242,72 @@
         	if(vm.filter.travelComplete.search != null){
         		vm.filter.travelComplete.search = DateUtils.convertLocalDateToServer(vm.filter.travelComplete.search);
         	}
+//        	if(vm.filter.travelStart.replace.value != null){
+//        		vm.filter.travelStart.replace.value = DateUtils.convertLocalDateToServer(vm.filter.travelStart.replace.value);
+//        	}
+//        	if(vm.filter.travelEnd.replace.value != null){
+//        		vm.filter.travelEnd.replace.value = DateUtils.convertLocalDateToServer(vm.filter.travelEnd.replace.value);
+//        	}
+//        	if(vm.filter.saleStart.replace.value != null){
+//        		vm.filter.saleStart.replace.value = DateUtils.convertLocalDateToServer(vm.filter.saleStart.replace.value);
+//        	}
+//        	if(vm.filter.saleEnd.replace.value != null){
+//        		vm.filter.saleEnd.replace.value = DateUtils.convertLocalDateToServer(vm.filter.saleEnd.replace.value);
+//        	}
+//        	if(vm.filter.travelComplete.replace.value != null){
+//        		vm.filter.travelComplete.replace.value = DateUtils.convertLocalDateToServer(vm.filter.travelComplete.replace.value);
+//        	}
         };
         
         vm.reset = function(){
         	 vm.filter = vm.originalFilter;
         };
+        
+        vm.showField = function(field){   
+        	var fields = [];
+
+//    		var fields = [
+//    			'status', 'carrier', 'action', 'tarno', 'tarcd', 'global', 'origin', 'destination', 
+//    			'bucket', 'farebasis', 'bookingclass', 'cabin', 'owrt', 'footnote', 'zone', 'rtgno', 'ruleno',
+//    			'currency', 'amount', 'aif', 'travelstart', 'travelend', 'salestart', 'saleend', 'comment',
+//    			'travelcomplete', 'travelcompleteindicator', 'ratesheetcomment'
+//    		];
+        	
+        	if(fareType == 'fare'){
+        		var fields = [
+        			'status', 'carrier', 'action', 'tarno', 'tarcd', 'global', 'origin', 'destination', 'farebasis', 
+        			'bookingclass', 'cabin', 'owrt', 'footnote', 'rtgno', 'ruleno',
+        			'currency', 'amount', 'aif', 'travelstart', 'travelend', 'salestart', 'saleend', 'comment',
+        			'travelcomplete', 'travelcompleteindicator', 'ratesheetcomment'
+        		];    
+        		
+        	}
+        	else if(fareType == 'fare-regular-addon'){
+        		var fields = [
+        			'status', 'carrier', 'action', 'tarno', 'tarcd', 'global','origin', 'destination',
+        			'bucket', 'owrt', 'footnote', 'zone', 'rtgno','currency', 'amount', 
+        			'travelstart', 'travelend', 'salestart', 'saleend', 'comment', 'travelcomplete', 'travelcompleteindicator',
+        		];
+        	}
+        	else if(fareType == 'fare-market'){
+        		var fields = [
+        			'status', 'carrier', 'action','origin', 'destination',
+        			'farebasis', 'bookingclass', 'ssn', 'cabin', 'owrt', 'ruleno', 'currency', 'amount', 
+        			'travelstart', 'travelend', 'salestart', 'saleend', 'comment', 'travelcomplete', 'travelcompleteindicator',
+        			'ratesheetcomment'
+        		];
+        	}
+        	else if(fareType == 'fare-market-addon'){
+        	}
+        	else if(fareType == 'fare-discount'){
+        	}
+        	else if(fareType == 'fare-waiver'){
+        	}
+        	if(fields.indexOf(field) > -1){
+    			return true;
+    		}
+        	return false;
+        }
         
         function clear () {
             $uibModalInstance.dismiss('cancel');

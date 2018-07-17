@@ -2081,7 +2081,7 @@
  	    	}
  	    }
  	    
- 	    vm.searchReplace = function(table, fareSheet, filter){
+ 	    vm.searchReplace = function(fareType, table, fareSheet, filter){
  	    	$uibModal.open({
 	            templateUrl: 'app/pages/work-packages/work-package-search-replace-dialog.html',
 	            controller: 'WorkPackageSearchReplaceDialogController',
@@ -2100,6 +2100,9 @@
 	            		if(filter != null)
 	            			return filter;
 	            		return null;
+	            	},
+	            	fareType: function(){
+	            		return fareType;
 	            	}
 	            }
  	    	}).result.then(function(workPackageFareFilter) {
@@ -2116,6 +2119,7 @@
     	    			workPackageFareFilter.destination.check && workPackageFareFilter.destination.search != null && workPackageFareFilter.destination.search != '' ? 'destination' : null,
     	    			workPackageFareFilter.fareBasis.check && workPackageFareFilter.fareBasis.search != null && workPackageFareFilter.fareBasis.search != '' ? 'fareBasis' : null,
     	    			workPackageFareFilter.bookingClass.check && workPackageFareFilter.bookingClass.search != null && workPackageFareFilter.bookingClass.search != '' ? 'bookingClass' : null,
+    					workPackageFareFilter.ssn.check && workPackageFareFilter.ssn.search != null && workPackageFareFilter.ssn.search != '' ? 'ssn' : null,
     	    	    	workPackageFareFilter.cabin.check && workPackageFareFilter.cabin.search != null && workPackageFareFilter.cabin.search != '' ? 'cabin' : null,
     	    	    	workPackageFareFilter.footnote1.check && workPackageFareFilter.footnote1.search != null && workPackageFareFilter.footnote1.search != '' ? 'footnote1' : null,
     	    	    	workPackageFareFilter.typeOfJourney.check && workPackageFareFilter.typeOfJourney.search != null && workPackageFareFilter.typeOfJourney.search != '' ? 'typeOfJourney' : null,
@@ -2184,6 +2188,7 @@
     					workPackageFareFilter.destination.replace.check && workPackageFareFilter.destination.replace.value != null && workPackageFareFilter.destination.replace.value != '' ? 'destination' : null,
     					workPackageFareFilter.fareBasis.replace.check && workPackageFareFilter.fareBasis.replace.value != null && workPackageFareFilter.fareBasis.replace.value != '' ? 'fareBasis' : null,
     					workPackageFareFilter.bookingClass.replace.check && workPackageFareFilter.bookingClass.replace.value != null && workPackageFareFilter.bookingClass.replace.value != '' ? 'bookingClass' : null,
+						workPackageFareFilter.ssn.replace.check && workPackageFareFilter.ssn.replace.value != null && workPackageFareFilter.ssn.replace.value != '' ? 'ssn' : null,
     	    			workPackageFareFilter.cabin.replace.check && workPackageFareFilter.cabin.replace.value != null && workPackageFareFilter.cabin.replace.value != '' ? 'cabin' : null,
     	    			workPackageFareFilter.typeOfJourney.replace.check && workPackageFareFilter.typeOfJourney.replace.value != null && workPackageFareFilter.typeOfJourney.replace.value != '' ? 'typeOfJourney' : null,
     	    	    	workPackageFareFilter.footnote1.replace.check && workPackageFareFilter.footnote1.replace.value != null && workPackageFareFilter.footnote1.replace.value != '' ? 'footnote1' : null,
@@ -2192,7 +2197,7 @@
     	    	    	workPackageFareFilter.currency.replace.check && workPackageFareFilter.currency.replace.value != null && workPackageFareFilter.currency.replace.value != '' ? 'currency' : null,
     	    	    	workPackageFareFilter.amount.replace.check && workPackageFareFilter.amount.replace.value != null && workPackageFareFilter.amount.replace.value != '' ? 'amount' : null,
     	    	    	workPackageFareFilter.aif.replace.check && workPackageFareFilter.aif.search != null && workPackageFareFilter.aif.search != '' ? 'aif' : null,
-    	    	    	workPackageFareFilter.travelStart.vcheck && workPackageFareFilter.travelStart.replace.value != null && workPackageFareFilter.travelStart.replace.value != '' ? 'travelStart' : null,
+    	    	    	workPackageFareFilter.travelStart.check && workPackageFareFilter.travelStart.replace.value != null && workPackageFareFilter.travelStart.replace.value != '' ? 'travelStart' : null,
     	    	    	workPackageFareFilter.travelEnd.replace.check && workPackageFareFilter.travelEnd.replace.value != null && workPackageFareFilter.travelEnd.replace.value != '' ? 'travelEnd' : null,
     	    	    	workPackageFareFilter.saleStart.replace.check && workPackageFareFilter.saleStart.replace.value != null && workPackageFareFilter.saleStart.replace.value != '' ? 'saleStart' : null,
     	    	    	workPackageFareFilter.saleEnd.replace.check && workPackageFareFilter.saleEnd.replace.value != null && workPackageFareFilter.saleEnd.replace.value != '' ? 'saleEnd' : null,
@@ -2275,7 +2280,7 @@
 	    			}
 	    		}
 	    		
-    	    	vm.searchReplace(table, fareSheet, workPackageFareFilter);        	    
+    	    	vm.searchReplace(fareType, table, fareSheet, workPackageFareFilter);        	    
             }, function() {
         			
             });
@@ -5396,6 +5401,40 @@
 	    			  else{
 	    				  result.content[x].action = "A";
 	    			  }	    			  
+	    			  result.content[x].id = null;
+	    			  result.content[x].travelStart = DateUtils.convertDateTimeFromServer(result.content[x].travelStart);
+	    			  result.content[x].travelEnd = DateUtils.convertDateTimeFromServer(result.content[x].travelEnd);
+	    			  result.content[x].saleStart = DateUtils.convertDateTimeFromServer(result.content[x].saleStart);
+	    			  result.content[x].saleEnd = DateUtils.convertDateTimeFromServer(result.content[x].saleEnd);
+	    			  result.content[x].travelComplete = DateUtils.convertDateTimeFromServer(result.content[x].travelComplete);
+	        		  workPackageSheet.fares.push(result.content[x]);    			  
+	    		  }
+			  }
+			  else if(result.page == 'workorder-addon-fares'){
+	    		  for(var x=0;x<result.content.length;x++){
+	    			  result.content[x].no = workPackageSheet.fares.length+1;
+	    			  
+	    			  result.content[x].status = "PENDING";
+	    			  if(cancel){
+	    				  result.content[x].action = "X";
+	    			  }
+	    			  else{
+	    				  result.content[x].action = "A";
+	    			  }	    			  
+	    			  result.content[x].id = null;
+	    			  result.content[x].travelStart = DateUtils.convertDateTimeFromServer(result.content[x].travelStart);
+	    			  result.content[x].travelEnd = DateUtils.convertDateTimeFromServer(result.content[x].travelEnd);
+	    			  result.content[x].saleStart = DateUtils.convertDateTimeFromServer(result.content[x].saleStart);
+	    			  result.content[x].saleEnd = DateUtils.convertDateTimeFromServer(result.content[x].saleEnd);
+	    			  result.content[x].travelComplete = DateUtils.convertDateTimeFromServer(result.content[x].travelComplete);
+	        		  workPackageSheet.fares.push(result.content[x]);    			  
+	    		  }
+			  }
+			  else if(result.page == 'workorder-discount-fares'){
+	    		  for(var x=0;x<result.content.length;x++){
+	    			  result.content[x].no = workPackageSheet.fares.length+1;
+	    			  
+	    			  result.content[x].status = "PENDING";	    			     			  
 	    			  result.content[x].id = null;
 	    			  result.content[x].travelStart = DateUtils.convertDateTimeFromServer(result.content[x].travelStart);
 	    			  result.content[x].travelEnd = DateUtils.convertDateTimeFromServer(result.content[x].travelEnd);
