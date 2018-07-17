@@ -274,6 +274,24 @@ public class UserResource {
 	        return true;            
 	    }
 	 
+	 
+	 /**
+		 * GET /users : get all users.
+		 *
+		 * @param pageable
+		 *            the pagination information
+		 * @return the ResponseEntity with status 200 (OK) and with body all users
+		 * @throws IllegalAccessException 
+		 */
+		@GetMapping("/users/all")
+		@Timed
+		public ResponseEntity<List<User>> getAllUsers(){		
+			List<User> result = userService.findAll();
+			return new ResponseEntity<>(result, HttpStatus.OK);
+			
+		}
+		
+		
 	/**
 	 * @return a string list of the all of the roles
 	 */

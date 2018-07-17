@@ -113,6 +113,13 @@
                     return transformResponse(data);
                 }
             },
+            'getQuery': {
+                method: 'GET',
+                url:'api/work-packages/view/:id',
+                transformResponse: function (data) {
+                    return transformResponse(data);
+                }
+            },
             'update': { method:'PUT' },
             'createFromRecommendation': {
             	    method:'POST', url:'api/work-packages/create/fromRecommendation'
@@ -195,6 +202,7 @@
 	        'updateLatestFare' : { method: 'POST',  url:'api/work-packages/update-latest-fare'},
 	        'updateActionCodes' : { method: 'POST',  url:'api/work-packages/update-action-codes'},
 	        'refreshTariff' : { method: 'POST',  url:'api/work-packages/refresh-tariff'},
+	        'customQuery': { method: 'POST', url:'api/work-packages/query', isArray:true}
         });
     }
 })();
