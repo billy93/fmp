@@ -1657,6 +1657,792 @@
 	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.ratesheetComment.replace.check" ng-model="vm.filter.ratesheetComment.replace.value">
 	 						</div>
 	 					</div>
+	
+						
+	 					<div class="clearfix" ng-show="vm.showField('waiveragentname')">
+	 						<div class="pull-left ph5px w30 mt5px">Agent Name
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverAgentName.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverAgentName.check" ng-model="vm.filter.waiverAgentName.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverAgentName.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverAgentName.replace.check" ng-model="vm.filter.waiverAgentName.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiveriatano')">
+	 						<div class="pull-left ph5px w30 mt5px">Iata No
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverIataNo.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverIataNo.check" ng-model="vm.filter.waiverIataNo.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverIataNo.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverIataNo.replace.check" ng-model="vm.filter.waiverIataNo.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiveriocno')">
+	 						<div class="pull-left ph5px w30 mt5px">Ioc No
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverIocNo.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverIocNo.check" ng-model="vm.filter.waiverIocNo.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverIocNo.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverIocNo.replace.check" ng-model="vm.filter.waiverIocNo.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiverapprovaldate')">
+	 						<div class="pull-left ph5px w30 mt5px">Approval Date
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverApprovalDate.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverApprovalDate.check" ng-model="vm.filter.waiverApprovalDate.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverApprovalDate.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverApprovalDate.replace.check" ng-model="vm.filter.waiverApprovalDate.replace.value">	 	
+	 						</div>
+	 					</div>
+	 				
+	 						 					
+	 					<div class="clearfix" ng-show="vm.showField('waivertype')">
+	 						<div class="pull-left ph5px w30 mt5px">Waiver Type
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverType.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<select class="form-control" ng-disabled="!vm.filter.waiverType.check" ng-model="vm.filter.waiverType.search">
+	 								<option value="">Select Option</option>
+	 								<option value="SALES">SALES</option>
+	 								<option value="FUND">FUND</option>
+								</select>
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverType.replace.check">													
+										</label>
+									</div>
+								</div>	
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<select class="form-control" ng-disabled="!vm.filter.waiverType.replace.check" ng-model="vm.filter.waiverType.replace.value">
+	 								<option value="">Select Option</option>
+	 								<option value="SALES">SALES</option>
+	 								<option value="FUND">FUND</option>
+								</select>
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiverfullpartial')">
+	 						<div class="pull-left ph5px w30 mt5px">Full / Partial
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverFullPartial.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<select class="form-control" ng-disabled="!vm.filter.waiverFullPartial.check" ng-model="vm.filter.waiverFullPartial.search">
+	 								<option value="">Select Option</option>
+	 								<option value="FULL">FULL</option>
+	 								<option value="PARTIAL">PARTIAL</option>
+								</select>
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverFullPartial.replace.check">													
+										</label>
+									</div>
+								</div>	
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<select class="form-control" ng-disabled="!vm.filter.waiverFullPartial.replace.check" ng-model="vm.filter.waiverFullPartial.replace.value">
+	 								<option value="">Select Option</option>
+	 								<option value="FULL">FULL</option>
+	 								<option value="PARTIAL">PARTIAL</option>
+								</select>
+	 						</div>
+	 					</div>
+	 					
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiverpnr')">
+	 						<div class="pull-left ph5px w30 mt5px">PNR
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverPnr.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverPnr.check" ng-model="vm.filter.waiverPnr.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverPnr.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverPnr.replace.check" ng-model="vm.filter.waiverPnr.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waivertktfrom')">
+	 						<div class="pull-left ph5px w30 mt5px">Tkt From
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverTktFrom.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverTktFrom.check" ng-model="vm.filter.waiverTktFrom.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverTktFrom.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverTktFrom.replace.check" ng-model="vm.filter.waiverTktFrom.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waivertktto')">
+	 						<div class="pull-left ph5px w30 mt5px">Tkt To
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverTktTo.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverTktTo.check" ng-model="vm.filter.waiverTktTo.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverTktTo.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverTktTo.replace.check" ng-model="vm.filter.waiverTktTo.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiverori')">
+	 						<div class="pull-left ph5px w30 mt5px">Ori
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverOri.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverOri.check" ng-model="vm.filter.waiverOri.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverOri.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverOri.replace.check" ng-model="vm.filter.waiverOri.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiverdest')">
+	 						<div class="pull-left ph5px w30 mt5px">Dest
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverDest.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverDest.check" ng-model="vm.filter.waiverDest.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverDest.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverDest.replace.check" ng-model="vm.filter.waiverDest.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiveroriginalitinerary')">
+	 						<div class="pull-left ph5px w30 mt5px">Original Itinerary
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverOriginalItinerary.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverOriginalItinerary.check" ng-model="vm.filter.waiverOriginalItinerary.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverOriginalItinerary.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverOriginalItinerary.replace.check" ng-model="vm.filter.waiverOriginalItinerary.replace.value">	 	
+	 						</div>
+	 					</div>
+
+	 					<div class="clearfix" ng-show="vm.showField('waivernewitinerary')">
+	 						<div class="pull-left ph5px w30 mt5px">New Itinerary
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverNewItinerary.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverNewItinerary.check" ng-model="vm.filter.waiverNewItinerary.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverNewItinerary.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverNewItinerary.replace.check" ng-model="vm.filter.waiverNewItinerary.replace.value">	 	
+	 						</div>
+	 					</div>
+
+						
+	 					<div class="clearfix" ng-show="vm.showField('waiveroriginalbasicfare')">
+	 						<div class="pull-left ph5px w30 mt5px">Original Basic Fare
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverOriginalBasicFare.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverOriginalBasicFare.check" ng-model="vm.filter.waiverOriginalBasicFare.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverOriginalBasicFare.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverOriginalBasicFare.replace.check" ng-model="vm.filter.waiverOriginalBasicFare.replace.value">	 	
+	 						</div>
+	 					</div>
+						
+	 					<div class="clearfix" ng-show="vm.showField('waivernewbasicfare')">
+	 						<div class="pull-left ph5px w30 mt5px">New Basic Fare
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverNewBasicFare.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverNewBasicFare.check" ng-model="vm.filter.waiverNewBasicFare.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverNewBasicFare.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverNewBasicFare.replace.check" ng-model="vm.filter.waiverNewBasicFare.replace.value">	 	
+	 						</div>
+	 					</div>
+						
+						
+						<div class="clearfix" ng-show="vm.showField('waiverapprovedfare')">
+	 						<div class="pull-left ph5px w30 mt5px">Approved Fare
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverApprovedFare.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverApprovedFare.check" ng-model="vm.filter.waiverApprovedFare.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverApprovedFare.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverApprovedFare.replace.check" ng-model="vm.filter.waiverApprovedFare.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiverfarelost')">
+	 						<div class="pull-left ph5px w30 mt5px">Fare Lost
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverFareLost.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverFareLost.check" ng-model="vm.filter.waiverFareLost.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverFareLost.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverFareLost.replace.check" ng-model="vm.filter.waiverFareLost.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waivercalculatedpn')">
+	 						<div class="pull-left ph5px w30 mt5px">Calculated PN
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverCalculatedPn.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<select class="form-control" ng-disabled="!vm.filter.waiverCalculatedPn.check" ng-model="vm.filter.waiverCalculatedPn.search">
+	 								<option value="">Select Option</option>
+	 								<option value="amount">Amount</option>
+	 								<option value="percent">Percent</option>
+								</select>
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverCalculatedPn.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<select class="form-control" ng-disabled="!vm.filter.waiverCalculatedPn.replace.check" ng-model="vm.filter.waiverCalculatedPn.replace.value">
+	 								<option value="">Select Option</option>
+	 								<option value="amount">Amount</option>
+	 								<option value="percent">Percent</option>
+								</select>
+	 						</div>
+	 					</div>
+	 					
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiveroriginalpn')">
+	 						<div class="pull-left ph5px w30 mt5px">Original PN
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverOriginalPn.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverOriginalPn.check" ng-model="vm.filter.waiverOriginalPn.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverOriginalPn.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverOriginalPn.replace.check" ng-model="vm.filter.waiverOriginalPn.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiverapprovedpn')">
+	 						<div class="pull-left ph5px w30 mt5px">Approved PN
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverApprovedPn.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverApprovedPn.check" ng-model="vm.filter.waiverApprovedPn.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverApprovedPn.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverApprovedPn.replace.check" ng-model="vm.filter.waiverApprovedPn.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiverpenaltylostpercent')">
+	 						<div class="pull-left ph5px w30 mt5px">Penalty Lost Percent
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverPenaltyLostPercent.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverPenaltyLostPercent.check" ng-model="vm.filter.waiverPenaltyLostPercent.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverPenaltyLostPercent.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverPenaltyLostPercent.replace.check" ng-model="vm.filter.waiverPenaltyLostPercent.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiverpenaltylostamount')">
+	 						<div class="pull-left ph5px w30 mt5px">Penalty Lost Amount
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverPenaltyLostAmount.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverPenaltyLostAmount.check" ng-model="vm.filter.waiverPenaltyLostAmount.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverPenaltyLostAmount.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverPenaltyLostAmount.replace.check" ng-model="vm.filter.waiverPenaltyLostAmount.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waivercurrency')">
+	 						<div class="pull-left ph5px w30 mt5px">Currency
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverCurrency.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverCurrency.check" ng-model="vm.filter.waiverCurrency.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverCurrency.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverCurrency.replace.check" ng-model="vm.filter.waiverCurrency.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waivertotalpax')">
+	 						<div class="pull-left ph5px w30 mt5px">Total Pax
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverTotalPax.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverTotalPax.check" ng-model="vm.filter.waiverTotalPax.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverTotalPax.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverTotalPax.replace.check" ng-model="vm.filter.waiverTotalPax.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waivertotallost')">
+	 						<div class="pull-left ph5px w30 mt5px">Total Lost
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverTotalLost.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverTotalLost.check" ng-model="vm.filter.waiverTotalLost.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverTotalLost.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverTotalLost.replace.check" ng-model="vm.filter.waiverTotalLost.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiverremark')">
+	 						<div class="pull-left ph5px w30 mt5px">Remark
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverRemark.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverRemark.check" ng-model="vm.filter.waiverRemark.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverRemark.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverRemark.replace.check" ng-model="vm.filter.waiverRemark.replace.value">	 	
+	 						</div>
+	 					</div>
 	 				</div>
 	 			</div>
 			</div>
