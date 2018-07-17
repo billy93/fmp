@@ -2,6 +2,7 @@ package com.atibusinessgroup.fmp.repository;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 
+import java.io.Console;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -90,7 +91,12 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		}
 		Criteria approvalCriteria = new Criteria();
 		if(filter.getApproval() != null) {
-			approvalCriteria = Criteria.where("approval_reference").is(filter.getApproval());
+			approvalCriteria = Criteria.where("fare_sheet.approval_reference").is(filter.getApproval());
+		}
+				
+		Criteria fareTypeCriteria = new Criteria();
+		if(filter.getFareClass() != null) {
+			fareTypeCriteria = Criteria.where("fare_sheet.fare_type").is(filter.getFareClass().getName());
 		}
 		
 		Criteria createdDateCriteria = new Criteria();
@@ -204,7 +210,7 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		
 		Query query = new Query(new Criteria().andOperator(wpIDCriteria,nameCriteria,statusCriteria,
 				targetCriteria,typeCriteria, businessCriteria, createdCriteria, createdDateCriteria, 
-				filingDateCriteria, distribDateCriteria, discDateCriteria, approvalCriteria))
+				filingDateCriteria, distribDateCriteria, discDateCriteria, approvalCriteria, fareTypeCriteria))
 				.with(pageable);
 		
 		List<WorkPackage> workPackages = mongoTemplate.find(query, WorkPackage.class);

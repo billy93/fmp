@@ -1,0 +1,255 @@
+<form name="editForm" role="form" novalidate ng-submit="vm.save()">
+    <div class="modal-header">
+    	<h5 class="modal-title" id="myWorkPackageLabel">Advance Filtering and Sorting</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+    	<uib-tabset active="activeForm">			
+			<uib-tab heading="Filtering Options" ng-click="vm.selectTab('filtering')">				
+		      	<div class="box-detail">	
+      				<div class="box-body">
+						<div class="custom-label">New Filter</div>
+      					<div class="clearfix">
+							<div class="pull-left w50 ph5px">
+								<select class="form-control" ng-model="vm.newFilterField" ng-init="vm.newFilterField='reviewLevel'">
+									<option value="reviewLevel" ng-selected=true>Review Level</option>
+									<option value="status">Status </option>
+									<option value="wpid">WP ID </option>
+									<option value="name">Name </option>
+									<option value="businessArea">Business Area </option>
+									<option value="fareType"  >Fare Types </option>
+									<option value="priority">Priority </option>
+									<option value="filingDate">Filing Date </option>
+									<option value="reuseFrom">Reuse from </option>
+									<option value="replaceFrom">Replace from </option>
+									<option value="targetDistribution">Distribution Type </option>
+									<option value="queuedDate">Queued Date</option>
+									<option value="createdDate">Created Date </option>
+									<option value="createdBy">Created By </option>
+									<option value="lockedBy">Locked By </option>
+									<option value="lockedSince">Locked Since </option>
+									<option value="type">WO Type </option>
+									<option value="approvalReference"  >Approval Reference </option>
+									<option value="lastModifiedDate">Last Modified Date </option>
+									<option value="lastModifiedBy">Last Modified By </option>
+									<option value="groupFare">Group Fare</option>										
+								</select>
+							</div>
+							<div class="row">
+								<div class="col-sm-2">
+									<input type="checkbox" ng-model="vm.isCheckedNot"><label>Not</label>
+								</div>
+								<div class="col-sm-4">
+									<select class="form-control" ng-model="vm.newFilterComparator" ng-init="vm.newFilterComparator='equal'">
+									<option value="equal" ng-selected=true>=</option>
+									<option value="between">Between </option>
+									<option value="greaterThan"> > </option>
+									<option value="greaterThanorEqual"> >= </option>
+									<option value="lessThan"> <  </option>
+									<option value="lessThanorEqual"> <=  </option>
+									<option value="oneOf">One of </option>
+									<option value="wildcard">Wildcard Match </option>									
+								</select>
+								</div>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-sm-10">
+								<input type="text" class="form-control" ng-model="vm.valueFilter">
+							</div>
+							<div class="col-sm-2">
+								<button type="submit" class="btn btn-secondary" ng-click="vm.addNewFilter()" >Add</button>
+							</div>
+						</div>
+						<div>
+							<input type="checkbox" ng-model="vm.ignoreCase"><label>Ignore Case</label>
+						</div>
+      				</div>	      				
+      			</div>
+      			<div>
+				<div class="box-detail">
+      				<div class="box-header">Current Filter</div>	
+      				<div class="box-body">
+      					<div class="table-wrapper">
+							<div class="datatable-wrapper form-inline">
+								<div class="row">
+									<div class="col-sm-10">
+										<table>
+											<tbody>
+												<tr role="row" ng-click="vm.rowValueHighlighted(filter)" ng-class="{selected : filter == vm.selectedValueRow}"
+												class="datatable-row" ng-repeat="filter in vm.ListFilter track by $index">
+													<td>
+														{{filter}}
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+									<div class="col-sm-2">
+										<button type="submit" class="btn btn-secondary" ng-click="vm.removeFilter(vm.selectedValueRow)" >Remove</button>
+										<button type="submit" class="btn btn-secondary" ng-click="vm.removeAllFilter()" >Remove All</button>
+									</div>
+								</div>
+							</div>
+						</div>
+      				</div>		      				
+      			</div>
+  			</div>
+			</uib-tab>
+			
+			<uib-tab heading="Sorting Options" ng-click="vm.selectTab('sorting')">						
+		     	<div class="box-detail">
+      				<div>Short By</div>	
+      				<div class="box-body">
+      					<div class="table-wrapper">
+							<div class="datatable-wrapper form-inline">
+      					<div class="clearfix">
+							<div class="pull-left w50 ph5px">
+								<select class="form-control" ng-model="vm.newFilterField1" ng-init="vm.newFilterField1='reviewLevel'">
+									<option value="reviewLevel" ng-selected=true>Review Level</option>
+									<option value="status">Status </option>
+									<option value="wpid">WP ID </option>
+									<option value="name">Name </option>
+									<option value="businessArea">Business Area </option>
+									<option value="fareType"  >Fare Types </option>
+									<option value="priority">Priority </option>
+									<option value="filingDate">Filing Date </option>
+									<option value="reuseFrom">Reuse from </option>
+									<option value="replaceFrom">Replace from </option>
+									<option value="targetDistribution">Distribution Type </option>
+									<option value="queuedDate">Queued Date</option>
+									<option value="createdDate">Created Date </option>
+									<option value="createdBy">Created By </option>
+									<option value="lockedBy">Locked By </option>
+									<option value="lockedSince">Locked Since </option>
+									<option value="type">WO Type </option>
+									<option value="approvalReference"  >Approval Reference </option>
+									<option value="lastModifiedDate">Last Modified Date </option>
+									<option value="lastModifiedBy">Last Modified By </option>
+									<option value="groupFare">Group Fare</option>										
+								</select>
+								<div class="custom-label">Then By</div>
+								<select class="form-control" ng-model="vm.newFilterField2" ng-init="vm.newFilterField2='reviewLevel'">
+									<option value="reviewLevel" ng-selected=true>Review Level</option>
+									<option value="status">Status </option>
+									<option value="wpid">WP ID </option>
+									<option value="name">Name </option>
+									<option value="businessArea">Business Area </option>
+									<option value="fareType"  >Fare Types </option>
+									<option value="priority">Priority </option>
+									<option value="filingDate">Filing Date </option>
+									<option value="reuseFrom">Reuse from </option>
+									<option value="replaceFrom">Replace from </option>
+									<option value="targetDistribution">Distribution Type </option>
+									<option value="queuedDate">Queued Date</option>
+									<option value="createdDate">Created Date </option>
+									<option value="createdBy">Created By </option>
+									<option value="lockedBy">Locked By </option>
+									<option value="lockedSince">Locked Since </option>
+									<option value="type">WO Type </option>
+									<option value="approvalReference"  >Approval Reference </option>
+									<option value="lastModifiedDate">Last Modified Date </option>
+									<option value="lastModifiedBy">Last Modified By </option>
+									<option value="groupFare">Group Fare</option>										
+								</select>
+								<div class="custom-label">Then By</div>
+								<select class="form-control" ng-model="vm.newFilterField3" ng-init="vm.newFilterField3='reviewLevel'">
+									<option value="reviewLevel" ng-selected=true>Review Level</option>
+									<option value="status">Status </option>
+									<option value="wpid">WP ID </option>
+									<option value="name">Name </option>
+									<option value="businessArea">Business Area </option>
+									<option value="fareType"  >Fare Types </option>
+									<option value="priority">Priority </option>
+									<option value="filingDate">Filing Date </option>
+									<option value="reuseFrom">Reuse from </option>
+									<option value="replaceFrom">Replace from </option>
+									<option value="targetDistribution">Distribution Type </option>
+									<option value="queuedDate">Queued Date</option>
+									<option value="createdDate">Created Date </option>
+									<option value="createdBy">Created By </option>
+									<option value="lockedBy">Locked By </option>
+									<option value="lockedSince">Locked Since </option>
+									<option value="type">WO Type </option>
+									<option value="approvalReference"  >Approval Reference </option>
+									<option value="lastModifiedDate">Last Modified Date </option>
+									<option value="lastModifiedBy">Last Modified By </option>
+									<option value="groupFare">Group Fare</option>										
+								</select>
+								<div class="custom-label">Then By</div>
+								<select class="form-control" ng-model="vm.newFilterField4" ng-init="vm.newFilterField4='reviewLevel'">
+									<option value="reviewLevel" ng-selected=true>Review Level</option>
+									<option value="status">Status </option>
+									<option value="wpid">WP ID </option>
+									<option value="name">Name </option>
+									<option value="businessArea">Business Area </option>
+									<option value="fareType"  >Fare Types </option>
+									<option value="priority">Priority </option>
+									<option value="filingDate">Filing Date </option>
+									<option value="reuseFrom">Reuse from </option>
+									<option value="replaceFrom">Replace from </option>
+									<option value="targetDistribution">Distribution Type </option>
+									<option value="queuedDate">Queued Date</option>
+									<option value="createdDate">Created Date </option>
+									<option value="createdBy">Created By </option>
+									<option value="lockedBy">Locked By </option>
+									<option value="lockedSince">Locked Since </option>
+									<option value="type">WO Type </option>
+									<option value="approvalReference"  >Approval Reference </option>
+									<option value="lastModifiedDate">Last Modified Date </option>
+									<option value="lastModifiedBy">Last Modified By </option>
+									<option value="groupFare">Group Fare</option>										
+								</select>
+								<div class="custom-label">Then By</div>
+								<select class="form-control" ng-model="vm.newFilterField5" ng-init="vm.newFilterField5='reviewLevel'">
+									<option value="reviewLevel" ng-selected=true>Review Level</option>
+									<option value="status">Status </option>
+									<option value="wpid">WP ID </option>
+									<option value="name">Name </option>
+									<option value="businessArea">Business Area </option>
+									<option value="fareType"  >Fare Types </option>
+									<option value="priority">Priority </option>
+									<option value="filingDate">Filing Date </option>
+									<option value="reuseFrom">Reuse from </option>
+									<option value="replaceFrom">Replace from </option>
+									<option value="targetDistribution">Distribution Type </option>
+									<option value="queuedDate">Queued Date</option>
+									<option value="createdDate">Created Date </option>
+									<option value="createdBy">Created By </option>
+									<option value="lockedBy">Locked By </option>
+									<option value="lockedSince">Locked Since </option>
+									<option value="type">WO Type </option>
+									<option value="approvalReference"  >Approval Reference </option>
+									<option value="lastModifiedDate">Last Modified Date </option>
+									<option value="lastModifiedBy">Last Modified By </option>
+									<option value="groupFare">Group Fare</option>										
+								</select>
+							</div>
+							<div class="row">
+								<div class="col-sm-2">
+									<input type="checkbox" ng-model="vm.isCheckedIgnoreCaseSort"><label>Ignore Case</label>
+								</div>
+								<div class="col-sm-4">
+									<div ng-init="vm.properties = 'asc'">
+									  <input type="radio" name="gender" value="asc" ng-model="vm.properties" ng-selected="true"> Ascending<br>
+									  <input type="radio" name="gender" value="dsc" ng-model="vm.properties"> Descending<br>
+									</div>
+								</div>
+							</div>
+						</div>
+							</div>
+						</div>
+						<button type="submit" class="btn btn-secondary" ng-click="vm.clearAll()" >Clear All</button>
+      				</div>		      				
+      			</div> 			
+			</uib-tab>
+			</uib-tabset>
+   	</div>
+    <div class="modal-footer">
+    	<button type="submit" class="btn btn-secondary" ng-click="vm.advance()"> < Simple</button>
+    	<button type="submit" class="btn btn-secondary" ng-click="vm.select()" data-translate="entity.action.save">OK</button>
+        <button type="button" ng-click="vm.clear()" class="btn btn-back" data-dismiss="modal">Close</button>
+    </div>
+</form>

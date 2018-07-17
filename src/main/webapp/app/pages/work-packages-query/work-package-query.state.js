@@ -55,6 +55,9 @@
                 }],
                 creator: ['User', function(User) {
                     return User.queryAll().$promise;
+                }],
+                fareTypes: ['FareType', function(FareType) {
+                    return FareType.getAll().$promise;
                 }]
             }
         })

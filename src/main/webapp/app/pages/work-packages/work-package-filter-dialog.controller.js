@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('WorkPackageFilterDialogController', WorkPackageFilterDialogController);
 
-    WorkPackageFilterDialogController.$inject = ['$scope', 'FileSaver', 'DataUtils', '$uibModalInstance', 'WorkPackage', '$state', 'value', 'field'];
+    WorkPackageFilterDialogController.$inject = ['$uibModal', '$scope', 'FileSaver', 'DataUtils', '$uibModalInstance', 'WorkPackage', '$state', 'value', 'field','maxDate','minDate','isDate'];
 
-    function WorkPackageFilterDialogController($scope, FileSaver, DataUtils, $uibModalInstance, WorkPackage, $state, value, field) {
+    function WorkPackageFilterDialogController($uibModal, $scope, FileSaver, DataUtils, $uibModalInstance, WorkPackage, $state, value, field, maxDate, minDate,isDate) {
 
         var vm = this;
         vm.clear = clear;        
@@ -19,7 +19,12 @@
         vm.selectedCityGroupRow = null;
         vm.value = value;
         vm.field = field;
-        
+        vm.datePickerOpenStatus = {};
+        vm.dateFormat = "dd/MM/yyyy";
+        vm.openCalendar = openCalendar;
+        vm.minDate = minDate;
+        vm.maxDate = maxDate;
+        vm.isDate = isDate;
                  
         vm.rowValueHighlighted = function (idSelected) {
             vm.selectedValueRow = idSelected;
@@ -27,7 +32,7 @@
                         
         vm.select = function(){
         	if(vm.currentTab == 'range'){
-        		$uibModalInstance.close(vm.selectedRow);
+        		$uibModalInstance.close({key:'range', value:{from : vm.From, to : vm.To}});
         	}
         	else if(vm.currentTab == 'value'){
         		$uibModalInstance.close({key:'distinctValue', value:vm.selectedValueRow});
@@ -54,6 +59,47 @@
         }
         function clear () {
             $uibModalInstance.dismiss('cancel');
+        }
+        
+        function openCalendar (e, date) {
+        	e.preventDefault();
+            e.stopPropagation();
+            
+            vm.datePickerOpenStatus[date] = true;
+        }
+        
+        vm.advance = function(){
+        	clear();
+        	$uibModal.open({
+                templateUrl: 'app/pages/work-packages/work-package-filter-advance-dialog.html',
+                controller: 'WorkPackageFilterAdvanceDialogController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full-page-modal',
+                resolve: {
+  	              	/*fare: function(){
+  	              		return fare;
+  	              	},
+                    cities: ['City', function(City) {
+                        return City.getAll().$promise;
+                    }],
+                    cityGroup: ['CityGroup', function(CityGroup) {
+                        return CityGroup.getAll().$promise;
+                    }],*/
+                }
+  			}).result.then(function(option) {
+  				if(option != null){
+  					if(option.type == 'city'){
+  						fare[field] = option.cityCode;					
+  					}
+  					else if(option.type == 'cityGroup'){
+  						fare[field] = option.code;	
+  					}
+  				}
+            }, function() {
+        			
+            });
         }
         
     }
