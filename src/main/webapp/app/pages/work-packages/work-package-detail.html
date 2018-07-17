@@ -3810,7 +3810,7 @@
 															    	<a ng-click="vm.fillDown(workPackageSheet)" ng-disabled="vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)" ng-class="{'poiv-none':vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}">Fill Down</a>
 															    </li>
 															    <li>
-															    	<a ng-click="vm.searchReplace(workPackageSheet)" ng-disabled="vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)" ng-class="{'poiv-none':vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}">Search/Replace</a>
+															    	<a ng-click="vm.searchReplace('fare-waiver', 'fare-waiver-table'+$index, workPackageSheet)" ng-disabled="vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)" ng-class="{'poiv-none':vm.lockedOnly(vm.workPackage) || vm.reviewOnly(vm.workPackage)}">Search/Replace</a>
 															    </li>
 															    <li>
 														    		<a ng-click="vm.copySelectedFares(workPackageSheet, 'workorder-waiver-fares')" ng-disabled="vm.lockedOnly(vm.workPackage)" ng-class="{'poiv-none':vm.lockedOnly(vm.workPackage)}">Copy Selected Rows</a>
@@ -3852,7 +3852,7 @@
 											</div>
 										</div>
 										<div class="table-responsive">
-											<table class="table table-stripped table-bordered datatable">
+											<table id="fare-waiver-table{{$index}}" class="table table-stripped table-bordered datatable">
 												<thead>
 													<tr>
 								                		<th>No</th>

@@ -300,6 +300,170 @@
     				check:false
     			}
         	},
+        	
+        	//waiver
+        	waiverAgentName:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
+        	
+        	waiverIataNo:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
+        	
+        	waiverIocNo:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},        	
+        	
+        	waiverApprovalDate:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},  
+        	waiverType:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},  
+        	waiverFullPartial:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},  
+        	
+        	waiverPnr:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	}, 
+        	
+        	waiverTktFrom:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},  
+        	waiverTktTo:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	}, 
+        	
+        	waiverOri:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	}, 
+        	waiverDest:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	}, 
+        	waiverOriginalItinerary:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	}, 
+        	waiverNewItinerary:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	}, 
+        	waiverOriginalBasicFare:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	}, 
+        	waiverNewBasicFare:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	}, 
+        	waiverApprovedFare:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	}, 
+        	waiverFareLost:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	}, 
+        	waiverCalculatedPn:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	}, 
+        	waiverOriginalPn:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
+        	waiverApprovedPn:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},
+			waiverPenaltyLostPercent:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	}, 
+			waiverPenaltyLostAmount:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	}, 
+			waiverCurrency:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	}, 
+			waiverTotalPax:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	},  
+			waiverTotalLost:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	}, 
+			waiverRemark:{
+        		check:false,
+        		replace:{
+    				check:false
+    			}
+        	}, 
         };
         vm.originalFilter = angular.copy(vm.filter);
         
@@ -427,6 +591,14 @@
         		];
         	}
         	else if(fareType == 'fare-waiver'){
+        		var fields = [
+        			'waiveragentname', 'waiveriatano', 'waiveriocno', 'waiverapprovaldate', 'waivertype',
+        			'waiverfullpartial', 'waivertktfrom', 'waivertktto', 'waiverpnr', 'waiverori', 'waiverdest', 'waiveroriginalitinerary',
+        			'waivernewitinerary', 'waiveroriginalbasicfare', 'waivernewbasicfare', 'waiverapprovedfare', 'waiverfarelost', 'waivercalculatedpn', 'waiveroriginalpn', 
+        			'waiverapprovedpn', 'waiverpenaltylostpercent', 'waiverpenaltylostamount', 'waivercurrency', 'waivertotalpax',  'waivertotallost', 
+        			'waiverremark'
+        		];
+        		
         	}
         	if(fields.indexOf(field) > -1){
     			return true;
