@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('WorkPackageQueryController', WorkPackageQueryController);
 
-    WorkPackageQueryController.$inject = ['$scope','Principal', '$uibModal', '$state', '$stateParams', 'WorkPackage', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', 'FileSaver', 'DateUtils', 'user', 'businessAreas', 'creator'];
+    WorkPackageQueryController.$inject = ['$scope','Principal', '$uibModal', '$state', '$stateParams', 'WorkPackage', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', 'FileSaver', 'DateUtils', 'user', 'businessAreas', 'creator', 'fareTypes'];
 
-    function WorkPackageQueryController($scope,Principal, $uibModal, $state, $stateParams, WorkPackage, ParseLinks, AlertService, paginationConstants, pagingParams, FileSaver, DateUtils, user, businessAreas, creator) {
+    function WorkPackageQueryController($scope,Principal, $uibModal, $state, $stateParams, WorkPackage, ParseLinks, AlertService, paginationConstants, pagingParams, FileSaver, DateUtils, user, businessAreas, creator, fareTypes) {
         var vm = this;
         vm.reviewLevel = true;
         vm.woStatus = true;
@@ -22,6 +22,7 @@
         vm.optionStatus = ['New', 'Pending','Reviewing', 'Ready to Release','Distributed', 'Withdrawn','Reffered', 'Discontinued'];
         vm.optionBusinessAreas = businessAreas;
         vm.optionCreator = creator;
+        vm.optionFare = fareTypes;
         vm.datePickerOpenStatus = {};
         vm.dateFormat = "dd/MM/yyyy";
         vm.openCalendar = openCalendar;
@@ -111,6 +112,37 @@
 			}
 
         }
+        
+        vm.reuse = function(){
+        	vm.selectedRow.reuseReplaceConfig = {};
+        		$uibModal.open({
+                    templateUrl: 'app/pages/work-packages/work-package-reuse-replace-confirm-dialog.html',
+                    controller: 'WorkPackageReuseReplaceConfirmDialogController',
+                    controllerAs: 'vm',
+                    backdrop: 'static',
+                    size: 'lg',
+                    windowClass: 'full-page-modal',
+                    resolve: {
+                    	workPackage: function(){
+                    		return vm.selectedRow;
+                    	},
+                    	 businessAreas: ['User', function(User) {
+                             return User.getBusinessArea().$promise;
+                         }],
+                    }
+    			}).result.then(function(workPackage) {
+    				WorkPackage.reuse(workPackage, onReuseSuccess, onReuseFailed);
+
+    				function onReuseSuccess(result){
+    	        		alert('Reuse Success');
+    	        		$state.go('work-package-detail', {id:result.id});
+    	        	}
+
+    	        	function onReuseFailed(error){
+    	        		alert("An error occured, please try again");
+    	        	}
+    			});
+        }
 
         vm.refresh = function(){
         	vm.reset();
@@ -146,22 +178,67 @@
 
   		  return blob;
         }
+        
+        function max_date(all_dates) {
+        	var max_dt = all_dates[0],
+        	  max_dtObj = new Date(all_dates[0]);
+        	all_dates.forEach(function(dt, index)
+        	  {
+        	  if ( new Date( dt ) > max_dtObj)
+        	  {
+        	  max_dt = dt;
+        	  max_dtObj = new Date(dt);
+        	  }
+        	  });
+        	 return max_dt;
+        	  }
+        
+        function min_date(all_dates) {
+        	var max_dt = all_dates[0],
+        	  max_dtObj = new Date(all_dates[0]);
+        	all_dates.forEach(function(dt, index)
+        	  {
+        	  if ( new Date( dt ) < max_dtObj)
+        	  {
+        	  max_dt = dt;
+        	  max_dtObj = new Date(dt);
+        	  }
+        	  });
+        	 return max_dt;
+        	  }
                 
                 
         vm.rightClick = function(field){
         	var value=[];
-        	for(var l=0; l< vm.workPackages.length; l++){
-        		if(!vm.workPackages[l].hide){
-	        		if(value.indexOf(vm.workPackages[l][field]) < 0){
-	        			value.push(vm.workPackages[l][field]);
-	        		}
-        		}
+        	if(field.match(/date/gi) != null ){
+            	for(var l=0; l< vm.workPackages.length; l++){
+            		if(!vm.workPackages[l].hide){
+    	        		if(value.indexOf(vm.workPackages[l][field]) < 0){
+    	        			value.push(vm.workPackages[l][field]);
+    	        		}
+            		}
+            	}
+            	var maxDate = max_date(value);
+            	var minDate = min_date(value);
+            	var isDate = true;
+            	vm.filterDialog(value, field, DateUtils.convertLocalDateToServer(maxDate), DateUtils.convertLocalDateToServer(minDate),isDate);
+        	}else{
+            	for(var l=0; l< vm.workPackages.length; l++){
+            		if(!vm.workPackages[l].hide){
+    	        		if(value.indexOf(vm.workPackages[l][field]) < 0){
+    	        			value.push(vm.workPackages[l][field]);
+    	        		}
+            		}
+            	}
+            	var maxDate = null;
+            	var minDate = null;
+            	var isDate = false;
+            	vm.filterDialog(value,field,maxDate,minDate,isDate);
         	}
-        	vm.filterDialog(value, field);
         }
         
         vm.filterList = [];
-        vm.filterDialog = function(value,field){
+        vm.filterDialog = function(value,field,maxDate,minDate,isDate){
       	  $uibModal.open({
                 templateUrl: 'app/pages/work-packages/work-package-filter-dialog.html',
                 controller: 'WorkPackageFilterDialogController',
@@ -176,6 +253,15 @@
                     field : function(){
   	              		return field;
   	              	},
+  	              	maxDate : function(){
+  	              		return maxDate;
+  	              	},
+  	              	minDate : function(){
+	              		return minDate;
+	              	},
+	              	isDate : function(){
+	              		return isDate;
+	              	},
                 }
   			}).result.then(function(result) {
   				if(result.key == 'distinctValue'){
@@ -198,7 +284,7 @@
   				}
   				else if(result.key == 'removeAllColumnFilter'){
   					vm.filterList = [];
-  					vm.loadQuery();
+  					vm.loadAll();
   				}
   				else if(result.key == 'removeThisColumnFilter'){
   					for(var x=0;x<vm.filterList.length;x++){
@@ -240,11 +326,78 @@
 	  						vm.workPackages[l].hide = true;
 	  					}
 	  	        	}
+  				}else if(result.key == '*'){
+  					vm.filterList.push({key:field, value:result.value});
+	  				for(var l=0; l< vm.workPackages.length; l++){
+	  					var countTrue = [];
+	  					for(var m=0;m<vm.filterList.length;m++){
+	  						if(vm.workPackages[l][vm.filterList[m].key].indexOf(vm.filterList[m].value) > -1){
+	  							countTrue.push(true);
+	  						}
+	  					}  					
+	  					
+	  					if(countTrue.length == vm.filterList.length){
+	  						vm.workPackages[l].hide = false;
+	  					}
+	  					else{
+	  						vm.workPackages[l].hide = true;
+	  					}
+	  	        	}
+  				}else if(result.key == '?'){
+  					vm.filterList.push({key:field, value:result.value});
+	  				for(var l=0; l< vm.workPackages.length; l++){
+	  					var countTrue = [];
+	  					for(var m=0;m<vm.filterList.length;m++){
+	  						if(vm.workPackages[l][vm.filterList[m].key] == vm.filterList[m].value){
+	  							countTrue.push(true);
+	  						}
+	  					}  					
+	  					
+	  					if(countTrue.length == vm.filterList.length){
+	  						vm.workPackages[l].hide = false;
+	  					}
+	  					else{
+	  						vm.workPackages[l].hide = true;
+	  					}
+	  	        	}
+  				}else if(result.key == 'range'){
+  					console.log(result.value);
+  					vm.filterList.push({key:field, value:result.value});
+	  				for(var l=0; l< vm.workPackages.length; l++){
+	  					var countTrue = [];
+	  					for(var m=0;m<vm.filterList.length;m++){
+	  						if(result.value.from != null && result.value.to != null ){
+	  							var to = new Date(result.value.to);
+	  							to.setHours(23,59,59)
+	  							if(new Date( vm.workPackages[l][vm.filterList[m].key] ) >= result.value.from && new Date( vm.workPackages[l][vm.filterList[m].key] ) <= to){
+	  								countTrue.push(true);
+	  							}
+	  						}else if (result.value.from != null){
+	  							if(new Date( vm.workPackages[l][vm.filterList[m].key] ) >= result.value.from){
+	  								countTrue.push(true);
+	  							}
+	  						}else if(result.value.to != null){
+	  							var to = new Date(result.value.to);
+	  							to.setHours(23,59,59)
+	  							if(new Date( vm.workPackages[l][vm.filterList[m].key] ) <= to){
+	  								countTrue.push(true);
+	  							}
+	  						}
+	  					}  					
+	  					
+	  					if(countTrue.length == vm.filterList.length){
+	  						vm.workPackages[l].hide = false;
+	  					}
+	  					else{
+	  						vm.workPackages[l].hide = true;
+	  					}
+	  	        	}
   				}
             }, function() {
         			
             });
         }
+        
                 
         function openCalendar (e, date) {
         	e.preventDefault();

@@ -69,6 +69,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.atibusinessgroup.fmp.domain.AtpcoMasterTariff;
 import com.atibusinessgroup.fmp.domain.BusinessArea;
+import com.atibusinessgroup.fmp.domain.FareType;
 import com.atibusinessgroup.fmp.domain.TariffNumber;
 import com.atibusinessgroup.fmp.domain.User;
 import com.atibusinessgroup.fmp.domain.WorkPackage;
@@ -4451,7 +4452,7 @@ public class WorkPackageResource {
         private Date distribDateTo;
         private Date discDateFrom;
         private Date discDateTo;
-        private String fareClass;
+        private FareType fareClass;
         private BusinessArea businessArea;
         private User creator;
         private String approval;
@@ -4540,10 +4541,10 @@ public class WorkPackageResource {
 		public void setDiscDateTo(Date discDateTo) {
 			this.discDateTo = discDateTo;
 		}
-		public String getFareClass() {
+		public FareType getFareClass() {
 			return fareClass;
 		}
-		public void setFareClass(String fareClass) {
+		public void setFareClass(FareType fareClass) {
 			this.fareClass = fareClass;
 		}
 		
