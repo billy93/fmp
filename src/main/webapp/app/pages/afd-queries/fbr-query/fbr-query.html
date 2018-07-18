@@ -1,0 +1,343 @@
+<div class="panel">
+	<div class="panel-body">
+		<div class="filter-hero">
+			<div class="filter-label semibold show">Hide Filter</div>							
+			<div class="filter-area">
+				<div class="clearfix">
+					<form name="queryForm" role="form" novalidate>
+						<div class="clearfix">
+							<div class="pull-left ph5px">
+								<div class="panel panel-default mb0"
+									style="background-color: transparent !important; border-color: #f5f5f5">
+									<div class="panel-heading" style="background-color: #f5f5f5">
+										<h5 class="panel-title">Filters for Rule Selection</h5>
+									</div>
+									<div class="panel-body">
+										<div class="pull-left col-md-3 no-lpad">
+											<div class="form-group">
+												<div class="custom-label semibold">Rule Title</div>
+												<input type="text" class="form-control no-comma" name="ruleTittle" id="ruleTittle" ng-model="vm.queryParams.ruleTittle" uppercase />
+											</div>
+											<div class="form-group">
+												<div class="custom-label semibold">Carrier</div>
+												<div class="input-group">
+													<input type="text" class="form-control  no-comma"
+														name="carrier" id="carrier"
+														ng-class="{'must-fill' : queryForm.carrier.$invalid}"
+														ng-minlength="2" ng-model="vm.paramCarrier"
+														placeholder="minimum 2 characters.." uppercase required />
+	
+													<span ng-click="vm.showCarrierModal()"
+														class="input-group-addon"><i class="fa fa-folder"></i>
+													</span>
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="custom-label semibold">Source</div>
+												<select class="form-control" name="source" id="source" ng-init="vm.queryParams.source = 'A'" ng-model="vm.queryParams.source">
+													<option value="{{value.key}}" ng-repeat="value in vm.sources track by $index">{{value.value}}</option>
+												</select>
+											</div>
+										</div>
+										<div class="pull-left col-md-3 no-lpad">
+											<div class="form-group">
+												<div class="custom-label semibold">Public/Private</div>
+												<select class="form-control" name="publicPrivate" id="publicPrivate" ng-disabled="true" ng-model="vm.queryParams.publicPrivate">
+													<option value="{{value.key}}" ng-repeat="value in vm.publicPrivate track by $index">{{value.value}}</option>
+												</select>
+											</div>
+											<div class="form-group">
+												<div class="custom-label semibold">FBR Tariff</div>
+												<input type="text" class="form-control no-comma" name="fbrTariff" id="fbrTariff" ng-model="vm.queryParams.fbrTariff" uppercase />
+											</div>
+											<div class="form-group">
+												<div class="custom-label semibold">FBR Rule</div>
+												<input type="text" class="form-control no-comma" name="fbrRule" id="fbrRule" ng-model="vm.queryParams.fbrRule" uppercase />
+											</div>
+										</div>
+										<div class="pull-left col-md-3 no-lpad">
+											<div class="panel panel-default mb0"
+												style="background-color: transparent !important; border-color: #f5f5f5">
+												<div class="panel-heading" style="background-color: #f5f5f5">
+													<h5 class="panel-title">Cat 25</h5>
+												</div>
+												<div class="panel-body">
+													<div class="form-group">
+														<div class="custom-label semibold">Booking Class</div>
+														<input type="text" class="form-control no-comma" name="bookingClass" id="bookingClass" ng-model="vm.queryParams.bookingClass" uppercase />
+													</div>
+													<div class="form-group">
+														<div class="custom-label semibold">Fare Basis</div>
+														<input type="text" class="form-control no-comma" name="cat25FareBasis" id="cat25FareBasis" ng-model="vm.queryParams.cat25FareBasis" uppercase />
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="pull-left col-md-3 no-lpad">
+											<div class="panel panel-default mb0"
+												style="background-color: transparent !important; border-color: #f5f5f5">
+												<div class="panel-heading" style="background-color: #f5f5f5">
+													<h5 class="panel-title">Other Categories and Record 8</h5>
+												</div>
+												<div class="panel-body">
+													<div class="pull-left col-md-6 no-lpad">
+														<div class="form-group">
+															<div class="custom-label semibold">Tour Code</div>
+															<input type="text" class="form-control no-comma" name="tourCode" id="tourCode" ng-model="vm.queryParams.tourCode" uppercase />
+														</div>
+														<div class="form-group">
+															<div class="custom-label semibold">Account Code</div>
+															<input type="text" class="form-control no-comma" name="accountCode" id="accountCode" ng-model="vm.queryParams.accountCode" uppercase />
+														</div>
+													</div>
+													<div class="pull-left col-md-6 no-lpad">
+														<div class="form-group">
+															<div class="custom-label semibold">Tkt Designator</div>
+															<input type="text" class="form-control no-comma" name="tktDesignator" id="tktDesignator" ng-model="vm.queryParams.tktDesignator" uppercase />
+														</div>
+														<div class="form-group">
+															<div class="custom-label semibold">Pax Age</div>
+															<input type="text" class="form-control no-comma" name="paxAge" id="paxAge" ng-model="vm.queryParams.paxAge" uppercase />
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="clearfix">
+							<div class="ph5px pv1">
+								<div class="panel panel-default mb0"
+									style="background-color: transparent !important; border-color: #f5f5f5">
+									<div class="panel-heading" style="background-color: #f5f5f5">
+										<h5 class="panel-title">Filters for Rule Selection and Resulting Fares</h5>
+									</div>
+									<div class="panel-body">
+										<div class="pull-left col-md-6 no-lpad">
+											<div class="form-group">
+												<div class="custom-label semibold">Origin</div>
+												<input type="text" class="form-control no-comma" name="origin" id="origin" ng-model="vm.queryParams.origin" uppercase />
+											</div>
+											<div class="form-group">
+												<div class="custom-label semibold">Destination</div>
+												<input type="text" class="form-control no-comma" name="destination" id="destination" ng-model="vm.queryParams.destination" uppercase />
+											</div>
+										</div>
+										<div class="pull-left col-md-3 no-lpad">
+											<div class="form-group">
+												<div class="custom-label semibold">Effective Date</div>
+												<div class="row no-mar">
+													<div class="col-md-4 no-lpad absolute-datepicker">
+														<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'effectiveDateFrom')" 
+															is-open="vm.datePickerOpenStatus['effectiveDateFrom']" datetime-picker="{{vm.dateFormat}}" 
+															enable-time="false" name="effectiveDateFrom" id="datepicker" 
+															ng-model="vm.effectiveDateFrom" placeholder="From"/>
+													</div>
+													<div class="col-md-4 no-pad absolute-datepicker">
+														<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'effectiveDateTo')"
+															is-open="vm.datePickerOpenStatus['effectiveDateTo']" datetime-picker="{{vm.dateFormat}}" 
+															enable-time="false" name="effectiveDateTo" id="datepicker" 
+															ng-model="vm.effectiveDateTo" placeholder="To"/>
+													</div>
+													<div class="col-md-4 no-rpad">
+														<select class="form-control" name="effectiveDateOption" id="effectiveDateOption" ng-init="vm.queryParams.effectiveDateOption = vm.dateOptions[0].key" ng-model="vm.queryParams.effectiveDateOption">
+															<option value="{{value.key}}" ng-repeat="value in vm.dateOptions track by $index">{{value.value}}</option>
+														</select>
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="custom-label semibold">Pax Type</div>
+												<div class="row no-mar">
+													<div class="col-md-6 no-lpad">
+														<input type="text" class="form-control no-comma" name="paxType" id="paxType" ng-model="vm.queryParams.paxType" uppercase />
+													</div>
+													<div class="col-md-6 no-lpad checkbox-wrapper">
+														<label>
+															<input type="checkbox" name="biDirectional" ng-model="vm.queryParams.biDirectional" ng-disabled="true"> 
+															Bi-directional
+														</label>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="pull-left col-md-3 no-lpad">
+											<div class="form-group">
+												<div class="custom-label semibold">Sale Date</div>
+												<div class="row no-mar">
+													<div class="col-md-4 no-lpad absolute-datepicker">
+														<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'saleDateFrom')"
+															is-open="vm.datePickerOpenStatus['saleDateFrom']" datetime-picker="{{vm.dateFormat}}" 
+															enable-time="false" name="saleDateFrom" id="datepicker" 
+															ng-model="vm.saleDateFrom" placeholder="From"/>
+													</div>
+													<div class="col-md-4 no-pad absolute-datepicker">
+														<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'saleDateTo')"
+															is-open="vm.datePickerOpenStatus['saleDateTo']" datetime-picker="{{vm.dateFormat}}" 
+															enable-time="false" name="saleDateTo" id="datepicker" 
+															ng-model="vm.saleDateTo" placeholder="To"/>
+													</div>
+													<div class="col-md-4 no-rpad">
+														<select class="form-control" name="saleDateOption" id="saleDateOption" ng-init="vm.queryParams.saleDateOption = vm.dateOptions[0].key" ng-model="vm.queryParams.saleDateOption">
+															<option value="{{value.key}}" ng-repeat="value in vm.dateOptions track by $index">{{value.value}}</option>
+														</select>
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="custom-label semibold">Travel Date</div>
+												<div class="row no-mar">
+													<div class="col-md-4 no-lpad absolute-datepicker">
+														<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'travelDateFrom')"
+															is-open="vm.datePickerOpenStatus['travelDateFrom']" datetime-picker="{{vm.dateFormat}}" 
+															enable-time="false" name="travelDateFrom" id="datepicker" 
+															ng-model="vm.travelDateFrom" placeholder="From"/>
+													</div>
+													<div class="col-md-4 no-pad absolute-datepicker">
+														<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'travelDateTo')"
+															is-open="vm.datePickerOpenStatus['travelDateTo']" datetime-picker="{{vm.dateFormat}}" 
+															enable-time="false" name="travelDateTo" id="datepicker" 
+															ng-model="vm.travelDateTo" placeholder="To"/>
+													</div>
+													<div class="col-md-4 no-rpad">
+														<select class="form-control" name="travelDateOption" id="travelDateOption" ng-init="vm.queryParams.travelDateOption = vm.dateOptions[0].key" ng-model="vm.queryParams.travelDateOption">
+															<option value="{{value.key}}" ng-repeat="value in vm.dateOptions track by $index">{{value.value}}</option>
+														</select>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="clearfix">
+							<div class="ph5px">
+								<div class="panel panel-default mb0"
+									style="background-color: transparent !important; border-color: #f5f5f5">
+									<div class="panel-heading" style="background-color: #f5f5f5">
+										<h5 class="panel-title">Filters for Resulting Fares</h5>
+									</div>
+									<div class="panel-body">
+										<div class="text-center clearfix">
+											<div class="pull-left ph5px w20">
+												<div class="form-group text-left">
+													<div class="custom-label semibold">Cabin</div>
+													<input type="text" class="form-control no-comma" name="cabin" id="cabin" ng-model="vm.queryParams.cabin" uppercase />
+												</div>
+											</div>
+											<div class="pull-left ph5px w20">
+												<div class="form-group text-left">
+													<div class="custom-label semibold">Fare Basis</div>
+													<input type="text" class="form-control no-comma" name="fareBasis" id="fareBasis" ng-model="vm.queryParams.fareBasis" uppercase />
+												</div>
+											</div>
+											<div class="pull-left ph5px w20">
+												<div class="form-group text-left">
+													<div class="custom-label semibold">Fare Type</div>
+													<input type="text" class="form-control no-comma" name="fareType" id="fareType" ng-model="vm.queryParams.fareType" uppercase />
+												</div>
+											</div>
+											<div class="pull-left ph5px w20">
+												<div class="form-group text-left">
+													<div class="custom-label semibold">Global Indicator</div>
+													<input type="text" class="form-control no-comma" name="globalIndicator" id="globalIndicator" ng-model="vm.queryParams.globalIndicator" uppercase />
+												</div>
+											</div>
+											<div class="pull-left ph5px w20">
+												<div class="form-group text-left">
+													<div class="custom-label semibold">OW/RT</div>
+													<select class="form-control" name="owrt" id="owrt" ng-model="vm.queryParams.owrt">
+														<option value="{{value.key}}" ng-repeat="value in vm.owrts track by $index">{{value.value}}</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="clearfix pv1">
+							<div class="pull-left ph5px">
+								<div class="form-group">
+									<div class="checkbox-wrapper">
+										<label>
+											<input type="checkbox" name="appendResults" ng-model="vm.queryParams.appendResults" ng-disabled="true"> 
+											Append Results
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="pull-right">
+								<button type="button" class="btn btn-default small" ng-click="vm.query()" id="btn-afd-query">Query</button>
+								<button type="button" class="btn btn-default small">Clear</button>
+								<button type="reset" ng-click="vm.reset()" class="btn btn-default small">Reset</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="table-wrapper table-afd mb2">
+			<div class="datatable-wrapper form-inline">
+				<div class="clearfix">
+					<div class="pull-right w50">
+						<div class="clearfix">
+							<div class="pull-right datatable-button">
+								<div class="button-group dropdown custom">
+									<button class="btn btn-default small">FBR Explorer</button>
+									<button class="btn btn-default small">Print/Export</button>
+									<button class="btn btn-default small">Hide RuleBar</button>
+									<button class="btn btn-default small">Filter/Sort</button>
+								</div>	
+							</div>
+						</div>																						
+					</div>
+				</div>
+				<br/>
+				<div class="table-responsive" style="overflow-y:hidden; max-height: initial; padding-bottom: 0">
+					<div class="absolute-table">
+						<table class="table table-striped table-bordered datatable table-header-fixed">
+				            <thead style="padding-right: 17px; background-color: #64768a">
+				                <tr>
+				                    <th class="th-fixed">ID</th>
+				                    <th class="th-fixed">Source</th>
+				                    <th class="th-fixed">Cxr</th>
+				                    <th class="th-fixed">Tar No</th>
+				                    <th class="th-fixed">Tar Cd</th>
+				                    <th class="th-fixed">Rule</th>
+				                    <th class="th-fixed">Rule Title</th>
+				                </tr>
+				            </thead>
+				            <tbody id="tbody-afd">
+				                <tr class="tr-afd" ng-repeat="fbrQuery in vm.fbrQueries track by fbrQuery.id" ng-click="vm.setSelectedRow($index, fbrQuery)" ng-class="{'selected': vm.selectedRows[$index] == fbrQuery}">
+				                    <td>{{$index + 1}}</td>
+				                    <td>{{fbrQuery.source}}</td>
+				                    <td>{{fbrQuery.carrierCode}}</td>
+				                    <td>{{fbrQuery.tariffNo}}</td>
+				                    <td>{{fbrQuery.tariffCode}}</td>
+				                    <td>{{fbrQuery.rule}}</td>
+				                    <td>{{fbrQuery.ruleTitle}}</td>
+				                </tr>
+				                <tr infinite-scroll="vm.loadPage(vm.page + 1)" infinite-scroll-disabled="vm.disableInfiniteScroll || vm.isLastPage || vm.isLoading" infinite-scroll-container="'#tbody-afd'"></tr>
+				            </tbody>
+				        </table>
+					</div>
+			        <div class="text-center fixed-wrapper-inside">
+						<div class="spinner" ng-if="vm.isLoading">
+							<div class="rect1"></div>
+							<div class="rect2"></div>
+							<div class="rect3"></div>
+							<div class="rect4"></div>
+							<div class="rect5"></div>
+						</div>
+						<div class="center-div" ng-if="(vm.noDataAvailable || vm.fbrQueries.length == 0) && !vm.isLoading">No Data Available</div>
+						<div class="center-div" ng-if="vm.isLastPage && !vm.noDataAvailable">You have reached the end of the page &nbsp;<i style="font-size: 8px !important; top: 0" class="glyphicon glyphicon-chevron-up"></i></div>
+					</div>
+			    </div>
+			</div>
+		</div>
+	</div>
+</div>
