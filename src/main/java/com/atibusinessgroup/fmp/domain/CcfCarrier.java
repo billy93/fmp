@@ -10,7 +10,7 @@ import java.util.Objects;
 /**
  * A CcfCarrier.
  */
-@Document(collection = "ccf_carrier")
+@Document(collection = "atpco_ccf_carrier")
 public class CcfCarrier implements Serializable {
 
     private static final long serialVersionUID = 1L;

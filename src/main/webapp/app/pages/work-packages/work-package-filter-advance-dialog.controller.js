@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('WorkPackageFilterAdvanceDialogController', WorkPackageFilterAdvanceDialogController);
 
-    WorkPackageFilterAdvanceDialogController.$inject = ['$uibModal','$scope', 'FileSaver', 'DataUtils', '$uibModalInstance', 'WorkPackage', '$state', 'value', 'field','maxDate','minDate','isDate'];
+    WorkPackageFilterAdvanceDialogController.$inject = ['$uibModal','$scope', 'FileSaver', 'DataUtils', '$uibModalInstance', 'WorkPackage', '$state', 'value','field'];
 
-    function WorkPackageFilterAdvanceDialogController($uibModal, $scope, FileSaver, DataUtils, $uibModalInstance, WorkPackage, $state, value, field, maxDate, minDate,isDate) {
+    function WorkPackageFilterAdvanceDialogController($uibModal, $scope, FileSaver, DataUtils, $uibModalInstance, WorkPackage, $state, value,field) {
 
         var vm = this;
         vm.clear = clear;        
@@ -19,11 +19,9 @@
         vm.dateFormat = "dd/MM/yyyy";
         vm.openCalendar = openCalendar;
         vm.ListFilter =[];
-        vm.value = value;                      
-        vm.minDate = minDate;
-        vm.maxDate = maxDate;
-        vm.isDate = isDate;
-        
+        vm.value = value;
+        vm.field = field;
+       
         vm.rowValueHighlighted = function (idSelected) {
             vm.selectedValueRow = idSelected;
         };
@@ -130,35 +128,7 @@
         }
         
         vm.simple = function(){
-        	$uibModal.open({
-        		templateUrl: 'app/pages/work-packages/work-package-filter-dialog.html',
-                controller: 'WorkPackageFilterDialogController',
-                controllerAs: 'vm',
-                backdrop: 'static',
-                size: 'lg',
-                windowClass: 'full-page-modal',
-                resolve: {
-                	 value : function(){
-    	              		return value;
-    	              	},
-                      field : function(){
-    	              		return field;
-    	              	},
-    	              	maxDate : function(){
-    	              		return maxDate;
-    	              	},
-    	              	minDate : function(){
-  	              		return minDate;
-  	              	},
-  	              	isDate : function(){
-  	              		return isDate;
-  	              	}
-                }
-  			}).result.then(function(option) {
-  				
-            }, function() {
-        			
-            });
+        	$uibModalInstance.close({key:'simple', value:field});
         }
         
                

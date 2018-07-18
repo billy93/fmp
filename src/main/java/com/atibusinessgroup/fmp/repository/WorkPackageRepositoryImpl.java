@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -462,7 +463,20 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		
 		Criteria approvalReference = new Criteria();
 		if(wpFilter.getApprovalReference() != null && !wpFilter.getApprovalReference().contentEquals("")) {
-			approvalReference = Criteria.where("fare_sheet.approval_reference").regex(wpFilter.getApprovalReference(), "i");
+			List<Pattern> approvalsData = new ArrayList<>();
+			String approvals[] = wpFilter.getApprovalReference().split(",");
+			for(String app : approvals) {
+				Pattern x = Pattern.compile("^(?i)("+app.trim()+")");
+				approvalsData.add(x);
+//				approvalsData.add(app.trim());
+			}
+			
+//			approvalReference = Criteria.where("fare_sheet.approval_reference").regex(wpFilter.getApprovalReference(), "i");
+			approvalReference = Criteria.where("fare_sheet.approval_reference").in(approvalsData);
+//			approvalReference = Criteria.where("fare_sheet.approval_reference").elemMatch(
+//					Criteria.where("fare_sheet.approval_reference").regex(wpFilter.getApprovalReference(), "i")
+//			);
+			
 		}
 		
 		Criteria replaceCriteria = new Criteria();

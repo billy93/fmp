@@ -65,41 +65,19 @@
         	e.preventDefault();
             e.stopPropagation();
             
+            vm.datePickerOpenStatus = {};
             vm.datePickerOpenStatus[date] = true;
         }
         vm.advance=function(){
-        	vm.go(vm.value,vm.field,vm.maxDate,vm.minDate,vm.isDate);
-        }
-        vm.go = function(value,field,maxDate,minDate,isDate){
-        	clear();
-        	$uibModal.open({
-                templateUrl: 'app/pages/work-packages/work-package-filter-advance-dialog.html',
-                controller: 'WorkPackageFilterAdvanceDialogController',
-                controllerAs: 'vm',
-                backdrop: 'static',
-                size: 'lg',
-                windowClass: 'full-page-modal',
-                resolve: {
-                	 value : function(){
-   	              		return value;
-   	              	},
-                     field : function(){
-   	              		return field;
-   	              	},
-   	              	maxDate : function(){
-   	              		return maxDate;
-   	              	},
-   	              	minDate : function(){
- 	              		return minDate;
- 	              	},
- 	              	isDate : function(){
- 	              		return isDate;
- 	              	}
-                }
-  			}).result.then(function(option) {
-            }, function() {
-        			
-            });
+        	if(vm.currentTab == 'range'){
+        		$uibModalInstance.close({key:'advance', value:{from : vm.From, to : vm.To}});
+        	}
+        	else if(vm.currentTab == 'value'){
+        		$uibModalInstance.close({key:'advance', value:vm.selectedValueRow});
+        	}
+        	else if(vm.currentTab == 'card'){
+        		$uibModalInstance.close({key:'advance', value:vm.search});
+        	}
         }
         
     }
