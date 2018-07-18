@@ -3245,6 +3245,10 @@ p {
   padding-top: 1em !important;
   padding-bottom: 1em !important; }
 
+.ph1 {
+  padding-right: 1em !important;
+  padding-left: 1em !important; }
+
 .mb5px {
   margin-bottom: 5px !important; }
 
@@ -3253,6 +3257,9 @@ p {
 
 .pb0 {
   padding-bottom: 0 !important; }
+
+.pt0 {
+  padding-top: 0 !important; }
 
 .pb1 {
   padding-bottom: 1em !important; }
@@ -4717,6 +4724,10 @@ label.tree_label:after {
   20% {
     transform: scaleY(1);
     -webkit-transform: scaleY(1); } }
+
+.uib-tab.active a {
+  background-color: #3c8dbc !important;
+  color: #fff !important; }
 
 /* General Demo Style */
 body, html {
