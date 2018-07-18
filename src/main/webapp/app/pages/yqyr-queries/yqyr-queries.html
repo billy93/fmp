@@ -163,9 +163,9 @@
 				                   	<th class="th-fixed">Connection Max Time</th>
 				                   	<th class="th-fixed">Connections Exempt</th>
 				                   	<th class="th-fixed">International/Domestic</th>
-				                   	<th class="th-fixed">Point Of Sale</th>
-				                   	<th class="th-fixed">Point Of Sale Code</th>
-				                   	<th class="th-fixed">Point Of Ticketing</th>
+				                   	<th class="th-fixed">Point of Sale</th>
+				                   	<th class="th-fixed">Point of Sale Code</th>
+				                   	<th class="th-fixed">Point of Ticketing</th>
 				                   	<th class="th-fixed">Pax Type</th>
 				                   	<th class="th-fixed">RBD</th>
 				                   	<th class="th-fixed">Fare Class</th>
@@ -182,7 +182,7 @@
 				                </tr>
 				         	</thead>
 				         	<tbody id="tbody-afd">
-				                <tr class="tr-afd" ng-repeat="yqyr in vm.yqyrs track by yqyr.id" ng-click="vm.selectedYqyr = yqyr" ng-class="{'selected': vm.selectedRows[$index] == yqyr}">
+				                <tr class="tr-afd" ng-repeat="yqyr in vm.yqyrs track by yqyr.id" ng-click="vm.selectedYqyr = yqyr" ng-class="{'selected': vm.selectedYqyr == yqyr}">
 				                    <td>{{$index + 1}}</td>
 				                    <td>{{yqyr.carrierCode}}</td>
 				                    <td>{{yqyr.tc}}</td>
@@ -191,7 +191,7 @@
 				                    <td><span ng-if="yqyr.feeAmount != 0">{{yqyr.feeAmount}}</span></td>
 				                    <td>{{yqyr.currencyCode}}</td>
 				                    <td><span ng-if="yqyr.feePct != 0">{{yqyr.feePct}}%</span></td>
-				                    <td><span ng-if="yqyr.feeIncludeTax"><i class="glyphicon glyphicon-ok"></i></span></span></td>
+				                    <td><span ng-if="yqyr.feeIncludeTax"><i class="glyphicon glyphicon-ok"></i></span></td>
 				                    <td>{{yqyr.feeApplication}}</td>
 				                    <td>{{yqyr.journeyDirection}}</td>
 				                    <td>{{yqyr.journeyLoc1 | limitTo: 25}}<span ng-if="yqyr.journeyLoc1.length >= 25">...</span></td>
@@ -208,9 +208,9 @@
 				              		<td>{{yqyr.connectionMaxTime}}</td>
 				              		<td><span ng-if="yqyr.connectionsExempt"><i class="glyphicon glyphicon-ok"></i></span></td>
 				              		<td>{{yqyr.internationalDomestic}}</td>
-				              		<td>{{yqyr.pointOfSale}}</td>
+				              		<td>{{yqyr.pointOfSale | limitTo: 25}}<span ng-if="yqyr.pointOfSale.length >= 25">...</span></td>
 				              		<td>{{yqyr.pointOfSaleCode}}</td>
-				              		<td>{{yqyr.pointOfTicketing}}</td>
+				              		<td>{{yqyr.pointOfTicketing | limitTo: 25}}<span ng-if="yqyr.pointOfTicketing.length >= 25">...</span></td>
 				              		<td>{{yqyr.paxType}}</td>
 				              		<td>{{yqyr.rbd}}</td>
 				              		<td>{{yqyr.fareClass}}</td>
@@ -265,6 +265,10 @@
 					<div class="col-md-6 no-pad">{{vm.selectedYqyr.subId}}</div>
 				</div>
 				<div class="detail-group">
+					<div class="header col-md-6 no-pad">Carrier</div>
+					<div class="col-md-6 no-pad">{{vm.selectedYqyr.carrierCode}}</div>
+				</div>
+				<div class="detail-group">
 					<div class="header col-md-6 no-pad">Tax Code</div>
 					<div class="col-md-6 no-pad">{{vm.selectedYqyr.tc}}</div>
 				</div>
@@ -273,8 +277,40 @@
 					<div class="col-md-6 no-pad">{{vm.selectedYqyr.sc}}</div>
 				</div>
 				<div class="detail-group">
+					<div class="header col-md-6 no-pad">Sequence</div>
+					<div class="col-md-6 no-pad">{{vm.selectedYqyr.sequenceInt}}</div>
+				</div>
+				<div class="detail-group">
 					<div class="header col-md-6 no-pad">Fee</div>
-					<div class="col-md-6 no-pad"><span ng-if="vm.selectedYqyr.feeAmount == 0">FREE</span><span ng-if="vm.selectedYqyr.feeAmount != 0">{{vm.selectedYqyr.feeAmount}} {{vm.selectedYqyr.currencyCode}}	</span></div>
+					<div class="col-md-6 no-pad"><span ng-if="vm.selectedYqyr.feeAmount == 0">FREE</span><span ng-if="vm.selectedYqyr.feeAmount != 0">{{vm.selectedYqyr.feeAmount}} {{vm.selectedYqyr.currencyCode}}</span></div>
+				</div>
+				<div class="detail-group">
+					<div class="header col-md-6 no-pad">Fee Percentage</div>
+					<div class="col-md-6 no-pad"><span ng-if="vm.selectedYqyr.feePct != 0">{{vm.selectedYqyr.feePct}}%</span></div>
+				</div>
+				<div class="detail-group">
+					<div class="header col-md-6 no-pad">Fee Include Tax</div>
+					<div class="col-md-6 no-pad"><span ng-if="vm.selectedYqyr.feeIncludeTax"><i class="glyphicon glyphicon-ok"></i></span></div>
+				</div>
+				<div class="detail-group">
+					<div class="header col-md-6 no-pad">Fee Application</div>
+					<div class="col-md-6 no-pad">{{vm.selectedYqyr.feeApplication}}</div>
+				</div>
+				<div class="detail-group">
+					<div class="header col-md-6 no-pad">Pax Type</div>
+					<div class="col-md-6 no-pad">{{vm.selectedYqyr.paxType}}</div>
+				</div>
+				<div class="detail-group">
+					<div class="header col-md-6 no-pad">RBD</div>
+					<div class="col-md-6 no-pad">{{vm.selectedYqyr.rbd}}</div>
+				</div>
+				<div class="detail-group">
+					<div class="header col-md-6 no-pad">Fare Class</div>
+					<div class="col-md-6 no-pad">{{vm.selectedYqyr.fareClass}}</div>
+				</div>
+				<div class="detail-group">
+					<div class="header col-md-6 no-pad">Ticket Designator</div>
+					<div class="col-md-6 no-pad">{{vm.selectedYqyr.ticketDesignator}}</div>
 				</div>
 				<div class="detail-group">
 					<div class="header col-md-6 no-pad">Journey Direction</div>
@@ -297,41 +333,16 @@
 					<div class="col-md-6 no-pad"><pre ng-if="vm.selectedYqyr.journeyWhollyWithin != null && vm.selectedYqyr.journeyWhollyWithin != ''">{{vm.selectedYqyr.journeyWhollyWithin}}</pre></div>
 				</div>
 				<div class="detail-group">
-					<div class="header col-md-6 no-pad">Connection Max Time</div>
-					<div class="col-md-6 no-pad">{{vm.selectedYqyr.connectionMaxTime}}</div>
+					<div class="header col-md-6 no-pad">Return To Origin</div>
+					<div class="col-md-6 no-pad">{{vm.selectedYqyr.returnToOrigin}}</div>
 				</div>
+				
 				<div class="detail-group">
 					<div class="header col-md-6 no-pad">Comment</div>
 					<div class="col-md-6 no-pad"><pre ng-if="vm.selectedYqyr.comment != null && vm.selectedYqyr.comment != ''">{{vm.selectedYqyr.comment}}</pre></div>
 				</div>
 			</div>
 			<div class="pull-left col-md-5 col-md-offset-1 no-pad">
-				<div class="detail-group">
-					<div class="header col-md-6 no-pad">Carrier</div>
-					<div class="col-md-6 no-pad">{{vm.selectedYqyr.carrierCode}}</div>
-				</div>
-				<div class="detail-group">
-					<div class="header col-md-6 no-pad">Sequence</div>
-					<div class="col-md-6 no-pad">{{vm.selectedYqyr.sequenceInt}}</div>
-				</div>
-				<div class="detail-group">
-					<div class="header col-md-6 no-pad">Travel Dates</div>
-					<div class="col-md-6 no-pad">
-						<span ng-if="vm.selectedYqyr.travelEffDate != null && vm.selectedYqyr.travelEffDate != 'indef'">{{vm.selectedYqyr.travelEffDate | date:vm.dateFormat:vm.timezone}}</span>
-						to 
-						<span ng-if="vm.selectedYqyr.travelDiscDate != null && vm.selectedYqyr.travelDiscDate != 'indef'">{{vm.selectedYqyr.travelDiscDate | date:vm.dateFormat:vm.timezone}}</span>
-              			<span ng-if="vm.selectedYqyr.travelDiscDate == 'indef'">NONE</span>
-					</div>
-				</div>
-				<div class="detail-group">
-					<div class="header col-md-6 no-pad">Fare Class</div>
-					<div class="col-md-6 no-pad">{{vm.selectedYqyr.fareClass}}</div>
-				</div>
-				
-				<div class="detail-group">
-					<div class="header col-md-6 no-pad">Fee Application</div>
-					<div class="col-md-6 no-pad">{{vm.selectedYqyr.feeApplication}}</div>
-				</div>
 				<div class="detail-group">
 					<div class="header col-md-6 no-pad">Sector/Portion Flag</div>
 					<div class="col-md-6 no-pad">{{vm.selectedYqyr.sectorPortionFlag}}</div>
@@ -353,6 +364,43 @@
 					<div class="col-md-6 no-pad"><pre ng-if="vm.selectedYqyr.sectorVia != null && vm.selectedYqyr.sectorVia != ''">{{vm.selectedYqyr.sectorVia}}</pre></div>
 				</div>
 				<div class="detail-group">
+					<div class="header col-md-6 no-pad">Stopover/Connection</div>
+					<div class="col-md-6 no-pad">{{vm.selectedYqyr.stopoverConnection}}</div>
+				</div>
+				<div class="detail-group">
+					<div class="header col-md-6 no-pad">Connection Max Time</div>
+					<div class="col-md-6 no-pad">{{vm.selectedYqyr.connectionMaxTime}}</div>
+				</div>
+				<div class="detail-group">
+					<div class="header col-md-6 no-pad">Connections Exempt</div>
+					<div class="col-md-6 no-pad"><span ng-if="vm.selectedYqyr.connectionsExempt"><i class="glyphicon glyphicon-ok"></i></span></div>
+				</div>
+				<div class="detail-group">
+					<div class="header col-md-6 no-pad">International/Domestic</div>
+					<div class="col-md-6 no-pad">{{vm.selectedYqyr.internationalDomestic}}</div>
+				</div>
+				<div class="detail-group">
+					<div class="header col-md-6 no-pad">Point of Sale</div>
+					<div class="col-md-6 no-pad"><pre ng-if="vm.selectedYqyr.pointOfSale != null && vm.selectedYqyr.pointOfSale != ''">{{vm.selectedYqyr.pointOfSale}}</pre></div>
+				</div>
+				<div class="detail-group">
+					<div class="header col-md-6 no-pad">Point of Sale Code</div>
+					<div class="col-md-6 no-pad">{{vm.selectedYqyr.pointOfSaleCode}}</div>
+				</div>
+				<div class="detail-group">
+					<div class="header col-md-6 no-pad">Point of Ticketing</div>
+					<div class="col-md-6 no-pad"><pre ng-if="vm.selectedYqyr.pointOfTicketing != null && vm.selectedYqyr.pointOfTicketing != ''">{{vm.selectedYqyr.pointOfTicketing}}</pre></div>
+				</div>
+				<div class="detail-group">
+					<div class="header col-md-6 no-pad">Travel Dates</div>
+					<div class="col-md-6 no-pad">
+						<span ng-if="vm.selectedYqyr.travelEffDate != null && vm.selectedYqyr.travelEffDate != 'indef'">{{vm.selectedYqyr.travelEffDate | date:vm.dateFormat:vm.timezone}}</span>
+						to 
+						<span ng-if="vm.selectedYqyr.travelDiscDate != null && vm.selectedYqyr.travelDiscDate != 'indef'">{{vm.selectedYqyr.travelDiscDate | date:vm.dateFormat:vm.timezone}}</span>
+              			<span ng-if="vm.selectedYqyr.travelDiscDate == 'indef'">NONE</span>
+					</div>
+				</div>
+				<div class="detail-group">
 					<div class="header col-md-6 no-pad">Ticket Dates</div>
 					<div class="col-md-6 no-pad">
 						<span ng-if="vm.selectedYqyr.ticketEffDate != null && vm.selectedYqyr.ticketEffDate != 'indef'">{{vm.selectedYqyr.ticketEffDate | date:vm.dateFormat:vm.timezone}}</span>
@@ -369,6 +417,10 @@
 				<div class="detail-group">
 					<div class="header col-md-6 no-pad">Val Cxr</div>
 					<div class="col-md-6 no-pad"><pre ng-if="vm.selectedYqyr.valCarrierCode != null && vm.selectedYqyr.valCarrierCode != ''">{{vm.selectedYqyr.valCarrierCode}}</pre></div>
+				</div>
+				<div class="detail-group">
+					<div class="header col-md-6 no-pad">Equipment</div>
+					<div class="col-md-6 no-pad">{{vm.selectedYqyr.equipment}}</div>
 				</div>
 			</div>
 		</div>
