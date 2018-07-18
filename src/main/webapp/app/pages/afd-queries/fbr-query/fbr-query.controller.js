@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('FbrQueryController', FbrQueryController);
 
-    FbrQueryController.$inject = ['$state', 'FbrQuery', 'ParseLinks', 'AlertService', 'paginationConstants', '$uibModal'];
+    FbrQueryController.$inject = ['$state', 'FbrQuery', 'ParseLinks', 'AlertService', 'paginationConstants', '$uibModal', 'DateUtils'];
 
-    function FbrQueryController($state, FbrQuery, ParseLinks, AlertService, paginationConstants, $uibModal) {
+    function FbrQueryController($state, FbrQuery, ParseLinks, AlertService, paginationConstants, $uibModal, DateUtils) {
 
     	var vm = this;
     	 
@@ -110,6 +110,8 @@
             	vm.noDataAvailable = false;
             	vm.currentAddOn = null;
             	
+            	vm.queryParams.carrier = vm.paramCarrier;
+            	
             	vm.queryParams.page = vm.page;
             	vm.queryParams.size = vm.itemsPerPage;
             	vm.queryParams.lastIndex = vm.lastIndex;
@@ -168,15 +170,16 @@
         }
         
         function checkValidParameters() {
-        	if ((vm.queryParams.origin != null && vm.queryParams.origin != '' && vm.queryParams.destination != null && vm.queryParams.destination != '') ||
-        			(vm.queryParams.origin != null && vm.queryParams.origin != '' && vm.queryParams.bucket != null && vm.queryParams.bucket != '') ||
-        			(vm.queryParams.destination != null && vm.queryParams.destination != '' && vm.queryParams.bucket != null && vm.queryParams.bucket != '') ||
-        			(vm.queryParams.carrier != null && vm.queryParams.carrier != '' && vm.queryParams.bucket != null && vm.queryParams.bucket != '') ||
-        			(vm.queryParams.woId != null && vm.queryParams.woId != '')) {
-        		return 'Valid';
-        	} else {
-        		return "Error: One set of the following is required.\n\tOrigin and Destination\n\tOrigin and Add-On Bucket\n\tDestination and Add-On Bucket\n\tCarrier and Add-On Bucket\n\tWork Order ID\n";
-        	}
+//        	if ((vm.queryParams.origin != null && vm.queryParams.origin != '' && vm.queryParams.destination != null && vm.queryParams.destination != '') ||
+//        			(vm.queryParams.origin != null && vm.queryParams.origin != '' && vm.queryParams.bucket != null && vm.queryParams.bucket != '') ||
+//        			(vm.queryParams.destination != null && vm.queryParams.destination != '' && vm.queryParams.bucket != null && vm.queryParams.bucket != '') ||
+//        			(vm.queryParams.carrier != null && vm.queryParams.carrier != '' && vm.queryParams.bucket != null && vm.queryParams.bucket != '') ||
+//        			(vm.queryParams.woId != null && vm.queryParams.woId != '')) {
+//        		return 'Valid';
+//        	} else {
+//        		return "Error: One set of the following is required.\n\tOrigin and Destination\n\tOrigin and Add-On Bucket\n\tDestination and Add-On Bucket\n\tCarrier and Add-On Bucket\n\tWork Order ID\n";
+//        	}
+        	return 'Valid';
         }
 
         function loadPage(page) {
