@@ -90,7 +90,7 @@
         if (vm.isViewOnly) {
         	$(document).ready(function() {
         		$('.input-group-addon, iframe').addClass('disabled poiv-none');
-        		$('input, i, select, iframe, textarea').attr('disabled', 'disabled');
+        		$('input, i, select:not(#version), iframe, textarea').attr('disabled', 'disabled');
         		$('.view-only').addClass('disabled', 'disabled');
         	});
         }
@@ -5166,7 +5166,7 @@
 	      });
 	  }
       
-      vm.agent = function(disabled){
+      vm.agent = function(disabled, viewOnly){
 	    	  	var object = {
 	    			agents: vm.workPackage.agent
 	    	 	}
@@ -5179,7 +5179,8 @@
 	          size: 'lg',
 	          resolve: {
 	              entity: object,
-		          isDisabled : disabled
+		          isDisabled : disabled,
+		          isViewOnly : viewOnly
 	          }
 	      }).result.then(function(agent) {
 	      	  vm.workPackage.agent = agent;

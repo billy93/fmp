@@ -49,7 +49,7 @@
         	WorkPackageFilter.deleteByName({}, function(){
                 collapseNavbar();
                 Auth.logout();
-                $state.go('home'); 
+                $state.go('home');
         	});
         }
 

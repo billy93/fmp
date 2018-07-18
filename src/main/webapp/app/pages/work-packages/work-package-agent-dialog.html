@@ -11,7 +11,7 @@
             	<input autocomplete="off" type="text" name="add_Agent" ng-model="vm.agent" class="form-control"
             		uib-typeahead="o.agentName as o.agentName for o in vm.agencies | filter:{agentName:$viewValue} | limitTo:5">
                 <span class="input-group-addon add-agent">
-					<i class="fa fa-plus" ng-click="vm.addAgents()"></i>
+					<i ng-class="{'poiv-none': vm.isViewOnly==true }" class="fa fa-plus" ng-click="vm.addAgents()"></i>
 				</span>
             </div>
         </div>
@@ -25,7 +25,7 @@
 		</div>
     </div>
     <div class="modal-footer">
-    	<button type="submit" ng-disabled="editForm.$invalid || vm.isSaving || vm.disabled" class="btn btn-secondary" data-translate="entity.action.save">Save changes</button>
+    	<button type="submit" ng-disabled="editForm.$invalid || vm.isSaving || vm.disabled || vm.isViewOnly" class="btn btn-secondary" data-translate="entity.action.save">Save changes</button>
         <button type="button" ng-click="vm.clear()" class="btn btn-back" data-dismiss="modal">Close</button>
     </div>
 </form>
