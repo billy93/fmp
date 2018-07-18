@@ -7,20 +7,10 @@
     SpecifiedConstructed.$inject = ['$resource'];
 
     function SpecifiedConstructed ($resource) {
-        var resourceUrl =  'api/afd-queries/specified-constructed/:id';
 
-        return $resource(resourceUrl, {}, {
-            'query': { method: 'POST'},
-            'get': {
-                method: 'GET',
-                transformResponse: function (data) {
-                    if (data) {
-                        data = angular.fromJson(data);
-                    }
-                    return data;
-                }
-            },
-            'update': { method:'PUT' },
+        return $resource(null, {}, {
+            'getSpecified': { method: 'POST', url:'api/afd-queries/specified' },
+            'getSpecifiedConstructed': { method: 'POST', url:'api/afd-queries/specified-constructed' },
             'getRules': { method: 'POST', url:'api/afd-queries/rules', isArray: true }
         });
     }

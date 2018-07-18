@@ -32,11 +32,11 @@
                     controller: 'AddOnsController',
                     controllerAs: 'vm'
 				},
-//				'fbr-query@afd-query' : {
-//					templateUrl: 'app/pages/afd-queries/fbr-query/fbr-query.html',
-//                    controller: 'FbrQueryController',
-//                    controllerAs: 'vm'
-//				}
+				'fbr-query@afd-query' : {
+					templateUrl: 'app/pages/afd-queries/fbr-query/fbr-query.html',
+                    controller: 'FbrQueryController',
+                    controllerAs: 'vm'
+				}
             },
             params: {
             	tab: '1'

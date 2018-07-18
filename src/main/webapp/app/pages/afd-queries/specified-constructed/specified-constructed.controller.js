@@ -161,7 +161,11 @@
             	
             	console.log(vm.queryParams);
             	
-            	SpecifiedConstructed.query(vm.queryParams, onSuccess, onError);
+            	if (vm.queryParams.includeConstructed) {
+            		SpecifiedConstructed.getSpecifiedConstructed(vm.queryParams, onSuccess, onError);
+            	} else {
+            		SpecifiedConstructed.getSpecified(vm.queryParams, onSuccess, onError);
+            	}
             	
                 function onSuccess(data) {
                 	vm.isLastPage = data.lastPage;

@@ -34,6 +34,9 @@ import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.Category;
 import com.atibusinessgroup.fmp.domain.dto.CategoryTextFormatAndAttribute;
 import com.atibusinessgroup.fmp.domain.dto.DataTable;
+import com.atibusinessgroup.fmp.domain.dto.FbrQuery;
+import com.atibusinessgroup.fmp.domain.dto.FbrQueryParam;
+import com.atibusinessgroup.fmp.domain.dto.FbrQueryWrapper;
 import com.atibusinessgroup.fmp.domain.dto.GeneralRuleApplication;
 import com.atibusinessgroup.fmp.domain.dto.SpecifiedConstructed;
 import com.atibusinessgroup.fmp.domain.dto.SpecifiedConstructedWrapper;
@@ -436,5 +439,41 @@ public class AfdQueryResource {
         }
         
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+    
+    @PostMapping("/afd-queries/fbr-query")
+    @Timed
+    public ResponseEntity<FbrQueryWrapper> getAllAfdQueryFbrs(@RequestBody FbrQueryParam param) {
+    	log.debug("REST request to get a page of AfdQuery Fbrs: {}", param);
+    	
+    	FbrQueryWrapper fbrQueryWrapper = new FbrQueryWrapper();
+    	
+    	if (param != null && param.getSource() != null) {
+    		Pageable pageable = new PageRequest(param.getPage(), param.getSize());
+        	List<FbrQuery> fbrQueries = new ArrayList<>();
+            boolean isLastPage = false;
+            int lastIndex = 0;
+            
+            //ATPCO
+            if (param.getSource() != null && param.getSource().contentEquals("A")) {
+            	FbrQueryWrapper atpco = atpcoFareCustomRepository.findAtpcoFbrs(param, pageable);
+            	fbrQueries.addAll(atpco.getFbrQueries());
+            	isLastPage = atpco.isLastPage();
+                lastIndex = atpco.getLastIndex();
+            }
+            
+            //Market
+            if (param.getSource().contentEquals("M")) {
+            	fbrQueries = new ArrayList<>();
+            	isLastPage = true;
+            	lastIndex = 0;
+            }
+            
+            fbrQueryWrapper.setFbrQueries(fbrQueries);
+            fbrQueryWrapper.setLastPage(isLastPage);
+            fbrQueryWrapper.setLastIndex(lastIndex);
+    	}
+    	
+    	return new ResponseEntity<>(fbrQueryWrapper, HttpStatus.OK);
     }
 }

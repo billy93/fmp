@@ -1,9 +1,11 @@
 package com.atibusinessgroup.fmp.repository;
 
-import com.atibusinessgroup.fmp.domain.AtpcoMasterTariff;
-import org.springframework.stereotype.Repository;
+import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
+
+import com.atibusinessgroup.fmp.domain.AtpcoMasterTariff;
 
 /**
  * Spring Data MongoDB repository for the TariffNumber entity.
@@ -20,4 +22,5 @@ public interface AtpcoMasterTariffRepository extends MongoRepository<AtpcoMaster
 
 	AtpcoMasterTariff findOneByTarNoAndType(String tariffNo, String type);
 
+	List<AtpcoMasterTariff> findAllByType(String type);
 }

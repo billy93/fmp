@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('WorkPackageFilterAdvanceDialogController', WorkPackageFilterAdvanceDialogController);
 
-    WorkPackageFilterAdvanceDialogController.$inject = ['$uibModal','$scope', 'FileSaver', 'DataUtils', '$uibModalInstance', 'WorkPackage', '$state', 'value', 'field','maxDate','minDate','isDate'];
+    WorkPackageFilterAdvanceDialogController.$inject = ['$uibModal','$scope', 'FileSaver', 'DataUtils', '$uibModalInstance', 'WorkPackage', '$state', 'value','field', 'filter'];
 
-    function WorkPackageFilterAdvanceDialogController($uibModal, $scope, FileSaver, DataUtils, $uibModalInstance, WorkPackage, $state, value, field, maxDate, minDate,isDate) {
+    function WorkPackageFilterAdvanceDialogController($uibModal, $scope, FileSaver, DataUtils, $uibModalInstance, WorkPackage, $state, value,field,filter) {
 
         var vm = this;
         vm.clear = clear;        
@@ -16,13 +16,13 @@
         vm.currentTab = 'filtering';
         vm.selectedRow = null;       
         vm.datePickerOpenStatus = {};
-        vm.dateFormat = "dd/MM/yyyy";
+        vm.dateFormat = "dMMMyyyy";
         vm.openCalendar = openCalendar;
         vm.ListFilter =[];
-        vm.value = value;                      
-        vm.minDate = minDate;
-        vm.maxDate = maxDate;
-        vm.isDate = isDate;
+		vm.param={field:[], isNot : [], comparator: [], value : [], ignoreCase : []};
+        vm.value = value;
+        vm.field = field;
+        vm.filter = filter;
         
         vm.rowValueHighlighted = function (idSelected) {
             vm.selectedValueRow = idSelected;
@@ -72,7 +72,7 @@
         	}else{
         		var isEmpty =null;
         		var ok = true; 
-        		
+        		vm.valueFilterPass = vm.valueFilter;
         		if(vm.isCheckedNot == undefined || vm.isCheckedNot == false){
         			vm.not = isEmpty;
         		}else if(vm.isCheckedNot == true){
@@ -100,7 +100,7 @@
         				vm.Comparator = '';
         				var temp = vm.valueFilter;
         				var splitx = temp.split(",");
-        				vm.valueFilter = splitx[0]+" between "+splitx[1];
+        				vm.valueFilterPass = splitx[0]+" between "+splitx[1];
         			}else{
         				alert("You must select two values. Use a comma to seperate values");
         				ok = false;
@@ -110,57 +110,48 @@
         		}
         		
         		if(ok){
-        			var filter = vm.newFilterField+" "+vm.not+" "+vm.Comparator+" "+vm.valueFilter+" "+vm.ignore;
+        			var filter = vm.newFilterField+" "+vm.not+" "+vm.Comparator+" "+vm.valueFilterPass+" "+vm.ignore;
         			var final = filter.replace(/null/gi,'');
-        			vm.ListFilter.push(final);  
+        			vm.ListFilter.push(final); 
+        			vm.param.field.push(vm.newFilterField);
+        			vm.param.isNot.push(vm.isCheckedNot);
+        			vm.param.comparator.push(vm.newFilterComparator);
+        			vm.param.value.push(vm.valueFilter);
+        			vm.param.ignoreCase.push(vm.ignoreCase);
         		}
         		
+        	}
+        }
+        
+        if(vm.filter.length > 0 ){
+        	for(var bakso=0 ; bakso< vm.filter.length; bakso++){
+        		var temp = vm.filter[bakso].key+" equal to "+vm.filter[bakso].value;
+        		vm.ListFilter.push(temp); 
+        		vm.param.field.push(vm.filter[bakso].key);
+    			vm.param.isNot.push(false);
+    			vm.param.comparator.push("equal");
+    			vm.param.value.push(vm.filter[bakso].value);
+    			vm.param.ignoreCase.push(false);
         	}
         }
               
         vm.removeAllFilter = function(){
         	vm.ListFilter = [];
+        	vm.param = null;
         }
         
         vm.removeFilter = function (query){
-        	console.log(query);
         	var index = vm.ListFilter.indexOf(query);
-        	console.log(index);
         	vm.ListFilter.splice(index, 1); 
         }
         
         vm.simple = function(){
-        	$uibModal.open({
-        		templateUrl: 'app/pages/work-packages/work-package-filter-dialog.html',
-                controller: 'WorkPackageFilterDialogController',
-                controllerAs: 'vm',
-                backdrop: 'static',
-                size: 'lg',
-                windowClass: 'full-page-modal',
-                resolve: {
-                	 value : function(){
-    	              		return value;
-    	              	},
-                      field : function(){
-    	              		return field;
-    	              	},
-    	              	maxDate : function(){
-    	              		return maxDate;
-    	              	},
-    	              	minDate : function(){
-  	              		return minDate;
-  	              	},
-  	              	isDate : function(){
-  	              		return isDate;
-  	              	}
-                }
-  			}).result.then(function(option) {
-  				
-            }, function() {
-        			
-            });
+        	$uibModalInstance.close({key:'simple', value:vm.field});
         }
         
+        vm.ok = function(){
+        	$uibModalInstance.close({key:'filtering', value:vm.param});
+        }
                
     }
 })();

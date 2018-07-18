@@ -26,6 +26,7 @@ import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.aggregation.SkipOperation;
 import org.springframework.data.mongodb.core.aggregation.SortOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import com.atibusinessgroup.fmp.constant.CategoryName;
@@ -34,11 +35,13 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoAddOn;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoCcfParcity;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFootnoteRecord2;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterG16;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord1;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2Cat10;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat14;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat15;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat50;
 import com.atibusinessgroup.fmp.domain.dto.AddOnParam;
 import com.atibusinessgroup.fmp.domain.dto.AddOnsWrapper;
 import com.atibusinessgroup.fmp.domain.dto.AfdQueryAddOns;
@@ -48,6 +51,9 @@ import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.CategoryObject;
 import com.atibusinessgroup.fmp.domain.dto.DataTable;
+import com.atibusinessgroup.fmp.domain.dto.FbrQuery;
+import com.atibusinessgroup.fmp.domain.dto.FbrQueryParam;
+import com.atibusinessgroup.fmp.domain.dto.FbrQueryWrapper;
 import com.atibusinessgroup.fmp.domain.dto.SpecifiedConstructed;
 import com.atibusinessgroup.fmp.domain.dto.SpecifiedConstructedWrapper;
 import com.atibusinessgroup.fmp.service.AtpcoRecordService;
@@ -621,6 +627,14 @@ public class AtpcoFareCustomRepository {
 		
 		List<SpecifiedConstructed> scs = new ArrayList<>();
 		
+		//G16
+		Query query = new Query(new Criteria().andOperator(Criteria.where("cxr_code").is(param.getCarrier().trim()), Criteria.where("$where").is("this.arbitary_tariff.length > 0")));
+		List<AtpcoMasterG16> g16s = mongoTemplate.find(query, AtpcoMasterG16.class);
+		
+		System.out.println("G16 size " + g16s.size());
+		
+		result.setLastPage(true);
+		
 		return result;
 	}
 	
@@ -1018,6 +1032,178 @@ public class AtpcoFareCustomRepository {
 		Aggregation aggregation = newAggregation(aggregationOperations);
 		
 		List<AtpcoFootnoteRecord2GroupByCatNo> result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_FOOTNOTE_RECORD_2, AtpcoFootnoteRecord2GroupByCatNo.class).getMappedResults();
+		
+		return result;
+	}
+	
+	public FbrQueryWrapper findAtpcoFbrs(FbrQueryParam param, Pageable pageable) {
+		FbrQueryWrapper result = new FbrQueryWrapper();
+		List<FbrQuery> fbrQueries = new ArrayList<>();
+		
+		LinkedHashMap<String, String> fareCategories = new LinkedHashMap<>();
+    	fareCategories.put("050", CategoryName.CAT_050);
+    	
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject match = new BasicDBObject();
+				if (param.getCarrier() != null && !param.getCarrier().isEmpty()) {
+					match.append("cxr_code", new BasicDBObject("$in", Arrays.asList(param.getCarrier().split(","))));
+				}
+				if (param.getFbrTariff() != null && !param.getFbrTariff().isEmpty()) {
+					match.append("tariff", param.getFbrTariff());
+				}
+				if (param.getFbrRule() != null && !param.getFbrRule().isEmpty()) {
+					match.append("rule_no", param.getFbrRule());
+				}
+				
+				return new BasicDBObject("$match", match);
+			}
+		});
+		
+		List<String> listPP = new ArrayList<>();
+		if(param.getPublicPrivate() != null && !param.getPublicPrivate().isEmpty()) {
+			listPP.add(param.getPublicPrivate().toLowerCase());
+		} else {
+			listPP.add("public");
+			listPP.add("private");
+		}
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject query = new BasicDBObject();
+				query.append("from", CollectionName.ATPCO_MASTER_TARIFF);
+				query.append("let", new BasicDBObject("tar_no", "$tariff"));
+				query.append("pipeline", Arrays.asList(new BasicDBObject("$match", 
+						new BasicDBObject("$expr", 
+								new BasicDBObject("$and", 
+										Arrays.asList(
+												new BasicDBObject("$eq", Arrays.asList("$tar_no","$$tar_no")),
+												new BasicDBObject("$in", Arrays.asList("$pp", listPP))
+												)
+										)
+								)
+						)));
+				query.append("as", "m_tariff");
+				return new BasicDBObject("$lookup", query);
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				return new BasicDBObject("$match", new BasicDBObject("m_tariff", new BasicDBObject("$ne", Arrays.asList())));
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				return new BasicDBObject("$unwind", "$m_tariff");
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject project = new BasicDBObject();
+				project.append("_id", "$_id");
+				project.append("cxr", "$cxr_code");
+				project.append("tar_no", "$tariff");
+				project.append("tar_cd", "$m_tariff.tar_cd");
+				project.append("rule_no", "$rule_no");
+				project.append("rule_title", "");
+				
+				return new BasicDBObject("$project", project);
+			}
+		});
+		
+		int index = 0, currentAggregationLoop = 0, skipSize = 0, limitSize = pageable.getPageSize();
+    	boolean isLastPage = false, isCompleted = false;
+    	while (!isCompleted) {
+    		skipSize = param.getLastIndex() + (currentAggregationLoop * limitSize);
+    		
+    		if (currentAggregationLoop > 0) {
+    			aggregationOperations.remove(aggregationOperations.size() - 1);
+    			aggregationOperations.remove(aggregationOperations.size() - 1);
+    		}
+    		
+    		SkipOperation skip = new SkipOperation(skipSize);
+    		aggregationOperations.add(skip);
+    		
+    		LimitOperation limit = new LimitOperation(limitSize);
+    		aggregationOperations.add(limit);
+    		
+    		Aggregation aggregation = newAggregation(aggregationOperations);
+    		
+    		List<FbrQuery> fbrQueryTemp = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_RECORD_8, FbrQuery.class).getMappedResults();
+    		
+    		for (FbrQuery fbrQuery : fbrQueryTemp) {
+    			
+    			List<CategoryObject> cat50s = null;
+            	
+            	for (Map.Entry<String, String> entry : fareCategories.entrySet()) {
+            		List<DataTable> dataTables = new ArrayList<>();
+    				
+            		for (AtpcoRecord2GroupByCatNo arecord2:findAtpcoRecord2ByRecordId(fbrQuery.getTarNo() + fbrQuery.getCxr() + fbrQuery.getRuleNo())) {
+                    	if (arecord2.getCatNo().contentEquals(entry.getKey())) {
+                    		for (AtpcoRecord2 record2:arecord2.getRecords2()) {
+                    			List<DataTable> rec2DataTables = record2.getDataTables();
+                    			
+                    			for (Iterator<DataTable> iterator = rec2DataTables.iterator(); iterator.hasNext();) {
+                    				DataTable dt = iterator.next();
+                    				if (!dt.getCatNo().contentEquals(entry.getKey())) {
+                    					iterator.remove();
+                    				}
+                    			}
+                    			
+                    			dataTables.addAll(rec2DataTables);
+                    		}
+                    		
+                    		break;
+                    	}
+                    }	
+            		
+            		if (dataTables.size() > 0) {
+                		List<CategoryObject> rules = atpcoRecordService.getAndConvertCategoryObjectDataTable(entry.getKey(), dataTables, "Rule");
+                		
+                		switch (entry.getKey()) {
+                			case "050": cat50s = rules;
+										break;
+                		}
+                	}
+            	}
+            	
+            	if (cat50s != null) {
+            		String cat50text = "";
+        			for (CategoryObject cat50o:cat50s) {
+        				AtpcoRecord3Cat50 cat50 = (AtpcoRecord3Cat50) cat50o.getCategory();
+        				if (cat50.getApplication_title() != null && !cat50.getApplication_title().trim().isEmpty()) {
+        					cat50text += cat50.getApplication_title().trim() + "\n";
+        				}
+        			}
+        			fbrQuery.setRuleTitle(cat50text);
+        		}
+            	
+    			fbrQuery.setSource("A");
+    			fbrQueries.add(fbrQuery);
+			}
+        	
+    		if ((fbrQueryTemp.size() == 0) || (fbrQueryTemp.size() == pageable.getPageSize())) {
+				isCompleted = true;
+			}
+    		
+    		currentAggregationLoop++;
+    	}
+    	
+    	if ((!isLastPage && fbrQueries.size() < pageable.getPageSize()) || (fbrQueries.size() == 0)) {
+    		isLastPage = true;
+    	}
+    	
+    	result.setLastPage(isLastPage);
+    	result.setLastIndex(skipSize + index);
+    	result.setFbrQueries(fbrQueries);
 		
 		return result;
 	}
