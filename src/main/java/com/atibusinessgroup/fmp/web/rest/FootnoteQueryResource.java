@@ -1,6 +1,7 @@
 package com.atibusinessgroup.fmp.web.rest;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -197,18 +198,6 @@ public class FootnoteQueryResource {
 		}
 		
 		for (Map.Entry<String, String> entry : categories.entrySet()) {
-			AtpcoFootnoteRecord2 matchedFRecord2 = null;
-			
-			for (AtpcoFootnoteRecord2GroupByCatNo arecord2 : arecords2) {
-				
-				if (arecord2.getCatNo().contentEquals(entry.getKey())) {
-					for (AtpcoFootnoteRecord2 record2 : arecord2.getRecords2()) {
-						matchedFRecord2 = record2;
-					}
-					break;
-				}
-			}
-			
 			Category cat = new Category();
 			cat.setCatName(entry.getValue());
 
@@ -218,26 +207,40 @@ public class FootnoteQueryResource {
 				e.printStackTrace();
 			}
 			
-			String type = "";
+			String type = "", allText = "";
 			
-			if (matchedFRecord2 != null) {
-				List<DataTable> dataTables = new ArrayList<>();
-				
-				for (DataTable dt:matchedFRecord2.getDataTables()) {
-					if (!dataTables.contains(dt)) {
-						dataTables.add(dt);
+			for (AtpcoFootnoteRecord2GroupByCatNo arecord2 : arecords2) {
+				if (arecord2.getCatNo().contentEquals(entry.getKey())) {
+					for (AtpcoFootnoteRecord2 frecord2:arecord2.getRecords2()) {
+						List<DataTable> dataTables = frecord2.getDataTables();
+						
+	        			for (Iterator<DataTable> iterator = dataTables.iterator(); iterator.hasNext();) {
+	        				DataTable dt = iterator.next();
+	        				if (!dt.getCatNo().contentEquals(entry.getKey())) {
+	        					iterator.remove();
+	        				}
+	        			}
+	        			
+	        			if (dataTables.size() > 0) {
+							type = CategoryType.FOOTNOTE;
+				        	String textFormat = atpcoRecordService.generateCategoryTextHeader(CategoryType.FOOTNOTE, footnoteQuery.getTarNo(), ftntTcd, footnoteQuery.getFtnt(), frecord2.getSequenceNo(), frecord2.getEffectiveDateObject());
+			        		CategoryTextFormatAndAttribute ctfa = atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), dataTables, CategoryType.FOOTNOTE);
+			        		textFormat += ctfa.getTextFormat();
+			        		cat.getCatAttributes().addAll(ctfa.getAttributes());
+			        		
+			        		allText += textFormat + "\n";
+						}
 					}
+					
+					break;
 				}
-				
-				type = CategoryType.FOOTNOTE;
-	        	String textFormat = atpcoRecordService.generateCategoryTextHeader(CategoryType.FOOTNOTE, footnoteQuery.getTarNo(), ftntTcd, footnoteQuery.getFtnt(), matchedFRecord2.getSequenceNo(), matchedFRecord2.getEffectiveDateObject());
-        		CategoryTextFormatAndAttribute ctfa = atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), dataTables, CategoryType.FOOTNOTE);
-        		textFormat += ctfa.getTextFormat();
-        		cat.getCatAttributes().addAll(ctfa.getAttributes());
-        		
-        		cat.setType(type);
-            	cat.setTextFormat(textFormat);
 			}
+			
+			if (!type.isEmpty()) {
+				cat.setType(type);
+			}
+			
+			cat.setTextFormat(allText);
 			
 			result.add(cat);
 		}

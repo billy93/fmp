@@ -1,7 +1,7 @@
 package com.atibusinessgroup.fmp.web.rest;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.parser.Part.Type;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.atibusinessgroup.fmp.constant.CategoryName;
 import com.atibusinessgroup.fmp.constant.CategoryType;
 import com.atibusinessgroup.fmp.domain.AtpcoMasterTariff;
-import com.atibusinessgroup.fmp.domain.TariffNumber;
-import com.atibusinessgroup.fmp.domain.atpco.AtpcoFootnoteRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord8;
-import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByCatNo;
-import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByRuleNoCxrTarNo;
 import com.atibusinessgroup.fmp.domain.dto.Category;
 import com.atibusinessgroup.fmp.domain.dto.CategoryTextFormatAndAttribute;
@@ -183,16 +180,6 @@ public class RuleQueryResource {
 		}
 		
 		for (Map.Entry<String, String> entry : categories.entrySet()) {
-			AtpcoRecord2 matchedFRecord2 = null;
-			
-			for (AtpcoRecord2 arecord2 : arecords2) {
-				
-				if (arecord2.getCatNo().contentEquals(entry.getKey())) {
-					matchedFRecord2 = arecord2;
-					break;
-				}
-			}
-			
 			Category cat = new Category();
 			cat.setCatName(entry.getValue());
 
@@ -202,26 +189,35 @@ public class RuleQueryResource {
 				e.printStackTrace();
 			}
 			
-			String type = "";
+			String type = "", allText = "";
 			
-			if (matchedFRecord2 != null) {
-				List<DataTable> dataTables = new ArrayList<>();
-				
-				for (DataTable dt:matchedFRecord2.getDataTables()) {
-					if (!dataTables.contains(dt)) {
-						dataTables.add(dt);
-					}
+			for (AtpcoRecord2 arecord2 : arecords2) {
+				if (arecord2.getCatNo().contentEquals(entry.getKey())) {
+        			List<DataTable> dataTables = arecord2.getDataTables();
+        			
+        			for (Iterator<DataTable> iterator = dataTables.iterator(); iterator.hasNext();) {
+        				DataTable dt = iterator.next();
+        				if (!dt.getCatNo().contentEquals(entry.getKey())) {
+        					iterator.remove();
+        				}
+        			}
+        			
+        			if (dataTables.size() > 0) {
+        				type = CategoryType.RULE;
+        	        	String textFormat = atpcoRecordService.generateCategoryTextHeader(CategoryType.RULE, ruleQuery.getTarNo(), ftntTcd, null, arecord2.getSequenceNo(), arecord2.getEffectiveDateObject());
+                		CategoryTextFormatAndAttribute ctfa = atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), dataTables, CategoryType.RULE);
+                		textFormat += ctfa.getTextFormat();
+                		cat.getCatAttributes().addAll(ctfa.getAttributes());
+                		allText += textFormat + "\n";
+        			}
 				}
-				
-				type = CategoryType.RULE;
-	        	String textFormat = atpcoRecordService.generateCategoryTextHeader(CategoryType.RULE, ruleQuery.getTarNo(), ftntTcd, null, matchedFRecord2.getSequenceNo(), matchedFRecord2.getEffectiveDateObject());
-        		CategoryTextFormatAndAttribute ctfa = atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), dataTables, CategoryType.RULE);
-        		textFormat += ctfa.getTextFormat();
-        		cat.getCatAttributes().addAll(ctfa.getAttributes());
-        		
-        		cat.setType(type);
-            	cat.setTextFormat(textFormat);
 			}
+			
+			if (!type.isEmpty()) {
+				cat.setType(type);
+			}
+			
+			cat.setTextFormat(allText);
 			
 			result.add(cat);
 		}
