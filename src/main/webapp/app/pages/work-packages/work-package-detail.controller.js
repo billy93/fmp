@@ -3210,9 +3210,9 @@
         	  }else{
         		  vm.workPackage.validate = false;
         	  }
-        	  
-        	  removeTime(vm.workPackage);
-              WorkPackage.update(vm.workPackage, onSaveSuccess, onSaveError);
+        	  var newWp = angular.copy(vm.workPackage);
+        	  removeTime(newWp);
+              WorkPackage.update(newWp, onSaveSuccess, onSaveError);
           } else {
               WorkPackage.save(vm.workPackage, onSaveSuccess, onSaveError);
           }
