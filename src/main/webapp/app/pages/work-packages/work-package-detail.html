@@ -381,7 +381,7 @@
 											<div class="pull-left w50 two-column">
 												<div class="form-group">
 													<label>Version</label>
-													<select class="form-control" ng-model="workPackageSheet.version"
+													<select class="form-control" ng-model="workPackageSheet.version" id="version"
 													ng-change="vm.changeVersion(workPackageSheet, workPackageSheet.version)"
 													ng-init="vm.changeVersion(workPackageSheet, 'current')">
 														<option value='current'>Current</option>
@@ -874,7 +874,7 @@
 											<div class="pull-left w50 two-column">
 												<div class="form-group">
 													<label>Version</label>
-													<select class="form-control" ng-model="workPackageSheet.version" ng-change="vm.changeVersion(workPackageSheet, workPackageSheet.version)" ng-init="vm.changeVersion(workPackageSheet, 'current')">
+													<select class="form-control"  id="version" ng-model="workPackageSheet.version" ng-change="vm.changeVersion(workPackageSheet, workPackageSheet.version)" ng-init="vm.changeVersion(workPackageSheet, 'current')">
 														<option value='current'>Current</option>
 														<option ng-repeat="version in workPackageSheet.fareVersion track by $index" value="{{$index}}">
 															{{version.version}} - {{version.username}} - {{version.action}}
@@ -1685,7 +1685,7 @@
 						              <div class="pull-left w50 two-column">
 										<div class="form-group">
 											<label>Version</label>
-											<select class="form-control" ng-model="workPackageSheet.version" ng-change="vm.changeVersion(workPackageSheet, workPackageSheet.version)" ng-init="vm.changeVersion(workPackageSheet, 'current')">
+											<select class="form-control" id="version" ng-model="workPackageSheet.version" ng-change="vm.changeVersion(workPackageSheet, workPackageSheet.version)" ng-init="vm.changeVersion(workPackageSheet, 'current')">
 												<option value='current'>Current</option>
 												<option ng-repeat="version in workPackageSheet.fareVersion track by $index" value="{{$index}}">
 													{{version.version}} - {{version.username}} - {{version.action}}
@@ -2669,7 +2669,7 @@
 										<div class="pull-left w50 two-column">
 											<div class="form-group">
 												<label>Version</label>
-												<select class="form-control" ng-model="workPackageSheet.version" ng-change="vm.changeVersion(workPackageSheet, workPackageSheet.version)" ng-init="vm.changeVersion(workPackageSheet, 'current')">
+												<select class="form-control" id="version" ng-model="workPackageSheet.version" ng-change="vm.changeVersion(workPackageSheet, workPackageSheet.version)" ng-init="vm.changeVersion(workPackageSheet, 'current')">
 													<option value='current'>Current</option>
 													<option ng-repeat="version in workPackageSheet.fareVersion track by $index" value="{{$index}}">
 														{{version.version}} - {{version.username}} - {{version.action}}
@@ -3192,7 +3192,7 @@
 										<div class="pull-left w50 two-column">
 											<div class="form-group">
 												<label>Version</label>
-												<select class="form-control" ng-model="workPackageSheet.version" ng-change="vm.changeVersion(workPackageSheet, workPackageSheet.version)" ng-init="vm.changeVersion(workPackageSheet, 'current')">
+												<select class="form-control" id="version" ng-model="workPackageSheet.version" ng-change="vm.changeVersion(workPackageSheet, workPackageSheet.version)" ng-init="vm.changeVersion(workPackageSheet, 'current')">
 													<option value='current'>Current</option>
 													<option ng-repeat="version in workPackageSheet.fareVersion track by $index" value="{{$index}}">
 														{{version.version}} - {{version.username}} - {{version.action}}
@@ -3739,7 +3739,7 @@
 										<div class="pull-left w50 two-column">
 											<div class="form-group">
 												<label>Version</label>
-												<select class="form-control" ng-model="workPackageSheet.version" ng-change="vm.changeVersion(workPackageSheet, workPackageSheet.version)" ng-init="vm.changeVersion(workPackageSheet, 'current')">
+												<select class="form-control" id="version" ng-model="workPackageSheet.version" ng-change="vm.changeVersion(workPackageSheet, workPackageSheet.version)" ng-init="vm.changeVersion(workPackageSheet, 'current')">
 													<option value='current'>Current</option>
 													<option ng-repeat="version in workPackageSheet.fareVersion track by $index" value="{{$index}}">
 														{{version.version}} - {{version.username}} - {{version.action}}
