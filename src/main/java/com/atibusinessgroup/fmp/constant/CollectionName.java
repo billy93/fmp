@@ -75,6 +75,7 @@ public class CollectionName {
 	public final static String ATPCO_YQYR_CARRIER_APPLICATION_TABLE_190 = "atpco_yqyr_carrier_application_table_190";
 	public final static String ATPCO_YQYR_TEXT_TABLE_196 = "atpco_yqyr_text_table_196";
 	
+	public final static String ATPCO_MASTER_G16 = "atpco_master_g16";
 	public final static String ATPCO_MASTER_TARIFF = "master_tariff";
 	
 	public final static String ATPCO_CCF_PARCITY = "atpco_ccf_parcity";

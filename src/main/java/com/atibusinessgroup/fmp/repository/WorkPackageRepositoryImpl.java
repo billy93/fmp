@@ -2,7 +2,6 @@ package com.atibusinessgroup.fmp.repository;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 
-import java.io.Console;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -35,8 +34,6 @@ import com.atibusinessgroup.fmp.service.util.DateUtil;
 import com.atibusinessgroup.fmp.web.rest.WorkPackageResource.WorkPackageQuery;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-
-import ch.qos.logback.core.status.Status;
 
 
 public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAnyName {

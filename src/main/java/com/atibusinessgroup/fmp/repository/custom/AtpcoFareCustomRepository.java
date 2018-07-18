@@ -26,6 +26,7 @@ import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
 import org.springframework.data.mongodb.core.aggregation.SkipOperation;
 import org.springframework.data.mongodb.core.aggregation.SortOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import com.atibusinessgroup.fmp.constant.CategoryName;
@@ -34,6 +35,7 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoAddOn;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoCcfParcity;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFare;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoFootnoteRecord2;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterG16;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord1;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2Cat10;
@@ -620,6 +622,14 @@ public class AtpcoFareCustomRepository {
 		SpecifiedConstructedWrapper result = new SpecifiedConstructedWrapper();
 		
 		List<SpecifiedConstructed> scs = new ArrayList<>();
+		
+		//G16
+		Query query = new Query(new Criteria().andOperator(Criteria.where("cxr_code").is(param.getCarrier().trim()), Criteria.where("$where").is("this.arbitary_tariff.length > 0")));
+		List<AtpcoMasterG16> g16s = mongoTemplate.find(query, AtpcoMasterG16.class);
+		
+		System.out.println("G16 size " + g16s.size());
+		
+		result.setLastPage(true);
 		
 		return result;
 	}
