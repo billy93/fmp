@@ -8,7 +8,6 @@
     	<uib-tabset active="activeForm">			
 			<uib-tab heading="By Value" ng-click="vm.selectTab('value')">				
 		      	<div class="box-detail">
-      				<div class="box-header">List City Group</div>
       				<div><input type="checkbox" ng-checked="vm.excludeSelectedValue">Exclude Selected Value</div>	
       				<div class="box-body">
       					<div class="table-wrapper">
@@ -46,8 +45,58 @@
       				</div>		      				
       			</div>
 			</uib-tab>
-			<uib-tab heading="By Range" ng-click="vm.selectTab('range')">
-						
+			<uib-tab heading="By Range" ng-click="vm.selectTab('range')" ng-if="vm.isDate == true">
+				<div class="box-detail">
+      				<div><input type="checkbox" ng-checked="vm.excludeSelectedValue">Exclude Selected Value</div>	
+      				<div class="box-body">
+      					<div class="table-wrapper">
+							<div class="datatable-wrapper form-inline">
+								<div align="center">
+								<label>Date Range</label>
+									<div align="center">
+									 <div>
+									 <label>Maximum value : {{vm.minDate | date : vm.dateFormat}} </label>
+									 </div>
+									 <div>
+									 <label>Minumum value : {{vm.maxDate | date : vm.dateFormat}} </label>
+									 </div>									
+									</div>								
+								</div>
+								<div>
+								<label>Filter range :</label> 
+								<div class="row">
+									<label>Select all values that :</label> 
+								    <div class="row no-mar">
+										<div class="col-md-6 no-lpad absolute-datepicker">
+											<label>Are greater than or equal to :</label> 
+										</div>
+										<div class="col-md-6 no-pad absolute-datepicker">
+											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'From')" 
+												is-open="vm.datePickerOpenStatus['From']" datetime-picker="{{vm.dateFormat}}" 
+												enable-time="false" name="From" id="datepicker" 
+												ng-model="vm.From" placeholder="From"/>
+										</div>
+									</div>
+									<div class="row no-mar">
+										<div class="col-md-6 no-lpad absolute-datepicker">
+											<label>And less than or equal to :</label> 
+										</div>
+										<div class="col-md-6 no-pad absolute-datepicker">
+											<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'To')"
+												is-open="vm.datePickerOpenStatus['To']" datetime-picker="{{vm.dateFormat}}" 
+												enable-time="false" name="To" id="datepicker" 
+												ng-model="vm.To" placeholder="To"/>
+										</div>
+									</div>
+								  </div>
+								  </div>
+							</div>
+						</div>
+						<button type="submit" class="btn btn-secondary" ng-click="vm.removeThisColumnFilter()" >Remove this column's filters</button>
+						<button type="submit" class="btn btn-secondary" ng-click="vm.removeAllColumnFilter()">Remove all column's filters</button>
+						<button type="submit" class="btn btn-secondary" ng-click="vm.removeLastColumnFilter()">Remove last filter</button>
+      				</div>		      				
+      			</div> 			
 			</uib-tab>
 			<uib-tab heading="Wild Cards" ng-click="vm.selectTab('card')">						
 		     	<div class="box-detail">
@@ -70,8 +119,8 @@
 								<label>Select all values that are like :</label> 
 								<div class="row">
 								    <div class="col-sm-2" >
-									    <select class="form-control" ng-model="vm.option">
-										<option value="*">*</option>
+									    <select class="form-control" ng-model="vm.option" ng-init="vm.option='*'">
+										<option value="*" ng-selected=true>*</option>
 										<option value="?">?</option>
 									</select>	
 								    </div>
@@ -91,6 +140,7 @@
 			</uib-tabset>
    	</div>
     <div class="modal-footer">
+    	<button type="submit" class="btn btn-secondary" ng-click="vm.advance()">Advanced &gt;</button>
     	<button type="submit" class="btn btn-secondary" ng-click="vm.select()" data-translate="entity.action.save">OK</button>
         <button type="button" ng-click="vm.clear()" class="btn btn-back" data-dismiss="modal">Close</button>
     </div>

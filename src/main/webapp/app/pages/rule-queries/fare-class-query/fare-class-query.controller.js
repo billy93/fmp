@@ -22,6 +22,8 @@
         vm.getFareClassDetails = getFareClassDetails;
         vm.showTariffModal = showTariffModal;
         vm.showCarrierModal = showCarrierModal;
+        vm.showFareTypeModal = showFareTypeModal;
+        vm.showPassengerTypeModal = showPassengerTypeModal;
         vm.isLoading = false;
         
         if($stateParams.fareClasssQueryFilter != null){
@@ -40,6 +42,8 @@
 				
 				vm.queryParams.cxr = vm.paramCarrier;
 	        	vm.queryParams.tarNo = vm.paramTarNo;
+	        	vm.queryParams.fareType = vm.paramFareTypeCode;
+	        	vm.queryParams.psgrType = vm.paramPassengerCode;
 				
 				FareClassQuery.query(vm.queryParams, onSuccess, onError);
 	            
@@ -214,6 +218,42 @@
         	$uibModal.open({
                 templateUrl: 'app/pages/modals/carrier-modal.html',
                 controller: 'MasterCarrierModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full',
+                resolve: {
+                	entity: vm
+                }
+            }).result.then(function() {
+                $state.go('rule-queries', {}, { reload: false });
+            }, function() {
+                $state.go('rule-queries');
+            });
+        }
+        
+        function showFareTypeModal() {
+        	$uibModal.open({
+                templateUrl: 'app/pages/modals/atpco-fare-type-modal.html',
+                controller: 'AtpcoMasterFareTypeModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full',
+                resolve: {
+                	entity: vm
+                }
+            }).result.then(function() {
+                $state.go('rule-queries', {}, { reload: false });
+            }, function() {
+                $state.go('rule-queries');
+            });
+        }
+        
+        function showPassengerTypeModal() {
+        	$uibModal.open({
+                templateUrl: 'app/pages/modals/passenger-modal.html',
+                controller: 'MasterPassengerModalController',
                 controllerAs: 'vm',
                 backdrop: 'static',
                 size: 'lg',

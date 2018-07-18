@@ -1,0 +1,76 @@
+<form name="editForm" role="form" novalidate ng-submit="vm.save()">
+    <div class="modal-header">
+    	<h5 class="modal-title" id="myWorkPackageLabel">Select a fare type</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+      	<div class="clearfix mb1">
+      		<div class="pull-left ph5px w25">
+    					<div class="form-group">
+					<label>Select the column name to search</label>
+					<select class="form-control" ng-model="vm.option.searchType" ng-change="vm.search()">
+						<option value="typeCode">Type Code</option>
+						<option value="definition">Definition</option>
+						<option value="fareTypeDesignation">Fare Type Designation</option>
+					</select>																
+				</div>
+				<div class="form-group">
+					<label>Enter Search String</label>
+					<input type="text" name="search" ng-change="vm.search()" class="form-control" ng-model="vm.option.search">																
+				</div>
+			</div>      		
+      	</div>
+      	<div class="box-detail">
+      				<div class="box-header">List Fare Type</div>	
+      				<div class="box-body">
+      					<div class="table-wrapper">
+							<div class="datatable-wrapper form-inline">
+								<div class="table-responsive">
+									<table class="table table-stripped table-bordered datatable">
+										<thead>
+											<tr role="row">
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" ng-click="vm.sortType = 'typeCode'; vm.sortReverse = !vm.sortReverse">
+										            Type Code
+										            <span ng-show="vm.sortType == 'typeCode' && !vm.sortReverse" class="fa fa-caret-down"></span>
+										            <span ng-show="vm.sortType == 'typeCode' && vm.sortReverse" class="fa fa-caret-up"></span>
+												</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" ng-click="vm.sortType = 'definition'; vm.sortReverse = !vm.sortReverse">
+										            Definition
+										            <span ng-show="vm.sortType == 'definition' && !vm.sortReverse" class="fa fa-caret-down"></span>
+										            <span ng-show="vm.sortType == 'definition' && vm.sortReverse" class="fa fa-caret-up"></span>
+												</th>
+												<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" ng-click="vm.sortType = 'fareTypeDesignation'; vm.sortReverse = !vm.sortReverse">
+										            Fare Type Designation
+										            <span ng-show="vm.sortType == 'fareTypeDesignation' && !vm.sortReverse" class="fa fa-caret-down"></span>
+										            <span ng-show="vm.sortType == 'fareTypeDesignation' && vm.sortReverse" class="fa fa-caret-up"></span>
+												</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr role="row" 
+											ng-click="vm.rowHighlighted(fareType)" ng-dblclick="vm.select()" ng-class="{'selected': fareType === vm.selectedRow}"
+											class="datatable-row" ng-repeat="fareType in (vm.filteredFareType = (vm.fareTypes | filter:vm.option.search | orderBy:vm.sortType:vm.sortReverse)) track by $index">
+												<td>
+													{{fareType.typeCode}}
+												</td>
+												<td>
+													{{fareType.definition}}
+												</td>
+												<td>
+													{{fareType.fareTypeDesignation}}
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+      				</div>		      				
+      			</div>
+   	</div>
+    <div class="modal-footer">
+    	<button type="submit" class="btn btn-secondary" ng-click="vm.select()" data-translate="entity.action.save">OK</button>
+        <button type="button" ng-click="vm.clear()" class="btn btn-back" data-dismiss="modal">Close</button>
+    </div>
+</form>

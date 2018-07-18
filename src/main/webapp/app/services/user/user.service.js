@@ -21,7 +21,8 @@
             'update': { method:'PUT' },
             'delete':{ method:'DELETE'},
             'generateTourcode':{method:'POST', url:'api/users/generateTourcode'},
-            'getBusinessArea':{method:'GET',isArray: true, url:'api/users/getBusinessArea'}
+            'getBusinessArea':{method:'GET',isArray: true, url:'api/users/getBusinessArea'},
+            'queryAll':{method:'GET',isArray: true, url:'api/users/all'}
         });
 
         return service;

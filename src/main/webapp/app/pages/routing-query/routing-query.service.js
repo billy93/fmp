@@ -22,6 +22,7 @@
             },        
             'getDetails': { method: 'GET', url:'api/routingqueries/details', isArray: true },
             'getMaps': { method: 'GET', url:'api/routingqueries/getmaps/:tarno/:crx/:rtg', isArray: true },
+            'exportQueue': {method:'POST', url:'api/routingqueries/exportQueue'},
         });
     }
 })();

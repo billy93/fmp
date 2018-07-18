@@ -66,18 +66,17 @@
 	 						<div class="pull-left ph5px w30">
 	 						</div>
 					 	</div>
-	 					<div class="clearfix">
-	 						<div class="pull-left ph5px w30 mt5px">Status
- 						</div>
- 						<div class="pull-left ph5px w5">
- 							<div class="form-group mb0">
-								<div class="checkbox-wrapper inline">
-									<label>
-										<input type="checkbox" ng-model="vm.filter.status.check">													
-									</label>
+	 					<div class="clearfix" ng-show="vm.showField('status')">
+	 						<div class="pull-left ph5px w30 mt5px">Status</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.status.check">													
+										</label>
+									</div>
 								</div>
-							</div>
-	 					</div>
+		 					</div>
 	 						<div class="pull-left ph5px w30">
 								<select class="form-control" ng-disabled="!vm.filter.status.check" ng-model="vm.filter.status.search">
 	 								<option value="">Select Option</option>
@@ -104,7 +103,7 @@
 								</select>
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('carrier')">
 	 						<div class="pull-left ph5px w30 mt5px">Cxr
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -132,7 +131,7 @@
 	 							<!-- <input type="text" class="form-control inline" disabled ng-model="vm.filter.carrier.replace.value"/>	 -->	 								
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('action')">
 	 						<div class="pull-left ph5px w30 mt5px">Action
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -159,7 +158,7 @@
 	 						<div class="pull-left ph5px w30">
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('tarno')">
 	 						<div class="pull-left ph5px w30 mt5px">Tar No
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -179,7 +178,7 @@
 	 						<div class="pull-left ph5px w30">
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('tarcd')">
 	 						<div class="pull-left ph5px w30 mt5px">Tar Cd
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -192,14 +191,22 @@
 								</div>
 	 						</div>
 	 						<div class="pull-left ph5px w30">
-									<input type="text" class="form-control inline" uppercase ng-disabled="!vm.filter.tariffNumber.tarCd.check" ng-model="vm.filter.tariffNumber.tarCd.search"/>	 						
+								<input type="text" class="form-control inline" uppercase ng-disabled="!vm.filter.tariffNumber.tarCd.check" ng-model="vm.filter.tariffNumber.tarCd.search"/>	 						
 	 						</div>
 	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.tariffNumber.tarCd.replace.check">													
+										</label>
+									</div>
+								</div>
 	 						</div>
 	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" uppercase ng-model="vm.filter.tariffNumber.tarCd.replace.value" ng-disabled="!vm.filter.tariffNumber.tarCd.replace.check">	 						
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('global')">
 	 						<div class="pull-left ph5px w30 mt5px">Global
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -219,7 +226,155 @@
 	 						<div class="pull-left ph5px w30">
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('loc1Type')">
+	 						<div class="pull-left ph5px w30 mt5px">Loc 1 Type
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.loc1Type.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<select class="form-control" ng-disabled="!vm.filter.loc1Type.check" ng-model="vm.filter.loc1Type.search">
+	 								<option value="">Select Option</option>
+	 								<option label="City" value="C">City</option>
+	 								<option label="Country" value="N">Country</option>
+	 								<option label="State" value="S">State</option>
+	 								<option label="Area" value="A">Area</option>
+	 								<option label="City Group" value="G">City Group</option>
+								</select>
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.loc1Type.replace.check">													
+										</label>
+									</div>
+								</div>						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<select class="form-control" ng-disabled="!vm.filter.loc1Type.replace.check" ng-model="vm.filter.loc1Type.replace.value">
+	 								<option value="">Select Option</option>
+	 								<option label="City" value="C">City</option>
+	 								<option label="Country" value="N">Country</option>
+	 								<option label="State" value="S">State</option>
+	 								<option label="Area" value="A">Area</option>
+	 								<option label="City Group" value="G">City Group</option>
+								</select>
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('loc1')">
+	 						<div class="pull-left ph5px w30 mt5px">Loc 1
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.loc1.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" class="form-control inline" uppercase ng-disabled="!vm.filter.loc1.check" ng-model="vm.filter.loc1.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.loc1.replace.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" uppercase ng-model="vm.filter.loc1.replace.value" ng-disabled="!vm.filter.loc1.replace.check">
+	 						</div>
+	 					</div>
+	 					
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('loc2Type')">
+	 						<div class="pull-left ph5px w30 mt5px">Loc 2 Type
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.loc2Type.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<select class="form-control" ng-disabled="!vm.filter.loc2Type.check" ng-model="vm.filter.loc2Type.search">
+	 								<option value="">Select Option</option>
+	 								<option label="City" value="C">City</option>
+	 								<option label="Country" value="N">Country</option>
+	 								<option label="State" value="S">State</option>
+	 								<option label="Area" value="A">Area</option>
+	 								<option label="City Group" value="G">City Group</option>
+								</select>
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.loc2Type.replace.check">													
+										</label>
+									</div>
+								</div>						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<select class="form-control" ng-disabled="!vm.filter.loc2Type.replace.check" ng-model="vm.filter.loc2Type.replace.value">
+	 								<option value="">Select Option</option>
+	 								<option label="City" value="C">City</option>
+	 								<option label="Country" value="N">Country</option>
+	 								<option label="State" value="S">State</option>
+	 								<option label="Area" value="A">Area</option>
+	 								<option label="City Group" value="G">City Group</option>
+								</select>
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('loc2')">
+	 						<div class="pull-left ph5px w30 mt5px">Loc 2
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.loc2.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" class="form-control inline" uppercase ng-disabled="!vm.filter.loc2.check" ng-model="vm.filter.loc2.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.loc2.replace.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" uppercase ng-model="vm.filter.loc2.replace.value" ng-disabled="!vm.filter.loc2.replace.check">
+	 						</div>
+	 					</div>
+	 					
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('origin')">
 	 						<div class="pull-left ph5px w30 mt5px">Origin
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -247,7 +402,8 @@
 	 							<input type="text" class="form-control inline" uppercase ng-model="vm.filter.origin.replace.value" ng-disabled="!vm.filter.origin.replace.check">
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('destination')">
 	 						<div class="pull-left ph5px w30 mt5px">Dest
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -275,7 +431,7 @@
 	 							<input type="text" uppercase class="form-control inline" ng-disabled="!vm.filter.destination.replace.check" ng-model="vm.filter.destination.replace.value">
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('bucket')">
 	 						<div class="pull-left ph5px w30 mt5px">Addon Bucket
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -303,8 +459,7 @@
 	 							<input type="text" uppercase class="form-control inline" ng-disabled="!vm.filter.bucket.replace.check" ng-model="vm.filter.bucket.replace.value">
 	 						</div>
 	 					</div>
-	 					
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('farebasis')">
 	 						<div class="pull-left ph5px w30 mt5px">Fare Class
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -332,7 +487,38 @@
 	 							<input type="text" uppercase class="form-control inline"  ng-disabled="!vm.filter.fareBasis.replace.check" ng-model="vm.filter.fareBasis.replace.value">
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('basefarebasis')">
+	 						<div class="pull-left ph5px w30 mt5px">Base Fare Class
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.baseFareBasis.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.baseFareBasis.check" ng-model="vm.filter.baseFareBasis.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.baseFareBasis.replace.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" uppercase class="form-control inline"  ng-disabled="!vm.filter.baseFareBasis.replace.check" ng-model="vm.filter.baseFareBasis.replace.value">
+	 						</div>
+	 					</div>
+	 					
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('bookingclass')">
 	 						<div class="pull-left ph5px w30 mt5px">Booking Class
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -360,7 +546,67 @@
 	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.bookingClass.replace.check" ng-model="vm.filter.bookingClass.replace.value">
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('ssn')">
+	 						<div class="pull-left ph5px w30 mt5px">SSN
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.ssn.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<select class="form-control" ng-disabled="!vm.filter.ssn.check" ng-model="vm.filter.ssn.search">
+	 								<option value="">Select Option</option>
+									<option label="Christmas" value="C">Christmas</option>
+	 								<option label="Easter" value="E">Easter</option>
+	 								<option label="4th Level" value="F">4th Level</option>
+	 								<option label="High Peak" value="H">High Peak</option>
+	 								<option label="Basic" value="J">Basic</option>
+	 								<option label="Low/Off-Peak" value="L">Low/Off-Peak</option>
+	 								<option label="Chinese New Year" value="N">Chinese New Year</option>
+	 								<option label="Shoulder" value="O">Shoulder</option>
+	 								<option label="Peak Of Peak" value="P">Peak Of Peak</option>
+	 								<option label="Holiday Surcharge" value="Q">Holiday Surcharge</option>
+	 								<option label="5th Level" value="T">5th Level</option>
+	 								<option label="7th Level" value="Y">7th Level</option>
+	 								<option label="Second Winter" value="Z">Second Winter</option>
+								</select>
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.ssn.replace.check">													
+										</label>
+									</div>
+								</div>	
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<select class="form-control" ng-disabled="!vm.filter.ssn.replace.check" ng-model="vm.filter.ssn.replace.value">
+	 								<option value="">Select Option</option>
+	 								<option label="Christmas" value="C">Christmas</option>
+	 								<option label="Easter" value="E">Easter</option>
+	 								<option label="4th Level" value="F">4th Level</option>
+	 								<option label="High Peak" value="H">High Peak</option>
+	 								<option label="Basic" value="J">Basic</option>
+	 								<option label="Low/Off-Peak" value="L">Low/Off-Peak</option>
+	 								<option label="Chinese New Year" value="N">Chinese New Year</option>
+	 								<option label="Shoulder" value="O">Shoulder</option>
+	 								<option label="Peak Of Peak" value="P">Peak Of Peak</option>
+	 								<option label="Holiday Surcharge" value="Q">Holiday Surcharge</option>
+	 								<option label="5th Level" value="T">5th Level</option>
+	 								<option label="7th Level" value="Y">7th Level</option>
+	 								<option label="Second Winter" value="Z">Second Winter</option>
+								</select>
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('cabin')">
 	 						<div class="pull-left ph5px w30 mt5px">Cabin
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -400,7 +646,8 @@
 								</select>
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('owrt')">
 	 						<div class="pull-left ph5px w30 mt5px">OW/RT
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -438,7 +685,7 @@
 								</select>
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('footnote')">
 	 						<div class="pull-left ph5px w30 mt5px">Footnote
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -467,7 +714,7 @@
 	 							
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('zone')">
 	 						<div class="pull-left ph5px w30 mt5px">Zone
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -495,7 +742,7 @@
 	 							<input type="text" uppercase class="form-control inline" ng-disabled="!vm.filter.zone.replace.check" ng-model="vm.filter.zone.replace.value">
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('rtgno')">
 	 						<div class="pull-left ph5px w30 mt5px">Rtg No
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -523,7 +770,133 @@
 	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.rtgno.replace.check" ng-model="vm.filter.rtgno.replace.value">	 							
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('baseruleno')">
+	 						<div class="pull-left ph5px w30 mt5px">Base Rule No
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.baseRuleNo.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.baseRuleNo.check" ng-model="vm.filter.baseRuleNo.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.baseRuleNo.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.baseRuleNo.replace.check" ng-model="vm.filter.baseRuleNo.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					<div class="clearfix" ng-show="vm.showField('basetarcd')">
+	 						<div class="pull-left ph5px w30 mt5px">Base Tar Cd
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.baseTarcd.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" class="form-control inline" uppercase ng-disabled="!vm.filter.baseTarcd.check" ng-model="vm.filter.baseTarcd.search"/>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.baseTarcd.replace.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" uppercase ng-model="vm.filter.baseTarcd.replace.value" ng-disabled="!vm.filter.baseTarcd.replace.check">	 						
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('calctype')">
+	 						<div class="pull-left ph5px w30 mt5px">Calc Type
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.calcType.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<select class="form-control" ng-disabled="!vm.filter.calcType.check" ng-model="vm.filter.calcType.search">
+	 								<option value="">Select Option</option>
+	 								<option label="Calculated" value="C">Calculated</option>
+	 								<option label="Specified" value="S">Specified</option>
+	 								<option label="Substract Specified from Calculated" value="M">Substract Specified from Calculated</option>
+								</select>
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.calcType.replace.check">													
+										</label>
+									</div>
+								</div>						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<select class="form-control" ng-disabled="!vm.filter.calcType.replace.check" ng-model="vm.filter.calcType.replace.value">
+	 								<option value="">Select Option</option>
+	 								<option label="Calculated" value="C">Calculated</option>
+	 								<option label="Specified" value="S">Specified</option>
+	 								<option label="Substract Specified from Calculated" value="M">Substract Specified from Calculated</option>
+								</select>
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('percentbasefare')">
+	 						<div class="pull-left ph5px w30 mt5px">% Base Fare
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.percentBaseFare.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.percentBaseFare.check" ng-model="vm.filter.percentBaseFare.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.percentBaseFare.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.percentBaseFare.replace.check" ng-model="vm.filter.percentBaseFare.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('ruleno')">
 	 						<div class="pull-left ph5px w30 mt5px">Rule No
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -551,7 +924,7 @@
 	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.ruleno.replace.check" ng-model="vm.filter.ruleno.replace.value">	 	
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('currency')">
 	 						<div class="pull-left ph5px w30 mt5px">Currency
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -580,7 +953,37 @@
 	 						</div>
 
 	 					</div>
-	 					<div class="clearfix">
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('discountspecifiedamount')">
+	 						<div class="pull-left ph5px w30 mt5px">Amount
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.discountSpecifiedAmount.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" class="form-control inline" uppercase ng-disabled="!vm.filter.discountSpecifiedAmount.check" ng-model="vm.filter.discountSpecifiedAmount.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.discountSpecifiedAmount.replace.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 								<input type="text" class="form-control inline" ng-disabled="!vm.filter.discountSpecifiedAmount.replace.check" ng-model="vm.filter.discountSpecifiedAmount.replace.value">	 		 							 						
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('amount')">
 	 						<div class="pull-left ph5px w30 mt5px">Amount
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -608,7 +1011,7 @@
 	 								<input type="text" class="form-control inline" ng-disabled="!vm.filter.amount.replace.check" ng-model="vm.filter.amount.replace.value">	 		 							 						
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('aif')">
 	 						<div class="pull-left ph5px w30 mt5px">Target AIF
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -637,7 +1040,252 @@
 	 						
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('passengertype')">
+	 						<div class="pull-left ph5px w30 mt5px">Passenger Type
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.passengerType.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" class="form-control inline" uppercase ng-disabled="!vm.filter.passengerType.check" ng-model="vm.filter.passengerType.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.passengerType.replace.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 								<input type="text" class="form-control inline" ng-disabled="!vm.filter.passengerType.replace.check" ng-model="vm.filter.passengerType.replace.value">	 		 							 						
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('faretype')">
+	 						<div class="pull-left ph5px w30 mt5px">Fare Type
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.fareType.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" class="form-control inline" uppercase ng-disabled="!vm.filter.fareType.check" ng-model="vm.filter.fareType.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.fareType.replace.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 								<input type="text" class="form-control inline" ng-disabled="!vm.filter.fareType.replace.check" ng-model="vm.filter.fareType.replace.value">	 		 							 						
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('ticketcode')">
+	 						<div class="pull-left ph5px w30 mt5px">Ticket Code
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.ticketCode.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" class="form-control inline" uppercase ng-disabled="!vm.filter.ticketCode.check" ng-model="vm.filter.ticketCode.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.ticketCode.replace.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 								<input type="text" class="form-control inline" ng-disabled="!vm.filter.ticketCode.replace.check" ng-model="vm.filter.ticketCode.replace.value">	 		 							 						
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('ticketdesignator')">
+	 						<div class="pull-left ph5px w30 mt5px">Ticket Designator
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.ticketDesignator.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" class="form-control inline" uppercase ng-disabled="!vm.filter.ticketDesignator.check" ng-model="vm.filter.ticketDesignator.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.ticketDesignator.replace.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 								<input type="text" class="form-control inline" ng-disabled="!vm.filter.ticketDesignator.replace.check" ng-model="vm.filter.ticketDesignator.replace.value">	 		 							 						
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('rtgnotarno')">
+	 						<div class="pull-left ph5px w30 mt5px">Rtg No Tar No
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.rtgnoTarno.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" class="form-control inline" uppercase ng-disabled="!vm.filter.rtgnoTarno.check" ng-model="vm.filter.rtgnoTarno.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.rtgnoTarno.replace.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.rtgnoTarno.replace.check" ng-model="vm.filter.rtgnoTarno.replace.value">	 							
+	 						</div>
+	 					</div>
+	 					
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('newfarebasis')">
+	 						<div class="pull-left ph5px w30 mt5px">New FareCls
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.newFareBasis.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.newFareBasis.check" ng-model="vm.filter.newFareBasis.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.newFareBasis.replace.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" uppercase class="form-control inline"  ng-disabled="!vm.filter.newFareBasis.replace.check" ng-model="vm.filter.newFareBasis.replace.value">
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('newtypeofjourney')">
+	 						<div class="pull-left ph5px w30 mt5px">New OW/RT
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.newTypeOfJourney.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<select class="form-control" ng-disabled="!vm.filter.newTypeOfJourney.check" ng-model="vm.filter.newTypeOfJourney.search">
+	 								<option value="">Select Option</option>
+									<option value="1">One Way</option>
+									<option value="2">Return</option>
+									<option value="3">One Way Only</option>
+								</select>
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.newTypeOfJourney.replace.check">													
+										</label>
+									</div>
+								</div>	
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<select class="form-control" ng-disabled="!vm.filter.newTypeOfJourney.replace.check" ng-model="vm.filter.newTypeOfJourney.replace.value">
+	 								<option value="">Select Option</option>
+									<option value="1">One Way</option>
+									<option value="2">Return</option>
+									<option value="3">One Way Only</option>
+								</select>
+	 						</div>
+	 					</div>
+	 					
+	 						 					
+	 					<div class="clearfix" ng-show="vm.showField('newbookingcode')">
+	 						<div class="pull-left ph5px w30 mt5px">New Booking Cd
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.newBookingCode.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+									<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.newBookingCode.check" ng-model="vm.filter.newBookingCode.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.newBookingCode.replace.check">													
+										</label>
+									</div>
+								</div>	
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+ 								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.newBookingCode.replace.check" ng-model="vm.filter.newBookingCode.replace.value">
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('travelstart')">
 	 						<div class="pull-left ph5px w30 mt5px">Travel Start
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -650,8 +1298,7 @@
 								</div>
 	 						</div>
 	 						<div class="pull-left ph5px w30">
-								<div class="input-group">
-								
+								<div class="input-group absolute-datepicker">
 									<input id="field_travelStartDate" 
 										ng-disabled="!vm.filter.travelStart.check"
 										type="text"
@@ -677,7 +1324,8 @@
 								</div>
 	 						</div>
 	 						<div class="pull-left ph5px w30">
-	 							<input id="field_travelStartDate" 
+	 							<div class="input-group absolute-datepicker">
+	 								<input id="field_travelStartDate" 
 										ng-disabled="!vm.filter.travelStart.replace.check"
 										type="text"
 										name="travelStartReplaceDate" id="field_travelStartDate"
@@ -690,9 +1338,10 @@
 									<span ng-click="vm.openCalendar('travelStartReplaceDate')" class="input-group-addon disabled">
 										<i class="fa fa-calendar"></i>
 									</span>
+								</div>
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('travelend')">
 	 						<div class="pull-left ph5px w30 mt5px">Travel End
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -705,8 +1354,7 @@
 								</div>
 	 						</div>
 	 						<div class="pull-left ph5px w30">
-								<div class="input-group">
-								
+								<div class="input-group absolute-datepicker">
 									<input id="field_travelStartDate" 
 										ng-disabled="!vm.filter.travelEnd.check"
 										type="text"
@@ -732,7 +1380,8 @@
 								</div>
 	 						</div>
 	 						<div class="pull-left ph5px w30">
-	 							<input id="field_travelEndDate" 
+	 							<div class="input-group absolute-datepicker">
+	 								<input id="field_travelEndDate" 
 										ng-disabled="!vm.filter.travelEnd.replace.check"
 										type="text"
 										name="travelEndReplaceDate" id="field_travelStartDate"
@@ -745,9 +1394,10 @@
 									<span ng-click="vm.openCalendar('travelEndReplaceDate')" class="input-group-addon disabled">
 										<i class="fa fa-calendar"></i>
 									</span>
+								</div>
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('salestart')">
 	 						<div class="pull-left ph5px w30 mt5px">Sale Start
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -760,8 +1410,7 @@
 								</div>
 	 						</div>
 	 						<div class="pull-left ph5px w30">
-								<div class="input-group">
-								
+								<div class="input-group absolute-datepicker">
 									<input id="field_saleStartDate" 
 										ng-disabled="!vm.filter.saleStart.check"
 										type="text"
@@ -787,7 +1436,8 @@
 								</div>
 	 						</div>
 	 						<div class="pull-left ph5px w30">
-	 							<input id="field_travelEndDate" 
+	 							<div class="input-group absolute-datepicker">
+	 								<input id="field_travelEndDate" 
 										ng-disabled="!vm.filter.saleStart.replace.check"
 										type="text"
 										name="saleStartReplaceDate" id="field_saleStartDate"
@@ -800,9 +1450,10 @@
 									<span ng-click="vm.openCalendar('saleStartReplaceDate')" class="input-group-addon disabled">
 										<i class="fa fa-calendar"></i>
 									</span>
+								</div>
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('saleend')">
 	 						<div class="pull-left ph5px w30 mt5px">Sale End
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -815,8 +1466,7 @@
 								</div>
 	 						</div>
 	 						<div class="pull-left ph5px w30">
-								<div class="input-group">
-								
+								<div class="input-group absolute-datepicker">
 									<input id="field_travelStartDate" 
 										ng-disabled="!vm.filter.saleEnd.check"
 										type="text"
@@ -842,7 +1492,8 @@
 								</div>
 	 						</div>
 	 						<div class="pull-left ph5px w30">
-	 							<input id="field_saleEndReplaceDate" 
+	 							<div class="input-group absolute-datepicker">
+	 								<input id="field_saleEndReplaceDate" 
 										ng-disabled="!vm.filter.saleEnd.replace.check"
 										type="text"
 										name="saleEndReplaceDate" id="field_saleEdDate"
@@ -855,9 +1506,10 @@
 									<span ng-click="vm.openCalendar('saleEndReplaceDate')" class="input-group-addon disabled">
 										<i class="fa fa-calendar"></i>
 									</span>
+								</div>
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('comment')">
 	 						<div class="pull-left ph5px w30 mt5px">Comment
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -885,7 +1537,7 @@
 								<input type="text" class="form-control inline" ng-disabled="!vm.filter.comment.replace.check" ng-model="vm.filter.comment.replace.value">	 		 							 							 						
 	 						</div>
 	 					</div>
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('travelcomplete')">
 	 						<div class="pull-left ph5px w30 mt5px">Travel Complete
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -898,8 +1550,7 @@
 								</div>
 	 						</div>
 	 						<div class="pull-left ph5px w30">
-								<div class="input-group">
-								
+								<div class="input-group absolute-datepicker">
 									<input id="field_travelCompleteDate" 
 										ng-disabled="!vm.filter.travelComplete.check"
 										type="text"
@@ -925,7 +1576,8 @@
 								</div>
 	 						</div>
 	 						<div class="pull-left ph5px w30">
-	 							<input id="field_saleEndReplaceDate" 
+	 							<div class="input-group absolute-datepicker">
+	 								<input id="field_saleEndReplaceDate" 
 										ng-disabled="!vm.filter.travelComplete.replace.check"
 										type="text"
 										name="travelCompleteReplaceDate" id="field_travelCompleteDate"
@@ -938,10 +1590,10 @@
 									<span ng-click="vm.openCalendar('travelCompleteReplaceDate')" class="input-group-addon disabled">
 										<i class="fa fa-calendar"></i>
 									</span>
+								</div>
 	 						</div>
 	 					</div>
-	 					
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('travelcompleteindicator')">
 	 						<div class="pull-left ph5px w30 mt5px">Travel Complete Indicator
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -977,8 +1629,7 @@
 								</select>
 	 						</div>
 	 					</div>
-	 					
-	 					<div class="clearfix">
+	 					<div class="clearfix" ng-show="vm.showField('ratesheetcomment')">
 	 						<div class="pull-left ph5px w30 mt5px">Ratesheet Comment
 	 						</div>
 	 						<div class="pull-left ph5px w5">
@@ -1004,6 +1655,792 @@
 	 						</div>
 	 						<div class="pull-left ph5px w30">
 	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.ratesheetComment.replace.check" ng-model="vm.filter.ratesheetComment.replace.value">
+	 						</div>
+	 					</div>
+	
+						
+	 					<div class="clearfix" ng-show="vm.showField('waiveragentname')">
+	 						<div class="pull-left ph5px w30 mt5px">Agent Name
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverAgentName.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverAgentName.check" ng-model="vm.filter.waiverAgentName.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverAgentName.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverAgentName.replace.check" ng-model="vm.filter.waiverAgentName.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiveriatano')">
+	 						<div class="pull-left ph5px w30 mt5px">Iata No
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverIataNo.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverIataNo.check" ng-model="vm.filter.waiverIataNo.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverIataNo.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverIataNo.replace.check" ng-model="vm.filter.waiverIataNo.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiveriocno')">
+	 						<div class="pull-left ph5px w30 mt5px">Ioc No
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverIocNo.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverIocNo.check" ng-model="vm.filter.waiverIocNo.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverIocNo.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverIocNo.replace.check" ng-model="vm.filter.waiverIocNo.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiverapprovaldate')">
+	 						<div class="pull-left ph5px w30 mt5px">Approval Date
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverApprovalDate.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverApprovalDate.check" ng-model="vm.filter.waiverApprovalDate.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverApprovalDate.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverApprovalDate.replace.check" ng-model="vm.filter.waiverApprovalDate.replace.value">	 	
+	 						</div>
+	 					</div>
+	 				
+	 						 					
+	 					<div class="clearfix" ng-show="vm.showField('waivertype')">
+	 						<div class="pull-left ph5px w30 mt5px">Waiver Type
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverType.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<select class="form-control" ng-disabled="!vm.filter.waiverType.check" ng-model="vm.filter.waiverType.search">
+	 								<option value="">Select Option</option>
+	 								<option value="SALES">SALES</option>
+	 								<option value="FUND">FUND</option>
+								</select>
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverType.replace.check">													
+										</label>
+									</div>
+								</div>	
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<select class="form-control" ng-disabled="!vm.filter.waiverType.replace.check" ng-model="vm.filter.waiverType.replace.value">
+	 								<option value="">Select Option</option>
+	 								<option value="SALES">SALES</option>
+	 								<option value="FUND">FUND</option>
+								</select>
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiverfullpartial')">
+	 						<div class="pull-left ph5px w30 mt5px">Full / Partial
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverFullPartial.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<select class="form-control" ng-disabled="!vm.filter.waiverFullPartial.check" ng-model="vm.filter.waiverFullPartial.search">
+	 								<option value="">Select Option</option>
+	 								<option value="FULL">FULL</option>
+	 								<option value="PARTIAL">PARTIAL</option>
+								</select>
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverFullPartial.replace.check">													
+										</label>
+									</div>
+								</div>	
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<select class="form-control" ng-disabled="!vm.filter.waiverFullPartial.replace.check" ng-model="vm.filter.waiverFullPartial.replace.value">
+	 								<option value="">Select Option</option>
+	 								<option value="FULL">FULL</option>
+	 								<option value="PARTIAL">PARTIAL</option>
+								</select>
+	 						</div>
+	 					</div>
+	 					
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiverpnr')">
+	 						<div class="pull-left ph5px w30 mt5px">PNR
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverPnr.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverPnr.check" ng-model="vm.filter.waiverPnr.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverPnr.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverPnr.replace.check" ng-model="vm.filter.waiverPnr.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waivertktfrom')">
+	 						<div class="pull-left ph5px w30 mt5px">Tkt From
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverTktFrom.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverTktFrom.check" ng-model="vm.filter.waiverTktFrom.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverTktFrom.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverTktFrom.replace.check" ng-model="vm.filter.waiverTktFrom.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waivertktto')">
+	 						<div class="pull-left ph5px w30 mt5px">Tkt To
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverTktTo.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverTktTo.check" ng-model="vm.filter.waiverTktTo.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverTktTo.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverTktTo.replace.check" ng-model="vm.filter.waiverTktTo.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiverori')">
+	 						<div class="pull-left ph5px w30 mt5px">Ori
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverOri.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverOri.check" ng-model="vm.filter.waiverOri.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverOri.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverOri.replace.check" ng-model="vm.filter.waiverOri.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiverdest')">
+	 						<div class="pull-left ph5px w30 mt5px">Dest
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverDest.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverDest.check" ng-model="vm.filter.waiverDest.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverDest.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverDest.replace.check" ng-model="vm.filter.waiverDest.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiveroriginalitinerary')">
+	 						<div class="pull-left ph5px w30 mt5px">Original Itinerary
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverOriginalItinerary.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverOriginalItinerary.check" ng-model="vm.filter.waiverOriginalItinerary.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverOriginalItinerary.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverOriginalItinerary.replace.check" ng-model="vm.filter.waiverOriginalItinerary.replace.value">	 	
+	 						</div>
+	 					</div>
+
+	 					<div class="clearfix" ng-show="vm.showField('waivernewitinerary')">
+	 						<div class="pull-left ph5px w30 mt5px">New Itinerary
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverNewItinerary.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverNewItinerary.check" ng-model="vm.filter.waiverNewItinerary.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverNewItinerary.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverNewItinerary.replace.check" ng-model="vm.filter.waiverNewItinerary.replace.value">	 	
+	 						</div>
+	 					</div>
+
+						
+	 					<div class="clearfix" ng-show="vm.showField('waiveroriginalbasicfare')">
+	 						<div class="pull-left ph5px w30 mt5px">Original Basic Fare
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverOriginalBasicFare.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverOriginalBasicFare.check" ng-model="vm.filter.waiverOriginalBasicFare.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverOriginalBasicFare.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverOriginalBasicFare.replace.check" ng-model="vm.filter.waiverOriginalBasicFare.replace.value">	 	
+	 						</div>
+	 					</div>
+						
+	 					<div class="clearfix" ng-show="vm.showField('waivernewbasicfare')">
+	 						<div class="pull-left ph5px w30 mt5px">New Basic Fare
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverNewBasicFare.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverNewBasicFare.check" ng-model="vm.filter.waiverNewBasicFare.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverNewBasicFare.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverNewBasicFare.replace.check" ng-model="vm.filter.waiverNewBasicFare.replace.value">	 	
+	 						</div>
+	 					</div>
+						
+						
+						<div class="clearfix" ng-show="vm.showField('waiverapprovedfare')">
+	 						<div class="pull-left ph5px w30 mt5px">Approved Fare
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverApprovedFare.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverApprovedFare.check" ng-model="vm.filter.waiverApprovedFare.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverApprovedFare.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverApprovedFare.replace.check" ng-model="vm.filter.waiverApprovedFare.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiverfarelost')">
+	 						<div class="pull-left ph5px w30 mt5px">Fare Lost
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverFareLost.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverFareLost.check" ng-model="vm.filter.waiverFareLost.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverFareLost.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverFareLost.replace.check" ng-model="vm.filter.waiverFareLost.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waivercalculatedpn')">
+	 						<div class="pull-left ph5px w30 mt5px">Calculated PN
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverCalculatedPn.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<select class="form-control" ng-disabled="!vm.filter.waiverCalculatedPn.check" ng-model="vm.filter.waiverCalculatedPn.search">
+	 								<option value="">Select Option</option>
+	 								<option value="amount">Amount</option>
+	 								<option value="percent">Percent</option>
+								</select>
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverCalculatedPn.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<select class="form-control" ng-disabled="!vm.filter.waiverCalculatedPn.replace.check" ng-model="vm.filter.waiverCalculatedPn.replace.value">
+	 								<option value="">Select Option</option>
+	 								<option value="amount">Amount</option>
+	 								<option value="percent">Percent</option>
+								</select>
+	 						</div>
+	 					</div>
+	 					
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiveroriginalpn')">
+	 						<div class="pull-left ph5px w30 mt5px">Original PN
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverOriginalPn.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverOriginalPn.check" ng-model="vm.filter.waiverOriginalPn.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverOriginalPn.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverOriginalPn.replace.check" ng-model="vm.filter.waiverOriginalPn.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiverapprovedpn')">
+	 						<div class="pull-left ph5px w30 mt5px">Approved PN
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverApprovedPn.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverApprovedPn.check" ng-model="vm.filter.waiverApprovedPn.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverApprovedPn.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverApprovedPn.replace.check" ng-model="vm.filter.waiverApprovedPn.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiverpenaltylostpercent')">
+	 						<div class="pull-left ph5px w30 mt5px">Penalty Lost Percent
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverPenaltyLostPercent.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverPenaltyLostPercent.check" ng-model="vm.filter.waiverPenaltyLostPercent.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverPenaltyLostPercent.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverPenaltyLostPercent.replace.check" ng-model="vm.filter.waiverPenaltyLostPercent.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiverpenaltylostamount')">
+	 						<div class="pull-left ph5px w30 mt5px">Penalty Lost Amount
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverPenaltyLostAmount.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverPenaltyLostAmount.check" ng-model="vm.filter.waiverPenaltyLostAmount.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverPenaltyLostAmount.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverPenaltyLostAmount.replace.check" ng-model="vm.filter.waiverPenaltyLostAmount.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waivercurrency')">
+	 						<div class="pull-left ph5px w30 mt5px">Currency
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverCurrency.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverCurrency.check" ng-model="vm.filter.waiverCurrency.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverCurrency.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverCurrency.replace.check" ng-model="vm.filter.waiverCurrency.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waivertotalpax')">
+	 						<div class="pull-left ph5px w30 mt5px">Total Pax
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverTotalPax.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverTotalPax.check" ng-model="vm.filter.waiverTotalPax.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverTotalPax.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverTotalPax.replace.check" ng-model="vm.filter.waiverTotalPax.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waivertotallost')">
+	 						<div class="pull-left ph5px w30 mt5px">Total Lost
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverTotalLost.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverTotalLost.check" ng-model="vm.filter.waiverTotalLost.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverTotalLost.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverTotalLost.replace.check" ng-model="vm.filter.waiverTotalLost.replace.value">	 	
+	 						</div>
+	 					</div>
+	 					
+	 					<div class="clearfix" ng-show="vm.showField('waiverremark')">
+	 						<div class="pull-left ph5px w30 mt5px">Remark
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox"  ng-model="vm.filter.waiverRemark.check">													
+										</label>
+									</div>
+								</div>
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+								<input type="text" name="" class="form-control inline" uppercase ng-disabled="!vm.filter.waiverRemark.check" ng-model="vm.filter.waiverRemark.search">
+	 						</div>
+	 						<div class="pull-left ph5px w5">
+	 							<div class="form-group mb0">
+									<div class="checkbox-wrapper inline">
+										<label>
+											<input type="checkbox" ng-model="vm.filter.waiverRemark.replace.check">													
+										</label>
+									</div>
+								</div>	 						
+	 						</div>
+	 						<div class="pull-left ph5px w30">
+	 							<input type="text" class="form-control inline" ng-disabled="!vm.filter.waiverRemark.replace.check" ng-model="vm.filter.waiverRemark.replace.value">	 	
 	 						</div>
 	 					</div>
 	 				</div>

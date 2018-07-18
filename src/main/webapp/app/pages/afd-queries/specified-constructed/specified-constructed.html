@@ -236,29 +236,29 @@
 									<input type="text" class="form-control" name="maxStay" id="maxStay" ng-model="vm.queryParams.maxStay"/>
 								</div>
 							</div>
-<!-- 							<div class="col-md-12 no-lpad"> -->
-<!-- 								<div class="form-group"> -->
-<!-- 									<div class="custom-label semibold">Additional Options</div> -->
-<!-- 									<div class="checkbox-wrapper"> -->
-<!-- 										<label> -->
-<!-- 											<input type="checkbox" name="includeConstructed" ng-model="vm.queryParams.includeConstructed" ng-disabled="true">  -->
-<!-- 											Include Constructed -->
-<!-- 										</label> -->
+							<div class="col-md-12 no-lpad">
+								<div class="form-group">
+									<div class="custom-label semibold">Additional Options</div>
+									<div class="checkbox-wrapper">
+										<label>
+											<input type="checkbox" name="includeConstructed" ng-model="vm.queryParams.includeConstructed"> 
+											Include Constructed
+										</label>
 <!-- 										<label> -->
 <!-- 											<input type="checkbox" name="appendResults" ng-model="vm.queryParams.appendResults" ng-disabled="true">  -->
 <!-- 											Append Results -->
 <!-- 										</label> -->
-<!-- 										<label> -->
-<!-- 											<input type="checkbox" name="biDirectional" ng-model="vm.queryParams.biDirectional" ng-disabled="true">  -->
-<!-- 											Bi-directional -->
-<!-- 										</label> -->
+										<label>
+											<input type="checkbox" name="biDirectional" ng-model="vm.queryParams.biDirectional" ng-disabled="true"> 
+											Bi-directional
+										</label>
 <!-- 										<label> -->
 <!-- 											<input type="checkbox" name="calculateTfc" ng-model="vm.queryParams.calculateTfc" ng-disabled="true">  -->
 <!-- 											Calculate TFC -->
 <!-- 										</label> -->
-<!-- 									</div> -->
-<!-- 								</div> -->
-<!-- 							</div> -->
+									</div>
+								</div>
+							</div>
 							<div class="clearfix">
 								<div class="pull-right pv1">
 									<button type="button" class="btn btn-default small" ng-click="vm.categoryRules = null; vm.query()" id="btn-afd-query">Query</button>
@@ -480,25 +480,12 @@
 				        </table>
 					</div>
 			        <div class="text-center fixed-wrapper-inside">
-						<div class="svg-loader" ng-show="vm.isLoading">
-						  	<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-								width="24px" height="30px" viewBox="0 0 24 30" style="enable-background:new 0 0 50 50;" xml:space="preserve">
-							    <rect x="0" y="10" width="4" height="10" fill="#333" opacity="0.2">
-							    	<animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0s" dur="1.5s" repeatCount="indefinite" />
-							    	<animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0s" dur="1.5s" repeatCount="indefinite" />
-							    	<animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0s" dur="1.5s" repeatCount="indefinite" />
-							    </rect>
-							    <rect x="8" y="10" width="4" height="10" fill="#333"  opacity="0.2">
-							    	<animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0.3s" dur="1.5s" repeatCount="indefinite" />
-							    	<animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0.3s" dur="1.5s" repeatCount="indefinite" />
-							    	<animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0.3s" dur="1.5s" repeatCount="indefinite" />
-							    </rect>
-							    <rect x="16" y="10" width="4" height="10" fill="#333"  opacity="0.2">
-							    	<animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0.6s" dur="1.5s" repeatCount="indefinite" />
-							    	<animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0.6s" dur="1.5s" repeatCount="indefinite" />
-							    	<animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0.6s" dur="1.5s" repeatCount="indefinite" />
-							    </rect>
-							</svg>
+						<div class="spinner" ng-if="vm.isLoading">
+							<div class="rect1"></div>
+							<div class="rect2"></div>
+							<div class="rect3"></div>
+							<div class="rect4"></div>
+							<div class="rect5"></div>
 						</div>
 						<div class="center-div" ng-if="(vm.noDataAvailable || vm.afdQueries.length == 0) && !vm.isLoading">No Data Available</div>
 						<div class="center-div" ng-if="vm.isLastPage && !vm.noDataAvailable">You have reached the end of the page &nbsp;<i style="font-size: 8px !important; top: 0" class="glyphicon glyphicon-chevron-up"></i></div>
@@ -506,26 +493,13 @@
 			    </div>
 			</div>
 		</div>
-		<div class="col-md-12 text-center" ng-if="vm.isLoadingRule">
-			<div class="svg-loader">
-			  	<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-					width="24px" height="30px" viewBox="0 0 24 30" style="enable-background:new 0 0 50 50;" xml:space="preserve">
-				    <rect x="0" y="10" width="4" height="10" fill="#333" opacity="0.2">
-				    	<animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0s" dur="1.5s" repeatCount="indefinite" />
-				    	<animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0s" dur="1.5s" repeatCount="indefinite" />
-				    	<animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0s" dur="1.5s" repeatCount="indefinite" />
-				    </rect>
-				    <rect x="8" y="10" width="4" height="10" fill="#333"  opacity="0.2">
-				    	<animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0.3s" dur="1.5s" repeatCount="indefinite" />
-				    	<animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0.3s" dur="1.5s" repeatCount="indefinite" />
-				    	<animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0.3s" dur="1.5s" repeatCount="indefinite" />
-				    </rect>
-				    <rect x="16" y="10" width="4" height="10" fill="#333"  opacity="0.2">
-				    	<animate attributeName="opacity" attributeType="XML" values="0.2; 1; .2" begin="0.6s" dur="1.5s" repeatCount="indefinite" />
-				    	<animate attributeName="height" attributeType="XML" values="10; 20; 10" begin="0.6s" dur="1.5s" repeatCount="indefinite" />
-				    	<animate attributeName="y" attributeType="XML" values="10; 5; 10" begin="0.6s" dur="1.5s" repeatCount="indefinite" />
-				    </rect>
-				</svg>
+		<div class="col-md-12 text-center" style="margin-top: -10px">
+			<div class="spinner" ng-if="vm.isLoadingRule">
+				<div class="rect1"></div>
+				<div class="rect2"></div>
+				<div class="rect3"></div>
+				<div class="rect4"></div>
+				<div class="rect5"></div>
 			</div>
 		</div>
 		<div class="additional-info-wrapper" ng-if="vm.categoryRules">

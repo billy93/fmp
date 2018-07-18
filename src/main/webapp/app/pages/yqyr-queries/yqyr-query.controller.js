@@ -60,6 +60,7 @@
         	vm.yqyrs = [];
         	vm.page = 0;
         	vm.lastIndex = 0;
+        	vm.selectedYqyr = null;
         	vm.isLastPage = false;
         	vm.loadAll();
         }

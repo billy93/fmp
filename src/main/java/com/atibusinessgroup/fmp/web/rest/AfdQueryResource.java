@@ -1,7 +1,6 @@
 package com.atibusinessgroup.fmp.web.rest;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,19 +107,19 @@ public class AfdQueryResource {
     }
     
     /**
-     * POST  /afd-queries/specified-constructed : get all the afd queries.
+     * POST  /afd-queries/specified : get all the afd queries.
      *
      * @param query params, pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of afdQueries in body
      */
-    @PostMapping("/afd-queries/specified-constructed")
+    @PostMapping("/afd-queries/specified")
     @Timed
-    public ResponseEntity<SpecifiedConstructedWrapper> getAllAfdQuerySpecifiedConstructed(@RequestBody AfdQueryParam param) {
-        log.debug("REST request to get a page of SpecifiedConstructed: {}", param);
+    public ResponseEntity<SpecifiedConstructedWrapper> getAllAfdQuerySpecified(@RequestBody AfdQueryParam param) {
+        log.debug("REST request to get a page of Specified: {}", param);
         
         SpecifiedConstructedWrapper result = new SpecifiedConstructedWrapper();
         
-        if (param != null && param.getSource() != null) {
+        if (param != null && param.getSource() != null && !param.isIncludeConstructed()) {
         	Pageable pageable = new PageRequest(param.getPage(), param.getSize());
             
             List<SpecifiedConstructed> fares = new ArrayList<>();
@@ -129,7 +128,7 @@ public class AfdQueryResource {
             
             //ATPCO
             if (param.getSource() != null && param.getSource().contentEquals("A")) {
-            	SpecifiedConstructedWrapper atpco = atpcoFareCustomRepository.findAtpcoFareAfdQueryWithRecords(param, pageable);
+            	SpecifiedConstructedWrapper atpco = atpcoFareCustomRepository.findSpecifiedFares(param, pageable);
             	fares.addAll(atpco.getSpecifiedConstructed());
                 isLastPage = atpco.isLastPage();
                 lastIndex = atpco.getLastIndex();
@@ -178,6 +177,42 @@ public class AfdQueryResource {
     }
     
     /**
+     * POST  /afd-queries/specified-constructed : get all the afd queries.
+     *
+     * @param query params, pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of afdQueries in body
+     */
+    @PostMapping("/afd-queries/specified-constructed")
+    @Timed
+    public ResponseEntity<SpecifiedConstructedWrapper> getAllAfdQuerySpecifiedConstructed(@RequestBody AfdQueryParam param) {
+        log.debug("REST request to get a page of SpecifiedConstructed: {}", param);
+        
+        SpecifiedConstructedWrapper result = new SpecifiedConstructedWrapper();
+        
+        if (param != null && param.getSource() != null && param.isIncludeConstructed()) {
+        	Pageable pageable = new PageRequest(param.getPage(), param.getSize());
+            
+            List<SpecifiedConstructed> fares = new ArrayList<>();
+            boolean isLastPage = false;
+            int lastIndex = 0;
+            
+            //ATPCO
+            if (param.getSource() != null && param.getSource().contentEquals("A")) {
+            	SpecifiedConstructedWrapper atpco = atpcoFareCustomRepository.findSpecifiedConstructedFares(param, pageable);
+            	fares.addAll(atpco.getSpecifiedConstructed());
+                isLastPage = atpco.isLastPage();
+                lastIndex = atpco.getLastIndex();
+            }
+            
+            result.setSpecifiedConstructed(fares);
+            result.setLastPage(isLastPage);
+            result.setLastIndex(lastIndex);
+        }
+        
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+    
+    /**
      * POST  /afd-queries/rules : s afd query rules.
      *
      * @return the ResponseEntity with status 200 (OK) and the list of rules in body
@@ -211,24 +246,6 @@ public class AfdQueryResource {
 
         	all : for (AtpcoRecord2GroupByCatNo arecord2:arecords2) {
             	if (arecord2.getCatNo().contentEquals(entry.getKey())) {
-            		if (entry.getKey().contentEquals("007")) {
-            			System.out.println("007TEST");
-            			for (AtpcoRecord2 record2:arecord2.getRecords2()) {
-            				System.out.println(record2.getSequenceNo());
-            			}
-            			
-            			arecord2.getRecords2().sort(new Comparator<AtpcoRecord2>() {
-            				@Override
-            				public int compare(AtpcoRecord2 o1, AtpcoRecord2 o2) {
-            					return o1.getSequenceNo().compareTo(o2.getSequenceNo());
-            				}
-            			});
-            			System.out.println("007AFTER");
-            			for (AtpcoRecord2 record2:arecord2.getRecords2()) {
-            				System.out.println(record2.getSequenceNo());
-            			}
-            		}
-            		
             		for (AtpcoRecord2 record2:arecord2.getRecords2()) {
             			boolean matched = atpcoRecordService.compareMatchingFareAndRecord("C", afdQuery.getOriginCity(), "C", afdQuery.getDestinationCity(), afdQuery.getFareClassCode(), afdQuery.getFareType(), afdQuery.getSeason(), afdQuery.getDayOfWeekType(), afdQuery.getOwrt(), afdQuery.getRoutingNo(), afdQuery.getFootnote(), afdQuery.getFocusDate(),
             					record2.getGeoType1(), record2.getGeoLoc1(), record2.getGeoType2(), record2.getGeoLoc2(), record2.getFareClass(), record2.getFareType(), record2.getSeasonType(), record2.getDayOfWeekType(), record2.getOwrt(), record2.getRoutingNo(), record2.getFootnote(), record2.getEffectiveDateObject(), record2.getDiscontinueDateObject());
