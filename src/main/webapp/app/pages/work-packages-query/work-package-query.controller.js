@@ -143,6 +143,40 @@
     	        	}
     			});
         }
+        
+        vm.replace = function(){
+        	vm.selectedRow.reuseReplaceConfig = {};
+        		$uibModal.open({
+                    templateUrl: 'app/pages/work-packages/work-package-reuse-replace-confirm-dialog.html',
+                    controller: 'WorkPackageReuseReplaceConfirmDialogController',
+                    controllerAs: 'vm',
+                    backdrop: 'static',
+                    size: 'lg',
+                    windowClass: 'full-page-modal',
+                    resolve: {
+                    	workPackage: function(){
+                    		return vm.selectedRow;
+                    	},
+	                   	 businessAreas: ['User', function(User) {
+	                         return User.getBusinessArea().$promise;
+	                     }],
+                    }
+    			}).result.then(function(option) {
+    				vm.selectedRow.reuseReplaceConfig.attachment = option.attachment;
+
+    				WorkPackage.replace(vm.selectedRow, onReplaceSuccess, onReplceFailed);
+
+    	        	function onReplaceSuccess(result){
+    	        		alert('Replace Success');
+    	        		$state.go('work-package-detail', {id:result.id});
+
+    	        	}
+
+    	        	function onReplceFailed(error){
+
+    	        	}
+    			});        	
+        }
 
         vm.refresh = function(){
         	vm.reset();
