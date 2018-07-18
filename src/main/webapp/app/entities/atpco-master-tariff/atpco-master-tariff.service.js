@@ -23,6 +23,7 @@
             'update': { method:'PUT' },
             'getAll': { method: 'GET', isArray: true, url:"api/atpcoMasterTariff/getAll"},
             'getAllGlobal': { method: 'GET', isArray: true, url:"api/atpcoMasterTariff/getAllGlobal"},
+            'findByType' : { method: 'GET', isArray: true, url:"api/atpcoMasterTariff/findByType/:type"},
         });
     }
 })();

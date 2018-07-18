@@ -20,8 +20,8 @@
      * @param Clipboard
      * @returns
      */
-    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber','tariffNumberAddOn', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities', 'states', 'cityGroups', 'Currency', 'atpcoFareTypes', 'ClipboardSheet', 'Clipboard', '$timeout', 'viewOnly'];
-    function WorkPackageDetailController($window, $sce, currencies,tariffNumber,tariffNumberAddOn, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups, Currency, atpcoFareTypes, ClipboardSheet, Clipboard, $timeout, viewOnly) {
+    WorkPackageDetailController.$inject = ['$window', '$sce', 'currencies','tariffNumber','tariffNumberAddOn', 'cities', 'FileSaver', '$uibModal', 'DateUtils', 'DataUtils', 'Account', '$scope', '$state', '$rootScope', '$stateParams', 'previousState', 'entity', 'WorkPackage', 'ProfileService', 'user', 'fareTypes', 'businessAreas', 'passengers', 'priorities', 'states', 'cityGroups', 'Currency', 'atpcoFareTypes', 'ClipboardSheet', 'Clipboard', '$timeout', 'viewOnly', 'AtpcoMasterTariff'];
+    function WorkPackageDetailController($window, $sce, currencies,tariffNumber,tariffNumberAddOn, cities, FileSaver, $uibModal, DateUtils, DataUtils, Account, $scope, $state, $rootScope, $stateParams, previousState, entity, WorkPackage, ProfileService, user, fareTypes, businessAreas, passengers, priorities, states, cityGroups, Currency, atpcoFareTypes, ClipboardSheet, Clipboard, $timeout, viewOnly, AtpcoMasterTariff) {
     	var vm = this;
 
     	window.onbeforeunload = function (e) {
@@ -5924,6 +5924,38 @@
           });
       }
       
+      vm.selectAtpcoMasterTariff = function(fare, field, type){
+    	  $uibModal.open({
+              templateUrl: 'app/pages/work-packages/work-package-select-tariff-dialog.html',
+              controller: 'WorkPackageSelectTariffDialogController',
+              controllerAs: 'vm',
+              backdrop: 'static',
+              size: 'lg',
+              windowClass: 'full-page-modal',
+              resolve: {
+	              	fare: function(){
+	              		return fare;
+	              	},
+                  tariffNumber: ['AtpcoMasterTariff', function(AtpcoMasterTariff) {
+                      return AtpcoMasterTariff.findByType({type:type}).$promise;
+                  }],
+                  AddOn : false,
+              }
+			}).result.then(function(option) {
+				if(option != null){
+					if(field=='tarcd'){
+						fare[field] = option.tarCd;
+					}else if(field=='baseTarcd'){
+						fare[field] = option.tarCd;
+					}else{
+						fare[field] = option;
+					}					
+				}
+          }, function() {
+      			
+          });
+      }
+      
       vm.selectTariffAddOn = function(fare, field){
     	  $uibModal.open({
               templateUrl: 'app/pages/work-packages/work-package-select-tariff-dialog.html',
@@ -6276,17 +6308,31 @@
     	  }
       } 
       
-      vm.checkTariffDiscount = function(fare, inputField){
+      vm.checkTariffDiscount = function(fare, inputField, type){
     	  var tariff = null;
     	  if(fare[inputField] != undefined && fare[inputField] != null && fare[inputField] != ""){
 	    	  var exist = false;
-	    	  for(var x=0;x<vm.tariffNumber.length;x++){
-	    		  if(vm.tariffNumber[x].tarCd == fare[inputField].toUpperCase()){
-	    			  tariff = angular.copy(vm.tariffNumber[x].tarCd);
-	    			  exist = true;
-	    			  break;
-	    		  }
+	    	  
+              vm.tariffNumberCheck =  AtpcoMasterTariff.findByType({type:type}).$promise
+	    	  if(type == 'FARE'){
+	    		  console.log("CHECK TARIFF DISCOUNT FARE");
+	    		  for(var x=0;x<vm.tariffNumberCheck.length;x++){
+		    		  if(vm.tariffNumberCheck[x].tarCd == fare[inputField].toUpperCase()){
+		    			  tariff = angular.copy(vm.tariffNumberCheck[x].tarCd);
+		    			  exist = true;
+		    			  break;
+		    		  }
+		    	  }
 	    	  }
+	    	  else if(type == 'FARE BY RULE'){
+	    		  for(var x=0;x<vm.tariffNumberCheck.length;x++){
+		    		  if(vm.tariffNumberCheck[x].tarCd == fare[inputField].toUpperCase()){
+		    			  tariff = angular.copy(vm.tariffNumberCheck[x].tarCd);
+		    			  exist = true;
+		    			  break;
+		    		  }
+		    	  }
+	    	  }	    		  
 	    	  
 	    	  if(!exist){
 	    		  alert("Tariff number is invalid. Please select a correct code");
