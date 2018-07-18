@@ -37,7 +37,6 @@
         vm.loadAll = loadAll;
         vm.query = query;
         vm.timezone = Timezone.GMT7;
-        vm.selectedRows = [];
         
         vm.yqyrs = [];
         vm.reset = reset;
