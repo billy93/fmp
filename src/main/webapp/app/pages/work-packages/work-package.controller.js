@@ -122,6 +122,9 @@
                 vm.workPackages = data;
                 vm.page = pagingParams.page;
                 vm.timezone = headers('timezone');
+                
+                $(".custom-range-slider").trigger("change");
+
             }
             function onError(error) {
                 AlertService.error(error.data.message);
@@ -140,6 +143,8 @@
                 sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
                 workPackageFilter : vm.workPackageFilter
             });
+            
+            console.log("CREATED TIME : "+vm.workPackageFilter.createdTime);
         }
 
         vm.rowSelected = function(idx, workPackage){
