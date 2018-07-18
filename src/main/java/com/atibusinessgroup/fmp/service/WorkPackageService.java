@@ -139,82 +139,94 @@ public class WorkPackageService {
         		}
         	}
         }
-        for(WorkPackageFareSheet sheet : workPackage.getAddonFareSheet()) {
-        	List<WorkPackageFare> fares = sheet.getFares();
-        	for(WorkPackageFare fare : fares) {
-//        		if(fare.getTravelStart() != null)
-//        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
-//        		if(fare.getTravelEnd() != null)
-//        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
-//        		if(fare.getSaleStart() != null)	            		
-//        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
-//        		if(fare.getSaleEnd() != null)
-//            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
-//        		if(fare.getTravelComplete() != null)
-//	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));        		
-        		
-        		fare.setAction("N");
-        		if(fare.getId() == null) {
-        			fare.setId(new ObjectId().toString());
-        		}
-        	}
+        
+        if(workPackage.getAddonFareSheet() != null) {        
+	        for(WorkPackageFareSheet sheet : workPackage.getAddonFareSheet()) {
+	        	List<WorkPackageFare> fares = sheet.getFares();
+	        	for(WorkPackageFare fare : fares) {
+	//        		if(fare.getTravelStart() != null)
+	//        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+	//        		if(fare.getTravelEnd() != null)
+	//        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+	//        		if(fare.getSaleStart() != null)	            		
+	//        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+	//        		if(fare.getSaleEnd() != null)
+	//            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+	//        		if(fare.getTravelComplete() != null)
+	//	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));        		
+	        		
+	        		fare.setAction("N");
+	        		if(fare.getId() == null) {
+	        			fare.setId(new ObjectId().toString());
+	        		}
+	        	}
+	        }
         }
-        for(WorkPackageFareSheet sheet : workPackage.getMarketFareSheet()) {
-        	List<WorkPackageFare> fares = sheet.getFares();
-        	for(WorkPackageFare fare : fares) {
-//        		if(fare.getTravelStart() != null)
-//        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
-//        		if(fare.getTravelEnd() != null)
-//        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
-//        		if(fare.getSaleStart() != null)	            		
-//        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
-//        		if(fare.getSaleEnd() != null)
-//            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
-//        		if(fare.getTravelComplete() != null)
-//	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
-        		
-        		fare.setAction("N");   
-        		if(fare.getId() == null) {
-        			fare.setId(new ObjectId().toString());
-        		}
-        	}
+        
+        if(workPackage.getMarketFareSheet() != null) {
+	        for(WorkPackageFareSheet sheet : workPackage.getMarketFareSheet()) {
+	        	List<WorkPackageFare> fares = sheet.getFares();
+	        	for(WorkPackageFare fare : fares) {
+	//        		if(fare.getTravelStart() != null)
+	//        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+	//        		if(fare.getTravelEnd() != null)
+	//        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+	//        		if(fare.getSaleStart() != null)	            		
+	//        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+	//        		if(fare.getSaleEnd() != null)
+	//            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+	//        		if(fare.getTravelComplete() != null)
+	//	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+	        		
+	        		fare.setAction("N");   
+	        		if(fare.getId() == null) {
+	        			fare.setId(new ObjectId().toString());
+	        		}
+	        	}
+	        }
         }
-        for(WorkPackageFareSheet sheet : workPackage.getDiscountFareSheet()) {
-        	List<WorkPackageFare> fares = sheet.getFares();
-        	for(WorkPackageFare fare : fares) {
-//        		if(fare.getTravelStart() != null)
-//        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
-//        		if(fare.getTravelEnd() != null)
-//        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
-//        		if(fare.getSaleStart() != null)	            		
-//        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
-//        		if(fare.getSaleEnd() != null)
-//            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
-//        		if(fare.getTravelComplete() != null)
-//	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
-        		
-        		if(fare.getId() == null) {
-        			fare.setId(new ObjectId().toString());
-        		}
-        	}
+        
+        if(workPackage.getDiscountFareSheet() != null) {
+	        for(WorkPackageFareSheet sheet : workPackage.getDiscountFareSheet()) {
+	        	List<WorkPackageFare> fares = sheet.getFares();
+	        	for(WorkPackageFare fare : fares) {
+	//        		if(fare.getTravelStart() != null)
+	//        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+	//        		if(fare.getTravelEnd() != null)
+	//        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+	//        		if(fare.getSaleStart() != null)	            		
+	//        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+	//        		if(fare.getSaleEnd() != null)
+	//            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+	//        		if(fare.getTravelComplete() != null)
+	//	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+	        		
+	        		if(fare.getId() == null) {
+	        			fare.setId(new ObjectId().toString());
+	        		}
+	        	}
+	        }
         }
-        for(WorkPackageFareSheet sheet : workPackage.getWaiverFareSheet()) {
-        	List<WorkPackageFare> fares = sheet.getFares();
-        	for(WorkPackageFare fare : fares) {
-//        		if(fare.getTravelStart() != null)
-//        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
-//        		if(fare.getTravelEnd() != null)
-//        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
-//        		if(fare.getSaleStart() != null)	            		
-//        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
-//        		if(fare.getSaleEnd() != null)
-//            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
-//        		if(fare.getTravelComplete() != null)
-//	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
-        		if(fare.getId() == null) {
-        			fare.setId(new ObjectId().toString());
-        		}
-        	}
+        
+        if(workPackage.getWaiverFareSheet() != null) {
+	        for(WorkPackageFareSheet sheet : workPackage.getWaiverFareSheet()) {
+	        	List<WorkPackageFare> fares = sheet.getFares();
+	        	for(WorkPackageFare fare : fares) {
+	//        		if(fare.getTravelStart() != null)
+	//        			fare.setTravelStart(ZonedDateTime.ofInstant(fare.getTravelStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+	//        		if(fare.getTravelEnd() != null)
+	//        			fare.setTravelEnd(ZonedDateTime.ofInstant(fare.getTravelEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+	//        		if(fare.getSaleStart() != null)	            		
+	//        			fare.setSaleStart(ZonedDateTime.ofInstant(fare.getSaleStart().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+	//        		if(fare.getSaleEnd() != null)
+	//            		fare.setSaleEnd(ZonedDateTime.ofInstant(fare.getSaleEnd().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+	//        		if(fare.getTravelComplete() != null)
+	//	        		fare.setTravelComplete(ZonedDateTime.ofInstant(fare.getTravelComplete().toInstant().truncatedTo(ChronoUnit.DAYS), ZoneId.systemDefault()));
+	        		if(fare.getId() == null) {
+	        			fare.setId(new ObjectId().toString());
+	        		}
+	        	}
+	        }
         }
         
         if(workPackage.getWpid() == null) {
@@ -238,20 +250,31 @@ public class WorkPackageService {
         }
     	
     	if(!workPackage.isSpecifiedFares()) {
-    		workPackage.getFareSheet().clear();
+    		if(workPackage.getFareSheet() != null) {
+    			workPackage.getFareSheet().clear();
+    		}
     	}
     	if(!workPackage.isWaiverFares()) {
-    		workPackage.getWaiverFareSheet().clear();
+    		if(workPackage.getWaiverFareSheet() != null) {
+    			workPackage.getWaiverFareSheet().clear();
+    		}
     	}
     	if(!workPackage.isMarketFares()) {
-    		workPackage.getMarketFareSheet().clear();
+    		if(workPackage.getMarketFareSheet() != null) {
+    			workPackage.getMarketFareSheet().clear();
+    		}
     	}
     	if(!workPackage.isDiscount()) {
-    		workPackage.getDiscountFareSheet().clear();
+    		if(workPackage.getDiscountFareSheet() != null) {
+    			workPackage.getDiscountFareSheet().clear();
+    		}
     	}
     	if(!workPackage.isAddon()) {
-    		workPackage.getAddonFareSheet().clear();
+    		if(workPackage.getAddonFareSheet() != null) {
+    			workPackage.getAddonFareSheet().clear();
+    		}
     	}
+    	
     	if(workPackage.getComment() != null) {
 	    	for(Comment comments : workPackage.getComment()) {
 	    		if(comments.getUsername() == null && comments.getCreatedTime() == null) {
@@ -304,7 +327,7 @@ public class WorkPackageService {
     	}
     	
     	List<WorkPackageFare> allFares = new ArrayList<>();
-    	if(workPackage.getFareSheet().size() > 0) {
+    	if(workPackage.getFareSheet() != null && workPackage.getFareSheet().size() > 0) {
     		for(WorkPackageFareSheet sheet : workPackage.getFareSheet()) {
     			if(sheet.getFares().size() > 0) {
     				for(WorkPackageFare fares : sheet.getFares()) {
@@ -316,7 +339,7 @@ public class WorkPackageService {
     			}
     		}
     	}
-    	if(workPackage.getAddonFareSheet().size() > 0) {
+    	if(workPackage.getAddonFareSheet() != null && workPackage.getAddonFareSheet().size() > 0) {
     		for(WorkPackageFareSheet sheet : workPackage.getAddonFareSheet()) {
     			if(sheet.getFares().size() > 0) {
     				for(WorkPackageFare fares : sheet.getFares()) {
@@ -328,7 +351,7 @@ public class WorkPackageService {
     			}
     		}
     	}
-    	if(workPackage.getDiscountFareSheet().size() > 0) {
+    	if(workPackage.getDiscountFareSheet() != null && workPackage.getDiscountFareSheet().size() > 0) {
     		for(WorkPackageFareSheet sheet : workPackage.getDiscountFareSheet()) {
     			if(sheet.getFares().size() > 0) {
     				for(WorkPackageFare fares : sheet.getFares()) {
@@ -340,7 +363,7 @@ public class WorkPackageService {
     			}
     		}
     	}
-    	if(workPackage.getMarketFareSheet().size() > 0) {
+    	if(workPackage.getMarketFareSheet() != null && workPackage.getMarketFareSheet().size() > 0) {
     		for(WorkPackageFareSheet sheet : workPackage.getMarketFareSheet()) {
     			if(sheet.getFares().size() > 0) {
     				for(WorkPackageFare fares : sheet.getFares()) {
@@ -352,7 +375,7 @@ public class WorkPackageService {
     			}
     		}
     	}
-    	if(workPackage.getWaiverFareSheet().size() > 0) {
+    	if(workPackage.getWaiverFareSheet() != null && workPackage.getWaiverFareSheet().size() > 0) {
     		for(WorkPackageFareSheet sheet : workPackage.getWaiverFareSheet()) {
     			if(sheet.getFares().size() > 0) {
     				for(WorkPackageFare fares : sheet.getFares()) {
