@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-@Document(collection = "construction_data_P02")
+@Document(collection = "atpco_construction_record_P02")
 public class ConstractionDataP02 implements Serializable {
 
     private static final long serialVersionUID = 1L;
