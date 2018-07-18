@@ -42,7 +42,7 @@
 										<div class="pull-left col-md-3 no-lpad">
 											<div class="form-group">
 												<div class="custom-label semibold">Public/Private</div>
-												<select class="form-control" name="publicPrivate" id="publicPrivate" ng-disabled="true" ng-model="vm.queryParams.publicPrivate">
+												<select class="form-control" name="publicPrivate" id="publicPrivate" ng-model="vm.queryParams.publicPrivate">
 													<option value="{{value.key}}" ng-repeat="value in vm.publicPrivate track by $index">{{value.value}}</option>
 												</select>
 											</div>
@@ -312,13 +312,13 @@
 				                </tr>
 				            </thead>
 				            <tbody id="tbody-afd">
-				                <tr class="tr-afd" ng-repeat="fbrQuery in vm.fbrQueries track by fbrQuery.id" ng-click="vm.setSelectedRow($index, fbrQuery)" ng-class="{'selected': vm.selectedRows[$index] == fbrQuery}">
+				                <tr class="tr-afd" ng-repeat="fbrQuery in vm.fbrQueries track by $index" ng-click="vm.setSelectedRow($index, fbrQuery)" ng-class="{'selected': vm.selectedRows[$index] == fbrQuery}">
 				                    <td>{{$index + 1}}</td>
 				                    <td>{{fbrQuery.source}}</td>
-				                    <td>{{fbrQuery.carrierCode}}</td>
-				                    <td>{{fbrQuery.tariffNo}}</td>
-				                    <td>{{fbrQuery.tariffCode}}</td>
-				                    <td>{{fbrQuery.rule}}</td>
+				                    <td>{{fbrQuery.cxr}}</td>
+				                    <td>{{fbrQuery.tarNo}}</td>
+				                    <td>{{fbrQuery.tarCd}}</td>
+				                    <td>{{fbrQuery.ruleNo}}</td>
 				                    <td>{{fbrQuery.ruleTitle}}</td>
 				                </tr>
 				                <tr infinite-scroll="vm.loadPage(vm.page + 1)" infinite-scroll-disabled="vm.disableInfiniteScroll || vm.isLastPage || vm.isLoading" infinite-scroll-container="'#tbody-afd'"></tr>
