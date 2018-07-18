@@ -122,6 +122,9 @@
                 vm.workPackages = data;
                 vm.page = pagingParams.page;
                 vm.timezone = headers('timezone');
+                
+                $(".custom-range-slider").trigger("change");
+
             }
             function onError(error) {
                 AlertService.error(error.data.message);
@@ -140,6 +143,8 @@
                 sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
                 workPackageFilter : vm.workPackageFilter
             });
+            
+            console.log("CREATED TIME : "+vm.workPackageFilter.createdTime);
         }
 
         vm.rowSelected = function(idx, workPackage){
@@ -524,7 +529,32 @@
 	  						vm.workPackages[l].hide = true;
 	  					}
 	  	        	}
+  				}else if(result.key == 'advance'){
+  					vm.filterDialogAdvance(result.value, field);
   				}
+            }, function() {
+        			
+            });
+        }
+        
+        vm.filterDialogAdvance = function(result,field){
+        	$uibModal.open({
+                templateUrl: 'app/pages/work-packages/work-package-filter-advance-dialog.html',
+                controller: 'WorkPackageFilterAdvanceDialogController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full-page-modal',
+                resolve: {
+                	value : function(){
+   	              		return result;
+   	              	},
+   	              	field : function(){
+	              		return field;
+	              	},
+                }
+  			}).result.then(function(result) {
+  				vm.rightClick(result.value);
             }, function() {
         			
             });

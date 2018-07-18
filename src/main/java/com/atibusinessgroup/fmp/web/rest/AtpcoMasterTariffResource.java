@@ -180,6 +180,20 @@ public class AtpcoMasterTariffResource {
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(tariffNumber));
     }
 
+    
+    /* GET  /tariff-numbers/:id : get the "id" tariffNumber.
+    *
+    * @param id the id of the tariffNumber to retrieve
+    * @return the ResponseEntity with status 200 (OK) and with body the tariffNumber, or with status 404 (Not Found)
+    */
+   @GetMapping("/atpcoMasterTariff/findByType/{type}")
+   @Timed
+   public ResponseEntity<List<AtpcoMasterTariff>> getTariffNumberByType(@PathVariable String type) {
+       log.debug("REST request to get TariffNumber by type : {}", type);
+       List<AtpcoMasterTariff> tariffNumber = tariffNumberRepository.findAllByType(type);
+       return new ResponseEntity<>(tariffNumber, null, HttpStatus.OK);
+   }
+    
     /**
      * DELETE  /tariff-numbers/:id : delete the "id" tariffNumber.
      *

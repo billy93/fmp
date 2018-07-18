@@ -2,7 +2,6 @@ package com.atibusinessgroup.fmp.repository;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 
-import java.io.Console;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -10,6 +9,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,8 +35,6 @@ import com.atibusinessgroup.fmp.service.util.DateUtil;
 import com.atibusinessgroup.fmp.web.rest.WorkPackageResource.WorkPackageQuery;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-
-import ch.qos.logback.core.status.Status;
 
 
 public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAnyName {
@@ -465,7 +463,13 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		
 		Criteria approvalReference = new Criteria();
 		if(wpFilter.getApprovalReference() != null && !wpFilter.getApprovalReference().contentEquals("")) {
-			approvalReference = Criteria.where("fare_sheet.approval_reference").regex(wpFilter.getApprovalReference(), "i");
+			List<Pattern> approvalsData = new ArrayList<>();
+			String approvals[] = wpFilter.getApprovalReference().split(",");
+			for(String app : approvals) {
+				Pattern x = Pattern.compile("^(?i)("+app.trim()+")");
+				approvalsData.add(x);
+			}			
+			approvalReference = Criteria.where("fare_sheet.approval_reference").in(approvalsData);
 		}
 		
 		Criteria replaceCriteria = new Criteria();
