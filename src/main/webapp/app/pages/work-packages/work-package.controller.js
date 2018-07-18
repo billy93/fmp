@@ -524,7 +524,32 @@
 	  						vm.workPackages[l].hide = true;
 	  					}
 	  	        	}
+  				}else if(result.key == 'advance'){
+  					vm.filterDialogAdvance(result.value, field);
   				}
+            }, function() {
+        			
+            });
+        }
+        
+        vm.filterDialogAdvance = function(result,field){
+        	$uibModal.open({
+                templateUrl: 'app/pages/work-packages/work-package-filter-advance-dialog.html',
+                controller: 'WorkPackageFilterAdvanceDialogController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full-page-modal',
+                resolve: {
+                	value : function(){
+   	              		return result;
+   	              	},
+   	              	field : function(){
+	              		return field;
+	              	},
+                }
+  			}).result.then(function(result) {
+  				vm.rightClick(result.value);
             }, function() {
         			
             });
