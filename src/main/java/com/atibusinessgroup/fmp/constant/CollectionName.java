@@ -70,6 +70,9 @@ public class CollectionName {
 	public final static String ATPCO_RECORD_DATE_TABLE_994 = "atpco_record_date_table_994";
 	public final static String ATPCO_RECORD_TEXT_TABLE_996 = "atpco_record_text_table_996";
 	
+	public final static String ATPCO_YQYR_USER_ZONE_TABLE_178 = "atpco_yqyr_user_zone_table_178";
+	public final static String ATPCO_YQYR_CARRIER_TABLE_186 = "atpco_yqyr_carrier_table_186";
+	public final static String ATPCO_YQYR_CARRIER_APPLICATION_TABLE_190 = "atpco_yqyr_carrier_application_table_190";
 	public final static String ATPCO_YQYR_TEXT_TABLE_196 = "atpco_yqyr_text_table_196";
 	
 	public final static String ATPCO_MASTER_TARIFF = "master_tariff";

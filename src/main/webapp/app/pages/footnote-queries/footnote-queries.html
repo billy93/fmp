@@ -26,7 +26,7 @@
 								<div class="custom-label semibold">Footnote</div>
 								<div class="no-rpad">
 									<input type="text" class="form-control no-comma" name="footNote"
-										id="ftnt" ng-model="vm.queryParams.ftnt" maxlength="4" uppercase />
+										id="ftnt" ng-model="vm.queryParams.ftnt" maxlength="2" uppercase />
 								</div>
 							</div>
 							<div class="form-group">
@@ -79,7 +79,7 @@
 											is-open="vm.datePickerOpenStatus['saleDateFrom']"
 											datetime-picker="{{vm.dateFormat}}" enable-time="false"
 											name="saleDateFrom" id="dtpSaleStart"
-											ng-model="vm.queryParams.saleDateFrom" placeholder="From"
+											ng-model="vm.saleDateFrom" placeholder="From"
 											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '014'" />
 									</div>
 									<div class="col-md-4 no-lpad">
@@ -88,16 +88,14 @@
 											is-open="vm.datePickerOpenStatus['saleDateTo']"
 											datetime-picker="{{vm.dateFormat}}" enable-time="false"
 											name="saleDateTo" id="dtpSaleEnd"
-											ng-model="vm.queryParams.saleDateTo" placeholder="To"
+											ng-model="vm.saleDateTo" placeholder="To"
 											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '014'" />
 									</div>
 									<div class="col-md-4 no-pad">
-										<select class="form-control" name="saleOption" id="saleOpt"
-											ng-model="vm.queryParams.saleDateType"
+										<select class="form-control" name="saleOpt" id="saleOpt"
+											ng-model="vm.queryParams.saleDateType" ng-init="vm.queryParams.saleDateType = vm.dateOptions[1].key"
 											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '014'">
-											<option></option>
-											<option value="1">Active In</option>
-											<option value="2">Exact Match</option>
+											<option value="{{value.key}}" ng-repeat="value in vm.dateOptions track by $index">{{value.value}}</option>
 										</select>
 									</div>
 								</div>
@@ -112,7 +110,7 @@
 											is-open="vm.datePickerOpenStatus['travelDateFrom']"
 											datetime-picker="{{vm.dateFormat}}" enable-time="false"
 											name="travelDateFrom" id="dtpTravelStart"
-											ng-model="vm.queryParams.travelDateFrom" placeholder="From"
+											ng-model="vm.travelDateFrom" placeholder="From"
 											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '015'" />
 									</div>
 									<div class="col-md-4 no-lpad">
@@ -121,16 +119,14 @@
 											is-open="vm.datePickerOpenStatus['travelDateTo']"
 											datetime-picker="{{vm.dateFormat}}" enable-time="false"
 											name="travelDateTo" id="dtpTravelEnd"
-											ng-model="vm.queryParams.travelDateTo" placeholder="To"
+											ng-model="vm.travelDateTo" placeholder="To"
 											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '015'" />
 									</div>
 									<div class="col-md-4 no-pad">
-										<select class="form-control" name="travelOption"
-											id="travelOpt" ng-model="vm.queryParams.travelDateType"
+										<select class="form-control" name="travelOpt"
+											id="travelOpt" ng-model="vm.queryParams.travelDateType" ng-init="vm.queryParams.travelDateType = vm.dateOptions[1].key"
 											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '015'">
-											<option></option>
-											<option value="1">Active In</option>
-											<option value="2">Exact Match</option>
+											<option value="{{value.key}}" ng-repeat="value in vm.dateOptions track by $index">{{value.value}}</option>
 										</select>
 									</div>
 								</div>
@@ -150,8 +146,8 @@
 											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '015'" />
 									</div>
 									<div class="col-md-4 no-lpad">
-										<select class="form-control" name="travelOption"
-											id="travelOpt" ng-model="vm.queryParams.travelOpt"
+										<select class="form-control" name="trip"
+											id="trip" ng-model="vm.queryParams.travelOpt"
 											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '015'">
 											<option></option>
 											<option value="P">P - Trip Completed</option>
@@ -159,8 +155,8 @@
 										</select>
 									</div>
 									<div class="col-md-4 no-pad">
-										<select class="form-control" name="completedOption"
-											id="completedOption"
+										<select class="form-control" name="completedOpt"
+											id="completedOpt"
 											ng-disabled="vm.queryParams.catNo == '023' || vm.queryParams.catNo == '003' || vm.queryParams.catNo == '011' || vm.queryParams.catNo == '015'">
 											<option></option>
 											<option value="2">Exact Match</option>

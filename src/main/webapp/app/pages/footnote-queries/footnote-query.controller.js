@@ -4,9 +4,9 @@
 	angular.module('fmpApp').controller('FootnoteQueryController',
 			FootnoteQueryController);
 
-	FootnoteQueryController.$inject = [ '$state', '$stateParams', 'Timezone', 'FootnoteQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', '$uibModal' ];
+	FootnoteQueryController.$inject = [ '$state', '$stateParams', 'Timezone', 'FootnoteQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'queryParams', 'DateUtils', '$uibModal' ];
 
-	function FootnoteQueryController($state, $stateParams, Timezone, FootnoteQuery, ParseLinks, AlertService, paginationConstants, queryParams, $uibModal) {
+	function FootnoteQueryController($state, $stateParams, Timezone, FootnoteQuery, ParseLinks, AlertService, paginationConstants, queryParams, DateUtils, $uibModal) {
 
 		var vm = this;
 		vm.loadPage = loadPage;
@@ -44,13 +44,16 @@
         
         vm.loadAll();
         
+        vm.dateOptions = [
+        	{key: "1", value: "Active In"},
+        	{key: "2", value: "Exact Match"}
+        ]
+        
         $("#catNo").change(function() {
         	vm.queryParams.saleDateFrom = null;
         	vm.queryParams.saleDateTo = null;
-        	vm.queryParams.saleDateType = null;
         	vm.queryParams.travelDateFrom = null;
         	vm.queryParams.travelDateTo = null;
-        	vm.queryParams.travelDateType = null;
         	vm.queryParams.completedDateFrom = null;
         	vm.queryParams.travelOpt = null;
         	
@@ -61,6 +64,12 @@
 				vm.footnoteQueries = null;
 				vm.footnoteQueryCategories = null;
 				vm.footnoteQueryCategories2 = null;
+				
+            	vm.queryParams.travelDateFrom = DateUtils.convertLocalDateToServer(vm.travelDateFrom);
+            	vm.queryParams.travelDateTo = DateUtils.convertLocalDateToServer(vm.travelDateTo);
+            	vm.queryParams.saleDateFrom = DateUtils.convertLocalDateToServer(vm.saleDateFrom);
+            	vm.queryParams.saleDateTo = DateUtils.convertLocalDateToServer(vm.saleDateTo);
+            	
 				
 				vm.queryParams.page = vm.page - 1;
 				vm.queryParams.size = vm.itemsPerPage;
@@ -149,7 +158,6 @@
 			vm.isLoadingRule = true;
 			FootnoteQuery.getFtnt2(footnoteQuery, function(data) {
 				vm.footnoteQueryCategories2 = data;
-				console.log(vm.footnoteQueryCategories2);
 				vm.isLoadingRule = false;
 			}, function(error) {
 				console.log(error);
@@ -166,6 +174,22 @@
 		}
 
 		function reset() {
+			vm.footnoteQueries = null;
+			vm.footnoteQueryCategories = null;
+			vm.footnoteQueryCategories2 = null;
+			
+			vm.paramCarrier = null;
+			vm.paramTarNo = null;
+			
+			vm.effectiveDateFrom = null;
+        	vm.effectiveDateTo = null;
+        	vm.saleDateFrom = null;
+        	vm.saleDateTo = null;
+        	vm.travelDateFrom = null;
+        	vm.travelDateTo = null;
+        	vm.seasonDateFrom = null;
+        	vm.seasonDateTo = null;
+			
 			vm.queryParams = {
 				cxr : null,
 				ftnt : null,
@@ -173,21 +197,16 @@
 				catNo : null,
 				saleDateFrom : null,
 				saleDateTo : null,
-				saleDateType : null,
 				travelDateFrom : null,
 				travelDateTo : null,
-				travelDateType : null,
 				completedDateFrom : null,
 				travelOpt : null,
-				includeDisc : null
+				includeDisc : null,
+				saleDateType : vm.dateOptions[1].key,
+				travelDateType : vm.dateOptions[1].key,
 			}
-
-			vm.footnoteQueries = null;
-			vm.footnoteQueryCategories = null;
-			vm.footnoteQueryCategories2 = null;
 			
-			vm.paramCarrier = null;
-			vm.paramTarNo = null;
+			
 			
 		}
 

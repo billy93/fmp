@@ -210,16 +210,24 @@
         }
         
         function checkValidParameters() {
-        	if ((vm.queryParams.carrier != null && vm.queryParams.carrier != '' && vm.queryParams.origin != null && vm.queryParams.origin != '') ||
-        			(vm.queryParams.carrier != null && vm.queryParams.destination != null && vm.queryParams.carrier != '' && vm.queryParams.destination != '') ||
-        			(vm.queryParams.origin != null && vm.queryParams.destination != null && vm.queryParams.origin != '' && vm.queryParams.destination != '') ||
-        			(vm.queryParams.origin != null && vm.queryParams.fareBasis != null && vm.queryParams.origin != '' && vm.queryParams.fareBasis != '') ||
-        			(vm.queryParams.destination != null && vm.queryParams.fareBasis != null && vm.queryParams.destination != '' && vm.queryParams.fareBasis != '') || 
-        			(vm.queryParams.carrier != null && vm.queryParams.fareBasis != null && vm.queryParams.carrier != '' && vm.queryParams.fareBasis != '') || 
-        			(vm.queryParams.woId != null && vm.queryParams.woId != '')) {
-        		return 'Valid';
+        	if (vm.queryParams.includeConstructed) {
+        		if (vm.queryParams.carrier != null && vm.queryParams.carrier != '' && vm.queryParams.origin != null && vm.queryParams.origin != '' && vm.queryParams.destination != null && vm.queryParams.destination != '') {
+        			return 'Valid';
+        		} else {
+        			return "Error: The following set is required for constructed fares.\n\tCarrier, Origin and Destination\n";
+        		}
         	} else {
-        		return "Error: One set of the following is required.\n\tCarrier and Origin\n\tCarrier and Destination\n\tCarrier and Fare Basis\n\tOrigin and Destination\n\tOrigin and Fare Basis\n\tDestination and Fare Basis\n\tWork Order ID\n";
+        		if ((vm.queryParams.carrier != null && vm.queryParams.carrier != '' && vm.queryParams.origin != null && vm.queryParams.origin != '') ||
+            			(vm.queryParams.carrier != null && vm.queryParams.destination != null && vm.queryParams.carrier != '' && vm.queryParams.destination != '') ||
+            			(vm.queryParams.origin != null && vm.queryParams.destination != null && vm.queryParams.origin != '' && vm.queryParams.destination != '') ||
+            			(vm.queryParams.origin != null && vm.queryParams.fareBasis != null && vm.queryParams.origin != '' && vm.queryParams.fareBasis != '') ||
+            			(vm.queryParams.destination != null && vm.queryParams.fareBasis != null && vm.queryParams.destination != '' && vm.queryParams.fareBasis != '') || 
+            			(vm.queryParams.carrier != null && vm.queryParams.fareBasis != null && vm.queryParams.carrier != '' && vm.queryParams.fareBasis != '') || 
+            			(vm.queryParams.woId != null && vm.queryParams.woId != '')) {
+            		return 'Valid';
+            	} else {
+            		return "Error: One set of the following is required.\n\tCarrier and Origin\n\tCarrier and Destination\n\tCarrier and Fare Basis\n\tOrigin and Destination\n\tOrigin and Fare Basis\n\tDestination and Fare Basis\n\tWork Order ID\n";
+            	}
         	}
         	
 //        	if (vm.effectiveDateFrom == null) {

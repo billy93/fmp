@@ -67,13 +67,29 @@
 											<div>
 												<div class="form-group">
 													<div class="custom-label semibold">Passenger Type</div>
-													<input type="text" class="form-control" name="psgrType"
-														id="psgrType" ng-model="vm.queryParams.psgrType" uppercase />
+													<div class="input-group">
+														<input type="text" class="form-control  no-comma"
+															name="psgrType" id="psgrType"
+															ng-model="vm.paramPassengerCode"
+															uppercase/>
+
+														<span ng-click="vm.showPassengerTypeModal()"
+															class="input-group-addon"><i class="fa fa-folder"></i>
+														</span>
+													</div>
 												</div>
 												<div class="form-group">
 													<div class="custom-label semibold">Fare Type</div>
-													<input type="text" class="form-control" name="fareType"
-														id="fareType" ng-model="vm.queryParams.fareType" uppercase />
+													<div class="input-group">
+														<input type="text" class="form-control  no-comma"
+															name="fareType" id="fareType"
+															ng-model="vm.paramFareTypeCode"
+															uppercase/>
+
+														<span ng-click="vm.showFareTypeModal()"
+															class="input-group-addon"><i class="fa fa-folder"></i>
+														</span>
+													</div>
 												</div>
 												<div class="form-group">
 													<div class="custom-label semibold">Booking Class</div>

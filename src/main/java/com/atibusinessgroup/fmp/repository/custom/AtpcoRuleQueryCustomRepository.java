@@ -28,10 +28,13 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import com.atibusinessgroup.fmp.constant.CollectionName;
+import com.atibusinessgroup.fmp.domain.AtpcoMasterTariff;
+import com.atibusinessgroup.fmp.domain.ConstractionDataP02;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord8;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord1FareClassInformation;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByRuleNoCxrTarNo;
+import com.atibusinessgroup.fmp.domain.dto.FareClassConstractionDetail;
 import com.atibusinessgroup.fmp.domain.dto.FareClassGroup;
 import com.atibusinessgroup.fmp.domain.dto.FareClassQuery;
 import com.atibusinessgroup.fmp.domain.dto.FareClassQueryParam;
@@ -810,8 +813,7 @@ public class AtpcoRuleQueryCustomRepository {
 		return aggregationOperations;
 	}
 	
-	public List<String> getFareClassText(FareClassQuery param) {
-		List<String> fareClassTextList = new ArrayList<>();
+	public String getFareClassText(FareClassQuery param) {
 		SimpleDateFormat sdf = new SimpleDateFormat("ddMMMyyyy");
 		SimpleDateFormat sdf2 = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
 		
@@ -841,26 +843,63 @@ public class AtpcoRuleQueryCustomRepository {
 			datesDiscFormat = param.getDatesDisc();
 		}
 		
-		fareClassTextList.add("CXR: "+param.getCxr().toUpperCase()+" "+"RULE: "+param.getRuleNo().toUpperCase()+" "+"TARIFF: "+param.getTarCd().toUpperCase()+" - "+param.getDescription().toUpperCase());
-		fareClassTextList.add("EXPLANATION");
-		fareClassTextList.add("------------------------------------------------------");
-		fareClassTextList.add("");
-		fareClassTextList.add("SEQUENCE: "+param.getSeqNo().toUpperCase()+" "+"EFF: "+datesEffFormat+" "+"DISC: "+datesDiscFormat);
-		fareClassTextList.add(param.getFareClass().toUpperCase());
-		fareClassTextList.add("");
-		fareClassTextList.add("");
-		fareClassTextList.add("CONSTRUCTION DATA");
-		fareClassTextList.add("");
-		fareClassTextList.add("");
-		fareClassTextList.add("END OF TEXT");
+		Query masterTariffQuery = new Query();
+		masterTariffQuery.addCriteria(Criteria.where("type").is("FARE"));
+		masterTariffQuery.addCriteria(Criteria.where("pp").is("public"));
+		masterTariffQuery.addCriteria(Criteria.where("tar_cd").is(param.getTarCd()));
+		AtpcoMasterTariff atpcoMasterTariff = mongoTemplate.findOne(masterTariffQuery, AtpcoMasterTariff.class);
 		
-		return fareClassTextList;
+		String bkcd = "";
+		for (String bkcdStr : param.getBkcd()) {
+			bkcd += bkcdStr;
+		}
+		
+		Query cdcP02Query = new Query();
+		cdcP02Query.addCriteria(Criteria.where("key_tar_no").is(param.getTarNo()));
+		cdcP02Query.addCriteria(Criteria.where("key_cxr_code").is(param.getCxr()));
+		cdcP02Query.addCriteria(Criteria.where("key_intl_fare_class").is(param.getFareClass()));
+		ConstractionDataP02 constractionDataP02 = mongoTemplate.findOne(cdcP02Query, ConstractionDataP02.class);
+		
+		String fareClassText = "";
+		fareClassText += "CXR: "+param.getCxr().toUpperCase()+"\t\t RULE: "+param.getRuleNo().toUpperCase()+"\t TARIFF: "+param.getTarCd().toUpperCase()+" - "+param.getDescription().toUpperCase()+"\n";
+		fareClassText += "FARE CLASS EXPLANATION \t\t\t\t\t\t RBDS\n";
+		fareClassText += "------------------------------------------------------------------------\n";
+		fareClassText += "\n";
+		fareClassText += "SEQUENCE: "+param.getSeqNo().toUpperCase()+"\t EFF: "+datesEffFormat+"\t\t DISC: "+datesDiscFormat+"\n";
+		fareClassText += param.getFareClass().toUpperCase()+"\n";
+		fareClassText += "\t\t "+atpcoMasterTariff.getDescription()+" ("+atpcoMasterTariff.getTarCd()+") \t\t"+bkcd+"\n";
+		fareClassText += "\t\t EXCURSION DISPLAY CAT SPECIAL PRICING CAT FARES \n";
+		
+		if(param.getOwrt().equals("1"))
+			fareClassText += "\t\t FOR ONE WAY FARES \n";
+		else
+			fareClassText += "\t\t FOR ROUND TRIP FARES \n";
+			
+		fareClassText += "\n";
+		fareClassText += "CONSTRUCTION DATA\n";
+		if(constractionDataP02 != null) {
+			if(constractionDataP02.getUsAll().equals("X")) fareClassText += "\tCONSTRUCTS WITH ****** ADDONS WITHIN [AREA] : YES\n";
+			if(constractionDataP02.getNusAll().equals("X")) fareClassText += "\tCONSTRUCTS WITH ****** ADDONS WITHIN [AREA] : YES\n";
+			if(!constractionDataP02.getUsGen().equals("")) fareClassText += "\tCONSTRUCTS WITH "+constractionDataP02.getUsGen()+"***** ADDONS WITHIN [AREA]\n";
+			if(!constractionDataP02.getNusGen().equals("")) fareClassText += "\tCONSTRUCTS WITH "+constractionDataP02.getNusGen()+"***** ADDONS WITHIN [AREA]\n";
+			if(constractionDataP02.getNuc().equals("Y")) fareClassText += "\tTHIS FARE IS SUBJECT TO NEUTRAL UNIT OF CURRENCY.\n";
+		}
+		fareClassText += "END OF TEXT\n";
+		
+		return fareClassText;
 	}
 
-	public List<String> getFareClassConstructionDetails(FareClassQuery param) {
-		List<String> fareClassContructionDetailsList = new ArrayList<>();
-		fareClassContructionDetailsList.add("Carrier: "+param.getCxr().toUpperCase()+" "+"Tariff No: "+param.getTarNo().toUpperCase()+" "+"Tariff Code: "+param.getTarCd().toUpperCase()+" "+"Rule No: "+param.getRuleNo().toUpperCase());
+	public FareClassConstractionDetail getFareClassConstructionDetails(FareClassQuery param) {
+		FareClassConstractionDetail fareClassContructionDetail = new FareClassConstractionDetail();
+		fareClassContructionDetail.setFareClassQuery(param);
 		
-		return fareClassContructionDetailsList;
+		Query cdcP02Query = new Query();
+		cdcP02Query.addCriteria(Criteria.where("key_tar_no").is(param.getTarNo()));
+		cdcP02Query.addCriteria(Criteria.where("key_cxr_code").is(param.getCxr()));
+		cdcP02Query.addCriteria(Criteria.where("key_intl_fare_class").is(param.getFareClass()));
+		ConstractionDataP02 constractionDataP02 = mongoTemplate.findOne(cdcP02Query, ConstractionDataP02.class);
+		fareClassContructionDetail.setConstractionDataP02(constractionDataP02);
+		
+		return fareClassContructionDetail;
 	}
 }

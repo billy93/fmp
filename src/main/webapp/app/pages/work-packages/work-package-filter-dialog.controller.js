@@ -68,8 +68,10 @@
             vm.datePickerOpenStatus = {};
             vm.datePickerOpenStatus[date] = true;
         }
-        
-        vm.advance = function(){
+        vm.advance=function(){
+        	vm.go(vm.value,vm.field,vm.maxDate,vm.minDate,vm.isDate);
+        }
+        vm.go = function(value,field,maxDate,minDate,isDate){
         	clear();
         	$uibModal.open({
                 templateUrl: 'app/pages/work-packages/work-package-filter-advance-dialog.html',
@@ -79,25 +81,23 @@
                 size: 'lg',
                 windowClass: 'full-page-modal',
                 resolve: {
-  	              	/*fare: function(){
-  	              		return fare;
-  	              	},
-                    cities: ['City', function(City) {
-                        return City.getAll().$promise;
-                    }],
-                    cityGroup: ['CityGroup', function(CityGroup) {
-                        return CityGroup.getAll().$promise;
-                    }],*/
+                	 value : function(){
+   	              		return value;
+   	              	},
+                     field : function(){
+   	              		return field;
+   	              	},
+   	              	maxDate : function(){
+   	              		return maxDate;
+   	              	},
+   	              	minDate : function(){
+ 	              		return minDate;
+ 	              	},
+ 	              	isDate : function(){
+ 	              		return isDate;
+ 	              	}
                 }
   			}).result.then(function(option) {
-  				if(option != null){
-  					if(option.type == 'city'){
-  						fare[field] = option.cityCode;					
-  					}
-  					else if(option.type == 'cityGroup'){
-  						fare[field] = option.code;	
-  					}
-  				}
             }, function() {
         			
             });

@@ -99,8 +99,6 @@ public class AtpcoYqyrCustomRepository {
     		
     		Aggregation aggregation = newAggregation(aggregationOperations).withOptions(newAggregationOptions().allowDiskUse(true).build());
     		
-    		System.out.println(aggregation.toString());
-    		
     		List<AtpcoYqyrS1> ayqyrs = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_YQYR_S1, AtpcoYqyrS1.class).getMappedResults();
         	
     		if (ayqyrs.size() == 0) {

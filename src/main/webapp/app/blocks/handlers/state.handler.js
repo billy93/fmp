@@ -6,10 +6,10 @@
         .factory('stateHandler', stateHandler);
 
     stateHandler.$inject = ['$rootScope', '$state', '$sessionStorage', '$localStorage', '$window',
-        'Auth', 'Principal', 'VERSION', 'Idle'];
+        'Auth', 'Principal', 'VERSION', 'Idle','WorkPackageFilter'];
 
     function stateHandler($rootScope, $state, $sessionStorage, $localStorage, $window,
-        Auth, Principal, VERSION, Idle) {
+        Auth, Principal, VERSION, Idle,WorkPackageFilter) {
         return {
             initialize: initialize
         };
@@ -58,9 +58,12 @@
                 Idle.watch();
                 
                 $rootScope.$on('IdleStart', function() {
-                	Idle.unwatch();
-                	Auth.logout();
-                	$state.go('home');
+                	WorkPackageFilter.deleteByName({}, function(){
+                		Idle.unwatch();
+                    	Auth.logout();
+                    	$state.go('home');
+                    	$window.location.reload();
+                	});
             	});
             });
 

@@ -5,7 +5,7 @@
                 ng-click="vm.clear()">&times;</button>
     </div>
     <div class="modal-body">
-    	<uib-tabset active="activeForm">			
+    	<uib-tabset active="activeForm">	
 			<uib-tab heading="Filtering Options" ng-click="vm.selectTab('filtering')">
 				<div class="pv1">				
 			      	<div class="box-detail">	
@@ -49,12 +49,12 @@
 										<select class="form-control" ng-model="vm.newFilterComparator" ng-init="vm.newFilterComparator='equal'">
 											<option value="equal" ng-selected=true>=</option>
 											<option value="between">Between </option>
-											<option value="greaterThan"> > </option>
-											<option value="greaterThanorEqual"> >= </option>
-											<option value="lessThan"> <  </option>
-											<option value="lessThanorEqual"> <=  </option>
+											<option value="greaterThan"> &gt; </option>
+											<option value="greaterThanorEqual"> &gt;= </option>
+											<option value="lessThan"> &lt;   </option>
+											<option value="lessThanorEqual"> &lt;=  </option>
 											<option value="oneOf">One of </option>
-											<option value="wildcard">Wildcard Match </option>									
+											<option value="wildcard">Wildcard Match </option>										
 										</select>
 									</div>
 	      						</div>

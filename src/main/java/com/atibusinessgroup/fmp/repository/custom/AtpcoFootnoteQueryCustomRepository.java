@@ -199,9 +199,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 								} else {
 									
 									
-									matchFilter.add(new BasicDBObject("cat015.sales_dates_earliest_tktg", new BasicDBObject("$gte", DateUtil.convertObjectToDate(param.getSaleDateFrom()))));
-									matchFilter.add(new BasicDBObject("cat015.sales_dates_earliest_tktg", new BasicDBObject("$lt", DateUtil.convertObjectToDateWithParam(param.getSaleDateFrom(), 1, 0, 0))));
-									
+									matchFilter.add(new BasicDBObject("cat015.sales_dates_earliest_tktg", new BasicDBObject("$eq", DateUtil.convertObjectToDate(param.getSaleDateFrom()))));
 								}
 							} else {
 								matchFilter.add(new BasicDBObject("$or", Arrays.asList(
@@ -227,8 +225,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 									
 								} else {
 									
-									matchFilter.add(new BasicDBObject("cat015.sales_dates_latest_tktg", new BasicDBObject("$gte", DateUtil.convertObjectToDate(param.getSaleDateTo()))));
-									matchFilter.add(new BasicDBObject("cat015.sales_dates_latest_tktg", new BasicDBObject("$lt", DateUtil.convertObjectToDateWithParam(param.getSaleDateTo(), 1, 0, 0))));
+									matchFilter.add(new BasicDBObject("cat015.sales_dates_latest_tktg", new BasicDBObject("$eq", DateUtil.convertObjectToDate(param.getSaleDateTo()))));
 										
 									
 								}
@@ -256,7 +253,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 				public DBObject toDBObject(AggregationOperationContext context) {
 					BasicDBObject group = new BasicDBObject("$group",new BasicDBObject("_id", 
 							new BasicDBObject("cxr", "$cxr_code")
-							.append("tarNo", "$tar_no")
+							.append("tarNo", "$fare_tar_no")
 							.append("ftnt","$ftnt")
 							));
 					
@@ -323,8 +320,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 									
 								} else {
 								
-									matchFilter.add(new BasicDBObject("cat014.travel_dates_comm", new BasicDBObject("$gte", DateUtil.convertObjectToDate(param.getTravelDateFrom()))));
-									matchFilter.add(new BasicDBObject("cat014.travel_dates_comm", new BasicDBObject("$lt", DateUtil.convertObjectToDateWithParam(param.getTravelDateFrom(), 1, 0, 0))));
+									matchFilter.add(new BasicDBObject("cat014.travel_dates_comm", new BasicDBObject("$eq", DateUtil.convertObjectToDate(param.getTravelDateFrom()))));
 								}
 								
 							} else {
@@ -351,8 +347,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 									
 								} else {
 								
-									matchFilter.add(new BasicDBObject("cat014.travel_dates_exp", new BasicDBObject("$gte", DateUtil.convertObjectToDate(param.getTravelDateTo()))));
-									matchFilter.add(new BasicDBObject("cat014.travel_dates_exp", new BasicDBObject("$lt", DateUtil.convertObjectToDateWithParam(param.getTravelDateTo(), 1, 0, 0))));
+									matchFilter.add(new BasicDBObject("cat014.travel_dates_exp", new BasicDBObject("$eq", DateUtil.convertObjectToDate(param.getTravelDateTo()))));
 								}
 								
 							} else {
@@ -367,8 +362,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 						
 						if(param.getCompletedDateFrom() != null) {
 							
-							matchFilter.add(new BasicDBObject("cat014.travel_dates_commence_complete", new BasicDBObject("$gte", DateUtil.convertObjectToDate(param.getCompletedDateFrom()))));
-							matchFilter.add(new BasicDBObject("cat014.travel_dates_commence_complete", new BasicDBObject("$lt", DateUtil.convertObjectToDateWithParam(param.getCompletedDateFrom(), 1, 0, 0))));
+							matchFilter.add(new BasicDBObject("cat014.travel_dates_commence_complete", new BasicDBObject("$eq", DateUtil.convertObjectToDate(param.getCompletedDateFrom()))));
 							
 							
 						} 
@@ -460,9 +454,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 							
 						} else {
 							matchQuery.append("$or", Arrays.asList(
-									new BasicDBObject("cat15.sales_dates_earliest_tktg", new BasicDBObject("$gte", DateUtil.convertObjectToDate(param.getSaleDateFrom()))),
-									new BasicDBObject("cat15.sales_dates_earliest_tktg", new BasicDBObject("$lt", DateUtil.convertObjectToDateWithParam(param.getSaleDateFrom(), 1, 0, 0)))
-									));
+									new BasicDBObject("cat15.sales_dates_earliest_tktg", new BasicDBObject("$eq", DateUtil.convertObjectToDate(param.getSaleDateFrom())))));
 						}
 						
 					} else {
@@ -486,9 +478,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 							
 						} else {
 							matchQuery.append("$or", Arrays.asList(
-									new BasicDBObject("cat15.sales_dates_latest_tktg", new BasicDBObject("$gte", DateUtil.convertObjectToDate(param.getSaleDateTo()))),
-									new BasicDBObject("cat15.sales_dates_latest_tktg", new BasicDBObject("$lt", DateUtil.convertObjectToDateWithParam(param.getSaleDateTo(), 1, 0, 0)))
-									));
+									new BasicDBObject("cat15.sales_dates_latest_tktg", new BasicDBObject("$eq", DateUtil.convertObjectToDate(param.getSaleDateTo())))));
 						}
 						
 					} else {
@@ -512,9 +502,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 							
 						} else {
 							matchQuery.append("$or", Arrays.asList(
-									new BasicDBObject("cat14.travel_dates_comm", new BasicDBObject("$gte", DateUtil.convertObjectToDate(param.getTravelDateFrom()))),
-									new BasicDBObject("cat14.travel_dates_comm", new BasicDBObject("$lt", DateUtil.convertObjectToDateWithParam(param.getTravelDateFrom(), 1, 0, 0)))
-									));
+									new BasicDBObject("cat14.travel_dates_comm", new BasicDBObject("$eq", DateUtil.convertObjectToDate(param.getTravelDateFrom())))));
 						}
 						
 					} else {
@@ -538,9 +526,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 							
 						} else {
 							matchQuery.append("$or", Arrays.asList(
-									new BasicDBObject("cat14.travel_dates_exp", new BasicDBObject("$gte", DateUtil.convertObjectToDate(param.getTravelDateTo()))),
-									new BasicDBObject("cat14.travel_dates_exp", new BasicDBObject("$lt", DateUtil.convertObjectToDateWithParam(param.getTravelDateTo(), 1, 0, 0)))
-									));
+									new BasicDBObject("cat14.travel_dates_exp", new BasicDBObject("$eq", DateUtil.convertObjectToDate(param.getTravelDateTo())))));
 						}
 						
 					} else {
@@ -557,9 +543,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 				if(param.getCompletedDateFrom() != null) {
 					
 					matchQuery.append("$or", Arrays.asList(
-						new BasicDBObject("cat14.travel_dates_commence_complete", new BasicDBObject("$gte", DateUtil.convertObjectToDate(param.getCompletedDateFrom()))),
-						new BasicDBObject("cat14.travel_dates_commence_complete", new BasicDBObject("$lt", DateUtil.convertObjectToDateWithParam(param.getCompletedDateFrom(), 1, 0, 0)))
-					));
+						new BasicDBObject("cat14.travel_dates_commence_complete", new BasicDBObject("$eq", DateUtil.convertObjectToDate(param.getCompletedDateFrom())))));
 					
 				} 
 				
@@ -706,6 +690,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 		});
 		
 		Aggregation aggregation = newAggregation(aggregationOperations);
+		System.out.println(aggregation);
 
 		List<AtpcoFootnoteQueryGroup> data = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_FOOTNOTE_RECORD_2, AtpcoFootnoteQueryGroup.class).getMappedResults();
 		
@@ -1314,8 +1299,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 													
 												} else {
 													matchQuery.append("$or", Arrays.asList(
-															new BasicDBObject(catNo+".sales_dates_earliest_tktg", new BasicDBObject("$gte", DateUtil.convertObjectToDate(ftntParam.getSaleDateFrom()))),
-															new BasicDBObject(catNo+".sales_dates_earliest_tktg", new BasicDBObject("$lt", DateUtil.convertObjectToDateWithParam(ftntParam.getSaleDateFrom(), 1, 0, 0)))
+															new BasicDBObject(catNo+".sales_dates_earliest_tktg", new BasicDBObject("$eq", DateUtil.convertObjectToDate(ftntParam.getSaleDateFrom())))
 															));
 												}
 												
@@ -1340,9 +1324,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 													
 												} else {
 													matchQuery.append("$or", Arrays.asList(
-															new BasicDBObject(catNo+".sales_dates_latest_tktg", new BasicDBObject("$gte", DateUtil.convertObjectToDate(ftntParam.getSaleDateTo()))),
-															new BasicDBObject(catNo+".sales_dates_latest_tktg", new BasicDBObject("$lt", DateUtil.convertObjectToDateWithParam(ftntParam.getSaleDateTo(), 1, 0, 0)))
-															));
+															new BasicDBObject(catNo+".sales_dates_latest_tktg", new BasicDBObject("$eq", DateUtil.convertObjectToDate(ftntParam.getSaleDateTo())))));
 												}
 												
 											} else {
@@ -1368,9 +1350,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 													
 												} else {
 													matchQuery.append("$or", Arrays.asList(
-															new BasicDBObject(catNo+".travel_dates_comm", new BasicDBObject("$gte", DateUtil.convertObjectToDate(ftntParam.getTravelDateFrom()))),
-															new BasicDBObject(catNo+".travel_dates_comm", new BasicDBObject("$lt", DateUtil.convertObjectToDateWithParam(ftntParam.getTravelDateFrom(), 1, 0, 0)))
-															));
+															new BasicDBObject(catNo+".travel_dates_comm", new BasicDBObject("$eq", DateUtil.convertObjectToDate(ftntParam.getTravelDateFrom())))));
 												}
 												
 											} else {
@@ -1394,9 +1374,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 													
 												} else {
 													matchQuery.append("$or", Arrays.asList(
-															new BasicDBObject(catNo+".travel_dates_exp", new BasicDBObject("$gte", DateUtil.convertObjectToDate(ftntParam.getTravelDateTo()))),
-															new BasicDBObject(catNo+".travel_dates_exp", new BasicDBObject("$lt", DateUtil.convertObjectToDateWithParam(ftntParam.getTravelDateTo(), 1, 0, 0)))
-															));
+															new BasicDBObject(catNo+".travel_dates_exp", new BasicDBObject("$eq", DateUtil.convertObjectToDate(ftntParam.getTravelDateTo())))));
 												}
 												
 											} else {
