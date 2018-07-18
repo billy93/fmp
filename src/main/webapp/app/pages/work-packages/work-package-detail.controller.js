@@ -5166,7 +5166,7 @@
 	      });
 	  }
       
-      vm.agent = function(disabled){
+      vm.agent = function(disabled, viewOnly){
 	    	  	var object = {
 	    			agents: vm.workPackage.agent
 	    	 	}
@@ -5179,7 +5179,8 @@
 	          size: 'lg',
 	          resolve: {
 	              entity: object,
-		          isDisabled : disabled
+		          isDisabled : disabled,
+		          isViewOnly : viewOnly
 	          }
 	      }).result.then(function(agent) {
 	      	  vm.workPackage.agent = agent;
