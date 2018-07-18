@@ -1,10 +1,14 @@
 package com.atibusinessgroup.fmp.constant;
 
 public class CollectionName {
-	public final static String ATPCO_ADD_ON = "atpco_addon";
 	
-	public final static String ATPCO_YQYR_S1 = "atpco_yqyr_s1";
-	public final static String ATPCO_YQYR_S2 = "atpco_yqyr_s2";
+	public final static String ATPCO_ADD_ON = "atpco_addon";
+
+	public final static String ATPCO_MASTER_TARIFF = "master_tariff";
+	public final static String ATPCO_MASTER_G16 = "atpco_master_g16";
+	public final static String ATPCO_TARIFF_CROSS_REF = "atpco_tariff_cross_ref";
+	public final static String ATPCO_MASTER_FARE_MATRIX = "atpco_master_fare_matrix";
+	public final static String ATPCO_MASTER_FARE_TYPE = "atpco_master_fare_type";
 	
 	public final static String ATPCO_FARE = "atpco_fare";
 	public final static String ATPCO_RECORD_0 = "atpco_record_0";
@@ -70,9 +74,44 @@ public class CollectionName {
 	public final static String ATPCO_RECORD_DATE_TABLE_994 = "atpco_record_date_table_994";
 	public final static String ATPCO_RECORD_TEXT_TABLE_996 = "atpco_record_text_table_996";
 	
+	public final static String ATPCO_YQYR_S1 = "atpco_yqyr_s1";
+	public final static String ATPCO_YQYR_S2 = "atpco_yqyr_s2";
+	public final static String ATPCO_YQYR_USER_ZONE_TABLE_178 = "atpco_yqyr_user_zone_table_178";
+	public final static String ATPCO_YQYR_CARRIER_TABLE_186 = "atpco_yqyr_carrier_table_186";
+	public final static String ATPCO_YQYR_CARRIER_APPLICATION_TABLE_190 = "atpco_yqyr_carrier_application_table_190";
 	public final static String ATPCO_YQYR_TEXT_TABLE_196 = "atpco_yqyr_text_table_196";
 	
-	public final static String ATPCO_MASTER_TARIFF = "master_tariff";
-	
+	public final static String ATPCO_CCF_FARE = "atpco_ccf_fare";
+	public final static String ATPCO_CCF_CARRIER = "atpco_ccf_carrier";
 	public final static String ATPCO_CCF_PARCITY = "atpco_ccf_parcity";
+	public final static String ATPCO_CCF_MULTI_AIRPORT = "atpco_ccf_multi_airport";
+	
+	public final static String ATPCO_CONSTRUCTION_RECORD_P02 = "atpco_construction_record_P02";
+	public final static String ATPCO_CONSTRUCTION_RECORD_P04 = "atpco_construction_record_P04";
+	public final static String ATPCO_CONSTRUCTION_RECORD_P05 = "atpco_construction_record_P05";
+	public final static String ATPCO_CONSTRUCTION_RECORD_P06 = "atpco_construction_record_P06";
+	public final static String ATPCO_CONSTRUCTION_RECORD_PI1 = "atpco_construction_record_PI1";
+	public final static String ATPCO_CONSTRUCTION_RECORD_PI2 = "atpco_construction_record_PI2";
+	
+	public final static String ATPCO_ROUTING_DETAIL = "atpco_routing_detail";
+	public final static String ATPCO_ROUTING_HEADER = "atpco_routing_header";
+	public final static String ATPCO_ROUTING_RESTRICTION = "atpco_routing_restriction";
+	public final static String ATPCO_ROUTING_TEXT_RESTRICTION = "atpco_routing_text_restriction"; 	
+	
+	public final static String ATPCO_TAXES_X1 = "atpco_taxes_x1";
+	public final static String ATPCO_TAXES_X2 = "atpco_taxes_x2";
+	public final static String ATPCO_TAX_TEXT_TABLE_164 = "atpco_tax_text_table_164";
+	public final static String ATPCO_TAX_SECTOR_DETAILS_TABLE_167 = "atpco_tax_sector_details_table_167";
+	public final static String ATPCO_TAX_SERVICE_BAGGAGE_TABLE_168 = "atpco_tax_service_baggage_table_168";
+	public final static String ATPCO_TAX_PTC_TABLE_169 = "atpco_tax_ptc_table_169";
+	public final static String ATPCO_TAX_USER_ZONE_TABLE_178 = "atpco_tax_user_zone_table_178";
+	public final static String ATPCO_TAX_SECURITY_TABLE_183 = "atpco_tax_security_table_183";
+	public final static String ATPCO_TAX_CARRIER_TABLE_186 = "atpco_tax_carrier_table_186";
+	public final static String ATPCO_TAX_CARRIER_APPLICATION_TABLE_190 = "atpco_tax_carrier_application_table_190";
+	
+	
+	
+	
+	
+	
 }
