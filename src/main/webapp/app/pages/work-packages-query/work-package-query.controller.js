@@ -558,5 +558,10 @@
         	vm.loadQuery();
         }
         
+        vm.ViewDetail = function(id){
+        	var url = $state.href('work-package-view-only', {id: id});
+        	window.open(url,'_blank');
+        }
+        
     }
 })();

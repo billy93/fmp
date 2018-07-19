@@ -398,13 +398,13 @@
 											ng-click="vm.rowSelected($index, workPackage)">
 											<td class="text-right" ng-class="{selected: workPackage === vm.selectedRow}">
 						                        <div class="btn-group edit-btn entities flex-btn-group-container">
-						                            <button type="submit" title="Edit" ui-sref="work-package-view-only({id:workPackage.id})"
+						                            <button type="submit" title="Edit" ng-click="vm.ViewDetail(workPackage.id)"
 						                                    class="btn btn-primary btn-tiny mb0">
 						                                <span >View</span>
 						                            </button>
 						                        </div>
 						                    </td>
-						                    <td><a ui-sref="work-package-view-only({id:workPackage.id})">{{$index+1}}</a></td>
+						                    <td><a ng-click="vm.ViewDetail(workPackage.id)">{{$index+1}}</a></td>
 						                    <td ng-right-click="vm.rightClick('status')">{{workPackage.status}}</td>
 						                    <td ng-right-click="vm.rightClick('wpid')">{{workPackage.wpid}}</td>
 						                    <td ng-right-click="vm.rightClick('name')">{{workPackage.name}}</td>
