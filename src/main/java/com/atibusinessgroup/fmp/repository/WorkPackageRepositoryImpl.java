@@ -221,6 +221,164 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		return page;
 	}
 	
+	@Override
+	public List<WorkPackage> findCustomQuery(WorkPackageQuery filter) {
+		Criteria wpIDCriteria = new Criteria();
+		if(filter.getWpID() != null) {
+			wpIDCriteria = Criteria.where("wpid").is(filter.getWpID());
+		}		
+		Criteria nameCriteria = new Criteria();
+		if(filter.getName() != null) {
+			nameCriteria = Criteria.where("name").regex(filter.getName(),"i");
+		}		
+		Criteria statusCriteria = new Criteria();
+		if(filter.getStatus() != null) {
+			statusCriteria = Criteria.where("status").regex(filter.getStatus(),"i");
+		}
+		Criteria targetCriteria = new Criteria();
+		if(filter.getDistribution() != null) {
+			targetCriteria = Criteria.where("target_distribution").is(filter.getDistribution());
+		}
+		Criteria typeCriteria = new Criteria();
+		if(filter.getWpType() != null) {
+			typeCriteria = Criteria.where("type").regex(filter.getWpType(),"i");
+		}
+		Criteria businessCriteria = new Criteria();
+		if(filter.getBusinessArea() != null) {
+			businessCriteria = Criteria.where("business_area").is(filter.getBusinessArea().getName());
+		}
+		Criteria createdCriteria = new Criteria();
+		if(filter.getCreator() != null) {
+			createdCriteria = Criteria.where("created_by").is(filter.getCreator().getLogin());
+		}
+		Criteria approvalCriteria = new Criteria();
+		if(filter.getApproval() != null) {
+			approvalCriteria = Criteria.where("fare_sheet.approval_reference").is(filter.getApproval());
+		}
+				
+		Criteria fareTypeCriteria = new Criteria();
+		if(filter.getFareClass() != null) {
+			fareTypeCriteria = Criteria.where("fare_sheet.fare_type").is(filter.getFareClass().getName());
+		}
+		
+		Criteria createdDateCriteria = new Criteria();
+		if(filter.getCreatedDateFrom() !=null && filter.getCreatedDateTo() != null) {
+			Date from = DateUtil.convertObjectToDate(filter.getCreatedDateFrom());
+			
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(filter.getCreatedDateTo());
+			calendar.set(Calendar.HOUR_OF_DAY, 23);
+			calendar.set(Calendar.MINUTE, 59);
+			calendar.set(Calendar.SECOND, 59);
+			calendar.set(Calendar.MILLISECOND, 0);
+			Date to = calendar.getTime();
+			
+			createdDateCriteria = Criteria.where("created_date").gte(from).lte(to);
+		}else if(filter.getCreatedDateFrom() !=null) {
+			Date from = DateUtil.convertObjectToDate(filter.getCreatedDateFrom());
+			createdDateCriteria = Criteria.where("created_date").gte(from);
+		}else if(filter.getCreatedDateTo() !=null) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(filter.getCreatedDateTo());
+			calendar.set(Calendar.HOUR_OF_DAY, 23);
+			calendar.set(Calendar.MINUTE, 59);
+			calendar.set(Calendar.SECOND, 59);
+			calendar.set(Calendar.MILLISECOND, 0);
+			Date to = calendar.getTime();
+			createdDateCriteria = Criteria.where("created_date").lte(to);
+		}
+		
+		
+		Criteria filingDateCriteria = new Criteria();
+		if(filter.getFilingDateFrom() !=null && filter.getFilingDateTo() != null) {
+			Date from = DateUtil.convertObjectToDate(filter.getFilingDateFrom());
+			
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(filter.getFilingDateTo());
+			calendar.set(Calendar.HOUR_OF_DAY, 23);
+			calendar.set(Calendar.MINUTE, 59);
+			calendar.set(Calendar.SECOND, 59);
+			calendar.set(Calendar.MILLISECOND, 0);
+			Date to = calendar.getTime();
+			
+			filingDateCriteria = Criteria.where("filing_date").gte(from).lte(to);
+		}else if(filter.getFilingDateFrom() !=null) {
+			Date from = DateUtil.convertObjectToDate(filter.getFilingDateFrom());
+			filingDateCriteria = Criteria.where("filing_date").gte(from);
+		}else if(filter.getFilingDateTo() !=null) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(filter.getFilingDateTo());
+			calendar.set(Calendar.HOUR_OF_DAY, 23);
+			calendar.set(Calendar.MINUTE, 59);
+			calendar.set(Calendar.SECOND, 59);
+			calendar.set(Calendar.MILLISECOND, 0);
+			Date to = calendar.getTime();
+			filingDateCriteria = Criteria.where("filing_date").lte(to);
+		}
+				
+		Criteria distribDateCriteria = new Criteria();
+		if(filter.getDistribDateFrom() !=null && filter.getDistribDateTo() != null) {
+			Date from = DateUtil.convertObjectToDate(filter.getDistribDateFrom());
+			
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(filter.getDistribDateTo());
+			calendar.set(Calendar.HOUR_OF_DAY, 23);
+			calendar.set(Calendar.MINUTE, 59);
+			calendar.set(Calendar.SECOND, 59);
+			calendar.set(Calendar.MILLISECOND, 0);
+			Date to = calendar.getTime();
+			
+			distribDateCriteria = Criteria.where("distribution_date").gte(from).lte(to);
+		}else if(filter.getDistribDateFrom() !=null) {
+			Date from = DateUtil.convertObjectToDate(filter.getDistribDateFrom());
+			distribDateCriteria = Criteria.where("distribution_date").gte(from);
+		}else if(filter.getDistribDateTo() !=null) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(filter.getDistribDateTo());
+			calendar.set(Calendar.HOUR_OF_DAY, 23);
+			calendar.set(Calendar.MINUTE, 59);
+			calendar.set(Calendar.SECOND, 59);
+			calendar.set(Calendar.MILLISECOND, 0);
+			Date to = calendar.getTime();
+			distribDateCriteria = Criteria.where("distribution_date").lte(to);
+		}
+		
+		Criteria discDateCriteria = new Criteria();
+		if(filter.getDiscDateFrom() !=null && filter.getDiscDateTo() != null) {
+			Date from = DateUtil.convertObjectToDate(filter.getDiscDateFrom());
+			
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(filter.getDiscDateTo());
+			calendar.set(Calendar.HOUR_OF_DAY, 23);
+			calendar.set(Calendar.MINUTE, 59);
+			calendar.set(Calendar.SECOND, 59);
+			calendar.set(Calendar.MILLISECOND, 0);
+			Date to = calendar.getTime();
+			
+			discDateCriteria = Criteria.where("discontinue_date").gte(from).lte(to);
+		}else if(filter.getDiscDateFrom() !=null) {
+			Date from = DateUtil.convertObjectToDate(filter.getDiscDateFrom());
+			discDateCriteria = Criteria.where("discontinue_date").gte(from);
+		}else if(filter.getDiscDateTo() !=null) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(filter.getDiscDateTo());
+			calendar.set(Calendar.HOUR_OF_DAY, 23);
+			calendar.set(Calendar.MINUTE, 59);
+			calendar.set(Calendar.SECOND, 59);
+			calendar.set(Calendar.MILLISECOND, 0);
+			Date to = calendar.getTime();
+			discDateCriteria = Criteria.where("discontinue_date").lte(to);
+		}
+		
+		Query query = new Query(new Criteria().andOperator(wpIDCriteria,nameCriteria,statusCriteria,
+				targetCriteria,typeCriteria, businessCriteria, createdCriteria, createdDateCriteria, 
+				filingDateCriteria, distribDateCriteria, discDateCriteria, approvalCriteria, fareTypeCriteria));
+		
+		List<WorkPackage> workPackages = mongoTemplate.find(query, WorkPackage.class);
+
+		return workPackages;
+	}
+	
 	public Criteria findByQuery(WorkPackageFilter wpFilter){
 		// TODO Auto-generated method stub
 		

@@ -612,10 +612,20 @@
 	  	  			  						}
 	  	  			  					}
 	  	  		  					}else if(result.value.comparator[bakso] == "between"){
-	  		  							try {
-											
-										} catch (e) {
-										}
+			  								for(var m=0;m<vm.filterList.length;m++){
+			  									var temp = vm.filterList[m].value;
+				  		          				var splitx = temp.split(",");
+				  		          				
+			  		  							var greater = new Date(splitx[0]);
+			  	  		  						greater.setHours(0,0,0);
+			  	  		  						var less = new Date(splitx[1]);
+			  	  		  						less.setHours(23,59,59);
+			  		  							var wpDate = new Date( vm.workPackages[l][vm.filterList[m].key]);
+			  	  		  						wpDate.setHours(0,0,0);
+			  	  			  						if(wpDate > greater && wpDate <= less){
+			  	  			  							countTrue.push(true);
+			  	  			  						}
+			  	  			  					} 
 	  		  						}else if(result.value.comparator[bakso] == "greaterThan"){
 	  		  						for(var m=0;m<vm.filterList.length;m++){
 	  	  		  						var greater = new Date( vm.filterList[m].value);
