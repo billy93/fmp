@@ -356,12 +356,12 @@ angular.module('ui.bootstrap.datetimepicker', ['ui.bootstrap.dateparser', 'ui.bo
                 }
 
             };
-
+            
             $scope.$watch('isOpen', function (value) {
                 $scope.dropdownStyle = {
                     display: value ? 'block' : 'none'
                 };
-
+                
                 if (value) {
                     cache['openDate'] = $scope.date;
 
@@ -378,6 +378,7 @@ angular.module('ui.bootstrap.datetimepicker', ['ui.bootstrap.dateparser', 'ui.bo
                     $timeout(function () {
                         $scope.$broadcast('uib:datepicker.focus');
                         $document.bind('click', documentClickBind);
+                        $element[0].focus();
                     }, 0, false);
 
                     $scope.open($scope.showPicker);
