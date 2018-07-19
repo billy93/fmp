@@ -68,6 +68,7 @@ public class CollectionName {
 	public final static String ATPCO_FOOTNOTE_RECORD_3_CAT_014 = "atpco_footnote_record_3_cat_014";
 	public final static String ATPCO_FOOTNOTE_RECORD_3_CAT_015 = "atpco_footnote_record_3_cat_015";;
 	public final static String ATPCO_FOOTNOTE_RECORD_3_CAT_023 = "atpco_footnote_record_3_cat_023";
+	public final static String ATPCO_FOOTNOTE_RECORD_4 = "atpco_footnote_record_4";
 	
 	public final static String ATPCO_RECORD_DAY_OF_WEEK_TABLE_966 = "atpco_record_day_of_week_table_966";
 	public final static String ATPCO_RECORD_FARE_TYPE_TABLE_974 = "atpco_record_fare_type_table_974";

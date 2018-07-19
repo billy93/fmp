@@ -12,6 +12,7 @@ import com.mongodb.DBObject;
 import com.atibusinessgroup.fmp.domain.RoutingQueryDetails;
 import com.atibusinessgroup.fmp.domain.RoutingQueryRestriction;
 import com.atibusinessgroup.fmp.domain.RoutingQueryTextRestriction;
+import com.atibusinessgroup.fmp.constant.CollectionName;
 import com.atibusinessgroup.fmp.domain.RoutingQuery;
 import com.atibusinessgroup.fmp.domain.dto.RouteMapView;
 import com.atibusinessgroup.fmp.domain.dto.RoutingQueryParam;
@@ -581,8 +582,8 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 //		log.debug(pageable.toString());
 //		log.debug("aggregationPagination "+aggregationPagination);
 		log.debug("aggregation "+aggregation);
-		List<RoutingQuery> result = mongoTemplate.aggregate(aggregationPagination, RoutingQuery.class, RoutingQuery.class).getMappedResults();
-		long allResultCount = mongoTemplate.aggregate(aggregation, RoutingQuery.class, RoutingQuery.class).getMappedResults().size();
+		List<RoutingQuery> result = mongoTemplate.aggregate(aggregationPagination, CollectionName.ATPCO_ROUTING_HEADER, RoutingQuery.class).getMappedResults();
+		long allResultCount = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_ROUTING_HEADER, RoutingQuery.class).getMappedResults().size();
 		
 //		log.debug("routingqueries "+result);
 //		log.debug("allResultCount "+allResultCount);
@@ -595,7 +596,7 @@ public class RoutingQueryRepositoryImpl implements RoutingQueryService {
 	public RoutingQuery findOneCustom(RoutingQueryParam param) {
 		List<AggregationOperation> aggregationOperations = getAggregationOperation(param);
 		Aggregation aggregations = newAggregation(aggregationOperations);
-		List<RoutingQuery> result = mongoTemplate.aggregate(aggregations, RoutingQuery.class, RoutingQuery.class).getMappedResults();
+		List<RoutingQuery> result = mongoTemplate.aggregate(aggregations, CollectionName.ATPCO_ROUTING_HEADER, RoutingQuery.class).getMappedResults();
 		
 		if(result.size() > 0) {
 			return result.get(0);

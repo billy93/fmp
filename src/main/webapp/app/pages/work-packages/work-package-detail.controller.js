@@ -2825,9 +2825,17 @@
 	  vm.passUp = function(){
 		    if (confirm("Are you sure to Pass up this workorder?")) {
 		    	vm.workPackage.validate = true;
-		    	WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
+		    	
+		    	var wp = angular.copy(vm.workPackage);
+		    	removeTime(wp);
+		    	
+		    	WorkPackage.update(wp, function onSaveSuccess(result){
 		    		if(vm.mapWorkpackage(result)){
-			    		WorkPackage.passup(result, function(wp){
+		    			
+		    			var wp2 = angular.copy(result);
+		    			removeTime(wp2);
+			    		
+		    			WorkPackage.passup(wp2, function(wp){
 			    			alert('Pass Up Success');
 			    			$state.go('work-package');
 			    		}, function(){
@@ -2843,16 +2851,15 @@
 	  
 	  vm.passDown = function(){
 		    if (confirm("Are you sure to Pass down this workorder?")) {
-		    	WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
-		    		WorkPackage.passdown(result, function(){
-		    			alert('Pass Down Success');
-		    			$state.go('work-package');
-		    		}, function(){
-		    			alert('Pass Up Failed');
-		    		});
-		    	}, function onSaveError(){
-		    		alert('An error occured, please try again');
-		    	});
+		    	var wp = angular.copy(vm.workPackage);
+		    	removeTime(wp);
+		    	
+		    	WorkPackage.passdown(wp, function(){
+	    			alert('Pass Down Success');
+	    			$state.go('work-package');
+	    		}, function(){
+	    			alert('Pass Down Failed');
+	    		});
 		    } else {
 		    }
 	  };
@@ -2860,9 +2867,17 @@
 	  vm.passSideway = function(){
 		    if (confirm("Are you sure to Pass sideway this workorder?")) {
 		    		vm.workPackage.validate = true;
-			    	WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
+		    		
+		    		var wp = angular.copy(vm.workPackage);
+			    	removeTime(wp);
+			    	
+			    	WorkPackage.update(wp, function onSaveSuccess(result){
 			    		if(vm.mapWorkpackage(result)){
-				    		WorkPackage.passsideway(vm.workPackage, function(){
+			    			
+			    			var wp2 = angular.copy(result);
+			    			removeTime(wp2);
+				    		
+			    			WorkPackage.passsideway(wp2, function(){
 				    			alert('Pass Sideway Success');
 				    			$state.go('work-package');
 				    		}, function(){
@@ -2941,8 +2956,15 @@
 	  
 	  vm.approve = function(){
 		  vm.workPackage.validate = true;
-		  WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
+		  
+		  var wp = angular.copy(vm.workPackage);
+	      removeTime(wp);
+	    	
+		  WorkPackage.update(wp, function onSaveSuccess(result){
 			  if(vm.mapWorkpackage(result)){
+				  var wp2 = angular.copy(result);
+			      removeTime(wp2);
+			      
 				  var validated = true;
 				  var cekStatus = "";
 				  var counterApprove = false;
@@ -3114,8 +3136,15 @@
 			          }).result.then(function(config) {
 			        	  vm.workPackage.approveConfig = config;
 			        	  
-			        	  WorkPackage.update(vm.workPackage, function onSaveSuccess(result){		        	  
-				        	  WorkPackage.approve(vm.workPackage, function(){
+			        	  var wp2 = angular.copy(vm.workPackage);
+					      removeTime(wp2);
+					      
+			        	  WorkPackage.update(wp2, function onSaveSuccess(result){	
+			        		  
+			        		  var wp3 = angular.copy(result);
+						      removeTime(wp3);
+						      
+				        	  WorkPackage.approve(wp3, function(){
 				        		  alert('Approve Success');
 				        		  $state.go('work-package');
 				    		  }, function(){
@@ -3143,7 +3172,10 @@
 	  
 	  vm.referback = function(){
 		    if (confirm("Are you sure to Referback this workorder?")) {
-		    		WorkPackage.referback(vm.workPackage, function(){
+		    	 	var wp = angular.copy(vm.workPackage);
+		    	 	removeTime(wp);
+			      
+		    		WorkPackage.referback(wp, function(){
 		    			alert('Refer Back Success');
 		    			$state.go('work-package');
 		    		}, function(){
@@ -3155,7 +3187,10 @@
 	  
 	  vm.complete = function(){
 		    if (confirm("Are you sure to Complete this workorder?")) {
-		    		WorkPackage.complete(vm.workPackage, function(){
+		    	var wp = angular.copy(vm.workPackage);
+	    	 	removeTime(wp);
+	    	 	
+		    		WorkPackage.complete(wp, function(){
 		    			alert('Complete Success');
 		    			$state.go('work-package');
 		    		}, function(){
@@ -3167,7 +3202,10 @@
 	  
 	  vm.createBatches = function(){
 		  if (confirm("Are you sure to create Batches this workorder?")) {
-	    		WorkPackage.createbatch(vm.workPackage, function(wo){
+			  var wp = angular.copy(vm.workPackage);
+	    	 	removeTime(wp);
+	    	 	
+	    		WorkPackage.createbatch(wp, function(wo){
 	    			alert('Create Batches Success');
 	    			alert(wo.batchString);
 	    			$state.go('work-package');
@@ -3180,7 +3218,10 @@
 	  
 	  vm.reviseBatches = function(){
 		  if (confirm("Are you sure to revise Batches this workorder?")) {
-	    		WorkPackage.revisebatch(vm.workPackage, function(){
+			  var wp = angular.copy(vm.workPackage);
+	    	 	removeTime(wp);
+	    	 	
+	    		WorkPackage.revisebatch(wp, function(){
 	    			alert('Revise Batches Success');
 	    			$state.go('work-package');
 	    		}, function(){
@@ -3192,7 +3233,10 @@
 	  
 	  vm.completeBatches = function(){
 		  if (confirm("Are you sure to complete Batches this workorder?")) {
-	    		WorkPackage.completebatch(vm.workPackage, function(){
+			  var wp = angular.copy(vm.workPackage);
+	    	 	removeTime(wp);
+	    	 	
+	    		WorkPackage.completebatch(wp, function(){
 	    			alert('Complete Batches Success');
 	    			$state.go('work-package');
 	    		}, function(){
@@ -3285,10 +3329,9 @@
       function onSaveSuccess (result) {
     	  alert("Save Success");
 	      $scope.$emit('fmpApp:workPackageUpdate', result);
-	      var data = result;
-    	  
-	      vm.mapWorkpackage(data);
 	      
+	      var data = result;    	  
+	      vm.mapWorkpackage(data);	      
           vm.isSaving = false;          
       }
 

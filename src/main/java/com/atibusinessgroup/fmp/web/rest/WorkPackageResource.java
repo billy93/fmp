@@ -1866,7 +1866,7 @@ public class WorkPackageResource {
 
     public static class WorkPackageExportOption{
     	public WorkPackageFilter workPackageFilter;
-
+    	public WorkPackageQuery workPackageQuery;
     	public String outputTo;
     	public boolean gridLines;
     	public boolean columnHeaders;
@@ -1902,6 +1902,13 @@ public class WorkPackageResource {
 		}
 		public void setOnlySelectedRows(boolean onlySelectedRows) {
 			this.onlySelectedRows = onlySelectedRows;
+		}
+		
+		public WorkPackageQuery getWorkPackageQuery() {
+			return workPackageQuery;
+		}
+		public void setWorkPackageQuery(WorkPackageQuery workPackageQuery) {
+			this.workPackageQuery = workPackageQuery;
 		}
 		@Override
 		public String toString() {
@@ -2012,6 +2019,72 @@ public class WorkPackageResource {
         }
 
     	Attachment att = createWorkbook("Workorder Queue", data);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
+            .body(att);
+    }
+    
+    /**
+     * POST  /work-packages/export-queque-query : Export work package fares
+     *
+     * @param workPackage the workPackage to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/work-packages/exportQueueQuery")
+    @Timed
+    public ResponseEntity<Attachment> exportQueueQueryWorkPackage(@RequestBody WorkPackageExportOption workPackageExportOption) throws URISyntaxException {
+    	log.debug("REST request to exportWorkqueue : {}", workPackageExportOption);
+
+    	LinkedHashMap<String, Object> data = new LinkedHashMap<>();
+
+    	data.put("WO Type", new ArrayList<>());
+    	data.put("Distribution Type", new ArrayList<>());
+    	data.put("Status", new ArrayList<>());
+    	data.put("WO Id", new ArrayList<>());
+    	data.put("WO Name", new ArrayList<>());
+    	data.put("Business Area", new ArrayList<>());
+    	data.put("Review Level", new ArrayList<>());
+    	data.put("Approval Reference", new ArrayList<>());
+    	data.put("Reuse From", new ArrayList<>());
+    	data.put("Replace From", new ArrayList<>());
+    	data.put("Priority", new ArrayList<>());
+    	data.put("Filing Date", new ArrayList<>());
+    	data.put("Distribution Date", new ArrayList<>());
+    	data.put("Fare Type", new ArrayList<>());
+    	data.put("Created Date", new ArrayList<>());
+    	data.put("Created By", new ArrayList<>());
+    	data.put("Locked By", new ArrayList<>());
+    	data.put("Locked Since", new ArrayList<>());
+    	data.put("Last Modified Date", new ArrayList<>());
+    	data.put("Last Modified By", new ArrayList<>());
+    	
+    	List<WorkPackage> wp = workPackageService.findCustomQuery(workPackageExportOption.getWorkPackageQuery());
+
+        DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy");
+        for(int i=0; i<wp.size(); i++) {
+        	putValue(data.get("WO Type"), wp.get(i).getType().name());
+        	putValue(data.get("Distribution Type"), wp.get(i).getTargetDistribution());
+        	putValue(data.get("Status"), wp.get(i).getStatus().name());
+        	putValue(data.get("WO Id"), wp.get(i).getWpid());
+        	putValue(data.get("WO Name"), wp.get(i).getName());
+        	putValue(data.get("Business Area"), wp.get(i).getBusinessArea());
+        	putValue(data.get("Review Level"), wp.get(i).getReviewLevel());
+        	putValue(data.get("Approval Reference"), wp.get(i).getName());
+        	putValue(data.get("Reuse From"), wp.get(i).getName());
+        	putValue(data.get("Replace From"), wp.get(i).getName());
+        	putValue(data.get("Priority"), wp.get(i).getPriority());
+        	putValue(data.get("Filing Date"), wp.get(i).getFilingDate() != null ? dfFull.format(Date.from(wp.get(i).getFilingDate().toInstant())) : null);
+        	putValue(data.get("Distribution Date"), wp.get(i).getDistributionDate() != null ? dfFull.format(Date.from(wp.get(i).getDistributionDate().toInstant())) : null);
+        	putValue(data.get("Created Date"), wp.get(i).getCreatedDate() != null ? dfFull.format(Date.from(wp.get(i).getCreatedDate())) : null);
+        	putValue(data.get("Created By"), wp.get(i).getCreatedBy());
+        	putValue(data.get("Locked By"), wp.get(i).getLockedBy());
+        	putValue(data.get("Locked Since"), wp.get(i).getLockedSince() != null ? dfFull.format(Date.from(wp.get(i).getLockedSince().toInstant())) : null);
+        	putValue(data.get("Last Modified Date"), wp.get(i).getLastModifiedDate() != null ? dfFull.format(Date.from(wp.get(i).getLastModifiedDate())) : null);
+        	putValue(data.get("Last Modified By"), wp.get(i).getLastModifiedBy());
+        }
+
+    	Attachment att = createWorkbook("Workorder Queue Query", data);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ""))
             .body(att);
@@ -4870,7 +4943,6 @@ public class WorkPackageResource {
         }
 
         workPackage = workPackageService.save(workPackage);
-
         workPackage = validateWo(workPackage);
         if(workPackage.getValidation() != null && workPackage.getValidation().getErrorsCount() > 0) {
 
@@ -5100,17 +5172,12 @@ public class WorkPackageResource {
      */
     @PostMapping("/work-packages/passdown")
     @Timed
-    public ResponseEntity<WorkPackage> passdownWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
-        log.debug("REST request to passdown WorkPackage : {}", workPackage);
-        if (workPackage.getId() == null) {
+    public ResponseEntity<WorkPackage> passdownWorkPackage(@RequestBody WorkPackage result) throws URISyntaxException {
+        log.debug("REST request to passdown WorkPackage : {}", result);
+        if (result.getId() == null) {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
-
-        saveHistoryData(workPackage);
-
-        //updateWorkPackage(workPackage);
-
-        WorkPackage result = workPackageService.findOne(workPackage.getId());
+        
         String reviewLevel = result.getReviewLevel();
         if(reviewLevel.contentEquals("HO")) {
     		result.setReviewLevel("LSO");
@@ -5120,53 +5187,63 @@ public class WorkPackageResource {
         }
 
         List<WorkPackageFareSheet> fareSheet = result.getFareSheet();
-        for(WorkPackageFareSheet sheet : fareSheet) {
-        	FareVersion fareVersion = new FareVersion();
-        	fareVersion.action = "PASSDOWN";
-        	fareVersion.fares = sheet.getFares();
-        	fareVersion.version = sheet.fareVersion.size() + 1;
-        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
-        	sheet.fareVersion.add(fareVersion);
+        if(fareSheet != null) {
+	        for(WorkPackageFareSheet sheet : fareSheet) {
+	        	FareVersion fareVersion = new FareVersion();
+	        	fareVersion.action = "PASSDOWN";
+	        	fareVersion.fares = sheet.getFares();
+	        	fareVersion.version = sheet.fareVersion.size() + 1;
+	        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+	        	sheet.fareVersion.add(fareVersion);
+	        }
         }
-
+        
         List<WorkPackageFareSheet> addOnFareSheet = result.getAddonFareSheet();
-        for(WorkPackageFareSheet sheet : addOnFareSheet) {
-        	FareVersion fareVersion = new FareVersion();
-        	fareVersion.action = "PASSDOWN";
-        	fareVersion.fares = sheet.getFares();
-        	fareVersion.version = sheet.fareVersion.size() + 1;
-        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
-        	sheet.fareVersion.add(fareVersion);
+        if(addOnFareSheet != null) {
+	        for(WorkPackageFareSheet sheet : addOnFareSheet) {
+	        	FareVersion fareVersion = new FareVersion();
+	        	fareVersion.action = "PASSDOWN";
+	        	fareVersion.fares = sheet.getFares();
+	        	fareVersion.version = sheet.fareVersion.size() + 1;
+	        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+	        	sheet.fareVersion.add(fareVersion);
+	        }
         }
-
+        
         List<WorkPackageFareSheet> discountFareSheet = result.getDiscountFareSheet();
-        for(WorkPackageFareSheet sheet : discountFareSheet) {
-        	FareVersion fareVersion = new FareVersion();
-        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
-        	fareVersion.action = "PASSDOWN";
-        	fareVersion.fares = sheet.getFares();
-        	fareVersion.version = sheet.fareVersion.size() + 1;
-        	sheet.fareVersion.add(fareVersion);
+        if(discountFareSheet != null) {
+	        for(WorkPackageFareSheet sheet : discountFareSheet) {
+	        	FareVersion fareVersion = new FareVersion();
+	        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+	        	fareVersion.action = "PASSDOWN";
+	        	fareVersion.fares = sheet.getFares();
+	        	fareVersion.version = sheet.fareVersion.size() + 1;
+	        	sheet.fareVersion.add(fareVersion);
+	        }
         }
-
+        
         List<WorkPackageFareSheet> marketFareSheet = result.getMarketFareSheet();
-        for(WorkPackageFareSheet sheet : marketFareSheet) {
-        	FareVersion fareVersion = new FareVersion();
-        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
-        	fareVersion.action = "PASSDOWN";
-        	fareVersion.fares = sheet.getFares();
-        	fareVersion.version = sheet.fareVersion.size() + 1;
-        	sheet.fareVersion.add(fareVersion);
+        if(marketFareSheet != null) {
+	        for(WorkPackageFareSheet sheet : marketFareSheet) {
+	        	FareVersion fareVersion = new FareVersion();
+	        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+	        	fareVersion.action = "PASSDOWN";
+	        	fareVersion.fares = sheet.getFares();
+	        	fareVersion.version = sheet.fareVersion.size() + 1;
+	        	sheet.fareVersion.add(fareVersion);
+	        }
         }
-
+        
         List<WorkPackageFareSheet> waiverFareSheet = result.getWaiverFareSheet();
-        for(WorkPackageFareSheet sheet : waiverFareSheet) {
-        	FareVersion fareVersion = new FareVersion();
-        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
-        	fareVersion.action = "PASSDOWN";
-        	fareVersion.fares = sheet.getFares();
-        	fareVersion.version = sheet.fareVersion.size() + 1;
-        	sheet.fareVersion.add(fareVersion);
+        if(waiverFareSheet != null) {
+	        for(WorkPackageFareSheet sheet : waiverFareSheet) {
+	        	FareVersion fareVersion = new FareVersion();
+	        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+	        	fareVersion.action = "PASSDOWN";
+	        	fareVersion.fares = sheet.getFares();
+	        	fareVersion.version = sheet.fareVersion.size() + 1;
+	        	sheet.fareVersion.add(fareVersion);
+	        }
         }
         result.setQueuedDate(Instant.now());
         workPackageService.save(result);
@@ -5176,7 +5253,6 @@ public class WorkPackageResource {
         history.setType("PASSDOWN");
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
-
 
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -5514,17 +5590,17 @@ public class WorkPackageResource {
      */
     @PostMapping("/work-packages/referback")
     @Timed
-    public ResponseEntity<WorkPackage> referbackWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
-        log.debug("REST request to referback WorkPackage : {}", workPackage);
-        if (workPackage.getId() == null) {
+    public ResponseEntity<WorkPackage> referbackWorkPackage(@RequestBody WorkPackage result) throws URISyntaxException {
+        log.debug("REST request to referback WorkPackage : {}", result);
+        if (result.getId() == null) {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
 
-        saveHistoryData(workPackage);
+//        saveHistoryData(workPackage);
 
         //updateWorkPackage(workPackage);
 
-        WorkPackage result = workPackageService.findOne(workPackage.getId());
+//        WorkPackage result = workPackageService.findOne(workPackage.getId());
 
         result.setReviewLevel(result.getDistributionReviewLevel());
         result.setDistributionReviewLevel(null);
@@ -5554,17 +5630,17 @@ public class WorkPackageResource {
      */
     @PostMapping("/work-packages/complete")
     @Timed
-    public ResponseEntity<WorkPackage> completeWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
-        log.debug("REST request to complete WorkPackage : {}", workPackage);
-        if (workPackage.getId() == null) {
+    public ResponseEntity<WorkPackage> completeWorkPackage(@RequestBody WorkPackage result) throws URISyntaxException {
+        log.debug("REST request to complete WorkPackage : {}", result);
+        if (result.getId() == null) {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
 
-        saveHistoryData(workPackage);
+//        saveHistoryData(workPackage);
 
         //updateWorkPackage(workPackage);
 
-        WorkPackage result = workPackageService.findOne(workPackage.getId());
+//        WorkPackage result = workPackageService.findOne(workPackage.getId());
 
         result.setReviewLevel(result.getReviewLevel());
         result.setDistributionReviewLevel(result.getDistributionReviewLevel());

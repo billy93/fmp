@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -1227,6 +1229,7 @@ public class AtpcoFootnoteQueryCustomRepository {
 									
 									query.append("record_id", recordId);
 									query.append("cat_no", dt.getCatNo());
+									query.append("seq_no", atpcoFootnoteRecord2.getSequenceNo());
 									
 									match.append("$match", query);
 									return match;
@@ -1461,15 +1464,16 @@ public class AtpcoFootnoteQueryCustomRepository {
 							
 							Aggregation aggregation = newAggregation(aggregationOperations);
 							
-							AtpcoFootnoteQueryDetails af = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_FOOTNOTE_RECORD_2, AtpcoFootnoteQueryDetails.class).getUniqueMappedResult();
+							System.out.println(aggregation);
 							
-							if(af != null) {
-								result.add(af);
+							List<AtpcoFootnoteQueryDetails> af = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_FOOTNOTE_RECORD_2, AtpcoFootnoteQueryDetails.class).getMappedResults();
+							
+							System.out.println(af.size());
+							
+							if(af.size() > 0) {
+								result.addAll(af);
 							}
 							
-							
-						
-						
 						}
 					
 					} else {
@@ -1575,10 +1579,12 @@ public class AtpcoFootnoteQueryCustomRepository {
 						
 						Aggregation aggregation = newAggregation(aggregationOperations);
 						
-						AtpcoFootnoteQueryDetails af = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_FOOTNOTE_RECORD_2, AtpcoFootnoteQueryDetails.class).getUniqueMappedResult();
+						System.out.println(aggregation);
 						
-						if(af != null) {
-							result.add(af);
+						List<AtpcoFootnoteQueryDetails> af = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_FOOTNOTE_RECORD_2, AtpcoFootnoteQueryDetails.class).getMappedResults();
+						
+						if(af.size() > 0) {
+							result.addAll(af);
 						}
 						
 						
@@ -1586,8 +1592,6 @@ public class AtpcoFootnoteQueryCustomRepository {
 				}
 			}
 		}
-		
-		
 		return result;
 	}
 
