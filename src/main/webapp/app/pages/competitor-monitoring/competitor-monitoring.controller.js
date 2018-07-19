@@ -41,7 +41,7 @@
 		vm.checkValidParameters = checkValidParameters;
 		
 		vm.compMonitoring = [];
-
+		
 		vm.sources = [
         	{key: "A", value: "A - ATPCO"},
         	{key: "M", value: "M - Market"},
@@ -316,6 +316,34 @@
 				return true;
 			}
 		}
+		
+		function generateChart(data) {
+			$('#container').show();
+			
+			var fares = [];
+			var cabins = [];
+			var groupedCategories = [];
+			
+			for(var i=0;i<data.length;i++) {
+				  fares.push(data[i].carrierCode);
+				  cabins.push(data[i].cabin);
+			  }
+			
+			var groupedFares = Array.from(new Set(fares));
+			var groupedCabin = Array.from(new Set(cabins));
+			
+			for(var a=0;a<groupedCabin.length;a++) {
+				for(var b=0;b<groupedFares.length;b++) {
+					for(var c=0; c<data.length; c++) {
+						if(groupedCabin[a] == data[c].cabin) {
+							if(groupedFares[b] == data[c].carrierCode) {
+								
+							}
+						}
+					}
+				}
+			}
+		}
 
 		function generateGraph(data) {
 
@@ -385,8 +413,6 @@
 		    }
 		  dataGroup.push({'name':categories[j], 'data':dataGraph});
 		    
-		  console.log(dataGraph);
-		  
 		  var chartOptions = {
 		          chart : {
 		            renderTo : 'container',
