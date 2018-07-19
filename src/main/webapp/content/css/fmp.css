@@ -3090,7 +3090,8 @@ body .ui-tooltip {
       overflow-x: hidden;
       overflow-y: auto; }
       .sideBar ul .sub-menu ul {
-        padding: 20px 20px 20px 10px; }
+        padding: 20px 0;
+        padding-left: 20px; }
       .sideBar ul .sub-menu li {
         margin-bottom: 10px; }
         .sideBar ul .sub-menu li:last-child {
