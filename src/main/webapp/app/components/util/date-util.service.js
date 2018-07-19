@@ -22,7 +22,7 @@
         function convertDateFromServer(date){
         	 if (date) {
         		 date = date.substring(0,10).split('-');
-        		 
+
         		 var year = date[0];
         		 var month = date[1];
         		 var day = date[2];
