@@ -5,9 +5,9 @@
         .module('fmpApp')
         .controller('FbrQueryController', FbrQueryController);
 
-    FbrQueryController.$inject = ['$state', 'FbrQuery', 'ParseLinks', 'AlertService', 'paginationConstants', '$uibModal', 'DateUtils'];
+    FbrQueryController.$inject = ['$state', 'FbrQuery', 'ParseLinks', 'AlertService', 'paginationConstants', '$uibModal', 'DateUtils', 'AtpcoMasterFareType', 'TariffNumber', 'Passenger'];
 
-    function FbrQueryController($state, FbrQuery, ParseLinks, AlertService, paginationConstants, $uibModal, DateUtils) {
+    function FbrQueryController($state, FbrQuery, ParseLinks, AlertService, paginationConstants, $uibModal, DateUtils, AtpcoMasterFareType, TariffNumber, Passenger) {
 
     	var vm = this;
     	 
@@ -53,8 +53,14 @@
         vm.itemsPerPage = paginationConstants.itemsPerPage;
         vm.loadAll = loadAll;
         vm.query = query;
+        vm.getRules = getRules;
         vm.checkValidParameters = checkValidParameters;
         vm.showInfoModal = showInfoModal;
+        vm.showCategoryDetail = showCategoryDetail;
+        vm.showCarrierModal = showCarrierModal;
+        vm.showTariffModal = showTariffModal;
+        vm.showLegend = showLegend;
+        vm.viewFullText = viewFullText;
         
         vm.fbrQueries = [];
         vm.reset = reset;
@@ -65,16 +71,22 @@
         vm.dateFormat = "dd/MM/yyyy";
         vm.openCalendar = openCalendar;
         
-        vm.sources = [
-        	{key: "A", value: "A - ATPCO"},
-        	{key: "M", value: "M - Market"}
-        ]
+        vm.fareTypes = AtpcoMasterFareType.getAll();
+        vm.globalIndicators = TariffNumber.getAllGlobal();
+        vm.paxTypes = Passenger.getAll();
         
         vm.publicPrivate = [
         	{key: "", value: "Select Public/Private"},
         	{key: "Public", value: "Public"},
         	{key: "Private", value: "Private"}
         ]
+        
+        vm.cabins = [
+        	{key: "F", value: "First"},
+        	{key: "J", value: "Business"},
+        	{key: "W", value: "Premium Economy"},
+        	{key: "Y", value: "Economy"}
+        ];
         
         vm.owrts = [
         	{key: "", value: "Select OW/RT"},
@@ -108,9 +120,10 @@
         		vm.isLoading = true;
             	vm.isLastPage = false;
             	vm.noDataAvailable = false;
-            	vm.currentAddOn = null;
+            	vm.fbrQueryCategories = null;
             	
             	vm.queryParams.carrier = vm.paramCarrier;
+            	vm.queryParams.fbrTariff = vm.paramTarNo;
             	
             	vm.queryParams.page = vm.page;
             	vm.queryParams.size = vm.itemsPerPage;
@@ -169,17 +182,23 @@
         	}
         }
         
+        function getRules(fbrQuery) {
+        	vm.isLoadingRule = true;
+        	FbrQuery.getRules(fbrQuery, function(data) {
+        		vm.fbrQueryCategories = data;
+        		vm.isLoadingRule = false;
+        	}, function(error) {
+        		console.log(error);
+        		vm.isLoadingRule = false;
+        	});
+        }   
+        
         function checkValidParameters() {
-//        	if ((vm.queryParams.origin != null && vm.queryParams.origin != '' && vm.queryParams.destination != null && vm.queryParams.destination != '') ||
-//        			(vm.queryParams.origin != null && vm.queryParams.origin != '' && vm.queryParams.bucket != null && vm.queryParams.bucket != '') ||
-//        			(vm.queryParams.destination != null && vm.queryParams.destination != '' && vm.queryParams.bucket != null && vm.queryParams.bucket != '') ||
-//        			(vm.queryParams.carrier != null && vm.queryParams.carrier != '' && vm.queryParams.bucket != null && vm.queryParams.bucket != '') ||
-//        			(vm.queryParams.woId != null && vm.queryParams.woId != '')) {
-//        		return 'Valid';
-//        	} else {
-//        		return "Error: One set of the following is required.\n\tOrigin and Destination\n\tOrigin and Add-On Bucket\n\tDestination and Add-On Bucket\n\tCarrier and Add-On Bucket\n\tWork Order ID\n";
-//        	}
-        	return 'Valid';
+        	if (vm.paramCarrier != null) {
+        		return 'Valid';
+        	} else {
+        		return "Error: One set of the following is required.\n\Carrier\n";
+        	}
         }
 
         function loadPage(page) {
@@ -239,6 +258,9 @@
         	vm.saleDateTo = null;
         	vm.travelDateFrom = null;
         	vm.travelDateTo = null;
+        	
+        	vm.paramCarrier = null;
+        	vm.paramTarNo = null;
         }
         
         function showInfoModal(message) {
@@ -252,6 +274,96 @@
                     entity: {
                     	message: message
                     }	
+                }
+            }).result.then(function() {
+                $state.go('afd-query', {}, { reload: false });
+            }, function() {
+                $state.go('afd-query');
+            });
+        }
+        
+        function showCategoryDetail(category) {
+			$uibModal.open({
+				templateUrl : 'app/pages/modals/category-modal.html',
+				controller : 'CategoryModalController',
+				controllerAs : 'vm',
+				backdrop : 'static',
+				size : 'lg',
+				windowClass : 'full',
+				resolve : {
+					entity : category
+				}
+			}).result.then(function() {
+				$state.go('afd-query', {}, {
+					reload : false
+				});
+			}, function() {
+				$state.go('afd-query');
+			});
+		}
+        
+        function showCarrierModal() {
+        	$uibModal.open({
+                templateUrl: 'app/pages/modals/carrier-modal.html',
+                controller: 'MasterCarrierModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full',
+                resolve: {
+                	entity: vm
+                }
+            }).result.then(function() {
+                $state.go('afd-query', {}, { reload: false });
+            }, function() {
+                $state.go('afd-query');
+            });
+        }
+        
+        function showTariffModal() {
+        	$uibModal.open({
+                templateUrl: 'app/pages/modals/tariff-modal.html',
+                controller: 'MasterTariffModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full',
+                resolve: {
+                	entity: vm
+                }
+            }).result.then(function() {
+                $state.go('afd-query', {}, { reload: false });
+            }, function() {
+                $state.go('afd-query');
+            });
+        }
+        
+        function showLegend() {
+        	$uibModal.open({
+                templateUrl: 'app/pages/modals/legend-modal.html',
+                controller: 'LegendModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'md'
+            }).result.then(function() {
+                $state.go('afd-query', {}, { reload: false });
+            }, function() {
+                $state.go('afd-query');
+            });
+        }
+        
+        function viewFullText() {
+        	$uibModal.open({
+                templateUrl: 'app/pages/modals/full-text-modal.html',
+                controller: 'FullTextModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'lg',
+                windowClass: 'full',
+                resolve: {
+                    entity: {
+                    	categories: vm.fbrQueryCategories
+                    }
                 }
             }).result.then(function() {
                 $state.go('afd-query', {}, { reload: false });

@@ -41,11 +41,14 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2Cat10;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat14;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat15;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat35;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat35Ticketing;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat50;
 import com.atibusinessgroup.fmp.domain.dto.AddOnParam;
 import com.atibusinessgroup.fmp.domain.dto.AddOnsWrapper;
 import com.atibusinessgroup.fmp.domain.dto.AfdQueryAddOns;
 import com.atibusinessgroup.fmp.domain.dto.AfdQueryParam;
+import com.atibusinessgroup.fmp.domain.dto.AtpcoDateWrapper;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFareAfdQueryWithRecords;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoFootnoteRecord2GroupByCatNo;
 import com.atibusinessgroup.fmp.domain.dto.AtpcoRecord2GroupByCatNo;
@@ -1040,6 +1043,9 @@ public class AtpcoFareCustomRepository {
 		List<FbrQuery> fbrQueries = new ArrayList<>();
 		
 		LinkedHashMap<String, String> fareCategories = new LinkedHashMap<>();
+		fareCategories.put("014", CategoryName.CAT_014);
+		fareCategories.put("015", CategoryName.CAT_015);
+		fareCategories.put("035", CategoryName.CAT_035);
     	fareCategories.put("050", CategoryName.CAT_050);
     	
 		List<AggregationOperation> aggregationOperations = new ArrayList<>();
@@ -1055,6 +1061,39 @@ public class AtpcoFareCustomRepository {
 				}
 				if (param.getFbrRule() != null && !param.getFbrRule().isEmpty()) {
 					match.append("rule_no", param.getFbrRule());
+				}
+				if (param.getAccountCode() != null && !param.getAccountCode().isEmpty()) {
+					match.append("account_code", param.getAccountCode());
+				}
+				if (param.getTktDesignator() != null && !param.getTktDesignator().isEmpty()) {
+					match.append("ticket_designator", param.getTktDesignator());
+				}
+				
+				Date paramFrom = DateUtil.convertObjectToDate(param.getEffectiveDateFrom());
+				Date paramTo = DateUtil.convertObjectToDate(param.getEffectiveDateTo());
+				if (paramFrom == null) {
+					paramFrom = minimumDate;
+				}
+				if (paramTo == null) {
+					paramTo = maximumDate;
+				}
+				if (param.getEffectiveDateOption() != null && param.getEffectiveDateOption().contentEquals("A")) {
+					match.append("$and", 
+							Arrays.asList(new BasicDBObject("$or", Arrays.asList(new BasicDBObject("dates_eff", "indef"), new BasicDBObject("dates_eff", new BasicDBObject("$lte", paramTo)))), 
+									new BasicDBObject("$or", Arrays.asList(new BasicDBObject("dates_disc", "indef"), new BasicDBObject("dates_disc", new BasicDBObject("$gte", paramFrom))))));
+				} else if (param.getEffectiveDateOption() != null && param.getEffectiveDateOption().contentEquals("E")) {
+					if (param.getEffectiveDateFrom() != null && param.getEffectiveDateTo() != null) {
+						match.append("$and", Arrays.asList(new BasicDBObject("dates_eff", new BasicDBObject("$eq", paramFrom)), 
+								new BasicDBObject("dates_disc", new BasicDBObject("$eq", paramTo))));
+					} else if (param.getEffectiveDateFrom() == null && param.getEffectiveDateTo() != null) {
+						match.append("dates_disc", new BasicDBObject("$eq", paramTo));
+					} else if (param.getEffectiveDateTo() == null && param.getEffectiveDateFrom() != null) {
+						match.append("dates_eff", new BasicDBObject("$eq", paramFrom));
+					}
+				}
+				
+				if (param.getPaxType() != null && !param.getPaxType().isEmpty()) {
+					match.append("prim_pass_type", param.getPaxType());
 				}
 				
 				return new BasicDBObject("$match", match);
@@ -1106,13 +1145,28 @@ public class AtpcoFareCustomRepository {
 		aggregationOperations.add(new AggregationOperation() {
 			@Override
 			public DBObject toDBObject(AggregationOperationContext context) {
+				BasicDBObject group = new BasicDBObject();
+				BasicDBObject idGroup = new BasicDBObject();
+				idGroup.append("cxr", "$cxr_code");
+				idGroup.append("tar_no", "$tariff");
+				idGroup.append("tar_cd", "$m_tariff.tar_cd");
+				idGroup.append("rule_no", "$rule_no");
+				
+				group.append("_id", idGroup);
+				
+				return new BasicDBObject("$group", group);
+			}
+		});
+		
+		aggregationOperations.add(new AggregationOperation() {
+			@Override
+			public DBObject toDBObject(AggregationOperationContext context) {
 				BasicDBObject project = new BasicDBObject();
-				project.append("_id", "$_id");
-				project.append("cxr", "$cxr_code");
-				project.append("tar_no", "$tariff");
-				project.append("tar_cd", "$m_tariff.tar_cd");
-				project.append("rule_no", "$rule_no");
-				project.append("rule_title", "");
+				project.append("_id", 0);
+				project.append("cxr", "$_id.cxr");
+				project.append("tar_no", "$_id.tar_no");
+				project.append("tar_cd", "$_id.tar_cd");
+				project.append("rule_no", "$_id.rule_no");
 				
 				return new BasicDBObject("$project", project);
 			}
@@ -1140,6 +1194,9 @@ public class AtpcoFareCustomRepository {
     		
     		for (FbrQuery fbrQuery : fbrQueryTemp) {
     			
+    			List<CategoryObject> cat14s = null;
+            	List<CategoryObject> cat15s = null;
+            	List<CategoryObject> cat35s = null;
     			List<CategoryObject> cat50s = null;
             	
             	for (Map.Entry<String, String> entry : fareCategories.entrySet()) {
@@ -1168,12 +1225,57 @@ public class AtpcoFareCustomRepository {
                 		List<CategoryObject> rules = atpcoRecordService.getAndConvertCategoryObjectDataTable(entry.getKey(), dataTables, "Rule");
                 		
                 		switch (entry.getKey()) {
+                			case "014": cat14s = rules;
+										break;
+							case "015": cat15s = rules;
+										break;
+							case "035": cat35s = rules;
+										break;
                 			case "050": cat50s = rules;
 										break;
                 		}
                 	}
             	}
             	
+            	List<AtpcoDateWrapper> travelDateList = new ArrayList<>();
+            	if (cat14s != null) {
+            		for (CategoryObject cat14o:cat14s) {
+            			AtpcoRecord3Cat14 cat14 = (AtpcoRecord3Cat14) cat14o.getCategory();
+            			Date s = DateUtil.convertObjectToDate(cat14.getTravel_dates_comm());
+            			AtpcoDateWrapper atpcoDateWrapper = new AtpcoDateWrapper();
+        				if (s != null) {
+        					atpcoDateWrapper.setStartDate(s);
+        				}
+        				Date e = DateUtil.convertObjectToDate(cat14.getTravel_dates_exp());
+        				if (e != null) {
+        					atpcoDateWrapper.setEndDate(e);
+        				}
+        				travelDateList.add(atpcoDateWrapper);
+            		}
+            	}
+            	List<AtpcoDateWrapper> saleDateList = new ArrayList<>();
+            	if (cat15s != null) {
+        			for (CategoryObject cat15o:cat15s) {
+        				AtpcoRecord3Cat15 cat15 = (AtpcoRecord3Cat15) cat15o.getCategory();
+        				Date s = DateUtil.convertObjectToDate(cat15.getSales_dates_earliest_tktg());
+        				AtpcoDateWrapper atpcoDateWrapper = new AtpcoDateWrapper();
+        				if (s != null) {
+        					atpcoDateWrapper.setStartDate(s);
+        				}
+        				Date e = DateUtil.convertObjectToDate(cat15.getSales_dates_latest_tktg());
+        				if (e != null) {
+        					atpcoDateWrapper.setStartDate(e);
+        				}
+        				saleDateList.add(atpcoDateWrapper);
+        			}
+            	}
+            	List<AtpcoRecord3Cat35Ticketing> ticketingCat35 = new ArrayList<>();
+            	if (cat35s != null) {
+        			for (CategoryObject cat35o:cat35s) {
+        				AtpcoRecord3Cat35 cat35 = (AtpcoRecord3Cat35) cat35o.getCategory();
+        				ticketingCat35.addAll(cat35.getTicketing());
+        			}
+            	}
             	if (cat50s != null) {
             		String cat50text = "";
         			for (CategoryObject cat50o:cat50s) {
@@ -1185,8 +1287,32 @@ public class AtpcoFareCustomRepository {
         			fbrQuery.setRuleTitle(cat50text);
         		}
             	
-    			fbrQuery.setSource("A");
-    			fbrQueries.add(fbrQuery);
+            	boolean isCorrectData = true;
+            	if(isCorrectData && param.getRuleTittle() != null && !param.getRuleTittle().isEmpty() && !fbrQuery.getRuleTitle().toLowerCase().contains(param.getRuleTittle().toLowerCase())) {
+            		isCorrectData = false;
+            	}
+            	
+            	if(isCorrectData && param.getTourCode() != null && !param.getTourCode().isEmpty()) {
+            		isCorrectData = false;
+                	for (AtpcoRecord3Cat35Ticketing atpcoRecord3Cat35Ticketing : ticketingCat35) {
+    					if(atpcoRecord3Cat35Ticketing.getTour_car_value_code().equals(param.getTourCode())) {
+    						isCorrectData = true;
+    						break;
+    					}
+    				}
+            	}
+            	
+            	if(isCorrectData && ((param.getTravelDateFrom() != null) || (param.getTravelDateTo() != null)) && !atpcoRecordService.compareValueWithParamDate(travelDateList, param.getTravelDateFrom(), param.getTravelDateTo(), param.getTravelDateOption())) {
+            		isCorrectData = false;
+            	}
+            	
+            	if(isCorrectData && ((param.getSaleDateFrom() != null) || (param.getSaleDateTo() != null)) && !atpcoRecordService.compareValueWithParamDate(saleDateList, param.getSaleDateFrom(), param.getSaleDateTo(), param.getSaleDateOption())) {
+            		isCorrectData = false;
+            	}
+            	
+            	if(isCorrectData) {
+            		fbrQueries.add(fbrQuery);
+            	} 
 			}
         	
     		if ((fbrQueryTemp.size() == 0) || (fbrQueryTemp.size() == pageable.getPageSize())) {

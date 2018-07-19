@@ -1,6 +1,7 @@
 package com.atibusinessgroup.fmp.web.rest;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +40,7 @@ import com.atibusinessgroup.fmp.domain.dto.FbrQuery;
 import com.atibusinessgroup.fmp.domain.dto.FbrQueryParam;
 import com.atibusinessgroup.fmp.domain.dto.FbrQueryWrapper;
 import com.atibusinessgroup.fmp.domain.dto.GeneralRuleApplication;
+import com.atibusinessgroup.fmp.domain.dto.RuleQuery;
 import com.atibusinessgroup.fmp.domain.dto.SpecifiedConstructed;
 import com.atibusinessgroup.fmp.domain.dto.SpecifiedConstructedWrapper;
 import com.atibusinessgroup.fmp.domain.dto.WorkPackageMarketFare;
@@ -46,6 +49,7 @@ import com.atibusinessgroup.fmp.repository.AtpcoRecord0Repository;
 import com.atibusinessgroup.fmp.repository.VoltrasFareRepository;
 import com.atibusinessgroup.fmp.repository.WorkPackageRepositoryImpl;
 import com.atibusinessgroup.fmp.repository.custom.AtpcoFareCustomRepository;
+import com.atibusinessgroup.fmp.repository.custom.AtpcoRuleQueryCustomRepository;
 import com.atibusinessgroup.fmp.service.AtpcoRecordService;
 import com.atibusinessgroup.fmp.service.mapper.AfdQueryMapper;
 import com.codahale.metrics.annotation.Timed;
@@ -64,10 +68,12 @@ public class AfdQueryResource {
 	private final WorkPackageRepositoryImpl workPackageRepositoryImpl;
 	private final AfdQueryMapper afdQueryMapper;
 	private final AtpcoMasterTariffRepository tariffNumberRepository;
+	private final AtpcoRuleQueryCustomRepository atpcoRuleQueryCustomRepository;
 	
     public AfdQueryResource(AtpcoRecord0Repository atpcoRecord0Repository, AtpcoFareCustomRepository atpcoFareCustomRepository, 
     		AtpcoRecordService atpcoRecordService, WorkPackageRepositoryImpl workPackageRepositoryImpl, AfdQueryMapper afdQueryMapper,
-    		VoltrasFareRepository voltrasFareRepository, AtpcoMasterTariffRepository tariffNumberRepository) {
+    		VoltrasFareRepository voltrasFareRepository, AtpcoMasterTariffRepository tariffNumberRepository, 
+    		AtpcoRuleQueryCustomRepository atpcoRuleQueryCustomRepository) {
     	this.atpcoRecord0Repository = atpcoRecord0Repository;
     	this.atpcoFareCustomRepository = atpcoFareCustomRepository;
     	this.atpcoRecordService = atpcoRecordService;
@@ -75,6 +81,7 @@ public class AfdQueryResource {
     	this.afdQueryMapper = afdQueryMapper;
     	this.voltrasFareRepository = voltrasFareRepository;
     	this.tariffNumberRepository = tariffNumberRepository;
+    	this.atpcoRuleQueryCustomRepository = atpcoRuleQueryCustomRepository;
     	
     	categories.put("001", CategoryName.CAT_001);
     	categories.put("002", CategoryName.CAT_002);
@@ -444,36 +451,74 @@ public class AfdQueryResource {
     @PostMapping("/afd-queries/fbr-query")
     @Timed
     public ResponseEntity<FbrQueryWrapper> getAllAfdQueryFbrs(@RequestBody FbrQueryParam param) {
+    	System.out.println("=====================================================================================================================================");
     	log.debug("REST request to get a page of AfdQuery Fbrs: {}", param);
     	
-    	FbrQueryWrapper fbrQueryWrapper = new FbrQueryWrapper();
-    	
-    	if (param != null && param.getSource() != null) {
-    		Pageable pageable = new PageRequest(param.getPage(), param.getSize());
-        	List<FbrQuery> fbrQueries = new ArrayList<>();
-            boolean isLastPage = false;
-            int lastIndex = 0;
-            
-            //ATPCO
-            if (param.getSource() != null && param.getSource().contentEquals("A")) {
-            	FbrQueryWrapper atpco = atpcoFareCustomRepository.findAtpcoFbrs(param, pageable);
-            	fbrQueries.addAll(atpco.getFbrQueries());
-            	isLastPage = atpco.isLastPage();
-                lastIndex = atpco.getLastIndex();
-            }
-            
-            //Market
-            if (param.getSource().contentEquals("M")) {
-            	fbrQueries = new ArrayList<>();
-            	isLastPage = true;
-            	lastIndex = 0;
-            }
-            
-            fbrQueryWrapper.setFbrQueries(fbrQueries);
-            fbrQueryWrapper.setLastPage(isLastPage);
-            fbrQueryWrapper.setLastIndex(lastIndex);
-    	}
+    	Pageable pageable = new PageRequest(param.getPage(), param.getSize());
+    	FbrQueryWrapper fbrQueryWrapper = atpcoFareCustomRepository.findAtpcoFbrs(param, pageable);
     	
     	return new ResponseEntity<>(fbrQueryWrapper, HttpStatus.OK);
+    }
+    
+    @GetMapping("/afd-queries/fbr-query/rules")
+	@Timed
+	public ResponseEntity<List<Category>> getFbrQueryRules(FbrQuery fbrQuery) {
+    	log.debug("REST request to get fbrQueries rules: {}", fbrQuery);
+
+		List<Category> result = new ArrayList<>();
+		String recordId = fbrQuery.getTarNo() + fbrQuery.getCxr() + fbrQuery.getRuleNo() + "";
+		
+		List<AtpcoRecord2> arecords2 = atpcoRuleQueryCustomRepository.getListRecord2ById(recordId);
+		AtpcoMasterTariff ftntTn = tariffNumberRepository.findOneByTarNo(fbrQuery.getTarNo());
+		String ftntTcd = null;
+		
+		if (ftntTn != null) {
+			ftntTcd = ftntTn.getTarCd();
+		}
+		
+		for (Map.Entry<String, String> entry : categories.entrySet()) {
+			Category cat = new Category();
+			cat.setCatName(entry.getValue());
+
+			try {
+				cat.setCatNo(Integer.parseInt(entry.getKey()));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			String type = "", allText = "";
+			
+			for (AtpcoRecord2 arecord2 : arecords2) {
+				if (arecord2.getCatNo().contentEquals(entry.getKey())) {
+        			List<DataTable> dataTables = arecord2.getDataTables();
+        			
+        			for (Iterator<DataTable> iterator = dataTables.iterator(); iterator.hasNext();) {
+        				DataTable dt = iterator.next();
+        				if (!dt.getCatNo().contentEquals(entry.getKey())) {
+        					iterator.remove();
+        				}
+        			}
+        			
+        			if (dataTables.size() > 0) {
+        				type = CategoryType.RULE;
+        	        	String textFormat = atpcoRecordService.generateCategoryTextHeader(CategoryType.RULE, fbrQuery.getTarNo(), ftntTcd, null, arecord2.getSequenceNo(), arecord2.getEffectiveDateObject());
+                		CategoryTextFormatAndAttribute ctfa = atpcoRecordService.getAndConvertCategoryDataTable(entry.getKey(), dataTables, CategoryType.RULE);
+                		textFormat += ctfa.getTextFormat();
+                		cat.getCatAttributes().addAll(ctfa.getAttributes());
+                		allText += textFormat + "\n";
+        			}
+				}
+			}
+			
+			if (!type.isEmpty()) {
+				cat.setType(type);
+			}
+			
+			cat.setTextFormat(allText);
+			
+			result.add(cat);
+		}
+
+		return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
