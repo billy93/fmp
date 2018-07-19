@@ -4870,7 +4870,6 @@ public class WorkPackageResource {
         }
 
         workPackage = workPackageService.save(workPackage);
-
         workPackage = validateWo(workPackage);
         if(workPackage.getValidation() != null && workPackage.getValidation().getErrorsCount() > 0) {
 
@@ -5100,17 +5099,12 @@ public class WorkPackageResource {
      */
     @PostMapping("/work-packages/passdown")
     @Timed
-    public ResponseEntity<WorkPackage> passdownWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
-        log.debug("REST request to passdown WorkPackage : {}", workPackage);
-        if (workPackage.getId() == null) {
+    public ResponseEntity<WorkPackage> passdownWorkPackage(@RequestBody WorkPackage result) throws URISyntaxException {
+        log.debug("REST request to passdown WorkPackage : {}", result);
+        if (result.getId() == null) {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
-
-        saveHistoryData(workPackage);
-
-        //updateWorkPackage(workPackage);
-
-        WorkPackage result = workPackageService.findOne(workPackage.getId());
+        
         String reviewLevel = result.getReviewLevel();
         if(reviewLevel.contentEquals("HO")) {
     		result.setReviewLevel("LSO");
@@ -5120,53 +5114,63 @@ public class WorkPackageResource {
         }
 
         List<WorkPackageFareSheet> fareSheet = result.getFareSheet();
-        for(WorkPackageFareSheet sheet : fareSheet) {
-        	FareVersion fareVersion = new FareVersion();
-        	fareVersion.action = "PASSDOWN";
-        	fareVersion.fares = sheet.getFares();
-        	fareVersion.version = sheet.fareVersion.size() + 1;
-        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
-        	sheet.fareVersion.add(fareVersion);
+        if(fareSheet != null) {
+	        for(WorkPackageFareSheet sheet : fareSheet) {
+	        	FareVersion fareVersion = new FareVersion();
+	        	fareVersion.action = "PASSDOWN";
+	        	fareVersion.fares = sheet.getFares();
+	        	fareVersion.version = sheet.fareVersion.size() + 1;
+	        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+	        	sheet.fareVersion.add(fareVersion);
+	        }
         }
-
+        
         List<WorkPackageFareSheet> addOnFareSheet = result.getAddonFareSheet();
-        for(WorkPackageFareSheet sheet : addOnFareSheet) {
-        	FareVersion fareVersion = new FareVersion();
-        	fareVersion.action = "PASSDOWN";
-        	fareVersion.fares = sheet.getFares();
-        	fareVersion.version = sheet.fareVersion.size() + 1;
-        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
-        	sheet.fareVersion.add(fareVersion);
+        if(addOnFareSheet != null) {
+	        for(WorkPackageFareSheet sheet : addOnFareSheet) {
+	        	FareVersion fareVersion = new FareVersion();
+	        	fareVersion.action = "PASSDOWN";
+	        	fareVersion.fares = sheet.getFares();
+	        	fareVersion.version = sheet.fareVersion.size() + 1;
+	        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+	        	sheet.fareVersion.add(fareVersion);
+	        }
         }
-
+        
         List<WorkPackageFareSheet> discountFareSheet = result.getDiscountFareSheet();
-        for(WorkPackageFareSheet sheet : discountFareSheet) {
-        	FareVersion fareVersion = new FareVersion();
-        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
-        	fareVersion.action = "PASSDOWN";
-        	fareVersion.fares = sheet.getFares();
-        	fareVersion.version = sheet.fareVersion.size() + 1;
-        	sheet.fareVersion.add(fareVersion);
+        if(discountFareSheet != null) {
+	        for(WorkPackageFareSheet sheet : discountFareSheet) {
+	        	FareVersion fareVersion = new FareVersion();
+	        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+	        	fareVersion.action = "PASSDOWN";
+	        	fareVersion.fares = sheet.getFares();
+	        	fareVersion.version = sheet.fareVersion.size() + 1;
+	        	sheet.fareVersion.add(fareVersion);
+	        }
         }
-
+        
         List<WorkPackageFareSheet> marketFareSheet = result.getMarketFareSheet();
-        for(WorkPackageFareSheet sheet : marketFareSheet) {
-        	FareVersion fareVersion = new FareVersion();
-        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
-        	fareVersion.action = "PASSDOWN";
-        	fareVersion.fares = sheet.getFares();
-        	fareVersion.version = sheet.fareVersion.size() + 1;
-        	sheet.fareVersion.add(fareVersion);
+        if(marketFareSheet != null) {
+	        for(WorkPackageFareSheet sheet : marketFareSheet) {
+	        	FareVersion fareVersion = new FareVersion();
+	        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+	        	fareVersion.action = "PASSDOWN";
+	        	fareVersion.fares = sheet.getFares();
+	        	fareVersion.version = sheet.fareVersion.size() + 1;
+	        	sheet.fareVersion.add(fareVersion);
+	        }
         }
-
+        
         List<WorkPackageFareSheet> waiverFareSheet = result.getWaiverFareSheet();
-        for(WorkPackageFareSheet sheet : waiverFareSheet) {
-        	FareVersion fareVersion = new FareVersion();
-        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
-        	fareVersion.action = "PASSDOWN";
-        	fareVersion.fares = sheet.getFares();
-        	fareVersion.version = sheet.fareVersion.size() + 1;
-        	sheet.fareVersion.add(fareVersion);
+        if(waiverFareSheet != null) {
+	        for(WorkPackageFareSheet sheet : waiverFareSheet) {
+	        	FareVersion fareVersion = new FareVersion();
+	        	fareVersion.username = SecurityUtils.getCurrentUserLogin().get();
+	        	fareVersion.action = "PASSDOWN";
+	        	fareVersion.fares = sheet.getFares();
+	        	fareVersion.version = sheet.fareVersion.size() + 1;
+	        	sheet.fareVersion.add(fareVersion);
+	        }
         }
         result.setQueuedDate(Instant.now());
         workPackageService.save(result);
@@ -5176,7 +5180,6 @@ public class WorkPackageResource {
         history.setType("PASSDOWN");
         history.setUsername(SecurityUtils.getCurrentUserLogin().get());
         workPackageHistoryService.save(history);
-
 
         return ResponseEntity.created(new URI("/api/work-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
@@ -5514,17 +5517,17 @@ public class WorkPackageResource {
      */
     @PostMapping("/work-packages/referback")
     @Timed
-    public ResponseEntity<WorkPackage> referbackWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
-        log.debug("REST request to referback WorkPackage : {}", workPackage);
-        if (workPackage.getId() == null) {
+    public ResponseEntity<WorkPackage> referbackWorkPackage(@RequestBody WorkPackage result) throws URISyntaxException {
+        log.debug("REST request to referback WorkPackage : {}", result);
+        if (result.getId() == null) {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
 
-        saveHistoryData(workPackage);
+//        saveHistoryData(workPackage);
 
         //updateWorkPackage(workPackage);
 
-        WorkPackage result = workPackageService.findOne(workPackage.getId());
+//        WorkPackage result = workPackageService.findOne(workPackage.getId());
 
         result.setReviewLevel(result.getDistributionReviewLevel());
         result.setDistributionReviewLevel(null);
@@ -5554,17 +5557,17 @@ public class WorkPackageResource {
      */
     @PostMapping("/work-packages/complete")
     @Timed
-    public ResponseEntity<WorkPackage> completeWorkPackage(@RequestBody WorkPackage workPackage) throws URISyntaxException {
-        log.debug("REST request to complete WorkPackage : {}", workPackage);
-        if (workPackage.getId() == null) {
+    public ResponseEntity<WorkPackage> completeWorkPackage(@RequestBody WorkPackage result) throws URISyntaxException {
+        log.debug("REST request to complete WorkPackage : {}", result);
+        if (result.getId() == null) {
             throw new BadRequestAlertException("A workPackage should have an ID", ENTITY_NAME, "idexists");
         }
 
-        saveHistoryData(workPackage);
+//        saveHistoryData(workPackage);
 
         //updateWorkPackage(workPackage);
 
-        WorkPackage result = workPackageService.findOne(workPackage.getId());
+//        WorkPackage result = workPackageService.findOne(workPackage.getId());
 
         result.setReviewLevel(result.getReviewLevel());
         result.setDistributionReviewLevel(result.getDistributionReviewLevel());
