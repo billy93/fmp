@@ -624,9 +624,8 @@ public class AtpcoFareCustomRepository {
 		List<SpecifiedConstructed> scs = new ArrayList<>();
 		
 		//G16
-		Query query = new Query(new Criteria().andOperator(Criteria.where("cxr_code").is(param.getCarrier().trim()), Criteria.where("$where").is("this.arbitary_tariff.length > 0")));
-		List<AtpcoMasterG16> g16s = mongoTemplate.find(query, AtpcoMasterG16.class);
-		
+		Query g16q = new Query(new Criteria().andOperator(Criteria.where("cxr_code").is(param.getCarrier().trim()), Criteria.where("$where").is("this.arbitary_tariff.length > 0")));
+		List<AtpcoMasterG16> g16s = mongoTemplate.find(g16q, AtpcoMasterG16.class);
 		System.out.println("G16 size " + g16s.size());
 		
 		result.setLastPage(true);
