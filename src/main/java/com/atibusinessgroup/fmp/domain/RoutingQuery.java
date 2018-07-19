@@ -15,7 +15,7 @@ import java.util.Objects;
 /**
  * A Routingquery.
  */
-@Document(collection = "Full_Map_Routing_Header")
+@Document(collection = "atpco_routing_header")
 public class RoutingQuery implements Serializable {
 
     private static final long serialVersionUID = 1L;
