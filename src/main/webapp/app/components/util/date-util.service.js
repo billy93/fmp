@@ -22,13 +22,17 @@
         function convertDateFromServer(date){
         	 if (date) {
         		 date = date.substring(0,10).split('-');
-        		 date = date[1] + '-' + date[2] + '-' + date[0];
-                 return new Date(date);
+        		 
+        		 var year = date[0];
+        		 var month = date[1];
+        		 var day = date[2];
+
+                 return new Date(year, month-1, day, 0, 0, 0, 0);
              } else {
                  return null;
              }
         }
-        
+
         function convertDateTimeFromServer(date) {
             if (date) {
                 return new Date(date);
@@ -41,7 +45,7 @@
             var format = 'YYYY/MM/DD HH:mm:ss ZZ';
             return moment(time, format).tz(zone).format(format);
         }
-        
+
         function convertLocalDateFromServer(date) {
             if (date) {
                 var dateString = date.split('-');
