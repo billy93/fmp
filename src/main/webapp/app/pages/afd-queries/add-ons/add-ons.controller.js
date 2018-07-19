@@ -113,8 +113,6 @@
             	vm.queryParams.saleDateFrom = DateUtils.convertLocalDateToServer(vm.saleDateFrom);
             	vm.queryParams.saleDateTo = DateUtils.convertLocalDateToServer(vm.saleDateTo);
             	
-            	console.log(vm.queryParams);
-            	
             	AddOns.query(vm.queryParams, onSuccess, onError);
             	
                 function onSuccess(data) {
@@ -124,8 +122,6 @@
                     for (var i = 0; i < data.addOns.length; i++) {
                     	vm.addOns.push(data.addOns[i]);
                     }
-                    
-                    console.log(data);
                     
                     vm.isLoading = false;
                     vm.disableInfiniteScroll = false;

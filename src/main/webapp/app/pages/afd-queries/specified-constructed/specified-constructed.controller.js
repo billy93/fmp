@@ -84,7 +84,6 @@
         vm.openCalendar = openCalendar;
         
         vm.tariffs = TariffNumber.getAll();
-        console.log(vm.tariffs);
         vm.fareTypes = AtpcoMasterFareType.getAll();
         vm.globalIndicators = TariffNumber.getAllGlobal();
         vm.paxTypes = Passenger.getAll();
@@ -159,7 +158,6 @@
             	vm.queryParams.seasonDateFrom = DateUtils.convertLocalDateToServer(vm.seasonDateFrom);
             	vm.queryParams.seasonDateTo = DateUtils.convertLocalDateToServer(vm.seasonDateTo);
             	
-            	console.log(vm.queryParams);
             	
             	if (vm.queryParams.includeConstructed) {
             		SpecifiedConstructed.getSpecifiedConstructed(vm.queryParams, onSuccess, onError);
@@ -174,8 +172,6 @@
                     for (var i = 0; i < data.specifiedConstructed.length; i++) {
                     	vm.afdQueries.push(data.specifiedConstructed[i]);
                     }
-                    
-                    console.log(data);
                     
                     vm.isLoading = false;
                     vm.disableInfiniteScroll = false;
@@ -253,10 +249,8 @@
         		SpecifiedConstructed.getRules(afdQuery, function(data) {
             		vm.categoryRules = data;
             		vm.currentAfdQuery = afdQuery;
-            		console.log(vm.categoryRules);
             		vm.isLoadingRule = false;
             	}, function(error) {
-            		console.log(error);
             		vm.isLoadingRule = false;
             	});
         	} 

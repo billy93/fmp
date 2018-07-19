@@ -39,7 +39,6 @@
         	   vm.users = account;
                if($stateParams.workPackageFilter != null){
             	   for(var i=0; i<=vm.users.reviewLevels.length; i++){
-  		             //console.log(vm.users.reviewLevels[i]);
   		             if(vm.users.reviewLevels[i] == "HO"){
   		                 vm.reviewLevelHO = vm.users.reviewLevels[i];
   		             } else if(vm.users.reviewLevels[i] == "LSO"){
@@ -57,7 +56,6 @@
             	   WorkPackage.workPackagefilter({}, function onSuccess (response) {
             		   vm.workPackageFilter = response;
             		   for(var i=0; i<=vm.users.reviewLevels.length; i++){
-      		             //console.log(vm.users.reviewLevels[i]);
       		             if(vm.users.reviewLevels[i] == "HO"){
       		                 //vm.workPackageFilter.reviewLevel.ho = true;
       		                 vm.reviewLevelHO = vm.users.reviewLevels[i];
@@ -144,7 +142,6 @@
                 workPackageFilter : vm.workPackageFilter
             });
             
-            console.log("CREATED TIME : "+vm.workPackageFilter.createdTime);
         }
 
         vm.rowSelected = function(idx, workPackage){
@@ -498,7 +495,6 @@
 	  					}
 	  	        	}
   				}else if(result.key == 'range'){
-  					console.log(result.value);
   					vm.filterList.push({key:field, value:result.value});
 	  				for(var l=0; l< vm.workPackages.length; l++){
 	  					var countTrue = [];
@@ -569,7 +565,6 @@
         		onlySelectedRows:true
         	};
 
-        	console.log(exportConfig);
         	WorkPackage.exportQueue(exportConfig, function onExportSuccess(result){
 //        		alert('Export Success');
         		 var fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
