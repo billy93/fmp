@@ -57,16 +57,28 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		return page;
 	}
 
+	 
 	@Override
 	public Page<WorkPackage> findCustomQuery(WorkPackageQuery filter, Pageable pageable) {
+		
 		Criteria wpIDCriteria = new Criteria();
 		if(filter.getWpID() != null) {
-			wpIDCriteria = Criteria.where("wpid").is(filter.getWpID());
+			if(filter.getWpID().indexOf("*")>-1) {
+				wpIDCriteria = Criteria.where("wpid").regex(filter.getWpID().replace("*", ""),"i");
+			}else {
+				wpIDCriteria = Criteria.where("wpid").is(filter.getWpID());
+			}
 		}		
+		
 		Criteria nameCriteria = new Criteria();
 		if(filter.getName() != null) {
-			nameCriteria = Criteria.where("name").regex(filter.getName(),"i");
-		}		
+			if(filter.getName().indexOf("*")>-1) {
+				nameCriteria = Criteria.where("name").regex(filter.getName().replace("*", ""),"i");
+			}else {
+				nameCriteria = Criteria.where("name").is(filter.getName());
+			}
+		}	
+		
 		Criteria statusCriteria = new Criteria();
 		if(filter.getStatus() != null) {
 			statusCriteria = Criteria.where("status").regex(filter.getStatus(),"i");
@@ -87,9 +99,14 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		if(filter.getCreator() != null) {
 			createdCriteria = Criteria.where("created_by").is(filter.getCreator().getLogin());
 		}
+		
 		Criteria approvalCriteria = new Criteria();
 		if(filter.getApproval() != null) {
-			approvalCriteria = Criteria.where("fare_sheet.approval_reference").is(filter.getApproval());
+			if(filter.getApproval().indexOf("*")>-1) {
+				approvalCriteria = Criteria.where("fare_sheet.approval_reference").regex(filter.getApproval().replace("*", ""),"i");
+			}else {
+				approvalCriteria = Criteria.where("fare_sheet.approval_reference").is(filter.getApproval());
+			}
 		}
 				
 		Criteria fareTypeCriteria = new Criteria();
@@ -225,12 +242,22 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 	public List<WorkPackage> findCustomQuery(WorkPackageQuery filter) {
 		Criteria wpIDCriteria = new Criteria();
 		if(filter.getWpID() != null) {
-			wpIDCriteria = Criteria.where("wpid").is(filter.getWpID());
+			if(filter.getWpID().indexOf("*")>-1) {
+				wpIDCriteria = Criteria.where("wpid").regex(filter.getWpID().replace("*", ""),"i");
+			}else {
+				wpIDCriteria = Criteria.where("wpid").is(filter.getWpID());
+			}
 		}		
+		
 		Criteria nameCriteria = new Criteria();
 		if(filter.getName() != null) {
-			nameCriteria = Criteria.where("name").regex(filter.getName(),"i");
-		}		
+			if(filter.getName().indexOf("*")>-1) {
+				nameCriteria = Criteria.where("name").regex(filter.getName().replace("*", ""),"i");
+			}else {
+				nameCriteria = Criteria.where("name").is(filter.getName());
+			}
+		}	
+		
 		Criteria statusCriteria = new Criteria();
 		if(filter.getStatus() != null) {
 			statusCriteria = Criteria.where("status").regex(filter.getStatus(),"i");
@@ -251,9 +278,14 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 		if(filter.getCreator() != null) {
 			createdCriteria = Criteria.where("created_by").is(filter.getCreator().getLogin());
 		}
+		
 		Criteria approvalCriteria = new Criteria();
 		if(filter.getApproval() != null) {
-			approvalCriteria = Criteria.where("fare_sheet.approval_reference").is(filter.getApproval());
+			if(filter.getApproval().indexOf("*")>-1) {
+				approvalCriteria = Criteria.where("fare_sheet.approval_reference").regex(filter.getApproval().replace("*", ""),"i");
+			}else {
+				approvalCriteria = Criteria.where("fare_sheet.approval_reference").is(filter.getApproval());
+			}
 		}
 				
 		Criteria fareTypeCriteria = new Criteria();
