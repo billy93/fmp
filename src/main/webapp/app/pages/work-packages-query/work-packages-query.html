@@ -29,20 +29,20 @@
 											</div>
 											<div class="form-group mb0">
 												<div class="custom-label semibold">Status</div>
-												<select class="form-control" name="status"
-													ng-model="vm.status" ng-options="x for x in vm.optionStatus">
+												<select class="form-control" name="status" ng-model="vm.status" ng-options="x for x in vm.optionStatus">
+													<option value=""></option>
 												</select>
 											</div>
 											<div class="form-group mb0">
 												<div class="custom-label semibold">Distribution</div>
-												<select class="form-control" name="distribution"
-													ng-model="vm.distribution" ng-options="x for x in vm.optionDistribution">
+												<select class="form-control" name="distribution" ng-model="vm.distribution" ng-options="x for x in vm.optionDistribution">
+													<option value=""></option>
 												</select>
 											</div>
 											<div class="form-group mb0">
 												<div class="custom-label semibold">WP Type</div>
-												<select class="form-control" name="wpType"
-													ng-model="vm.wpType" ng-options="x for x in vm.optionWpType">
+												<select class="form-control" name="wpType" ng-model="vm.wpType" ng-options="x for x in vm.optionWpType">
+													<option value=""></option>
 												</select>
 											</div>
 										</div>
@@ -125,14 +125,14 @@
 										<div class="form-group">
 											<div class="form-group mb0">
 												<div class="custom-label semibold">Fare Type</div>
-												<select class="form-control" name="fareClass"
-													ng-model="vm.fareClass" ng-options="x.name for x in vm.optionFare">
+												<select class="form-control" name="fareClass" ng-model="vm.fareClass" ng-options="x.name for x in vm.optionFare">
+													<option value=""></option>
 												</select>
 											</div>
 											<div class="form-group mb0">
 												<div class="custom-label semibold">Business Area</div>
-												<select class="form-control" name="businessAreas"
-													ng-model="vm.businessAreas" ng-options="x.name for x in vm.optionBusinessAreas">
+												<select class="form-control" name="businessAreas" ng-model="vm.businessAreas" ng-options="x.name for x in vm.optionBusinessAreas">
+												 <option value=""></option>
 												</select>
 											</div>
 										</div>
@@ -141,8 +141,8 @@
 										<div class="form-group">
 											<div class="form-group mb0">
 												<div class="custom-label semibold">Created By</div>
-												<select class="form-control" name="creator"
-													ng-model="vm.creator" ng-options="x.login for x in vm.optionCreator">
+												<select class="form-control" name="creator" ng-model="vm.creator" ng-options="x.login for x in vm.optionCreator">
+													<option value=""></option>
 												</select>
 											</div>
 											<div class="form-group mb0">
@@ -189,10 +189,10 @@
 <!-- 											<button class="btn btn-default small" ng-click="vm.refresh()">Refresh</button> -->
 <!-- 											<button class="btn btn-default small" ng-click="vm.query()">Query</button> -->
 <!-- 											<button class="btn btn-default small" ng-click="vm.reset()">Reset</button> -->
-<!-- 											<button class="btn btn-default small" ng-click="vm.printExport()">Print/Export</button> -->
+											<button class="btn btn-default small" ng-click="vm.printExport()">Print/Export</button>
 											<button class="btn btn-default small" ng-click="vm.showHistory()" ng-disabled="vm.selectedRow == null"><i class="fa fa-history i-btn"></i> History</button>
 											<button class="btn btn-default small" ng-click="vm.reuse()" ng-disabled="vm.selectedRow == null"></i class="fa fa-recycle i-btn"> Reuse</button>
-											<button class="btn btn-default small" ng-click="vm.replace()" ng-disabled="vm.selectedRow == null"><i class="fa fa-reply i-btn"></i> Replace</button>
+											<button class="btn btn-default small" ng-click="vm.replace()" ng-disabled="vm.selectedRow == null || vm.selectedRow.targetDistribution == 'ATPCO'"><i class="fa fa-reply i-btn"></i> Replace</button>
 										</div>
 									</div>
 								</div>

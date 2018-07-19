@@ -37,28 +37,28 @@
         vm.loadQuery = loadQuery;        
         vm.loadQuery(); 
                               
-        function loadQuery () { 
+        function loadQuery () {
         	WorkPackage.customQuery({
-        		wpID : vm.wpID,
-            	name : vm.name,
-            	status : vm.status,
-            	distribution : vm.distribution,
-            	wpType : vm.wpType,
-            	createdDateFrom: DateUtils.convertLocalDateToServer(vm.createdDateFrom),
-            	createdDateTo : DateUtils.convertLocalDateToServer(vm.createdDateTo),
-            	filingDateFrom : DateUtils.convertLocalDateToServer(vm.filingDateFrom),
-            	filingDateTo : DateUtils.convertLocalDateToServer(vm.filingDateTo),
-            	gfsDateFrom : DateUtils.convertLocalDateToServer(vm.gfsDateFrom),
-            	gfsDateTo : DateUtils.convertLocalDateToServer(vm.gfsDateTo),
-            	distribDateFrom : DateUtils.convertLocalDateToServer(vm.distribDateFrom),
-            	distribDateTo : DateUtils.convertLocalDateToServer(vm.distribDateTo),
-            	discDateFrom : DateUtils.convertLocalDateToServer(vm.discDateFrom),
-            	discDateTo : DateUtils.convertLocalDateToServer(vm.discDateTo),
-            	fareClass : vm.fareClass,
-            	businessArea : vm.businessAreas,
-            	creator : vm.creator,
-            	approval : vm.approval,
-            	gfs : vm.gfs,
+        		wpID : vm.wpID == '' ? null : vm.wpID,
+            	name : vm.name  == '' ? null : vm.name,
+            	status : vm.status  == '' ? null : vm.status,
+            	distribution : vm.distribution  == '' ? null : vm.distribution,
+            	wpType : vm.wpType  == '' ? null : vm.wpType,
+            	createdDateFrom: DateUtils.convertLocalDateToServer(vm.createdDateFrom)  == '' ? null : DateUtils.convertLocalDateToServer(vm.createdDateFrom),
+            	createdDateTo : DateUtils.convertLocalDateToServer(vm.createdDateTo)  == '' ? null : DateUtils.convertLocalDateToServer(vm.createdDateTo),
+            	filingDateFrom : DateUtils.convertLocalDateToServer(vm.filingDateFrom)  == '' ? null : DateUtils.convertLocalDateToServer(vm.filingDateFrom),
+            	filingDateTo : DateUtils.convertLocalDateToServer(vm.filingDateTo)  == '' ? null : DateUtils.convertLocalDateToServer(vm.filingDateTo),
+            	gfsDateFrom : DateUtils.convertLocalDateToServer(vm.gfsDateFrom)  == '' ? null : DateUtils.convertLocalDateToServer(vm.gfsDateFrom),
+            	gfsDateTo : DateUtils.convertLocalDateToServer(vm.gfsDateTo)  == '' ? null : DateUtils.convertLocalDateToServer(vm.gfsDateTo),
+            	distribDateFrom : DateUtils.convertLocalDateToServer(vm.distribDateFrom)  == '' ? null : DateUtils.convertLocalDateToServer(vm.distribDateFrom),
+            	distribDateTo : DateUtils.convertLocalDateToServer(vm.distribDateTo)  == '' ? null : DateUtils.convertLocalDateToServer(vm.distribDateTo),
+            	discDateFrom : DateUtils.convertLocalDateToServer(vm.discDateFrom)  == '' ? null : DateUtils.convertLocalDateToServer(vm.discDateFrom),
+            	discDateTo : DateUtils.convertLocalDateToServer(vm.discDateTo)  == '' ? null : DateUtils.convertLocalDateToServer(vm.discDateTo),
+            	fareClass : vm.fareClass  == '' ? null : vm.fareClass,
+            	businessArea : vm.businessAreas  == '' ? null : vm.businessAreas,
+            	creator : vm.creator  == '' ? null : vm.creator,
+            	approval : vm.approval  == '' ? null : vm.approval,
+            	gfs : vm.gfs ,
             	page: vm.page-1,
                 size: vm.itemsPerPage,
                 sort: sort()}, onSuccess, onError);
@@ -211,6 +211,51 @@
   		  var blob = new Blob(byteArrays, {type: contentType});
 
   		  return blob;
+        }
+        
+        vm.printExport = function(){
+        	var workPackageQuery = {
+    			wpID : vm.wpID == '' ? null : vm.wpID,
+            	name : vm.name  == '' ? null : vm.name,
+            	status : vm.status  == '' ? null : vm.status,
+            	distribution : vm.distribution  == '' ? null : vm.distribution,
+            	wpType : vm.wpType  == '' ? null : vm.wpType,
+            	createdDateFrom: DateUtils.convertLocalDateToServer(vm.createdDateFrom)  == '' ? null : DateUtils.convertLocalDateToServer(vm.createdDateFrom),
+            	createdDateTo : DateUtils.convertLocalDateToServer(vm.createdDateTo)  == '' ? null : DateUtils.convertLocalDateToServer(vm.createdDateTo),
+            	filingDateFrom : DateUtils.convertLocalDateToServer(vm.filingDateFrom)  == '' ? null : DateUtils.convertLocalDateToServer(vm.filingDateFrom),
+            	filingDateTo : DateUtils.convertLocalDateToServer(vm.filingDateTo)  == '' ? null : DateUtils.convertLocalDateToServer(vm.filingDateTo),
+            	gfsDateFrom : DateUtils.convertLocalDateToServer(vm.gfsDateFrom)  == '' ? null : DateUtils.convertLocalDateToServer(vm.gfsDateFrom),
+            	gfsDateTo : DateUtils.convertLocalDateToServer(vm.gfsDateTo)  == '' ? null : DateUtils.convertLocalDateToServer(vm.gfsDateTo),
+            	distribDateFrom : DateUtils.convertLocalDateToServer(vm.distribDateFrom)  == '' ? null : DateUtils.convertLocalDateToServer(vm.distribDateFrom),
+            	distribDateTo : DateUtils.convertLocalDateToServer(vm.distribDateTo)  == '' ? null : DateUtils.convertLocalDateToServer(vm.distribDateTo),
+            	discDateFrom : DateUtils.convertLocalDateToServer(vm.discDateFrom)  == '' ? null : DateUtils.convertLocalDateToServer(vm.discDateFrom),
+            	discDateTo : DateUtils.convertLocalDateToServer(vm.discDateTo)  == '' ? null : DateUtils.convertLocalDateToServer(vm.discDateTo),
+            	fareClass : vm.fareClass  == '' ? null : vm.fareClass,
+            	businessArea : vm.businessAreas  == '' ? null : vm.businessAreas,
+            	creator : vm.creator  == '' ? null : vm.creator,
+            	approval : vm.approval  == '' ? null : vm.approval,
+            	gfs : vm.gfs 
+        	};
+        	
+        	var exportConfig = {
+        		workPackageQuery : workPackageQuery,
+        		outputTo:'excel',
+        		gridLines:true,
+        		columnHeaders:true,
+        		onlySelectedRows:true
+        	};
+
+        	console.log(exportConfig);
+        	WorkPackage.exportQueueQuery(exportConfig, function onExportSuccess(result){
+//        		alert('Export Success');
+        		 var fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+       			var templateFilename = "Workorder_Queue.xlsx";
+       			var blob = b64toBlob(result.file, fileType);
+       			FileSaver.saveAs(blob, templateFilename);
+        	}, function onExportFailed(){
+
+        	});
+
         }
         
         function max_date(all_dates) {

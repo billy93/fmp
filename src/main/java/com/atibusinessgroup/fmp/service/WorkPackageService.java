@@ -601,4 +601,7 @@ public class WorkPackageService {
 	public Page<WorkPackage> findCustomQuery(WorkPackageQuery wpFilter, Pageable pageable){
 		return workPackageRepository.findCustomQuery(wpFilter, pageable);
 	}
+	public List<WorkPackage> findCustomQuery(WorkPackageQuery wpFilter){
+		return workPackageRepository.findCustomQuery(wpFilter);
+	}
 }
