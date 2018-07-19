@@ -122,6 +122,9 @@
                 vm.workPackages = data;
                 vm.page = pagingParams.page;
                 vm.timezone = headers('timezone');
+                
+                $(".custom-range-slider").trigger("change");
+
             }
             function onError(error) {
                 AlertService.error(error.data.message);
@@ -140,6 +143,8 @@
                 sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
                 workPackageFilter : vm.workPackageFilter
             });
+            
+            console.log("CREATED TIME : "+vm.workPackageFilter.createdTime);
         }
 
         vm.rowSelected = function(idx, workPackage){
@@ -448,6 +453,7 @@
 	  					for(var m=0;m<vm.filterList.length;m++){
 	  						if(vm.workPackages[l][vm.filterList[m].key] == vm.filterList[m].value){
 	  							countTrue.push(true);
+	  							console.log("true");
 	  						}
 	  					}  					
 	  					
@@ -493,7 +499,7 @@
 	  					}
 	  	        	}
   				}else if(result.key == 'range'){
-  					console.log(result.value);
+//  					console.log(result.value);
   					vm.filterList.push({key:field, value:result.value});
 	  				for(var l=0; l< vm.workPackages.length; l++){
 	  					var countTrue = [];
@@ -525,14 +531,14 @@
 	  					}
 	  	        	}
   				}else if(result.key == 'advance'){
-  					vm.filterDialogAdvance(result.value, field);
+  					vm.filterDialogAdvance(result.value, field, vm.filterList);
   				}
             }, function() {
         			
             });
         }
         
-        vm.filterDialogAdvance = function(result,field){
+        vm.filterDialogAdvance = function(result,field,filter){
         	$uibModal.open({
                 templateUrl: 'app/pages/work-packages/work-package-filter-advance-dialog.html',
                 controller: 'WorkPackageFilterAdvanceDialogController',
@@ -547,9 +553,130 @@
    	              	field : function(){
 	              		return field;
 	              	},
+	              	filter : function(){
+	              		return filter;
+	              	}
                 }
   			}).result.then(function(result) {
-  				vm.rightClick(result.value);
+  				if(result.key == "simple"){
+  					vm.rightClick(result.value);
+  				}else if(result.key == "filtering"){
+  					if(result.value == null){
+  						vm.filterList = [];
+  						for(var l=0; l< vm.workPackages.length; l++){
+	  		  					var countTrue = [];
+  		  						for(var m=0;m<vm.filterList.length;m++){
+  			  						if(vm.workPackages[l][vm.filterList[m].key] == vm.filterList[m].value){
+  			  							countTrue.push(true);
+  			  						}
+  			  					}
+	  		  					if(countTrue.length == vm.filterList.length){
+	  		  						vm.workPackages[l].hide = false;
+	  		  					}
+	  		  					else{
+	  		  						vm.workPackages[l].hide = true;
+	  		  					}
+	  		  	        	} 
+  					}else{
+  						vm.filterList = [];
+  						for(var bakso = 0; bakso<result.value.field.length; bakso++){
+  	  						if(result.value.ignoreCase[bakso] == true){
+  	  							vm.filterList.push({key:result.value.field[bakso], value:result.value.value[bakso].toUpperCase()});
+  	  						}else{
+  	  							vm.filterList.push({key:result.value.field[bakso], value:result.value.value[bakso]});
+  	  						}
+  	  		  				for(var l=0; l< vm.workPackages.length; l++){
+  	  		  					var countTrue = [];
+  	  		  					if(result.value.ignoreCase[bakso] == true){
+  	  		  						if(result.value.comparator[bakso] == "equal"){
+	  	  		  						for(var m=0;m<vm.filterList.length;m++){
+	  	  			  						if(vm.workPackages[l][vm.filterList[m].key].toUpperCase() == vm.filterList[m].value.toUpperCase()){
+	  	  			  							countTrue.push(true);
+	  	  			  						}
+	  	  			  					}
+  	  		  						}else if(result.value.comparator[bakso] == "between"){
+  	  		  							
+  	  		  						}else if(result.value.comparator[bakso] == "greaterThan"){
+	  	  		  						 	  		  							
+  	  		  						}else if(result.value.comparator[bakso] == "greaterThanorEqual"){
+  	  		  							
+  	  		  						}else if(result.value.comparator[bakso] == "lessThan"){
+  	  		  							
+  	  		  						}else if(result.value.comparator[bakso] == "lessThanorEqual"){
+  	  		  							
+  	  		  						}else if(result.value.comparator[bakso] == "oneOf"){
+  	  		  							
+  	  		  						}else if(result.value.comparator[bakso] == "wildcard"){
+  	  		  							
+  	  		  						}
+  	  		  					}else{
+	  	  		  					if(result.value.comparator[bakso] == "equal"){
+	  	  		  						for(var m=0;m<vm.filterList.length;m++){
+	  	  			  						if(vm.workPackages[l][vm.filterList[m].key] == vm.filterList[m].value){
+	  	  			  							countTrue.push(true);
+	  	  			  						}
+	  	  			  					}
+	  	  		  					}else if(result.value.comparator[bakso] == "between"){
+	  		  							try {
+											
+										} catch (e) {
+										}
+	  		  						}else if(result.value.comparator[bakso] == "greaterThan"){
+	  		  						for(var m=0;m<vm.filterList.length;m++){
+	  	  		  						var greater = new Date( vm.filterList[m].value);
+	  	  		  						greater.setHours(23,59,59);
+	  		  							var wpDate = new Date( vm.workPackages[l][vm.filterList[m].key]);
+	  	  		  						wpDate.setHours(0,0,0);
+	  	  			  						if(wpDate > greater){
+	  	  			  							countTrue.push(true);
+	  	  			  						}
+	  	  			  					} 	  		  							
+  	  		  						}else if(result.value.comparator[bakso] == "greaterThanorEqual"){
+  	  		  						for(var m=0;m<vm.filterList.length;m++){
+	  	  		  						var greater = new Date( vm.filterList[m].value);
+	  	  		  						greater.setHours(0,0,0);
+	  		  							var wpDate = new Date( vm.workPackages[l][vm.filterList[m].key]);
+	  	  		  						wpDate.setHours(0,0,0);
+	  	  			  						if(wpDate >= greater){
+	  	  			  							countTrue.push(true);
+	  	  			  						}
+	  	  			  					}   	  		  							
+  	  		  						}else if(result.value.comparator[bakso] == "lessThan"){
+	  	  		  						for(var m=0;m<vm.filterList.length;m++){
+	  	  		  						var less = new Date( vm.filterList[m].value);
+	  	  		  						less.setHours(0,0,0);
+	  		  							var wpDate = new Date( vm.workPackages[l][vm.filterList[m].key]);
+	  	  		  						wpDate.setHours(0,0,0);
+	  	  			  						if(wpDate < less){
+	  	  			  							countTrue.push(true);
+	  	  			  						}
+	  	  			  					}  
+  	  		  						}else if(result.value.comparator[bakso] == "lessThanorEqual"){
+	  	  		  						for(var m=0;m<vm.filterList.length;m++){
+	  	  		  						var less = new Date( vm.filterList[m].value);
+	  	  		  						less.setHours(23,59,59);
+	  		  							var wpDate = new Date( vm.workPackages[l][vm.filterList[m].key]);
+	  	  		  						wpDate.setHours(0,0,0);
+	  	  			  						if(wpDate <= less){
+	  	  			  							countTrue.push(true);
+	  	  			  						}
+	  	  			  					}  
+  	  		  						}else if(result.value.comparator[bakso] == "oneOf"){
+  	  		  							
+  	  		  						}else if(result.value.comparator[bakso] == "wildcard"){
+  	  		  							
+  	  		  						}
+  	  		  					}
+  	  		  					if(countTrue.length == vm.filterList.length){
+  	  		  						vm.workPackages[l].hide = false;
+  	  		  					}
+  	  		  					else{
+  	  		  						vm.workPackages[l].hide = true;
+  	  		  					}
+  	  		  	        	}  						
+  	  					}
+  					}
+  				}
             }, function() {
         			
             });

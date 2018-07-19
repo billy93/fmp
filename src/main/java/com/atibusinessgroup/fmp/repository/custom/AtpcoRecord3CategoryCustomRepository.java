@@ -164,7 +164,7 @@ public class AtpcoRecord3CategoryCustomRepository {
 		
 		Aggregation aggregation = newAggregation(aggregationOperations);
 		
-		DateTable result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_RECORD_DATE_TABLE_994, DateTable.class).getUniqueMappedResult();
+		DateTable result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_RECORD_OVERRIDE_DATE_TABLE_994, DateTable.class).getUniqueMappedResult();
 		
 		return result;
 	}

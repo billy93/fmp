@@ -468,15 +468,8 @@ public class WorkPackageRepositoryImpl implements WorkPackageRepositoryCustomAny
 			for(String app : approvals) {
 				Pattern x = Pattern.compile("^(?i)("+app.trim()+")");
 				approvalsData.add(x);
-//				approvalsData.add(app.trim());
-			}
-			
-//			approvalReference = Criteria.where("fare_sheet.approval_reference").regex(wpFilter.getApprovalReference(), "i");
+			}			
 			approvalReference = Criteria.where("fare_sheet.approval_reference").in(approvalsData);
-//			approvalReference = Criteria.where("fare_sheet.approval_reference").elemMatch(
-//					Criteria.where("fare_sheet.approval_reference").regex(wpFilter.getApprovalReference(), "i")
-//			);
-			
 		}
 		
 		Criteria replaceCriteria = new Criteria();

@@ -20,7 +20,7 @@
         vm.value = value;
         vm.field = field;
         vm.datePickerOpenStatus = {};
-        vm.dateFormat = "dd/MM/yyyy";
+        vm.dateFormat = "dMMMyyyy";
         vm.openCalendar = openCalendar;
         vm.minDate = minDate;
         vm.maxDate = maxDate;

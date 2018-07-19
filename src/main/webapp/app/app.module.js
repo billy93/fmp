@@ -29,11 +29,12 @@
         stateHandler.initialize();
     }
     
-    config.$inject = ['IdleProvider','KeepaliveProvider'];
+    config.$inject = ['IdleProvider','KeepaliveProvider', 'uibDatepickerConfig'];
 
     
-    function config(IdleProvider, KeepaliveProvider) {
+    function config(IdleProvider, KeepaliveProvider, uibDatepickerConfig) {
 		// configure Idle settings
 		IdleProvider.idle(1200); // in seconds
+		uibDatepickerConfig.showWeeks = false;
 	}
 })();
