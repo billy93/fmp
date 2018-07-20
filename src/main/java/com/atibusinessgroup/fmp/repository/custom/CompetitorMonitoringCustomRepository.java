@@ -314,7 +314,6 @@ public class CompetitorMonitoringCustomRepository {
     		
     		Aggregation aggregation = newAggregation(listAggregationOps);
     		
-    		System.out.println(aggregation);
     		
     		List<AtpcoFare> afares = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_FARE, AtpcoFare.class).getMappedResults();
     		

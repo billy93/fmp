@@ -1,5 +1,7 @@
 package com.atibusinessgroup.fmp.web.rest;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -73,6 +75,10 @@ public class CompetitorMonitoringResource {
     	
     	Pageable pageable = new PageRequest(param.getPage(), param.getSize());
     	Page<SpecifiedConstructed> page = competitorMonitoringCustomRepository.getCompetitorQueries(param, pageable);
+
+//    	page.getContent().sort(Comparator.comparing(SpecifiedConstructed::getBaseAmount).reversed());
+//    	page.getContent().sort(Comparator.comparing(SpecifiedConstructed::getCabin));
+    	
     	HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/footnote-queries");
     	
 		return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);

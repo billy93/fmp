@@ -117,6 +117,7 @@
                             return {
                                 rbd: null,
                                 color: null,
+                                colorVal: null,
                                 id: null
                             };
                         }
