@@ -14,7 +14,7 @@
         vm.distributionType = true;
         vm.workPackageActionButton = [];
         vm.predicate = pagingParams.predicate;
-        vm.page = 1;
+        vm.page = 0;
         
         vm.login =user;
         vm.optionDistribution = ['ATPCO', 'MARKET'];
@@ -26,18 +26,18 @@
         vm.datePickerOpenStatus = {};
         vm.dateFormat = "dd/MM/yyyy";
         vm.openCalendar = openCalendar;
-        if($stateParams.size != null || $stateParams.size != undefined){
-        	vm.itemsPerPage = $stateParams.size;
-        }
-        else{
-        	vm.itemsPerPage = "10";
-        }
-        
-
-        vm.loadQuery = loadQuery;        
-        vm.loadQuery(); 
+        vm.loadPage = loadPage;
+        vm.itemsPerPage = paginationConstants.itemsPerPage;
+        vm.loadQuery = loadQuery; 
+    	vm.noDataAvailable = false;
+    	vm.workPackages=[]; 
+    	vm.disableInfiniteScroll = true;
                               
         function loadQuery () {
+        	vm.isLoading = true;
+        	vm.isLastPage = false;
+        	vm.noDataAvailable = false;
+        	
         	WorkPackage.customQuery({
         		wpID : vm.wpID == '' ? null : vm.wpID,
             	name : vm.name  == '' ? null : vm.name,
@@ -59,7 +59,7 @@
             	creator : vm.creator  == '' ? null : vm.creator,
             	approval : vm.approval  == '' ? null : vm.approval,
             	gfs : vm.gfs ,
-            	page: vm.page-1,
+            	page: vm.page,
                 size: vm.itemsPerPage,
                 sort: sort()}, onSuccess, onError);
             function sort() {
@@ -73,14 +73,52 @@
             	vm.links = ParseLinks.parse(headers('link'));
                 vm.totalItems = headers('X-Total-Count');
                 vm.queryCount = vm.totalItems;
-                vm.workPackages = data;
                 vm.timezone = headers('timezone');
+                
+                for (var i = 0; i < data.length; i++) {
+                	vm.workPackages.push(data[i]);
+                }
+                
+                if (vm.workPackages.length < vm.totalItems) {
+                	vm.isLastPage = false;
+                } else {
+                	vm.isLastPage = true;
+                }
+                
+                
+                vm.isLoading = false;
+                vm.disableInfiniteScroll = false;
+                
+                if(vm.workPackages.length == 0){
+                	vm.noDataAvailable = true;
+                }else{
+                	$(document).ready(function(){
+                		var _parents = $('.table-afd').find('thead');
+                		var _th = _parents.find('.th-fixed');
+                		var _tr = _parents.siblings('tbody').find('.tr-afd');
+                		var _td = _tr.find('.td-afd');
+                		var _length = _th.length;
+                		for(var i=0;i<_length;i++){
+                			var _width = _th.eq(i).outerWidth();
+                			var _width2 = _td.eq(i).outerWidth();
+                			if(_width >= _width2){
+                				_td.eq(i).css('min-width', _width);
+                				_td.eq(i).css('width', _width);
+                			}
+                			else {
+                				_th.eq(i).css('min-width', _width2);
+                				_th.eq(i).css('width', _width2);
+                			}
+                		}
+                	});
+                }
             }
             function onError(error) {
                 AlertService.error(error.data.message);
+                vm.isLoading = false;
             }
         }
-
+        
         vm.rowSelected = function(idx, workPackage){
     		vm.selectedRow = workPackage;
     		vm.workPackageActionButton[idx] = !vm.workPackageActionButton[idx];
@@ -183,6 +221,10 @@
         	vm.loadQuery();
         }
         
+        function loadPage(page) {
+    		vm.page = page;
+    		vm.loadQuery();
+        }
         
         vm.changeItemsPerPage = function(){
         	vm.loadQuery();
@@ -510,7 +552,15 @@
         }
         
         vm.query = function(){
+        	vm.workPackages=[]; 
+        	vm.page = 0;
+        	vm.isLastPage = false;
         	vm.loadQuery();
+        }
+        
+        vm.ViewDetail = function(id){
+        	var url = $state.href('work-package-view-only', {id: id});
+        	window.open(url,'_blank');
         }
         
     }

@@ -1272,13 +1272,28 @@ public class WorkPackageResource {
 
                 int i=0;
                 AtpcoMasterTariff tfNumber = new AtpcoMasterTariff();
-                for(Object o : value) {
-                	if(header.contentEquals("Type")) {
+                for(Object o : value) {                	
+                	if(header.contentEquals("Agent Name")) {
+                		fares.get(i).setWaiverAgentName(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("IATA No")) {
+                		fares.get(i).setWaiverIataNo(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("IOC Number")) {
+                		fares.get(i).setWaiverIocNo(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Approval Date")) {
+                		if(o != null && !String.valueOf(o).contentEquals("")) {
+	                		ZonedDateTime date1 = ZonedDateTime.parse(String.valueOf(o));
+	                		fares.get(i).setWaiverApprovalDate(date1);
+                		}
+                	}
+                	else if(header.contentEquals("Type")) {
                 		fares.get(i).setWaiverType(String.valueOf(o));
                 	}
                 	else if(header.contentEquals("Full/Partial")) {
                 		fares.get(i).setWaiverFullPartial(String.valueOf(o));
-                	}
+                	}                	
                 	else if(header.contentEquals("PNR")) {
                 		fares.get(i).setWaiverPnr(String.valueOf(o));
                 	}
@@ -1503,7 +1518,10 @@ public class WorkPackageResource {
     	log.debug("REST request to save exportFares : {}", workPackage.getExportIndex());
 
     	LinkedHashMap<String, Object> data = new LinkedHashMap<>();
-
+    	data.put("Agent Name", new ArrayList<>());
+    	data.put("IATA No", new ArrayList<>());
+    	data.put("IOC Number", new ArrayList<>());
+    	data.put("Approval Date", new ArrayList<>());
     	data.put("Type", new ArrayList<>());
     	data.put("Full/Partial", new ArrayList<>());
     	data.put("PNR", new ArrayList<>());
@@ -1533,6 +1551,10 @@ public class WorkPackageResource {
 
         DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy");
         for(int i=0; i<fares.size(); i++) {
+        	putValue(data.get("Agent Name"), fares.get(i).getWaiverAgentName());
+        	putValue(data.get("IATA No"), fares.get(i).getWaiverIataNo());
+        	putValue(data.get("IOC Number"),fares.get(i).getWaiverIocNo());
+        	putValue(data.get("Approval Date"),fares.get(i).getWaiverApprovalDate()!= null ? dfFull.format(Date.from(fares.get(i).getWaiverApprovalDate().toInstant())) : null);
         	putValue(data.get("Type"), fares.get(i).getWaiverType());
         	putValue(data.get("Full/Partial"), fares.get(i).getWaiverFullPartial());
         	putValue(data.get("PNR"), fares.get(i).getWaiverPnr());
