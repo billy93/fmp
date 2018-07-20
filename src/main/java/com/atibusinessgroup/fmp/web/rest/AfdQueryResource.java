@@ -451,7 +451,6 @@ public class AfdQueryResource {
     @PostMapping("/afd-queries/fbr-query")
     @Timed
     public ResponseEntity<FbrQueryWrapper> getAllAfdQueryFbrs(@RequestBody FbrQueryParam param) {
-    	System.out.println("=====================================================================================================================================");
     	log.debug("REST request to get a page of AfdQuery Fbrs: {}", param);
     	
     	Pageable pageable = new PageRequest(param.getPage(), param.getSize());

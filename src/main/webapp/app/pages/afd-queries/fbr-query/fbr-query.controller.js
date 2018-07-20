@@ -59,6 +59,7 @@
         vm.showCategoryDetail = showCategoryDetail;
         vm.showCarrierModal = showCarrierModal;
         vm.showTariffModal = showTariffModal;
+        vm.selectCity = selectCity;
         vm.showLegend = showLegend;
         vm.viewFullText = viewFullText;
         
@@ -332,6 +333,26 @@
                 	entity: vm
                 }
             }).result.then(function() {
+                $state.go('afd-query', {}, { reload: false });
+            }, function() {
+                $state.go('afd-query');
+            });
+        }
+        
+        function selectCity(model) {
+        	$uibModal.open({
+                templateUrl: 'app/pages/modals/select-city-modal.html',
+                controller: 'SelectCityModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'md',
+            }).result.then(function(value) {
+            	if (model == 'Origin') {
+            		vm.queryParams.origin = value;
+            	} else if (model == 'Destination') {
+            		vm.queryParams.destination = value;
+            	}
+            	
                 $state.go('afd-query', {}, { reload: false });
             }, function() {
                 $state.go('afd-query');
