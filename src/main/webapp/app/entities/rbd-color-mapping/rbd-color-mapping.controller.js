@@ -15,10 +15,11 @@
         vm.predicate = pagingParams.predicate;
         vm.reverse = pagingParams.ascending;
         vm.transition = transition;
-        vm.itemsPerPage = paginationConstants.itemsPerPage;
-        
+        vm.itemsPerPage = 30;
+    
         loadAll();
-
+      
+        
         function loadAll () {
             RbdColorMapping.query({
                 page: pagingParams.page - 1,

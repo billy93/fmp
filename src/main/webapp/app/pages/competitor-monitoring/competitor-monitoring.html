@@ -134,11 +134,11 @@
 							<div class="form-group">
 								<div class="pull-left col-md-6 no-lpad">
 									<div class="checkbox-wrapper">
-										<label> <input type="checkbox"
-											name="includeConstructed"
-											ng-model="vm.queryParams.includeConstructed"
-											ng-disabled="true"> Calculate TFC
-										</label> 
+<!-- 										<label> <input type="checkbox" -->
+<!-- 											name="includeConstructed" -->
+<!-- 											ng-model="vm.queryParams.includeConstructed" -->
+<!-- 											ng-disabled="true"> Calculate TFC -->
+<!-- 										</label>  -->
 										<label> <input type="checkbox" name="appendResults"
 											ng-model="vm.queryParams.appendResults" disabled="disabled">
 											Lowest level only
@@ -153,7 +153,7 @@
 								<button type="button" class="btn btn-default small mb1"
 									ng-click="vm.loadAll()">Query</button>
 								<button type="button" class="btn btn-default small mb1"
-									ng-click="vm.generateGraph(vm.compMonitoring)"
+									ng-click="vm.generateChart(vm.compMonitoring)"
 									ng-disabled="vm.compMonitoring.length == 0 || vm.compMonitoring == null">Generate
 									Chart</button>
 								<button type="reset" ng-click="vm.reset()"
@@ -236,71 +236,68 @@
 								</tr>
 							</tbody>
 						</table>
+						<div class="text-center"  class="form-group">
+							<span ng-if="vm.compMonitoring.length < 2000">Showing {{vm.totalItems}} items.</span>
+							<span ng-if="vm.compMonitoring.length == 2000" style="color:red">Maximum items exceeded. Showing {{vm.totalItems}} items.</span>
+						</div>
 					</div>
 				</div>
+				
 			</div>
 		</div>
 		
-		<div class="text-center" ng-if="vm.compMonitoring.length > 0">
-			<div class="form-group">
-				<span ng-if="vm.compMonitoring.length < 2000">Showing {{vm.totalItems}} items.</span>
-				<span ng-if="vm.compMonitoring.length == 2000" style="color:red">Maximum items exceeded. Showing {{vm.totalItems}} items.</span>
-			</div>
-			<br/>
 		
-			<div id="chartOptions" class="form-inline mb2" hidden="hidden" ng-if="vm.compMonitoring.length > 0">  
-	           <div class="form-group" style="margin-left:10px; margin-bottom:10px; !important">
-	            <label for="barThickness">Bar Thickness : </label>
-	           <input id="barThickness" ng-model="vm.barThickness" type="text" class="number-only"></input>
-	          </div> 
-	
-	          <div class="form-group" style="margin-left:10px; margin-bottom:10px; !important">
-	            <label for="barOpacity">Bar Opacity : </label>
-	           <input id="barOpacity" ng-model="vm.barOpacity" type="text" class="number-only"></input>
-	          </div> 
-	          
-	          <div class="form-group" style="margin-left:10px; margin-bottom:10px; !important">
-	          
-	            <button type="button" class="btn btn-default small" ng-click="vm.generateGraph(vm.compMonitoring)">Re-Generate</button>
-	            </div>
-	        </div>
-        
-		</div>
-		
-		
-        <div id="containerTitle" class="text-center wrapper-location mb1" hidden="hidden" ng-if="vm.compMonitoring.length > 0">
-        	<div class="monitoring-location"><span>{{vm.queryParams.origin}}</span></div>
-        </div>
-		
-		<div id="container" class="col-md-12 no-pad" hidden="hidden">
-			<div id="graphCab1" class="col-md-6 no-pad"></div>
-			<div id="graphCab2" class="col-md-6 no-pad"></div>
-			<div id="graphCab3" class="col-md-6 no-pad"></div>
-			<div id="graphCab4" class="col-md-6 no-pad"></div>
-		</div>
-		
-<!-- 		<div id="container" class="col-md-12 no-pad" style="height:600px;" hidden="hidden" ng-if="vm.compMonitoring.length > 0"></div> -->
-		
-		<div id="containerLegend" ng-if="vm.compMonitoring.length > 0" hidden="hidden" style="margin : 10px;">
-			<div class="custom-label semibold">Color Legend : </div>
-			<br/>
-			<table>
-				<tbody>
-					<tr>
-						<td valign="middle"><div style="background-color:red; width:50px; height:12px; float: left; margin-right:15px"></div><label>Y</label></td>
-					</tr>
+	<div id="comporDiv" hidden="hidden" ng-if="vm.compMonitoring.length > 0">
+	<div class="panel-body">
+		<div class="filter-hero">
+			<div class="filter-label semibold show">Hide Filter</div>
+			<div class="filter-area">
+				<div class="clearfix">
+					<div id="chartOptions" class="form-inline">  
+						<div class="form-group col-md-4">
+							<div class="col-md-5">
+				          	  	<div class="custom-label semibold">Bar Thickness</div>
+								<input id="barThickness" ng-model="vm.barThickness" type="text" class="number-only form-control"></input>
+				          	</div> 
+				          	
+				          	<div class="col-md-5">
+			            		<div class="custom-label semibold">Bar Opacity</div>
+			           			<input id="barOpacity" ng-model="vm.barOpacity" type="text" class="number-only form-control"></input>
+			          		</div> 
+			           	</div>
+			           	<div class="form-group col-md-6">
+							<div class="col-md-5">
+								<div class="custom-label semibold">Origin Destination</div>
+								<select class="form-control" name="origDest" id="origDest" ng-model="vm.compTitle"> 
+									<option value="{{value}}" ng-repeat="value in vm.origDests track by $index">{{value}}</option>
+								</select>
+							</div>
+							<div class="col-md-5">
+								<div class="custom-label semibold">Cabin</div>
+								<select class="form-control" name="cabin" id="cabin" ng-model="vm.cabin"> 
+									<option value="{{value}}" ng-repeat="value in vm.cabins track by $index">Cabin - {{value}}</option>
+								</select>
+							</div>
+							<div class="col-md-2">
+				            	<button type="button" class="btn btn-default small" ng-click="vm.generateChart(vm.compMonitoring)">Re-Generate</button>
+				            </div>
+						</div>
 						
-					<tr>
-						<td valign="middle"><div style="background-color:green; width:50px; height:12px; float: left; margin-right:15px"></div><label>W</label></td>
-					</tr>
-					<tr>
-						<td valign="middle"><div style="background-color:blue; width:50px; height:12px; float: left; margin-right:15px"></div><label>F</label></td>
-					</tr>
-					<tr>
-						<td valign="middle"><div style="background-color:yellow; width:50px; height:12px; float: left; margin-right:15px"></div><label>J</label></td>
-					</tr>
-				</tbody>
-			</table>
+						
 		</div>
+		</div>
+		</div>
+		</div>
+		
+        <div id="containerTitle" class="text-center text-danger">
+        	<div class="monitoring-location"><h2>{{vm.compTitle}} : CABIN - {{vm.cabin}}</h2></div>
+        </div>
+        
+        <br/>
+		<br/>
+		
+		<div id="container" class="col-md-12 no-pad" style="height:600px;"></div>
+
+	</div>
 	</div>
 </div>

@@ -10,6 +10,7 @@
     function RbdColorMappingDialogController ($timeout, $scope, $stateParams, $uibModalInstance, entity, RbdColorMapping) {
         var vm = this;
 
+        vm.colorVal = '';
         vm.rbdColorMapping = entity;
         vm.clear = clear;
         vm.save = save;
@@ -176,6 +177,7 @@
 
         function save () {
             vm.isSaving = true;
+            vm.rbdColorMapping.colorVal = vm.colorVal;
             if (vm.rbdColorMapping.id !== null) {
                 RbdColorMapping.update(vm.rbdColorMapping, onSaveSuccess, onSaveError);
             } else {

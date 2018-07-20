@@ -54,7 +54,15 @@ public class RbdColorMappingResource {
         if (rbdColorMapping.getId() != null) {
             throw new BadRequestAlertException("A new rbdColorMapping cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        RbdColorMapping result = rbdColorMappingRepository.save(rbdColorMapping);
+        RbdColorMapping result = null;
+        try {
+        	result = rbdColorMappingRepository.save(rbdColorMapping);
+        } catch (Exception e) {
+        	if(e.getMessage().contains("rite failed with error code 11000 and error message 'E11000 duplicate key error collection")) {
+        		throw new BadRequestAlertException("RBD Color has already been mapped", ENTITY_NAME, "RBDexists");
+        	}
+        	
+        }
         return ResponseEntity.created(new URI("/api/rbd-color-mappings/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -76,7 +84,14 @@ public class RbdColorMappingResource {
         if (rbdColorMapping.getId() == null) {
             return createRbdColorMapping(rbdColorMapping);
         }
-        RbdColorMapping result = rbdColorMappingRepository.save(rbdColorMapping);
+        RbdColorMapping result = null;
+        try {
+        	result = rbdColorMappingRepository.save(rbdColorMapping);
+        } catch (Exception e) {
+        	if(e.getMessage().contains("rite failed with error code 11000 and error message 'E11000 duplicate key error collection")) {
+        		throw new BadRequestAlertException("RBD Color has already been mapped", ENTITY_NAME, "RBDexists");
+        	}
+        }
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, rbdColorMapping.getId().toString()))
             .body(result);
