@@ -1,0 +1,31 @@
+{
+    "fluentMethods": true,
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "oalCxr",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "oalCabin",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "ownCabin",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "oalRbd",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "ownRbd",
+            "fieldType": "String"
+        }
+    ],
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "rbd_mapping",
+    "jpaMetamodelFiltering": false,
+    "pagination": "pagination"
+}

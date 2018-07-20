@@ -181,22 +181,40 @@ public class CompetitorMonitoringCustomRepository {
 					queries.add(ruleNo);
 				} else {
 					BasicDBObject andMatch = new BasicDBObject();
+					BasicDBObject andSecondMatch = new BasicDBObject();
 					List<BasicDBObject> ruleNo = new ArrayList<>();
-					if (param.getRuleNo() != null && !param.getRuleNo().isEmpty()) {
-						
+					List<BasicDBObject> ocRuleNo = new ArrayList<>();
+					if ((param.getRuleNo() != null) && (param.getOcRuleNo() == null)) {
+						if(!param.getRuleNo().isEmpty()) {
+							ruleNo.add(new BasicDBObject("rules_no", new BasicDBObject("$in",  Arrays.stream(param.getRuleNo().split(",")).map(String::trim).toArray(String[]::new))));
+							ruleNo.add(new BasicDBObject("cxr_cd", "GA"));
+							ocRuleNo.add(new BasicDBObject("rules_no", new BasicDBObject("$exists", "true")));
+							ocRuleNo.add(new BasicDBObject("cxr_cd", new BasicDBObject("$in", listOcCarrierFinal)));
+							andMatch.append("$and", ruleNo);
+							andSecondMatch.append("$and", ocRuleNo);
+							listRuleNo.add(andMatch);
+							listRuleNo.add(andSecondMatch);
+						}
+					} else if((param.getRuleNo() == null) && (param.getOcRuleNo() != null)) {
+						if(!param.getOcRuleNo().isEmpty()) {
+							ocRuleNo.add(new BasicDBObject("rules_no", new BasicDBObject("$in",  Arrays.stream(param.getOcRuleNo().split(",")).map(String::trim).toArray(String[]::new))));
+							ocRuleNo.add(new BasicDBObject("cxr_cd", new BasicDBObject("$in", listOcCarrierFinal)));
+							ruleNo.add(new BasicDBObject("rules_no", new BasicDBObject("$exists", "true")));
+							ruleNo.add(new BasicDBObject("cxr_cd", "GA"));
+							andMatch.append("$and", ruleNo);
+							andSecondMatch.append("$and", ocRuleNo);
+							listRuleNo.add(andMatch);
+							listRuleNo.add(andSecondMatch);
+						}
+					} else {
+						ocRuleNo.add(new BasicDBObject("rules_no", new BasicDBObject("$in",  Arrays.stream(param.getOcRuleNo().split(",")).map(String::trim).toArray(String[]::new))));
+						ocRuleNo.add(new BasicDBObject("cxr_cd", new BasicDBObject("$in", listOcCarrierFinal)));
 						ruleNo.add(new BasicDBObject("rules_no", new BasicDBObject("$in",  Arrays.stream(param.getRuleNo().split(",")).map(String::trim).toArray(String[]::new))));
 						ruleNo.add(new BasicDBObject("cxr_cd", "GA"));
 						andMatch.append("$and", ruleNo);
+						andSecondMatch.append("$and", ocRuleNo);
 						listRuleNo.add(andMatch);
-						
-					}
-					
-					if (param.getOcRuleNo() != null && !param.getOcRuleNo().isEmpty()) {
-						ruleNo.add(new BasicDBObject("rules_no", new BasicDBObject("$in",  Arrays.stream(param.getOcRuleNo().split(",")).map(String::trim).toArray(String[]::new))));
-						ruleNo.add(new BasicDBObject("cxr_cd", new BasicDBObject("$in", listOcCarrierFinal)));
-						andMatch.append("$and", ruleNo);
-						listRuleNo.add(andMatch);
-						
+						listRuleNo.add(andSecondMatch);
 					}
 					
 					BasicDBObject orRuleNo = new BasicDBObject();

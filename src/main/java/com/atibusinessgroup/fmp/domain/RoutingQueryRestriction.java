@@ -10,7 +10,7 @@ import java.util.Objects;
 /**
  * A Routingquery.
  */
-@Document(collection = "Full_Map_Routing_Restriction")
+@Document(collection = "atpco_routing_restriction")
 public class RoutingQueryRestriction implements Serializable {
 
     private static final long serialVersionUID = 1L;

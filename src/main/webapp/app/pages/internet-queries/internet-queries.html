@@ -43,14 +43,14 @@
 								</div>
 							</div>
 							<div class="pull-left col-md-3 no-lpad">
-								<div class="form-group">	
+								<div class="form-group absolute-datepicker">	
 									<div class="custom-label semibold">Depart From Date</div>
 									<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'departDateFrom')" 
 										is-open="vm.datePickerOpenStatus['departDateFrom']" datetime-picker="{{vm.dateFormat}}" 
 										enable-time="false" name="departDateFrom" id="departDateFrom" 
 										ng-model="vm.queryParams.departDateFrom" placeholder="Depart From Date"/>
 								</div>
-								<div class="form-group">	
+								<div class="form-group absolute-datepicker">	
 									<div class="custom-label semibold">Depart To Date</div>
 									<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'departDateTo')" 
 										is-open="vm.datePickerOpenStatus['departDateTo']" datetime-picker="{{vm.dateFormat}}" 
@@ -65,23 +65,19 @@
 								</div>
 							</div>
 							<div class="pull-left col-md-3 no-lpad">
-								<div class="form-group">	
+								<div class="form-group absolute-datepicker">	
 									<div class="custom-label semibold">Capture From Date</div>
 									<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'captureDateFrom')" 
 										is-open="vm.datePickerOpenStatus['captureDateFrom']" datetime-picker="{{vm.dateFormat}}" 
 										enable-time="false" name="captureDateFrom" id="captureDateFrom" 
 										ng-model="vm.queryParams.captureDateFrom" placeholder="Capture From Date"/>
 								</div>
-								<div class="form-group">	
+								<div class="form-group absolute-datepicker">	
 									<div class="custom-label semibold">Capture To Date</div>
 									<input type="text" class="form-control" ng-click="vm.openCalendar($event, 'captureDateTo')" 
 										is-open="vm.datePickerOpenStatus['captureDateTo']" datetime-picker="{{vm.dateFormat}}" 
 										enable-time="false" name="captureDateTo" id="captureDateTo" 
 										ng-model="vm.queryParams.captureDateTo" placeholder="Capture From To"/>
-								</div>
-								<div class="form-group">	
-									<div class="custom-label semibold">Market Group</div>
-									<input type="text" class="form-control" name="marketGroup" id="marketGroup" ng-model="vm.queryParams.marketGroup" ng-disabled="true" uppercase />
 								</div>
 							</div>
 							<div class="pull-left col-md-2 no-lpad">
@@ -96,11 +92,6 @@
 										<label>
 											<input type="checkbox" name="appendResults" ng-model="vm.queryParams.appendResults" ng-disabled="true"> 
 											Append Results
-										</label>
-										<br/>
-										<label>
-											<input type="checkbox" name="appendResults" ng-model="vm.queryParams.queryByGroup" ng-disabled="true"> 
-											Query By Group
 										</label>
 									</div>
 								</div>

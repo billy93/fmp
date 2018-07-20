@@ -172,6 +172,7 @@
 	        'history': { method: 'GET', isArray: true, url:'api/work-packages/history/:id'},
 	        'changeVersion': { method: 'POST', url:'api/work-packages/changeVersion'},
 	        'exportQueue': {method:'POST', url:'api/work-packages/exportQueue'},
+	        'exportQueueQuery': {method:'POST', url:'api/work-packages/exportQueueQuery'},
 	        'importFares': { method: 'POST',  url:'api/work-packages/import-fares'},
 	        'importFaresAddon': { method: 'POST',  url:'api/work-packages/import-fares-addon'},
 	        'importFaresMarket': { method: 'POST',  url:'api/work-packages/import-fares-market'},

@@ -37,13 +37,14 @@ spring:
     mail:
         host: mail.atibusinessgroup.com
         port: 25
-        username: andreas.sutandi@atibusinessgroup.com 
+        username: andreas.sutandi@atibusinessgroup.com
         password: ati2016
     messages:
         cache-seconds: 1
     thymeleaf:
         cache: false
-
+    jndi:
+        ignore: true
 # ===================================================================
 # To enable SSL, generate a certificate using:
 # keytool -genkey -alias fmp -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
