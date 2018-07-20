@@ -20,4 +20,6 @@ public interface WorkPackageRepositoryCustomAnyName {
 	List<WorkPackage> findCustom(WorkPackageFilter workPackageFilter);
 
 	Page<WorkPackageMarketFare> findAllMarketFare(AfdQueryParam param, Pageable pageable);
+
+	List<WorkPackage> findCustomQuery(WorkPackageQuery filter);
 }

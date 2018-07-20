@@ -33,22 +33,22 @@
 												</div>
 											</div>
 											<div class="form-group">
-												<div class="custom-label semibold">Source</div>
-												<select class="form-control" name="source" id="source" ng-init="vm.queryParams.source = 'A'" ng-model="vm.queryParams.source">
-													<option value="{{value.key}}" ng-repeat="value in vm.sources track by $index">{{value.value}}</option>
-												</select>
-											</div>
-										</div>
-										<div class="pull-left col-md-3 no-lpad">
-											<div class="form-group">
 												<div class="custom-label semibold">Public/Private</div>
 												<select class="form-control" name="publicPrivate" id="publicPrivate" ng-model="vm.queryParams.publicPrivate">
 													<option value="{{value.key}}" ng-repeat="value in vm.publicPrivate track by $index">{{value.value}}</option>
 												</select>
 											</div>
+										</div>
+										<div class="pull-left col-md-3 no-lpad">
 											<div class="form-group">
 												<div class="custom-label semibold">FBR Tariff</div>
-												<input type="text" class="form-control no-comma" name="fbrTariff" id="fbrTariff" ng-model="vm.queryParams.fbrTariff" uppercase />
+												<div class="input-group">
+													<input id="fbrTariff" type="text" name="fbrTariff"
+														class="form-control no-comma" ng-model="vm.paramTarNo"
+														uppercase> <span ng-click="vm.showTariffModal()"
+														class="input-group-addon"><i class="fa fa-folder"></i>
+													</span>
+												</div>
 											</div>
 											<div class="form-group">
 												<div class="custom-label semibold">FBR Rule</div>
@@ -152,7 +152,9 @@
 												<div class="custom-label semibold">Pax Type</div>
 												<div class="row no-mar">
 													<div class="col-md-6 no-lpad">
-														<input type="text" class="form-control no-comma" name="paxType" id="paxType" ng-model="vm.queryParams.paxType" uppercase />
+														<select class="form-control" name="paxType" id="paxType" ng-model="vm.queryParams.paxType">
+															<option value="{{value.code}}" ng-repeat="value in vm.paxTypes track by $index">{{value.code}} - {{value.name}}</option>
+														</select>
 													</div>
 													<div class="col-md-6 no-lpad checkbox-wrapper">
 														<label>
@@ -225,7 +227,9 @@
 											<div class="pull-left ph5px w20">
 												<div class="form-group text-left">
 													<div class="custom-label semibold">Cabin</div>
-													<input type="text" class="form-control no-comma" name="cabin" id="cabin" ng-model="vm.queryParams.cabin" uppercase />
+													<select class="form-control" name="cabin" id="cabin" ng-model="vm.queryParams.cabin">
+														<option value="{{value.key}}" ng-repeat="value in vm.cabins track by $index">{{value.key}} - {{value.value}}</option>
+													</select>
 												</div>
 											</div>
 											<div class="pull-left ph5px w20">
@@ -237,13 +241,19 @@
 											<div class="pull-left ph5px w20">
 												<div class="form-group text-left">
 													<div class="custom-label semibold">Fare Type</div>
-													<input type="text" class="form-control no-comma" name="fareType" id="fareType" ng-model="vm.queryParams.fareType" uppercase />
+													<select class="form-control" name="fareType" id="fareType" ng-model="vm.queryParams.fareType">
+														<option value="">Select Type Code</option>
+														<option value="{{value.typeCode}}" ng-repeat="value in vm.fareTypes track by $index">{{value.typeCode}} - {{value.definition}}</option>
+													</select>
 												</div>
 											</div>
 											<div class="pull-left ph5px w20">
 												<div class="form-group text-left">
 													<div class="custom-label semibold">Global Indicator</div>
-													<input type="text" class="form-control no-comma" name="globalIndicator" id="globalIndicator" ng-model="vm.queryParams.globalIndicator" uppercase />
+													<select class="form-control" name="globalIndicator" id="globalIndicator" ng-model="vm.queryParams.globalIndicator">
+														<option value="">Select Global Indicator</option>
+														<option value="{{value.global}}" ng-repeat="value in vm.globalIndicators track by $index">{{value.global}}</option>
+													</select>
 												</div>
 											</div>
 											<div class="pull-left ph5px w20">
@@ -312,7 +322,7 @@
 				                </tr>
 				            </thead>
 				            <tbody id="tbody-afd">
-				                <tr class="tr-afd" ng-repeat="fbrQuery in vm.fbrQueries track by $index" ng-click="vm.setSelectedRow($index, fbrQuery)" ng-class="{'selected': vm.selectedRows[$index] == fbrQuery}">
+				                <tr class="tr-afd" ng-repeat="fbrQuery in vm.fbrQueries track by $index" ng-click="vm.getRules(fbrQuery)" ng-class="{'selected': vm.selectedRows[$index] == fbrQuery}">
 				                    <td>{{$index + 1}}</td>
 				                    <td>{{fbrQuery.source}}</td>
 				                    <td>{{fbrQuery.cxr}}</td>
@@ -337,6 +347,35 @@
 						<div class="center-div" ng-if="vm.isLastPage && !vm.noDataAvailable">You have reached the end of the page &nbsp;<i style="font-size: 8px !important; top: 0" class="glyphicon glyphicon-chevron-up"></i></div>
 					</div>
 			    </div>
+			</div>
+		</div>
+		<div class="col-md-12 text-center" ng-if="vm.isLoadingRule">
+			<div class="spinner yellow">
+				<div class="double-bounce1"></div>
+				<div class="double-bounce2"></div>
+			</div>
+		</div>
+		<div class="additional-info-wrapper" ng-if="vm.fbrQueryCategories">
+			<div class="clearfix">
+				<div class="pull-left ph5px additional-container"
+					ng-repeat="cat in vm.fbrQueryCategories track by cat.catNo">
+					<div class="additional-info"
+						ng-click="vm.showCategoryDetail(cat)"
+						ng-class="{'lightyellow': cat.type.includes('F'), 'yellow': cat.type.includes('R'), 'blue': cat.type == 'G'}">
+						{{cat.catNo}} {{cat.catName}} <span
+							ng-if="cat.type != undefined && cat.type != ''">({{cat.type}})</span>
+					</div>
+				</div>
+				<div class="pull-left ph5px additional-container">
+					<div class="additional-info action dropdown custom"
+						ng-click="vm.actionClicked = !vm.actionClicked">
+						Action <i class="fa fa-caret-down pull-right"></i>
+						<div class="action-wrapper" ng-if="vm.actionClicked">
+							<a ng-click="vm.showLegend()">Show Legend</a> <a
+								ng-click="vm.viewFullText()">View Full Text</a>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

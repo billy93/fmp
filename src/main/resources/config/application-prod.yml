@@ -27,16 +27,17 @@ spring:
             enabled: false
     data:
         mongodb:
-            uri: mongodb://10.90.29.32:27001
+            uri: mongodb://10.90.29.104:27001
             database: fmp_db
     mail:
         host: mail.atibusinessgroup.com
         port: 25
-        username: andreas.sutandi@atibusinessgroup.com 
+        username: andreas.sutandi@atibusinessgroup.com
         password: ati2016
     thymeleaf:
         cache: true
-
+    jndi:
+        ignore: true
 # ===================================================================
 # To enable SSL, generate a certificate using:
 # keytool -genkey -alias fmp -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650

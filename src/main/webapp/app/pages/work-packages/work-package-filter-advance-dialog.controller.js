@@ -105,6 +105,16 @@
         				alert("You must select two values. Use a comma to seperate values");
         				ok = false;
         			}
+        		}else if(vm.newFilterComparator == "oneOf"){
+        			if(vm.valueFilter.match(/,/gi) != null ){
+        				vm.Comparator = '';
+        				var temp = vm.valueFilter;
+        				var splitx = temp.split(",");
+        				vm.valueFilterPass = splitx[0]+" between "+splitx[1];
+        			}else{
+        				alert("You must select two values. Use a comma to seperate values");
+        				ok = false;
+        			}
         		}else{
         			vm.Comparator = vm.newFilterComparator;
         		}

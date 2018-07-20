@@ -10,44 +10,38 @@
 						<div class="filter-label semibold show">Hide Filter</div>
 						<div class="filter-area">
 							<div class="clearfix">
-								<div class="pull-left w50 ph5px">
+								<div class="pull-left w35 ph5px">
 									<div class="form-group">
-										<div class="custom-label semibold">Login Name :</div>
+										<div class="custom-label semibold">Login Name</div>
 										<input type="text" class="form-control" ng-model="vm.loginName"  />
-										<div class="custom-label semibold">Email :</div>
+									</div>
+									<div class="form-group">
+										<div class="custom-label semibold">Email</div>
 										<input type="text" class="form-control" ng-model="vm.email"  />
 									</div>
 								</div>
-								<div class="pull-left w50 ph5px">
-									<div class="pull-left w50 ph5px">
-										<div class="form-group">
-											<div class="clearfix">
-												<div class="custom-label semibold">First Name :</div>
-												<input type="text" class="form-control" ng-model="vm.firstName"  />
-												<div class="custom-label semibold">Last Name :</div>
-												<input type="text" class="form-control" ng-model="vm.lastName"  />
-											</div>
-										</div>
+								<div class="pull-left w35 ph5px">
+									<div class="form-group">
+										<div class="custom-label semibold">First Name</div>
+										<input type="text" class="form-control" ng-model="vm.firstName"  />
 									</div>
-									<div class="pull-left w50 ph5px">
-										<div class="form-group">
-											<div class="clearfix">
-												<button class="btn btn-default" ng-click = "vm.queryFilter()">
-								                    <span >
-								                        Query
-								                    </span>
-								                </button>
-											</div>
-										</div>
-										<div class="form-group">
-											<div class="clearfix">
-												<button class="btn btn-default" ng-click = "vm.resetFilter()">
-								                    <span >
-								                        Reset
-								                    </span>
-								                </button>
-											</div>
-										</div>
+									<div class="form-group">
+										<div class="custom-label semibold">Last Name</div>
+										<input type="text" class="form-control" ng-model="vm.lastName"  />
+									</div>
+								</div>
+								<div class="pull-left w30 ph1" style="margin-top: 21px">
+									<div class="form-group">
+										<button class="btn btn-default" ng-click = "vm.queryFilter()">
+						                    <span >
+						                        Query
+						                    </span>
+						                </button>
+						                <button class="btn btn-default" ng-click = "vm.resetFilter()">
+						                    <span >
+						                        Reset
+						                    </span>
+						                </button>
 									</div>
 								</div>
 							</div>
@@ -66,7 +60,7 @@
 		    <br>
 		    <div class="table-wrapper">
 		    	<div class="table-responsive">
-			        <table class="jh-table table table-striped">
+			        <table class="jh-table table table-striped table-bordered">
 			            <thead>
 			            <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
 			                <th jh-sort-by="id"><span>ID</span><span class="glyphicon glyphicon-sort"></span></th>

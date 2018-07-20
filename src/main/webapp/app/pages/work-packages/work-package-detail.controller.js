@@ -3,7 +3,7 @@
 	angular
         .module('fmpApp')
         .controller('WorkPackageDetailController', WorkPackageDetailController);
-    
+
     /**
      * @param $uibModal
      * @param DataUtils
@@ -28,13 +28,13 @@
     		   // handle the exit event
     		return "Please click 'Stay on this Page' if you did this unintentionally";
     	};
-    	
+
     	window.addEventListener("beforeunload", function() {
     		console.log(event);
     		console.log(event.srcElement.URL);
     		console.log(event.target.URL);
     	});
-    	
+
     	vm.editorConfig = {
 		    sanitize: false,
 		    toolbar: [
@@ -44,21 +44,21 @@
 			{ name: 'styling', items: ['font', 'size', 'format'] },
 		    ]
 		};
-    	
+
     	$scope.$on("$destroy", function() {
 	    	WorkPackage.closeEditor(vm.workPackage, closedSuccess, closedFailure);
 	      	  function closedSuccess (result) {
 	      	  }
 	      	  function closedFailure (error) {
-	      	  } 
+	      	  }
     	   });
-    	
+
         vm.currentTab = [];
         vm.currentAddonTab = [];
         vm.currentDiscountTab = [];
         vm.currentMarketTab = [];
         vm.currentWaiverTab = [];
-         
+
         vm.rulesMenu = true;
         vm.user = user;
         vm.datePickerOpenStatus = {};
@@ -66,7 +66,7 @@
         vm.openCalendarRow = openCalendarRow;
         vm.getCalendar = getCalendar;
         vm.importData = {};
-        
+
         vm.ioString =null;
         vm.openFile = DataUtils.openFile;
         vm.account = null;
@@ -84,9 +84,9 @@
         $scope.dateformat = "dd/MM/yyyy";
         vm.optionFare = fareTypes;
         vm.atpcoFareTypes = atpcoFareTypes;
-                    
+
         vm.isViewOnly = viewOnly;
-        
+
         if (vm.isViewOnly) {
         	$(document).ready(function() {
         		$('.input-group-addon, iframe').addClass('disabled poiv-none');
@@ -94,45 +94,45 @@
         		$('.view-only').addClass('disabled', 'disabled');
         	});
         }
-        
+
         vm.businessArea = {};
         for(var x=0;x<businessAreas.length;x++){
         	vm.businessArea[businessAreas[x]] = businessAreas[x];
         }
-        
+
         vm.priority = {};
         for(var x=0;x<priorities.length;x++){
         	vm.priority[priorities[x].name] = priorities[x].name;
         }
-        
+
         vm.typeOfJourney = {
-    		"":"Select OW/RT", 
-    		"1":"One Way", 
-    		"2":"Round Trip", 
+    		"":"Select OW/RT",
+    		"1":"One Way",
+    		"2":"Round Trip",
     		"3":"One Way Only"
         };
-        
+
         vm.cabin = {
-    		"":"Select Cabin", 
-    		"Y":"Y - Economy", 
-    		"F":"F - First Class", 
-    		"C":"C - Business", 
+    		"":"Select Cabin",
+    		"Y":"Y - Economy",
+    		"F":"F - First Class",
+    		"C":"C - Business",
     		"R":"R - Premium Economy"
         };
-        
+
         vm.status = {
         	"":"Select Priority",
         	"PENDING":"Pending",
         	"APPROVED":"Approve",
         	"REJECTED":"Reject"
         };
-        
+
         vm.travelCompleteIndicator = {
         	"": "Select Travel Complete Indicator",
         	"P" : "Trip Completed",
         	"c" : "Trip Commence"
         };
-        
+
         vm.locationType = {
         	"": "Select Location Type",
         	"C" : "City",
@@ -141,14 +141,14 @@
         	"A" : "Area",
     		"G" : "City Group"
         };
-        
+
         vm.calculationType = {
         	"": "Select Calculation Type",
         	"C" : "Calculated",
         	"S" : "Specified",
         	"M" : "Substract Specified from Calculated"
         };
-        
+
         vm.ssn = {
         	"": "Select SSN Type",
         	"C" : "Christmas",
@@ -165,7 +165,7 @@
             "Y" : "7th Level",
             "Z" : "Second Winter"
         };
-        
+
         vm.fields = [
         	// WORKSHEET HEADER
         	{
@@ -218,7 +218,7 @@
         		editable:["HO", "LSO"],
         		mandatory:["HO", "LSO"]
         	},
-        	
+
         	// REGULAR HEADER FARES FIELD
         	{
         		name:"description",
@@ -235,7 +235,7 @@
         		editable:["HO"],
         		mandatory:["HO"]
         	},
-        	
+
         	//REGULAR FARES FIELD
         	{
         		name:"status",
@@ -310,7 +310,7 @@
         	{
         		name:"amount",
         		editable:["LSO", "HO"],
-        		mandatory:[        			
+        		mandatory:[
         			"LSO", "HO"
         		],
         		mandatoryExtraCondition:[
@@ -372,14 +372,14 @@
         		mandatory:[]
         	},
         	//END REGULAR FARES FIELD
-        	
+
         	// ADDON HEADER FARES FIELD
         	{
         		name:"addonFaresName",
         		editable:["LSO", "HO"],
         		mandatory:["LSO", "HO"]
         	},
-        	
+
         	//ADDON FARES FIELD
         	{
         		name:"addonFareStatus",
@@ -481,7 +481,7 @@
         		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
-        	
+
         	//DISCOUNT FARE HEADER
         	{
         		name:"discountFaresName",
@@ -503,7 +503,7 @@
         		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:[]
         	},
-        	
+
         	//DISCOUNT FARE
         	{
         		name:"discountStatus",
@@ -520,7 +520,7 @@
         		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
-        	
+
         	{
         		name:"discountLoc1",
         		editable:["LSO", "HO", "DISTRIBUTION"],
@@ -531,13 +531,13 @@
         		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
-        	
+
         	{
         		name:"discountLoc2",
         		editable:["LSO", "HO", "DISTRIBUTION"],
         		mandatory:["LSO", "HO", "DISTRIBUTION"]
         	},
-        	
+
         	{
         		name:"discountBaseFareBasis",
         		editable:["LSO", "HO", "DISTRIBUTION"],
@@ -556,7 +556,7 @@
         	{
         		name:"discountCalcType",
         		editable:["LSO", "HO"],
-        		mandatory:["LSO", "HO"]        		
+        		mandatory:["LSO", "HO"]
         	},
         	{
         		name:"discountPercentageOfBaseFare",
@@ -654,7 +654,7 @@
         		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
-        	
+
         	{
         		name:"discountTicketDesignator",
         		editable:["LSO", "HO",  "DISTRIBUTION"],
@@ -770,7 +770,7 @@
         		editable:["LSO", "HO",  "DISTRIBUTION"],
         		mandatory:[]
         	},
-        	
+
         	// MARKET FARE HEADER
         	{
         		name:"marketFareDescription",
@@ -792,7 +792,7 @@
         		editable:["LSO", "HO"],
         		mandatory:[]
         	},
-        	
+
         	//MARKET FARE
         	{
         		name:"marketFareStatus",
@@ -803,7 +803,7 @@
         		name:"marketFareCarrier",
         		editable:[],
         		mandatory:[]
-        	},        	
+        	},
         	{
         		name:"marketFareOrigin",
         		editable:["LSO", "HO"],
@@ -829,13 +829,13 @@
         		editable:["LSO", "HO"],
         		mandatory:[]
         	},
-        	
+
         	{
         		name:"marketFareCabin",
         		editable:["LSO", "HO"],
         		mandatory:["LSO", "HO"]
         	},
-        	
+
         	{
         		name:"marketFareTypeOfJourney",
         		editable:["LSO", "HO"],
@@ -855,7 +855,7 @@
         		name:"marketFareBaseAmt",
         		editable:["LSO", "HO"],
         		mandatory:["LSO", "HO"]
-        	},        	        	
+        	},
         	{
         		name:"marketFareTravelStartDate",
         		editable:["LSO", "HO"],
@@ -891,7 +891,7 @@
         		editable:["LSO", "HO"],
         		mandatory:[]
         	},
-        	
+
         	//WAIVER FARE HEADER
         	{
         		name:"waiverFareDescription",
@@ -913,7 +913,7 @@
         		editable:["LSO", "HO"],
         		mandatory:["LSO", "HO"]
         	},
-        	
+
         	{
         		name:"waiverIataNo",
         		editable:["LSO", "HO"],
@@ -929,8 +929,8 @@
         		editable:[],
         		mandatory:[]
         	},
-        	
-        	
+
+
         	//WAIVER FARE
         	{
         		name:"waiverType",
@@ -1048,15 +1048,15 @@
         		mandatory:[]
         	}
         ];
-        
+
         vm.isRequired = function(field, fare){
-        	return vm.checkField(field, 'mandatory', fare);        	 
+        	return vm.checkField(field, 'mandatory', fare);
         };
-        
+
         vm.isEditable = function(field, fare){
-        	return vm.checkField(field, 'editable', fare);    
+        	return vm.checkField(field, 'editable', fare);
         };
-        
+
         vm.checkField = function(field, type, fare){
         	var result = false;
         	if(type == 'mandatory'){
@@ -1064,7 +1064,7 @@
         			if(vm.fields[x].name == field){
         				var reviewLevels = vm.fields[x].mandatory;
         				var extraCondition = vm.fields[x].mandatoryExtraCondition;
-        				
+
         				if(extraCondition != null && extraCondition.length > 0){
 //        					console.log("EXTRA CONDITION")
         					if(reviewLevels.indexOf(vm.workPackage.reviewLevel) > -1){
@@ -1072,7 +1072,7 @@
 	        						if(fare != null){
 	        							//Check extra condition here
 	        							var field = extraCondition[y].field;
-	        							
+
 	        							//Check other field empty condition
 	        							var isEmpty = extraCondition[y].isEmpty;
 	        							if(isEmpty){
@@ -1080,9 +1080,9 @@
 	        									result = true;
 	        									break;
 	        								}
-	        							} 
+	        							}
 	        							//End check other field empty condition
-	        							
+
 	        							//Check other field value condition
 	        							var otherField = extraCondition[y].field;
 	        							if(fare != null){
@@ -1092,8 +1092,8 @@
 	        								}
 	        							}
 	        							else{
-	        								
-	        							}    
+
+	        							}
 	        							//End check other field value condition
 	        						}
 	        					}
@@ -1109,8 +1109,8 @@
         								}
         							}
         							else{
-        								
-        							}        							
+
+        							}
         						}
         					}
         				}
@@ -1128,15 +1128,15 @@
         			if(vm.fields[x].name == field){
         				var reviewLevels = vm.fields[x].editable;
         				var extraCondition = vm.fields[x].editableExtraCondition;
-        				
+
         				if(extraCondition != null && extraCondition.length > 0){
-        					
+
         					if(reviewLevels.indexOf(vm.workPackage.reviewLevel) > -1){
 	        					for(var y=0;y<extraCondition.length;y++){
 	        						if(fare != null){
 	        							//Check extra condition here
 	        							var field = extraCondition[y].field;
-	        							
+
 	        							//Check other field empty condition
 	        							var isEmpty = extraCondition[y].isEmpty;
 	        							if(isEmpty){
@@ -1144,20 +1144,20 @@
 	        									result = false;
 	        									break;
 	        								}
-	        							} 
+	        							}
 	        							//End check other field empty condition
-	        							
+
 	        							//Check other field value condition
 	        							var otherField = extraCondition[y].field;
         								if(fare != null){
 	        								if(fare[otherField] == extraCondition[y].isEqual){
-	        									result = true;	        									
+	        									result = true;
 	        									break;
 	        								}
 	        							}
 	        							else{
-	        								
-	        							}    
+
+	        							}
 	        							//End check other field value condition
 	        						}
 	        					}
@@ -1173,11 +1173,11 @@
 //        								}
 //        							}
 //        							else{
-//        								
-//        							}        							
+//
+//        							}
 //        						}
         					}
-        				} else {        				
+        				} else {
 	        				if(reviewLevels.indexOf(vm.workPackage.reviewLevel) > -1){
 	        					result = true;
 	        					break;
@@ -1188,7 +1188,7 @@
         	}
 	  		return result;
 	    }
-        
+
         //GENERATE TOUR CODE
         vm.generateTourCode = function(workPackageSheet, type){
         	$uibModal.open({
@@ -1204,12 +1204,12 @@
                 	}
                 }
 			}).result.then(function(option) {
-				workPackageSheet.approvalReference = option.tourcode;	
+				workPackageSheet.approvalReference = option.tourcode;
             }, function() {
-        			
+
             });
         };
-        
+
         vm.generateTourCodeAttachment = function(){
         	$uibModal.open({
                 templateUrl: 'app/pages/work-packages/work-package-generate-tourcode-dialog.html',
@@ -1224,14 +1224,14 @@
                 	}
                 }
 			}).result.then(function(option) {
-				vm.workPackage.attachmentApprovalReference = option.tourcode;		 
-				//workPackageSheet.approvalReference = option.tourcode;		        			    			
+				vm.workPackage.attachmentApprovalReference = option.tourcode;
+				//workPackageSheet.approvalReference = option.tourcode;
             }, function() {
-        			
+
             });
         };
         //END GENERATE TOUR CODE
-        
+
         //Comment TAB
         vm.currentTabComment = true;
         vm.selectCommentTab = function(tab){
@@ -1251,21 +1251,21 @@
         		vm.currentTabComment = false;
         	}
         }
-        
+
         //END COMMENT TAB
-        
+
         //FARES TAB
         if(vm.workPackage.specifiedFares){
         	vm.currentTab[0] = true;
         }
         vm.selectedTab = 0;
         vm.selectTab = function(index){
-        	vm.resetTab(); 
+        	vm.resetTab();
         	if(vm.workPackage.fareSheet.length > 0){
         		vm.currentTab[index] = true;
         	}
         };
-        
+
         vm.addTab = function(option, fares){
         	if(option.type == 'Fares'){
         		if(!vm.workPackage.specifiedFares){
@@ -1296,126 +1296,126 @@
         		vm.selectAddonTab(vm.workPackage.addonFareSheet.length-1);
         	}
         	else if(option.type == 'Attachment'){
-        		vm.workPackage.attachment = true;    
+        		vm.workPackage.attachment = true;
         		vm.selectOtherTab('attachment');
         	}
         	else if(option.type == 'Filing Instruction'){
         		vm.workPackage.filingInstruction = true;
         		vm.selectOtherTab('filingInstruction');
         	}
-        	
-        	
+
+
 
             if(vm.workPackage.fareSheet.length > 0){
               	for(var x=0;x<vm.workPackage.fareSheet.length;x++){
-              		vm.changeVersion(vm.workPackage.fareSheet[x], 'current'); 
+              		vm.changeVersion(vm.workPackage.fareSheet[x], 'current');
               	}
               }
-              
+
               if(vm.workPackage.addonFareSheet.length > 0){
               	for(var x=0;x<vm.workPackage.addonFareSheet.length;x++){
-              		vm.changeVersion(vm.workPackage.addonFareSheet[x], 'current'); 
+              		vm.changeVersion(vm.workPackage.addonFareSheet[x], 'current');
               	}
               }
-              
+
               if(vm.workPackage.marketFareSheet.length > 0){
               	for(var x=0;x<vm.workPackage.marketFareSheet.length;x++){
-              		vm.changeVersion(vm.workPackage.marketFareSheet[x], 'current');                	
+              		vm.changeVersion(vm.workPackage.marketFareSheet[x], 'current');
               	}
               }
-              
-              
+
+
               if(vm.workPackage.discountFareSheet.length > 0){
               	for(var x=0;x<vm.workPackage.discountFareSheet.length;x++){
               		vm.changeVersion(vm.workPackage.discountFareSheet[x], 'current');
               	}
               }
-              
+
               if(vm.workPackage.waiverFareSheet.length > 0){
               	for(var x=0;x<vm.workPackage.waiverFareSheet.length;x++){
               		vm.changeVersion(vm.workPackage.waiverFareSheet[x], 'current');
               	}
               }
         };
-        
+
         vm.removeTab = function(){
         	var findTab = false;
-        	
+
         	if(!findTab){
 	        	for(var x=0;x<vm.currentTab.length;x++){
 	        		if(vm.currentTab[x]){
 //	        			console.log('Active Fare Tab '+x);
 	        			findTab = true;
-	        			
+
 	        			var index = vm.workPackage.fareSheet.indexOf(vm.workPackage.fareSheet[x]);
-	                	vm.workPackage.fareSheet.splice(x, 1); 
+	                	vm.workPackage.fareSheet.splice(x, 1);
 	                	//vm.selectedTab = 0;
 	                	//vm.selectTab(0);
 	        			break;
 	        		}
 	        	}
         	}
-        	
+
         	if(!findTab){
 	        	for(var x=0;x<vm.currentAddonTab.length;x++){
 	        		if(vm.currentAddonTab[x]){
 //	        			console.log('Active Addon Tab '+x);
 	        			findTab = true;
-	        			
+
 	        			var index = vm.workPackage.addonFareSheet.indexOf(vm.workPackage.addonFareSheet[x]);
-	                	vm.workPackage.addonFareSheet.splice(index, 1); 
+	                	vm.workPackage.addonFareSheet.splice(index, 1);
 	                	//vm.selectedAddonTab = 0;
 	                	//vm.selectAddonTab(0);
 	        			break;
 	        		}
 	        	}
         	}
-        	
+
         	if(!findTab){
 	        	for(var x=0;x<vm.currentDiscountTab.length;x++){
 	        		if(vm.currentDiscountTab[x]){
 //	        			console.log('Active Discount Tab '+x);
 	        			findTab = true;
-	        			
+
 	        			var index = vm.workPackage.discountFareSheet.indexOf(vm.workPackage.discountFareSheet[x]);
-	                	vm.workPackage.discountFareSheet.splice(index, 1); 
+	                	vm.workPackage.discountFareSheet.splice(index, 1);
 //	                	vm.selectedDiscountTab = 0;
 	                	//vm.selectDiscountTab(0);
 	        			break;
 	        		}
 	        	}
         	}
-        	
+
         	if(!findTab){
 	        	for(var x=0;x<vm.currentMarketTab.length;x++){
 	        		if(vm.currentMarketTab[x]){
 //	        			console.log('Active Market Tab '+x);
 	        			findTab = true;
-	        			
+
 	        			var index = vm.workPackage.marketFareSheet.indexOf(vm.workPackage.marketFareSheet[x]);
-	                	vm.workPackage.marketFareSheet.splice(index, 1); 
+	                	vm.workPackage.marketFareSheet.splice(index, 1);
 //	                	vm.selectedMarketTab = 0;
 	                	//vm.selectMarketTab(0);
 	        			break;
 	        		}
 	        	}
         	}
-        	
+
         	if(!findTab){
 	        	for(var x=0;x<vm.currentWaiverTab.length;x++){
 	        		if(vm.currentWaiverTab[x]){
 //	        			console.log('Active Waiver Tab '+x);
 	        			findTab = true;
-	        			
+
 	        			var index = vm.workPackage.waiverFareSheet.indexOf(vm.workPackage.waiverFareSheet[x]);
-	                	vm.workPackage.waiverFareSheet.splice(index, 1); 
+	                	vm.workPackage.waiverFareSheet.splice(index, 1);
 //	                	vm.selectedWaiverTab = 0;
 //	                	vm.selectWaiverTab(0);
 	        			break;
 	        		}
 	        	}
         	}
-        	
+
         	if(!findTab && vm.currentTabAttachment){
         		vm.workPackage.attachment = false;
         		findTab = true;
@@ -1424,86 +1424,86 @@
         		vm.workPackage.filingInstruction = false;
         		findTab = true;
         	}
-        	return findTab;        	
+        	return findTab;
         }
         //END FARES TAB
-        
-        
+
+
         //ADDON TAB
-        vm.selectedAddonTab = 0;     
+        vm.selectedAddonTab = 0;
 //        if(vm.workPackage.addon){
 //        	vm.currentAddonTab[0] = true;
 //        }
         vm.selectAddonTab = function(index){
-        	vm.resetTab(); 
+        	vm.resetTab();
         	if(vm.workPackage.addonFareSheet.length > 0){
         		vm.currentAddonTab[index] = true;
         	}
         	vm.selectedAddonTab = index;
         };
-        
+
         vm.addAddonTab = function(){
         	vm.workPackage.addonFareSheet.push({});
         }
-        
+
         vm.removeAddonTab = function(){
         	var index = vm.workPackage.addonFareSheet.indexOf(vm.selectedAddonTab);
-        	vm.workPackage.addonFareSheet.splice(index, 1); 
+        	vm.workPackage.addonFareSheet.splice(index, 1);
         	vm.selectedAddonTab = 0;
         }
-        
+
         vm.addAddonSheet = function(){
         	vm.addAddonTab();
         };
-        
+
         vm.copyAddonSheet = function(){
           	vm.workPackage.addonFareSheet.push(vm.workPackage.addonFareSheet[vm.selectedAdddonTab]);
         };
-        
+
         vm.removeAddonSheet = function(){
         	vm.removeAddonTab();
         };
         //END ADDON TAB
-        
+
         //DISCOUNT TAB
-        vm.selectedDiscountTab = 0; 
+        vm.selectedDiscountTab = 0;
         if(vm.workPackage.discount){
         	vm.currentDiscountTab[0] = true;
         }
-        
+
 //        vm.selectTab = function(index){
-//        	vm.resetTab(); 
+//        	vm.resetTab();
 //        	if(vm.workPackage.fareSheet.length > 0){
 //        		vm.currentTab[index] = true;
 //        	}
 //        };
         vm.selectDiscountTab = function(index){
-        	vm.resetTab();    
+        	vm.resetTab();
         	if(vm.workPackage.discountFareSheet.length > 0){
         		vm.currentDiscountTab[index] = true;
         	}
 //        	vm.currentDiscountTab[index] = true;
 //        	vm.selectedDiscountTab = index;
         };
-        
+
         vm.addDiscountTab = function(){
         	vm.workPackage.discountFareSheet.push({});
         }
-        
+
         vm.removeDiscountTab = function(){
         	var index = vm.workPackage.discountFareSheet.indexOf(vm.selectedDiscountTab);
-        	vm.workPackage.discountFareSheet.splice(index, 1); 
+        	vm.workPackage.discountFareSheet.splice(index, 1);
         	vm.selectedDiscountTab = 0;
         }
-        
+
         vm.addDiscountSheet = function(){
         	vm.addDiscountTab();
         };
-        
+
         vm.copyDiscountSheet = function(){
           	vm.workPackage.discountFareSheet.push(vm.workPackage.discountFareSheet[vm.selecteDiscountTab]);
         };
-        
+
         vm.removeDiscountSheet = function(){
         	vm.removeDiscountTab();
         };
@@ -1513,70 +1513,70 @@
         if(vm.workPackage.marketFares){
         	vm.currentMarketTab[0] = true;
         }
-        vm.selectedMarketTab = 0;       
+        vm.selectedMarketTab = 0;
         vm.selectMarketTab = function(index){
-        	vm.resetTab();        	
+        	vm.resetTab();
         	vm.currentMarketTab[index] = true;
         	vm.selectedMarketTab = index;
         };
-        
+
         vm.addMarketTab = function(){
         	vm.workPackage.marketFareSheet.push({});
         }
-        
+
         vm.removeMarketTab = function(){
         	var index = vm.workPackage.marketFareSheet.indexOf(vm.selectedMarketTab);
-        	vm.workPackage.marketFareSheet.splice(index, 1); 
+        	vm.workPackage.marketFareSheet.splice(index, 1);
         	vm.selectedMarketTab = 0;
         }
-        
+
         vm.addMarketSheet = function(){
         	vm.addMarketTab();
         };
-        
+
         vm.copyMarketSheet = function(){
           	vm.workPackage.marketFareSheet.push(vm.workPackage.marketFareSheet[vm.selectedMarketTab]);
         };
-        
+
         vm.removeMarketSheet = function(){
         	vm.removeMarketTab();
         };
         //END MARKET TAB
-        
+
         //WAIVER TAB
         if(vm.workPackage.waiverFares){
         	vm.currentWaiverTab[0] = true;
         }
-        vm.selectedWaiverTab = 0;       
+        vm.selectedWaiverTab = 0;
         vm.selectWaiverTab = function(index){
-        	vm.resetTab();        	
+        	vm.resetTab();
         	vm.currentWaiverTab[index] = true;
         	vm.selectedWaiverTab = index;
         };
-        
+
         vm.addWaiverTab = function(){
         	vm.workPackage.waiverFareSheet.push({});
         }
-        
+
         vm.removeWaiverTab = function(){
         	var index = vm.workPackage.waiverFareSheet.indexOf(vm.selectedWaiverTab);
-        	vm.workPackage.waiverFareSheet.splice(index, 1); 
+        	vm.workPackage.waiverFareSheet.splice(index, 1);
         	vm.selectedWaiverTab = 0;
         }
-        
+
         vm.addWaiverSheet = function(){
         	vm.addWaiverTab();
         };
-        
+
         vm.copyWaiverSheet = function(){
           	vm.workPackage.waiverFareSheet.push(vm.workPackage.waiverFareSheet[vm.selectedWaiverTab]);
         };
-        
+
         vm.removeWaiverSheet = function(){
         	vm.removeWaiverTab();
         };
         //END WAIVER TAB
-        
+
         //OTHER TAB
         vm.selectOtherTab = function(tabName){
         	vm.resetTab();
@@ -1593,7 +1593,7 @@
         	}
         };
         //END OTHER TAB
-        
+
         //RESET TAB FUNCTION
         vm.resetTab = function(){
         	for(var x=0;x<vm.currentTab.length;x++){
@@ -1618,7 +1618,7 @@
         	vm.currentTabWaiverRules = false;
         };
         //END RESET TAB FUNCTION
-        
+
         //SHEET FUNCTION
         vm.addSheet = function(){
         	$uibModal.open({
@@ -1641,13 +1641,13 @@
                 }
 			}).result.then(function(option) {
 				vm.addTab(option);
-				
-				
+
+
             }, function() {
-        			
+
             });
         };
-        
+
         vm.copySheet = function(){
         	var findTab = false;
         	var clipboardSheet = {
@@ -1658,7 +1658,7 @@
 	        		if(vm.currentTab[x]){
 //	        			console.log('Active Fare Tab '+x);
 	        			findTab = true;
-	        			
+
 	        			var index = vm.workPackage.fareSheet.indexOf(x);
 //	        			vm.workPackage.fareSheet.push(angular.copy(vm.workPackage.fareSheet[x]));
 //	        			console.log(vm.workPackage.fareSheet[x]);
@@ -1670,18 +1670,18 @@
 	        		}
 	        	}
         	}
-        	
+
         	if(!findTab){
 	        	for(var x=0;x<vm.currentAddonTab.length;x++){
 	        		if(vm.currentAddonTab[x]){
 //	        			console.log('Active Addon Tab '+x);
 	        			findTab = true;
-	        			
+
 	        			var index = vm.workPackage.addonFareSheet.indexOf(x);
 //	        			vm.workPackage.addonFareSheet.push(angular.copy(vm.workPackage.addonFareSheet[x]));
 	        			if(vm.workPackage.addonFareSheet[x].fares.length > 0){
 		        			clipboardSheet.sheet = angular.copy(vm.workPackage.addonFareSheet[x]);
-		        			
+
 		        			if(vm.workPackage.type == 'REGULAR'){
 		        				clipboardSheet.type = "addon-fares";
 		        			}
@@ -1693,13 +1693,13 @@
 	        		}
 	        	}
         	}
-        	
+
         	if(!findTab){
 	        	for(var x=0;x<vm.currentMarketTab.length;x++){
 	        		if(vm.currentMarketTab[x]){
 //	        			console.log('Active Market Tab '+x);
 	        			findTab = true;
-	        			
+
 	        			var index = vm.workPackage.marketFareSheet.indexOf(x);
 //	        			vm.workPackage.marketFareSheet.push(angular.copy(vm.workPackage.marketFareSheet[x]));
 	        			if(vm.workPackage.marketFareSheet[x].fares.length > 0){
@@ -1710,16 +1710,16 @@
 	        		}
 	        	}
         	}
-        	
+
         	if(!findTab){
 	        	for(var x=0;x<vm.currentDiscountTab.length;x++){
 	        		if(vm.currentDiscountTab[x]){
 //	        			console.log('Active Discount Tab '+x);
 	        			findTab = true;
-	        			
+
 	        			var index = vm.workPackage.discountFareSheet.indexOf(x);
 //	        			vm.workPackage.discountFareSheet.push(angular.copy(vm.workPackage.discountFareSheet[x]));
-	        			if(vm.workPackage.discountFareSheet[x].fares.length > 0){			        		
+	        			if(vm.workPackage.discountFareSheet[x].fares.length > 0){
 		        			clipboardSheet.sheet = angular.copy(vm.workPackage.discountFareSheet[x]);
 		        			clipboardSheet.type = "discount";
 	        			}
@@ -1727,16 +1727,16 @@
 	        		}
 	        	}
         	}
-        	
+
         	if(!findTab){
 	        	for(var x=0;x<vm.currentWaiverTab.length;x++){
 	        		if(vm.currentWaiverTab[x]){
 //	        			console.log('Active Waiver Tab '+x);
 	        			findTab = true;
-	        			
+
 	        			var index = vm.workPackage.waiverFareSheet.indexOf(x);
 //	        			vm.workPackage.waiverFareSheet.push(angular.copy(vm.workPackage.waiverFareSheet[x]));
-	        			if(vm.workPackage.waiverFareSheet[x].fares.length > 0){		
+	        			if(vm.workPackage.waiverFareSheet[x].fares.length > 0){
 		        			clipboardSheet.sheet = angular.copy(vm.workPackage.waiverFareSheet[x]);
 		        			clipboardSheet.type = "waiver";
 	        			}
@@ -1744,8 +1744,8 @@
 	        		}
 	        	}
         	}
-        	
-        	
+
+
         	if(!findTab){
         		alert('Sheet cannot be copied');
         	}
@@ -1762,7 +1762,7 @@
         		}
         	}
         };
-        
+
         vm.removeSheet = function(){
         	if(vm.workPackage.reviewLevel != 'DISTRIBUTION'){
 	        	var removed = vm.removeTab();
@@ -1775,7 +1775,7 @@
         	}
         };
         //END SHEET FUNCTION
-        
+
         vm.pasteSheet = function(){
         	if(vm.workPackage.reviewLevel != 'DISTRIBUTION'){
         		ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise.then(function(sheet){
@@ -1785,44 +1785,44 @@
         		        		vm.openAddSheetDialog();
         		        	}
         		        	else{
-        		        		alert('No sheet copied');   
+        		        		alert('No sheet copied');
         		        	}
         	        	}
         	        	else if(vm.workPackage.type == 'MARKET'){
         	        		if(sheet.type == 'market' || sheet.type == 'addon-market'){
-        		        		vm.openAddSheetDialog();        		        		
+        		        		vm.openAddSheetDialog();
         		        	}
         	        		else{
-        		        		alert('No sheet copied');   
+        		        		alert('No sheet copied');
         		        	}
         	        	}
         	        	else if(vm.workPackage.type == 'DISCOUNT'){
         	        		if(sheet.type == 'discount'){
-        		        		vm.openAddSheetDialog();        		        		
+        		        		vm.openAddSheetDialog();
         		        	}
         	        		else{
-        		        		alert('No sheet copied');   
+        		        		alert('No sheet copied');
         		        	}
         	        	}
         	        	else if(vm.workPackage.type == 'WAIVER'){
         	        		if(sheet.type == 'waiver'){
-        		        		vm.openAddSheetDialog();        		        		
+        		        		vm.openAddSheetDialog();
         		        	}
         	        		else{
-        		        		alert('No sheet copied');   
+        		        		alert('No sheet copied');
         		        	}
         	        	}
         	        	else{
-        	        		alert('No sheet copied');        	        		
+        	        		alert('No sheet copied');
         	        	}
         	        }
         	        else{
         	        	alert('No sheet copied');
         	        }
-        		});	        	
+        		});
         	}
         };
-        
+
         vm.openAddSheetDialog = function(){
         	$uibModal.open({
                 templateUrl: 'app/pages/work-packages/work-package-add-sheet-dialog.html',
@@ -1845,23 +1845,23 @@
 			}).result.then(function(option) {
 				var clipboardSheet = ClipboardSheet.findByCurrentUsername({id : $stateParams.id}).$promise;
 				clipboardSheet.then(function(result){
-					
+
 					for(var l=0; l<result.sheet.fares.length; l++){
 						try {
 							result.sheet.fares[l].status="PENDING";
 						} catch (e) {
 						}
-						
+
 					}
-					
+
 					vm.addTab(option, result.sheet.fares);
 					alert('Paste Sheet Success');
 				});
             }, function() {
-        			
+
             });
         };
-        
+
         vm.faresActionButton = [];
         vm.addonFaresActionButton = [];
         vm.marketFaresActionButton = [];
@@ -1884,16 +1884,16 @@
         		vm.waiverFaresActionButton[index] = !vm.waiverFaresActionButton[index];
         	}
         }
-        
+
         vm.errorStyle = { 'background-color':'red'};
         vm.selectedFare = null;
-        
+
         vm.derivedFares  = function() {
         	if (vm.selectedFare) {
         		DerivedFares.get(vm.selectedFare, onSuccess, function(error) {
 //        			console.log(error);
         		});
-        		
+
         		function onSuccess(result) {
         			$uibModal.open({
     	                templateUrl: 'app/pages/derived-fares/derived-fares.html',
@@ -1910,13 +1910,13 @@
         		}
         	}
         }
-        
+
         vm.paste = function(){
         		Clipboard.findCurrent({}, onFindSuccess, onFindError);
-        		
+
         		function onFindSuccess(result){
         			console.log(result);
-        			
+
         			for(var i=0;i<result.fares.length;i++){
             			if(vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'REGULAR'){
 //            				console.log("BOOKING CLASS : "+result.fares[i].bookingClass);
@@ -1944,21 +1944,21 @@
             					effDt:result.fares[i].effectiveDate,
             					travelComplete:result.fares[i].travelComplete,
             				});
-            			}        				
+            			}
         			}
         		}
-        		
+
         		function onFindError(error){
-        			
+
         		}
         }
-        
+
         vm.pasteAsCancel = function(){
 	        	Clipboard.findCurrent({}, onFindSuccess, onFindError);
-	    		
+
 	    		function onFindSuccess(result){
 //	    			console.log(result);
-	    			
+
 	    			for(var i=0;i<result.fares.length;i++){
 	        			if(vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'REGULAR'){
 	        				vm.workPackage.fares.push({
@@ -1985,22 +1985,22 @@
 	        					effDt:result.fares[i].effectiveDate,
 	        					travelComplete:result.fares[i].travelComplete,
 	        				});
-	        			}        				
+	        			}
 	    			}
 	    		}
-    		
+
 	    		function onFindError(error){
-	    			
+
 	    		}
         }
-        
+
  	    //Specific Fares Function
- 	    vm.addFares = function(fareSheet){ 	 
+ 	    vm.addFares = function(fareSheet){
 // 	    	console.log("ADD FARES");
  	    	if(fareSheet.fares == null){
  	    		fareSheet.fares = [];
        	  	}
- 	    	
+
     		fareSheet.fares.push({
     			no:fareSheet.fares.length+1,
     			status:"PENDING",
@@ -2008,13 +2008,13 @@
   	 	      	carrier:"GA"
     		});
  	    }
- 	    
+
  	   function getDescendantProp (obj, desc) {
  		  var arr = desc.split('.');
  		  while (arr.length && (obj = obj[arr.shift()]));
  		  return obj;
  		}
- 	   
+
  	   function sortBy(field, type) {
  		   if(type == 'asc'){
 	 		    return function(a, b) {
@@ -2029,7 +2029,7 @@
 	 		        } else if (getDescendantProp(a, field) < getDescendantProp(b, field)) {
 	 		            return -1;
 	 		        }
-	 		    	
+
 	 		        return 1;
 	 		    };
  		   } else if(type='desc'){
@@ -2049,22 +2049,22 @@
 	 		    };
  		   }
  		}
- 	  
+
  	    vm.sort = function(workPackageSheet, field){
  	    	if(workPackageSheet.sort == undefined){
- 	 	    	workPackageSheet.sort = []; 	 	    		
+ 	 	    	workPackageSheet.sort = [];
  	    	}
  	    	if(workPackageSheet.sort[field] == undefined){
- 	    		workPackageSheet.sort[field] = {asc:true}; 	    	
+ 	    		workPackageSheet.sort[field] = {asc:true};
  	    	}
  	    	else{
  	    		workPackageSheet.sort[field].asc = !workPackageSheet.sort[field].asc;
- 	    	} 	    
- 	    	
+ 	    	}
+
  	    	workPackageSheet.currentSort = {field:field, asc:workPackageSheet.sort[field].asc};
 
  	    	if(field == '#'){
- 	    		if(workPackageSheet.sort[field].asc){ 
+ 	    		if(workPackageSheet.sort[field].asc){
  	    			workPackageSheet.fares.sort(sortBy('no', 'asc'));
  	    		}
  	    		else{
@@ -2072,15 +2072,15 @@
  	    		}
  	    	}
  	    	else{
- 	    		if(workPackageSheet.sort[field].asc){ 	    			
+ 	    		if(workPackageSheet.sort[field].asc){
  	    			workPackageSheet.fares.sort(sortBy(field, 'asc'));
  	    		}
  	    		else{
- 	    			workPackageSheet.fares.sort(sortBy(field, 'desc')); 
+ 	    			workPackageSheet.fares.sort(sortBy(field, 'desc'));
  	    		}
  	    	}
  	    }
- 	    
+
  	    vm.searchReplace = function(fareType, table, fareSheet, filter){
  	    	$uibModal.open({
 	            templateUrl: 'app/pages/work-packages/work-package-search-replace-dialog.html',
@@ -2136,10 +2136,10 @@
     	    	    	workPackageFareFilter.travelCompleteIndicator.check && workPackageFareFilter.travelCompleteIndicator.search != null && workPackageFareFilter.travelCompleteIndicator.search != '' ? 'travelCompleteIndicator' : null,
     	    	    	workPackageFareFilter.comment.check && workPackageFareFilter.comment.search != null && workPackageFareFilter.comment.search != '' ? 'comment' : null,
     	    	    	workPackageFareFilter.ratesheetComment.check && workPackageFareFilter.ratesheetComment.search != null && workPackageFareFilter.ratesheetComment.search != '' ? 'ratesheetComment' : null,
-    	    	    			
+
     	    	    	//addon
     	    	    	workPackageFareFilter.bucket.check && workPackageFareFilter.bucket.search != null && workPackageFareFilter.bucket.search != '' ? 'bucket' : null,
-    	    	    			
+
     	    	    	//discount
     	    	    	workPackageFareFilter.loc1Type.check && workPackageFareFilter.loc1Type.search != null && workPackageFareFilter.loc1Type.search != '' ? 'loc1Type' : null,
     	    	    	workPackageFareFilter.loc1.check && workPackageFareFilter.loc1.search != null && workPackageFareFilter.loc1.search != '' ? 'loc1' : null,
@@ -2156,42 +2156,42 @@
     	    	    	workPackageFareFilter.newFareBasis.check && workPackageFareFilter.newFareBasis.search != null && workPackageFareFilter.newFareBasis.search != '' ? 'newFareBasis' : null,
     	    	    	workPackageFareFilter.newTypeOfJourney.check && workPackageFareFilter.newTypeOfJourney.search != null && workPackageFareFilter.newTypeOfJourney.search != '' ? 'newTypeOfJourney' : null,
     	    	    	workPackageFareFilter.newBookingCode.check && workPackageFareFilter.newBookingCode.search != null && workPackageFareFilter.newBookingCode.search != '' ? 'newBookingCode' : null,
-    	    	    			
+
     	    	    	//waiver
     	    			workPackageFareFilter.waiverAgentName.check && workPackageFareFilter.waiverAgentName.search != null && workPackageFareFilter.waiverAgentName.search != '' ? 'waiverAgentName' : null,
     	    			workPackageFareFilter.waiverIataNo.check && workPackageFareFilter.waiverIataNo.search != null && workPackageFareFilter.waiverIataNo.search != '' ? 'waiverIataNo' : null,
     	    			workPackageFareFilter.waiverIocNo.check && workPackageFareFilter.waiverIocNo.search != null && workPackageFareFilter.waiverIocNo.search != '' ? 'waiverIocNo' : null,
     	    			workPackageFareFilter.waiverApprovalDate.check && workPackageFareFilter.waiverApprovalDate.search != null && workPackageFareFilter.waiverApprovalDate.search != '' ? 'waiverApprovalDate' : null,
     	    			workPackageFareFilter.waiverType.check && workPackageFareFilter.waiverType.search != null && workPackageFareFilter.waiverType.search != '' ? 'waiverType' : null,
-    	    			workPackageFareFilter.waiverFullPartial.check && workPackageFareFilter.waiverFullPartial.search != null && workPackageFareFilter.waiverFullPartial.search != '' ? 'waiverFullPartial' : null,    	    						
-    	    			workPackageFareFilter.waiverPnr.check && workPackageFareFilter.waiverPnr.search != null && workPackageFareFilter.waiverPnr.search != '' ? 'waiverPnr' : null,    	    						
-    	    			workPackageFareFilter.waiverTktFrom.check && workPackageFareFilter.waiverTktFrom.search != null && workPackageFareFilter.waiverTktFrom.search != '' ? 'waiverTktFrom' : null,    	    						
-    	    			workPackageFareFilter.waiverTktTo.check && workPackageFareFilter.waiverTktTo.search != null && workPackageFareFilter.waiverTktTo.search != '' ? 'waiverTktTo' : null,    	    						
-    					workPackageFareFilter.waiverOri.check && workPackageFareFilter.waiverOri.search != null && workPackageFareFilter.waiverOri.search != '' ? 'waiverOri' : null,    	    						
-    					workPackageFareFilter.waiverDest.check && workPackageFareFilter.waiverDest.search != null && workPackageFareFilter.waiverDest.search != '' ? 'waiverDest' : null,    	    						
-    	    			workPackageFareFilter.waiverOriginalItinerary.check && workPackageFareFilter.waiverOriginalItinerary.search != null && workPackageFareFilter.waiverOriginalItinerary.search != '' ? 'waiverOriginalItinerary' : null,    	    						
-    	    			workPackageFareFilter.waiverNewItinerary.check && workPackageFareFilter.waiverNewItinerary.search != null && workPackageFareFilter.waiverNewItinerary.search != '' ? 'waiverNewItinerary' : null,    	    						
+    	    			workPackageFareFilter.waiverFullPartial.check && workPackageFareFilter.waiverFullPartial.search != null && workPackageFareFilter.waiverFullPartial.search != '' ? 'waiverFullPartial' : null,
+    	    			workPackageFareFilter.waiverPnr.check && workPackageFareFilter.waiverPnr.search != null && workPackageFareFilter.waiverPnr.search != '' ? 'waiverPnr' : null,
+    	    			workPackageFareFilter.waiverTktFrom.check && workPackageFareFilter.waiverTktFrom.search != null && workPackageFareFilter.waiverTktFrom.search != '' ? 'waiverTktFrom' : null,
+    	    			workPackageFareFilter.waiverTktTo.check && workPackageFareFilter.waiverTktTo.search != null && workPackageFareFilter.waiverTktTo.search != '' ? 'waiverTktTo' : null,
+    					workPackageFareFilter.waiverOri.check && workPackageFareFilter.waiverOri.search != null && workPackageFareFilter.waiverOri.search != '' ? 'waiverOri' : null,
+    					workPackageFareFilter.waiverDest.check && workPackageFareFilter.waiverDest.search != null && workPackageFareFilter.waiverDest.search != '' ? 'waiverDest' : null,
+    	    			workPackageFareFilter.waiverOriginalItinerary.check && workPackageFareFilter.waiverOriginalItinerary.search != null && workPackageFareFilter.waiverOriginalItinerary.search != '' ? 'waiverOriginalItinerary' : null,
+    	    			workPackageFareFilter.waiverNewItinerary.check && workPackageFareFilter.waiverNewItinerary.search != null && workPackageFareFilter.waiverNewItinerary.search != '' ? 'waiverNewItinerary' : null,
 
-    	    			workPackageFareFilter.waiverOriginalBasicFare.check && workPackageFareFilter.waiverOriginalBasicFare.search != null && workPackageFareFilter.waiverOriginalBasicFare.search != '' ? 'waiverOriginalBasicFare' : null,    	    						
-    	    			workPackageFareFilter.waiverNewBasicFare.check && workPackageFareFilter.waiverNewBasicFare.search != null && workPackageFareFilter.waiverNewBasicFare.search != '' ? 'waiverNewBasicFare' : null,    	    						
-    	    			workPackageFareFilter.waiverApprovedFare.check && workPackageFareFilter.waiverApprovedFare.search != null && workPackageFareFilter.waiverApprovedFare.search != '' ? 'waiverApprovedFare' : null,    	    						
-    	    			workPackageFareFilter.waiverFareLost.check && workPackageFareFilter.waiverFareLost.search != null && workPackageFareFilter.waiverFareLost.search != '' ? 'waiverFareLost' : null,    	    						
-    	    			workPackageFareFilter.waiverCalculatedPn.check && workPackageFareFilter.waiverCalculatedPn.search != null && workPackageFareFilter.waiverCalculatedPn.search != '' ? 'waiverCalculatedPn' : null,    	    						
-    	    			workPackageFareFilter.waiverOriginalPn.check && workPackageFareFilter.waiverOriginalPn.search != null && workPackageFareFilter.waiverOriginalPn.search != '' ? 'waiverOriginalPn' : null,    	    						
-    	    	    	workPackageFareFilter.waiverApprovedPn.check && workPackageFareFilter.waiverApprovedPn.search != null && workPackageFareFilter.waiverApprovedPn.search != '' ? 'waiverApprovedPn' : null,    	    						
-    	    	    	workPackageFareFilter.waiverPenaltyLostPercent.check && workPackageFareFilter.waiverPenaltyLostPercent.search != null && workPackageFareFilter.waiverPenaltyLostPercent.search != '' ? 'waiverPenaltyLostPercent' : null,    	    						
-    	    	    	workPackageFareFilter.waiverPenaltyLostAmount.check && workPackageFareFilter.waiverPenaltyLostAmount.search != null && workPackageFareFilter.waiverPenaltyLostAmount.search != '' ? 'waiverPenaltyLostAmount' : null,    	    						
-    	    	    	workPackageFareFilter.waiverCurrency.check && workPackageFareFilter.waiverCurrency.search != null && workPackageFareFilter.waiverCurrency.search != '' ? 'waiverCurrency' : null,    	    						
-    	    	    	workPackageFareFilter.waiverTotalPax.check && workPackageFareFilter.waiverTotalPax.search != null && workPackageFareFilter.waiverTotalPax.search != '' ? 'waiverTotalPax' : null,    	    						
-    	    	    	workPackageFareFilter.waiverTotalLost.check && workPackageFareFilter.waiverTotalLost.search != null && workPackageFareFilter.waiverTotalLost.search != '' ? 'waiverTotalLost' : null,    	    						
-    	    	    	workPackageFareFilter.waiverRemark.check && workPackageFareFilter.waiverRemark.search != null && workPackageFareFilter.waiverRemark.search != '' ? 'waiverRemark' : null,    	    						
+    	    			workPackageFareFilter.waiverOriginalBasicFare.check && workPackageFareFilter.waiverOriginalBasicFare.search != null && workPackageFareFilter.waiverOriginalBasicFare.search != '' ? 'waiverOriginalBasicFare' : null,
+    	    			workPackageFareFilter.waiverNewBasicFare.check && workPackageFareFilter.waiverNewBasicFare.search != null && workPackageFareFilter.waiverNewBasicFare.search != '' ? 'waiverNewBasicFare' : null,
+    	    			workPackageFareFilter.waiverApprovedFare.check && workPackageFareFilter.waiverApprovedFare.search != null && workPackageFareFilter.waiverApprovedFare.search != '' ? 'waiverApprovedFare' : null,
+    	    			workPackageFareFilter.waiverFareLost.check && workPackageFareFilter.waiverFareLost.search != null && workPackageFareFilter.waiverFareLost.search != '' ? 'waiverFareLost' : null,
+    	    			workPackageFareFilter.waiverCalculatedPn.check && workPackageFareFilter.waiverCalculatedPn.search != null && workPackageFareFilter.waiverCalculatedPn.search != '' ? 'waiverCalculatedPn' : null,
+    	    			workPackageFareFilter.waiverOriginalPn.check && workPackageFareFilter.waiverOriginalPn.search != null && workPackageFareFilter.waiverOriginalPn.search != '' ? 'waiverOriginalPn' : null,
+    	    	    	workPackageFareFilter.waiverApprovedPn.check && workPackageFareFilter.waiverApprovedPn.search != null && workPackageFareFilter.waiverApprovedPn.search != '' ? 'waiverApprovedPn' : null,
+    	    	    	workPackageFareFilter.waiverPenaltyLostPercent.check && workPackageFareFilter.waiverPenaltyLostPercent.search != null && workPackageFareFilter.waiverPenaltyLostPercent.search != '' ? 'waiverPenaltyLostPercent' : null,
+    	    	    	workPackageFareFilter.waiverPenaltyLostAmount.check && workPackageFareFilter.waiverPenaltyLostAmount.search != null && workPackageFareFilter.waiverPenaltyLostAmount.search != '' ? 'waiverPenaltyLostAmount' : null,
+    	    	    	workPackageFareFilter.waiverCurrency.check && workPackageFareFilter.waiverCurrency.search != null && workPackageFareFilter.waiverCurrency.search != '' ? 'waiverCurrency' : null,
+    	    	    	workPackageFareFilter.waiverTotalPax.check && workPackageFareFilter.waiverTotalPax.search != null && workPackageFareFilter.waiverTotalPax.search != '' ? 'waiverTotalPax' : null,
+    	    	    	workPackageFareFilter.waiverTotalLost.check && workPackageFareFilter.waiverTotalLost.search != null && workPackageFareFilter.waiverTotalLost.search != '' ? 'waiverTotalLost' : null,
+    	    	    	workPackageFareFilter.waiverRemark.check && workPackageFareFilter.waiverRemark.search != null && workPackageFareFilter.waiverRemark.search != '' ? 'waiverRemark' : null,
      	    		];
- 	    			
+
  	    			var found = false;
  	    			if(type == 'and'){
 	 	    			found = true;
 	 	    			for(var x=0;x<listField.length;x++){
-	 	    				if(listField[x] != null){	 
+	 	    				if(listField[x] != null){
 	 	    					if(listField[x] == 'travelStart' || listField[x] == 'travelEnd' || listField[x] == 'saleStart' || listField[x] == 'saleEnd' || listField[x] == 'travelComplete'){
 	 	    						var date = DateUtils.convertLocalDateToServer(fare[listField[x]]);
 	 	    						if(date != getDescendantProp(workPackageFareFilter, listField[x]+'.search')){
@@ -2201,7 +2201,7 @@
 	 	    					else{
 		 	    					if(getDescendantProp(fare, listField[x]) != getDescendantProp(workPackageFareFilter, listField[x]+'.search')){
 			 	    					found = false;
-			 	    				}	 	    						
+			 	    				}
 	 	    					}
 	 	    				}
 	 	    			}
@@ -2218,14 +2218,14 @@
 	 	    					else{
 		 	    					if(getDescendantProp(fare, listField[x]) == getDescendantProp(workPackageFareFilter, listField[x]+'.search')){
 			 	    					found = true;
-			 	    				}	 	    						
+			 	    				}
 	 	    					}
 	 	    				}
 	 	    			}
  	    			}
  	    			return found;
  	    		}
- 	    		
+
  	    		function replaceField(workPackageFareFilter, fare){
  	    			//regular
  	    			var listField = [
@@ -2250,11 +2250,11 @@
     	    	    	workPackageFareFilter.travelComplete.replace.check && workPackageFareFilter.travelComplete.replace.value != null && workPackageFareFilter.travelComplete.replace.value !=  '' ? 'travelComplete' : null,
     	    	    	workPackageFareFilter.travelCompleteIndicator.replace.check && workPackageFareFilter.travelCompleteIndicator.replace.value != null && workPackageFareFilter.travelCompleteIndicator.replace.value != '' ? 'travelCompleteIndicator' : null,
     	    	    	workPackageFareFilter.comment.replace.check && workPackageFareFilter.comment.replace.value != null && workPackageFareFilter.comment.replace.value != '' ? 'comment' : null,
-    	    	    	workPackageFareFilter.ratesheetComment.replace.check && workPackageFareFilter.ratesheetComment.replace.value != null && workPackageFareFilter.ratesheetComment.replace.value != '' ? 'ratesheetComment' : null,    	    		
-    	    	    			
+    	    	    	workPackageFareFilter.ratesheetComment.replace.check && workPackageFareFilter.ratesheetComment.replace.value != null && workPackageFareFilter.ratesheetComment.replace.value != '' ? 'ratesheetComment' : null,
+
     	    	    	//addon
-    	    	    	workPackageFareFilter.bucket.replace.check && workPackageFareFilter.bucket.replace.value != null && workPackageFareFilter.bucket.replace.value != '' ? 'bucket' : null,    	    		
-    	    	    	workPackageFareFilter.zone.replace.check && workPackageFareFilter.zone.replace.value != null && workPackageFareFilter.zone.replace.value != '' ? 'zone' : null,    	    		
+    	    	    	workPackageFareFilter.bucket.replace.check && workPackageFareFilter.bucket.replace.value != null && workPackageFareFilter.bucket.replace.value != '' ? 'bucket' : null,
+    	    	    	workPackageFareFilter.zone.replace.check && workPackageFareFilter.zone.replace.value != null && workPackageFareFilter.zone.replace.value != '' ? 'zone' : null,
 
     	    	    	//discount
     	    	    	workPackageFareFilter.loc1Type.replace.check && workPackageFareFilter.loc1Type.replace.value != null && workPackageFareFilter.loc1Type.replace.value != '' ? 'loc1Type' : null,
@@ -2275,7 +2275,7 @@
     	    	    	workPackageFareFilter.newFareBasis.replace.check && workPackageFareFilter.newFareBasis.replace.value != null && workPackageFareFilter.newFareBasis.replace.value != '' ? 'newFareBasis' : null,
     	    	    	workPackageFareFilter.newTypeOfJourney.replace.check && workPackageFareFilter.newTypeOfJourney.replace.value != null && workPackageFareFilter.newTypeOfJourney.replace.value != '' ? 'newTypeOfJourney' : null,
     	    	    	workPackageFareFilter.newBookingCode.replace.check && workPackageFareFilter.newBookingCode.replace.value != null && workPackageFareFilter.newBookingCode.replace.value != '' ? 'newBookingCode' : null,
-    	    	    	
+
     	    	    	//waiver
     	    			workPackageFareFilter.waiverAgentName.replace.check && workPackageFareFilter.waiverAgentName.replace.value != null && workPackageFareFilter.waiverAgentName.replace.value != '' ? 'waiverAgentName' : null,
     	    			workPackageFareFilter.waiverIataNo.replace.check && workPackageFareFilter.waiverIataNo.replace.value != null && workPackageFareFilter.waiverIataNo.replace.value != '' ? 'waiverIataNo' : null,
@@ -2286,64 +2286,64 @@
     	    			workPackageFareFilter.waiverPnr.replace.check && workPackageFareFilter.waiverPnr.replace.value != null && workPackageFareFilter.waiverPnr.replace.value != '' ? 'waiverPnr' : null,
     	    			workPackageFareFilter.waiverTktFrom.replace.check && workPackageFareFilter.waiverTktFrom.replace.value != null && workPackageFareFilter.waiverTktFrom.replace.value != '' ? 'waiverTktFrom' : null,
     	    			workPackageFareFilter.waiverTktTo.replace.check && workPackageFareFilter.waiverTktTo.replace.value != null && workPackageFareFilter.waiverTktTo.replace.value != '' ? 'waiverTktTo' : null,
-    	    					
+
     	    			workPackageFareFilter.waiverOri.replace.check && workPackageFareFilter.waiverOri.replace.value != null && workPackageFareFilter.waiverOri.replace.value != '' ? 'waiverOri' : null,
     	    			workPackageFareFilter.waiverDest.replace.check && workPackageFareFilter.waiverDest.replace.value != null && workPackageFareFilter.waiverDest.replace.value != '' ? 'waiverDest' : null,
     	    			workPackageFareFilter.waiverOriginalItinerary.replace.check && workPackageFareFilter.waiverOriginalItinerary.replace.value != null && workPackageFareFilter.waiverOriginalItinerary.replace.value != '' ? 'waiverOriginalItinerary' : null,
-    	    		
-    					workPackageFareFilter.waiverNewItinerary.replace.check && workPackageFareFilter.waiverNewItinerary.replace.value != null && workPackageFareFilter.waiverNewItinerary.search != '' ? 'waiverNewItinerary' : null,    	    						
-    					workPackageFareFilter.waiverOriginalBasicFare.replace.check && workPackageFareFilter.waiverOriginalBasicFare.replace.value != null && workPackageFareFilter.waiverOriginalBasicFare.search != '' ? 'waiverOriginalBasicFare' : null,    	    						
-    							
-    	    			workPackageFareFilter.waiverNewBasicFare.replace.check && workPackageFareFilter.waiverNewBasicFare.replace.value != null && workPackageFareFilter.waiverNewBasicFare.replace.value != '' ? 'waiverNewBasicFare' : null,    	    						
-    	    			workPackageFareFilter.waiverApprovedFare.replace.check && workPackageFareFilter.waiverApprovedFare.replace.value != null && workPackageFareFilter.waiverApprovedFare.replace.value != '' ? 'waiverApprovedFare' : null,    	    						
-    	    			workPackageFareFilter.waiverFareLost.replace.check && workPackageFareFilter.waiverFareLost.replace.value != null && workPackageFareFilter.waiverFareLost.replace.value != '' ? 'waiverFareLost' : null,    	    						
-    	    			workPackageFareFilter.waiverCalculatedPn.replace.check && workPackageFareFilter.waiverCalculatedPn.replace.value != null && workPackageFareFilter.waiverCalculatedPn.replace.value != '' ? 'waiverCalculatedPn' : null,    	    						
-    	    			workPackageFareFilter.waiverOriginalPn.replace.check && workPackageFareFilter.waiverOriginalPn.replace.value != null && workPackageFareFilter.waiverOriginalPn.replace.value != '' ? 'waiverOriginalPn' : null,    	    						
-    	    	    	workPackageFareFilter.waiverApprovedPn.replace.check && workPackageFareFilter.waiverApprovedPn.replace.value != null && workPackageFareFilter.waiverApprovedPn.replace.value != '' ? 'waiverApprovedPn' : null,    	    						
-    	    	    	workPackageFareFilter.waiverPenaltyLostPercent.replace.check && workPackageFareFilter.waiverPenaltyLostPercent.replace.value != null && workPackageFareFilter.waiverPenaltyLostPercent.replace.value != '' ? 'waiverPenaltyLostPercent' : null,    	    						
-    	    	    	workPackageFareFilter.waiverPenaltyLostAmount.replace.check && workPackageFareFilter.waiverPenaltyLostAmount.replace.value != null && workPackageFareFilter.waiverPenaltyLostAmount.replace.value != '' ? 'waiverPenaltyLostAmount' : null,    	    						
-    	    	    	workPackageFareFilter.waiverCurrency.replace.check && workPackageFareFilter.waiverCurrency.replace.value != null && workPackageFareFilter.waiverCurrency.replace.value != '' ? 'waiverCurrency' : null,    	    						
-    	    	    	workPackageFareFilter.waiverTotalPax.replace.check && workPackageFareFilter.waiverTotalPax.replace.value != null && workPackageFareFilter.waiverTotalPax.replace.value != '' ? 'waiverTotalPax' : null,    	    						
-    	    	    	workPackageFareFilter.waiverTotalLost.replace.check && workPackageFareFilter.waiverTotalLost.replace.value != null && workPackageFareFilter.waiverTotalLost.replace.value != '' ? 'waiverTotalLost' : null,    	    						
-    	    	    	workPackageFareFilter.waiverRemark.replace.check && workPackageFareFilter.waiverRemark.replace.value != null && workPackageFareFilter.waiverRemark.replace.value != '' ? 'waiverRemark' : null,    	    						
-     	    		
+
+    					workPackageFareFilter.waiverNewItinerary.replace.check && workPackageFareFilter.waiverNewItinerary.replace.value != null && workPackageFareFilter.waiverNewItinerary.search != '' ? 'waiverNewItinerary' : null,
+    					workPackageFareFilter.waiverOriginalBasicFare.replace.check && workPackageFareFilter.waiverOriginalBasicFare.replace.value != null && workPackageFareFilter.waiverOriginalBasicFare.search != '' ? 'waiverOriginalBasicFare' : null,
+
+    	    			workPackageFareFilter.waiverNewBasicFare.replace.check && workPackageFareFilter.waiverNewBasicFare.replace.value != null && workPackageFareFilter.waiverNewBasicFare.replace.value != '' ? 'waiverNewBasicFare' : null,
+    	    			workPackageFareFilter.waiverApprovedFare.replace.check && workPackageFareFilter.waiverApprovedFare.replace.value != null && workPackageFareFilter.waiverApprovedFare.replace.value != '' ? 'waiverApprovedFare' : null,
+    	    			workPackageFareFilter.waiverFareLost.replace.check && workPackageFareFilter.waiverFareLost.replace.value != null && workPackageFareFilter.waiverFareLost.replace.value != '' ? 'waiverFareLost' : null,
+    	    			workPackageFareFilter.waiverCalculatedPn.replace.check && workPackageFareFilter.waiverCalculatedPn.replace.value != null && workPackageFareFilter.waiverCalculatedPn.replace.value != '' ? 'waiverCalculatedPn' : null,
+    	    			workPackageFareFilter.waiverOriginalPn.replace.check && workPackageFareFilter.waiverOriginalPn.replace.value != null && workPackageFareFilter.waiverOriginalPn.replace.value != '' ? 'waiverOriginalPn' : null,
+    	    	    	workPackageFareFilter.waiverApprovedPn.replace.check && workPackageFareFilter.waiverApprovedPn.replace.value != null && workPackageFareFilter.waiverApprovedPn.replace.value != '' ? 'waiverApprovedPn' : null,
+    	    	    	workPackageFareFilter.waiverPenaltyLostPercent.replace.check && workPackageFareFilter.waiverPenaltyLostPercent.replace.value != null && workPackageFareFilter.waiverPenaltyLostPercent.replace.value != '' ? 'waiverPenaltyLostPercent' : null,
+    	    	    	workPackageFareFilter.waiverPenaltyLostAmount.replace.check && workPackageFareFilter.waiverPenaltyLostAmount.replace.value != null && workPackageFareFilter.waiverPenaltyLostAmount.replace.value != '' ? 'waiverPenaltyLostAmount' : null,
+    	    	    	workPackageFareFilter.waiverCurrency.replace.check && workPackageFareFilter.waiverCurrency.replace.value != null && workPackageFareFilter.waiverCurrency.replace.value != '' ? 'waiverCurrency' : null,
+    	    	    	workPackageFareFilter.waiverTotalPax.replace.check && workPackageFareFilter.waiverTotalPax.replace.value != null && workPackageFareFilter.waiverTotalPax.replace.value != '' ? 'waiverTotalPax' : null,
+    	    	    	workPackageFareFilter.waiverTotalLost.replace.check && workPackageFareFilter.waiverTotalLost.replace.value != null && workPackageFareFilter.waiverTotalLost.replace.value != '' ? 'waiverTotalLost' : null,
+    	    	    	workPackageFareFilter.waiverRemark.replace.check && workPackageFareFilter.waiverRemark.replace.value != null && workPackageFareFilter.waiverRemark.replace.value != '' ? 'waiverRemark' : null,
+
     	    		];
- 	    			
+
  	    			for(var x=0;x<listField.length;x++){
  	    				if(listField[x] != null){
  	    					fare[listField[x]] = getDescendantProp(workPackageFareFilter, listField[x]+'.replace.value');
  	    				}
  	    			}
  	    		}
- 	    		
+
     	    	var index = 0;
     	    	if(!workPackageFareFilter.replaceAll){
 		    		if(workPackageFareFilter.index != null){
 		    			index = workPackageFareFilter.index;
 		    		}
     	    	}
-	    		
+
 	    		for(var i = 0; i < fareSheet.fares.length; i++){
 	    			fareSheet.fares[i].field = {};
 	    		}
-	    		
+
 	    		var find = false;
-	    		
+
 	    		for(var i = index; i < fareSheet.fares.length; i++){
-	    			
+
 	    			if(fareSheet.fares[i].field == null || fareSheet.fares[i].field == undefined){
     					fareSheet.fares[i].field = {};
     		    	}
-	    			
+
 	    			//Unselect
 	    			//fareSheet.fares[i].field['no'] =  false;
-	    			
+
 	    			if(checkField(workPackageFareFilter, workPackageFareFilter.andor, fareSheet.fares[i])){
     					find = true;
-    					
-    					//select all field   
+
+    					//select all field
     					var tableEl = document.querySelector( '#'+table );
-    					
+
     					//regular fare column size
     					var fromColumn = 0;
     					var toColumn = 50;
@@ -2351,14 +2351,14 @@
 	    					  var column = angular.element(tableEl.rows[i+1].cells[f]).attr('id');
 	    					  fareSheet.fares[i].field[column] = true;
 	    				}
-	    				
+
     					if(i+1 == fareSheet.fares.length){
     						workPackageFareFilter.index = 0;
     					}
     					else{
     						workPackageFareFilter.index = i+1;
     					}
-    					
+
     					if(workPackageFareFilter.replace){
     						replaceField(workPackageFareFilter, fareSheet.fares[i]);
     						break;
@@ -2367,25 +2367,25 @@
     						replaceField(workPackageFareFilter, fareSheet.fares[i]);
     					}
     					else{
-	    					break;	    						
+	    					break;
     					}
-    				}    			
+    				}
 	    		}
 	    		if(!find){
 	    			if(workPackageFareFilter.message == null){
 	    				workPackageFareFilter.message = "No Matches found, continue search at the beginning?";
 	    			}
 	    		}
-	    		
-    	    	vm.searchReplace(fareType, table, fareSheet, workPackageFareFilter);        	    
+
+    	    	vm.searchReplace(fareType, table, fareSheet, workPackageFareFilter);
             }, function() {
-        			
+
             });
  	    };
         vm.rowFaresSelected = function(workPackageFare){
         	vm.selectedFare = workPackageFare;
 	    }
-        
+
         vm.deleteFaresSelected = function(type, workPackageFare, parentIdx, idx){
     		if(type == 'fares'){
     			vm.faresActionButton[parentIdx+''+idx] = false;
@@ -2402,25 +2402,25 @@
     		else if(type == 'waiver'){
     			vm.waiverFaresActionButton[parentIdx+''+idx] = false;
     		}
-        	workPackageFare.fares.splice(idx, 1);  
+        	workPackageFare.fares.splice(idx, 1);
 	    }
-        
+
         vm.deleteDiscountFaresSelected = function(idx){
-    		vm.workPackage.discountFareSheet[vm.selectedDiscountTab].fares.splice(idx, 1);  
+    		vm.workPackage.discountFareSheet[vm.selectedDiscountTab].fares.splice(idx, 1);
         }
-        
+
         vm.deleteMarketFaresSelected = function(idx){
-    		vm.workPackage.marketFareSheet[vm.selectedMarketTab].fares.splice(idx, 1);  
+    		vm.workPackage.marketFareSheet[vm.selectedMarketTab].fares.splice(idx, 1);
         }
-        
+
         vm.deleteWaiverFaresSelected = function(idx){
-    		vm.workPackage.waiverFareSheet[vm.selectedWaiverTab].fares.splice(idx, 1);  
+    		vm.workPackage.waiverFareSheet[vm.selectedWaiverTab].fares.splice(idx, 1);
         }
-        
+
         vm.duplicateFaresSelected = function(idx){
     		vm.workPackage.fares.push(JSON.parse(JSON.stringify(vm.workPackage.fares[vm.selectedTab])));
 	    }
-        
+
         function swap(input, index_A, index_B) {
     	    var temp = input[index_A];
 
@@ -2437,35 +2437,35 @@
         		swap(workPackageSheet.fares, idx, idx+1);
         	}
         }*/
-        
+
         vm.moveUpFare = function(workPackageSheet){
         	 var fares = [];
              var selected = [];
              var exist = false;
          	  for(var x=0;x<workPackageSheet.fares.length;x++){
-         		  if(workPackageSheet.fares[x].field != undefined){      			  
+         		  if(workPackageSheet.fares[x].field != undefined){
          			  Object.keys(workPackageSheet.fares[x].field).forEach(function(key) {
          				  if(workPackageSheet.fares[x].field[key]){
          					  exist = true;
          					  selected.push(workPackageSheet.fares[x]);
          				  }
-         			 });      			 
+         			 });
          		  }
          	  }
-         	if(exist){      
-         		var readySwap = true; 
-         		for(var l=selected.length; l>0; l--){      			 				
+         	if(exist){
+         		var readySwap = true;
+         		for(var l=selected.length; l>0; l--){
      				var index1 =  workPackageSheet.fares.indexOf(selected[l-1]);
-     				var index2 =  workPackageSheet.fares.indexOf(selected[l-1])-1; 
+     				var index2 =  workPackageSheet.fares.indexOf(selected[l-1])-1;
      				if(index1 == 0){
      					readySwap = false;
      				}
      			 }
-         		 
+
          		if(readySwap){
-         		 for(var l=0; l<selected.length; l++){      			 				
+         		 for(var l=0; l<selected.length; l++){
     				var index1 =  workPackageSheet.fares.indexOf(selected[l]);
-    				var index2 =  workPackageSheet.fares.indexOf(selected[l])-1; 
+    				var index2 =  workPackageSheet.fares.indexOf(selected[l])-1;
     				swap(workPackageSheet.fares, index1, index2);
     			 }
          		 for(var x=0;x<workPackageSheet.fares.length;x++){
@@ -2479,29 +2479,29 @@
           var selected = [];
           var exist = false;
       	  for(var x=0;x<workPackageSheet.fares.length;x++){
-      		  if(workPackageSheet.fares[x].field != undefined){      			  
+      		  if(workPackageSheet.fares[x].field != undefined){
       			  Object.keys(workPackageSheet.fares[x].field).forEach(function(key) {
       				  if(workPackageSheet.fares[x].field[key]){
       					  exist = true;
       					  selected.push(workPackageSheet.fares[x]);
       				  }
-      			 });      			 
+      			 });
       		  }
       	  }
-      	if(exist){      
-      		var readySwap = true; 
-      		for(var l=selected.length; l>0; l--){      			 				
+      	if(exist){
+      		var readySwap = true;
+      		for(var l=selected.length; l>0; l--){
   				var index1 =  workPackageSheet.fares.indexOf(selected[l-1]);
-  				var index2 =  workPackageSheet.fares.indexOf(selected[l-1])+1; 
+  				var index2 =  workPackageSheet.fares.indexOf(selected[l-1])+1;
   				if(index2 == workPackageSheet.fares.length){
   					readySwap = false;
   				}
   			 }
-      		 
+
       		if(readySwap){
-      		 for(var l=selected.length; l>0; l--){      			 				
+      		 for(var l=selected.length; l>0; l--){
  				var index1 =  workPackageSheet.fares.indexOf(selected[l-1]);
- 				var index2 =  workPackageSheet.fares.indexOf(selected[l-1])+1; 
+ 				var index2 =  workPackageSheet.fares.indexOf(selected[l-1])+1;
  				swap(workPackageSheet.fares, index1, index2);
  			 }
       		 for(var x=0;x<workPackageSheet.fares.length;x++){
@@ -2510,153 +2510,153 @@
       		}
 		  }
         }
-        
+
         vm.clearSelection = function(workPackageSheet){
-        	
+
         	for(var x=0;x<workPackageSheet.fares.length;x++){
 //        		console.log(workPackageSheet.fares[x].field);
         		if(workPackageSheet.fares[x].field != undefined){
        			  Object.keys(workPackageSheet.fares[x].field).forEach(function(key,index) {
-       				  
+
        				  if(workPackageSheet.fares[x].field[key]){
        					  if(key == 'tarno' || key == 'tarcd' || key == 'global'){
        						 workPackageSheet.fares[x].tariffNumber = null;
 	   					  }
 	   					  else{
-	   						  workPackageSheet.fares[x][key] = null;       		
+	   						  workPackageSheet.fares[x][key] = null;
 	   					  }
        				  }
        			  });
        		  }
         	}
-        	
+
         };
         //End Specific Fares Function
-        
+
         //Addon Fares Function
         vm.addAddon = function(){
         	if(vm.workPackage.addonFareSheet[vm.selectedAddonTab].fares == null){
-        		vm.workPackage.addonFareSheet[vm.selectedAddonTab].fares = [];	      	  	
+        		vm.workPackage.addonFareSheet[vm.selectedAddonTab].fares = [];
         	}
-        	
+
         	vm.workPackage.addonFareSheet[vm.selectedAddonTab].fares.push({
       	  		status:"PENDING",
       	  		action:"New",
       	  		carrier:"GA",
       	  	});
         }
-        
+
         vm.rowAddonFaresSelected = function(workPackageFare){
 	    	vm.selectedFareAddon = workPackageFare;
 	    }
-	    
+
 	    vm.deleteAddonFaresSelected = function(){
     		var index = vm.workPackage.addonFares.indexOf(vm.selectedFareAddon);
-    		vm.workPackage.addonFares.splice(index, 1);  
+    		vm.workPackage.addonFares.splice(index, 1);
 	    }
-	    
+
 	    vm.duplicateAddonFaresSelected = function(){
     		vm.workPackage.addonFares.push(JSON.parse(JSON.stringify(vm.selectedFareAddon)));
 	    }
         //End Addon Fares Function
-        
+
 	    //Market Fares Function
 	    vm.addMarketFares = function(){
 	    	if(vm.workPackage.marketFareSheet[vm.selectedMarketTab].fares == null){
-        		vm.workPackage.marketFareSheet[vm.selectedMarketTab].fares = [];	      	  	
+        		vm.workPackage.marketFareSheet[vm.selectedMarketTab].fares = [];
         	}
-        	
+
         	vm.workPackage.marketFareSheet[vm.selectedMarketTab].fares.push({
       	  		status:"PENDING",
       	  		action:"New",
       	  		carrier:"GA",
       	  	});
 	    };
-	    
+
 	    vm.rowMarketFaresSelected = function(workPackageFare){
     		vm.selectedFareMarket = workPackageFare;
     		for(var x=0;x<vm.workPackage.marketRulesData.length;x++){
     			if(workPackageFare.ruleno == vm.workPackage.marketRulesData[x].ruleid){
     				vm.selectedFareMarket.fareRule = vm.workPackage.marketRulesData[x].fareRule;
     				break;
-    			}	    			
+    			}
     		}
 	    }
-	    
+
 	    vm.deleteMarketFaresSelected = function(){
     		var index = vm.workPackage.marketFares.indexOf(vm.selectedFareMarket);
-    		vm.workPackage.marketFares.splice(index, 1);  
+    		vm.workPackage.marketFares.splice(index, 1);
 	    }
-	    
+
 	    vm.duplicateMarketFaresSelected = function(){
     		vm.workPackage.marketFares.push(JSON.parse(JSON.stringify(vm.selectedFareMarket)));
 	    }
 	    //End Market Fares Function
-	    
-	    
+
+
 	    //Waiver Fares Function
 	    vm.addWaiverFares = function(){
 	    	if(vm.workPackage.waiverFareSheet[vm.selectedWaiverTab].fares == null){
-        		vm.workPackage.waiverFareSheet[vm.selectedWaiverTab].fares = [];	      	  	
+        		vm.workPackage.waiverFareSheet[vm.selectedWaiverTab].fares = [];
         	}
-        	
+
         	vm.workPackage.waiverFareSheet[vm.selectedWaiverTab].fares.push({
       	  		status:"PENDING",
       	  		action:"New",
       	  		carrier:"GA",
       	  	});
 	    };
-	    
+
 	    vm.rowWaiverFaresSelected = function(workPackageFare){
     		vm.selectedFareWaiver = workPackageFare;
     		for(var x=0;x<vm.workPackage.waiverRulesData.length;x++){
     			if(workPackageFare.ruleno == vm.workPackage.waiverRulesData[x].ruleid){
     				vm.selectedFareWaiver.fareRule = vm.workPackage.waiverRulesData[x].fareRule;
     				break;
-    			}	    			
+    			}
     		}
 	    }
-	    
+
 	    vm.deleteWaiverFaresSelected = function(){
     		var index = vm.workPackage.waiverFares.indexOf(vm.selectedFareWaiver);
-    		vm.workPackage.waiverFares.splice(index, 1);  
+    		vm.workPackage.waiverFares.splice(index, 1);
 	    }
-	    
+
 	    vm.duplicateWaiverFaresSelected = function(){
     		vm.workPackage.waiverFares.push(JSON.parse(JSON.stringify(vm.selectedFareWaiver)));
 	    }
 	    //End Waiver Fares Function
-	    
+
 	    //Filing Details
 	    vm.workPackage.tarif = [{},{}];
 	    vm.rowTarifSelected = function(tarif){
 	    		vm.selectedTarif = tarif;
 	    }
-	    
+
 	    vm.addBatch = function(){
 	    		vm.batch.push({no:"", gfsref:"", gfsdate:""});
 	    };
-	    
+
 	    vm.removeBatch = function(batch){
 	    		 var index = vm.batch.indexOf(batch);
-	    		 vm.batch.splice(index, 1);  
+	    		 vm.batch.splice(index, 1);
 	    };
 	    //End Filing Details
-	    
-	    
+
+
 	    //Discount Fares
 	    vm.addDiscountFares = function(){
 	    	if(vm.workPackage.discountFareSheet[vm.selectedDiscountTab].fares == null){
 // 	    		console.log("WORKPACKAGE DISCOUNT FARES NULL");
  	    		vm.workPackage.discountFareSheet[vm.selectedDiscountTab].fares = [];
 	       	  }
- 	    	
+
  	    		vm.workPackage.discountFareSheet[vm.selectedDiscountTab].fares.push({
 	 			  status:"PENDING",
 	 			  action:"New",
       	 	      carrier:"GA"
 	 		  });
- 	    		
+
 //	 		  if(vm.workPackage.discountFares == null){
 //	       		vm.workPackage.discountFares = [];
 //	       	  }
@@ -2665,23 +2665,23 @@
 //	 			  action:"NEW"
 //	 		  });
 	    }
-	    
+
 	    vm.rowFaresDiscountSelected = function(workPackageFare){
 	    		vm.selectedFareDiscount = workPackageFare;
 		}
-	      
+
 	    vm.deleteFaresDiscountSelected = function(){
       		var index = vm.workPackage.discountFares.indexOf(vm.selectedFareDiscount);
-      		vm.workPackage.discountFares.splice(index, 1);  
+      		vm.workPackage.discountFares.splice(index, 1);
 	    }
-	      
+
 	    vm.duplicateFaresDiscountSelected = function(){
       		vm.workPackage.discountFares.push(JSON.parse(JSON.stringify(vm.selectedFareDiscount)));
 		}
-	    
+
         vm.derivedFaresDiscount  = function() {
         	    WorkPackage.findDiscountDerivedFares(vm.selectedFareDiscount, onFindSuccess, onFindFailure);
-        	    
+
         	    function onFindSuccess(result){
 	        		$uibModal.open({
 	                templateUrl: 'app/entities/work-package/work-package-derived-fares-dialog.html',
@@ -2695,33 +2695,33 @@
 	                    fareSelected: vm.selectedFareDiscount
 	                }
 	            }).result.then(function(workPackage) {
-	            	    
+
 	            }, function() {
-	        			
+
 	            });
         	    }
-        	    
+
         	    function onFindFailure(error){
-        	    	
+
         	    }
         }
 
 	    //End Discount Fares
-	    
+
         vm.rowSelected = function(workPackageFare){
 	    		vm.selectedFare = workPackageFare;
 //	    		for(var x=0;x<vm.workPackage.marketRulesData.length;x++){
 //	    			if(workPackageFare.ruleno == vm.workPackage.marketRulesData[x].ruleid){
 //	    				vm.selectedFare.fareRule = vm.workPackage.marketRulesData[x].fareRule;
 //	    				break;
-//	    			}	    			
+//	    			}
 //	    		}
 	    }
-        
+
         if(vm.workPackage.addonFares == null){
         		vm.workPackage.addonFares = [];
     		}
-    
+
         //vm.workPackage.businessArea = 'JKT';
        //vm.workPackage.status = 'NEW';
        // vm.workPackage.fareCarrier = 'GA';
@@ -2735,24 +2735,24 @@
         vm.actionButton = {isopen:false};
         vm.editButton = {isopen:false};
         vm.editDiscountButton = {isopen:false};
-        
+
         ///
         vm.batch = [];
         vm.attachment = [
-    		
+
         ];
         vm.marketRules = [];
         vm.currentBatch = 1;
-        
+
         vm.save = save;
-        
+
 //        var unsubscribe = $rootScope.$on('fmpApp:workPackageUpdate', function(event, result) {
 //            vm.workPackage = result;
 //        });
         $scope.$on('$destroy', function(){
         	window.onbeforeunload = null;
         });
-      
+
         Account.get().$promise
         .then(function(account){
         	vm.account = account;
@@ -2760,7 +2760,7 @@
         .catch(function(err){
 //        	console.log(err);
         });
-       
+
         vm.datePickerOpenStatus.createdDate = false;
         vm.datePickerOpenStatus.filingDate = false;
         vm.datePickerOpenStatus.distributionDate = false;
@@ -2776,27 +2776,27 @@
         	vm.datePickerOpenStatus[variable][sheet+row] = true;
             //vm.datePickerOpenStatus[date] = true;
         }
-        
+
         function getCalendar (date){
         	return vm.datePickerOpenStatus[date];
         }
-       
-        
+
+
         vm.addFiling = function(){
 	        	if(vm.workPackage.filingInstructionData == null){
 	        		vm.workPackage.filingInstructionData = [];
 	        	}
         		vm.workPackage.filingInstructionData.push({status:"PENDING", tarno:"", cxr:"GA", comment:"", file:"", fileContentType:""});
         }
-        
-         
+
+
 	   vm.addAttachment = function(){
 		 	if(vm.workPackage.attachmentData == null){
 	        	vm.workPackage.attachmentData = [];
 	        }
 	   		vm.workPackage.attachmentData.push({comment:""});
 	   }
-	   
+
 	   vm.removeAttachment = function(attachment){
 		  if(vm.workPackage.reviewLevel != "DISTRIBUTION"){
 			  if(vm.workPackage.status != "NEW"){
@@ -2804,37 +2804,37 @@
 				   attachment.isDeleted = true;
 			   }else{
 				 var index = vm.workPackage.attachmentData.indexOf(attachment);
-			  	 vm.workPackage.attachmentData.splice(index, 1); 
-			   }  
+			  	 vm.workPackage.attachmentData.splice(index, 1);
+			   }
 		  }
 	  };
-	  
+
 	  vm.addMarketRules = function(){
 		  if(vm.workPackage.marketRulesData == null){
       		vm.workPackage.marketRulesData = [];
       	}
 		  vm.workPackage.marketRulesData.push({status:"PENDING", file:"", comment:""});
 	   }
-	  
-	  
+
+
 	   vm.removeMarketRules = function(marketRules){
 	  		 var index = vm.workPackage.marketRulesData.indexOf(marketRules);
-	  		 vm.workPackage.marketRulesData.splice(index, 1);  
+	  		 vm.workPackage.marketRulesData.splice(index, 1);
 	  };
-	  
+
 	  vm.passUp = function(){
 		    if (confirm("Are you sure to Pass up this workorder?")) {
 		    	vm.workPackage.validate = true;
-		    	
+
 		    	var wp = angular.copy(vm.workPackage);
 		    	removeTime(wp);
-		    	
+
 		    	WorkPackage.update(wp, function onSaveSuccess(result){
 		    		if(vm.mapWorkpackage(result)){
-		    			
+
 		    			var wp2 = angular.copy(result);
 		    			removeTime(wp2);
-			    		
+
 		    			WorkPackage.passup(wp2, function(wp){
 			    			alert('Pass Up Success');
 			    			$state.go('work-package');
@@ -2848,12 +2848,12 @@
 		    } else {
 		    }
 	  };
-	  
+
 	  vm.passDown = function(){
 		    if (confirm("Are you sure to Pass down this workorder?")) {
 		    	var wp = angular.copy(vm.workPackage);
 		    	removeTime(wp);
-		    	
+
 		    	WorkPackage.passdown(wp, function(){
 	    			alert('Pass Down Success');
 	    			$state.go('work-package');
@@ -2863,20 +2863,20 @@
 		    } else {
 		    }
 	  };
-	  
+
 	  vm.passSideway = function(){
 		    if (confirm("Are you sure to Pass sideway this workorder?")) {
 		    		vm.workPackage.validate = true;
-		    		
+
 		    		var wp = angular.copy(vm.workPackage);
 			    	removeTime(wp);
-			    	
+
 			    	WorkPackage.update(wp, function onSaveSuccess(result){
 			    		if(vm.mapWorkpackage(result)){
-			    			
+
 			    			var wp2 = angular.copy(result);
 			    			removeTime(wp2);
-				    		
+
 			    			WorkPackage.passsideway(wp2, function(){
 				    			alert('Pass Sideway Success');
 				    			$state.go('work-package');
@@ -2885,16 +2885,16 @@
 				    		});
 			    		}
 			    		else{
-			    			
+
 			    		}
 			    	}, function onSaveError(){
 			    		alert('An error occured, please try again');
 			    	});
-		    		
+
 		    } else {
 		    }
 	  };
-	  
+
 	  vm.resendApprove = function(){
 		  $uibModal.open({
               templateUrl: 'app/pages/work-packages/work-package-approve-email-dialog.html',
@@ -2903,7 +2903,7 @@
               backdrop: 'static',
               size: 'lg',
               resolve: {
-                  workPackage: vm.workPackage,              	  
+                  workPackage: vm.workPackage,
 	              email: ['SystemParameter', function(SystemParameter) {
 	                   return vm.workPackage.approveConfig.email
 	              }],
@@ -2921,10 +2921,10 @@
     			alert('Approve Failed');
     		});
           }, function() {
-      			
+
           });
 	  };
-	  
+
 	  vm.viewRecipients = function(){
 		  $uibModal.open({
               templateUrl: 'app/pages/work-packages/work-package-view-email-dialog.html',
@@ -2933,7 +2933,7 @@
               backdrop: 'static',
               size: 'lg',
               resolve: {
-                  workPackage: vm.workPackage,              	  
+                  workPackage: vm.workPackage,
 	              email: ['SystemParameter', function(SystemParameter) {
 	                   return vm.workPackage.approveConfig.email
 	              }],
@@ -2950,13 +2950,13 @@
 //    			console.log("fail");
     		});
           }, function() {
-      			
+
           });
 	  };
-	  
+
 	  vm.approve = function(){
 		  vm.workPackage.validate = true;
-		  
+
 		  var wp = angular.copy(vm.workPackage);
 		  if(wp.type == 'WAIVER'){
 			  for(var x=0;x<wp.waiverFareSheet.length;x++){
@@ -2967,12 +2967,12 @@
 			  }
 		  }
 	      removeTime(wp);
-	    	
+
 		  WorkPackage.update(wp, function onSaveSuccess(result){
 			  if(vm.mapWorkpackage(result)){
 				  var wp2 = angular.copy(result);
 			      removeTime(wp2);
-			      
+
 				  var validated = true;
 				  var cekStatus = "";
 				  var counterApprove = false;
@@ -2983,7 +2983,7 @@
 					  cekStatus = "Interoffice comment could not be blank";
 					  validated = false;
 				  }
-				  
+
 				  if(vm.workPackage.fareSheet != null && vm.workPackage.fareSheet.length > 0){
 					  for(var x=0;x<vm.workPackage.fareSheet.length;x++){
 						  if(vm.workPackage.fareSheet[x].fares != null && vm.workPackage.fareSheet[x].fares.length > 0){
@@ -3004,7 +3004,7 @@
 						  }
 					  }
 				  }
-				  
+
 				  if(vm.workPackage.discountFareSheet != null && vm.workPackage.discountFareSheet.length > 0){
 					  for(var x=0;x<vm.workPackage.discountFareSheet.length;x++){
 						  if(vm.workPackage.discountFareSheet[x].fares != null && vm.workPackage.discountFareSheet[x].fares.length > 0){
@@ -3023,8 +3023,8 @@
 							  }
 						  }
 					  }
-				  }	
-				  
+				  }
+
 				  if(vm.workPackage.addonFareSheet != null && vm.workPackage.addonFareSheet.length > 0){
 					  for(var x=0;x<vm.workPackage.addonFareSheet.length;x++){
 						  if(vm.workPackage.addonFareSheet[x].fares != null && vm.workPackage.addonFareSheet[x].fares.length > 0){
@@ -3043,9 +3043,9 @@
 								  }
 							  }
 						  }
-					  } 
-				  }	
-				  
+					  }
+				  }
+
 				  if(vm.workPackage.marketFareSheet != null && vm.workPackage.marketFareSheet.length > 0){
 					  for(var x=0;x<vm.workPackage.marketFareSheet.length;x++){
 						  if(vm.workPackage.marketFareSheet[x].fares != null && vm.workPackage.marketFareSheet[x].fares.length > 0){
@@ -3055,7 +3055,7 @@
 									  approveRuleNo.push(vm.workPackage.marketFareSheet[x].fares[y].ruleno);
 									  counterApprove =true;
 								  }
-							  }					  
+							  }
 							  for(var y=0;y<vm.workPackage.marketFareSheet[x].fares.length;y++){
 								  if(vm.workPackage.marketFareSheet[x].fares[y].status == "" || vm.workPackage.marketFareSheet[x].fares[y].status == "PENDING" || !counterApprove){
 									  cekStatus = "Can not approve because status fare is : "+vm.workPackage.marketFareSheet[x].fares[y].status;
@@ -3079,12 +3079,12 @@
 						  }else{
 							  cekStatus = "Market rules data could not be blank";
 							  validated = false;
-						  }				  
+						  }
 					  }
-				  }	
-				  				 
+				  }
+
 				  if(validated){
-					  
+
 					  if(vm.workPackage.fareSheet != null && vm.workPackage.fareSheet.length > 0){
 						  for(var x=0;x<vm.workPackage.fareSheet.length;x++){
 							  if(vm.workPackage.fareSheet[x].fares != null && vm.workPackage.fareSheet[x].fares.length > 0){
@@ -3092,39 +3092,39 @@
 							  }
 						  }
 					  }
-					  
+
 					  if(vm.workPackage.discountFareSheet != null && vm.workPackage.discountFareSheet.length > 0){
 						  for(var x=0;x<vm.workPackage.discountFareSheet.length;x++){
 							  if(vm.workPackage.discountFareSheet[x].fares != null && vm.workPackage.discountFareSheet[x].fares.length > 0){
-								 
+
 							  }
 						  }
-					  }	
-					  
+					  }
+
 					  if(vm.workPackage.addonFareSheet != null && vm.workPackage.addonFareSheet.length > 0){
 						  for(var x=0;x<vm.workPackage.addonFareSheet.length;x++){
 							  if(vm.workPackage.addonFareSheet[x].fares != null && vm.workPackage.addonFareSheet[x].fares.length > 0){
 								  vm.expandCityGroup(vm.workPackage.addonFareSheet[x]);
 							  }
-						  } 
-					  }	
-					  
+						  }
+					  }
+
 					  if(vm.workPackage.marketFareSheet != null && vm.workPackage.marketFareSheet.length > 0){
 						  for(var x=0;x<vm.workPackage.marketFareSheet.length;x++){
 							  if(vm.workPackage.marketFareSheet[x].fares != null && vm.workPackage.marketFareSheet[x].fares.length > 0){
 								  vm.expandCityGroup(vm.workPackage.marketFareSheet[x]);
 							  }
 						  }
-					  }	
-					  
+					  }
+
 					  if(vm.workPackage.waiverFareSheet != null && vm.workPackage.waiverFareSheet.length > 0){
 						  for(var x=0;x<vm.workPackage.waiverFareSheet.length;x++){
 							  if(vm.workPackage.waiverFareSheet[x].fares != null && vm.workPackage.waiverFareSheet[x].fares.length > 0){
 								  vm.expandCityGroup(vm.workPackage.waiverFareSheet[x]);
 							  }
 						  }
-					  }	
-					  
+					  }
+
 					  $uibModal.open({
 			              templateUrl: 'app/pages/work-packages/work-package-approve-email-dialog.html',
 			              controller: 'WorkPackageApproveEmailDialogController',
@@ -3132,7 +3132,7 @@
 			              backdrop: 'static',
 			              size: 'lg',
 			              resolve: {
-			                  workPackage: vm.workPackage,              	  
+			                  workPackage: vm.workPackage,
 				              email: ['SystemParameter', function(SystemParameter) {
 				                   return SystemParameter.getSystemParameterByName({name : 'APPROVE_EMAIL'}).$promise;
 				              }],
@@ -3143,15 +3143,15 @@
 			              }
 			          }).result.then(function(config) {
 			        	  vm.workPackage.approveConfig = config;
-			        	  
+
 			        	  var wp2 = angular.copy(vm.workPackage);
 					      removeTime(wp2);
-					      
-			        	  WorkPackage.update(wp2, function onSaveSuccess(result){	
-			        		  
+
+			        	  WorkPackage.update(wp2, function onSaveSuccess(result){
+
 			        		  var wp3 = angular.copy(result);
 						      removeTime(wp3);
-						      
+
 				        	  WorkPackage.approve(wp3, function(){
 				        		  alert('Approve Success');
 				        		  $state.go('work-package');
@@ -3162,26 +3162,26 @@
 			        		  alert('An error occured, please try again');
 					      });
 			          }, function() {
-			      			
+
 			          });
 				  } else{
 					  if(cekStatus.length != 0){
 						  alert(cekStatus);
 					  }else{
-						 alert('Work Package cannot be approved, please check the workorder');  
-					  }			  
-				  } 
-			  }	
+						 alert('Work Package cannot be approved, please check the workorder');
+					  }
+				  }
+			  }
 	    	}, function onSaveError(){
 	    		alert('An error occured, please try again');
 	    	});
 	  };
-	  
+
 	  vm.referback = function(){
 		    if (confirm("Are you sure to Referback this workorder?")) {
 		    	 	var wp = angular.copy(vm.workPackage);
 		    	 	removeTime(wp);
-			      
+
 		    		WorkPackage.referback(wp, function(){
 		    			alert('Refer Back Success');
 		    			$state.go('work-package');
@@ -3191,12 +3191,12 @@
 		    } else {
 		    }
 	  };
-	  
+
 	  vm.complete = function(){
 		    if (confirm("Are you sure to Complete this workorder?")) {
 		    	var wp = angular.copy(vm.workPackage);
 	    	 	removeTime(wp);
-	    	 	
+
 		    		WorkPackage.complete(wp, function(){
 		    			alert('Complete Success');
 		    			$state.go('work-package');
@@ -3206,12 +3206,12 @@
 		    } else {
 		    }
 	  };
-	  
+
 	  vm.createBatches = function(){
 		  if (confirm("Are you sure to create Batches this workorder?")) {
 			  var wp = angular.copy(vm.workPackage);
 	    	 	removeTime(wp);
-	    	 	
+
 	    		WorkPackage.createbatch(wp, function(wo){
 	    			alert('Create Batches Success');
 	    			alert(wo.batchString);
@@ -3222,12 +3222,12 @@
 	    } else {
 	    }
 	  }
-	  
+
 	  vm.reviseBatches = function(){
 		  if (confirm("Are you sure to revise Batches this workorder?")) {
 			  var wp = angular.copy(vm.workPackage);
 	    	 	removeTime(wp);
-	    	 	
+
 	    		WorkPackage.revisebatch(wp, function(){
 	    			alert('Revise Batches Success');
 	    			$state.go('work-package');
@@ -3237,12 +3237,12 @@
 	    } else {
 	    }
 	  }
-	  
+
 	  vm.completeBatches = function(){
 		  if (confirm("Are you sure to complete Batches this workorder?")) {
 			  var wp = angular.copy(vm.workPackage);
 	    	 	removeTime(wp);
-	    	 	
+
 	    		WorkPackage.completebatch(wp, function(){
 	    			alert('Complete Batches Success');
 	    			$state.go('work-package');
@@ -3252,7 +3252,7 @@
 	    } else {
 	    }
 	  }
-	  
+
 	  function save (isValidate) {
           vm.isSaving = true;
           if (vm.workPackage.id !== null) {
@@ -3271,6 +3271,9 @@
 
 	  function removeTime(workPackage){
 		  data = workPackage;
+
+		  data.saleDate = DateUtils.convertLocalDateToServer(data.saleDate);
+
 		  if(data.fareSheet.length > 0){
           	for(var x=0;x<data.fareSheet.length;x++){
           		var fares = data.fareSheet[x].fares;
@@ -3343,25 +3346,25 @@
             	}
             }
 	  }
-	  
+
       function onSaveSuccess (result) {
     	  alert("Save Success");
 	      $scope.$emit('fmpApp:workPackageUpdate', result);
-	      
-	      var data = result;    	  
-	      vm.mapWorkpackage(data);	      
-          vm.isSaving = false;          
+
+	      var data = result;
+	      vm.mapWorkpackage(data);
+          vm.isSaving = false;
       }
 
       function onSaveError () {
           vm.isSaving = false;
       }
-      
+
       vm.isFieldEditable = function(fare, field) {
 	  		var currentReviewLevel = [vm.workPackage.reviewLevel];
-	  		
+
 	  		if(currentReviewLevel != "Distribution"){
-    	        if(fare.status == 'APPROVED' || fare.status == 'REJECTED'){	
+    	        if(fare.status == 'APPROVED' || fare.status == 'REJECTED'){
     	        	if(field == 'status'){
 		    	  	    //cannot be edited by
 		    	  		var reviewLevel = ["LSO1", "LSO2", "Route Management"];
@@ -3370,7 +3373,7 @@
 	        			return false;
 	        		}
     	        }
-    	        else {	    	  		
+    	        else {
 	  	    		if(field == 'status'){
 		    	  	    //cannot be edited by
 		    	  		var reviewLevel = ["LSO", "Distribution", "Route Management"];
@@ -3421,37 +3424,37 @@
 		    	  		var reviewLevel = ["Distribution", "Route Management"];
 		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
 		    	  	}
-	  	    		
+
 	  	    		else if(field == 'footnote'){
 		    	  	    //cannot be edited by
 		    	  		var reviewLevel = ["LSO1", "LSO2", "Route Management"];
 		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
 		    	  	}
-	  	    		
+
 	  	    		else if(field == 'rtgno'){
 		    	  	    //cannot be edited by
 		    	  		var reviewLevel = ["Route Management"];
 		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
 		    	  	}
-	  	    		
+
 	  	    		else if(field == 'rtgno'){
 		    	  	    //cannot be edited by
 		    	  		var reviewLevel = ["Route Management"];
 		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
 		    	  	}
-	  	    		
+
 	  	    		else if(field == 'ruleno'){
 		    	  	    //cannot be edited by
 		    	  		var reviewLevel = ["Route Management"];
 		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
 		    	  	}
-	  	    		
+
 	  	    		else if(field == 'currency'){
 		    	  	    //cannot be edited by
 		    	  		var reviewLevel = ["Distribution", "Route Management"];
 		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
 		    	  	}
-	  	    		
+
 	  	    		else if(field == 'amount'){
 		    	  	    //cannot be edited by
 		    	  		var reviewLevel = ["Distribution", "Route Management"];
@@ -3507,7 +3510,7 @@
 		    	  		var reviewLevel = ["Distribution", "Route Management"];
 		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
 		    	  	}
-	  	    		
+
 	  	    		//ADDON FARE
 	  	    		else if(field == 'addonFareStatus'){
 		    	  	    //cannot be edited by
@@ -3543,13 +3546,13 @@
 		    	  	    //cannot be edited by
 		    	  		var reviewLevel = [];
 		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-		    	  	}		  	    		
+		    	  	}
 	  	    		else if(field == 'addonFareCarrier'){
 		    	  	    //cannot be edited by
 		    	  		var reviewLevel = [];
 		    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
 		    	  	}
-	  	    		
+
 	  	    		//DISCOUNT FARE
 	  	    	  	else if(field == 'discountStatus'){
 	  	    	  		//not required by
@@ -3713,22 +3716,22 @@
 	  			return true;
 	  		}
       };
-      
-      
+
+
       vm.isFieldDisable = function(field){
     	    var currentReviewLevel = [vm.workPackage.reviewLevel];
-    	    
+
     	  	if(field == 'priority'){
     	  		//cannot be edited by
-    	  		var reviewLevel = ["LSO", "HO", "Distribution", "Route Management"];    	  		
+    	  		var reviewLevel = ["LSO", "HO", "Distribution", "Route Management"];
     	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
     	  	if(field == 'saleDate'){
     	  		//cannot be edited by
-    	  		var reviewLevel = ["Distribution", "Route Management"];    	  		
+    	  		var reviewLevel = ["Distribution", "Route Management"];
     	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
-    	  	
+
     	  	else if(field == 'name'){
     	  	    //cannot be edited by
     	  		var reviewLevel = ["Distribution", "Route Management"];
@@ -3759,8 +3762,8 @@
     	  		var reviewLevel = ["Distribution", "Route Management"];
     	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
-    	  	
-    	  	//DISCOUNT  
+
+    	  	//DISCOUNT
     	  	else if(field == 'discountFareType'){
     	  	    //not required by
     	  		var reviewLevel = ["Distribution", "Route Management"];
@@ -3781,8 +3784,8 @@
     	  		var reviewLevel = ["Distribution", "Route Management"];
     	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
-    	  	//DISCOUNT 
-    	  	
+    	  	//DISCOUNT
+
     	  	/////// COMMENT
     	  	else if(field == 'ioComment'){
     	  	    //cannot be edited by
@@ -3794,9 +3797,9 @@
     	  		var reviewLevel = ["Distribution", "Route Management"];
     	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
-    	  	
+
     	  	/////// END COMMENT
-    	  	
+
     	  	/////// FARES
     	  	else if(field == 'status'){
     	  	    //cannot be edited by
@@ -3908,7 +3911,7 @@
     	  		var reviewLevel = ["Distribution", "Route Management"];
     	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
-    	  	
+
     	  	//ADDON FARES
     	  	else if(field == 'addonFaresName'){
     	  		//cannot be edited by
@@ -4010,7 +4013,7 @@
     	  		var reviewLevel = ["Route Management"];
     	  		return vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
-    	  	
+
     	  	//DISCOUNT FARE
     	  	else if(field == 'discountStatus'){
     	  		//not required by
@@ -4169,31 +4172,31 @@
     	  	}
     	  	//END DISCOUNT FARE
       };
-      
+
       vm.getFieldDisable = function(currentReviewLevel, reviewLevel){
   		var editable = false;
-  		
+
   		for(var x=0; x<currentReviewLevel.length; x++){
   			if(reviewLevel.indexOf(currentReviewLevel[x]) > -1){
   				editable = true;
   				break;
   			}
   		}
-  		
+
   		return editable;
       }
-      
+
       vm.checkRequiredField = function(field){
     	  	var currentReviewLevel = [vm.workPackage.reviewLevel];
-    	  	
+
     	  	if(field == 'workpackageName'){
     	  		var reviewLevel = ["Distribution", "Route Management"];
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-    	  	}  
+    	  	}
     	  	else if(field == 'saleDate'){
     	  		var reviewLevel = ["Distribution", "Route Management"];
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-    	  	}  
+    	  	}
     	  	else if(field == 'businessArea'){
     	  		var reviewLevel = ["Distribution", "Route Management"];
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
@@ -4201,11 +4204,11 @@
     	  	else if(field == 'filingDate'){
     	  		var reviewLevel = ["LSO", "Distribution", "Route Management"];
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-    	  	}  
+    	  	}
 //    	  	else if(field == 'name'){
 //    	  		var reviewLevel = ["Distribution", "Route Management"];
 //    	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
-//    	  	}  
+//    	  	}
 
     	  	else if(field == 'fareType'){
     	  	    //not required by
@@ -4222,7 +4225,7 @@
     	  		var reviewLevel = ["LSO", "Distribution", "Route Management"];
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
-    	  	
+
     	  	//DISCOUNT FARE HEADER
     	  	else if(field == 'discountFareType'){
     	  	    //not required by
@@ -4245,7 +4248,7 @@
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
     	  	//END DISCOUNT FARE HEADER
-    	  	
+
     	  	//////FARE
     	  	else if(field == 'status'){
     	  		var reviewLevel = ["LSO", "Distribution", "Route Management"];
@@ -4360,7 +4363,7 @@
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
     	  	//END FARE
-    	  	
+
     	  	//ADDON FARE
     	  	else if(field == 'addonFaresName'){
     	  		//not required by
@@ -4473,7 +4476,7 @@
     	  		return !vm.getFieldDisable(currentReviewLevel, reviewLevel);
     	  	}
     	  	//END ADDON FARE
-    	  	
+
     	  	//DISCOUNT FARE
     	  	else if(field == 'discountStatus'){
     	  		//not required by
@@ -4632,27 +4635,27 @@
     	  	}
     	  	//END DISCOUNT FARE
       }
-      
+
       vm.importFare = function ($file, index) {
           if ($file) {
               DataUtils.toBase64($file, function(base64Data) {
                   $scope.$apply(function() {
-                      var testing = { 
+                      var testing = {
                     		  file : base64Data,
                     		  fileContentType : $file.type
                       };
-                      
+
                       vm.workPackage.importFares = testing;
                       vm.workPackage.importIndex = index;
                       //send to backend
-                      
+
                       WorkPackage.importFares(vm.workPackage, onImportSuccess, onImportFailure);
-                      
+
                       function onImportSuccess(result){
                     	  	alert('Import Success');
                     	  	vm.mapWorkpackage(result);
                       }
-                      
+
                       function onImportFailure(){
                     	    alert('Import Failed');
                       }
@@ -4660,27 +4663,27 @@
               });
           }
       };
-      
+
       vm.importFareAddon = function ($file, index) {
           if ($file) {
               DataUtils.toBase64($file, function(base64Data) {
                   $scope.$apply(function() {
-                      var testing = { 
+                      var testing = {
                     		  file : base64Data,
                     		  fileContentType : $file.type
                       };
-                      
+
                       vm.workPackage.importFares = testing;
                       vm.workPackage.importIndex = index;
                       //send to backend
-                      
+
                       WorkPackage.importFaresAddon(vm.workPackage, onImportSuccess, onImportFailure);
-                      
+
                       function onImportSuccess(result){
                   	  		alert('Import Success');
                   	  		vm.mapWorkpackage(result);
                       }
-                      
+
                       function onImportFailure(){
                     	    alert('Import Failed');
                       }
@@ -4688,27 +4691,27 @@
               });
           }
       };
-      
+
       vm.importFareWaiver = function ($file, index) {
           if ($file) {
               DataUtils.toBase64($file, function(base64Data) {
                   $scope.$apply(function() {
-                      var testing = { 
+                      var testing = {
                     		  file : base64Data,
                     		  fileContentType : $file.type
                       };
-                      
+
                       vm.workPackage.importFares = testing;
                       vm.workPackage.importIndex = index;
                       //send to backend
-                      
+
                       WorkPackage.importFaresWaiver(vm.workPackage, onImportSuccess, onImportFailure);
-                      
+
                       function onImportSuccess(result){
                     	  	alert('Import Success');
                     	  	vm.mapWorkpackage(result);
                       }
-                      
+
                       function onImportFailure(){
                     	    alert('Import Failed');
                       }
@@ -4716,7 +4719,7 @@
               });
           }
       };
-      
+
       vm.mapWorkpackage = function(result){
     	  data = result;
   	  	  data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
@@ -4726,7 +4729,7 @@
           data.queuedDate = DateUtils.convertDateTimeFromServer(data.queuedDate);
           data.lockedSince = DateUtils.convertDateTimeFromServer(data.lockedSince);
           data.saleDate = DateUtils.convertDateFromServer(data.saleDate);
-          
+
           if(data.fareSheet.length > 0){
           	for(var x=0;x<data.fareSheet.length;x++){
           		var fares = data.fareSheet[x].fares;
@@ -4741,7 +4744,7 @@
           		}
           	}
           }
-          
+
           if(data.addonFareSheet.length > 0){
           	for(var x=0;x<data.addonFareSheet.length;x++){
           		var fares = data.addonFareSheet[x].fares;
@@ -4756,7 +4759,7 @@
           		}
           	}
           }
-          
+
           if(data.marketFareSheet.length > 0){
           	for(var x=0;x<data.marketFareSheet.length;x++){
           		var fares = data.marketFareSheet[x].fares;
@@ -4771,8 +4774,8 @@
           		}
           	}
           }
-          
-          
+
+
           if(data.discountFareSheet.length > 0){
           	for(var x=0;x<data.discountFareSheet.length;x++){
           		var fares = data.discountFareSheet[x].fares;
@@ -4787,75 +4790,75 @@
           		}
           	}
           }
-        
+
           if(data.filingDetail != null && data.filingDetail.createdDate != null){
 	      		data.filingDetail.createdDate = DateUtils.convertDateTimeFromServer(data.filingDetail.createdDate);
 	      }
-	      
+
           if(data.filingDetail != null &&  data.filingDetail.releaseDate != null){
 	     		data.filingDetail.releaseDate = DateUtils.convertDateTimeFromServer(data.filingDetail.releaseDate);
 	      }
-          
-          vm.workPackage = data;          
+
+          vm.workPackage = data;
 
           if(vm.workPackage.fareSheet.length > 0){
             	for(var x=0;x<vm.workPackage.fareSheet.length;x++){
-            		vm.changeVersion(vm.workPackage.fareSheet[x], vm.workPackage.fareSheet[x].version); 
+            		vm.changeVersion(vm.workPackage.fareSheet[x], vm.workPackage.fareSheet[x].version);
             	}
             }
-            
+
             if(vm.workPackage.addonFareSheet.length > 0){
             	for(var x=0;x<vm.workPackage.addonFareSheet.length;x++){
-            		vm.changeVersion(vm.workPackage.addonFareSheet[x], vm.workPackage.addonFareSheet[x].version); 
+            		vm.changeVersion(vm.workPackage.addonFareSheet[x], vm.workPackage.addonFareSheet[x].version);
             	}
             }
-            
+
             if(vm.workPackage.marketFareSheet.length > 0){
             	for(var x=0;x<vm.workPackage.marketFareSheet.length;x++){
-            		vm.changeVersion(vm.workPackage.marketFareSheet[x], vm.workPackage.marketFareSheet[x].version);                	
+            		vm.changeVersion(vm.workPackage.marketFareSheet[x], vm.workPackage.marketFareSheet[x].version);
             	}
             }
-            
-            
+
+
             if(vm.workPackage.discountFareSheet.length > 0){
             	for(var x=0;x<vm.workPackage.discountFareSheet.length;x++){
             		vm.changeVersion(vm.workPackage.discountFareSheet[x], vm.workPackage.discountFareSheet[x].version);
             	}
             }
-            
+
             if(vm.workPackage.waiverFareSheet.length > 0){
             	for(var x=0;x<vm.workPackage.waiverFareSheet.length;x++){
             		vm.changeVersion(vm.workPackage.waiverFareSheet[x], vm.workPackage.waiverFareSheet[x].version);
             	}
             }
-            
+
             if(vm.workPackage.validation != null && ((vm.workPackage.validation.errorsCount > 0) || (vm.workPackage.validation.warningsCount > 0))){
 				alert('There is '+vm.workPackage.validation.errorsCount+' error(s) and '+vm.workPackage.validation.warningsCount+' warning(s)');
 				return false;
-		  }       
-          
+		  }
+
             return true;
       }
-      
+
       vm.importFareDiscount = function ($file) {
           if ($file) {
               DataUtils.toBase64($file, function(base64Data) {
                   $scope.$apply(function() {
-                      var testing = { 
+                      var testing = {
                     		  file : base64Data,
                     		  fileContentType : $file.type
                       };
-                      
+
                       vm.workPackage.importFares = testing;
-                      
+
                       //send to backend
                       WorkPackage.importFaresDiscount(vm.workPackage, onImportSuccess, onImportFailure);
-                      
+
                       function onImportSuccess(result){
                     	  	alert('Import Success');
                     	  	vm.mapWorkpackage(result);
                       }
-                      
+
                       function onImportFailure(){
                     	    alert('Import Failed');
                       }
@@ -4867,21 +4870,21 @@
           if ($file) {
               DataUtils.toBase64($file, function(base64Data) {
                   $scope.$apply(function() {
-                      var testing = { 
+                      var testing = {
                     		  file : base64Data,
                     		  fileContentType : $file.type
                       };
-                      
+
                       vm.workPackage.importFares = testing;
-                      
+
                       //send to backend
                       WorkPackage.importFaresMarket(vm.workPackage, onImportSuccess, onImportFailure);
-                      
+
                       function onImportSuccess(result){
                     	  	alert('Import Success');
                     	  	vm.mapWorkpackage(result);
                       }
-                      
+
                       function onImportFailure(){
                     	    alert('Import Failed');
                       }
@@ -4889,7 +4892,7 @@
               });
           }
       };
-      
+
       vm.exportFares = function(index){
     	  /*
     	  $uibModal.open({
@@ -4910,7 +4913,7 @@
 //              $state.go('work-package');
           });
     	  */
-    	  
+
     	  vm.workPackage.exportIndex = index;
     	  WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
     		  WorkPackage.exportFares(vm.workPackage, onExportSuccess, onExportFailure);
@@ -4921,14 +4924,14 @@
       			FileSaver.saveAs(blob, templateFilename);
 	    	  }
 	    	  function onExportFailure(){
-	    		  
-	    	  }    	 
+
+	    	  }
 	    	}, function onSaveError(){
 	    		alert('An error occured, please try again');
-	    	}); 
-	       
+	    	});
+
       }
-      
+
       vm.exportFaresWaiver = function(index){
     	  vm.workPackage.exportIndex = index;
     	  WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
@@ -4941,11 +4944,11 @@
 	    	  }
 	    	  function onExportFailure(error){
 //	    		  console.log(error);
-	    	  }    	 
+	    	  }
 	    	}, function onSaveError(){
 	    		alert('An error occured, please try again');
-	    	}); 
-	       
+	    	});
+
       }
       vm.exportFaresAddon = function(index){
     	  /*
@@ -4967,7 +4970,7 @@
 //              $state.go('work-package');
           });
     	  */
-    	  
+
     	  vm.workPackage.exportIndex = index;
     	  WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
     		  WorkPackage.exportFaresAddon(vm.workPackage, onExportSuccess, onExportFailure);
@@ -4978,14 +4981,14 @@
       			FileSaver.saveAs(blob, templateFilename);
 	    	  }
 	    	  function onExportFailure(){
-	    		  
-	    	  }    	 
+
+	    	  }
 	    	}, function onSaveError(){
 	    		alert('An error occured, please try again');
-	    	}); 
-	       
+	    	});
+
       }
-      
+
       vm.exportFaresMarket = function(index){
     	  vm.workPackage.exportIndex = index;
     	  WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
@@ -4997,16 +5000,16 @@
 	  			FileSaver.saveAs(blob, templateFilename);
 	    	  }
 	    	  function onExportFailure(){
-	    		  
-	    	  }    	  
+
+	    	  }
 	       }, function onSaveError(){
 	    		alert('An error occured, please try again');
-	    	}); 
+	    	});
 	  }
-      
+
       vm.exportFaresDiscount = function(index){
     	  vm.workPackage.exportIndex = index;
-    	  WorkPackage.update(vm.workPackage, function onSaveSuccess(result){    		
+    	  WorkPackage.update(vm.workPackage, function onSaveSuccess(result){
 		  	  WorkPackage.exportFaresDiscount(vm.workPackage, onExportSuccess, onExportFailure);
 		    	  function onExportSuccess(result){
 		    		  var fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
@@ -5015,13 +5018,13 @@
 		  			FileSaver.saveAs(blob, templateFilename);
 		    	  }
 		    	  function onExportFailure(){
-		    		  
-		    	  }    
+
+		    	  }
 	    	   }, function onSaveError(){
 	    		alert('An error occured, please try again');
-	    	}); 
+	    	});
 	  }
-      
+
       function b64toBlob(b64Data, contentType, sliceSize) {
 		  contentType = contentType || '';
 		  sliceSize = sliceSize || 512;
@@ -5046,7 +5049,7 @@
 
 		  return blob;
 	}
-      
+
       vm.setFile = function ($file, testing) {
           if ($file) {
               DataUtils.toBase64($file, function(base64Data) {
@@ -5058,7 +5061,7 @@
               });
           }
       };
-      
+
       vm.setFileMarketRules = function ($file, testing) {
           if ($file) {
               DataUtils.toBase64($file, function(base64Data) {
@@ -5069,13 +5072,13 @@
               });
           }
       };
-      
+
       vm.addComment = function(){
 	  	 if(vm.commentString != null){
 	    	  if(vm.workPackage.comment == null){
 	      		vm.workPackage.comment = [];
 	      }
-	    	  
+
     	  	vm.workPackage.comment.push({
     	  		comment:vm.commentString
     	  	});
@@ -5086,23 +5089,23 @@
 	              $('.comment-list').css('min-width',_width)
 	        });
     	 }
-	  	
-	
+
+
       }
-      
+
       $scope.trustAsHtml = function(string) {
     	    return $sce.trustAsHtml(string);
      };
-      
-      
-     
-      
+
+
+
+
      vm.isFilingInstructionCollapse = true;
-     
+
       vm.expandCommentFillingInstruction = function(){
     	  vm.isFilingInstructionCollapse = false;
       }
-      
+
       vm.collapseCommentFillingInstruction = function(){
     	  vm.isFilingInstructionCollapse = true;
       }
@@ -5111,28 +5114,28 @@
 	 	  		 if (vm.workPackage.filingInstructionData == null) {
 	 	      		vm.workPackage.filingInstructionData = [];
 	 	  		 }
-	 	    	  
-	 	  		 vm.workPackage.filingInstructionData.push({ 
+
+	 	  		 vm.workPackage.filingInstructionData.push({
 	     	  		status:"PENDING", tarno:"", cxr:"GA", comment:vm.commentStringFillingInstruction, file:"", fileContentType:"", isDeleted:false, username :vm.user.login,
 	     	  		createdTime :new Date()
 	 	  		 });
 	 	  		 vm.save();
-	 	  		 vm.commentStringFillingInstruction = null;	 	  		
-	 	  		 	 	  		
+	 	  		 vm.commentStringFillingInstruction = null;
+
 	 	  		 $(document).ready(function(){
 	                var _width = $('.comment-wrapper').outerWidth();
 		              $('.comment-list').css('min-width',_width)
 		        });
 	  	 	}
      }
-     
+
       vm.deleteCommentFillingInstruction = function(){
     	 for(var l=0; l<vm.tempFIC.length; l++){
     		 vm.tempFIC[l].isDeleted = true;
     	 }
     	 vm.save();
       }
-      
+
       vm.tempFIC = [];
       vm.selectCommentFillingInstruction = function(data){
     	  if(vm.tempFIC.indexOf(data) < 0){
@@ -5140,23 +5143,23 @@
     	  }else{
     		  for(var x = 0; x<vm.tempFIC.length; x++){
     			  if(vm.tempFIC.indexOf(data) > -1){
-        			  vm.tempFIC.splice(vm.tempFIC.indexOf(data),1);    				  
+        			  vm.tempFIC.splice(vm.tempFIC.indexOf(data),1);
     			  }
-    		  }    		  
+    		  }
     	  }
        }
-      
+
       vm.removeFiling = function(filing){
-	   		var index = vm.workPackage.filingInstructionData.indexOf(filing); 
+	   		var index = vm.workPackage.filingInstructionData.indexOf(filing);
 //	   		console.log(filing.isDeleted);
 	   };
-	         
+
       vm.addInterOffice = function(){
  	  	 if(vm.ioString != null){
  	    	  if(vm.workPackage.interofficeComment == null){
  	      		vm.workPackage.interofficeComment = [];
  	      }
- 	    	  
+
      	  	vm.workPackage.interofficeComment.push({
      	  		comment:vm.ioString
      	  	});
@@ -5168,11 +5171,11 @@
 	        });
      	 }
        }
-                
+
       vm.export = function(){
     	  	alert('EXPORT');
       }
-      
+
       vm.ratesheet = function(){
     	  	  $uibModal.open({
               templateUrl: 'app/pages/work-packages/work-package-rate-sheet-dialog.html',
@@ -5185,12 +5188,12 @@
                   index : vm.indexSelectedTab
               }
           }).result.then(function(ratesheet) {
-          	  
+
           }, function() {
-      			
+
           });
       }
-      
+
       vm.ratesheetDiscount = function(){
 	  	  $uibModal.open({
           templateUrl: 'app/pages/work-packages/work-package-discount-rate-sheet-dialog.html',
@@ -5203,12 +5206,12 @@
               index : vm.indexSelectedTab
           }
       }).result.then(function(ratesheet) {
-      	  
+
       }, function() {
-  			
+
 	      });
 	  }
-      
+
       vm.ratesheetWaiver = function(){
 	  	  $uibModal.open({
           templateUrl: 'app/pages/work-packages/work-package-waiver-rate-sheet-dialog.html',
@@ -5221,17 +5224,17 @@
               index : vm.indexSelectedTab
           }
       }).result.then(function(ratesheet) {
-      	  
+
       }, function() {
-	  			
+
 	      });
 	  }
-      
+
       vm.agent = function(disabled, viewOnly){
 	    	  	var object = {
 	    			agents: vm.workPackage.agent
 	    	 	}
-    	  
+
 	  	  $uibModal.open({
 	          templateUrl: 'app/pages/work-packages/work-package-agent-dialog.html',
 	          controller: 'WorkPackageAgentDialogController',
@@ -5247,33 +5250,33 @@
 	      	  vm.workPackage.agent = agent;
 	      	  vm.save();
 	      }, function() {
-	  			
+
 	      });
 	  }
-      
+
       vm.publish = function(){
     	      WorkPackage.publish(vm.workPackage, onPublishSuccess, onPublishError);
-    	      
+
     	      function onPublishSuccess(result){
     	    	  	alert("PUBLISH SUCCESS");
 //    	    	  	console.log(result);
     	      }
-    	      
+
     	      function onPublishError(error){
-    	    	  
+
     	      }
       }
-      
+
       vm.previousVersion = function(){
     	  vm.workPackage.changeType = 'previous';
     	  WorkPackage.changeVersion(vm.workPackage, onChangeSuccess, onChangeError);
-    	  
+
     	  function onChangeSuccess(result){
 //    		  alert('Change Version success');
-//    		  console.log(result.version);    		  
+//    		  console.log(result.version);
 //    		  vm.workPackage = result;
     		  var data = result;
-    	      
+
         	  data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
               data.newCreatedDate = DateUtils.convertDateTimeFromServer(data.createdDate);
               data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
@@ -5283,19 +5286,19 @@
               data.id =  vm.workPackage.id;
               vm.workPackage = data;
     	  }
-    	  
+
     	  function onChangeError(error){
-    		  
+
     	  }
       };
-      
+
       vm.nextVersion = function(){
     	  vm.workPackage.changeType = 'next';
     	  WorkPackage.changeVersion(vm.workPackage, onChangeSuccess, onChangeError);
-    	  
+
     	  function onChangeSuccess(result){
     		  var data = result;
-    	      
+
         	  data.filingDate = DateUtils.convertDateTimeFromServer(data.filingDate);
               data.newCreatedDate = DateUtils.convertDateTimeFromServer(data.createdDate);
               data.distributionDate = DateUtils.convertDateTimeFromServer(data.distributionDate);
@@ -5305,12 +5308,12 @@
               data.id =  vm.workPackage.id;
               vm.workPackage = data;
     	  }
-    	  
+
     	  function onChangeError(error){
-    		  
+
     	  }
       };
-      
+
       vm.checkDisabledField = function(){
     	  var isDisabled = false;
     	  if(vm.workPackage.version != 'current'){
@@ -5322,14 +5325,14 @@
     			  isDisabled = true;
     		  }
     	  }
-    	  
+
     	  return isDisabled;
       };
-      
+
       vm.fareAmountChange = function(fare){
     	  	 fare.aif = parseInt(fare.amount) + parseInt(fare.tfc);
       };
-      
+
       vm.fareAifChange = function(fare){
     	  	fare.amount = parseInt(fare.aif) - parseInt(fare.tfc);
       }
@@ -5342,7 +5345,7 @@
 	    		  $('#comment-section').addClass('show');
 	    	  }
       });
-      
+
       //Waiver Function
       vm.calculateFareLost = function(fare){
     	  if(fare.waiverApprovedFare != null || fare.waiverNewBasicFare != null){
@@ -5361,7 +5364,7 @@
         	  }
     	  }
       }
-            
+
       vm.calculatePenaltyLost = function(fare){
     	  if(fare.waiverApprovedPn != null || fare.waiverApprovedPn != undefined || fare.waiverOriginalPn != null || fare.waiverOriginalPn != undefined){
     		  if(fare.waiverCalculatedPn=="amount"){
@@ -5376,16 +5379,16 @@
         		  if(fare.waiverTotalPax !=null){
             		  fare.waiverTotalLost = (parseInt(fare.waiverFareLost))*parseInt(fare.waiverTotalPax);
             	  }
-    		  } 
+    		  }
     	  }
       }
-            
+
     /*  vm.calculateTotalLost = function(fare){
     	  if(fare.waiverTotalPax !=null && fare.waiverFareLost != null && fare.waiverFareLost != null){
     		  fare.waiverTotalLost = (parseInt(fare.waiverFareLost)+parseInt(fare.waiverPenaltyLostAmount))*parseInt(fare.waiverTotalPax);
     	  }
       }*/
-      
+
       vm.routemap = function(){
     	  $uibModal.open({
               templateUrl: 'app/pages/work-packages/work-package-routemap-dialog.html',
@@ -5403,10 +5406,10 @@
 //				console.log(option);
 //				vm.addTab(option);
           }, function() {
-      			
+
           });
       }
-      
+
       vm.downloadTemplate = function(){
     	  WorkPackage.downloadMarketRules(vm.workPackage, onDownloadSuccess, onDownloadFailure);
     	  function onDownloadSuccess(result){
@@ -5417,7 +5420,7 @@
     	  }
     	  function onDownloadFailure(err){
 //    		  console.log(err);
-    	  }    	  
+    	  }
       };
       vm.close = function(){
     	  if (vm.isViewOnly) {
@@ -5431,19 +5434,19 @@
             		  $state.go("work-package");
             	  }
             	  function onUnlockedFailure (error) {
-            		  
-            	  } 
-        	  }  
-    	  }    	     	  
+
+            	  }
+        	  }
+    	  }
       }
-      
+
       vm.isAllSelected = {};
       vm.toggleAll = function(fares, idx) {
 	     var toggleStatus = vm.isAllSelected[idx];
 	     angular.forEach(fares, function(itm){ itm.selected = toggleStatus; });
-	   
+
 	  }
-      
+
       vm.fillDown = function(workPackageSheet){
     	  var fares = [];
     	  for(var x=0;x<workPackageSheet.fares.length;x++){
@@ -5460,7 +5463,7 @@
     			  }
     		  }
     	  }
-    	  
+
     	  for(var x=0;x<workPackageSheet.fares.length;x++){
     		  if(fares[0].index != x){
     			  if(x > fares[0].index){
@@ -5485,10 +5488,10 @@
     		  else{
     			  //console.log("Fare equal");
     		  }
-    		  
+
     	  }
       }
-      
+
       vm.duplicateSelectedFares = function(workPackageSheet){
     	  for(var x=0;x<workPackageSheet.fares.length;x++){
     		  if(workPackageSheet.fares[x].field != undefined){
@@ -5508,9 +5511,9 @@
     				  workPackageSheet.fares.push(copiedFare);
     			  }
     		  }
-    	  }    	  
+    	  }
       }
-      
+
       vm.copySelectedFares = function(workPackageSheet, currentPage){
     	  var fares = [];
     	  for(var x=0;x<workPackageSheet.fares.length;x++){
@@ -5521,7 +5524,7 @@
     					  selected = true;
     				  }
     			 });
-    			  
+
     			  if(selected){
     				  var copiedFare = angular.copy(workPackageSheet.fares[x]);
 //    				  copiedFare.no = workPackageSheet.fares.length+1;
@@ -5537,95 +5540,95 @@
     	      content:fares,
 			  page:currentPage
 		  }
-		  
+
 		  	Clipboard.copy(clipboard, function(result){
 				alert('Fare copied');
 			}, function(error){
 				alert('Error occured');
 			});
       }
-      
+
       vm.pasteFares = function(workPackageSheet, cancel){
     	  var clipboard = Clipboard.findByCurrentUsername({id : $stateParams.id}).$promise;
-    	  
+
     	  clipboard.then(function(result){
 			  if(result.page == 'workorder-fares'){
 	    		  for(var x=0;x<result.content.length;x++){
 	    			  result.content[x].no = workPackageSheet.fares.length+1;
-	    			  
+
 	    			  result.content[x].status = "PENDING";
 	    			  if(cancel){
 	    				  result.content[x].action = "X";
 	    			  }
 	    			  else{
 	    				  result.content[x].action = "A";
-	    			  }	    			  
+	    			  }
 	    			  result.content[x].id = null;
 	    			  result.content[x].travelStart = DateUtils.convertDateTimeFromServer(result.content[x].travelStart);
 	    			  result.content[x].travelEnd = DateUtils.convertDateTimeFromServer(result.content[x].travelEnd);
 	    			  result.content[x].saleStart = DateUtils.convertDateTimeFromServer(result.content[x].saleStart);
 	    			  result.content[x].saleEnd = DateUtils.convertDateTimeFromServer(result.content[x].saleEnd);
 	    			  result.content[x].travelComplete = DateUtils.convertDateTimeFromServer(result.content[x].travelComplete);
-	        		  workPackageSheet.fares.push(result.content[x]);    			  
+	        		  workPackageSheet.fares.push(result.content[x]);
 	    		  }
 			  }
 			  else if(result.page == 'workorder-addon-fares'){
 	    		  for(var x=0;x<result.content.length;x++){
 	    			  result.content[x].no = workPackageSheet.fares.length+1;
-	    			  
+
 	    			  result.content[x].status = "PENDING";
 	    			  if(cancel){
 	    				  result.content[x].action = "X";
 	    			  }
 	    			  else{
 	    				  result.content[x].action = "A";
-	    			  }	    			  
+	    			  }
 	    			  result.content[x].id = null;
 	    			  result.content[x].travelStart = DateUtils.convertDateTimeFromServer(result.content[x].travelStart);
 	    			  result.content[x].travelEnd = DateUtils.convertDateTimeFromServer(result.content[x].travelEnd);
 	    			  result.content[x].saleStart = DateUtils.convertDateTimeFromServer(result.content[x].saleStart);
 	    			  result.content[x].saleEnd = DateUtils.convertDateTimeFromServer(result.content[x].saleEnd);
 	    			  result.content[x].travelComplete = DateUtils.convertDateTimeFromServer(result.content[x].travelComplete);
-	        		  workPackageSheet.fares.push(result.content[x]);    			  
+	        		  workPackageSheet.fares.push(result.content[x]);
 	    		  }
 			  }
 			  else if(result.page == 'workorder-discount-fares'){
 	    		  for(var x=0;x<result.content.length;x++){
 	    			  result.content[x].no = workPackageSheet.fares.length+1;
-	    			  
-	    			  result.content[x].status = "PENDING";	    			     			  
+
+	    			  result.content[x].status = "PENDING";
 	    			  result.content[x].id = null;
 	    			  result.content[x].travelStart = DateUtils.convertDateTimeFromServer(result.content[x].travelStart);
 	    			  result.content[x].travelEnd = DateUtils.convertDateTimeFromServer(result.content[x].travelEnd);
 	    			  result.content[x].saleStart = DateUtils.convertDateTimeFromServer(result.content[x].saleStart);
 	    			  result.content[x].saleEnd = DateUtils.convertDateTimeFromServer(result.content[x].saleEnd);
 	    			  result.content[x].travelComplete = DateUtils.convertDateTimeFromServer(result.content[x].travelComplete);
-	        		  workPackageSheet.fares.push(result.content[x]);    			  
+	        		  workPackageSheet.fares.push(result.content[x]);
 	    		  }
 			  }
 			  else if(result.page == 'workorder-waiver-fares'){
 	    		  for(var x=0;x<result.content.length;x++){
 	    			  result.content[x].no = workPackageSheet.fares.length+1;
-	    			  
+
 	    			  result.content[x].id = null;
 	    			  result.content[x].travelStart = DateUtils.convertDateTimeFromServer(result.content[x].travelStart);
 	    			  result.content[x].travelEnd = DateUtils.convertDateTimeFromServer(result.content[x].travelEnd);
 	    			  result.content[x].saleStart = DateUtils.convertDateTimeFromServer(result.content[x].saleStart);
 	    			  result.content[x].saleEnd = DateUtils.convertDateTimeFromServer(result.content[x].saleEnd);
 	    			  result.content[x].travelComplete = DateUtils.convertDateTimeFromServer(result.content[x].travelComplete);
-	        		  workPackageSheet.fares.push(result.content[x]);    			  
+	        		  workPackageSheet.fares.push(result.content[x]);
 	    		  }
 			  }
 			  else if(result.page == 'AFD_QUERY'){
 				  for(var x=0;x<result.content.length;x++){
 					  var tariffNumber = null;
-					  for(var y=0;y<vm.tariffNumber.length;y++){	
+					  for(var y=0;y<vm.tariffNumber.length;y++){
 			    		  if(vm.tariffNumber[y].tarNo == result.content[x].tariffNo){
 			    			  tariffNumber = angular.copy(vm.tariffNumber[y]);
 			    			  break;
 			    		  }
 			    	  }
-					  
+
 					  if(vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'REGULAR'){
 						  var fare = {
 							  status:"PENDING",
@@ -5707,7 +5710,7 @@
 								  travelComplete:DateUtils.convertDateFromServer(result.content[x].travelComplete)
 							  };
 					  }
-					  workPackageSheet.fares.push(fare);    	
+					  workPackageSheet.fares.push(fare);
 				  }
 			  }
     		  else{
@@ -5715,14 +5718,14 @@
     		  }
     	  });
       }
-      
+
       vm.marketPrevBaseAmount = function(fare){
     	  if(fare.prevAmount != null){
 			  fare.prevAmountDiff = fare.amount - fare.prevAmount;
 			  fare.prevPercentAmountDiff = parseFloat((fare.prevAmountDiff/fare.prevAmount)*100).toFixed(2);
     	  }
       }
-      
+
       vm.deleteSelectedFares = function(workPackageSheet){
     	  var fares = [];
     	  for(var x=0;x<workPackageSheet.fares.length;x++){
@@ -5738,8 +5741,8 @@
     					  fares.push(workPackageSheet.fares[x]);
     				  }
 //    				  var index = workPackageSheet.fares.indexOf(workPackageSheet.fares[x]);
-//    				  workPackageSheet.fares.splice(index, 1); 
-    				  
+//    				  workPackageSheet.fares.splice(index, 1);
+
 //    				  console.log("SELECTED : "+selected);
 //    				  var copiedFare = angular.copy(workPackageSheet.fares[x]);
 //    				  copiedFare.field = null;
@@ -5748,22 +5751,22 @@
 //    			  console.log("X : "+x);
     		  }
     	  }
-    	  
+
     	  for(var y=0;y<fares.length;y++){
     		  for(var x=0;x<workPackageSheet.fares.length;x++){
     			  if(workPackageSheet.fares[x] == fares[y]){
-    				  workPackageSheet.fares.splice(x, 1); 
+    				  workPackageSheet.fares.splice(x, 1);
     				  break;
     			  }
     		  }
     	  }
-    	  
+
     	  //reset number
     	  workPackageSheet.fares.sort(sortBy('no', 'asc'));
     	  for(var i=0;i<workPackageSheet.fares.length; i++){
     		  workPackageSheet.fares[i].no = i+1;
     	  }
-    	  
+
     	  if(workPackageSheet.currentSort.field == '#'){
     		  if(workPackageSheet.currentSort.asc){
         		  workPackageSheet.fares.sort(sortBy('no', 'asc'));
@@ -5777,17 +5780,17 @@
     			  workPackageSheet.fares.sort(sortBy(workPackageSheet.currentSort.field, 'asc'));
     		  }
     		  else{
-    			  workPackageSheet.fares.sort(sortBy(workPackageSheet.currentSort.field, 'desc'));    			  
+    			  workPackageSheet.fares.sort(sortBy(workPackageSheet.currentSort.field, 'desc'));
     		  }
     	  }
-      }      
-      
+      }
+
       vm.tbodyClick = function(workPackageSheet){
 //    	  for(var x=0;x<workPackageSheet.fares.length;x++){
-//    		  
+//
 //    	  }
       }
-      
+
       function getNearestTableAncestor(htmlElementNode) {
     	    while (htmlElementNode) {
     	        htmlElementNode = htmlElementNode.parentNode;
@@ -5797,14 +5800,14 @@
     	    }
     	    return undefined;
       }
-      
+
       vm.tdClick = function(workPackageSheet, fare, f, event){
     	  var elmtCell = event.target;
     	  while(elmtCell.cellIndex == undefined){
     		  elmtCell = elmtCell.parentNode;
     	  }
     	  var cellIndex = elmtCell.cellIndex;
-    	  
+
     	  var elmtRow = event.target;
     	  while(elmtRow.rowIndex == undefined){
     		  elmtRow = elmtRow.parentNode;
@@ -5817,7 +5820,7 @@
 //    	  angular.element(table.rows[1].cells[1]).triggerHandler('click');
 //    	  console.log(table.rows[1].cells[1].getAttributeNode("ng-click").value);
     	  //console.log(table.rows[rowIndex].cells[cellIndex].getAttributeNode("ng-click").value);
-    	  
+
     	  if (event.ctrlKey || event.metaKey){
     		  if(fare.field == null || fare.field == undefined){
         		  fare.field = {};
@@ -5825,8 +5828,8 @@
     		  if(workPackageSheet.column == null || workPackageSheet.column == undefined){
         		  workPackageSheet.column = [];
         	  }
-    		  
-        	  fare.field[f] = !fare.field[f];   
+
+        	  fare.field[f] = !fare.field[f];
         	  workPackageSheet.column.push({row:rowIndex,column:cellIndex});
     	  }
     	  else if(event.shiftKey){
@@ -5834,7 +5837,7 @@
     			  if(fare.field == null || fare.field == undefined){
             		  fare.field = {};
             	  }
-            	  fare.field[f] = !fare.field[f];  
+            	  fare.field[f] = !fare.field[f];
         		  workPackageSheet.column = [];
         		  workPackageSheet.column.push({row:rowIndex,column:cellIndex});
         	  }
@@ -5843,39 +5846,39 @@
 	    		  //row index
 	    		  var firstIndex = -1;
 	    		  var lastIndex = -1;
-	    		  
+
 	    		  //column index
 	    		  var firstColumnIndex = -1;
 	    		  var lastColumnIndex = -1;
-	    		  
+
 	    		  for(var x=0;x<workPackageSheet.fares.length;x++){
 	    			  //console.log(workPackageSheet.fares[x].field);
 	    			  if(workPackageSheet.fares[x].field == undefined || Object.keys(workPackageSheet.fares[x].field).length === 0){
-	    				  
+
 	    			  }
 	    			  else{
 	    				  firstIndex = x;
 	    				  break;
 	    			  }
 	        	  }
-	    		  
+
 	    		  for(var x=0;x<workPackageSheet.fares.length;x++){
 	    			  if(fare == workPackageSheet.fares[x]){
 	    				  lastIndex = x;
 	    				  break;
 	    			  }
 	        	  }
-	    		  
+
 	    		  if(firstIndex == lastIndex){
-	    			  
+
 	    		  }
 	    		  else if(firstIndex > lastIndex){
 	    			  var temp = firstIndex;
 	    			  firstIndex = lastIndex;
 	    			  lastIndex = temp;
 	    		  }
-	    		  
-	    		  
+
+
 	    		  if(firstIndex < lastIndex){
 	    			 //highlight multiple row column
 	    			  var row = workPackageSheet.column[workPackageSheet.column.length-1].row;
@@ -5888,19 +5891,19 @@
 	    				  fromColumn = toColumn;
 	    				  toColumn = temp;
 	    			  }
-	    			  
+
 	    			  for(var z=firstIndex;z<=lastIndex;z++){
 	    				  for(var x=0;x<workPackageSheet.fares.length;x++){
-		        			  if(workPackageSheet.fares[x] == workPackageSheet.fares[z]){        				  
+		        			  if(workPackageSheet.fares[x] == workPackageSheet.fares[z]){
 		        				  for(var f=fromColumn; f<=toColumn;f++){
 		        					  var column = angular.element(table.rows[row].cells[f]).attr('id');
 		        					  workPackageSheet.fares[x].field[column] = true;
 		        				  }
 		        				  break;
 		        			  }
-		            	  } 
+		            	  }
 	    			  }
-	    			 
+
 	    		  }
 	    		  else if(firstIndex == lastIndex){
 	    			  //highlight 1 row column
@@ -5914,16 +5917,16 @@
 	    				  fromColumn = toColumn;
 	    				  toColumn = temp;
 	    			  }
-	    			  
+
 	    			  for(var x=0;x<workPackageSheet.fares.length;x++){
-	        			  if(fare == workPackageSheet.fares[x]){        				  
+	        			  if(fare == workPackageSheet.fares[x]){
 	        				  for(var f=fromColumn; f<=toColumn;f++){
 	        					  var column = angular.element(table.rows[row].cells[f]).attr('id');
 	        					  fare.field[column] = true;
 	        				  }
 	        				  break;
 	        			  }
-	            	  }    			  
+	            	  }
 	    		  }
     		  }
     	  }
@@ -5931,30 +5934,30 @@
     		  for(var x=0;x<workPackageSheet.fares.length;x++){
 				  workPackageSheet.fares[x].field = {};
         	  }
-    		  
+
     		  if(fare.field == null || fare.field == undefined){
         		  fare.field = {};
         	  }
     		  if(workPackageSheet.column == null || workPackageSheet.column == undefined){
     			  workPackageSheet.column = [];
         	  }
-        	  fare.field[f] = !fare.field[f];  
-        	  
+        	  fare.field[f] = !fare.field[f];
+
         	  workPackageSheet.column = [];
-        	  workPackageSheet.column.push({row:rowIndex,column:cellIndex});        	  
+        	  workPackageSheet.column.push({row:rowIndex,column:cellIndex});
     	  }
-    	  
-    	  console.log(workPackageSheet.column);    	  
+
+    	  console.log(workPackageSheet.column);
       }
-      
+
       $scope.optionToggled = function(fares){
 	    $scope.isAllSelected = fares.every(function(itm){ return itm.selected; })
 	  }
-      
+
       vm.getKey = function(obj, index){
     	  return Object.keys(obj)[index];
       }
-      
+
       vm.selectTariff = function(fare, field){
     	  $uibModal.open({
               templateUrl: 'app/pages/work-packages/work-package-select-tariff-dialog.html',
@@ -5978,13 +5981,13 @@
 						fare[field] = option.tarCd;
 					}else{
 						fare[field] = option;
-					}					
+					}
 				}
           }, function() {
-      			
+
           });
       }
-      
+
       vm.selectAtpcoMasterTariff = function(fare, field, type){
     	  $uibModal.open({
               templateUrl: 'app/pages/work-packages/work-package-select-tariff-dialog.html',
@@ -6010,13 +6013,13 @@
 						fare[field] = option.tarCd;
 					}else{
 						fare[field] = option;
-					}					
+					}
 				}
           }, function() {
-      			
+
           });
       }
-      
+
       vm.selectTariffAddOn = function(fare, field){
     	  $uibModal.open({
               templateUrl: 'app/pages/work-packages/work-package-select-tariff-dialog.html',
@@ -6039,11 +6042,11 @@
 					fare[field] = option;
 				}
           }, function() {
-      			
+
           });
       }
-    
-    	  
+
+
       vm.selectCity = function(fare, field){
     	  $uibModal.open({
               templateUrl: 'app/pages/work-packages/work-package-select-city-dialog.html',
@@ -6066,17 +6069,17 @@
 			}).result.then(function(option) {
 				if(option != null){
 					if(option.type == 'city'){
-						fare[field] = option.cityCode;					
+						fare[field] = option.cityCode;
 					}
 					else if(option.type == 'cityGroup'){
-						fare[field] = option.code;	
+						fare[field] = option.code;
 					}
 				}
           }, function() {
-      			
+
           });
       }
-      
+
       vm.selectCityATPCODiscount = function(fare, field){
     	  $uibModal.open({
               templateUrl: 'app/pages/work-packages/work-package-select-city-dialog.html',
@@ -6100,24 +6103,24 @@
 				if(option != null){
 					if(field == 'loc1'){
 						if(fare.loc1Type == 'C'){
-							fare[field] = option.cityCode;				
+							fare[field] = option.cityCode;
 						}else if(fare.loc1Type == 'N'){
 							fare[field] = option.countryCode;
 						}
 					}else if(field == 'loc2'){
 						if(fare.loc2Type == 'C'){
-							fare[field] = option.cityCode;				
+							fare[field] = option.cityCode;
 						}else if(fare.loc2Type == 'N'){
 							fare[field] = option.countryCode;
 						}
-					}					
+					}
 				}
-					
+
           }, function() {
-      			
+
           });
       }
-      
+
       vm.selectState = function(fare, field){
     	  $uibModal.open({
               templateUrl: 'app/pages/work-packages/work-package-select-state-dialog.html',
@@ -6137,14 +6140,14 @@
               }
 			}).result.then(function(option) {
 				if(option != null){
-					fare[field] = option.code;	
+					fare[field] = option.code;
 				}
-					
+
           }, function() {
-      			
+
           });
       }
-      
+
       vm.selectCityGroup = function(fare, field){
     	  $uibModal.open({
               templateUrl: 'app/pages/work-packages/work-package-select-state-dialog.html',
@@ -6164,14 +6167,14 @@
               }
 			}).result.then(function(option) {
 				if(option != null){
-					fare[field] = option.code;	
+					fare[field] = option.code;
 				}
-					
+
           }, function() {
-      			
+
           });
       }
-      
+
       vm.selectPax = function(fare, field){
     	  $uibModal.open({
               templateUrl: 'app/pages/work-packages/work-package-select-state-dialog.html',
@@ -6191,14 +6194,14 @@
               }
 			}).result.then(function(option) {
 				if(option != null){
-					fare[field] = option.code;	
+					fare[field] = option.code;
 				}
-					
+
           }, function() {
-      			
+
           });
       }
-      
+
       vm.selectCurrency = function(fare, field){
     	  $uibModal.open({
               templateUrl: 'app/pages/work-packages/work-package-select-currency-dialog.html',
@@ -6219,10 +6222,10 @@
 				if(option != null)
 					fare[field] = option.currencyCode;
           }, function() {
-      			
+
           });
       }
-      
+
       vm.checkCurrency = function(fare, field){
     	  if(fare[field] != null || fare[field] != ''){
 	    	  var exist = false;
@@ -6232,7 +6235,7 @@
 	    			  break;
 	    		  }
 	    	  }
-	    	  
+
 	    	  if(!exist){
 	    		  alert("Currency code '"+fare[field]+"' is invalid. Please select a correct code");
 	    		  fare[field] = null;
@@ -6240,7 +6243,7 @@
 	    	  }
     	  }
       }
-      
+
       vm.checkpassengerType = function(fare, field){
     	  if(fare[field] != null || fare[field] != ''){
 	    	  var exist = false;
@@ -6250,7 +6253,7 @@
 	    			  break;
 	    		  }
 	    	  }
-	    	  
+
 	    	  if(!exist){
 	    		  alert("Passenger code '"+fare[field]+"' is invalid. Please select a correct code");
 	    		  fare[field] = null;
@@ -6258,12 +6261,12 @@
 	    	  }
     	  }
       }
-      
+
       vm.checkCity = function(fare, field){
     	  if(fare[field] != null && fare[field] != '' && fare[field] != undefined){
 	    	  var exist = false;
 	    	  for(var x=0;x<vm.cities.length;x++){
-	    		  
+
 	    		  if(vm.cities[x].cityCode.toUpperCase() == fare[field].toUpperCase()){
 	    			  exist = true;
 	    			  break;
@@ -6275,7 +6278,7 @@
 	    			  break;
 	    		  }
 	    	  }
-	    	  
+
 	    	  if(!exist){
 	    		  alert("City code '"+fare[field]+"' is invalid. Please select a correct code");
 	    		  fare[field] = null;
@@ -6283,7 +6286,7 @@
 	    	  }
     	  }
       }
-      
+
       vm.checkLoc = function(fare, field, type){
     	  if(fare[field] != null || fare[field] != ''){
 	    	  var exist = false;
@@ -6293,7 +6296,7 @@
 		    			  exist = true;
 		    			  break;
 		    		  }
-		    	  }				
+		    	  }
 				}else if(type== 'N'){
 					 for(var x=0;x<vm.cities.length;x++){
 			    		  if(vm.cities[x].countryCode.toUpperCase() == fare[field].toUpperCase()){
@@ -6322,8 +6325,8 @@
 			    			  break;
 			    		  }
 			    	  }
-				}		    	 
-	    	  
+				}
+
 	    	  if(!exist){
 	    		  if(type== 'C'){
 	    		  alert("City code '"+fare[field]+"' is invalid. Please select a correct code");
@@ -6341,19 +6344,19 @@
 	    	  }
     	  }
       }
-          
+
       vm.checkTariff = function(fare, field, inputField){
     	  var tariff = null;
     	  if(fare[field][inputField] != undefined && fare[field][inputField] != null && fare[field][inputField] != ""){
 	    	  var exist = false;
-	    	  for(var x=0;x<vm.tariffNumber.length;x++){	   
+	    	  for(var x=0;x<vm.tariffNumber.length;x++){
 	    		  if(vm.tariffNumber[x][inputField] == fare[field][inputField]){
 	    			  tariff = angular.copy(vm.tariffNumber[x]);
 	    			  exist = true;
 	    			  break;
 	    		  }
 	    	  }
-	    	  
+
 	    	  if(!exist){
 	    		  alert("Tariff number is invalid. Please select a correct code");
 	    		  fare[field] = null;
@@ -6367,13 +6370,13 @@
     		  fare[field] = null;
     		  return;
     	  }
-      } 
-      
+      }
+
       vm.checkTariffDiscount = function(fare, inputField, type){
     	  var tariff = null;
     	  if(fare[inputField] != undefined && fare[inputField] != null && fare[inputField] != ""){
 	    	  var exist = false;
-	    	  
+
               vm.tariffNumberCheck =  AtpcoMasterTariff.findByType({type:type}).$promise
 	    	  if(type == 'FARE'){
 	    		  console.log("CHECK TARIFF DISCOUNT FARE");
@@ -6393,8 +6396,8 @@
 		    			  break;
 		    		  }
 		    	  }
-	    	  }	    		  
-	    	  
+	    	  }
+
 	    	  if(!exist){
 	    		  alert("Tariff number is invalid. Please select a correct code");
 	    		  fare[inputField] = null;
@@ -6408,10 +6411,10 @@
     		  fare[inputField] = null;
     		  return;
     	  }
-      } 
-      
+      }
+
       vm.keypress = function(event, regexp){
-    	  
+
     	  if (event.charCode!=0) {
     			var regex = new RegExp(regexp);
     			var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
@@ -6421,9 +6424,9 @@
     			}
     		}
       }
-      
+
       vm.diff = [];
-      vm.changeVersion = function(workPackageSheet, index){    	  
+      vm.changeVersion = function(workPackageSheet, index){
     	  workPackageSheet.version = index;
     	  if(index == 'current'){
     		  vm.diff = [];
@@ -6440,38 +6443,38 @@
     		  }
     	  }
       }
-            
+
       vm.checkDiff = function(current, version){
     	  vm.diff = [];
     	  var idObject =[];
     	  var colorDiff = false;
-    	  
+
     	  if(current.length == 0){
-    		  for(var y = 0; y< version.length; y++){ 
+    		  for(var y = 0; y< version.length; y++){
     			 vm.diff[version[y].id]=['prevPercentAmountDiff','prevAmountDiff','prevAmount','percentBaseFare','passengerType','overrideIndicator','newTypeOfJourney','newFareBasis','newBookingCode','minStay','maxStay','loc2Type','loc1Type','loc2','loc1','itinerary','fareType','dowIn','discountSpecifiedAmount','direction','dealCode','calcType','cabinClass','status','bucket', 'carrier','tarNo','tarCd','global','origin','destination','fareBasis','bookingClass','cabin',
     					  'typeOfJourney','typeOfJourney','typeOfJourney','typeOfJourney','recommendedAmount','typeOfJourney','footnote1','rtgno','ruleno','currency', 'amount','amtDiff','amtPercentDiff', 'aif', 'action','no',
         				  'travelStart','travelEnd', 'saleStart','saleEnd','comment','travelComplete','travelCompleteIndicator','ratesheetComment'];
     			  }
     	  }
     	  for(var x = 0; x< current.length; x++){
-    		  for(var y = 0; y< version.length; y++){ 
+    		  for(var y = 0; y< version.length; y++){
     			  if(current[x].id == version[y].id){
     				  idObject.push(version[y]);
-    			  }    			  
+    			  }
     			  if(idObject.length == 0){
     				  vm.diff[version[y].id]=['prevPercentAmountDiff','prevAmountDiff','prevAmount','percentBaseFare','passengerType','overrideIndicator','newTypeOfJourney','newFareBasis','newBookingCode','minStay','maxStay','loc2Type','loc1Type','loc2','loc1','itinerary','fareType','dowIn','discountSpecifiedAmount','direction','dealCode','calcType','cabinClass','status','bucket', 'carrier','tarNo','tarCd','global','origin','destination','fareBasis','bookingClass','cabin',
     					  'typeOfJourney','recommendedAmount','typeOfJourney','footnote1','rtgno','ruleno','currency', 'amount','amtDiff','amtPercentDiff', 'aif', 'action','no','rtgnoTarno',
         				  'travelStart','travelEnd', 'saleStart','saleEnd','comment','travelComplete','travelCompleteIndicator','ratesheetComment','baseRuleNo','baseFareBasis','baseTarcd','ticketCode','ticketDesignator'];
     			  }else{
-    				  colorDiff = true;    				  
+    				  colorDiff = true;
     			  }
     		  }
-    		  if(colorDiff){    			  
+    		  if(colorDiff){
         		  for(var y=0; y<idObject.length;y++){
     			    if(current[x].id == idObject[y].id){
     			    	if(vm.diff[idObject[y].id] == null){
-    	    				  vm.diff[idObject[y].id] = [];  
-    	    			    }    	    		
+    	    				  vm.diff[idObject[y].id] = [];
+    	    			    }
     	    				if(current[x].status != idObject[y].status){
     	    	    			vm.diff[idObject[y].id].push('status');
     	      	    		}
@@ -6486,7 +6489,7 @@
     	      	    		}
     	    				if(current[x].recommendedAmount != idObject[y].recommendedAmount){
     	    	    			vm.diff[idObject[y].id].push('recommendedAmount');
-    	      	    		}    	    				
+    	      	    		}
     	    				if(current[x].newBookingCode != idObject[y].newBookingCode){
     	    	    			vm.diff[idObject[y].id].push('newBookingCode');
     	      	    		}
@@ -6663,34 +6666,34 @@
     	      	    		}
     	      	    		if(current[x].ratesheetComment != idObject[y].ratesheetComment){
     	      	    			vm.diff[idObject[y].id].push('ratesheetComment');
-    	      	    		} 
+    	      	    		}
     	      	    		if(current[x].bucket != idObject[y].bucket){
     	      	    			vm.diff[idObject[y].id].push('bucket');
-    	      	    		} 
-    			      }    			    
+    	      	    		}
+    			      }
     			  }
         	  }
-    	  }    	  
+    	  }
       }
-            
+
 
       vm.checkValidateCityGroupFares = function(workPackageSheet){
     	  var fares = workPackageSheet.fares;
     	  for(var x=0;x<fares.length;x++){
     		  var origin = false;
     		  var destination = false;
-    		  
+
     		  for(var y=0;y<vm.cityGroups.length;y++){
-    			  if(fares[x] != undefined){    				  	    			  
-    				  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (fares[x].origin != null && fares[x].origin.toUpperCase())){	    				  
+    			  if(fares[x] != undefined){
+    				  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (fares[x].origin != null && fares[x].origin.toUpperCase())){
     					  origin = true;
 	    			  }
 	    			  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (fares[x].destination != null && fares[x].destination.toUpperCase())){
 	      				  destination = true;
-	    			  }	    			   
+	    			  }
     			  }
     		  }
-    		  
+
     		  if(origin){
 				  return false;
 			  }else if(destination){
@@ -6701,7 +6704,7 @@
       }
       vm.expandCityGroup = function(workPackageSheet){
     	  var fares = workPackageSheet.fares;
-    	  
+
     	  var faresCityGroupOrigin = [];
     	  var faresCityGroupDestination = [];
     	  var faresCityGroupOriginDestination = [];
@@ -6709,18 +6712,18 @@
     	  for(var x=0;x<fares.length;x++){
     		  var origin = false;
     		  var destination = false;
-    		  
+
     		  for(var y=0;y<vm.cityGroups.length;y++){
-    			  if(fares[x] != undefined){    				  	    			  
-    				  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (fares[x].origin != null && fares[x].origin.toUpperCase())){	    				  
+    			  if(fares[x] != undefined){
+    				  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (fares[x].origin != null && fares[x].origin.toUpperCase())){
     					  origin = true;
 	    			  }
 	    			  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (fares[x].destination != null && fares[x].destination.toUpperCase())){
 	      				  destination = true;
-	    			  }	    			   
+	    			  }
     			  }
     		  }
-    		  
+
 
 			  if(origin && destination){
 				  faresCityGroupOriginDestination.push(angular.copy(fares[x]));
@@ -6733,12 +6736,12 @@
 				  fares.splice(x, 1);
 			  }
     	  }
-    	  
+
     	  if(faresCityGroupOriginDestination.length > 0){
     		  for(var x=0;x<faresCityGroupOriginDestination.length;x++){
     			  var listCitiesOrigin = [];
         		  var listCitiesDestination = [];
-        		 
+
         		  for(var y=0;y<vm.cityGroups.length;y++){
 	    			  if((vm.cityGroups[y].code != null && vm.cityGroups[y].code.toUpperCase()) == (faresCityGroupOriginDestination[x].origin != null && faresCityGroupOriginDestination[x].origin.toUpperCase())){
 	    				  listCitiesOrigin = vm.cityGroups[y].cities;
@@ -6747,7 +6750,7 @@
 	    				  listCitiesDestination = vm.cityGroups[y].cities;
 					  }
         		  }
-        		  
+
     			  for(var a=0;a<listCitiesOrigin.length;a++){
     				  for(var b=0;b<listCitiesDestination.length;b++){
     					  var f = angular.copy(faresCityGroupOriginDestination[x]);
@@ -6759,7 +6762,7 @@
     				  }
     			  }
     		  }
-    	  }    	  
+    	  }
     	  else if(faresCityGroupOrigin.length > 0){
     		  for(var x=0;x<faresCityGroupOrigin.length;x++){
     			  var listCities = [];
@@ -6769,7 +6772,7 @@
     					  break;
     				  }
     			  }
-    			  
+
     			  for(var z=0;z<listCities.length;z++){
     				  var f = angular.copy(faresCityGroupOrigin[x]);
     				  f.origin = listCities[z].cityCode;
@@ -6788,7 +6791,7 @@
     					  break;
     				  }
     			  }
-    			  
+
     			  for(var z=0;z<listCities.length;z++){
     				  var f = angular.copy(faresCityGroupDestination[x]);
     				  f.destination = listCities[z].cityCode;
@@ -6799,7 +6802,7 @@
     		  }
     	  }
       };
-      
+
       vm.disabledField = function(wp){
     	  var disabled = false;
     	  if(wp.locked == true && wp.locked !=null){
@@ -6807,18 +6810,18 @@
     			  disabled = false;
     		  }else{
     			  disabled = true;
-    		  }    		  
+    		  }
     	  }
     	  if(!disabled){
     		  if(vm.user.reviewLevels.indexOf(wp.reviewLevel) > -1){
     			  disabled = false;
     		  }else{
-    			  disabled = true;  
+    			  disabled = true;
     		  }
     	  }
     	  return disabled;
       }
-      
+
       vm.lockedOnly = function(wp){
     	  var disabled = false;
     	  if(wp.locked == true && wp.locked !=null){
@@ -6826,21 +6829,21 @@
     			  disabled = false;
     		  }else{
     			  disabled = true;
-    		  }    		  
-    	  } 
+    		  }
+    	  }
     	  return disabled;
       }
-      
+
       vm.reviewOnly = function(wp){
     	  var disabled = false;
     	  if(vm.user.reviewLevels.indexOf(wp.reviewLevel) > -1){
 			  disabled = false;
 		  }else{
-			  disabled = true;  
+			  disabled = true;
 		  }
-    	  return disabled;  
+    	  return disabled;
       }
-      
+
       vm.getTooltip = function(value){
     	  var listCity = [];
     	  for(var y=0;y<vm.cityGroups.length;y++){
@@ -6852,14 +6855,14 @@
 				  break;
 			  }
 		  }
-    	  
+
     	  var message = "";
     	  if(listCity.length > 0){
     		  message += listCity.join(', ');
     	  }
     	  return message;
       }
-      
+
       vm.updateLatestFare = function(workPackageSheet){
     	  WorkPackage.updateLatestFare(workPackageSheet, function(result){
     		  alert('Fares updated');
@@ -6867,7 +6870,7 @@
     		  vm.changeVersion(workPackageSheet, 'current');
     	  }, function(error){});
       }
-      
+
       vm.updateActionCodes = function(workPackageSheet){
     	  WorkPackage.updateActionCodes(workPackageSheet, function(result){
     		  alert('Action code updated');
@@ -6879,16 +6882,16 @@
       vm.dateNgModelOpts = {
     		  timezone : '+07:00'
 	  };
-      
+
       vm.selectErrorField = function(sheetType, sheetIndex, fareIndex, field){
     	  if(sheetType == 'Fares'){
     		  vm.selectTab(sheetIndex);
     		  for(var x=0;x<vm.workPackage.fareSheet[sheetIndex].fares.length;x++){
     			  vm.workPackage.fareSheet[sheetIndex].fares[x].field = {};
         	  }
-    		  
-    		  vm.workPackage.fareSheet[sheetIndex].fares[fareIndex].field[field] = !vm.workPackage.fareSheet[sheetIndex].fares[fareIndex].field[field]; 
-    		  
+
+    		  vm.workPackage.fareSheet[sheetIndex].fares[fareIndex].field[field] = !vm.workPackage.fareSheet[sheetIndex].fares[fareIndex].field[field];
+
     		  var fieldName = ""+field+sheetIndex+fareIndex;
     		  var elmnt = $window.document.getElementsByName(fieldName)[0];
     		  var offset_top = elmnt.offsetTop;
@@ -6903,9 +6906,9 @@
     		  for(var x=0;x<vm.workPackage.addonFareSheet[sheetIndex].fares.length;x++){
     			  vm.workPackage.addonFareSheet[sheetIndex].fares[x].field = {};
         	  }
-    		  
-    		  vm.workPackage.addonFareSheet[sheetIndex].fares[fareIndex].field[field] = !vm.workPackage.addonFareSheet[sheetIndex].fares[fareIndex].field[field]; 
-    		  
+
+    		  vm.workPackage.addonFareSheet[sheetIndex].fares[fareIndex].field[field] = !vm.workPackage.addonFareSheet[sheetIndex].fares[fareIndex].field[field];
+
     		  var fieldName = ""+field+sheetIndex+fareIndex;
     		  var elmnt = $window.document.getElementsByName(fieldName)[0];
     		  var offset_top = elmnt.offsetTop;
@@ -6921,9 +6924,9 @@
     		  for(var x=0;x<vm.workPackage.marketFareSheet[sheetIndex].fares.length;x++){
     			  vm.workPackage.marketFareSheet[sheetIndex].fares[x].field = {};
         	  }
-    		  
-    		  vm.workPackage.marketFareSheet[sheetIndex].fares[fareIndex].field[field] = !vm.workPackage.marketFareSheet[sheetIndex].fares[fareIndex].field[field]; 
-    		  
+
+    		  vm.workPackage.marketFareSheet[sheetIndex].fares[fareIndex].field[field] = !vm.workPackage.marketFareSheet[sheetIndex].fares[fareIndex].field[field];
+
     		  var fieldName = ""+field+sheetIndex+fareIndex;
     		  var elmnt = $window.document.getElementsByName(fieldName)[0];
     		  var offset_top = elmnt.offsetTop;
@@ -6938,9 +6941,9 @@
     		  for(var x=0;x<vm.workPackage.discountFareSheet[sheetIndex].fares.length;x++){
     			  vm.workPackage.discountFareSheet[sheetIndex].fares[x].field = {};
         	  }
-    		  
-    		  vm.workPackage.discountFareSheet[sheetIndex].fares[fareIndex].field[field] = !vm.workPackage.discountFareSheet[sheetIndex].fares[fareIndex].field[field]; 
-    		  
+
+    		  vm.workPackage.discountFareSheet[sheetIndex].fares[fareIndex].field[field] = !vm.workPackage.discountFareSheet[sheetIndex].fares[fareIndex].field[field];
+
     		  var fieldName = ""+field+sheetIndex+fareIndex;
     		  var elmnt = $window.document.getElementsByName(fieldName)[0];
     		  var offset_top = elmnt.offsetTop;
@@ -6955,9 +6958,9 @@
     		  for(var x=0;x<vm.workPackage.waiverFareSheet[sheetIndex].fares.length;x++){
     			  vm.workPackage.waiverFareSheet[sheetIndex].fares[x].field = {};
         	  }
-    		  
-    		  vm.workPackage.waiverFareSheet[sheetIndex].fares[fareIndex].field[field] = !vm.workPackage.waiverFareSheet[sheetIndex].fares[fareIndex].field[field]; 
-    		  
+
+    		  vm.workPackage.waiverFareSheet[sheetIndex].fares[fareIndex].field[field] = !vm.workPackage.waiverFareSheet[sheetIndex].fares[fareIndex].field[field];
+
     		  var fieldName = ""+field+sheetIndex+fareIndex;
     		  var elmnt = $window.document.getElementsByName(fieldName)[0];
     		  var offset_top = elmnt.offsetTop;
@@ -6985,8 +6988,8 @@
     		  elmnt.focus();
     	  }
       }
-      
-      
+
+
       vm.createBatch = function(){
     	  WorkPackage.createbatch(vm.workPackage, function(result){
     		  if(vm.mapWorkpackage(result)){
@@ -6997,7 +7000,7 @@
     		  alert('Error occured, please try again')
     	  });
       }
-      
+
       vm.reviseBatch = function(){
     	  WorkPackage.revisebatch(vm.workPackage, function(result){
     		  vm.mapWorkpackage(result);
@@ -7008,7 +7011,7 @@
     		  alert('Error occured, please try again')
     	  });
       }
-      
+
       vm.refreshTariff = function(){
     	  WorkPackage.refreshTariff(vm.workPackage, function(result){
     		  alert('Refresh Tariff Success');
@@ -7016,11 +7019,11 @@
 //    		  onSaveSuccess(vm.workPackage);
     	  }, function(){});
       }
-      
+
       vm.addBatchNumber = function(){
     	  if(vm.selectedTariffRow != null){
     		  if(vm.selectedTariffRow.batch == null) vm.selectedTariffRow.batch = [];
-    		  
+
 	    	  vm.selectedTariffRow.batch.push({
 	    		  batchNo:null,
 	    		  gfsRef:null,
@@ -7031,7 +7034,7 @@
     		  alert('Please select a tariff');
     	  }
       }
-      
+
       vm.removeBatchNumber = function(){
     	  if(vm.selectedBatchRow){
 	    	  var index = vm.selectedTariffRow.batch.indexOf(vm.selectedBatchRow);
@@ -7041,28 +7044,28 @@
     		  alert('Please select batch row');
     	  }
       }
-      
+
       vm.checkFilingDetailDisabled = function(){
     	  return vm.workPackage.status == 'READY_TO_RELEASE';
       }
-      
+
       vm.applyText = function(){
     	  if(vm.selectedTariffRow != null){
     		  if(vm.selectedTariffRow.justificationText != null && vm.selectedTariffRow.justificationText != ""){
 	    		  for(var x=0;x<vm.workPackage.filingDetail.filingDetailTarif.length;x++){
 					  vm.workPackage.filingDetail.filingDetailTarif[x].justificationText = vm.selectedTariffRow.justificationText;
-	    		  }    		  
+	    		  }
     		  }
   		  }
     	  else{
     		  alert('Please select a tariff');
     	  }
       }
-      
+
       vm.previewUploadFile = function(){
     	  alert(vm.workPackage.filingDetail.atpcoFile);
       }
-      
+
       vm.resetCalculateField = function(fare){
     	  fare.percentBaseFare = null;
     	  fare.currency = null;
@@ -7070,7 +7073,7 @@
     	  fare.typeOfJourney = null;
     	  fare.global=null;
       }
-      
+
       vm.footnote = function(workPackageSheet){
     	  var selectedSize = 0;
     	  var tariff = null;
@@ -7086,7 +7089,7 @@
     				  selectedSize++;
     			  }
     		  }
-    	  }    	  
+    	  }
     	  if(selectedSize == 1){
     		  for(var x=0;x<workPackageSheet.fares.length;x++){
         		  if(workPackageSheet.fares[x].field != undefined){
@@ -7102,18 +7105,18 @@
         					  tariff = copiedFare.tariffNumber.tarNo;
         				  }
         				  else{
-        					 
+
         				  }
         			  }
         		  }
-        	  }  
+        	  }
     		  var url = $state.href('footnote-query', {cxr: "GA", tariff:tariff});
         	  window.open(url,'_blank');
     	  }
     	  else{
     		  alert('Please select one row');
     	  }
-    	  
+
       }
     }
 })();

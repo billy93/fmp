@@ -68,62 +68,63 @@
 				                    />
 								</div>
 		      				</div>
-		      			</div>						
+		      			</div>	
+		      			<div class="box-detail" ng-if="vm.account.department == 'RZT'">
+		      				<div class="box-header">
+								Generate Tourcode Parameter
+							</div>
+							
+		      				<div class="box-body">
+		      					<div class="form-group">
+									<label>Fare Type</label>
+									<select class="form-control" name="faretype" ng-model="vm.option.faretype"
+									        ng-options="type as type for type in vm.fareType track by type">
+						            </select>
+								</div>
+								<div class="form-group">
+									<label>Area</label>
+									<select class="form-control" name="areas" ng-model="vm.option.area"
+									        ng-options="type as type for type in vm.areas track by type">
+						            </select>
+								</div>
+								<div class="form-group">
+									<label>Sub Area</label>
+									<select class="form-control" name="sub_areas" ng-model="vm.option.subarea"
+									        ng-options="type as type for type in vm.subareas track by type">
+						            </select>
+								</div>
+								<div class="form-group">
+									<label>Subject</label>
+									<input type="text" class="form-control"
+									name="name" id="field_name"
+				                    ng-model="vm.option.subject"
+				                    />
+								</div>
+	      					</div>
+				      	</div>
+				      	<div class="box-detail" ng-if="vm.account.department == 'RZI' || vm.account.department == 'RZD'">
+		      				<div class="box-header">
+								Generate Tourcode Parameter
+							</div>
+							
+		      				<div class="box-body">
+		      					<div class="form-group">
+									<label>Fare Type</label>
+									<select class="form-control" name="faretype" ng-model="vm.option.faretype"
+									        ng-options="type as type for type in vm.fareType track by type">
+						            </select>
+								</div>
+								<div class="form-group">
+									<label>Subject</label>
+									<input type="text" class="form-control"
+									name="name" id="field_name"
+				                    ng-model="vm.option.subject"
+				                    />
+								</div>
+	      					</div>
+				      	</div>					
 			      	</div>
-			      	<div class="box-detail" ng-if="vm.account.department == 'RZT'">
-	      				<div class="box-header">
-							Generate Tourcode Parameter
-						</div>
-						
-	      				<div class="box-body">
-	      					<div class="form-group">
-								<label>Fare Type</label>
-								<select class="form-control" name="faretype" ng-model="vm.option.faretype"
-								        ng-options="type as type for type in vm.fareType track by type">
-					            </select>
-							</div>
-							<div class="form-group">
-								<label>Area</label>
-								<select class="form-control" name="areas" ng-model="vm.option.area"
-								        ng-options="type as type for type in vm.areas track by type">
-					            </select>
-							</div>
-							<div class="form-group">
-								<label>Sub Area</label>
-								<select class="form-control" name="sub_areas" ng-model="vm.option.subarea"
-								        ng-options="type as type for type in vm.subareas track by type">
-					            </select>
-							</div>
-							<div class="form-group">
-								<label>Subject</label>
-								<input type="text" class="form-control"
-								name="name" id="field_name"
-			                    ng-model="vm.option.subject"
-			                    />
-							</div>
-      					</div>
-			      	</div>
-			      	<div class="box-detail" ng-if="vm.account.department == 'RZI' || vm.account.department == 'RZD'">
-	      				<div class="box-header">
-							Generate Tourcode Parameter
-						</div>
-						
-	      				<div class="box-body">
-	      					<div class="form-group">
-								<label>Fare Type</label>
-								<select class="form-control" name="faretype" ng-model="vm.option.faretype"
-								        ng-options="type as type for type in vm.fareType track by type">
-					            </select>
-							</div>
-							<div class="form-group">
-								<label>Subject</label>
-								<input type="text" class="form-control"
-								name="name" id="field_name"
-			                    ng-model="vm.option.subject"
-			                    />
-							</div>
-      					</div>
-			      	</div>
+			      	
 		      		<div class="modal-footer">				        
 				        <button type="submit" class="btn btn-secondary" ng-disabled="editForm.$invalid || vm.isSaving">Generate</button>
 				        <button type="button" class="btn btn-back" data-dismiss="modal" ng-click="vm.clear()">Close</button>
