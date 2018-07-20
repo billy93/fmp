@@ -118,11 +118,21 @@
 										<div class="pull-left col-md-6 no-lpad">
 											<div class="form-group">
 												<div class="custom-label semibold">Origin</div>
-												<input type="text" class="form-control no-comma" name="origin" id="origin" ng-model="vm.queryParams.origin" uppercase />
+												<span class="input-group">
+													<input type="text" class="form-control" name="origin" id="origin" ng-model="vm.queryParams.origin" uppercase/>
+													<span class="input-group-addon" ng-click="$event.stopPropagation(); vm.selectCity('Origin')">
+														<i class="fa fa-folder"></i>
+													</span>
+												</span>
 											</div>
 											<div class="form-group">
 												<div class="custom-label semibold">Destination</div>
-												<input type="text" class="form-control no-comma" name="destination" id="destination" ng-model="vm.queryParams.destination" uppercase />
+												<span class="input-group">
+													<input type="text" class="form-control" name="destination" id="destination" ng-model="vm.queryParams.destination" uppercase/>
+													<span class="input-group-addon" ng-click="$event.stopPropagation(); vm.selectCity('Destination')">
+														<i class="fa fa-folder"></i>
+													</span>
+												</span>
 											</div>
 										</div>
 										<div class="pull-left col-md-3 no-lpad">
@@ -313,7 +323,6 @@
 				            <thead style="padding-right: 17px; background-color: #64768a">
 				                <tr>
 				                    <th class="th-fixed">ID</th>
-				                    <th class="th-fixed">Source</th>
 				                    <th class="th-fixed">Cxr</th>
 				                    <th class="th-fixed">Tar No</th>
 				                    <th class="th-fixed">Tar Cd</th>
@@ -324,7 +333,6 @@
 				            <tbody id="tbody-afd">
 				                <tr class="tr-afd" ng-repeat="fbrQuery in vm.fbrQueries track by $index" ng-click="vm.getRules(fbrQuery)" ng-class="{'selected': vm.selectedRows[$index] == fbrQuery}">
 				                    <td>{{$index + 1}}</td>
-				                    <td>{{fbrQuery.source}}</td>
 				                    <td>{{fbrQuery.cxr}}</td>
 				                    <td>{{fbrQuery.tarNo}}</td>
 				                    <td>{{fbrQuery.tarCd}}</td>

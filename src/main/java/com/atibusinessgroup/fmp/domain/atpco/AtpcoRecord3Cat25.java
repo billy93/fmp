@@ -1,6 +1,7 @@
 package com.atibusinessgroup.fmp.domain.atpco;
 
-import java.math.BigDecimal;
+import org.bson.types.Decimal128;
+import java.util.Arrays;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -19,7 +20,7 @@ public class AtpcoRecord3Cat25 {
     private String resulting_fare_type_season;
 
 	@Field("record_sequence")
-    private String record_sequence;
+    private int record_sequence;
 
 	@Field("fare_calc_reserved_1")
     private String fare_calc_reserved_1;
@@ -43,7 +44,7 @@ public class AtpcoRecord3Cat25 {
     private String tbl_no;
 	
 	@Field("fare_comp_min_fare_1")
-    private BigDecimal fare_comp_min_fare_1;
+    private Decimal128 fare_comp_min_fare_1;
 
 	@Field("unavail")
     private String unavail;
@@ -52,7 +53,7 @@ public class AtpcoRecord3Cat25 {
     private String fare_calc_mileage_find;
 
 	@Field("fare_comp_min_fare_2")
-    private BigDecimal fare_comp_min_fare_2;
+    private Decimal128 fare_comp_min_fare_2;
 
 	@Field("resulting_fare_type_fare")
     private String resulting_fare_type_fare;
@@ -97,22 +98,22 @@ public class AtpcoRecord3Cat25 {
     private String fare_calc_fare_cur_1;
 
 	@Field("fare_calc_fare_amt_2")
-    private BigDecimal fare_calc_fare_amt_2;
+    private Decimal128 fare_calc_fare_amt_2;
 
 	@Field("fare_calc_fare_amt_1")
-    private BigDecimal fare_calc_fare_amt_1;
+    private Decimal128 fare_calc_fare_amt_1;
 
 	@Field("fare_calc_fare_cur_2")
     private String fare_calc_fare_cur_2;
 
 	@Field("fare_comp_max_fare_2")
-    private BigDecimal fare_comp_max_fare_2;
+    private Decimal128 fare_comp_max_fare_2;
 
 	@Field("fare_calc_mileage_min")
     private String fare_calc_mileage_min;
 
 	@Field("fare_comp_max_fare_1")
-    private BigDecimal fare_comp_max_fare_1;
+    private Decimal128 fare_comp_max_fare_1;
 
 	@Field("resulting_fare_tdm")
     private String resulting_fare_tdm;
@@ -145,7 +146,7 @@ public class AtpcoRecord3Cat25 {
     private String psgr_status_appl;
 
 	@Field("rec_type")
-    private String rec_type;
+    private int rec_type;
 
 	@Field("resulting_fare_rbd_validation")
     private String resulting_fare_rbd_validation;
@@ -154,7 +155,7 @@ public class AtpcoRecord3Cat25 {
     private String psgr_travel_origin_reserved_2;
 
 	@Field("fare_calc_mileage_percent")
-    private String fare_calc_mileage_percent;
+    private Decimal128 fare_calc_mileage_percent;
 
 	@Field("resulting_fare_tcm")
     private String resulting_fare_tcm;
@@ -213,38 +214,14 @@ public class AtpcoRecord3Cat25 {
     @Field("psgr_travel_origin_tsi")
     private String psgr_travel_origin_tsi;
 
-    @Field("resulting_fare_prime_rbd_6")
-    private String resulting_fare_prime_rbd_6;
-
-    @Field("resulting_fare_prime_rbd_7")
-    private String resulting_fare_prime_rbd_7;
-
-    @Field("resulting_fare_prime_rbd_8")
-    private String resulting_fare_prime_rbd_8;
-
-    @Field("resulting_fare_prime_rbd_2")
-    private String resulting_fare_prime_rbd_2;
-
     @Field("record_batch")
-    private String record_batch;
-
-    @Field("resulting_fare_prime_rbd_3")
-    private String resulting_fare_prime_rbd_3;
-
-    @Field("resulting_fare_prime_rbd_4")
-    private String resulting_fare_prime_rbd_4;
+    private int record_batch;
 
     @Field("age_max")
     private String age_max;
 
-    @Field("resulting_fare_prime_rbd_5")
-    private String resulting_fare_prime_rbd_5;
-
     @Field("cat_no")
     private String cat_no;
-
-    @Field("resulting_fare_prime_rbd_1")
-    private String resulting_fare_prime_rbd_1;
 
     @Field("fare_comp_rules_tarrif")
     private String fare_comp_rules_tarrif;
@@ -266,6 +243,9 @@ public class AtpcoRecord3Cat25 {
 
     @Field("psgr_travel_origin_geo_loc")
     private String psgr_travel_origin_geo_loc;
+    
+    @Field("resulting_fare_prime_rbd")
+    private String[] resulting_fare_prime_rbd;
 
 	public String getId() {
 		return id;
@@ -291,11 +271,11 @@ public class AtpcoRecord3Cat25 {
 		this.resulting_fare_type_season = resulting_fare_type_season;
 	}
 
-	public String getRecord_sequence() {
+	public int getRecord_sequence() {
 		return record_sequence;
 	}
 
-	public void setRecord_sequence(String record_sequence) {
+	public void setRecord_sequence(int record_sequence) {
 		this.record_sequence = record_sequence;
 	}
 
@@ -355,11 +335,11 @@ public class AtpcoRecord3Cat25 {
 		this.tbl_no = tbl_no;
 	}
 
-	public BigDecimal getFare_comp_min_fare_1() {
+	public Decimal128 getFare_comp_min_fare_1() {
 		return fare_comp_min_fare_1;
 	}
 
-	public void setFare_comp_min_fare_1(BigDecimal fare_comp_min_fare_1) {
+	public void setFare_comp_min_fare_1(Decimal128 fare_comp_min_fare_1) {
 		this.fare_comp_min_fare_1 = fare_comp_min_fare_1;
 	}
 
@@ -379,11 +359,11 @@ public class AtpcoRecord3Cat25 {
 		this.fare_calc_mileage_find = fare_calc_mileage_find;
 	}
 
-	public BigDecimal getFare_comp_min_fare_2() {
+	public Decimal128 getFare_comp_min_fare_2() {
 		return fare_comp_min_fare_2;
 	}
 
-	public void setFare_comp_min_fare_2(BigDecimal fare_comp_min_fare_2) {
+	public void setFare_comp_min_fare_2(Decimal128 fare_comp_min_fare_2) {
 		this.fare_comp_min_fare_2 = fare_comp_min_fare_2;
 	}
 
@@ -499,19 +479,19 @@ public class AtpcoRecord3Cat25 {
 		this.fare_calc_fare_cur_1 = fare_calc_fare_cur_1;
 	}
 
-	public BigDecimal getFare_calc_fare_amt_2() {
+	public Decimal128 getFare_calc_fare_amt_2() {
 		return fare_calc_fare_amt_2;
 	}
 
-	public void setFare_calc_fare_amt_2(BigDecimal fare_calc_fare_amt_2) {
+	public void setFare_calc_fare_amt_2(Decimal128 fare_calc_fare_amt_2) {
 		this.fare_calc_fare_amt_2 = fare_calc_fare_amt_2;
 	}
 
-	public BigDecimal getFare_calc_fare_amt_1() {
+	public Decimal128 getFare_calc_fare_amt_1() {
 		return fare_calc_fare_amt_1;
 	}
 
-	public void setFare_calc_fare_amt_1(BigDecimal fare_calc_fare_amt_1) {
+	public void setFare_calc_fare_amt_1(Decimal128 fare_calc_fare_amt_1) {
 		this.fare_calc_fare_amt_1 = fare_calc_fare_amt_1;
 	}
 
@@ -523,11 +503,11 @@ public class AtpcoRecord3Cat25 {
 		this.fare_calc_fare_cur_2 = fare_calc_fare_cur_2;
 	}
 
-	public BigDecimal getFare_comp_max_fare_2() {
+	public Decimal128 getFare_comp_max_fare_2() {
 		return fare_comp_max_fare_2;
 	}
 
-	public void setFare_comp_max_fare_2(BigDecimal fare_comp_max_fare_2) {
+	public void setFare_comp_max_fare_2(Decimal128 fare_comp_max_fare_2) {
 		this.fare_comp_max_fare_2 = fare_comp_max_fare_2;
 	}
 
@@ -539,11 +519,11 @@ public class AtpcoRecord3Cat25 {
 		this.fare_calc_mileage_min = fare_calc_mileage_min;
 	}
 
-	public BigDecimal getFare_comp_max_fare_1() {
+	public Decimal128 getFare_comp_max_fare_1() {
 		return fare_comp_max_fare_1;
 	}
 
-	public void setFare_comp_max_fare_1(BigDecimal fare_comp_max_fare_1) {
+	public void setFare_comp_max_fare_1(Decimal128 fare_comp_max_fare_1) {
 		this.fare_comp_max_fare_1 = fare_comp_max_fare_1;
 	}
 
@@ -627,11 +607,11 @@ public class AtpcoRecord3Cat25 {
 		this.psgr_status_appl = psgr_status_appl;
 	}
 
-	public String getRec_type() {
+	public int getRec_type() {
 		return rec_type;
 	}
 
-	public void setRec_type(String rec_type) {
+	public void setRec_type(int rec_type) {
 		this.rec_type = rec_type;
 	}
 
@@ -651,11 +631,11 @@ public class AtpcoRecord3Cat25 {
 		this.psgr_travel_origin_reserved_2 = psgr_travel_origin_reserved_2;
 	}
 
-	public String getFare_calc_mileage_percent() {
+	public Decimal128 getFare_calc_mileage_percent() {
 		return fare_calc_mileage_percent;
 	}
 
-	public void setFare_calc_mileage_percent(String fare_calc_mileage_percent) {
+	public void setFare_calc_mileage_percent(Decimal128 fare_calc_mileage_percent) {
 		this.fare_calc_mileage_percent = fare_calc_mileage_percent;
 	}
 
@@ -811,60 +791,12 @@ public class AtpcoRecord3Cat25 {
 		this.psgr_travel_origin_tsi = psgr_travel_origin_tsi;
 	}
 
-	public String getResulting_fare_prime_rbd_6() {
-		return resulting_fare_prime_rbd_6;
-	}
-
-	public void setResulting_fare_prime_rbd_6(String resulting_fare_prime_rbd_6) {
-		this.resulting_fare_prime_rbd_6 = resulting_fare_prime_rbd_6;
-	}
-
-	public String getResulting_fare_prime_rbd_7() {
-		return resulting_fare_prime_rbd_7;
-	}
-
-	public void setResulting_fare_prime_rbd_7(String resulting_fare_prime_rbd_7) {
-		this.resulting_fare_prime_rbd_7 = resulting_fare_prime_rbd_7;
-	}
-
-	public String getResulting_fare_prime_rbd_8() {
-		return resulting_fare_prime_rbd_8;
-	}
-
-	public void setResulting_fare_prime_rbd_8(String resulting_fare_prime_rbd_8) {
-		this.resulting_fare_prime_rbd_8 = resulting_fare_prime_rbd_8;
-	}
-
-	public String getResulting_fare_prime_rbd_2() {
-		return resulting_fare_prime_rbd_2;
-	}
-
-	public void setResulting_fare_prime_rbd_2(String resulting_fare_prime_rbd_2) {
-		this.resulting_fare_prime_rbd_2 = resulting_fare_prime_rbd_2;
-	}
-
-	public String getRecord_batch() {
+	public int getRecord_batch() {
 		return record_batch;
 	}
 
-	public void setRecord_batch(String record_batch) {
+	public void setRecord_batch(int record_batch) {
 		this.record_batch = record_batch;
-	}
-
-	public String getResulting_fare_prime_rbd_3() {
-		return resulting_fare_prime_rbd_3;
-	}
-
-	public void setResulting_fare_prime_rbd_3(String resulting_fare_prime_rbd_3) {
-		this.resulting_fare_prime_rbd_3 = resulting_fare_prime_rbd_3;
-	}
-
-	public String getResulting_fare_prime_rbd_4() {
-		return resulting_fare_prime_rbd_4;
-	}
-
-	public void setResulting_fare_prime_rbd_4(String resulting_fare_prime_rbd_4) {
-		this.resulting_fare_prime_rbd_4 = resulting_fare_prime_rbd_4;
 	}
 
 	public String getAge_max() {
@@ -875,28 +807,12 @@ public class AtpcoRecord3Cat25 {
 		this.age_max = age_max;
 	}
 
-	public String getResulting_fare_prime_rbd_5() {
-		return resulting_fare_prime_rbd_5;
-	}
-
-	public void setResulting_fare_prime_rbd_5(String resulting_fare_prime_rbd_5) {
-		this.resulting_fare_prime_rbd_5 = resulting_fare_prime_rbd_5;
-	}
-
 	public String getCat_no() {
 		return cat_no;
 	}
 
 	public void setCat_no(String cat_no) {
 		this.cat_no = cat_no;
-	}
-
-	public String getResulting_fare_prime_rbd_1() {
-		return resulting_fare_prime_rbd_1;
-	}
-
-	public void setResulting_fare_prime_rbd_1(String resulting_fare_prime_rbd_1) {
-		this.resulting_fare_prime_rbd_1 = resulting_fare_prime_rbd_1;
 	}
 
 	public String getFare_comp_rules_tarrif() {
@@ -955,6 +871,14 @@ public class AtpcoRecord3Cat25 {
 		this.psgr_travel_origin_geo_loc = psgr_travel_origin_geo_loc;
 	}
 
+	public String[] getResulting_fare_prime_rbd() {
+		return resulting_fare_prime_rbd;
+	}
+
+	public void setResulting_fare_prime_rbd(String[] resulting_fare_prime_rbd) {
+		this.resulting_fare_prime_rbd = resulting_fare_prime_rbd;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -1009,23 +933,16 @@ public class AtpcoRecord3Cat25 {
 				+ ((psgr_travel_origin_reserved_2 == null) ? 0 : psgr_travel_origin_reserved_2.hashCode());
 		result = prime * result + ((psgr_travel_origin_tsi == null) ? 0 : psgr_travel_origin_tsi.hashCode());
 		result = prime * result + ((psgr_type == null) ? 0 : psgr_type.hashCode());
-		result = prime * result + ((rec_type == null) ? 0 : rec_type.hashCode());
-		result = prime * result + ((record_batch == null) ? 0 : record_batch.hashCode());
-		result = prime * result + ((record_sequence == null) ? 0 : record_sequence.hashCode());
+		result = prime * result + rec_type;
+		result = prime * result + record_batch;
+		result = prime * result + record_sequence;
 		result = prime * result + ((reserved_1 == null) ? 0 : reserved_1.hashCode());
 		result = prime * result + ((resulting_fare_disc_cat == null) ? 0 : resulting_fare_disc_cat.hashCode());
 		result = prime * result + ((resulting_fare_fare_class == null) ? 0 : resulting_fare_fare_class.hashCode());
 		result = prime * result + ((resulting_fare_global == null) ? 0 : resulting_fare_global.hashCode());
 		result = prime * result + ((resulting_fare_owrt == null) ? 0 : resulting_fare_owrt.hashCode());
 		result = prime * result + ((resulting_fare_prc_cat == null) ? 0 : resulting_fare_prc_cat.hashCode());
-		result = prime * result + ((resulting_fare_prime_rbd_1 == null) ? 0 : resulting_fare_prime_rbd_1.hashCode());
-		result = prime * result + ((resulting_fare_prime_rbd_2 == null) ? 0 : resulting_fare_prime_rbd_2.hashCode());
-		result = prime * result + ((resulting_fare_prime_rbd_3 == null) ? 0 : resulting_fare_prime_rbd_3.hashCode());
-		result = prime * result + ((resulting_fare_prime_rbd_4 == null) ? 0 : resulting_fare_prime_rbd_4.hashCode());
-		result = prime * result + ((resulting_fare_prime_rbd_5 == null) ? 0 : resulting_fare_prime_rbd_5.hashCode());
-		result = prime * result + ((resulting_fare_prime_rbd_6 == null) ? 0 : resulting_fare_prime_rbd_6.hashCode());
-		result = prime * result + ((resulting_fare_prime_rbd_7 == null) ? 0 : resulting_fare_prime_rbd_7.hashCode());
-		result = prime * result + ((resulting_fare_prime_rbd_8 == null) ? 0 : resulting_fare_prime_rbd_8.hashCode());
+		result = prime * result + Arrays.hashCode(resulting_fare_prime_rbd);
 		result = prime * result + ((resulting_fare_prime_sector == null) ? 0 : resulting_fare_prime_sector.hashCode());
 		result = prime * result + ((resulting_fare_rbd_999 == null) ? 0 : resulting_fare_rbd_999.hashCode());
 		result = prime * result
@@ -1305,20 +1222,11 @@ public class AtpcoRecord3Cat25 {
 				return false;
 		} else if (!psgr_type.equals(other.psgr_type))
 			return false;
-		if (rec_type == null) {
-			if (other.rec_type != null)
-				return false;
-		} else if (!rec_type.equals(other.rec_type))
+		if (rec_type != other.rec_type)
 			return false;
-		if (record_batch == null) {
-			if (other.record_batch != null)
-				return false;
-		} else if (!record_batch.equals(other.record_batch))
+		if (record_batch != other.record_batch)
 			return false;
-		if (record_sequence == null) {
-			if (other.record_sequence != null)
-				return false;
-		} else if (!record_sequence.equals(other.record_sequence))
+		if (record_sequence != other.record_sequence)
 			return false;
 		if (reserved_1 == null) {
 			if (other.reserved_1 != null)
@@ -1350,45 +1258,7 @@ public class AtpcoRecord3Cat25 {
 				return false;
 		} else if (!resulting_fare_prc_cat.equals(other.resulting_fare_prc_cat))
 			return false;
-		if (resulting_fare_prime_rbd_1 == null) {
-			if (other.resulting_fare_prime_rbd_1 != null)
-				return false;
-		} else if (!resulting_fare_prime_rbd_1.equals(other.resulting_fare_prime_rbd_1))
-			return false;
-		if (resulting_fare_prime_rbd_2 == null) {
-			if (other.resulting_fare_prime_rbd_2 != null)
-				return false;
-		} else if (!resulting_fare_prime_rbd_2.equals(other.resulting_fare_prime_rbd_2))
-			return false;
-		if (resulting_fare_prime_rbd_3 == null) {
-			if (other.resulting_fare_prime_rbd_3 != null)
-				return false;
-		} else if (!resulting_fare_prime_rbd_3.equals(other.resulting_fare_prime_rbd_3))
-			return false;
-		if (resulting_fare_prime_rbd_4 == null) {
-			if (other.resulting_fare_prime_rbd_4 != null)
-				return false;
-		} else if (!resulting_fare_prime_rbd_4.equals(other.resulting_fare_prime_rbd_4))
-			return false;
-		if (resulting_fare_prime_rbd_5 == null) {
-			if (other.resulting_fare_prime_rbd_5 != null)
-				return false;
-		} else if (!resulting_fare_prime_rbd_5.equals(other.resulting_fare_prime_rbd_5))
-			return false;
-		if (resulting_fare_prime_rbd_6 == null) {
-			if (other.resulting_fare_prime_rbd_6 != null)
-				return false;
-		} else if (!resulting_fare_prime_rbd_6.equals(other.resulting_fare_prime_rbd_6))
-			return false;
-		if (resulting_fare_prime_rbd_7 == null) {
-			if (other.resulting_fare_prime_rbd_7 != null)
-				return false;
-		} else if (!resulting_fare_prime_rbd_7.equals(other.resulting_fare_prime_rbd_7))
-			return false;
-		if (resulting_fare_prime_rbd_8 == null) {
-			if (other.resulting_fare_prime_rbd_8 != null)
-				return false;
-		} else if (!resulting_fare_prime_rbd_8.equals(other.resulting_fare_prime_rbd_8))
+		if (!Arrays.equals(resulting_fare_prime_rbd, other.resulting_fare_prime_rbd))
 			return false;
 		if (resulting_fare_prime_sector == null) {
 			if (other.resulting_fare_prime_sector != null)
@@ -1535,19 +1405,16 @@ public class AtpcoRecord3Cat25 {
 				+ ", category_override_tags=" + category_override_tags + ", resulting_fare_prime_sector="
 				+ resulting_fare_prime_sector + ", psgr_status_geo_loc=" + psgr_status_geo_loc + ", fare_comp_dec_2="
 				+ fare_comp_dec_2 + ", fare_comp_fare_type=" + fare_comp_fare_type + ", fare_comp_dec_1="
-				+ fare_comp_dec_1 + ", psgr_travel_origin_tsi=" + psgr_travel_origin_tsi
-				+ ", resulting_fare_prime_rbd_6=" + resulting_fare_prime_rbd_6 + ", resulting_fare_prime_rbd_7="
-				+ resulting_fare_prime_rbd_7 + ", resulting_fare_prime_rbd_8=" + resulting_fare_prime_rbd_8
-				+ ", resulting_fare_prime_rbd_2=" + resulting_fare_prime_rbd_2 + ", record_batch=" + record_batch
-				+ ", resulting_fare_prime_rbd_3=" + resulting_fare_prime_rbd_3 + ", resulting_fare_prime_rbd_4="
-				+ resulting_fare_prime_rbd_4 + ", age_max=" + age_max + ", resulting_fare_prime_rbd_5="
-				+ resulting_fare_prime_rbd_5 + ", cat_no=" + cat_no + ", resulting_fare_prime_rbd_1="
-				+ resulting_fare_prime_rbd_1 + ", fare_comp_rules_tarrif=" + fare_comp_rules_tarrif
-				+ ", fare_comp_cur_1=" + fare_comp_cur_1 + ", fare_comp_cur_2=" + fare_comp_cur_2 + ", reserved_1="
-				+ reserved_1 + ", trvl_wholly_within_geo_loc=" + trvl_wholly_within_geo_loc
-				+ ", trvl_wholly_within_geo_type=" + trvl_wholly_within_geo_type + ", psgr_travel_origin_geo_loc="
-				+ psgr_travel_origin_geo_loc + "]";
+				+ fare_comp_dec_1 + ", psgr_travel_origin_tsi=" + psgr_travel_origin_tsi + ", record_batch="
+				+ record_batch + ", age_max=" + age_max + ", cat_no=" + cat_no + ", fare_comp_rules_tarrif="
+				+ fare_comp_rules_tarrif + ", fare_comp_cur_1=" + fare_comp_cur_1 + ", fare_comp_cur_2="
+				+ fare_comp_cur_2 + ", reserved_1=" + reserved_1 + ", trvl_wholly_within_geo_loc="
+				+ trvl_wholly_within_geo_loc + ", trvl_wholly_within_geo_type=" + trvl_wholly_within_geo_type
+				+ ", psgr_travel_origin_geo_loc=" + psgr_travel_origin_geo_loc + ", resulting_fare_prime_rbd="
+				+ Arrays.toString(resulting_fare_prime_rbd) + "]";
 	}
+
+	
     
     
 }
