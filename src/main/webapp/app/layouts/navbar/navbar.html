@@ -177,6 +177,35 @@
 		    	</div>
 		    	<div class="tooltip">Data Feed</div>
 		    </li>
+			<li class="menu-list has-sub" ng-click="vm.toggleMenu($event)">
+		    	<a>
+		    		<i class="fa fa-file-text"></i><span>Report</span>
+		    	</a>
+		    	<div class="sub-menu">
+		    		<ul>
+		    			<li>
+		    		    	<a ui-sref="data-feed({tab: 1})" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Corporate Activity Report</a>
+		    		    </li>
+		    		    <li>
+		    		    	<a ui-sref="data-feed-scheduler" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> ATPCO Report </a>
+		    		    </li>
+		    		    <li>
+		    		    	<a ui-sref="data-feed-scheduler" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Waiver Report </a>
+		    		    </li>
+		    		    <li>
+		    		    	<a ui-sref="data-feed-scheduler" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Agents Performance Report </a>
+		    		    </li>
+		    		    <li>
+		    		    	<a ui-sref="data-feed-scheduler" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Approval Date Report </a>
+		    		    </li>
+		    		    <li>
+		    		    	<a ui-sref="data-feed-scheduler" ng-click="vm.collapseNavbar()" class="linkClick"><i class="fa fa-circle"></i> Event Report </a>
+		    		    </li>
+		    		 </ul>
+		    	</div>
+		    	<div class="tooltip">Data Feed</div>
+		    </li>
+			
 		</ul>
 		</nav>
 	</div>
