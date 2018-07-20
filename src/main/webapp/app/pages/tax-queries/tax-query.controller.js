@@ -3,33 +3,37 @@
 
     angular
         .module('fmpApp')
-        .controller('YqyrQueryController', YqyrQueryController);
+        .controller('TaxQueryController', TaxQueryController);
 
-    YqyrQueryController.$inject = ['$state', 'YqyrQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', 'Timezone', 'Passenger', 'City', 'DateUtils'];
+    TaxQueryController.$inject = ['$state', 'TaxQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', 'Timezone', 'Passenger', 'City', 'DateUtils'];
 
-    function YqyrQueryController($state, YqyrQuery, ParseLinks, AlertService, paginationConstants, pagingParams, Timezone, Passenger, City, DateUtils) {
+    function TaxQueryController($state, TaxQuery, ParseLinks, AlertService, paginationConstants, pagingParams, Timezone, Passenger, City, DateUtils) {
 
         var vm = this;
 
         vm.queryParams = {
     		carrier: null,
+    		nation: null,
+    		taxCode: null,
+    		taxType: null,
+    		taxPointTag: null,
+    		percentFlatTag: null,
+    		taxUnitTag: null,
+    		saleDateFrom: null,
+    		sateDateTo: null,
+    		saleDateOption: null,
+    		travelApplication: null,
+    		travelDateFrom: null,
+    		travelDateTo: null,
+    		travelDateOption: null,
+    		ticketedPointTag: null,
     		pointOfSale: null,
     		pointOfTicketing: null,
-    		travelDate: null,
-    		ticketingDate: null,
-    		origin: null,
-    		destination: null,
-    		via: null,
-    		applyAs: null,
-    		fareClass: null,
-    		bookingClass: null,
-    		paxType: null,
-    		posCode: null,
-    		ticketDesignator: null,
-    		valCarrier: null,
-    		opCarrier: null,
-    		flightNumber: null,
-    		equipment: null
+    		securityTable183: null,
+    		journeyFrom: null,
+    		journeyTo: null,
+    		journeyInclude: null,
+    		journeyWhollyWithin: null
     	};
         
         vm.loadPage = loadPage;
@@ -54,6 +58,17 @@
         	{key: "J", value: "Journey"},
         	{key: "S", value: "Sector"},
         	{key: "B", value: "Both"}
+        ]
+        
+        vm.dateOptions = [
+        	{key: "A", value: "Active In"},
+        	{key: "E", value: "Exact Match"}
+        ]
+        
+        vm.securityTable183s = [
+        	{key: "", value: "Select Option"},
+        	{key: "E", value: "Exists"},
+        	{key: "D", value: "Does Not Exist"}
         ]
         
         function query() {
@@ -124,24 +139,28 @@
 
         function reset() {
         	vm.queryParams = {
-    			carrier: null,
+        		carrier: null,
+        		nation: null,
+        		taxCode: null,
+        		taxType: null,
+        		taxPointTag: null,
+        		percentFlatTag: null,
+        		taxUnitTag: null,
+        		saleDateFrom: null,
+        		sateDateTo: null,
+        		saleDateOption: vm.dateOptions[0].key,
+        		travelApplication: null,
+        		travelDateFrom: null,
+        		travelDateTo: null,
+        		travelDateOption: vm.dateOptions[0].key,
+        		ticketedPointTag: null,
         		pointOfSale: null,
         		pointOfTicketing: null,
-        		travelDate: null,
-        		ticketingDate: null,
-        		origin: null,
-        		destination: null,
-        		via: null,
-        		applyAs: vm.applyAs[0].key,
-        		fareClass: null,
-        		bookingClass: null,
-        		paxType: null,
-        		posCode: null,
-        		ticketDesignator: null,
-        		valCarrier: null,
-        		opCarrier: null,
-        		flightNumber: null,
-        		equipment: null
+        		securityTable183: null,
+        		journeyFrom: null,
+        		journeyTo: null,
+        		journeyInclude: null,
+        		journeyWhollyWithin: null
         	}
         	vm.travelDate = null;
         	vm.ticketingDate = null;
