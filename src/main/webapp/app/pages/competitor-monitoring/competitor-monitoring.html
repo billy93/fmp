@@ -272,7 +272,14 @@
         	<div class="monitoring-location"><span>{{vm.queryParams.origin}}</span></div>
         </div>
 		
-		<div id="container" class="col-md-12 no-pad" style="height:600px;" hidden="hidden" ng-if="vm.compMonitoring.length > 0"></div>
+		<div id="container" class="col-md-12 no-pad" hidden="hidden">
+			<div id="graphCab1" class="col-md-6 no-pad"></div>
+			<div id="graphCab2" class="col-md-6 no-pad"></div>
+			<div id="graphCab3" class="col-md-6 no-pad"></div>
+			<div id="graphCab4" class="col-md-6 no-pad"></div>
+		</div>
+		
+<!-- 		<div id="container" class="col-md-12 no-pad" style="height:600px;" hidden="hidden" ng-if="vm.compMonitoring.length > 0"></div> -->
 		
 		<div id="containerLegend" ng-if="vm.compMonitoring.length > 0" hidden="hidden" style="margin : 10px;">
 			<div class="custom-label semibold">Color Legend : </div>

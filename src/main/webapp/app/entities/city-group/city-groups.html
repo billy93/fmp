@@ -10,61 +10,57 @@
 						<div class="filter-label semibold show">Hide Filter</div>
 						<div class="filter-area">
 							<div class="clearfix">
-								<div class="pull-left w50 ph5px">
+								<div class="pull-left w35 ph5px">
 									<div class="form-group">
-										<div class="custom-label semibold">City Group Code :</div>
+										<div class="custom-label semibold">City Group Code</div>
 										<input type="text" class="form-control" ng-model="vm.cityGroupCode"  />
-										<div class="custom-label semibold">City Group Description :</div>
+									</div>
+									<div class="form-group">
+										<div class="checkbox-wrapper mb5px">
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="custom-label semibold">City Group Description</div>
 										<input type="text" class="form-control" ng-model="vm.cityGroupDescription"  />
 									</div>
 								</div>
-								<div class="pull-left w50 ph5px">
-									<div class="pull-left w50 ph5px">
-										<div class="form-group">
-											<div class="clearfix">
-												<div class="custom-label semibold">City Code :</div>
-												<input type="text" class="form-control" ng-model="vm.cityCode"  />
-												<div>
-													<label>
-												     	<input type="radio" ng-model="vm.operator" value="and"> And </label>
-												    </label><t>
-												    <label>
-												     	<input type="radio" ng-model="vm.operator" value="or"> Or </label>
-												    </label>
-												</div>
-												<div class="custom-label semibold">Country</div>
-												<input type="text" class="form-control" ng-model="vm.countryCode"  />
-											</div>
+								<div class="pull-left w35 ph5px">
+									<div class="form-group">
+										<div class="custom-label semibold">City Code</div>
+										<input type="text" class="form-control" ng-model="vm.cityCode"  />
+									</div>
+									<div class="form-group text-center" style="margin-top: -4px">
+										<div class="checkbox-wrapper">
+											<label class="white">
+										     	<input type="radio" ng-model="vm.operator" value="and"> And
+										    </label>
+										    <label class="white">
+										     	<input type="radio" ng-model="vm.operator" value="or"> Or
+										    </label>
 										</div>
 									</div>
-									<div class="pull-left w50 ph5px">
-										<div class="form-group">
-											<div class="clearfix">
-												<button class="btn btn-default" ng-click = "vm.queryFilter()">
-								                    <span >
-								                        Query
-								                    </span>
-								                </button>
-											</div>
-										</div>
-										<div class="form-group">
-											<div class="clearfix">
-												<button class="btn btn-default" ng-click = "vm.clearFilter()">
-								                    <span >
-								                        Clear
-								                    </span>
-								                </button>
-											</div>
-										</div>
-										<div class="form-group">
-											<div class="clearfix">
-												<button class="btn btn-default" ng-click = "vm.resetFilter()">
-								                    <span >
-								                        Reset
-								                    </span>
-								                </button>
-											</div>
-										</div>
+									<div class="form-group" style="margin-top: -16px">
+										<div class="custom-label semibold">Country</div>
+										<input type="text" class="form-control" ng-model="vm.countryCode"  />
+									</div>
+								</div>
+								<div class="pull-left w30 ph1" style="margin-top: 21px">
+									<div class="form-group">
+										<button class="btn btn-default" ng-click = "vm.queryFilter()">
+						                    <span >
+						                        Query
+						                    </span>
+						                </button>
+						                <button class="btn btn-default" ng-click = "vm.clearFilter()">
+						                    <span >
+						                        Clear
+						                    </span>
+						                </button>
+						                <button class="btn btn-default" ng-click = "vm.resetFilter()">
+						                    <span >
+						                        Reset
+						                    </span>
+						                </button>
 									</div>
 								</div>
 							</div>

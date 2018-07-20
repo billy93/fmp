@@ -29,20 +29,20 @@
 											</div>
 											<div class="form-group mb0">
 												<div class="custom-label semibold">Status</div>
-												<select class="form-control" name="status"
-													ng-model="vm.status" ng-options="x for x in vm.optionStatus">
+												<select class="form-control" name="status" ng-model="vm.status" ng-options="x for x in vm.optionStatus">
+													<option value=""></option>
 												</select>
 											</div>
 											<div class="form-group mb0">
 												<div class="custom-label semibold">Distribution</div>
-												<select class="form-control" name="distribution"
-													ng-model="vm.distribution" ng-options="x for x in vm.optionDistribution">
+												<select class="form-control" name="distribution" ng-model="vm.distribution" ng-options="x for x in vm.optionDistribution">
+													<option value=""></option>
 												</select>
 											</div>
 											<div class="form-group mb0">
 												<div class="custom-label semibold">WP Type</div>
-												<select class="form-control" name="wpType"
-													ng-model="vm.wpType" ng-options="x for x in vm.optionWpType">
+												<select class="form-control" name="wpType" ng-model="vm.wpType" ng-options="x for x in vm.optionWpType">
+													<option value=""></option>
 												</select>
 											</div>
 										</div>
@@ -125,14 +125,14 @@
 										<div class="form-group">
 											<div class="form-group mb0">
 												<div class="custom-label semibold">Fare Type</div>
-												<select class="form-control" name="fareClass"
-													ng-model="vm.fareClass" ng-options="x.name for x in vm.optionFare">
+												<select class="form-control" name="fareClass" ng-model="vm.fareClass" ng-options="x.name for x in vm.optionFare">
+													<option value=""></option>
 												</select>
 											</div>
 											<div class="form-group mb0">
 												<div class="custom-label semibold">Business Area</div>
-												<select class="form-control" name="businessAreas"
-													ng-model="vm.businessAreas" ng-options="x.name for x in vm.optionBusinessAreas">
+												<select class="form-control" name="businessAreas" ng-model="vm.businessAreas" ng-options="x.name for x in vm.optionBusinessAreas">
+												 <option value=""></option>
 												</select>
 											</div>
 										</div>
@@ -141,8 +141,8 @@
 										<div class="form-group">
 											<div class="form-group mb0">
 												<div class="custom-label semibold">Created By</div>
-												<select class="form-control" name="creator"
-													ng-model="vm.creator" ng-options="x.login for x in vm.optionCreator">
+												<select class="form-control" name="creator" ng-model="vm.creator" ng-options="x.login for x in vm.optionCreator">
+													<option value=""></option>
 												</select>
 											</div>
 											<div class="form-group mb0">
@@ -164,96 +164,79 @@
 							</div>
 						</div>
 					</div>
+					</div>
 					<!-- end of filter -->
 
 					<!-- table -->
-					<div class="table-wrapper">
+					<div class="table-wrapper table-afd">
 						<div class="datatable-wrapper form-inline">
 							<div class="clearfix">
-								<div class="pull-left w50">
-									<div class="datatable-length">
-										<label>
-											<select class="form-control" ng-model="vm.itemsPerPage" ng-change="vm.changeItemsPerPage()">
-												<option value="10">10</option>
-												<option value="20">20</option>
-												<option value="35">35</option>
-												<option value="50">50</option>
-											</select>
-											 records per page
-										</label>
-									</div>
-								</div>
-								<div>
-									<div class="clearfix">
-										<div class="pull-right datatable-button">
-<!-- 											<button class="btn btn-default small" ng-click="vm.refresh()">Refresh</button> -->
-<!-- 											<button class="btn btn-default small" ng-click="vm.query()">Query</button> -->
-<!-- 											<button class="btn btn-default small" ng-click="vm.reset()">Reset</button> -->
-<!-- 											<button class="btn btn-default small" ng-click="vm.printExport()">Print/Export</button> -->
-											<button class="btn btn-default small" ng-click="vm.showHistory()" ng-disabled="vm.selectedRow == null"><i class="fa fa-history i-btn"></i> History</button>
-											<button class="btn btn-default small" ng-click="vm.reuse()" ng-disabled="vm.selectedRow == null"></i class="fa fa-recycle i-btn"> Reuse</button>
-											<button class="btn btn-default small" ng-click="vm.replace()" ng-disabled="vm.selectedRow == null"><i class="fa fa-reply i-btn"></i> Replace</button>
-										</div>
-									</div>
+								<div class="pull-right datatable-button">
+									<button class="btn btn-default small" ng-click="vm.printExport()">Print/Export</button>
+									<button class="btn btn-default small" ng-click="vm.showHistory()" ng-disabled="vm.selectedRow == null"><i class="fa fa-history i-btn"></i> History</button>
+									<button class="btn btn-default small" ng-click="vm.reuse()" ng-disabled="vm.selectedRow == null"></i class="fa fa-recycle i-btn"> Reuse</button>
+									<button class="btn btn-default small" ng-click="vm.replace()" ng-disabled="vm.selectedRow == null || vm.selectedRow.targetDistribution == 'ATPCO'"><i class="fa fa-reply i-btn"></i> Replace</button>
 								</div>
 							</div>
-							<div class="table-responsive main-table">
-								<table class="table table-stripped table-bordered datatable" jq-slider>
-									<thead>
-										<tr role="row" jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-											<th class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Action</th>
-											<th class="sorting_asc" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1" aria-sort="ascending">No</th>
-											<th jh-sort-by="status" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Status <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="wpid" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">WO ID <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="name" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">WO Name <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="businessArea" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Business Area <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="priority" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Priority <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="reviewLevel" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Review Level <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="filingDate" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Filing Date <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="distributionDate" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Distrib Date <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="targetDistribution" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Distribution Type <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="createdDate" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Created Date <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="createdBy" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Created By <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="lockedBy" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Locked By <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="lockedSince" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Locked Since <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="approvalReference" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Approval Reference <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="type" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">WO Type <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="fareType" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Fare Types <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="reuseFrom" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Reuse from <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="replaceFrom" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Replace from <span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="queuedDate" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Queued Date<span class="glyphicon glyphicon-sort"></span></th>
-											<th jh-sort-by="groupFare" class="sorting" tabindex="0" aria-controls="datatable-tabletools" rowspan="1" colspan="1">Group Fare<span class="glyphicon glyphicon-sort"></span></th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr id="tr{{$index}}" ng-if="!workPackage.hide" ng-repeat="workPackage in vm.workPackages track by $index"  
-										    role="row" class="datatable-row"
-											ng-class="{selected: workPackage === vm.selectedRow}"
-											ng-click="vm.rowSelected($index, workPackage)">
-											<td class="text-right" ng-class="{selected: workPackage === vm.selectedRow}">
-						                        <div class="btn-group edit-btn entities flex-btn-group-container">
-						                            <button type="submit" title="Edit" ui-sref="work-package-view-only({id:workPackage.id})"
-						                                    class="btn btn-primary btn-tiny mb0">
-						                                <span >View</span>
-						                            </button>
-						                        </div>
-						                    </td>
-						                    <td><a ui-sref="work-package-view-only({id:workPackage.id})">{{$index+1}}</a></td>
-						                    <td ng-right-click="vm.rightClick('status')">{{workPackage.status}}</td>
-						                    <td ng-right-click="vm.rightClick('wpid')">{{workPackage.wpid}}</td>
-						                    <td ng-right-click="vm.rightClick('name')">{{workPackage.name}}</td>
-						                    <td ng-right-click="vm.rightClick('businessArea')">{{workPackage.businessArea}}</td>
-						                    <td ng-right-click="vm.rightClick('priority')">{{workPackage.priority}}</td>
-						                    <td ng-right-click="vm.rightClick('reviewLevel')">{{workPackage.reviewLevel}}</td>
-						                    <td ng-right-click="vm.rightClick('filingDate')">{{workPackage.filingDate | date:'ddMMMyyyy'}}</td>
-						                    <td ng-right-click="vm.rightClick('distributionDate')">{{workPackage.distributionDate | date:'ddMMMyyyy'}}</td>
-						                    <td ng-right-click="vm.rightClick('targetDistribution')">{{workPackage.targetDistribution}}</td>
-						                    <td ng-right-click="vm.rightClick('createdDate')">{{workPackage.createdDate | date:'ddMMMyyyy'}}</td>
-						                    <td ng-right-click="vm.rightClick('createdBy')">{{workPackage.createdBy}}</td>
-						                    <td ng-right-click="vm.rightClick('lockedBy')">{{workPackage.lockedBy}}</td>
-						                    <td ng-right-click="vm.rightClick('lockedSince')">{{workPackage.lockedSince | date:'medium'}}</td>
-						                    <td>
-						                    	<div>
+						    
+							<!--  INFINITY -->
+							<div class="table-responsive main-table" style="overflow-y:hidden; max-height: initial; padding-bottom: 0">
+								<div class="absolute-table">
+									<table class="table table-striped table-bordered datatable table-header-fixed">
+										<thead class="thead-fixed">
+											<tr>
+												<th class="th-fixed">Action</th>
+							                    <th class="th-fixed">No</th>
+							                    <th class="th-fixed">Status</th>
+							                    <th class="th-fixed">WO ID</th>
+							                    <th class="th-fixed">WO Name</th>
+							                    <th class="th-fixed">Business Area</th>
+							                    <th class="th-fixed">Priority</th>
+							                    <th class="th-fixed">Review Level </th>
+							                    <th class="th-fixed">Filing Date</th>
+							                    <th class="th-fixed">Distrib Date</th>
+							                    <th class="th-fixed">Distribution Type</th>
+							                    <th class="th-fixed">Created Date</th> 
+							                    <th class="th-fixed">Created By</th>
+							                    <th class="th-fixed">Locked By</th>
+							                    <th class="th-fixed">Locked Since</th>
+							                    <th class="th-fixed">Approval Reference</th>
+							                    <th class="th-fixed">WO Type</th>
+							                    <th class="th-fixed">Fare Types</th>
+							                    <th class="th-fixed">Reuse from</th>
+							                   <th class="th-fixed">Replace from</th>
+							                   <th class="th-fixed">Queued Date</th>
+							                   <th class="th-fixed">Group Fare</th>
+											</tr>
+										</thead>
+										<tbody id="tbody-afd" class="tbody-fixed">
+											<tr class="tr-afd" ng-if="!workPackage.hide" ng-repeat="workPackage in vm.workPackages track by $index"  
+											    role="row" class="datatable-row"
+												ng-class="{selected: workPackage === vm.selectedRow}"
+												ng-click="vm.rowSelected($index, workPackage)">
+												<td class="td-afd" ng-class="{selected: workPackage === vm.selectedRow}">
+							                        <div class="btn-group edit-btn entities flex-btn-group-container">
+							                            <button type="submit" title="Edit" ng-click="vm.ViewDetail(workPackage.id)"
+							                                    class="btn btn-primary btn-tiny mb0">
+							                                <span >View</span>
+							                            </button>
+							                        </div>
+							                    </td>
+							                    <td class="td-afd"><a ng-click="vm.ViewDetail(workPackage.id)">{{$index+1}}</a></td>
+							                    <td class="td-afd" ng-right-click="vm.rightClick('status')">{{workPackage.status}}</td>
+							                    <td class="td-afd" ng-right-click="vm.rightClick('wpid')">{{workPackage.wpid}}</td>
+							                    <td class="td-afd" ng-right-click="vm.rightClick('name')">{{workPackage.name}}</td>
+							                    <td class="td-afd" ng-right-click="vm.rightClick('businessArea')">{{workPackage.businessArea}}</td>
+							                    <td class="td-afd" ng-right-click="vm.rightClick('priority')">{{workPackage.priority}}</td>
+							                    <td class="td-afd" ng-right-click="vm.rightClick('reviewLevel')">{{workPackage.reviewLevel}}</td>
+							                    <td class="td-afd" ng-right-click="vm.rightClick('filingDate')">{{workPackage.filingDate | date:'ddMMMyyyy'}}</td>
+							                    <td class="td-afd" ng-right-click="vm.rightClick('distributionDate')">{{workPackage.distributionDate | date:'ddMMMyyyy'}}</td>
+							                    <td class="td-afd" ng-right-click="vm.rightClick('targetDistribution')">{{workPackage.targetDistribution}}</td>
+							                    <td class="td-afd" ng-right-click="vm.rightClick('createdDate')">{{workPackage.createdDate | date:'ddMMMyyyy'}}</td>
+							                    <td class="td-afd" ng-right-click="vm.rightClick('createdBy')">{{workPackage.createdBy}}</td>
+							                    <td class="td-afd" ng-right-click="vm.rightClick('lockedBy')">{{workPackage.lockedBy}}</td>
+							                    <td class="td-afd" ng-right-click="vm.rightClick('lockedSince')">{{workPackage.lockedSince | date:'medium'}}</td>
+							                    <td class="td-afd">
 							                    	<table ng-if="workPackage.specifiedFares" class="sub-table">
 							                    		<thead>
 							                    			<tr><th  colspan="2"><center>Fare</center></th></tr>
@@ -271,21 +254,39 @@
 							                    			</tr>
 							                    		</tbody>
 							                    	</table>
-						                    	</div>
-						                    </td>
-						                    <td ng-right-click="vm.rightClick('type')">{{workPackage.type}}</td>
-						                    <td>
-						                    	<div>
-							                    	<table ng-if="workPackage.specifiedFares" class="sub-table">
+							                    </td>
+							                    <td class="td-afd" ng-right-click="vm.rightClick('type')">{{workPackage.type}}</td>
+							                    <td class="td-afd">
+							                    	<div>
+								                    	<table ng-if="workPackage.specifiedFares" class="sub-table">
+								                    		<thead>
+								                    			<tr><th  colspan="2"><center>Fare</center></th></tr>
+								                    			<tr class="sub-second-th">
+								                    				<th>Sheet</th>
+								                    				<th>Fare Type</th>
+								                    			</tr>
+								                    		</thead>
+								                    		<tbody>
+								                    			<tr ng-repeat="fareSheet in workPackage.fareSheet track by $index">
+								                    				<td>{{$index+1}}</td>
+								                    				<td>
+								                    					{{fareSheet.fareType}}
+								                    				</td>
+								                    			</tr>
+								                    		</tbody>
+								                    	</table>
+							                    	</div>
+		
+							                    	<table ng-if="workPackage.discount" class="sub-table">
 							                    		<thead>
-							                    			<tr><th  colspan="2"><center>Fare</center></th></tr>
+							                    			<tr><th  colspan="2" style="padding-left:18px; padding-right:18px"><center>Discount Fare</center></th></tr>
 							                    			<tr class="sub-second-th">
 							                    				<th>Sheet</th>
 							                    				<th>Fare Type</th>
 							                    			</tr>
 							                    		</thead>
 							                    		<tbody>
-							                    			<tr ng-repeat="fareSheet in workPackage.fareSheet track by $index">
+							                    			<tr ng-repeat="fareSheet in workPackage.discountFareSheet track by $index">
 							                    				<td>{{$index+1}}</td>
 							                    				<td>
 							                    					{{fareSheet.fareType}}
@@ -293,78 +294,68 @@
 							                    			</tr>
 							                    		</tbody>
 							                    	</table>
-						                    	</div>
-
-						                    	<table ng-if="workPackage.discount" class="sub-table">
-						                    		<thead>
-						                    			<tr><th  colspan="2" style="padding-left:18px; padding-right:18px"><center>Discount Fare</center></th></tr>
-						                    			<tr class="sub-second-th">
-						                    				<th>Sheet</th>
-						                    				<th>Fare Type</th>
-						                    			</tr>
-						                    		</thead>
-						                    		<tbody>
-						                    			<tr ng-repeat="fareSheet in workPackage.discountFareSheet track by $index">
-						                    				<td>{{$index+1}}</td>
-						                    				<td>
-						                    					{{fareSheet.fareType}}
-						                    				</td>
-						                    			</tr>
-						                    		</tbody>
-						                    	</table>
-
-						                    	<table ng-if="workPackage.marketFares" class="sub-table">
-						                    		<thead>
-						                    			<tr><th  colspan="2" style="padding-left:18px; padding-right:18px"><center>Market Fare</center></th></tr>
-						                    			<tr class="sub-second-th">
-						                    				<th>Sheet</th>
-						                    				<th>Fare Type</th>
-						                    			</tr>
-						                    		</thead>
-						                    		<tbody>
-						                    			<tr ng-repeat="fareSheet in workPackage.marketFareSheet track by $index">
-						                    				<td>{{$index+1}}</td>
-						                    				<td>
-						                    					{{fareSheet.fareType}}
-						                    				</td>
-						                    			</tr>
-						                    		</tbody>
-						                    	</table>
-
-						                    	<table ng-if="workPackage.waiverFares" class="sub-table">
-						                    		<thead>
-						                    			<tr><th  colspan="2" style="padding-left:18px; padding-right:18px"><center>Waiver Fare</center></th></tr>
-						                    			<tr class="sub-second-th">
-						                    				<th>Sheet</th>
-						                    				<th>Fare Type</th>
-						                    			</tr>
-						                    		</thead>
-						                    		<tbody>
-						                    			<tr ng-repeat="fareSheet in workPackage.addonFareSheet track by $index">
-						                    				<td>{{$index+1}}</td>
-						                    				<td>
-						                    					{{fareSheet.fareType}}
-						                    				</td>
-						                    			</tr>
-						                    		</tbody>
-						                    	</table>
-						                    </td>
-						                    <td ng-right-click="vm.rightClick('reuseFrom')">{{workPackage.reuseFrom}}</td>
-						                    <td ng-right-click="vm.rightClick('replaceFrom')">{{workPackage.replaceFrom}}</td>
-						                    <td ng-right-click="vm.rightClick('queuedDate')">{{workPackage.queuedDate | date:'medium'}}</td>
-						                    <td><input type="checkbox" disabled ng-model="workPackage.marketFareSheet[0].groupFares"/></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-
-							<div class="text-center">
-						        <jhi-item-count page="vm.page" total="vm.queryCount" items-per-page="vm.itemsPerPage"></jhi-item-count>
-						        <uib-pagination class="pagination-sm" total-items="vm.totalItems" items-per-page="vm.itemsPerPage"
-						         ng-model="vm.page" ng-change="vm.loadQuery()"></uib-pagination>
-						    </div>
+		
+							                    	<table ng-if="workPackage.marketFares" class="sub-table">
+							                    		<thead>
+							                    			<tr><th  colspan="2" style="padding-left:18px; padding-right:18px"><center>Market Fare</center></th></tr>
+							                    			<tr class="sub-second-th">
+							                    				<th>Sheet</th>
+							                    				<th>Fare Type</th>
+							                    			</tr>
+							                    		</thead>
+							                    		<tbody>
+							                    			<tr ng-repeat="fareSheet in workPackage.marketFareSheet track by $index">
+							                    				<td>{{$index+1}}</td>
+							                    				<td>
+							                    					{{fareSheet.fareType}}
+							                    				</td>
+							                    			</tr>
+							                    		</tbody>
+							                    	</table>
+		
+							                    	<table ng-if="workPackage.waiverFares" class="sub-table">
+							                    		<thead>
+							                    			<tr><th  colspan="2" style="padding-left:18px; padding-right:18px"><center>Waiver Fare</center></th></tr>
+							                    			<tr class="sub-second-th">
+							                    				<th>Sheet</th>
+							                    				<th>Fare Type</th>
+							                    			</tr>
+							                    		</thead>
+							                    		<tbody>
+							                    			<tr ng-repeat="fareSheet in workPackage.addonFareSheet track by $index">
+							                    				<td>{{$index+1}}</td>
+							                    				<td>
+							                    					{{fareSheet.fareType}}
+							                    				</td>
+							                    			</tr>
+							                    		</tbody>
+							                    	</table>
+							                    </td>
+							                    <td class="td-afd" ng-right-click="vm.rightClick('reuseFrom')">{{workPackage.reuseFrom}}</td>
+							                    <td class="td-afd" ng-right-click="vm.rightClick('replaceFrom')">{{workPackage.replaceFrom}}</td>
+							                    <td class="td-afd" ng-right-click="vm.rightClick('queuedDate')">{{workPackage.queuedDate | date:'medium'}}</td>
+							                    <td class="td-afd"><input type="checkbox" disabled ng-model="workPackage.marketFareSheet[0].groupFares"/></td>
+											</tr>
+											<tr infinite-scroll="vm.loadPage(vm.page + 1)" infinite-scroll-disabled="vm.disableInfiniteScroll || vm.isLastPage || vm.isLoading" infinite-scroll-container="'#tbody-afd'"></tr>
+					            		</tbody>
+									</table>
+								</div>
+								<div class="text-center fixed-wrapper-inside">
+									<div class="spinner" ng-if="vm.isLoading">
+										<div class="rect1"></div>
+										<div class="rect2"></div>
+										<div class="rect3"></div>
+										<div class="rect4"></div>
+										<div class="rect5"></div>
+									</div>
+									<div class="center-div" ng-if="(vm.noDataAvailable || vm.workPackages.length == 0)&& !vm.isLoading">No Data Available</div>
+									<div class="center-div" ng-if="vm.isLastPage && !vm.noDataAvailable">You have reached the end of the page &nbsp;<i style="font-size: 8px !important; top: 0" class="glyphicon glyphicon-chevron-up"></i></div>
+								</div>
+							</div>					
+							<!--  END OF INFINITY -->
 						</div>
 					</div>
+				
 					<!-- end of table -->
 				</div>
 			</div>

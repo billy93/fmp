@@ -40,14 +40,19 @@ public class CityGroupRepositoryImpl implements CityGroupRepositoryCustomAnyName
 		}
 		
 		Criteria cityCriteria = new Criteria();
-		if(filter.getCities().getCityCode() != null) {
-			cityCriteria = Criteria.where("cities.city_code").regex(filter.getCities().getCityCode(),"i");
+		if(filter.getCities() != null) {
+			if(filter.getCities().getCityCode() != null) {
+				cityCriteria = Criteria.where("cities.city_code").regex(filter.getCities().getCityCode(),"i");
+			}
 		}
+		
 		Criteria countryCriteria = new Criteria();
-		if(filter.getCities().getCountryCode() != null) {
-			countryCriteria = Criteria.where("cities.country_code").regex(filter.getCities().getCountryCode(),"i");
+		if(filter.getCities() != null) {
+			if(filter.getCities().getCountryCode() != null) {
+				countryCriteria = Criteria.where("cities.country_code").regex(filter.getCities().getCountryCode(),"i");
+			}
 		}
-			
+					
 		if(filter.getOperator().equals("or")) {			
 			Criteria c = new Criteria().andOperator(
 					new Criteria().andOperator(codeCriteria, descriptionCriteria),
