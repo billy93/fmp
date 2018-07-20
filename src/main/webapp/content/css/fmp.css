@@ -4035,12 +4035,12 @@ tr td.highlighted {
 
 .table {
   width: 100%; }
-  .table.table-header-fixed tbody {
+  .table.table-header-fixed tbody.tbody-fixed {
     display: block;
-    max-height: 300px;
+    max-height: 297px;
     overflow-y: scroll;
     width: 100%; }
-  .table.table-header-fixed thead {
+  .table.table-header-fixed thead.thead-fixed {
     display: table;
     width: 100%;
     overflow: auto; }
@@ -4052,7 +4052,7 @@ tr td.highlighted {
   overflow: auto;
   padding-bottom: 50px;
   background-color: #f9f9f9; }
-  .absolute-table .table-header-fixed thead {
+  .absolute-table .table-header-fixed thead.thead-fixed {
     padding-right: 17px;
     background-color: #64768a; }
 
