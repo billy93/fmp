@@ -85,13 +85,12 @@
                 	vm.isLastPage = true;
                 }
                 
-                
                 vm.isLoading = false;
                 vm.disableInfiniteScroll = false;
                 
-                if(vm.workPackages.length == 0){
+                if (vm.workPackages.length == 0) {
                 	vm.noDataAvailable = true;
-                }else{
+                } else {
                 	$(document).ready(function(){
                 		var _parents = $('.table-afd').find('thead');
                 		var _th = _parents.find('.th-fixed');
@@ -224,10 +223,6 @@
         function loadPage(page) {
     		vm.page = page;
     		vm.loadQuery();
-        }
-        
-        vm.changeItemsPerPage = function(){
-        	vm.loadQuery();
         }
 
         function b64toBlob(b64Data, contentType, sliceSize) {
