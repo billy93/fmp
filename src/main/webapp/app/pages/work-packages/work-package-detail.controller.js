@@ -2958,6 +2958,14 @@
 		  vm.workPackage.validate = true;
 		  
 		  var wp = angular.copy(vm.workPackage);
+		  if(wp.type == 'WAIVER'){
+			  for(var x=0;x<wp.waiverFareSheet.length;x++){
+				  for(var y=0;y<wp.waiverFareSheet[x].fares.length;y++){
+					  console.log( wp.waiverFareSheet[x].fares[y]);
+					  wp.waiverFareSheet[x].fares[y].waiverApprovalDate = new Date();
+				  }
+			  }
+		  }
 	      removeTime(wp);
 	    	
 		  WorkPackage.update(wp, function onSaveSuccess(result){
@@ -3167,7 +3175,6 @@
 	    	}, function onSaveError(){
 	    		alert('An error occured, please try again');
 	    	});
-		 
 	  };
 	  
 	  vm.referback = function(){
@@ -3324,6 +3331,17 @@
           		}
           	}
           }
+          
+          if(data.waiverFareSheet.length > 0){
+            	for(var x=0;x<data.waiverFareSheet.length;x++){
+            		var fares = data.waiverFareSheet[x].fares;
+            		for(var y=0;y<fares.length;y++){
+                		if(fares[y] != null){
+                			fares[y].waiverApprovalDate = DateUtils.convertLocalDateToServer(fares[y].waiverApprovalDate);
+                		}
+            		}
+            	}
+            }
 	  }
 	  
       function onSaveSuccess (result) {

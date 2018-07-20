@@ -388,6 +388,7 @@ public class WorkPackageResource {
         for(WorkPackageFareSheet wps : wp.getWaiverFareSheet()) {
         	for(WorkPackageFare fare : wps.getFares()) {
         		fare.setStatus("PENDING");
+        		fare.setWaiverApprovalDate(null);
         	}
         }
         for(WorkPackageFareSheet wps : wp.getDiscountFareSheet()) {
@@ -496,6 +497,7 @@ public class WorkPackageResource {
         for(WorkPackageFareSheet wps : wp.getWaiverFareSheet()) {
         	for(WorkPackageFare fare : wps.getFares()) {
         		fare.setStatus("PENDING");
+        		fare.setWaiverApprovalDate(null);
         	}
         }
         for(WorkPackageFareSheet wps : wp.getDiscountFareSheet()) {
@@ -1261,8 +1263,14 @@ public class WorkPackageResource {
 
             List<Object> rows = (List<Object>) getElementByIndex(mapValue, 0);
             List<WorkPackageFare> fares = new ArrayList<>();
+            
+            int currentSize = workPackage.getWaiverFareSheet().get(importIndex).getFares().size();
+
             for(int i=0;i<rows.size();i++) {
-            	fares.add(new WorkPackageFare());
+            	WorkPackageFare f = new WorkPackageFare();
+            	currentSize+=1;
+            	f.setNo(currentSize);
+            	fares.add(f);
             }
 
             for (Map.Entry<ImportHeader, List<Object>> entry : mapValue.entrySet()) {
@@ -1275,6 +1283,19 @@ public class WorkPackageResource {
                 for(Object o : value) {
                 	if(header.contentEquals("Type")) {
                 		fares.get(i).setWaiverType(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Agent Name")) {
+                		fares.get(i).setWaiverAgentName(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("IATA No")) {
+                		fares.get(i).setWaiverIataNo(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("IOC Number")) {
+                		fares.get(i).setWaiverIocNo(String.valueOf(o));
+                	}
+                	else if(header.contentEquals("Approval Date")) {
+                		Date date1=new SimpleDateFormat("ddMMMyyyy").parse(String.valueOf(o));
+                		fares.get(i).setWaiverApprovalDate(date1);
                 	}
                 	else if(header.contentEquals("Full/Partial")) {
                 		fares.get(i).setWaiverFullPartial(String.valueOf(o));
@@ -1504,6 +1525,11 @@ public class WorkPackageResource {
 
     	LinkedHashMap<String, Object> data = new LinkedHashMap<>();
 
+    	data.put("Agent Name", new ArrayList<>());
+    	data.put("IATA No", new ArrayList<>());
+    	data.put("IOC Number", new ArrayList<>());
+    	data.put("Approval Date", new ArrayList<>());
+    	
     	data.put("Type", new ArrayList<>());
     	data.put("Full/Partial", new ArrayList<>());
     	data.put("PNR", new ArrayList<>());
@@ -1533,6 +1559,11 @@ public class WorkPackageResource {
 
         DateFormat dfFull = new SimpleDateFormat("ddMMMyyyy");
         for(int i=0; i<fares.size(); i++) {
+        	putValue(data.get("Agent Name"), fares.get(i).getWaiverAgentName());
+        	putValue(data.get("IATA No"), fares.get(i).getWaiverIataNo());
+        	putValue(data.get("IOC Number"), fares.get(i).getWaiverIocNo());
+        	putValue(data.get("Approval Date"), fares.get(i).getWaiverApprovalDate() != null ? dfFull.format(Date.from(fares.get(i).getWaiverApprovalDate().toInstant())) : null);
+
         	putValue(data.get("Type"), fares.get(i).getWaiverType());
         	putValue(data.get("Full/Partial"), fares.get(i).getWaiverFullPartial());
         	putValue(data.get("PNR"), fares.get(i).getWaiverPnr());
@@ -5295,11 +5326,11 @@ public class WorkPackageResource {
         	}
         }
 
-        for(WorkPackageFareSheet wps : workPackage.getWaiverFareSheet()) {
-        	for(WorkPackageFare fare : wps.getFares()) {
-        		fare.setWaiverApprovalDate(ZonedDateTime.now());
-        	}
-        }
+//        for(WorkPackageFareSheet wps : workPackage.getWaiverFareSheet()) {
+//        	for(WorkPackageFare fare : wps.getFares()) {
+//        		fare.setWaiverApprovalDate(ZonedDateTime.now());
+//        	}
+//        }
 
         workPackage.setQueuedDate(Instant.now());
         workPackageService.save(workPackage);
