@@ -4629,7 +4629,6 @@
       };
       
       vm.importFareWaiver = function ($file, index) {
-    	  console.log($file.type);
           if ($file) {
               DataUtils.toBase64($file, function(base64Data) {
                   $scope.$apply(function() {
