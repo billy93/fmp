@@ -435,7 +435,9 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<WorkPackage> replaceWorkPackage(@RequestBody WorkPackage wp) throws URISyntaxException {
         log.debug("REST request to save reuse WorkPackage : {}", wp);
-
+        
+        discontinueWorkPackage(wp);
+        
         String tempId = wp.getWpid();
 
         wp.setReplaceFrom(wp.getWpid());
