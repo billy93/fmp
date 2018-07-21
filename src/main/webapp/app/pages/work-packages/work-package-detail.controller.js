@@ -121,7 +121,7 @@
         };
 
         vm.status = {
-        	"":"Select Priority",
+        	"":"Select Status",
         	"PENDING":"Pending",
         	"APPROVED":"Approve",
         	"REJECTED":"Reject"
@@ -359,12 +359,24 @@
         	{
         		name:"travelComplete",
         		editable:["LSO", "HO", "DISTRIBUTION"],
-        		mandatory:[]
+        		mandatory:[],
+        		mandatoryExtraCondition:[
+        			{
+        				field:"travelCompleteIndicator",
+        				isEmpty:false
+        			}
+        		]
         	},
         	{
         		name:"travelIndicator",
         		editable:["LSO", "HO", "DISTRIBUTION"],
-        		mandatory:[]
+        		mandatory:[],
+        		mandatoryExtraCondition:[
+        			{
+        				field:"travelComplete",
+        				isEmpty:false
+        			}
+        		]
         	},
         	{
         		name:"ratesheetComment",
@@ -1066,53 +1078,37 @@
         				var extraCondition = vm.fields[x].mandatoryExtraCondition;
 
         				if(extraCondition != null && extraCondition.length > 0){
-//        					console.log("EXTRA CONDITION")
-        					if(reviewLevels.indexOf(vm.workPackage.reviewLevel) > -1){
-	        					for(var y=0;y<extraCondition.length;y++){
-	        						if(fare != null){
-	        							//Check extra condition here
-	        							var field = extraCondition[y].field;
-
-	        							//Check other field empty condition
-	        							var isEmpty = extraCondition[y].isEmpty;
-	        							if(isEmpty){
+        					for(var y=0;y<extraCondition.length;y++){
+    							var field = extraCondition[y].field;
+    							var otherField = extraCondition[y].field;
+    							var isEmpty = extraCondition[y].isEmpty;
+    							
+    							if(fare != null){
+    								if(extraCondition[y].isEqual != null){
+        								if(fare[otherField] == extraCondition[y].isEqual){
+        									result = true;
+        									break;
+        								}
+    								}
+    								else if(isEmpty != null){
+    									if(isEmpty){
 	        								if(fare[field] == null || fare[field] == ''){
 	        									result = true;
 	        									break;
 	        								}
 	        							}
-	        							//End check other field empty condition
-
-	        							//Check other field value condition
-	        							var otherField = extraCondition[y].field;
-	        							if(fare != null){
-	        								if(fare[otherField] == extraCondition[y].isEqual){
+    									else{
+    										if(fare[field] != null && fare[field] != '' && fare[field] != undefined){
 	        									result = true;
 	        									break;
 	        								}
-	        							}
-	        							else{
+    									}
+    								}
+    							}
+    							else{
 
-	        							}
-	        							//End check other field value condition
-	        						}
-	        					}
-	        					break;
-        					}
-        					else{
-        						for(var y=0;y<extraCondition.length;y++){
-        							var otherField = extraCondition[y].field;
-        							if(fare != null){
-        								if(fare[otherField] == extraCondition[y].isEqual){
-        									result = true;
-        									break;
-        								}
-        							}
-        							else{
-
-        							}
-        						}
-        					}
+    							}
+    						}
         				}
         				else{
 	        				if(reviewLevels.indexOf(vm.workPackage.reviewLevel) > -1){
@@ -6866,7 +6862,18 @@
       vm.updateLatestFare = function(workPackageSheet){
     	  WorkPackage.updateLatestFare(workPackageSheet, function(result){
     		  alert('Fares updated');
-    		  workPackageSheet.fares = result.fares;
+    		  for(var y=0;y<result.fares.length;y++){
+          		if(result.fares[y] != null){
+          			result.fares[y].travelStart = DateUtils.convertDateFromServer(result.fares[y].travelStart);
+          			result.fares[y].travelEnd = DateUtils.convertDateFromServer(result.fares[y].travelEnd);
+          			result.fares[y].saleStart = DateUtils.convertDateFromServer(result.fares[y].saleStart);
+          			result.fares[y].saleEnd = DateUtils.convertDateFromServer(result.fares[y].saleEnd);
+          			result.fares[y].travelComplete = DateUtils.convertDateFromServer(result.fares[y].travelComplete);
+          		}
+      		  }
+    		 workPackageSheet.fares = result.fares;
+    		  
+
     		  vm.changeVersion(workPackageSheet, 'current');
     	  }, function(error){});
       }
@@ -6874,6 +6881,15 @@
       vm.updateActionCodes = function(workPackageSheet){
     	  WorkPackage.updateActionCodes(workPackageSheet, function(result){
     		  alert('Action code updated');
+    		  for(var y=0;y<result.fares.length;y++){
+            		if(result.fares[y] != null){
+            			result.fares[y].travelStart = DateUtils.convertDateFromServer(result.fares[y].travelStart);
+            			result.fares[y].travelEnd = DateUtils.convertDateFromServer(result.fares[y].travelEnd);
+            			result.fares[y].saleStart = DateUtils.convertDateFromServer(result.fares[y].saleStart);
+            			result.fares[y].saleEnd = DateUtils.convertDateFromServer(result.fares[y].saleEnd);
+            			result.fares[y].travelComplete = DateUtils.convertDateFromServer(result.fares[y].travelComplete);
+            		}
+        		  }
     		  workPackageSheet.fares = result.fares;
     		  vm.changeVersion(workPackageSheet, 'current');
     	  }, function(error){});
