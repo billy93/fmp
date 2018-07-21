@@ -217,9 +217,8 @@
         	WorkPackage.withdraw(vm.selectedRow, onWithdrawSuccess, onWithdrawFailed);
 
         	function onWithdrawSuccess(result){
-        		alert('Withdraw Success '+result.id);
-//        		$state.go('work-package-detail', {id:result.id});
-
+        		alert('Withdraw Success');
+        		vm.loadAll();
         	}
 
         	function onWithdrawFailed(error){
