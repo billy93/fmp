@@ -2376,13 +2376,33 @@ public class WorkPackageResource {
 		//Validasi Fare
 		int sheetIndex = 0;
 		for(WorkPackageFareSheet wpfs : workPackage.getFareSheet()) {
-			WorkPackage.Validation.Tab tab1 = new WorkPackage.Validation.Tab();
+
+	    		List<WorkPackage.Validation.Tab.Error> errorWorksheetHeader = new ArrayList<>();
+	    		
+	    		WorkPackage.Validation.Tab tabWorksheetHeader = new WorkPackage.Validation.Tab();
+	    		tabWorksheetHeader.setName("Worksheet "+wpfs.getSpecifiedFaresName());
+	    		tabWorksheetHeader.setType("Worksheet Header Fares");
+	    		tabWorksheetHeader.setIndex(sheetIndex+"");
+	    		
+	    		if(wpfs.getApprovalReference() == null || wpfs.getApprovalReference().contentEquals("")) {
+					//List Error
+		    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setField("approvalReference");
+		    		err1.setMessage("Approval reference is required");
+		    		errorWorksheetHeader.add(err1);
+				}
+	    		if(errorWorksheetHeader.size() > 0) {
+	    			tabWorksheetHeader.setError(errorWorksheetHeader);
+	    			tabs.add(tabWorksheetHeader);
+	    		}
+	    		
+	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
+	    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
+	    		
+				WorkPackage.Validation.Tab tab1 = new WorkPackage.Validation.Tab();
 	    		tab1.setName(wpfs.getSpecifiedFaresName());
 	    		tab1.setType("Fares");
 	    		tab1.setIndex(sheetIndex+"");
-
-	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
-	    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
 
 		    		List<WorkPackageFare> fares = wpfs.getFares();
 		    		List<String> rejectStatus = new ArrayList<>();
@@ -2493,14 +2513,6 @@ public class WorkPackageResource {
 					    		errors.add(err1);
 							}
 						}else if(workPackage.getReviewLevel().contentEquals("HO")) {
-							if(wpfs.getApprovalReference() == null || wpfs.getApprovalReference().contentEquals("")) {
-								//List Error
-					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
-					    		err1.setIndex(index+"");
-					    		err1.setField("approvalReference");
-					    		err1.setMessage("Approval reference is required");
-					    		errors.add(err1);
-							}
 							if(fare.getStatus() == null || fare.getStatus().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
@@ -2720,26 +2732,29 @@ public class WorkPackageResource {
 			    		err1.setMessage("Worksheet cannot be empty or have all items rejected");
 			    		errors.add(err1);
 					}
+					
+					// check for duplicates
+		    		for(int i =0; i < fares.size(); i++){
+		    		    for(int j=0; j< fares.size(); j++){
+		    		        // compare for equality if it is not the same element
+		    		        if(i != j){
+		    		            if(fares.get(i).equals(fares.get(j))){
+		    		                // than we know there is a duplicate at index i,j
+
+//		    			    		//List Error
+		    			    		WorkPackage.Validation.Tab.Error warn1 = new WorkPackage.Validation.Tab.Error();
+		    			    		warn1.setIndex(i+"");
+		    			    		warn1.setField("no");
+		    			    		warn1.setMessage("Duplicate fares in work package '"+workPackage.getWpid()+"' row "+(i+1)+" with [Cxr/TarNo/Orig-Dest/FareCls/OWRT/Curr/RtgNo/RuleNo/Ftnt]");
+		    			    		errors.add(warn1);
+		    		            }
+		    		        }
+		    		    }
+		    		}
+		    		
 	    		tab1.setError(errors);
 
-	    		// check for duplicates
-	    		for(int i =0; i < fares.size(); i++){
-	    		    for(int j=0; j< fares.size(); j++){
-	    		        // compare for equality if it is not the same element
-	    		        if(i != j){
-	    		            if(fares.get(i).equals(fares.get(j))){
-	    		                // than we know there is a duplicate at index i,j
-
-//	    			    		//List Warning
-	    			    		WorkPackage.Validation.Tab.Error warn1 = new WorkPackage.Validation.Tab.Error();
-	    			    		warn1.setIndex(i+"");
-	    			    		warn1.setField("no");
-	    			    		warn1.setMessage("Duplicate fares in work package '"+workPackage.getWpid()+"' row "+(i+1)+" with [Cxr/TarNo/Orig-Dest/FareCls/OWRT/Curr/RtgNo/RuleNo/Ftnt]");
-	    			    		warnings.add(warn1);
-	    		            }
-	    		        }
-	    		    }
-	    		}
+	    		
 
 
 
