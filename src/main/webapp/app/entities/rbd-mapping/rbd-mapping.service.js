@@ -20,7 +20,8 @@
                     return data;
                 }
             },
-            'update': { method:'PUT' }
+            'update': { method:'PUT' },
+            'getByCarriers' : { method: 'POST', isArray: true, url:'api/rbd-mappings/getByCarriers' }
         });
     }
 })();

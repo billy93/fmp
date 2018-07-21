@@ -16,7 +16,7 @@
         <div class="form-group">
             <label class="control-label" for="field_rbd">Rbd</label>
             <input type="text" class="form-control" name="rbd" id="field_rbd"
-                    ng-model="vm.rbdColorMapping.rbd"
+                    ng-model="vm.rbdColorMapping.rbd" uppercase
                     />
         </div>
         <div class="form-group">
@@ -24,8 +24,8 @@
 <!--             <input type="text" class="form-control" name="color" id="field_color" -->
 <!--                     ng-model="vm.rbdColorMapping.color" -->
 <!--                     /> -->
-            <select class="form-control" name="field_color" id="field_color" ng-model="vm.rbdColorMapping.color"  ng-style="{'background-color' : vm.selectedColor}">
-					<option ng-click="vm.selectedColor = val.key" value="{{val.value}}" ng-repeat="val in vm.colorCodes" ng-style="{'background-color' : val.key}">{{val.key}}</option>
+            <select class="form-control" name="field_color" id="field_color" ng-model="vm.rbdColorMapping.color"  ng-style="{'background-color' : vm.rbdColorMapping.color}">
+					<option ng-click="vm.selectedColor = val.key; vm.colorVal = val.value" value="{{val.key}}" ng-repeat="val in vm.colorCodes" ng-style="{'background-color' : val.key}">{{val.key}}</option>
 			</select>
         </div>
 

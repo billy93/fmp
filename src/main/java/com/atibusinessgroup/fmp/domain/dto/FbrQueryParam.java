@@ -15,7 +15,7 @@ public class FbrQueryParam {
 	private String tourCode;
 	private String accountCode;
 	private String tktDesignator;
-	private String paxAge;
+	private int paxAge;
 	private String accountCodeBlank;
 	private String tktDesignatorBlank;
 	private boolean appendResults;
@@ -112,10 +112,10 @@ public class FbrQueryParam {
 	public void setTktDesignator(String tktDesignator) {
 		this.tktDesignator = tktDesignator;
 	}
-	public String getPaxAge() {
+	public int getPaxAge() {
 		return paxAge;
 	}
-	public void setPaxAge(String paxAge) {
+	public void setPaxAge(int paxAge) {
 		this.paxAge = paxAge;
 	}
 	public String getAccountCodeBlank() {

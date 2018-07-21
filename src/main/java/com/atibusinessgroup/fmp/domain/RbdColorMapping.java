@@ -23,6 +23,9 @@ public class RbdColorMapping implements Serializable {
 
     @Field("color")
     private String color;
+    
+    @Field("colorVal")
+    private String colorVal;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public String getId() {
@@ -58,34 +61,65 @@ public class RbdColorMapping implements Serializable {
     public void setColor(String color) {
         this.color = color;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        RbdColorMapping rbdColorMapping = (RbdColorMapping) o;
-        if (rbdColorMapping.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), rbdColorMapping.getId());
-    }
+	public String getColorVal() {
+		return colorVal;
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(getId());
-    }
+	public void setColorVal(String colorVal) {
+		this.colorVal = colorVal;
+	}
 
-    @Override
-    public String toString() {
-        return "RbdColorMapping{" +
-            "id=" + getId() +
-            ", rbd='" + getRbd() + "'" +
-            ", color='" + getColor() + "'" +
-            "}";
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((color == null) ? 0 : color.hashCode());
+		result = prime * result + ((colorVal == null) ? 0 : colorVal.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((rbd == null) ? 0 : rbd.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		RbdColorMapping other = (RbdColorMapping) obj;
+		if (color == null) {
+			if (other.color != null)
+				return false;
+		} else if (!color.equals(other.color))
+			return false;
+		if (colorVal == null) {
+			if (other.colorVal != null)
+				return false;
+		} else if (!colorVal.equals(other.colorVal))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (rbd == null) {
+			if (other.rbd != null)
+				return false;
+		} else if (!rbd.equals(other.rbd))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "RbdColorMapping [id=" + id + ", rbd=" + rbd + ", color=" + color + ", colorVal=" + colorVal + "]";
+	}
+    
+    
+    
+
+	
 }

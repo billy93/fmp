@@ -1,13 +1,11 @@
 package com.atibusinessgroup.fmp.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.atibusinessgroup.fmp.domain.RbdMapping;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-import com.atibusinessgroup.fmp.repository.RbdMappingRepository;
-import com.atibusinessgroup.fmp.web.rest.errors.BadRequestAlertException;
-import com.atibusinessgroup.fmp.web.rest.util.HeaderUtil;
-import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -15,13 +13,23 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import com.atibusinessgroup.fmp.domain.RbdMapping;
+import com.atibusinessgroup.fmp.repository.RbdMappingRepository;
+import com.atibusinessgroup.fmp.web.rest.errors.BadRequestAlertException;
+import com.atibusinessgroup.fmp.web.rest.util.HeaderUtil;
+import com.atibusinessgroup.fmp.web.rest.util.PaginationUtil;
+import com.codahale.metrics.annotation.Timed;
 
-import java.util.List;
-import java.util.Optional;
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing RbdMapping.
@@ -40,6 +48,19 @@ public class RbdMappingResource {
         this.rbdMappingRepository = rbdMappingRepository;
     }
 
+    public static class RbdParam {
+    	private List<String> carriers = new ArrayList<>();
+
+    	public RbdParam() {}
+    	
+		public List<String> getCarriers() {
+			return carriers;
+		}
+
+		public void setCarriers(List<String> carriers) {
+			this.carriers = carriers;
+		}
+    }
     /**
      * POST  /rbd-mappings : Create a new rbdMapping.
      *
@@ -54,7 +75,16 @@ public class RbdMappingResource {
         if (rbdMapping.getId() != null) {
             throw new BadRequestAlertException("A new rbdMapping cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        RbdMapping result = rbdMappingRepository.save(rbdMapping);
+        RbdMapping result = null;
+        
+        try {
+        	result = rbdMappingRepository.save(rbdMapping);
+		} catch (Exception e) {
+			if(e.getMessage().contains("rite failed with error code 11000 and error message 'E11000 duplicate key error collection")) {
+        		throw new BadRequestAlertException("RBD has already been mapped", ENTITY_NAME, "RBDexists");
+        	}
+		}
+        
         return ResponseEntity.created(new URI("/api/rbd-mappings/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -76,7 +106,14 @@ public class RbdMappingResource {
         if (rbdMapping.getId() == null) {
             return createRbdMapping(rbdMapping);
         }
-        RbdMapping result = rbdMappingRepository.save(rbdMapping);
+        RbdMapping result = null;
+        try {
+        	result = rbdMappingRepository.save(rbdMapping);
+		} catch (Exception e) {
+			if(e.getMessage().contains("rite failed with error code 11000 and error message 'E11000 duplicate key error collection")) {
+        		throw new BadRequestAlertException("RBD has already been mapped", ENTITY_NAME, "RBDexists");
+        	}
+		}
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, rbdMapping.getId().toString()))
             .body(result);
@@ -123,5 +160,21 @@ public class RbdMappingResource {
         log.debug("REST request to delete RbdMapping : {}", id);
         rbdMappingRepository.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id)).build();
+    }
+    
+    
+    /**
+     * GET  /rbd-mappings/:id : get the "id" rbdMapping.
+     *
+     * @param id the id of the rbdMapping to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the rbdMapping, or with status 404 (Not Found)
+     */
+    @PostMapping("/rbd-mappings/getByCarriers")
+    @Timed
+    public ResponseEntity<List<RbdMapping>> getRbdMappingByCarriers(@RequestBody RbdParam param) {
+        log.debug("REST request to get RbdMapping : {}", param);
+        List<RbdMapping> rbdMapping = rbdMappingRepository.findAllByOalCxrIn(param.getCarriers());
+        System.out.println("size :: "+rbdMapping.size());
+        return ResponseEntity.ok().body(rbdMapping);
     }
 }

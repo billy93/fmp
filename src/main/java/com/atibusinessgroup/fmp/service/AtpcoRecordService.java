@@ -1,6 +1,7 @@
 package com.atibusinessgroup.fmp.service;
 
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -1998,16 +1999,16 @@ public class AtpcoRecordService {
 				if (!codeind.isEmpty()) {
 					result += "\tTHE RESULTING FARE IS CREATED BY " + codeind;
 				}
-				if (cat25.getFare_calc_mileage_percent() != null && !cat25.getFare_calc_mileage_percent().isEmpty() && !cat25.getFare_calc_mileage_percent().contentEquals("0000000")) {
-					result += cat25.getFare_calc_mileage_percent() + "% OF THE BASE FARE MENTIONED BELOW";
+				if (cat25.getFare_calc_mileage_percent().bigDecimalValue().compareTo(BigDecimal.ZERO) != 0) {
+					result += cat25.getFare_calc_mileage_percent().bigDecimalValue() + "% OF THE BASE FARE MENTIONED BELOW";
 				}
 				String fcamount = "";
-				if (cat25.getFare_calc_fare_amt_1() != null && cat25.getFare_calc_fare_amt_1().doubleValue() != 0.0) {
+				if (cat25.getFare_calc_fare_amt_1() != null && cat25.getFare_calc_fare_amt_1().bigDecimalValue().doubleValue() != 0.0) {
 					if (cat25.getFare_calc_fare_cur_1() != null && !cat25.getFare_calc_fare_cur_1().isEmpty()) {
 						fcamount += cat25.getFare_calc_fare_cur_1() + " ";
 					}
 					
-					fcamount += cat25.getFare_calc_fare_amt_1().doubleValue();
+					fcamount += cat25.getFare_calc_fare_amt_1().bigDecimalValue().doubleValue();
 				}
 				if (!fcamount.isEmpty()) {
 					result += "\t" + fcamount + "\n";
@@ -2042,8 +2043,12 @@ public class AtpcoRecordService {
 				if (cat25.getResulting_fare_disc_cat() != null && !cat25.getResulting_fare_disc_cat().isEmpty()) {
 					result += "\tDIS CAT: " + cat25.getResulting_fare_disc_cat() + "\n";
 				}
-				if (cat25.getResulting_fare_prime_rbd_1() != null && !cat25.getResulting_fare_prime_rbd_1().isEmpty()) {
-					result += "\tPRIME RBD: " + cat25.getResulting_fare_prime_rbd_1() + "\n";
+				if (cat25.getResulting_fare_prime_rbd() != null) {
+					String rbd = "";
+					for (String r:cat25.getResulting_fare_prime_rbd()) {
+						rbd += r + ", ";
+					}
+					result += "\tPRIME RBD: " + (!rbd.isEmpty()?rbd.substring(0, rbd.length() - 2):"") + "\n";
 				}
 				if (cat25.getResulting_fare_ticketing_code() != null && !cat25.getResulting_fare_ticketing_code().isEmpty()) {
 					result += "\tTICKETING CODE: " + cat25.getResulting_fare_ticketing_code() + "\n";

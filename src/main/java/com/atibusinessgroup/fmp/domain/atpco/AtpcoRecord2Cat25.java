@@ -7,6 +7,8 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import com.atibusinessgroup.fmp.domain.dto.DataTable;
+
 public class AtpcoRecord2Cat25 {
 
 	@Id
@@ -37,7 +39,7 @@ public class AtpcoRecord2Cat25 {
     private String rule_no;
 
 	@Field("data_segs")
-    private List<AtpcoRecord2Cat25DataSeg> data_segs = new ArrayList<>();
+    private List<DataTable> dataTables = new ArrayList<>();
 
 	@Field("action")
     private String action;
@@ -168,12 +170,12 @@ public class AtpcoRecord2Cat25 {
 		this.rule_no = rule_no;
 	}
 
-	public List<AtpcoRecord2Cat25DataSeg> getData_segs() {
-		return data_segs;
+	public List<DataTable> getDataTables() {
+		return dataTables;
 	}
 
-	public void setData_segs(List<AtpcoRecord2Cat25DataSeg> data_segs) {
-		this.data_segs = data_segs;
+	public void setDataTables(List<DataTable> dataTables) {
+		this.dataTables = dataTables;
 	}
 
 	public String getAction() {
@@ -340,7 +342,7 @@ public class AtpcoRecord2Cat25 {
 		result = prime * result + ((batch_number == null) ? 0 : batch_number.hashCode());
 		result = prime * result + ((cat_no == null) ? 0 : cat_no.hashCode());
 		result = prime * result + ((cxr_code == null) ? 0 : cxr_code.hashCode());
-		result = prime * result + ((data_segs == null) ? 0 : data_segs.hashCode());
+		result = prime * result + ((dataTables == null) ? 0 : dataTables.hashCode());
 		result = prime * result + ((dates_disc == null) ? 0 : dates_disc.hashCode());
 		result = prime * result + ((dates_eff == null) ? 0 : dates_eff.hashCode());
 		result = prime * result + ((fare_appl == null) ? 0 : fare_appl.hashCode());
@@ -366,215 +368,170 @@ public class AtpcoRecord2Cat25 {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (getClass() != obj.getClass()) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
 		AtpcoRecord2Cat25 other = (AtpcoRecord2Cat25) obj;
 		if (_id == null) {
-			if (other._id != null) {
+			if (other._id != null)
 				return false;
-			}
-		} else if (!_id.equals(other._id)) {
+		} else if (!_id.equals(other._id))
 			return false;
-		}
 		if (action == null) {
-			if (other.action != null) {
+			if (other.action != null)
 				return false;
-			}
-		} else if (!action.equals(other.action)) {
+		} else if (!action.equals(other.action))
 			return false;
-		}
 		if (batch_ci == null) {
-			if (other.batch_ci != null) {
+			if (other.batch_ci != null)
 				return false;
-			}
-		} else if (!batch_ci.equals(other.batch_ci)) {
+		} else if (!batch_ci.equals(other.batch_ci))
 			return false;
-		}
 		if (batch_date == null) {
-			if (other.batch_date != null) {
+			if (other.batch_date != null)
 				return false;
-			}
-		} else if (!batch_date.equals(other.batch_date)) {
+		} else if (!batch_date.equals(other.batch_date))
 			return false;
-		}
-		if (batch_no != other.batch_no) {
+		if (batch_no != other.batch_no)
 			return false;
-		}
 		if (batch_number == null) {
-			if (other.batch_number != null) {
+			if (other.batch_number != null)
 				return false;
-			}
-		} else if (!batch_number.equals(other.batch_number)) {
+		} else if (!batch_number.equals(other.batch_number))
 			return false;
-		}
 		if (cat_no == null) {
-			if (other.cat_no != null) {
+			if (other.cat_no != null)
 				return false;
-			}
-		} else if (!cat_no.equals(other.cat_no)) {
+		} else if (!cat_no.equals(other.cat_no))
 			return false;
-		}
 		if (cxr_code == null) {
-			if (other.cxr_code != null) {
+			if (other.cxr_code != null)
 				return false;
-			}
-		} else if (!cxr_code.equals(other.cxr_code)) {
+		} else if (!cxr_code.equals(other.cxr_code))
 			return false;
-		}
-		if (data_segs == null) {
-			if (other.data_segs != null) {
+		if (dataTables == null) {
+			if (other.dataTables != null)
 				return false;
-			}
-		} else if (!data_segs.equals(other.data_segs)) {
+		} else if (!dataTables.equals(other.dataTables))
 			return false;
-		}
 		if (dates_disc == null) {
-			if (other.dates_disc != null) {
+			if (other.dates_disc != null)
 				return false;
-			}
-		} else if (!dates_disc.equals(other.dates_disc)) {
+		} else if (!dates_disc.equals(other.dates_disc))
 			return false;
-		}
 		if (dates_eff == null) {
-			if (other.dates_eff != null) {
+			if (other.dates_eff != null)
 				return false;
-			}
-		} else if (!dates_eff.equals(other.dates_eff)) {
+		} else if (!dates_eff.equals(other.dates_eff))
 			return false;
-		}
 		if (fare_appl == null) {
-			if (other.fare_appl != null) {
+			if (other.fare_appl != null)
 				return false;
-			}
-		} else if (!fare_appl.equals(other.fare_appl)) {
+		} else if (!fare_appl.equals(other.fare_appl))
 			return false;
-		}
 		if (geo_type_1 == null) {
-			if (other.geo_type_1 != null) {
+			if (other.geo_type_1 != null)
 				return false;
-			}
-		} else if (!geo_type_1.equals(other.geo_type_1)) {
+		} else if (!geo_type_1.equals(other.geo_type_1))
 			return false;
-		}
 		if (geo_type_2 == null) {
-			if (other.geo_type_2 != null) {
+			if (other.geo_type_2 != null)
 				return false;
-			}
-		} else if (!geo_type_2.equals(other.geo_type_2)) {
+		} else if (!geo_type_2.equals(other.geo_type_2))
 			return false;
-		}
 		if (geo_value_1 == null) {
-			if (other.geo_value_1 != null) {
+			if (other.geo_value_1 != null)
 				return false;
-			}
-		} else if (!geo_value_1.equals(other.geo_value_1)) {
+		} else if (!geo_value_1.equals(other.geo_value_1))
 			return false;
-		}
 		if (geo_value_2 == null) {
-			if (other.geo_value_2 != null) {
+			if (other.geo_value_2 != null)
 				return false;
-			}
-		} else if (!geo_value_2.equals(other.geo_value_2)) {
+		} else if (!geo_value_2.equals(other.geo_value_2))
 			return false;
-		}
 		if (geo_zone_tbl_978_1 == null) {
-			if (other.geo_zone_tbl_978_1 != null) {
+			if (other.geo_zone_tbl_978_1 != null)
 				return false;
-			}
-		} else if (!geo_zone_tbl_978_1.equals(other.geo_zone_tbl_978_1)) {
+		} else if (!geo_zone_tbl_978_1.equals(other.geo_zone_tbl_978_1))
 			return false;
-		}
 		if (geo_zone_tbl_978_2 == null) {
-			if (other.geo_zone_tbl_978_2 != null) {
+			if (other.geo_zone_tbl_978_2 != null)
 				return false;
-			}
-		} else if (!geo_zone_tbl_978_2.equals(other.geo_zone_tbl_978_2)) {
+		} else if (!geo_zone_tbl_978_2.equals(other.geo_zone_tbl_978_2))
 			return false;
-		}
 		if (jt_cxr_tbl_no_997 == null) {
-			if (other.jt_cxr_tbl_no_997 != null) {
+			if (other.jt_cxr_tbl_no_997 != null)
 				return false;
-			}
-		} else if (!jt_cxr_tbl_no_997.equals(other.jt_cxr_tbl_no_997)) {
+		} else if (!jt_cxr_tbl_no_997.equals(other.jt_cxr_tbl_no_997))
 			return false;
-		}
 		if (mcn == null) {
-			if (other.mcn != null) {
+			if (other.mcn != null)
 				return false;
-			}
-		} else if (!mcn.equals(other.mcn)) {
+		} else if (!mcn.equals(other.mcn))
 			return false;
-		}
 		if (no_appl == null) {
-			if (other.no_appl != null) {
+			if (other.no_appl != null)
 				return false;
-			}
-		} else if (!no_appl.equals(other.no_appl)) {
+		} else if (!no_appl.equals(other.no_appl))
 			return false;
-		}
 		if (rec_type == null) {
-			if (other.rec_type != null) {
+			if (other.rec_type != null)
 				return false;
-			}
-		} else if (!rec_type.equals(other.rec_type)) {
+		} else if (!rec_type.equals(other.rec_type))
 			return false;
-		}
 		if (record_id == null) {
-			if (other.record_id != null) {
+			if (other.record_id != null)
 				return false;
-			}
-		} else if (!record_id.equals(other.record_id)) {
+		} else if (!record_id.equals(other.record_id))
 			return false;
-		}
 		if (record_id_map == null) {
-			if (other.record_id_map != null) {
+			if (other.record_id_map != null)
 				return false;
-			}
-		} else if (!record_id_map.equals(other.record_id_map)) {
+		} else if (!record_id_map.equals(other.record_id_map))
 			return false;
-		}
 		if (reserved_1 == null) {
-			if (other.reserved_1 != null) {
+			if (other.reserved_1 != null)
 				return false;
-			}
-		} else if (!reserved_1.equals(other.reserved_1)) {
+		} else if (!reserved_1.equals(other.reserved_1))
 			return false;
-		}
 		if (reserved_2 == null) {
-			if (other.reserved_2 != null) {
+			if (other.reserved_2 != null)
 				return false;
-			}
-		} else if (!reserved_2.equals(other.reserved_2)) {
+		} else if (!reserved_2.equals(other.reserved_2))
 			return false;
-		}
 		if (rule_no == null) {
-			if (other.rule_no != null) {
+			if (other.rule_no != null)
 				return false;
-			}
-		} else if (!rule_no.equals(other.rule_no)) {
+		} else if (!rule_no.equals(other.rule_no))
 			return false;
-		}
 		if (rule_tar_no == null) {
-			if (other.rule_tar_no != null) {
+			if (other.rule_tar_no != null)
 				return false;
-			}
-		} else if (!rule_tar_no.equals(other.rule_tar_no)) {
+		} else if (!rule_tar_no.equals(other.rule_tar_no))
 			return false;
-		}
 		if (seq_no == null) {
-			if (other.seq_no != null) {
+			if (other.seq_no != null)
 				return false;
-			}
-		} else if (!seq_no.equals(other.seq_no)) {
+		} else if (!seq_no.equals(other.seq_no))
 			return false;
-		}
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "AtpcoRecord2Cat25 [_id=" + _id + ", fare_appl=" + fare_appl + ", rule_tar_no=" + rule_tar_no
+				+ ", record_id=" + record_id + ", cxr_code=" + cxr_code + ", mcn=" + mcn + ", dates_disc=" + dates_disc
+				+ ", seq_no=" + seq_no + ", rule_no=" + rule_no + ", dataTables=" + dataTables + ", action=" + action
+				+ ", batch_ci=" + batch_ci + ", no_appl=" + no_appl + ", geo_type_1=" + geo_type_1 + ", geo_type_2="
+				+ geo_type_2 + ", batch_no=" + batch_no + ", record_id_map=" + record_id_map + ", batch_number="
+				+ batch_number + ", dates_eff=" + dates_eff + ", batch_date=" + batch_date + ", geo_zone_tbl_978_2="
+				+ geo_zone_tbl_978_2 + ", geo_zone_tbl_978_1=" + geo_zone_tbl_978_1 + ", geo_value_2=" + geo_value_2
+				+ ", cat_no=" + cat_no + ", geo_value_1=" + geo_value_1 + ", rec_type=" + rec_type + ", reserved_2="
+				+ reserved_2 + ", reserved_1=" + reserved_1 + ", jt_cxr_tbl_no_997=" + jt_cxr_tbl_no_997 + "]";
+	}
+
+	
 }

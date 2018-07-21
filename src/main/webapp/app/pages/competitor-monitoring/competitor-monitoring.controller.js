@@ -5,11 +5,11 @@
 			CompetitorMonitoringController);
 
 	CompetitorMonitoringController.$inject = [ '$state',
-			'CompetitorMonitoring', 'ParseLinks', 'AlertService',
+			'CompetitorMonitoring', 'RbdColorMapping', 'RbdMapping', 'ParseLinks', 'AlertService',
 			'paginationConstants', 'queryParams', 'tariffNumbers', 'cities',
 			'$uibModal' ];
 
-	function CompetitorMonitoringController($state, CompetitorMonitoring,
+	function CompetitorMonitoringController($state, CompetitorMonitoring, RbdColorMapping, RbdMapping,
 			ParseLinks, AlertService, paginationConstants, queryParams,
 			tariffNumbers, cities, $uibModal) {
 
@@ -41,6 +41,13 @@
 		vm.checkValidParameters = checkValidParameters;
 		
 		vm.compMonitoring = [];
+		vm.compTitle = '';
+		vm.origDests = [];
+		vm.cabins = [];
+		vm.carriers = [];
+		vm.rbdMapping = [];
+		vm.generateChart = generateChart;
+		
 		
 		vm.sources = [
         	{key: "A", value: "A - ATPCO"},
@@ -68,7 +75,7 @@
 			value : "1 - One Way"
 		}, {
 			key : "2",
-			value : "2 - Rount Trip"
+			value : "2 - Round Trip"
 		}, {
 			key : "3",
 			value : "3 - One Way Only"
@@ -103,6 +110,45 @@
 		vm.showErrorModal = showErrorModal;
 
 		// vm.loadAll();
+		vm.loadRbdMapping = loadRbdMapping;
+		
+		loadRbdColor();
+		
+		function loadRbdColor() {
+			
+			RbdColorMapping.query({
+                page: 0,
+                size: 100
+            }, onSuccess, onError);
+			
+			function onSuccess(data, headers) {
+				console.log('rbdColor : ',data);
+				vm.rbdColors = data;
+			}
+			
+			function onError(error) {
+				AlertService.error(error.data.message);
+			}
+			
+		}
+		
+		function loadRbdMapping() {
+			var param = {
+					carriers: vm.carriers
+			}
+			
+			RbdMapping.getByCarriers(param, onSuccess, onError);
+			
+			function onSuccess(data, headers) {
+				console.log('rbdMapping : ',data);
+				vm.rbdMapping = data;
+			}
+			
+			function onError(error) {
+				AlertService.error(error.data.message);
+			}
+			
+		}
 		
 		function loadAll() {
 			
@@ -131,6 +177,23 @@
 				vm.queryCount = vm.totalItems;
 				vm.compMonitoring = data;
 				vm.graphEnabled = isDisabled();
+				vm.origDests = vm.queryParams.origin.split(',');
+				vm.compTitle = vm.origDests[0];
+				var cabins = [];
+				var carriers = [];
+				for(var i=0;i<data.length;i++) {
+					  cabins.push(data[i].cabin);
+					  carriers.push(data[i].carrierCode);
+				 }
+				
+				vm.cabins = Array.from(new Set(cabins));
+				vm.cabins.unshift('All');
+				vm.cabin = vm.cabins[0];
+				vm.carriers = Array.from(new Set(carriers));
+				
+				vm.loadRbdMapping();
+				
+				console.log('length : ',data.length);
 				
 				$(document).ready(function(){
 					var _parents = $('.table-afd').find('thead');
@@ -198,10 +261,7 @@
 		}
 
 		function reset() {
-			$('#containerTitle').hide();
-			$('#container').hide();
-			$('#chartOptions').hide();
-			$('#containerLegend').hide();
+			$('#comporDiv').hide();
 			vm.queryParams = {
 	        		carrier: null,
 	        		source: vm.sources[0].key,
@@ -318,40 +378,163 @@
 		}
 		
 		function generateChart(data) {
-			$('#container').show();
+			$('#comporDiv').show();
 			
-			var fares = [];
-			var cabins = [];
-			var groupedCategories = [];
+			var fares = data;
 			
-			for(var i=0;i<data.length;i++) {
-				  fares.push(data[i].carrierCode);
-				  cabins.push(data[i].cabin);
-			  }
+			var barThickness = vm.barThickness/100;
+		    var barOpacity = vm.barOpacity/10;
+		    
+		    var dataGroup = [];
+		    var ownCarrier = "GA";
+		    
+		    for(var a=0; a<vm.carriers.length; a++) {
+		    	var dataGraph = [];
+		    	
+		    	for(var b=0; b<fares.length; b++) {
+		    		
+		    		if(vm.carriers[a] == fares[b].carrierCode) {
+		    			var cities = fares[b].originCity+'-'+fares[b].destinationCity;
+		    			
+		    			if(vm.queryParams.appendResults) {
+		    				
+		    			} else {
+		    				
+		    				if(vm.compTitle == cities) {
+		    					
+			    				var amt = fares[b].baseAmount;
+			    				
+			    				if (vm.carriers[a] == ownCarrier) {
+			    					
+			    					for(var c=0; c<vm.rbdColors.length; c++) {
+				    					if (data[b].bookingClass == vm.rbdColors[c].rbd) {
+				    						cabColor = 'rgba(' + vm.rbdColors[c].colorVal +','+barOpacity+ ')';
+//				    						console.log(cabColor);
+				    						break;
+				    					}
+				    				}
+			    					
+			    					var lowVal = parseFloat(String(amt))-(parseFloat(String(amt))*parseFloat(String(barThickness)));
+						        	dataGraph.push({'x':a,'name':data[b].cabin,'bookingClass':data[b].bookingClass, 'color':cabColor, 'oalRbd':data[b].bookingClass,'high':amt,'low':lowVal});
+			    				} else {
+			    					var ownRbd = null;
+				    				var oalRbd = null;
+				    				var cabColor = null;
+				    				var found = false;
+				    				
+				    				for (var d = 0; d < vm.rbdMapping.length; d++) {
+				    					if (vm.carriers[a] == vm.rbdMapping[d].oalCxr) {
+				    						if (vm.rbdMapping[d].oalRbd == data[b].bookingClass[0]) {
+				    							oalRbd = vm.rbdMapping[d].oalRbd;
+				    							ownRbd = vm.rbdMapping[d].ownRbd;
+				    							found = true;
+				    							break;
+				    						}
+				    					}
+				    				}
+				    				
+				    				if (found) {
+				    					for(var c=0; c<vm.rbdColors.length; c++) {
+					    					if (ownRbd == vm.rbdColors[c].rbd) {
+					    						cabColor = 'rgba(' + vm.rbdColors[c].colorVal +','+barOpacity+ ')';
+					    						break;
+					    					}
+					    				}
+				    				} else {
+				    					oalRbd = data[b].bookingClass[0];
+				    					ownRbd = oalRbd;
+				    					cabColor = 'rgba(0,0,0,1)';
+				    				}
+				    				
+				    				var lowVal = parseFloat(String(amt))-(parseFloat(String(amt))*parseFloat(String(barThickness)));
+						        	dataGraph.push({'x':a,'name':data[b].cabin,'bookingClass':ownRbd, 'color':cabColor, 'oalRbd':oalRbd,'high':amt,'low':lowVal});
+			    				}
+			    			}
+		    			}
+		    		}
+		    	}
+		    	dataGroup.push({'name':vm.carriers[a], 'data':dataGraph});
+		    }
+		    console.log(dataGroup);
+		    var chartOptions = {
+			          chart : {
+			            renderTo : 'container',
+			            type : 'columnrange',
+			            zoomType : 'xy',
+			            inverted : false,
+			          },
+			          credits : {
+			            enabled : false
+			          },
+			          title : {
+			            text : ''
+			          },
+			          xAxis :
+			            [{
+			               type : 'category',
+			               categories : vm.carriers,
+			               gridLineWidth : 2,
+			            },{
+			              linkedTo: 0,
+			              type : 'category',
+			              categories : vm.carriers,
+			              opposite:true,
+			              labels: {
+			              useHTML: true,
+			              formatter: function() {
+//			              if(this.value == "GA")
+//			                  return '<img src="http://3.bp.blogspot.com/_UZImdYAiry8/SV9oVvC_WqI/AAAAAAAAOZI/vWKb9Pjuhl4/s400/Logo_garuda_indonesia.png" style="width:'+catWidth+'px; vertical-align: middle; height:50px;" />';
+//			              else
+//			                  return this.value;
+			          }
+			      }
+			            }],
 			
-			var groupedFares = Array.from(new Set(fares));
-			var groupedCabin = Array.from(new Set(cabins));
 			
-			for(var a=0;a<groupedCabin.length;a++) {
-				for(var b=0;b<groupedFares.length;b++) {
-					for(var c=0; c<data.length; c++) {
-						if(groupedCabin[a] == data[c].cabin) {
-							if(groupedFares[b] == data[c].carrierCode) {
-								
-							}
-						}
-					}
-				}
-			}
+			          yAxis : {
+			            type : 'logarithmic',
+			            minorTickInterval: 0.1,
+			            tickmarkPlacement : 'on',
+			            title : {
+			              text : 'Price'
+			            }
+			          },
+			          tooltip : {
+			            enabled : true,
+			            useHTML: true,
+			            formatter: function() {
+			              return '<span>price : '+this.point.high+'</span> <br/> <span>cabin : '+this.point.name+'</span> </br> <span>RBD : '+this.point.oalRbd+'</span>';
+			
+			          }
+			          },
+			          plotOptions : {
+			            columnrange : {
+			              stickyTracking : false,
+			              grouping : false
+			            },
+			            series:{
+			                turboThreshold:2000
+			            }
+			          },
+			          legend : {
+			            enabled : false
+			          },
+			          scrollbar : {
+			            enabled : true
+			          },
+			          series : dataGroup
+			        };
+			  
+	              var chart1 = new Highcharts.Chart(chartOptions);
+	              chart1.redraw();
+
+//		    console.log(dataGroup);
 		}
 
 		function generateGraph(data) {
 
 
-			$('#containerTitle').show();
-			$('#container').show();
-			$('#containerLegend').show();
-			$('#chartOptions').show();
+			$('#comporDiv').show();
 			
 			 var fares = data;
 		  

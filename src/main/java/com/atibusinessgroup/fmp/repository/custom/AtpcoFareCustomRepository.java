@@ -39,11 +39,14 @@ import com.atibusinessgroup.fmp.domain.atpco.AtpcoMasterG16;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord1;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2Cat10;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord2Cat25;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat14;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat15;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat25;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat35;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat35Ticketing;
 import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord3Cat50;
+import com.atibusinessgroup.fmp.domain.atpco.AtpcoRecord8;
 import com.atibusinessgroup.fmp.domain.dto.AddOnParam;
 import com.atibusinessgroup.fmp.domain.dto.AddOnsWrapper;
 import com.atibusinessgroup.fmp.domain.dto.AfdQueryAddOns;
@@ -1008,6 +1011,20 @@ public class AtpcoFareCustomRepository {
 		
 		return result;
 	}
+	
+	public List<AtpcoRecord2Cat25> findAtpcoRecord2Cat25ByRecordId(String recordId) {
+		
+		List<AggregationOperation> aggregationOperations = new ArrayList<>();
+		
+		MatchOperation match = new MatchOperation(new Criteria("record_id").is(recordId));
+		aggregationOperations.add(match);
+		
+		Aggregation aggregation = newAggregation(aggregationOperations);
+		
+		List<AtpcoRecord2Cat25> result = mongoTemplate.aggregate(aggregation, CollectionName.ATPCO_RECORD_2_25, AtpcoRecord2Cat25.class).getMappedResults();
+		
+		return result;
+	}
 
 	public List<AtpcoFootnoteRecord2GroupByCatNo> findAtpcoFootnoteRecord2ByRecordId(String recordId) {
 		
@@ -1045,6 +1062,7 @@ public class AtpcoFareCustomRepository {
 		LinkedHashMap<String, String> fareCategories = new LinkedHashMap<>();
 		fareCategories.put("014", CategoryName.CAT_014);
 		fareCategories.put("015", CategoryName.CAT_015);
+		fareCategories.put("025", CategoryName.CAT_025);
 		fareCategories.put("035", CategoryName.CAT_035);
     	fareCategories.put("050", CategoryName.CAT_050);
     	
@@ -1196,6 +1214,7 @@ public class AtpcoFareCustomRepository {
     			
     			List<CategoryObject> cat14s = null;
             	List<CategoryObject> cat15s = null;
+            	List<CategoryObject> cat25s = null;
             	List<CategoryObject> cat35s = null;
     			List<CategoryObject> cat50s = null;
             	
@@ -1219,7 +1238,17 @@ public class AtpcoFareCustomRepository {
                     		
                     		break;
                     	}
-                    }	
+                    }
+            		
+            		if(entry.getKey().equals("025")) {
+            			for (AtpcoRecord2Cat25 arecord25:findAtpcoRecord2Cat25ByRecordId(fbrQuery.getTarNo() + fbrQuery.getCxr() + fbrQuery.getRuleNo())) {
+            				for (DataTable dt:arecord25.getDataTables()) {
+            					if (dt.getCatNo().contentEquals(entry.getKey())) {
+            						dataTables.add(dt);
+            					}
+            				}
+                        }
+            		}
             		
             		if (dataTables.size() > 0) {
                 		List<CategoryObject> rules = atpcoRecordService.getAndConvertCategoryObjectDataTable(entry.getKey(), dataTables, "Rule");
@@ -1229,12 +1258,24 @@ public class AtpcoFareCustomRepository {
 										break;
 							case "015": cat15s = rules;
 										break;
+							case "025": cat25s = rules;
+										break;
 							case "035": cat35s = rules;
 										break;
                 			case "050": cat50s = rules;
 										break;
                 		}
                 	}
+            	}
+            	
+            	String record3Cat25Rbd = "";
+            	if (cat25s != null) {
+            		for (CategoryObject cat25o:cat25s) {
+            			AtpcoRecord3Cat25 cat25 = (AtpcoRecord3Cat25) cat25o.getCategory();
+            			for (String rbd : cat25.getResulting_fare_prime_rbd()) {
+            				record3Cat25Rbd += rbd;
+						}
+					}
             	}
             	
             	List<AtpcoDateWrapper> travelDateList = new ArrayList<>();
@@ -1288,6 +1329,10 @@ public class AtpcoFareCustomRepository {
         		}
             	
             	boolean isCorrectData = true;
+            	if(isCorrectData && param.getBookingClass() != null && !param.getBookingClass().isEmpty() && !record3Cat25Rbd.toLowerCase().contains(param.getBookingClass().toLowerCase())) {
+            		isCorrectData = false;
+            	}
+            	
             	if(isCorrectData && param.getRuleTittle() != null && !param.getRuleTittle().isEmpty() && !fbrQuery.getRuleTitle().toLowerCase().contains(param.getRuleTittle().toLowerCase())) {
             		isCorrectData = false;
             	}
@@ -1300,6 +1345,38 @@ public class AtpcoFareCustomRepository {
     						break;
     					}
     				}
+            	}
+            	
+            	if(isCorrectData && param.getPaxAge() > 0) {
+            		isCorrectData = false;
+            		Query query = new Query();
+            		query.addCriteria(Criteria.where("cxr_code").is(fbrQuery.getCxr()));
+            		query.addCriteria(Criteria.where("tariff").is(fbrQuery.getTarNo()));
+            		query.addCriteria(Criteria.where("rule_no").is(fbrQuery.getRuleNo()));
+            		List<AtpcoRecord8> atpcoRecord8List = mongoTemplate.find(query, AtpcoRecord8.class);
+            		for (AtpcoRecord8 atpcoRecord8 : atpcoRecord8List) {
+						if(atpcoRecord8.getAge_min() != null && !atpcoRecord8.getAge_min().isEmpty() && atpcoRecord8.getAge_max() != null && !atpcoRecord8.getAge_max().isEmpty()) {
+							int ageMin = Integer.parseInt(atpcoRecord8.getAge_min());
+							int ageMax = Integer.parseInt(atpcoRecord8.getAge_max());
+							if(ageMin <= param.getPaxAge() && ageMax >= param.getPaxAge()) {
+								isCorrectData = true;
+								break;
+							}
+						}
+					}
+            		if(!isCorrectData) {
+            			for (CategoryObject cat25o:cat25s) {
+	            			AtpcoRecord3Cat25 cat25 = (AtpcoRecord3Cat25) cat25o.getCategory();
+	            			if(cat25.getAge_min() != null && !cat25.getAge_min().isEmpty() && cat25.getAge_max() != null && !cat25.getAge_max().isEmpty()) {
+	            				int ageMin = Integer.parseInt(cat25.getAge_min());
+								int ageMax = Integer.parseInt(cat25.getAge_max());
+								if(ageMin <= param.getPaxAge() && ageMax >= param.getPaxAge()) {
+									isCorrectData = true;
+									break;
+								}
+	            			}
+						}
+            		}
             	}
             	
             	if(isCorrectData && ((param.getTravelDateFrom() != null) || (param.getTravelDateTo() != null)) && !atpcoRecordService.compareValueWithParamDate(travelDateList, param.getTravelDateFrom(), param.getTravelDateTo(), param.getTravelDateOption())) {

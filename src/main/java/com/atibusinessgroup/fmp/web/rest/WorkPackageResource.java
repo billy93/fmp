@@ -435,7 +435,9 @@ public class WorkPackageResource {
     @Timed
     public ResponseEntity<WorkPackage> replaceWorkPackage(@RequestBody WorkPackage wp) throws URISyntaxException {
         log.debug("REST request to save reuse WorkPackage : {}", wp);
-
+        
+        discontinueWorkPackage(wp);
+        
         String tempId = wp.getWpid();
 
         wp.setReplaceFrom(wp.getWpid());
@@ -1946,8 +1948,9 @@ public class WorkPackageResource {
 		}
 
     }
+    
     /**
-     * POST  /work-packages/export-fares : Export work package fares
+     * POST  /work-packages/exportQueue : Export work package fares queue
      *
      * @param workPackage the workPackage to create
      * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
@@ -2003,6 +2006,14 @@ public class WorkPackageResource {
         	putValue(data.get("Priority"), wp.get(i).getPriority());
         	putValue(data.get("Filing Date"), wp.get(i).getFilingDate() != null ? dfFull.format(Date.from(wp.get(i).getFilingDate().toInstant())) : null);
         	putValue(data.get("Distribution Date"), wp.get(i).getDistributionDate() != null ? dfFull.format(Date.from(wp.get(i).getDistributionDate().toInstant())) : null);
+        	
+        	String fareTypes = getFareType(wp.get(i));
+        	if(fareTypes != null && !fareTypes.contentEquals("")) {
+        		putValue(data.get("Fare Type"), fareTypes);
+        	}
+        	else {
+        		putValue(data.get("Fare Type"), "");
+        	}
         	putValue(data.get("Created Date"), wp.get(i).getCreatedDate() != null ? dfFull.format(Date.from(wp.get(i).getCreatedDate())) : null);
         	putValue(data.get("Created By"), wp.get(i).getCreatedBy());
         	putValue(data.get("Locked By"), wp.get(i).getLockedBy());
@@ -2053,7 +2064,7 @@ public class WorkPackageResource {
     }
     
     /**
-     * POST  /work-packages/export-queque-query : Export work package fares
+     * POST  /work-packages/export-queue-query : Export work package fares
      *
      * @param workPackage the workPackage to create
      * @return the ResponseEntity with status 201 (Created) and with body the new workPackage, or with status 400 (Bad Request) if the workPackage has already an ID
@@ -2072,6 +2083,7 @@ public class WorkPackageResource {
     	data.put("WO Id", new ArrayList<>());
     	data.put("WO Name", new ArrayList<>());
     	data.put("Business Area", new ArrayList<>());
+    	data.put("Fare Type", new ArrayList<>());
     	data.put("Review Level", new ArrayList<>());
     	data.put("Approval Reference", new ArrayList<>());
     	data.put("Reuse From", new ArrayList<>());
@@ -2097,6 +2109,14 @@ public class WorkPackageResource {
         	putValue(data.get("WO Id"), wp.get(i).getWpid());
         	putValue(data.get("WO Name"), wp.get(i).getName());
         	putValue(data.get("Business Area"), wp.get(i).getBusinessArea());
+        	
+        	String fareTypes = getFareType(wp.get(i));
+        	if(fareTypes != null && !fareTypes.contentEquals("")) {
+        		putValue(data.get("Fare Type"), fareTypes);
+        	}
+        	else {
+        		putValue(data.get("Fare Type"), "");
+        	}
         	putValue(data.get("Review Level"), wp.get(i).getReviewLevel());
         	putValue(data.get("Approval Reference"), wp.get(i).getName());
         	putValue(data.get("Reuse From"), wp.get(i).getName());
@@ -2119,7 +2139,51 @@ public class WorkPackageResource {
     }
 
 
-    /**
+    private String getFareType(WorkPackage workPackage) {
+		// TODO Auto-generated method stub
+    	List<String> fareTypes = new ArrayList<>();
+    	if(workPackage.getFareSheet() != null) {
+    		for(WorkPackageFareSheet sheet : workPackage.getFareSheet()) {
+    			if(sheet.getFareType() != null) {
+    				fareTypes.add(sheet.getFareType());
+    			}
+    		}
+    	}
+    	if(workPackage.getAddonFareSheet() != null) {
+    		for(WorkPackageFareSheet sheet : workPackage.getAddonFareSheet()) {
+    			if(sheet.getFareType() != null) {
+    				fareTypes.add(sheet.getFareType());
+    			}
+    		}
+    	}
+    	if(workPackage.getMarketFareSheet() != null) {
+    		for(WorkPackageFareSheet sheet : workPackage.getMarketFareSheet()) {
+    			if(sheet.getFareType() != null) {
+    				fareTypes.add(sheet.getFareType());
+    			}
+    		}
+    	}
+    	if(workPackage.getDiscountFareSheet() != null) {
+    		for(WorkPackageFareSheet sheet : workPackage.getDiscountFareSheet()) {
+    			if(sheet.getFareType() != null) {
+    				fareTypes.add(sheet.getFareType());
+    			}
+    		}
+    	}
+    	if(workPackage.getWaiverFareSheet() != null) {
+    		for(WorkPackageFareSheet sheet : workPackage.getWaiverFareSheet()) {
+    			if(sheet.getFareType() != null) {
+    				fareTypes.add(sheet.getFareType());
+    			}
+    		}
+    	}
+    	
+    	String joined = String.join(", ", fareTypes);    	
+		return joined;
+	}
+    
+
+	/**
      * POST  /work-packages/download-market-rules : Download Market Rules Template
      *
      * @param workPackage the workPackage to create
@@ -2314,13 +2378,33 @@ public class WorkPackageResource {
 		//Validasi Fare
 		int sheetIndex = 0;
 		for(WorkPackageFareSheet wpfs : workPackage.getFareSheet()) {
-			WorkPackage.Validation.Tab tab1 = new WorkPackage.Validation.Tab();
+
+	    		List<WorkPackage.Validation.Tab.Error> errorWorksheetHeader = new ArrayList<>();
+	    		
+	    		WorkPackage.Validation.Tab tabWorksheetHeader = new WorkPackage.Validation.Tab();
+	    		tabWorksheetHeader.setName("Worksheet "+wpfs.getSpecifiedFaresName());
+	    		tabWorksheetHeader.setType("Worksheet Header Fares");
+	    		tabWorksheetHeader.setIndex(sheetIndex+"");
+	    		
+	    		if(wpfs.getApprovalReference() == null || wpfs.getApprovalReference().contentEquals("")) {
+					//List Error
+		    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+		    		err1.setField("approvalReference");
+		    		err1.setMessage("Approval reference is required");
+		    		errorWorksheetHeader.add(err1);
+				}
+	    		if(errorWorksheetHeader.size() > 0) {
+	    			tabWorksheetHeader.setError(errorWorksheetHeader);
+	    			tabs.add(tabWorksheetHeader);
+	    		}
+	    		
+	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
+	    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
+	    		
+				WorkPackage.Validation.Tab tab1 = new WorkPackage.Validation.Tab();
 	    		tab1.setName(wpfs.getSpecifiedFaresName());
 	    		tab1.setType("Fares");
 	    		tab1.setIndex(sheetIndex+"");
-
-	    		List<WorkPackage.Validation.Tab.Error> errors = new ArrayList<>();
-	    		List<WorkPackage.Validation.Tab.Error> warnings = new ArrayList<>();
 
 		    		List<WorkPackageFare> fares = wpfs.getFares();
 		    		List<String> rejectStatus = new ArrayList<>();
@@ -2415,15 +2499,22 @@ public class WorkPackageResource {
 						    		errors.add(err1);
 								}
 							}
-						}else if(workPackage.getReviewLevel().contentEquals("HO")) {
-							if(wpfs.getApprovalReference() == null || wpfs.getApprovalReference().contentEquals("")) {
-								//List Error
-					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
-					    		err1.setIndex(index+"");
-					    		err1.setField("approvalReference");
-					    		err1.setMessage("Approval reference is required");
+							
+							if(fare.getTravelComplete() != null && fare.getTravelCompleteIndicator() == null) {
+								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+								err1.setIndex(index+"");
+					    		err1.setField("travelIndicator");
+					    		err1.setMessage("Travel Complete Indicator should not be blank");
 					    		errors.add(err1);
 							}
+							if(fare.getTravelComplete() == null && fare.getTravelCompleteIndicator() != null) {
+								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+								err1.setIndex(index+"");
+					    		err1.setField("travelComplete");
+					    		err1.setMessage("Travel Complete should not be blank");
+					    		errors.add(err1);
+							}
+						}else if(workPackage.getReviewLevel().contentEquals("HO")) {
 							if(fare.getStatus() == null || fare.getStatus().contentEquals("")) {
 								//List Error
 					    		WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
@@ -2556,6 +2647,20 @@ public class WorkPackageResource {
 						    		errors.add(err1);
 								}
 							}
+							if(fare.getTravelComplete() != null && fare.getTravelCompleteIndicator() == null) {
+								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+								err1.setIndex(index+"");
+					    		err1.setField("travelIndicator");
+					    		err1.setMessage("Travel Complete Indicator should not be blank");
+					    		errors.add(err1);
+							}
+							if(fare.getTravelComplete() == null && fare.getTravelCompleteIndicator() != null) {
+								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+								err1.setIndex(index+"");
+					    		err1.setField("travelComplete");
+					    		err1.setMessage("Travel Complete should not be blank");
+					    		errors.add(err1);
+							}
 						}else if(workPackage.getReviewLevel().toUpperCase().contentEquals("DISTRIBUTION")) {
 							if(fare.getTariffNumber() == null || fare.getTariffNumber().getTarCd() == null || fare.getTariffNumber().getTarCd().contentEquals("")) {
 								//List Error
@@ -2629,26 +2734,29 @@ public class WorkPackageResource {
 			    		err1.setMessage("Worksheet cannot be empty or have all items rejected");
 			    		errors.add(err1);
 					}
+					
+					// check for duplicates
+		    		for(int i =0; i < fares.size(); i++){
+		    		    for(int j=0; j< fares.size(); j++){
+		    		        // compare for equality if it is not the same element
+		    		        if(i != j){
+		    		            if(fares.get(i).equals(fares.get(j))){
+		    		                // than we know there is a duplicate at index i,j
+
+//		    			    		//List Error
+		    			    		WorkPackage.Validation.Tab.Error warn1 = new WorkPackage.Validation.Tab.Error();
+		    			    		warn1.setIndex(i+"");
+		    			    		warn1.setField("no");
+		    			    		warn1.setMessage("Duplicate fares in work package '"+workPackage.getWpid()+"' row "+(i+1)+" with [Cxr/TarNo/Orig-Dest/FareCls/OWRT/Curr/RtgNo/RuleNo/Ftnt]");
+		    			    		errors.add(warn1);
+		    		            }
+		    		        }
+		    		    }
+		    		}
+		    		
 	    		tab1.setError(errors);
 
-	    		// check for duplicates
-	    		for(int i =0; i < fares.size(); i++){
-	    		    for(int j=0; j< fares.size(); j++){
-	    		        // compare for equality if it is not the same element
-	    		        if(i != j){
-	    		            if(fares.get(i).equals(fares.get(j))){
-	    		                // than we know there is a duplicate at index i,j
-
-//	    			    		//List Warning
-	    			    		WorkPackage.Validation.Tab.Error warn1 = new WorkPackage.Validation.Tab.Error();
-	    			    		warn1.setIndex(i+"");
-	    			    		warn1.setField("no");
-	    			    		warn1.setMessage("Duplicate fares in work package '"+workPackage.getWpid()+"' row "+(i+1)+" with [Cxr/TarNo/Orig-Dest/FareCls/OWRT/Curr/RtgNo/RuleNo/Ftnt]");
-	    			    		warnings.add(warn1);
-	    		            }
-	    		        }
-	    		    }
-	    		}
+	    		
 
 
 
@@ -8925,8 +9033,19 @@ public class WorkPackageResource {
 
         List<WorkPackageFare> fares = workPackageSheet.getFares();
         for(WorkPackageFare fare : fares) {
-	        Optional<AtpcoFare> checkAtpcoFare = atpcoFareRepository.findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCity(fare.getCarrier(), fare.getTariffNumber() != null ? fare.getTariffNumber().getTarNo() : null, fare.getOrigin(), fare.getDestination());
-			if(checkAtpcoFare.isPresent()) {
+	       // Optional<AtpcoFare> checkAtpcoFare = atpcoFareRepository.findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCity(fare.getCarrier(), fare.getTariffNumber() != null ? fare.getTariffNumber().getTarNo() : null, fare.getOrigin(), fare.getDestination());
+        	Optional<AtpcoFare> checkAtpcoFare = atpcoFareRepository.findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCityAndFareOriginCurrencyCodeAndFareClassCodeAndOwrtAndFootnoteAndRoutingNoAndRuleNo(
+    				fare.getCarrier(), 
+    				fare.getTariffNumber() != null ? fare.getTariffNumber().getTarNo() : null, 
+    				fare.getOrigin(), 
+    				fare.getDestination(), 
+    				fare.getCurrency(), 
+    				fare.getFareBasis(), 
+    				fare.getTypeOfJourney(), 
+    				fare.getFootnote1(), 
+    				fare.getRtgno(), 
+    				fare.getRuleno());
+        	if(checkAtpcoFare.isPresent()) {
 				float atpcoFareAmount = Float.parseFloat(checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().toString());
 				fare.setAmount(String.valueOf(atpcoFareAmount));
 				fare.setAction("Y");
@@ -8955,7 +9074,18 @@ public class WorkPackageResource {
 
         List<WorkPackageFare> fares = workPackageSheet.getFares();
         for(WorkPackageFare fare : fares) {
-        	Optional<AtpcoFare> checkAtpcoFare = atpcoFareRepository.findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCity(fare.getCarrier(), fare.getTariffNumber() != null ? fare.getTariffNumber().getTarNo() : null, fare.getOrigin(), fare.getDestination());
+//        	Optional<AtpcoFare> checkAtpcoFare = atpcoFareRepository.findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCity(fare.getCarrier(), fare.getTariffNumber() != null ? fare.getTariffNumber().getTarNo() : null, fare.getOrigin(), fare.getDestination());        	
+        	Optional<AtpcoFare> checkAtpcoFare = atpcoFareRepository.findOneByCarrierCodeAndTariffNoAndOriginCityAndDestinationCityAndFareOriginCurrencyCodeAndFareClassCodeAndOwrtAndFootnoteAndRoutingNoAndRuleNo(
+    				fare.getCarrier(), 
+    				fare.getTariffNumber() != null ? fare.getTariffNumber().getTarNo() : null, 
+    				fare.getOrigin(), 
+    				fare.getDestination(), 
+    				fare.getCurrency(), 
+    				fare.getFareBasis(), 
+    				fare.getTypeOfJourney(), 
+    				fare.getFootnote1(), 
+    				fare.getRtgno(), 
+    				fare.getRuleno());
     		if(checkAtpcoFare.isPresent()) {
     			//I, R, Y
     			if(fare.getAmount() != null) {

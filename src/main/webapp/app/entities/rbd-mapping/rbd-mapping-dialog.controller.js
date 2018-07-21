@@ -37,8 +37,9 @@
             vm.isSaving = false;
         }
 
-        function onSaveError () {
+        function onSaveError (error) {
             vm.isSaving = false;
+            console.log(error);
         }
 
 
