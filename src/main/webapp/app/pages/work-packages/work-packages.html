@@ -197,7 +197,7 @@
 											<button class="btn btn-default small" ng-click="vm.printExport()">Print/Export</button>
 											<button class="btn btn-default small" ng-click="vm.unlock()" ng-disabled="vm.selectedRow == null || !vm.selectedRow.locked"><i class="fa fa-unlock i-btn"></i> Unlock</button>
 											<button class="btn btn-default small" ng-click="vm.reuse()" ng-disabled="vm.selectedRow == null"><i class="fa fa-recycle i-btn"></i> Reuse</button>
-											<button class="btn btn-default small" ng-click="vm.replace()" ng-disabled="vm.selectedRow == null && vm.selectedRow.targetDistribution != 'ATPCO'"><i class="fa fa-reply i-btn"></i> Replace</button>
+											<button class="btn btn-default small" ng-if="vm.selectedRow.targetDistribution != 'ATPCO'" ng-click="vm.replace()" ng-disabled="vm.selectedRow == null"><i class="fa fa-reply i-btn"></i> Replace</button>
 											<button class="btn btn-default small" ng-click="vm.withdraw()" ng-disabled="vm.selectedRow == null || (vm.selectedRow.reviewLevel == 'DISTRIBUTION')"><i class="fa fa-ban i-btn"></i> Withdraw</button>
 											<button class="btn btn-default small" ng-click="vm.showHistory()" ng-disabled="vm.selectedRow == null"><i class="fa fa-history i-btn"></i> History</button>
 
