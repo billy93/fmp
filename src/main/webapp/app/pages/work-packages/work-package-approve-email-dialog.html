@@ -23,7 +23,7 @@
 							<label class="control-label" for="field_email">Email</label>
 				            <div class="input-group mb1">
 				            	<input autocomplete="off" type="email" name="email" ng-model="vm.email" class="form-control" />
-				            	<span class="input-group-addon" ng-click="vm.addEmail()" ng-disabled="vm.email == null || editForm.email.$error.email">
+				            	<span class="input-group-addon" ng-click="!editForm.email.$invalid && vm.email != null ? vm.addEmail() : null" ng-disabled="vm.email == null || editForm.email.$error.email">
 				                    <i class="fa fa-plus"></i>
 				                </span>
 				            </div>
@@ -39,7 +39,7 @@
 				            <div class="multi-values" >
 								<span ng-repeat="email in vm.option.email track by $index">
 				           		<label name="remove_email" >
-				           			{{email}}<span class="delete"  ng-click="vm.removeEmail($index)"><i class="glyphicon glyphicon-remove-sign"></i></span>
+				           			{{email}}<span class="delete" ng-click="vm.removeEmail($index)"><i class="glyphicon glyphicon-remove-sign"></i></span>
 				           		</label>
 				           		<br/>
 				           		</span>
@@ -49,7 +49,7 @@
 							<label class="control-label" for="field_email">Cc Email</label>
 				            <div class="input-group mb1">
 				            	<input type="email" name="ccEmail" ng-model="vm.ccEmail" class="form-control" />
-				            	<span class="input-group-addon" ng-click="vm.addCcEmail()" ng-disabled="vm.ccEmail == null || editForm.ccEmail.$error.email">
+				            	<span class="input-group-addon" ng-click="!editForm.ccEmail.$invalid && vm.ccEmail != null ? vm.addCcEmail() : null" ng-disabled="vm.ccEmail == null || editForm.ccEmail.$error.email">
 				                    <i class="fa fa-plus"></i>
 				                </span>
 				            </div>

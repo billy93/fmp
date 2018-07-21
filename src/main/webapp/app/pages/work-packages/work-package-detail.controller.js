@@ -4829,7 +4829,10 @@
             }
 
             if(vm.workPackage.validation != null){
-				alert('There is '+vm.workPackage.validation.errorsCount+' error(s) and '+vm.workPackage.validation.warningsCount+' warning(s)');
+            	if(vm.workPackage.validation.errorsCount > 0 || vm.workPackage.validation.warningsCount > 0){
+            		alert('There is '+vm.workPackage.validation.errorsCount+' error(s) and '+vm.workPackage.validation.warningsCount+' warning(s)');
+            	}
+            	
             	if(vm.workPackage.validation.errorsCount > 0){
 					return false;
             	}
