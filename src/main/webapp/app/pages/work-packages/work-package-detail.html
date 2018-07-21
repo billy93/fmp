@@ -826,7 +826,7 @@
 																		name="travelComplete{{$parent.$index}}{{$index}}" id="field_travelEndDate"
 										                				ng-disabled="!vm.isEditable('travelComplete')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED' || vm.disabledField(vm.workPackage)||fare.action == 'X'"
 										                				class="form-control input-date"
-										                				ng-required="vm.isRequired('travelComplete')"
+										                				ng-required="vm.isRequired('travelComplete', fare)"
 											                    		ng-class="{'must-fill': editForm.editFormATPCO.travelComplete{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"
 															            ng-model="fare.travelComplete"
 															            datetime-picker="{{dateformat}}"
@@ -839,7 +839,7 @@
 									               			</td>
 									               			<td id="travelCompleteIndicator" ng-click="vm.tdClick(workPackageSheet, fare, 'travelCompleteIndicator', $event);" ng-class="{highlighted:fare.field['travelCompleteIndicator'], changed : vm.diff[fare.id].indexOf('travelCompleteIndicator') > -1}">
 							               						<select class="form-control inside-table" name="travelIndicator{{$parent.$index}}{{$index}}" id="field_travelIndicator" ng-disabled="!vm.isEditable('travelIndicator')|| vm.workPackage.status=='WITHDRAWN' ||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)||fare.action == 'X' "
-								                				ng-required="vm.isRequired('travelIndicator')"
+								                				ng-required="vm.isRequired('travelIndicator', fare)"
 									                    		ng-class="{'must-fill': !editForm.editFormATPCO.travelIndicator{{$parent.$index}}{{$index}}.$valid && fare.action != 'Canceled'}"
 									                    		ng-options="key as value for (key , value) in vm.travelCompleteIndicator"
 								                				ng-model="fare.travelCompleteIndicator"></select>
@@ -2983,6 +2983,7 @@
 										                    		ng-model="fare.currency"
 										                    		ng-disabled="!vm.isEditable('marketFareCurrency') ||vm.workPackage.status=='WITHDRAWN'||vm.workPackage.status =='DISCONTINUED'|| vm.disabledField(vm.workPackage)"
 										                    		style="min-width:60px"
+										                    		uppercase
 										                    		ng-class="{'must-fill': editForm.editFormMarket.marketFareCurrency{{$parent.$index}}{{$index}}.$error.required && fare.action != 'Canceled'}"
 														            ng-required="vm.isRequired('marketFareCurrency') && fare.action != 'Canceled'"
 														            ng-focus="currency[$parent.$index][$index]=true" ng-blur="currency[$parent.$index][$index]=false; vm.checkCurrency(fare, 'currency');"/>
@@ -3646,7 +3647,7 @@
 					     			<div class="col-md-12">
 					     				<div class="text-center no-data" ng-if="!vm.workPackage.attachmentData || vm.workPackage.attachmentData.length == 0">No Attachment Available</div>
 						     			<div ng-repeat="attachment in vm.workPackage.attachmentData.slice().reverse() track by $index" class="form-repeat">
-					       					<button ng-click="vm.removeAttachment(attachment) view-only" class="bordered delete" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION'"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></span></button>
+					       					<button ng-click="vm.removeAttachment(attachment)" class="bordered delete view-only" ng-disabled="vm.workPackage.reviewLevel=='DISTRIBUTION'"><span class="glyphicon glyphicon-remove" ng-class="{'poiv-none': vm.workPackage.reviewLevel=='DISTRIBUTION'|| (vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.reviewLevel == 'LSO' && vm.workPackage.status=='DISTRIBUTED')|| (vm.user.reviewLevels.indexOf('ROUTE_MANAGEMENT')>-1 && vm.workPackage.reviewLevel == 'ROUTE_MANAGEMENT')}"></span></button>
 							       			<label class="user">{{attachment.username}} <span class="vseparator no-mar"></span> {{attachment.createdTime | date: 'dd/MM/yyyy HH:mm'}}</label>
 							       			<div class="row mt1">
 								        		<div class="col-md-6">
@@ -4389,7 +4390,7 @@
 					    <li><a >Release Errors</a></li>
 					</ul>
 					<div class="tab-content">
-						<div class="tab-pane active" id="validation">
+						<div class="tab-pane active" id="validation" ng-show="vm.workPackage.validation.errorsCount != null || vm.workPackage.validation.warningsCount != null">
 							<ul class="tree">
 								<li>
 							    	<input type="checkbox" id="c1" />
