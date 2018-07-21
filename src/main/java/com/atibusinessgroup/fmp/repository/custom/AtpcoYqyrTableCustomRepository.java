@@ -5,7 +5,6 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.newA
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
@@ -21,10 +20,13 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
 @Service
-public class AtpcoYqyrTableRepository {	
+public class AtpcoYqyrTableCustomRepository {
+
+	private final MongoTemplate mongoTemplate;
 	
-	@Autowired
-    MongoTemplate mongoTemplate;
+	public AtpcoYqyrTableCustomRepository(MongoTemplate mongoTemplate) {
+		this.mongoTemplate = mongoTemplate;
+	}
 
 	public TextTable findTextTable196(String tableNo) {
 		List<AggregationOperation> aggregationOperations = new ArrayList<>();

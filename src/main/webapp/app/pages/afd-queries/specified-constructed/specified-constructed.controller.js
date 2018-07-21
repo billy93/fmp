@@ -55,7 +55,6 @@
     	
         vm.loadPage = loadPage;
         vm.itemsPerPage = paginationConstants.itemsPerPage;
-//        vm.itemsPerPage = 100;
         vm.loadAll = loadAll;
         vm.query = query;
         vm.checkValidParameters = checkValidParameters;
@@ -64,6 +63,7 @@
         vm.showCategoryDetail = showCategoryDetail;
         vm.showFareDetail = showFareDetail;
         vm.copyAfdQueryFares = copyAfdQueryFares;
+        vm.showDerivedFaresModal = showDerivedFaresModal;
         vm.selectAll = selectAll;
         vm.showLegend = showLegend;
         vm.viewFullText = viewFullText;
@@ -376,6 +376,10 @@
         		})
         	}
         }
+
+        function generateDerivedFares() {
+        	
+        }
         
         function showFareDetail() {
         	if (vm.selectedFares.length > 0) {
@@ -484,6 +488,26 @@
             		vm.queryParams.destination = value;
             	}
             	
+                $state.go('afd-query', {}, { reload: false });
+            }, function() {
+                $state.go('afd-query');
+            });
+        }
+        
+        function showDerivedFaresModal() {
+        	$uibModal.open({
+                templateUrl: 'app/pages/modals/derived-fares-modal.html',
+                controller: 'DerivedFareModalController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                size: 'md',
+                resolve: {
+                    entity: {
+                    	type: 'fare',
+                    	content: vm.selectedFares
+                    }	
+                }
+            }).result.then(function() {
                 $state.go('afd-query', {}, { reload: false });
             }, function() {
                 $state.go('afd-query');

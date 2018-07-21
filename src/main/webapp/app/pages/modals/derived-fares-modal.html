@@ -1,0 +1,52 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+            ng-click="vm.clear()">&times;</button>
+    <h4 class="modal-title">Generate Derived Fares</h4>
+</div>
+<div class="modal-body">
+	<div class="panel">
+		<div class="panel-body">
+			<label>Do you want to generate all Fare By Rule(FBR) derived fares from the selected fares?</label>
+	    	<label>This process will run in the background server.</label>
+	    	<label>A notification will be sent to you once the Fare By Rule(FBR) report is ready.</label>
+	    	<br/>
+	    	<br/>
+	    	<div class="filter-area">
+		    	<div class="clearfix">
+					<form name="fbrForm" role="form" novalidate>
+						<div class="col-md-12 no-pad">
+							<div class="form-group">
+								<div class="custom-label semibold">Pax Type</div>
+								<select class="form-control" name="paxType" id="paxType" ng-model="vm.queryParams.paxType">
+									<option value="{{value.code}}" ng-repeat="value in vm.paxTypes track by $index">{{value.code}} - {{value.name}}</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<div class="custom-label semibold">Pax Age</div>
+								<input type="number" class="form-control" name="age" id="age" ng-model="vm.queryParams.paxAge"/>
+							</div>
+							<div class="form-group">
+								<div class="custom-label semibold">Account Code</div>
+								<input type="text" class="form-control" name="accountCode" id="accountCode" ng-model="vm.queryParams.accountCode" uppercase/>
+							</div>
+							<div class="form-group">
+								<div class="custom-label semibold">Ticket Designator</div>
+								<input type="text" class="form-control" name="ticketDesignator" id="ticketDesignator" ng-model="vm.queryParams.ticketDesignator" uppercase/>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-info" ng-click="vm.clear()">
+        Close
+    </button>
+    <button type="submit" class="btn btn-secondary" ng-click="vm.generateDerivedFares()">
+        Submit
+    </button>
+</div>
+   	
+    

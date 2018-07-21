@@ -11,37 +11,37 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.atibusinessgroup.fmp.domain.dto.YqyrQueryParam;
-import com.atibusinessgroup.fmp.domain.dto.YqyrWrapper;
-import com.atibusinessgroup.fmp.repository.custom.AtpcoYqyrCustomRepository;
+import com.atibusinessgroup.fmp.domain.dto.TaxQueryParam;
+import com.atibusinessgroup.fmp.domain.dto.TaxWrapper;
+import com.atibusinessgroup.fmp.repository.custom.AtpcoTaxCustomRepository;
 import com.codahale.metrics.annotation.Timed;
 
 @RestController
 @RequestMapping("/api")
-public class YqyrQueryResource {
+public class TaxQueryResource {
 
-	private final Logger log = LoggerFactory.getLogger(YqyrQueryResource.class);
+	private final Logger log = LoggerFactory.getLogger(TaxQueryResource.class);
 
-	private final AtpcoYqyrCustomRepository atpcoYqyrCustomRepository;
+	private final AtpcoTaxCustomRepository atpcoTaxCustomRepository;
 	
-    public YqyrQueryResource(AtpcoYqyrCustomRepository atpcoYqyrCustomRepository) {
-    	this.atpcoYqyrCustomRepository = atpcoYqyrCustomRepository;
+    public TaxQueryResource(AtpcoTaxCustomRepository atpcoTaxCustomRepository) {
+    	this.atpcoTaxCustomRepository = atpcoTaxCustomRepository;
     }
     
     /**
-     * POST  /yqyr-queries : get all the yqyr queries.
+     * POST  /tax-queries : get all the tax queries.
      *
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of afdQueries in body
      */
-    @PostMapping("/yqyr-queries")
+    @PostMapping("/tax-queries")
     @Timed
-    public ResponseEntity<YqyrWrapper> getAllYqyrs(@RequestBody YqyrQueryParam param) {
-        log.debug("REST request to get a page of YqyrQueries: {}", param);
+    public ResponseEntity<TaxWrapper> getAllTaxes(@RequestBody TaxQueryParam param) {
+        log.debug("REST request to get a page of TaxQueries: {}", param);
         
         Pageable pageable = new PageRequest(param.getPage(), param.getSize());
         
-        YqyrWrapper result = atpcoYqyrCustomRepository.findYqyr(param, pageable);
+        TaxWrapper result = atpcoTaxCustomRepository.findTax(param, pageable);
         
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

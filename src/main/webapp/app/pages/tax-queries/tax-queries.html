@@ -156,11 +156,13 @@
 				            <thead class="thead-fixed">
 				                <tr>
 				                	<th class="th-fixed">ID</th>
+				                	<th class="th-fixed">Tax Carrier</th>
 				                </tr>
 				         	</thead>
 				         	<tbody id="tbody-afd" class="tbody-fixed">
-				                <tr class="tr-afd" ng-repeat="tax in vm.taxes track by yqyr.id" ng-click="vm.selectedTax = tax" ng-class="{'selected': vm.selectedTax == tax}">
+				                <tr class="tr-afd" ng-repeat="tax in vm.taxes track by tax.id" ng-click="vm.selectedTax = tax" ng-class="{'selected': vm.selectedTax == tax}">
 				                    <td>{{$index + 1}}</td>
+				                    <td>{{tax.carrierCode}}</td>
 				         		</tr>
 				         		<tr infinite-scroll="vm.loadPage(vm.page + 1)" infinite-scroll-disabled="vm.disableInfiniteScroll || vm.isLastPage || vm.isLoading" infinite-scroll-container="'#tbody-afd'"></tr>
 				        	</tbody>

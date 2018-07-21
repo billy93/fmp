@@ -1,0 +1,41 @@
+<div class="content-title">
+	<h2>Derived Fares</h2>
+	<jhi-alert></jhi-alert>
+</div>
+
+<div class="panel">
+	<div class="panel-body">
+		<div class="table-wrapper table-afd mb2">
+			<div class="datatable-wrapper form-inline">
+				<div class="table-responsive" style="overflow-y:hidden; max-height: initial; padding-bottom: 0">
+					<div class="absolute-table">
+						<table class="table table-striped table-bordered datatable table-header-fixed">
+				            <thead class="thead-fixed">
+				                <tr>
+				                	<th class="th-fixed">ID</th>
+				                </tr>
+				         	</thead>
+				         	<tbody id="tbody-afd" class="tbody-fixed">
+				                <tr class="tr-afd" ng-repeat="tax in vm.taxes track by yqyr.id" ng-click="vm.selectedTax = tax" ng-class="{'selected': vm.selectedTax == tax}">
+				                    <td>{{$index + 1}}</td>
+				         		</tr>
+				         		<tr infinite-scroll="vm.loadPage(vm.page + 1)" infinite-scroll-disabled="vm.disableInfiniteScroll || vm.isLastPage || vm.isLoading" infinite-scroll-container="'#tbody-afd'"></tr>
+				        	</tbody>
+				       	</table>
+				   	</div>
+				   	<div class="text-center fixed-wrapper-inside">
+						<div class="spinner" ng-if="vm.isLoading">
+							<div class="rect1"></div>
+							<div class="rect2"></div>
+							<div class="rect3"></div>
+							<div class="rect4"></div>
+							<div class="rect5"></div>
+						</div>
+						<div class="center-div" ng-if="(vm.noDataAvailable || vm.taxes.length == 0) && !vm.isLoading">No Data Available</div>
+						<div class="center-div" ng-if="vm.isLastPage && !vm.noDataAvailable">You have reached the end of the page &nbsp;<i style="font-size: 8px !important; top: 0" class="glyphicon glyphicon-chevron-up"></i></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

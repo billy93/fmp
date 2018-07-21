@@ -3,16 +3,37 @@
 
     angular
         .module('fmpApp')
-        .controller('TaxQueryController', TaxQueryController);
+        .controller('DerivedFareController', DerivedFareController);
 
-    TaxQueryController.$inject = ['$state', 'TaxQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', 'Timezone', 'Passenger', 'City', 'DateUtils'];
+    DerivedFareController.$inject = ['$state', 'DerivedFare', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', 'Timezone', 'DateUtils'];
 
-    function TaxQueryController($state, TaxQuery, ParseLinks, AlertService, paginationConstants, pagingParams, Timezone, Passenger, City, DateUtils) {
+    function DerivedFareController($state, DerivedFare, ParseLinks, AlertService, paginationConstants, pagingParams, Timezone, DateUtils) {
 
         var vm = this;
 
         vm.queryParams = {
-    		carrier: null
+    		carrier: null,
+    		nation: null,
+    		taxCode: null,
+    		taxType: null,
+    		taxPointTag: null,
+    		percentFlatTag: null,
+    		taxUnitTag: null,
+    		saleDateFrom: null,
+    		sateDateTo: null,
+    		saleDateOption: null,
+    		travelApplication: null,
+    		travelDateFrom: null,
+    		travelDateTo: null,
+    		travelDateOption: null,
+    		ticketedPointTag: null,
+    		pointOfSale: null,
+    		pointOfTicketing: null,
+    		securityTable183: null,
+    		journeyFrom: null,
+    		journeyTo: null,
+    		journeyInclude: null,
+    		journeyWhollyWithin: null
     	};
         
         vm.loadPage = loadPage;
@@ -21,7 +42,7 @@
         vm.query = query;
         vm.timezone = Timezone.GMT7;
         
-        vm.taxes = [];
+        vm.yqyrs = [];
         vm.reset = reset;
         vm.page = 0;
         vm.disableInfiniteScroll = true;
@@ -33,6 +54,12 @@
         vm.paxTypes = Passenger.getAll();
         vm.cities = City.getAll();
 
+        vm.applyAs = [
+        	{key: "J", value: "Journey"},
+        	{key: "S", value: "Sector"},
+        	{key: "B", value: "Both"}
+        ]
+        
         vm.dateOptions = [
         	{key: "A", value: "Active In"},
         	{key: "E", value: "Exact Match"}
@@ -45,10 +72,10 @@
         ]
         
         function query() {
-        	vm.taxes = [];
+        	vm.yqyrs = [];
         	vm.page = 0;
         	vm.lastIndex = 0;
-        	vm.selectedTax = null;
+        	vm.selectedYqyr = null;
         	vm.isLastPage = false;
         	vm.loadAll();
         }
@@ -61,7 +88,10 @@
         	vm.queryParams.size = vm.itemsPerPage;
         	vm.queryParams.lastIndex = vm.lastIndex;
         	
-        	TaxQuery.query(vm.queryParams, onSuccess, onError);
+        	vm.queryParams.travelDate = DateUtils.convertLocalDateToServer(vm.travelDate);
+        	vm.queryParams.ticketingDate = DateUtils.convertLocalDateToServer(vm.ticketingDate);
+        	
+        	YqyrQuery.query(vm.queryParams, onSuccess, onError);
         	
             function onSuccess(data) {
             	console.log(data);
@@ -69,14 +99,14 @@
             	vm.isLastPage = data.lastPage;
             	vm.lastIndex = data.lastIndex;
             	
-                for (var i = 0; i < data.tax.length; i++) {
-                	vm.taxes.push(data.tax[i]);
+                for (var i = 0; i < data.yqyr.length; i++) {
+                	vm.yqyrs.push(data.yqyr[i]);
                 }
                 
             	vm.isLoading = false;
                 vm.disableInfiniteScroll = false;
                 
-                if (vm.taxes.length == 0) {
+                if (vm.yqyrs.length == 0) {
                 	vm.noDataAvailable = true;
                 } else {
                 	$(document).ready(function(){
@@ -109,8 +139,31 @@
 
         function reset() {
         	vm.queryParams = {
-        		carrier: null
+        		carrier: null,
+        		nation: null,
+        		taxCode: null,
+        		taxType: null,
+        		taxPointTag: null,
+        		percentFlatTag: null,
+        		taxUnitTag: null,
+        		saleDateFrom: null,
+        		sateDateTo: null,
+        		saleDateOption: vm.dateOptions[0].key,
+        		travelApplication: null,
+        		travelDateFrom: null,
+        		travelDateTo: null,
+        		travelDateOption: vm.dateOptions[0].key,
+        		ticketedPointTag: null,
+        		pointOfSale: null,
+        		pointOfTicketing: null,
+        		securityTable183: null,
+        		journeyFrom: null,
+        		journeyTo: null,
+        		journeyInclude: null,
+        		journeyWhollyWithin: null
         	}
+        	vm.travelDate = null;
+        	vm.ticketingDate = null;
         }
         
         function loadPage(page) {

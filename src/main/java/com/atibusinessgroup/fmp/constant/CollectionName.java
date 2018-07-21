@@ -88,6 +88,8 @@ public class CollectionName {
 	public final static String ATPCO_RECORD_JOINT_CARRIER_TABLE_997 = "atpco_record_joint_carrier_table_997";
 	public final static String ATPCO_RECORD_RBD_EXCEPTION_CODE_TABLE_999 = "atpco_record_rbd_exception_code_table_999";
 	
+	public final static String ATPCO_TAX_X1 = "atpco_tax_x1";
+	
 	public final static String ATPCO_YQYR_S1 = "atpco_yqyr_s1";
 	public final static String ATPCO_YQYR_S2 = "atpco_yqyr_s2";
 	public final static String ATPCO_YQYR_USER_ZONE_TABLE_178 = "atpco_yqyr_user_zone_table_178";
@@ -123,4 +125,5 @@ public class CollectionName {
 	public final static String ATPCO_TAX_CARRIER_TABLE_186 = "atpco_tax_carrier_table_186";
 	public final static String ATPCO_TAX_CARRIER_APPLICATION_TABLE_190 = "atpco_tax_carrier_application_table_190";
 	
+	public final static String ATPCO_FBR_REPORT = "atpco_fbr_report";
 }

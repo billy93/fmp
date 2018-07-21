@@ -3,16 +3,18 @@
 
     angular
         .module('fmpApp')
-        .controller('TaxQueryController', TaxQueryController);
+        .controller('FbrReportController', FbrReportController);
 
-    TaxQueryController.$inject = ['$state', 'TaxQuery', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', 'Timezone', 'Passenger', 'City', 'DateUtils'];
+    FbrReportController.$inject = ['$state', 'FbrReport', 'ParseLinks', 'AlertService', 'paginationConstants', 'pagingParams', 'Timezone', 'DateUtils'];
 
-    function TaxQueryController($state, TaxQuery, ParseLinks, AlertService, paginationConstants, pagingParams, Timezone, Passenger, City, DateUtils) {
+    function FbrReportController($state, FbrReport, ParseLinks, AlertService, paginationConstants, pagingParams, Timezone, DateUtils) {
 
         var vm = this;
 
         vm.queryParams = {
-    		carrier: null
+    		carrier: null,
+    		tariff: null,
+    		ruleNo: null
     	};
         
         vm.loadPage = loadPage;
@@ -21,7 +23,7 @@
         vm.query = query;
         vm.timezone = Timezone.GMT7;
         
-        vm.taxes = [];
+        vm.reports = [];
         vm.reset = reset;
         vm.page = 0;
         vm.disableInfiniteScroll = true;
@@ -29,26 +31,12 @@
         vm.datePickerOpenStatus = {};
         vm.dateFormat = "dd/MM/yyyy";
         vm.openCalendar = openCalendar;
-
-        vm.paxTypes = Passenger.getAll();
-        vm.cities = City.getAll();
-
-        vm.dateOptions = [
-        	{key: "A", value: "Active In"},
-        	{key: "E", value: "Exact Match"}
-        ]
-        
-        vm.securityTable183s = [
-        	{key: "", value: "Select Option"},
-        	{key: "E", value: "Exists"},
-        	{key: "D", value: "Does Not Exist"}
-        ]
         
         function query() {
-        	vm.taxes = [];
+        	vm.reports = [];
         	vm.page = 0;
         	vm.lastIndex = 0;
-        	vm.selectedTax = null;
+        	vm.selectedYqyr = null;
         	vm.isLastPage = false;
         	vm.loadAll();
         }
@@ -61,22 +49,24 @@
         	vm.queryParams.size = vm.itemsPerPage;
         	vm.queryParams.lastIndex = vm.lastIndex;
         	
-        	TaxQuery.query(vm.queryParams, onSuccess, onError);
+        	FbrReport.query(vm.queryParams, onSuccess, onError);
         	
             function onSuccess(data) {
-            	console.log(data);
-            	
             	vm.isLastPage = data.lastPage;
             	vm.lastIndex = data.lastIndex;
-            	
-                for (var i = 0; i < data.tax.length; i++) {
-                	vm.taxes.push(data.tax[i]);
+                
+                console.log(data);
+                
+//                DateUtils.convertDateTimeFromServer(data.createdDate);
+                
+                for (var i = 0; i < data.fbrReport.length; i++) {
+                	vm.reports.push(data.fbrReport[i]);
                 }
                 
             	vm.isLoading = false;
                 vm.disableInfiniteScroll = false;
                 
-                if (vm.taxes.length == 0) {
+                if (vm.reports.length == 0) {
                 	vm.noDataAvailable = true;
                 } else {
                 	$(document).ready(function(){
@@ -109,7 +99,9 @@
 
         function reset() {
         	vm.queryParams = {
-        		carrier: null
+        		carrier: null,
+        		tariff: null,
+        		ruleNo: null
         	}
         }
         

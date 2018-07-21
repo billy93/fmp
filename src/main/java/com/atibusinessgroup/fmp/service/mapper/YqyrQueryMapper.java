@@ -12,15 +12,15 @@ import com.atibusinessgroup.fmp.domain.dto.CarrierTableDataSegs;
 import com.atibusinessgroup.fmp.domain.dto.TextTable;
 import com.atibusinessgroup.fmp.domain.dto.UserZoneTable;
 import com.atibusinessgroup.fmp.domain.dto.Yqyr;
-import com.atibusinessgroup.fmp.repository.custom.AtpcoYqyrTableRepository;
+import com.atibusinessgroup.fmp.repository.custom.AtpcoYqyrTableCustomRepository;
 
 @Service
 public class YqyrQueryMapper {
 	
-	private final AtpcoYqyrTableRepository atpcoYqyrTableRepository;
+	private final AtpcoYqyrTableCustomRepository atpcoYqyrTableCustomRepository;
 	
-	public YqyrQueryMapper(AtpcoYqyrTableRepository atpcoYqyrTableRepository) {
-		this.atpcoYqyrTableRepository = atpcoYqyrTableRepository;
+	public YqyrQueryMapper(AtpcoYqyrTableCustomRepository atpcoYqyrTableCustomRepository) {
+		this.atpcoYqyrTableCustomRepository = atpcoYqyrTableCustomRepository;
 	}
 		
 	public Yqyr convertYqyr(AtpcoYqyrS1 ayqyr) {
@@ -80,7 +80,7 @@ public class YqyrQueryMapper {
 					}
 				} else {
 					if (ayqyr.getJrny_geo_spec().getJrny_geo_spec_1_value() != null && !ayqyr.getJrny_geo_spec().getJrny_geo_spec_1_value().trim().isEmpty()) {
-						loc1 = convertUserZoneTableToText(atpcoYqyrTableRepository.findUserTable178(ayqyr.getJrny_geo_spec().getJrny_geo_spec_1_value().trim()));
+						loc1 = convertUserZoneTableToText(atpcoYqyrTableCustomRepository.findUserTable178(ayqyr.getJrny_geo_spec().getJrny_geo_spec_1_value().trim()));
 					}
 				}
 				
@@ -98,7 +98,7 @@ public class YqyrQueryMapper {
 					}
 				} else {
 					if (ayqyr.getJrny_geo_spec().getJrny_geo_spec_2_value() != null && !ayqyr.getJrny_geo_spec().getJrny_geo_spec_2_value().trim().isEmpty()) {
-						loc2 = convertUserZoneTableToText(atpcoYqyrTableRepository.findUserTable178(ayqyr.getJrny_geo_spec().getJrny_geo_spec_2_value().trim()));
+						loc2 = convertUserZoneTableToText(atpcoYqyrTableCustomRepository.findUserTable178(ayqyr.getJrny_geo_spec().getJrny_geo_spec_2_value().trim()));
 					}
 				}
 				
@@ -116,7 +116,7 @@ public class YqyrQueryMapper {
 					}
 				} else {
 					if (ayqyr.getJrny_geo_spec().getJrny_geo_spec_via_loc_value() != null && !ayqyr.getJrny_geo_spec().getJrny_geo_spec_via_loc_value().trim().isEmpty()) {
-						via = convertUserZoneTableToText(atpcoYqyrTableRepository.findUserTable178(ayqyr.getJrny_geo_spec().getJrny_geo_spec_via_loc_value().trim()));
+						via = convertUserZoneTableToText(atpcoYqyrTableCustomRepository.findUserTable178(ayqyr.getJrny_geo_spec().getJrny_geo_spec_via_loc_value().trim()));
 					}
 				}
 				
@@ -134,7 +134,7 @@ public class YqyrQueryMapper {
 					}
 				} else {
 					if (ayqyr.getJrny_geo_spec().getJrny_geo_spec_within_loc_value() != null && !ayqyr.getJrny_geo_spec().getJrny_geo_spec_within_loc_value().trim().isEmpty()) {
-						within = convertUserZoneTableToText(atpcoYqyrTableRepository.findUserTable178(ayqyr.getJrny_geo_spec().getJrny_geo_spec_within_loc_value().trim()));
+						within = convertUserZoneTableToText(atpcoYqyrTableCustomRepository.findUserTable178(ayqyr.getJrny_geo_spec().getJrny_geo_spec_within_loc_value().trim()));
 					}
 				}
 				
@@ -166,7 +166,7 @@ public class YqyrQueryMapper {
 					}
 				} else {
 					if (ayqyr.getSector().getSector_loc_1_value() != null && !ayqyr.getSector().getSector_loc_1_value().trim().isEmpty()) {
-						loc1 = convertUserZoneTableToText(atpcoYqyrTableRepository.findUserTable178(ayqyr.getSector().getSector_loc_1_value().trim()));
+						loc1 = convertUserZoneTableToText(atpcoYqyrTableCustomRepository.findUserTable178(ayqyr.getSector().getSector_loc_1_value().trim()));
 					}
 				}
 				
@@ -184,7 +184,7 @@ public class YqyrQueryMapper {
 					}
 				} else {
 					if (ayqyr.getSector().getSector_loc_2_value() != null && !ayqyr.getSector().getSector_loc_2_value().trim().isEmpty()) {
-						loc2 = convertUserZoneTableToText(atpcoYqyrTableRepository.findUserTable178(ayqyr.getSector().getSector_loc_2_value().trim()));
+						loc2 = convertUserZoneTableToText(atpcoYqyrTableCustomRepository.findUserTable178(ayqyr.getSector().getSector_loc_2_value().trim()));
 					}
 				}
 				
@@ -202,7 +202,7 @@ public class YqyrQueryMapper {
 					}
 				} else {
 					if (ayqyr.getSector().getSector_via_geo_value() != null && !ayqyr.getSector().getSector_via_geo_value().trim().isEmpty()) {
-						via = convertUserZoneTableToText(atpcoYqyrTableRepository.findUserTable178(ayqyr.getSector().getSector_via_geo_value().trim()));
+						via = convertUserZoneTableToText(atpcoYqyrTableCustomRepository.findUserTable178(ayqyr.getSector().getSector_via_geo_value().trim()));
 					}
 				}
 				
@@ -254,7 +254,7 @@ public class YqyrQueryMapper {
 					}
 				} else {
 					if (ayqyr.getPos().getPos_geo_spec_value() != null && !ayqyr.getPos().getPos_geo_spec_value().trim().isEmpty()) {
-						pos = convertUserZoneTableToText(atpcoYqyrTableRepository.findUserTable178(ayqyr.getPos().getPos_geo_spec_value().trim()));
+						pos = convertUserZoneTableToText(atpcoYqyrTableCustomRepository.findUserTable178(ayqyr.getPos().getPos_geo_spec_value().trim()));
 					}
 				}
 				
@@ -286,7 +286,7 @@ public class YqyrQueryMapper {
 					}
 				} else {
 					if (ayqyr.getPot().getPot_geo_spec_value() != null && !ayqyr.getPot().getPot_geo_spec_value().trim().isEmpty()) {
-						pot = convertUserZoneTableToText(atpcoYqyrTableRepository.findUserTable178(ayqyr.getPot().getPot_geo_spec_value().trim()));
+						pot = convertUserZoneTableToText(atpcoYqyrTableCustomRepository.findUserTable178(ayqyr.getPot().getPot_geo_spec_value().trim()));
 					}
 				}
 				
@@ -325,7 +325,7 @@ public class YqyrQueryMapper {
 		}
 		
 		if (ayqyr.getCarrier_appl_tbl_190() != null && !ayqyr.getCarrier_appl_tbl_190().trim().isEmpty() && !ayqyr.getCarrier_appl_tbl_190().trim().contentEquals("00000000")) {
-			CarrierApplicationTable cat = atpcoYqyrTableRepository.getCarrierApplicationTable190(ayqyr.getCarrier_appl_tbl_190().trim());	
+			CarrierApplicationTable cat = atpcoYqyrTableCustomRepository.getCarrierApplicationTable190(ayqyr.getCarrier_appl_tbl_190().trim());	
 			if (cat != null) {
 				String catext = "";
 				for (CarrierApplicationTableDataSegs catd:cat.getData_segs()) {
@@ -344,7 +344,7 @@ public class YqyrQueryMapper {
 		}
 		
 		if (ayqyr.getCxr_tbl_186() != null && !ayqyr.getCxr_tbl_186().trim().isEmpty() && !ayqyr.getCxr_tbl_186().trim().contentEquals("00000000")) {
-			CarrierTable ct = atpcoYqyrTableRepository.findCarrierTable186(ayqyr.getCxr_tbl_186().trim());
+			CarrierTable ct = atpcoYqyrTableCustomRepository.findCarrierTable186(ayqyr.getCxr_tbl_186().trim());
 			if (ct != null) {
 				String ctext = "";
 				for (CarrierTableDataSegs seg:ct.getData_segs()) {
@@ -379,7 +379,7 @@ public class YqyrQueryMapper {
 		}
 		
 		if (ayqyr.getTxt_tbl_no_196() != null && !ayqyr.getTxt_tbl_no_196().trim().isEmpty() && !ayqyr.getTxt_tbl_no_196().trim().contentEquals("00000000")) {
-			TextTable tt = atpcoYqyrTableRepository.findTextTable196(ayqyr.getTxt_tbl_no_196().trim());
+			TextTable tt = atpcoYqyrTableCustomRepository.findTextTable196(ayqyr.getTxt_tbl_no_196().trim());
 			if (tt != null) {
 				String text = "";
 				for (String line:tt.getText()) {
