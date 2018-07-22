@@ -1353,7 +1353,7 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
     			@Field("gfs_ref")    		
     			public String gfsRef;
     			@Field("gfs_date")    		
-    			public Instant gfsDate;
+    			public Date gfsDate;
     			
 				public String getBatchNo() {
 					return batchNo;
@@ -1367,10 +1367,10 @@ public class WorkPackage extends AbstractAuditingEntity implements Serializable 
 				public void setGfsRef(String gfsRef) {
 					this.gfsRef = gfsRef;
 				}
-				public Instant getGfsDate() {
+				public Date getGfsDate() {
 					return gfsDate;
 				}
-				public void setGfsDate(Instant gfsDate) {
+				public void setGfsDate(Date gfsDate) {
 					this.gfsDate = gfsDate;
 				}
     		}

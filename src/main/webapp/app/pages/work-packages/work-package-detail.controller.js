@@ -3378,6 +3378,16 @@
             		}
             	}
             }
+          
+          if(data.filingDetail != null && data.filingDetail.filingDetailTarif != null){
+      		for(var x=0;x<data.filingDetail.filingDetailTarif.length;x++){
+	                if(data.filingDetail.filingDetailTarif[x].batch.length > 0){
+	                	for(var y=0;y<data.filingDetail.filingDetailTarif[x].batch.length;y++){
+	                		data.filingDetail.filingDetailTarif[x].batch[y].gfsDate = DateUtils.convertLocalDateToServer(data.filingDetail.filingDetailTarif[x].batch[y].gfsDate);
+	                	}
+	                }
+      		}
+      	 }
 	  }
 
       function onSaveSuccess (result) {
