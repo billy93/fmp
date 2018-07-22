@@ -110,7 +110,8 @@
         	amount:{
         		check:false,
         		replace:{
-    				check:false
+    				check:false,
+    				operator:null
     			}
         	},
         	aif:{
