@@ -5648,10 +5648,10 @@
 							  currency:result.content[x].currencyCode,
 							  amount:result.content[x].baseAmount,
 							  aif:result.content[x].aif,
-							  travelStart:DateUtils.convertDateFromServer(result.content[x].travelStartDate),
-							  travelEnd:DateUtils.convertDateFromServer(result.content[x].travelEndDate),
-							  saleStart:DateUtils.convertDateFromServer(result.content[x].saleStartDate),
-							  saleEnd:DateUtils.convertDateFromServer(result.content[x].saleEndDate),
+							  travelStart:DateUtils.convertDateFromServer(result.content[x].firstTravelDate),
+							  travelEnd:DateUtils.convertDateFromServer(result.content[x].lastTravelDate),
+							  saleStart:DateUtils.convertDateFromServer(result.content[x].firstSaleDate),
+							  saleEnd:DateUtils.convertDateFromServer(result.content[x].lastSaleDate),
 							  travelComplete:DateUtils.convertDateFromServer(result.content[x].travelComplete)
 						  };
 					  } else if(vm.workPackage.targetDistribution == 'MARKET' && vm.workPackage.type == 'REGULAR'){
@@ -5672,10 +5672,10 @@
 								  currency:result.content[x].currencyCode,
 								  amount:result.content[x].baseAmount,
 								  aif:result.content[x].aif,
-								  travelStart:DateUtils.convertDateFromServer(result.content[x].travelStartDate),
-								  travelEnd:DateUtils.convertDateFromServer(result.content[x].travelEndDate),
-								  saleStart:DateUtils.convertDateFromServer(result.content[x].saleStartDate),
-								  saleEnd:DateUtils.convertDateFromServer(result.content[x].saleEndDate),
+								  travelStart:DateUtils.convertDateFromServer(result.content[x].firstTravelDate),
+								  travelEnd:DateUtils.convertDateFromServer(result.content[x].lastTravelDate),
+								  saleStart:DateUtils.convertDateFromServer(result.content[x].firstSaleDate),
+								  saleEnd:DateUtils.convertDateFromServer(result.content[x].lastSaleDate),
 								  travelComplete:DateUtils.convertDateFromServer(result.content[x].travelComplete),
 								  prevAmount:result.content[x].baseAmount,
 								  prevAmountDiff:0,
@@ -5704,10 +5704,10 @@
 								  amount:result.content[x].baseAmount,
 								  aif:result.content[x].aif,
 								  passengerType:result.content[x].paxType.length > 0 ? result.content[x].paxType[0] : null,
-								  travelStart:DateUtils.convertDateFromServer(result.content[x].travelStartDate),
-								  travelEnd:DateUtils.convertDateFromServer(result.content[x].travelEndDate),
-								  saleStart:DateUtils.convertDateFromServer(result.content[x].saleStartDate),
-								  saleEnd:DateUtils.convertDateFromServer(result.content[x].saleEndDate),
+								  travelStart:DateUtils.convertDateFromServer(result.content[x].firstTravelDate),
+								  travelEnd:DateUtils.convertDateFromServer(result.content[x].lastTravelDate),
+								  saleStart:DateUtils.convertDateFromServer(result.content[x].firstSaleDate),
+								  saleEnd:DateUtils.convertDateFromServer(result.content[x].lastSaleDate),
 								  travelComplete:DateUtils.convertDateFromServer(result.content[x].travelComplete)
 							  };
 					  }
