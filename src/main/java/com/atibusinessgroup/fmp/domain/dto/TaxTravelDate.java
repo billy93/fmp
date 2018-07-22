@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class TaxTravelDate {
 
 	@Field("travel_dates_tag")
-	private Object travel_dates_tag;
+	private String travel_dates_tag;
 
 	@Field("travel_dates_first")
     private Object travel_dates_first;
@@ -13,11 +13,11 @@ public class TaxTravelDate {
 	@Field("travel_dates_last")
     private Object travel_dates_last;
 
-	public Object getTravel_dates_tag() {
+	public String getTravel_dates_tag() {
 		return travel_dates_tag;
 	}
 
-	public void setTravel_dates_tag(Object travel_dates_tag) {
+	public void setTravel_dates_tag(String travel_dates_tag) {
 		this.travel_dates_tag = travel_dates_tag;
 	}
 

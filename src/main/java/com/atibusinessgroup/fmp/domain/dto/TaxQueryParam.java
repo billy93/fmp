@@ -2,12 +2,21 @@ package com.atibusinessgroup.fmp.domain.dto;
 
 public class TaxQueryParam {
 	
+	private String carrier;
 	private int page;
 	private int size;
 	private int lastIndex;
 	
 	public TaxQueryParam() {
 		
+	}
+
+	public String getCarrier() {
+		return carrier;
+	}
+
+	public void setCarrier(String carrier) {
+		this.carrier = carrier;
 	}
 
 	public int getPage() {

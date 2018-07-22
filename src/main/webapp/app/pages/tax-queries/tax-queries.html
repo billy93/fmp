@@ -157,12 +157,60 @@
 				                <tr>
 				                	<th class="th-fixed">ID</th>
 				                	<th class="th-fixed">Tax Carrier</th>
+				                	<th class="th-fixed">Nation</th>
+				                	<th class="th-fixed">Tax Code</th>
+				                	<th class="th-fixed">Tax Type</th>
+				                	<th class="th-fixed">Sequence</th>
+				                	<th class="th-fixed">Tax Point Tag</th>
+				                	<th class="th-fixed">Percent Flag Tag</th>
+				                	<th class="th-fixed">Tax Unit Tag</th>
+				                	<th class="th-fixed">First Sale Date</th>
+				                	<th class="th-fixed">Last Sale Date</th>
+				                	<th class="th-fixed">Travel Application</th>
+				                	<th class="th-fixed">First Travel Date</th>
+				                	<th class="th-fixed">Last Travel Date</th>
+				                	<th class="th-fixed">Ticketed Point Tag</th>
+				                	<th class="th-fixed">Point of Sale</th>
+				                	<th class="th-fixed">Point of Ticketing</th>
+				                	<th class="th-fixed">Security Table 183</th>
+				                	<th class="th-fixed">Journey Direction</th>
+				                   	<th class="th-fixed">Journey Loc 1</th>
+				                   	<th class="th-fixed">Journey Loc 2</th>
+				                   	<th class="th-fixed">Journey Includes</th>
+				                   	<th class="th-fixed">Journey Wholly Within</th>
 				                </tr>
 				         	</thead>
 				         	<tbody id="tbody-afd" class="tbody-fixed">
 				                <tr class="tr-afd" ng-repeat="tax in vm.taxes track by tax.id" ng-click="vm.selectedTax = tax" ng-class="{'selected': vm.selectedTax == tax}">
 				                    <td>{{$index + 1}}</td>
 				                    <td>{{tax.carrierCode}}</td>
+				                    <td>{{tax.nation}}</td>
+				                    <td>{{tax.taxCode}}</td>
+				                    <td>{{tax.taxType}}</td>
+				                    <td>{{tax.sequenceNo}}</td>
+				                    <td>{{tax.taxPointTag}}</td>
+				                    <td>{{tax.percentFlagTag}}</td>
+				                    <td>{{tax.taxUnitTag}}</td>
+				                    <td><span ng-if="tax.firstSaleDate != null && tax.firstSaleDate != 'indef'">{{tax.firstSaleDate | date:vm.dateFormat:vm.timezone}}</span></td>
+				              		<td>
+				              			<span ng-if="tax.lastSaleDate != null && tax.lastSaleDate != 'indef'">{{tax.lastSaleDate | date:vm.dateFormat:vm.timezone}}</span>
+				              			<span ng-if="tax.lastSaleDate == 'indef'">NONE</span>
+				              		</td>
+				                    <td>{{tax.travelApplication}}</td>
+				                    <td><span ng-if="tax.firstTravelDate != null && tax.firstTravelDate != 'indef'">{{tax.firstTravelDate | date:vm.dateFormat:vm.timezone}}</span></td>
+				              		<td>
+				              			<span ng-if="tax.lastTravelDate != null && tax.lastTravelDate != 'indef'">{{tax.lastTravelDate | date:vm.dateFormat:vm.timezone}}</span>
+				              			<span ng-if="tax.lastTravelDate == 'indef'">NONE</span>
+				              		</td>
+				              		<td>{{tax.ticketedPointTag}}</td>
+				                    <td>{{tax.pointOfSale}}</td>
+				                    <td>{{tax.pointOfTicketing}}</td>
+				                    <td>{{tax.securityTable183}}</td>
+				                    <td>{{tax.journeyDirection}}</td>
+				                    <td>{{tax.journeyLoc1 | limitTo: 25}}<span ng-if="tax.journeyLoc1.length >= 25">...</span></td>
+				                    <td>{{tax.journeyLoc2 | limitTo: 25}}<span ng-if="tax.journeyLoc2.length >= 25">...</span></td>
+				                    <td>{{tax.journeyIncludes | limitTo: 25}}<span ng-if="tax.journeyIncludes.length >= 25">...</span></td>
+				                    <td>{{tax.journeyWhollyWithin | limitTo: 25}}<span ng-if="tax.journeyWhollyWithin.length > 25">...</span></td>
 				         		</tr>
 				         		<tr infinite-scroll="vm.loadPage(vm.page + 1)" infinite-scroll-disabled="vm.disableInfiniteScroll || vm.isLastPage || vm.isLoading" infinite-scroll-container="'#tbody-afd'"></tr>
 				        	</tbody>
