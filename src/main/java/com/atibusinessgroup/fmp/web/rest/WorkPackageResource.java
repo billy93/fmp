@@ -2491,15 +2491,27 @@ public class WorkPackageResource {
 						    		err1.setMessage("Sale Start Date must be less than or equal to Sale End Date");
 						    		errors.add(err1);
 								}
+							}
+							
+							if(fare.getSaleStart() != null && fare.getTravelStart() != null) {
 								if(fare.getSaleStart().after(fare.getTravelStart())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 									err1.setIndex(index+"");
 						    		err1.setField("saleStart");
-						    		err1.setMessage("Sale Start Date must be before  or equal to Travel Starte Date");
+						    		err1.setMessage("Sale Start Date must be before  or equal to Travel Start Date");
 						    		errors.add(err1);
 								}
 							}
 							
+							if(fare.getSaleEnd() != null && fare.getTravelEnd() != null) {
+								if(fare.getSaleEnd().after(fare.getTravelEnd())) {
+									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+									err1.setIndex(index+"");
+						    		err1.setField("saleEnd");
+						    		err1.setMessage("Sale End Date must be before or equal to Travel End Date");
+						    		errors.add(err1);
+								}
+							}
 							if(fare.getTravelComplete() != null && fare.getTravelCompleteIndicator() == null) {
 								WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 								err1.setIndex(index+"");
@@ -2639,11 +2651,22 @@ public class WorkPackageResource {
 						    		err1.setMessage("Sale Start Date must be less than or equal to Sale End Date");
 						    		errors.add(err1);
 								}
+							}
+							if(fare.getSaleStart() != null && fare.getTravelStart() != null) {
 								if(fare.getSaleStart().after(fare.getTravelStart())) {
 									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
 									err1.setIndex(index+"");
 						    		err1.setField("saleStart");
-						    		err1.setMessage("Sale Start Date must be before  or equal to Travel Start Date");
+						    		err1.setMessage("Sale Start Date must be before or equal to Travel Start Date");
+						    		errors.add(err1);
+								}
+							}
+							if(fare.getSaleEnd() != null && fare.getTravelEnd() != null) {
+								if(fare.getSaleEnd().after(fare.getTravelEnd())) {
+									WorkPackage.Validation.Tab.Error err1 = new WorkPackage.Validation.Tab.Error();
+									err1.setIndex(index+"");
+						    		err1.setField("saleEnd");
+						    		err1.setMessage("Sale End Date must be before or equal to Travel End Date");
 						    		errors.add(err1);
 								}
 							}
