@@ -1007,7 +1007,19 @@
 									</div>
 								</div>
 	 						</div>
-	 						<div class="pull-left ph5px w30">
+	 						<div class="pull-left ph5px w10">
+	 							<select class="form-control" ng-disabled="!vm.filter.amount.replace.check" ng-model="vm.filter.amount.replace.operator">
+	 								<option value="">Select Option</option>
+	 								<option>=</option>
+	 								<option>+</option>
+	 								<option>-</option>
+	 								<option>+ %</option>
+	 								<option>- %</option>
+	 								<option>*</option>
+	 								<option>/</option>
+								</select> 		 							 						
+	 						</div>
+	 						<div class="pull-left ph5px w20">
 	 								<input type="text" class="form-control inline" ng-disabled="!vm.filter.amount.replace.check" ng-model="vm.filter.amount.replace.value">	 		 							 						
 	 						</div>
 	 					</div>

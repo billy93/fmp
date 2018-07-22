@@ -2307,7 +2307,37 @@
 
  	    			for(var x=0;x<listField.length;x++){
  	    				if(listField[x] != null){
- 	    					fare[listField[x]] = getDescendantProp(workPackageFareFilter, listField[x]+'.replace.value');
+ 	    					if(listField[x] == 'amount'){
+ 	    						var operator = getDescendantProp(workPackageFareFilter, listField[x]+'.replace.operator'); 	    
+ 	    						var value = getDescendantProp(workPackageFareFilter, listField[x]+'.replace.value'); 	 
+ 	    						if(operator == '+'){
+ 	    							fare[listField[x]] = parseInt(fare[listField[x]]) + parseInt(value);
+ 	    						}
+ 	    						else if(operator == '-'){
+ 	    							fare[listField[x]] = parseInt(fare[listField[x]]) - parseInt(value);
+ 	    						}
+ 	    						else if(operator == '*'){
+ 	    							fare[listField[x]] = parseInt(fare[listField[x]]) * parseInt(value);
+ 	    						}
+ 	    						else if(operator == '/'){
+ 	    							fare[listField[x]] = parseInt(fare[listField[x]]) / parseInt(value);
+ 	    						}
+ 	    						else if(operator == '+ %'){
+ 	    							fare[listField[x]] = parseInt(fare[listField[x]]) + (parseInt(fare[listField[x]]) * parseInt(value) / 100);
+ 	    						}
+ 	    						else if(operator == '- %'){
+ 	    							fare[listField[x]] = parseInt(fare[listField[x]]) - (parseInt(fare[listField[x]]) * parseInt(value) / 100);
+ 	    						}
+ 	    						else if(operator == '='){
+ 	    							fare[listField[x]] = getDescendantProp(workPackageFareFilter, listField[x]+'.replace.value'); 	 
+ 	    						}
+ 	    						else{
+ 	    							fare[listField[x]] = getDescendantProp(workPackageFareFilter, listField[x]+'.replace.value'); 	 
+ 	    						}
+ 	    					}
+ 	    					else{
+ 	 	    					fare[listField[x]] = getDescendantProp(workPackageFareFilter, listField[x]+'.replace.value'); 	    						
+ 	    					}
  	    				}
  	    			}
  	    		}
@@ -2366,11 +2396,18 @@
 	    					break;
     					}
     				}
+	    			else{
+
+	    			}
 	    		}
+	    		
 	    		if(!find){
 	    			if(workPackageFareFilter.message == null){
 	    				workPackageFareFilter.message = "No Matches found, continue search at the beginning?";
 	    			}
+	    		}
+	    		else{
+	    			
 	    		}
 
     	    	vm.searchReplace(fareType, table, fareSheet, workPackageFareFilter);
@@ -6929,7 +6966,7 @@
     	  if(sheetType == 'Fares'){
     		  vm.selectTab(sheetIndex);
     		  
-    		  setTimeout(function(){
+//    		  setTimeout(function(){
 	    		  for(var x=0;x<vm.workPackage.fareSheet[sheetIndex].fares.length;x++){
 	    			  vm.workPackage.fareSheet[sheetIndex].fares[x].field = {};
 	        	  }
@@ -6942,12 +6979,12 @@
 	    		  var elmntPage = $window.document.querySelector(".table-wrapper");
 	    		  elmntPage.scrollTop = offset_top;
 	    		  elmnt.focus();
-    		  }, 1);
+//    		  }, 1);
     	  }
     	  else if(sheetType == 'Addon'){
     		  vm.selectAddonTab(sheetIndex);
     		  
-    		  setTimeout(function(){
+//    		  setTimeout(function(){
 	    		  for(var x=0;x<vm.workPackage.addonFareSheet[sheetIndex].fares.length;x++){
 	    			  vm.workPackage.addonFareSheet[sheetIndex].fares[x].field = {};
 	        	  }
@@ -6960,12 +6997,12 @@
 	    		  var elmntPage = $window.document.querySelector(".table-wrapper");
 	    		  elmntPage.scrollTop = offset_top;
 	    		  elmnt.focus();
-    		  }, 1);
+//    		  }, 1);
     	  }
     	  else if(sheetType == 'Market'){
     		  vm.selectMarketTab(sheetIndex);
     		  
-    		  setTimeout(function(){
+//    		  setTimeout(function(){
 	    		  for(var x=0;x<vm.workPackage.marketFareSheet[sheetIndex].fares.length;x++){
 	    			  vm.workPackage.marketFareSheet[sheetIndex].fares[x].field = {};
 	        	  }
@@ -6978,12 +7015,12 @@
 	    		  var elmntPage = $window.document.querySelector(".table-wrapper");
 	    		  elmntPage.scrollTop = offset_top;
 	    		  elmnt.focus();
-    		  }, 1);
+//    		  }, 1);
     	  }
     	  else if(sheetType == 'Discount'){
     		  vm.selectDiscountTab(sheetIndex);
     		  
-    		  setTimeout(function(){
+//    		  setTimeout(function(){
 	    		  for(var x=0;x<vm.workPackage.discountFareSheet[sheetIndex].fares.length;x++){
 	    			  vm.workPackage.discountFareSheet[sheetIndex].fares[x].field = {};
 	        	  }
@@ -6996,12 +7033,12 @@
 	    		  var elmntPage = $window.document.querySelector(".table-wrapper");
 	    		  elmntPage.scrollTop = offset_top;
 	    		  elmnt.focus();
-    		  }, 1);
+//    		  }, 1);
     	  }
     	  else if(sheetType == 'Waiver'){
     		  vm.selectWaiverTab(sheetIndex);
     		  
-    		  setTimeout(function(){
+//    		  setTimeout(function(){
 	    		  for(var x=0;x<vm.workPackage.waiverFareSheet[sheetIndex].fares.length;x++){
 	    			  vm.workPackage.waiverFareSheet[sheetIndex].fares[x].field = {};
 	        	  }
@@ -7014,7 +7051,7 @@
 	    		  var elmntPage = $window.document.querySelector(".table-wrapper");
 	    		  elmntPage.scrollTop = offset_top;
 	    		  elmnt.focus();
-    		  }, 1);
+//    		  }, 1);
     	  }
     	  else if(sheetType == 'Header'){
     		  var elmnt = $window.document.getElementsByName(field)[0];
@@ -7026,14 +7063,14 @@
     	  else if(sheetType == 'Worksheet Header Fares'){
     		  vm.selectTab(sheetIndex);
     		  
-    		  setTimeout(function(){
+//    		  setTimeout(function(){
     			  var fieldName = ""+field+sheetIndex;    		  
         		  var elmnt = $window.document.getElementsByName(fieldName)[0];
         		  var offset_top = elmnt.offsetTop;
         		  var elmntPage = $window.document.querySelector(".tab-pane");
         		  elmntPage.scrollTop = offset_top;
         		  elmnt.focus();
-    		  }, 1);
+//    		  }, 1);
     		  
     	  }
     	  else if(sheetType == 'Comment'){
@@ -7041,13 +7078,13 @@
     			  vm.selectCommentTab('interofficeComment');
     		  }
     		  
-    		  setTimeout(function(){
+//    		  setTimeout(function(){
 	    		  var elmnt = $window.document.getElementsByName(field)[0];
 	    		  var offset_top = elmnt.offsetTop;
 	    		  var elmntPage = $window.document.querySelector(".page-wrapper");
 	    		  elmntPage.scrollTop = offset_top;
 	    		  elmnt.focus();
-    		  }, 1);
+//    		  }, 1);
     	  }
       }
 
