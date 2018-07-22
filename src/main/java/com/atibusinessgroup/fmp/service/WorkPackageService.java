@@ -112,7 +112,7 @@ public class WorkPackageService {
 	
 	        		if(checkAtpcoFare.isPresent()) {
 	        			if(fare.getAmount() != null) {
-	        				float atpcoFareAmount = Float.parseFloat(checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().toString());
+	        				float atpcoFareAmount = checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().floatValue();
 	        				float fareAmount = Float.parseFloat(fare.getAmount());
 		        			if(fareAmount < atpcoFareAmount) {
 		        				fare.setAction("R");
@@ -124,7 +124,7 @@ public class WorkPackageService {
 		        				fare.setAction("Y");        				        				
 		        			}
 		        			
-		        			float amtDiff = ((Float.parseFloat(fare.getAmount())) - Float.parseFloat(checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().toString()));
+		        			float amtDiff = ((Float.parseFloat(fare.getAmount())) - checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().floatValue());
 		        			fare.setAmtDiff(String.valueOf(amtDiff));
 		        			
 		        			float percentDiff = (amtDiff / atpcoFareAmount) * 100;

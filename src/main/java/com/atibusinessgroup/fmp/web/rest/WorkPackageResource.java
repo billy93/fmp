@@ -9069,7 +9069,7 @@ public class WorkPackageResource {
     				fare.getRtgno(), 
     				fare.getRuleno());
         	if(checkAtpcoFare.isPresent()) {
-				float atpcoFareAmount = Float.parseFloat(checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().toString());
+				float atpcoFareAmount = checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().floatValue();
 				fare.setAmount(String.valueOf(atpcoFareAmount));
 				fare.setAction("Y");
 				fare.setAmtDiff("0");
@@ -9112,7 +9112,7 @@ public class WorkPackageResource {
     		if(checkAtpcoFare.isPresent()) {
     			//I, R, Y
     			if(fare.getAmount() != null) {
-    				float atpcoFareAmount = Float.parseFloat(checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().toString());
+    				float atpcoFareAmount = checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().floatValue();
     				float fareAmount = Float.parseFloat(fare.getAmount());
         			if(fareAmount < atpcoFareAmount) {
         				fare.setAction("R");
@@ -9124,7 +9124,7 @@ public class WorkPackageResource {
         				fare.setAction("Y");
         			}
 
-        			float amtDiff = ((Float.parseFloat(fare.getAmount())) - Float.parseFloat(checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().toString()));
+        			float amtDiff = ((Float.parseFloat(fare.getAmount())) - checkAtpcoFare.get().getFareOriginAmount().bigDecimalValue().floatValue());
         			fare.setAmtDiff(String.format("%.02f",amtDiff));
 
         			float percentDiff = (amtDiff / atpcoFareAmount) * 100;
