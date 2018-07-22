@@ -6865,7 +6865,18 @@
       }
 
       vm.updateLatestFare = function(workPackageSheet){
-    	  WorkPackage.updateLatestFare(workPackageSheet, function(result){
+    	  var wps = angular.copy(workPackageSheet);
+    	  for(var y=0;y<wps.fares.length;y++){
+    		  if(wps.fares[y] != null){
+    			  	wps.fares[y].travelStart = DateUtils.convertLocalDateToServer(wps.fares[y].travelStart);
+	    			  wps.fares[y].travelEnd = DateUtils.convertLocalDateToServer(wps.fares[y].travelEnd);
+	    			  wps.fares[y].saleStart = DateUtils.convertLocalDateToServer(wps.fares[y].saleStart);
+	    			  wps.fares[y].saleEnd = DateUtils.convertLocalDateToServer(wps.fares[y].saleEnd);
+	    			  wps.fares[y].travelComplete = DateUtils.convertLocalDateToServer(wps.fares[y].travelComplete);
+        		}
+    	  }
+    	  
+    	  WorkPackage.updateLatestFare(wps, function(result){
     		  alert('Fares updated');
     		  for(var y=0;y<result.fares.length;y++){
           		if(result.fares[y] != null){
@@ -6877,17 +6888,26 @@
           		}
       		  }
     		 workPackageSheet.fares = result.fares;
-    		  
-
     		  vm.changeVersion(workPackageSheet, 'current');
     	  }, function(error){});
       }
 
       vm.updateActionCodes = function(workPackageSheet){
-    	  WorkPackage.updateActionCodes(workPackageSheet, function(result){
+    	  var wps = angular.copy(workPackageSheet);
+    	  for(var y=0;y<wps.fares.length;y++){
+    		  if(wps.fares[y] != null){
+    			  	wps.fares[y].travelStart = DateUtils.convertLocalDateToServer(wps.fares[y].travelStart);
+	    			  wps.fares[y].travelEnd = DateUtils.convertLocalDateToServer(wps.fares[y].travelEnd);
+	    			  wps.fares[y].saleStart = DateUtils.convertLocalDateToServer(wps.fares[y].saleStart);
+	    			  wps.fares[y].saleEnd = DateUtils.convertLocalDateToServer(wps.fares[y].saleEnd);
+	    			  wps.fares[y].travelComplete = DateUtils.convertLocalDateToServer(wps.fares[y].travelComplete);
+        		}
+    	  }
+    	  
+    	  WorkPackage.updateActionCodes(wps, function(result){
     		  alert('Action code updated');
     		  for(var y=0;y<result.fares.length;y++){
-            		if(result.fares[y] != null){
+            		if(result.fares[y] != null){            			
             			result.fares[y].travelStart = DateUtils.convertDateFromServer(result.fares[y].travelStart);
             			result.fares[y].travelEnd = DateUtils.convertDateFromServer(result.fares[y].travelEnd);
             			result.fares[y].saleStart = DateUtils.convertDateFromServer(result.fares[y].saleStart);
@@ -6898,6 +6918,7 @@
     		  workPackageSheet.fares = result.fares;
     		  vm.changeVersion(workPackageSheet, 'current');
     	  }, function(error){});
+    	  
       }
 
       vm.dateNgModelOpts = {
