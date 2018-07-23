@@ -30,9 +30,6 @@
     	};
 
     	window.addEventListener("beforeunload", function() {
-    		console.log(event);
-    		console.log(event.srcElement.URL);
-    		console.log(event.target.URL);
     	});
 
     	vm.editorConfig = {
@@ -1911,7 +1908,7 @@
         		Clipboard.findCurrent({}, onFindSuccess, onFindError);
 
         		function onFindSuccess(result){
-        			console.log(result);
+//        			console.log(result);
 
         			for(var i=0;i<result.fares.length;i++){
             			if(vm.workPackage.targetDistribution == 'ATPCO' && vm.workPackage.type == 'REGULAR'){
@@ -2105,33 +2102,60 @@
  	    		function checkField(workPackageFareFilter, type, fare){
  	    			//regular
  	    			var listField = [
-    	    			workPackageFareFilter.no.check && workPackageFareFilter.no.search != null && workPackageFareFilter.no.search != '' ? 'no' : null,
-    	    			workPackageFareFilter.status.check && workPackageFareFilter.status.search != null && workPackageFareFilter.status.search != '' ? 'status' : null,
-    	    			workPackageFareFilter.action.check && workPackageFareFilter.action.search != null && workPackageFareFilter.action.search != '' ? 'action' : null,
-    	    			workPackageFareFilter.tariffNumber.tarNo.check && workPackageFareFilter.tariffNumber.tarNo.search != null ? 'tariffNumber.tarNo' : null,
-    	    	    	workPackageFareFilter.tariffNumber.tarCd.check && workPackageFareFilter.tariffNumber.tarCd.search != null && workPackageFareFilter.tariffNumber.tarCd.search != '' ? 'tariffNumber.tarCd' : null,
-    	    	    	workPackageFareFilter.tariffNumber.global.check && workPackageFareFilter.tariffNumber.global.search != null && workPackageFareFilter.tariffNumber.global.search != '' ? 'tariffNumber.global' : null,
-    	    			workPackageFareFilter.origin.check && workPackageFareFilter.origin.search != null && workPackageFareFilter.origin.search != '' ? 'origin' : null,
-    	    			workPackageFareFilter.destination.check && workPackageFareFilter.destination.search != null && workPackageFareFilter.destination.search != '' ? 'destination' : null,
-    	    			workPackageFareFilter.fareBasis.check && workPackageFareFilter.fareBasis.search != null && workPackageFareFilter.fareBasis.search != '' ? 'fareBasis' : null,
-    	    			workPackageFareFilter.bookingClass.check && workPackageFareFilter.bookingClass.search != null && workPackageFareFilter.bookingClass.search != '' ? 'bookingClass' : null,
-    					workPackageFareFilter.ssn.check && workPackageFareFilter.ssn.search != null && workPackageFareFilter.ssn.search != '' ? 'ssn' : null,
-    	    	    	workPackageFareFilter.cabin.check && workPackageFareFilter.cabin.search != null && workPackageFareFilter.cabin.search != '' ? 'cabin' : null,
-    	    	    	workPackageFareFilter.footnote1.check && workPackageFareFilter.footnote1.search != null && workPackageFareFilter.footnote1.search != '' ? 'footnote1' : null,
-    	    	    	workPackageFareFilter.typeOfJourney.check && workPackageFareFilter.typeOfJourney.search != null && workPackageFareFilter.typeOfJourney.search != '' ? 'typeOfJourney' : null,
-    	    	    	workPackageFareFilter.rtgno.check && workPackageFareFilter.rtgno.search != null && workPackageFareFilter.rtgno.search != '' ? 'rtgno' : null,
-    	    	    	workPackageFareFilter.ruleno.check && workPackageFareFilter.ruleno.search != null && workPackageFareFilter.ruleno.search != '' ? 'ruleno' : null,
-    	    	    	workPackageFareFilter.currency.check && workPackageFareFilter.currency.search != null && workPackageFareFilter.currency.search != '' ? 'currency' : null,
-    	    	    	workPackageFareFilter.amount.check && workPackageFareFilter.amount.search != null && workPackageFareFilter.amount.search != '' ? 'amount' : null,
-    	    	    	workPackageFareFilter.aif.check && workPackageFareFilter.aif.search != null && workPackageFareFilter.aif.search != '' ? 'aif' : null,
-    	    	    	workPackageFareFilter.travelStart.check && workPackageFareFilter.travelStart.search != null && workPackageFareFilter.travelStart.search != '' ? 'travelStart' : null,
-    	    	    	workPackageFareFilter.travelEnd.check && workPackageFareFilter.travelEnd.search != null && workPackageFareFilter.travelEnd.search != '' ? 'travelEnd' : null,
-    	    	    	workPackageFareFilter.saleStart.check && workPackageFareFilter.saleStart.search != null && workPackageFareFilter.saleStart.search != '' ? 'saleStart' : null,
-    	    	    	workPackageFareFilter.saleEnd.check && workPackageFareFilter.saleEnd.search != null && workPackageFareFilter.saleEnd.search != '' ? 'saleEnd' : null,
-    	    	    	workPackageFareFilter.travelComplete.check && workPackageFareFilter.travelComplete.search != null && workPackageFareFilter.travelComplete.search != '' ? 'travelComplete' : null,
-    	    	    	workPackageFareFilter.travelCompleteIndicator.check && workPackageFareFilter.travelCompleteIndicator.search != null && workPackageFareFilter.travelCompleteIndicator.search != '' ? 'travelCompleteIndicator' : null,
-    	    	    	workPackageFareFilter.comment.check && workPackageFareFilter.comment.search != null && workPackageFareFilter.comment.search != '' ? 'comment' : null,
-    	    	    	workPackageFareFilter.ratesheetComment.check && workPackageFareFilter.ratesheetComment.search != null && workPackageFareFilter.ratesheetComment.search != '' ? 'ratesheetComment' : null,
+    	    			workPackageFareFilter.no.check && workPackageFareFilter.no.search != null && workPackageFareFilter.no.search != '' 
+    	    			? 'no' : null,
+    	    			workPackageFareFilter.status.check && workPackageFareFilter.status.search != null && workPackageFareFilter.status.search != '' 
+    	    			? 'status' : null,
+    	    			workPackageFareFilter.action.check && workPackageFareFilter.action.search != null && workPackageFareFilter.action.search != '' 
+    	    			? 'action' : null,
+    	    			workPackageFareFilter.tariffNumber.tarNo.check && workPackageFareFilter.tariffNumber.tarNo.search != null && workPackageFareFilter.tariffNumber.tarNo.search != '' 
+    	    			? 'tariffNumber.tarNo' : null,
+    	    	    	workPackageFareFilter.tariffNumber.tarCd.check && workPackageFareFilter.tariffNumber.tarCd.search != null && workPackageFareFilter.tariffNumber.tarCd.search != '' 
+    	    	    	? 'tariffNumber.tarCd' : null,
+    	    	    	workPackageFareFilter.tariffNumber.global.check && workPackageFareFilter.tariffNumber.global.search != null && workPackageFareFilter.tariffNumber.global.search != '' 
+    	    	    	? 'tariffNumber.global' : null,
+    	    			workPackageFareFilter.origin.check && workPackageFareFilter.origin.search != null && workPackageFareFilter.origin.search != '' 
+    	    			? 'origin' : null,
+    	    			workPackageFareFilter.destination.check && workPackageFareFilter.destination.search != null && workPackageFareFilter.destination.search != '' 
+    	    			? 'destination' : null,
+    	    			workPackageFareFilter.fareBasis.check && workPackageFareFilter.fareBasis.search != null && workPackageFareFilter.fareBasis.search != '' 
+    	    			? 'fareBasis' : null,
+    	    			workPackageFareFilter.bookingClass.check && workPackageFareFilter.bookingClass.search != null && workPackageFareFilter.bookingClass.search != '' 
+    	    			? 'bookingClass' : null,
+    					workPackageFareFilter.ssn.check && workPackageFareFilter.ssn.search != null && workPackageFareFilter.ssn.search != '' 
+    					? 'ssn' : null,
+    	    	    	workPackageFareFilter.cabin.check && workPackageFareFilter.cabin.search != null && workPackageFareFilter.cabin.search != '' 
+    	    	    	? 'cabin' : null,
+    	    	    	workPackageFareFilter.footnote1.check && workPackageFareFilter.footnote1.search != null && workPackageFareFilter.footnote1.search != '' 
+    	    	    	? 'footnote1' : null,
+    	    	    	workPackageFareFilter.typeOfJourney.check && workPackageFareFilter.typeOfJourney.search != null && workPackageFareFilter.typeOfJourney.search != '' 
+    	    	    	? 'typeOfJourney' : null,
+    	    	    	workPackageFareFilter.rtgno.check && workPackageFareFilter.rtgno.search != null && workPackageFareFilter.rtgno.search != '' 
+    	    	    	? 'rtgno' : null,
+    	    	    	workPackageFareFilter.ruleno.check && workPackageFareFilter.ruleno.search != null && workPackageFareFilter.ruleno.search != '' 
+    	    	    	? 'ruleno' : null,
+    	    	    	workPackageFareFilter.currency.check && workPackageFareFilter.currency.search != null && workPackageFareFilter.currency.search != '' 
+    	    	    	? 'currency' : null,
+    	    	    	workPackageFareFilter.amount.check && workPackageFareFilter.amount.search != null && workPackageFareFilter.amount.search != '' 
+    	    	    	? 'amount' : null,
+    	    	    	workPackageFareFilter.aif.check && workPackageFareFilter.aif.search != null && workPackageFareFilter.aif.search != '' 
+    	    	    	? 'aif' : null,
+    	    	    	workPackageFareFilter.travelStart.check && workPackageFareFilter.travelStart.search != null && workPackageFareFilter.travelStart.search != '' 
+    	    	    	? 'travelStart' : null,
+    	    	    	workPackageFareFilter.travelEnd.check && workPackageFareFilter.travelEnd.search != null && workPackageFareFilter.travelEnd.search != '' 
+    	    	    	? 'travelEnd' : null,
+    	    	    	workPackageFareFilter.saleStart.check && workPackageFareFilter.saleStart.search != null && workPackageFareFilter.saleStart.search != '' 
+    	    	    	? 'saleStart' : null,
+    	    	    	workPackageFareFilter.saleEnd.check && workPackageFareFilter.saleEnd.search != null && workPackageFareFilter.saleEnd.search != '' 
+    	    	    	? 'saleEnd' : null,
+    	    	    	workPackageFareFilter.travelComplete.check && workPackageFareFilter.travelComplete.search != null && workPackageFareFilter.travelComplete.search != '' 
+    	    	    	? 'travelComplete' : null,
+    	    	    	workPackageFareFilter.travelCompleteIndicator.check && workPackageFareFilter.travelCompleteIndicator.search != null && workPackageFareFilter.travelCompleteIndicator.search != '' 
+    	    	    	? 'travelCompleteIndicator' : null,
+    	    	    	workPackageFareFilter.comment.check && workPackageFareFilter.comment.search != null && workPackageFareFilter.comment.search != '' 
+    	    	    	? 'comment' : null,
+    	    	    	workPackageFareFilter.ratesheetComment.check && workPackageFareFilter.ratesheetComment.search != null && workPackageFareFilter.ratesheetComment.search != '' 
+    	    	    	? 'ratesheetComment' : null,
 
     	    	    	//addon
     	    	    	workPackageFareFilter.bucket.check && workPackageFareFilter.bucket.search != null && workPackageFareFilter.bucket.search != '' ? 'bucket' : null,
@@ -2778,7 +2802,8 @@
         vm.currentBatch = 1;
 
         vm.save = save;
-
+        vm.saveComment = saveComment;
+        
 //        var unsubscribe = $rootScope.$on('fmpApp:workPackageUpdate', function(event, result) {
 //            vm.workPackage = result;
 //        });
@@ -2994,7 +3019,7 @@
 		  if(wp.type == 'WAIVER'){
 			  for(var x=0;x<wp.waiverFareSheet.length;x++){
 				  for(var y=0;y<wp.waiverFareSheet[x].fares.length;y++){
-					  console.log( wp.waiverFareSheet[x].fares[y]);
+//					  console.log( wp.waiverFareSheet[x].fares[y]);
 					  wp.waiverFareSheet[x].fares[y].waiverApprovalDate = new Date();
 				  }
 			  }
@@ -3302,6 +3327,22 @@
           }
       }
 
+	  function saveComment (isValidate) {
+          vm.isSaving = true;
+          if (vm.workPackage.id !== null) {
+        	  if(isValidate){
+        		  vm.workPackage.validate = true;
+        	  }else{
+        		  vm.workPackage.validate = false;
+        	  }
+        	  var newWp = angular.copy(vm.workPackage);
+        	  removeTime(newWp);
+              WorkPackage.update(newWp, onSendSuccess, onSaveError);
+          } else {
+              WorkPackage.save(vm.workPackage, onSendSuccess, onSaveError);
+          }
+      }
+	  
 	  function removeTime(workPackage){
 		  data = workPackage;
 
@@ -3392,6 +3433,15 @@
 
       function onSaveSuccess (result) {
     	  alert("Save Success");
+	      $scope.$emit('fmpApp:workPackageUpdate', result);
+
+	      var data = result;
+	      vm.mapWorkpackage(data);
+          vm.isSaving = false;
+      }
+      
+      function onSendSuccess (result) {
+    	  alert("Send Success");
 	      $scope.$emit('fmpApp:workPackageUpdate', result);
 
 	      var data = result;
@@ -5130,15 +5180,13 @@
     	  	vm.workPackage.comment.push({
     	  		comment:vm.commentString
     	  	});
-    	  	vm.save();
+    	  	vm.saveComment();
     	  	vm.commentString = null;
     	  	$(document).ready(function(){
                 var _width = $('.comment-wrapper').outerWidth();
 	              $('.comment-list').css('min-width',_width)
 	        });
     	 }
-
-
       }
 
       $scope.trustAsHtml = function(string) {
@@ -5211,7 +5259,7 @@
      	  	vm.workPackage.interofficeComment.push({
      	  		comment:vm.ioString
      	  	});
-     	  	vm.save();
+     	  	vm.saveComment();
      	  	vm.ioString = null;
      	  	$(document).ready(function(){
                 var _width = $('.comment-wrapper').outerWidth();
@@ -5994,8 +6042,6 @@
         	  workPackageSheet.column = [];
         	  workPackageSheet.column.push({row:rowIndex,column:cellIndex});
     	  }
-
-    	  console.log(workPackageSheet.column);
       }
 
       $scope.optionToggled = function(fares){
@@ -6427,7 +6473,6 @@
 
               vm.tariffNumberCheck =  AtpcoMasterTariff.findByType({type:type}).$promise
 	    	  if(type == 'FARE'){
-	    		  console.log("CHECK TARIFF DISCOUNT FARE");
 	    		  for(var x=0;x<vm.tariffNumberCheck.length;x++){
 		    		  if(vm.tariffNumberCheck[x].tarCd == fare[inputField].toUpperCase()){
 		    			  tariff = angular.copy(vm.tariffNumberCheck[x].tarCd);
